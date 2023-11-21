@@ -3222,7 +3222,7 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' @return The section divider string. Each line that does not have a trailing separator
 #'   will have `NA_character_` as section divider.
 #'   
-#' @seealso [basic_table()] parameter `table_divider` for a global section divider.
+#' @seealso [basic_table()] parameter `header_section_div` for a global section divider.
 #' 
 #' @examples
 #' # Data
@@ -3245,10 +3245,21 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' # Setter
 #' section_div(tbl) <- letters[seq_len(nrow(tbl))]
 #' tbl
-#'
-#' @name section_div
+#' 
+#' # last letter can appear if there is another table
+#' rbind(tbl, tbl)
+#' 
+#' # header_section_div
+#' header_section_div(tbl) <- "+"
+#' tbl
+#' 
+#' @docType methods
+#' @rdname section_div
 #' @export
 setGeneric("section_div", function(obj) standardGeneric("section_div"))
+
+#' @rdname section_div
+#' @aliases section_div,VTableTree-method
 setMethod("section_div", "VTableTree", function(obj) {
   content_row_tbl <- content_table(obj)
   is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0 # otherwise NA or NULL
@@ -3265,15 +3276,24 @@ setMethod("section_div", "VTableTree", function(obj) {
     unname(section_div(tree_children(obj)))
   }
 })
+#' @rdname section_div
+#' @aliases section_div,list-method
 setMethod("section_div", "list", function(obj) {
   unlist(lapply(obj, section_div))
 })
+#' @rdname section_div
+#' @aliases section_div,TableRow-method
 setMethod("section_div", "TableRow", function(obj) {
   trailing_section_div(obj)
 })
 
 # section_div setter from table object
+#' @rdname section_div
+#' @export
 setGeneric("section_div<-", function(obj, value) standardGeneric("section_div<-"))
+
+#' @rdname section_div
+#' @aliases section_div<-,VTableTree-method
 setMethod("section_div<-", "VTableTree", function(obj, value) {
   char_v <- as.character(value)
   .check_char_vector_for_section_div(char_v, nrow(obj))
@@ -3288,9 +3308,14 @@ setMethod("section_div<-", "VTableTree", function(obj, value) {
   }
   obj
 })
+#' @rdname section_div
+#' @aliases section_div<-,list-method
 setMethod("section_div<-", "list", function(obj, value) {
   char_v <- as.character(value)
   for (i in seq_along(obj)) {
+    stopifnot(is(obj[[i]], "VTableTree") || 
+                is(obj[[i]], "TableRow") || 
+                is(obj[[i]], "LabelRow"))
     list_element_size <- nrow(obj[[i]])
     init <- (i - 1) * list_element_size + 1
     chunk_of_char_v_to_take <- seq(init, init + list_element_size - 1)
@@ -3298,10 +3323,14 @@ setMethod("section_div<-", "list", function(obj, value) {
   }
   obj
 })
+#' @rdname section_div
+#' @aliases section_div<-,TableRow-method
 setMethod("section_div<-", "TableRow", function(obj, value) {
   trailing_section_div(obj) <- value
   obj
 })
+#' @rdname section_div
+#' @aliases section_div<-,LabelRow-method
 setMethod("section_div<-", "LabelRow", function(obj, value) {
   trailing_section_div(obj) <- value
   obj
@@ -3318,7 +3347,55 @@ setMethod("section_div<-", "LabelRow", function(obj, value) {
   }
 }
 
-## formatters methods ----------------------------------------------------------
+#' @rdname section_div
+#' @export
+setGeneric("header_section_div", function(obj) standardGeneric("header_section_div"))
+
+#' @rdname section_div
+#' @aliases header_section_div,PreDataTableLayouts-method
+setMethod("header_section_div", "PreDataTableLayouts", 
+  function(obj) obj@header_section_div
+)
+#' @rdname section_div
+#' @aliases header_section_div,PreDataTableLayouts-method
+setMethod("header_section_div", "VTableTree", 
+  function(obj) obj@header_section_div
+)
+
+#' @rdname section_div
+#' @export
+setGeneric("header_section_div<-", function(obj, value) standardGeneric("header_section_div<-"))
+
+#' @rdname section_div
+#' @aliases header_section_div<-,PreDataTableLayouts-method
+setMethod("header_section_div<-", "PreDataTableLayouts", 
+          function(obj, value) {
+            .check_header_section_div(value)
+            obj@header_section_div <- value
+            obj
+          }
+)
+#' @rdname section_div
+#' @aliases header_section_div<-,PreDataTableLayouts-method
+setMethod("header_section_div<-", "VTableTree", 
+          function(obj, value) {
+            .check_header_section_div(value)
+            obj@header_section_div <- value
+            obj
+          }
+)
+.check_header_section_div <- function(chr) {
+  if (!is.na(chr) && 
+      (!is.character(chr) || 
+      length(chr) > 1 || 
+      nchar(chr) > 1 ||
+      nchar(chr) == 0)) {
+    stop("header_section_div must be a single character or NA_character_ if not used")
+  }
+  invisible(TRUE)
+}
+
+## table_inset ----------------------------------------------------------
 #' @rdname formatters_methods
 #' @export
 setMethod(

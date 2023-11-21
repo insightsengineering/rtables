@@ -26,6 +26,7 @@ ElementaryTable(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
+  header_section_div = NA_character_,
   hsep = default_hsep(),
   trailing_section_div = NA_character_,
   inset = 0L
@@ -52,6 +53,7 @@ TableTree(
   prov_footer = character(),
   page_title = NA_character_,
   hsep = default_hsep(),
+  header_section_div = NA_character_,
   trailing_section_div = NA_character_,
   inset = 0L
 )
@@ -106,6 +108,11 @@ lines.}
 \item{prov_footer}{character. Provenance-related global footer materials
 (\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
+
+\item{header_section_div}{character(1). String which will be used to divide the header
+from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
+Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
+tables that need a divider between them.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to

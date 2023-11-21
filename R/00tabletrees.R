@@ -1416,6 +1416,7 @@ setClass("VTableTree",
     labelrow = "LabelRow",
     page_titles = "character",
     horizontal_sep = "character",
+    header_section_div = "character",
     trailing_section_div = "character"
   )
 )
@@ -1519,6 +1520,7 @@ ElementaryTable <- function(kids = list(),
                             subtitles = character(),
                             main_footer = character(),
                             prov_footer = character(),
+                            header_section_div = NA_character_,
                             hsep = default_hsep(),
                             trailing_section_div = NA_character_,
                             inset = 0L) {
@@ -1554,6 +1556,7 @@ ElementaryTable <- function(kids = list(),
     main_footer = main_footer,
     provenance_footer = prov_footer,
     horizontal_sep = hsep,
+    header_section_div = header_section_div,
     trailing_section_div = trailing_section_div
   )
   tab <- set_format_recursive(tab, format, na_str, FALSE)
@@ -1618,6 +1621,7 @@ TableTree <- function(kids = list(),
                       prov_footer = character(),
                       page_title = NA_character_,
                       hsep = default_hsep(),
+                      header_section_div = NA_character_,
                       trailing_section_div = NA_character_,
                       inset = 0L) {
   check_ok_label(label)
@@ -1651,6 +1655,7 @@ TableTree <- function(kids = list(),
       main_footer = main_footer,
       prov_footer = prov_footer,
       hsep = hsep,
+      header_section_div = header_section_div,
       trailing_section_div = trailing_section_div,
       inset = inset
     )
@@ -1673,6 +1678,7 @@ TableTree <- function(kids = list(),
       provenance_footer = prov_footer,
       page_title_prefix = page_title,
       horizontal_sep = "-",
+      header_section_div = NA_character_,
       trailing_section_div = trailing_section_div
     ) ## this is overridden below to get recursiveness
     tab <- set_format_recursive(tab, format, na_str, FALSE)
@@ -1799,6 +1805,7 @@ setClass("PreDataTableLayouts",
     row_layout = "PreDataRowLayout",
     col_layout = "PreDataColLayout",
     top_left = "character",
+    header_section_div = "character",
     table_inset = "integer"
   )
 )
@@ -1810,6 +1817,7 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                 subtitles = character(),
                                 main_footer = character(),
                                 prov_footer = character(),
+                                header_section_div = NA_character_,
                                 table_inset = 0L) {
   new("PreDataTableLayouts",
     row_layout = rlayout,
@@ -1819,6 +1827,7 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
     subtitles = subtitles,
     main_footer = main_footer,
     provenance_footer = prov_footer,
+    header_section_div = header_section_div,
     table_inset = table_inset
   )
 }

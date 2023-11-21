@@ -3,7 +3,8 @@
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Section divisors can be set also for analysis rows.
  * Added setter and getter for section dividers (`section_div` and `section_div<-`).
- * Exported tree accessors have now a dedicated documentation page that is visible to users.
+ * Added `header_section_div` setters and getters for layout and table objects along with 
+   related`basic_table` parameter.
  
 ### Bug Fixes
  * Fixed a bug that was failing when wrapping and section dividers were used at the same time.
@@ -12,6 +13,7 @@
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
  * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
  * Whitespace is not trimmed when rendering tables with `as_html`.
+ * Exported `section_div` methods have now a dedicated documentation page that is visible to users.
 
 ## rtables 0.6.5
 ### New Features

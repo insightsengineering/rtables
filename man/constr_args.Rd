@@ -31,7 +31,8 @@ constr_args(
   split_na_str,
   cna_str,
   inset,
-  table_inset
+  table_inset,
+  header_section_div
 )
 }
 \arguments{
@@ -121,6 +122,11 @@ of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 \item{table_inset}{numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+
+\item{header_section_div}{character(1). String which will be used to divide the header
+from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
+Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
+tables that need a divider between them.}
 }
 \value{
 NULL (this is an argument template dummy function)

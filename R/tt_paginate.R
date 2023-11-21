@@ -256,7 +256,7 @@ setMethod(
     if (NROW(content_table(tt)) > 0) {
       ct_tt <- content_table(tt)
       cind <- indent + indent_mod(ct_tt)
-      trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(ct_tt))
+      trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(tt))
       contdf <- make_row_df(ct_tt,
         colwidths = colwidths,
         visible_only = visible_only,

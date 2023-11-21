@@ -225,6 +225,10 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   `NA_character_` for none (the default). When generated via layouting, this
 #'   would correspond to the `section_div` of the split under which this table
 #'   represents a single facet.
+#' @param header_section_div character(1). String which will be used to divide the header
+#'   from the table. See [header_section_div()] for getter and setter of these.
+#'   Please consider changing last element of [section_div()] when concatenating 
+#'   tables that need a divider between them.
 #' @param page_title character. Page specific title(s).
 #' @rdname constr_args
 constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
@@ -232,7 +236,7 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
                         trailing_section_div, split_na_str,
-                        cna_str, inset, table_inset) {
+                        cna_str, inset, table_inset, header_section_div) {
   NULL
 }
 

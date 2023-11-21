@@ -297,17 +297,39 @@ test_that("section_div getter and setter works", {
   expect_identical(section_div(tbl_content), make_row_df(tbl_content)$trailing_sep)
   
   separators <- strsplit(toString(tbl, widths = c(4, 10)), "\n")[[1]][c(4, 6, 9, 11, 13)]
-  check_pattern <- function(element, letter, len) {
-    # Regular expression to match exactly three of the same letter
-    regex <- paste0("^", letter, "{", len,"}$")
-    return(grepl(regex, element))
-  }
+  separators2 <- strsplit(toString(tbl_content, widths = c(4, 10)), "\n")[[1]][c(4, 6, 9, 11, 13)]
+  expect_identical(separators, separators2)
+  
+  
   mapply(separators, FUN = check_pattern, 
          letter = letters[seq_len(nrow(tbl) - 1)], # -1 is the table end 
          len = 17) %>% 
     all() %>% 
     expect_true()
 })
+
+test_that("header_section_div works", {
+  lyt <- basic_table(header_section_div = "+") %>% 
+    split_rows_by("STRATA1") %>% 
+    analyze("BMRKR1") 
+  expect_identical(header_section_div(lyt), "+")
+  header_section_div(lyt) <- "<"
+  expect_identical(header_section_div(lyt), "<")
+  
+  tbl <- lyt %>% build_table(DM)
+  expect_identical(header_section_div(tbl), "<")
+  header_section_div(tbl) <- "+"
+  expect_identical(header_section_div(tbl), "+")
+  header_sdiv <- strsplit(toString(tbl), "\n")[[1]][3]
+  
+  expect_true(check_pattern(header_sdiv, "+", nchar(header_sdiv)))
+})
+
+check_pattern <- function(element, letter, len) {
+  # Regular expression to match exactly three of the same letter
+  regex <- paste0("^", letter, "{", len,"}$")
+  return(grepl(regex, element))
+}
 
 test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
   # Main table obj

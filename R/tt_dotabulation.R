@@ -1336,6 +1336,7 @@ build_table <- function(lyt, df,
     subtitles(tab) <- subtitles(lyt)
     main_footer(tab) <- main_footer(lyt)
     prov_footer(tab) <- prov_footer(lyt)
+    header_section_div(tab) <- header_section_div(lyt)
   } else {
     tab <- TableTree(
       cont = ctab,
@@ -1350,7 +1351,8 @@ build_table <- function(lyt, df,
       title = main_title(lyt),
       subtitles = subtitles(lyt),
       main_footer = main_footer(lyt),
-      prov_footer = prov_footer(lyt)
+      prov_footer = prov_footer(lyt),
+      header_section_div = header_section_div(lyt)
     )
   }
 
