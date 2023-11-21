@@ -69,7 +69,7 @@ getClass("VTableTree")
 # Known Subclasses: "ElementaryTable", "TableTree"
 ```
 
-Now, to understand why only these two have this feature, lets see the structure of a table built with section dividers:
+Always check the constructors after finding the classes. In the above case for example, the `DataRow` and `ContentRow` share the constructor, so we do not need to add identical getter and setters for these two classes but only for the virtual class `TableRow`. Different is the story for `LabelRow` which needs to be handle differently. Now, to understand why only these two have this feature, lets see the structure of a table built with section dividers:
 
 ```{r}
 lyt <- basic_table() %>%
