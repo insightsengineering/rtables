@@ -686,9 +686,9 @@ test_that("Separators and wrapping work together with getter and setters", {
   ## formatters#221 (bug with wrapping) and #762 (analyze allows it)
   df <- data.frame(
     cat = c(
-      "really long thing its so long"
+      "really long thing its so ", "long"
     ),
-    value = c(6, 3, 10)
+    value = c(6, 3, 10, 1)
   )
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
@@ -707,26 +707,35 @@ test_that("Separators and wrapping work together with getter and setters", {
   mf1 <- matrix_form(tbl1)
   mf2 <- matrix_form(tbl2)
   expect_identical(mf1$row_info$trailing_sep, mf2$row_info$trailing_sep)
-  expect_identical(mf1$row_info$trailing_sep, c("~", " ", " "))
+  expect_identical(mf1$row_info$trailing_sep, rep(c(NA, " ", "~"), 2))
   
   exp1 <- c(
-    "             all obs",
-    "————————————————————",
-    "really              ",
-    "long thing          ",
-    "its so              ",
-    "long                ",
-    "~~~~~~~~~~~~~~~~~~~~",
-    "  m             6   ",
-    "                    ",
-    "  m/2           5   "
+    "            all obs",
+    "———————————————————",
+    "really             ",
+    "long               ",
+    "thing its          ",
+    "so                 ",
+    "  m            8   ",
+    "                   ",
+    "  m/2          5   ",
+    "~~~~~~~~~~~~~~~~~~~",
+    "long               ",
+    "  m            2   ",
+    "                   ",
+    "  m/2         1.5  "
   )
 
-  cw <- propose_column_widths(tbl)
+  cw <- propose_column_widths(tbl1)
   cw[1] <- ceiling(cw[1] / 3)
   expect_identical(strsplit(toString(tbl1, widths = cw), "\n")[[1]], exp1)
   
-  # Setter and getter 
-  rtables::get_section_divisors(tbl1)
-  
+  # setter and getter 
+  a_sec_div <- section_div(tbl1) 
+  a_sec_div[1] <- "a"  
+  section_div(tbl1) <- a_sec_div
+  expect_identical(
+    strsplit(toString(tbl1[seq_len(2), ]), "\\n")[[1]][4],
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  )
 })

@@ -3205,14 +3205,57 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
   obj
 })
 
-# section_div getter from table object
+# section_div getter from table object parts
+#' @title Section dividers setter ang getter
+#' 
+#' @description
+#' `section_div`can be used to set or get the section divider for a table object
+#' produced by [build_table()]. When assigned in post processing (`section_div<-`)
+#' the table can have a section divider after each row, independently. Otherwise,
+#' only [split_rows_by()] (and its related row-wise splits) and [analyze()] have a
+#' `section_div` parameters that will produce separators between split sections, or
+#' data subgroups.
+#' 
+#' @param obj Table object. This can be of any class that inherits from `VTableTree` 
+#'   or `TableRow`/`LabelRow`.
+#'
+#' @return The section divider string. Each line that does not have a trailing separator
+#'   will have `NA_character_` as section divider.
+#'   
+#' @seealso [basic_table()] parameter `table_divider` for a global section divider.
+#' 
+#' @examples
+#' # Data
+#' df <- data.frame(
+#'   cat = c(
+#'     "really long thing its so ", "long"
+#'    ),
+#'   value = c(6, 3, 10, 1)
+#' )
+#' fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
+#'
+#' tbl <- basic_table() %>%
+#'   split_rows_by("cat", section_div = "~") %>%
+#'   analyze("value", afun = fast_afun, section_div = " ") %>%
+#'   build_table(df)
+#'
+#' # Getter
+#' section_div(tbl)
+#'
+#' # Setter
+#' section_div(tbl) <- letters[seq_len(nrow(tbl))]
+#' tbl
+#'
+#' @name section_div
+#' @export
 setGeneric("section_div", function(obj) standardGeneric("section_div"))
 setMethod("section_div", "VTableTree", function(obj) {
-  if (labelrow_visible(obj)) {
+  content_row_tbl <- content_table(obj)
+  is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0 # otherwise NA or NULL
+  if (labelrow_visible(obj) || is_content_table) {
     section_div <- trailing_section_div(obj)
     labelrow_div <- trailing_section_div(tt_labelrow(obj))
     rest_of_tree <- section_div(tree_children(obj))
-    
     # Case it is the section itself and not the labels to have a trailing sep
     if (!is.na(section_div)) {
       rest_of_tree[length(rest_of_tree)] <- section_div
@@ -3234,8 +3277,11 @@ setGeneric("section_div<-", function(obj, value) standardGeneric("section_div<-"
 setMethod("section_div<-", "VTableTree", function(obj, value) {
   char_v <- as.character(value)
   .check_char_vector_for_section_div(char_v, nrow(obj))
-  if (labelrow_visible(obj)) {
+  content_row_tbl <- content_table(obj)
+  is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0
+  if (labelrow_visible(obj) || is_content_table) {
     trailing_section_div(tt_labelrow(obj)) <- char_v[1]
+    trailing_section_div(obj) <- NA_character_
     section_div(tree_children(obj)) <- char_v[-1]
   } else {
     section_div(tree_children(obj)) <- char_v
@@ -3250,12 +3296,18 @@ setMethod("section_div<-", "list", function(obj, value) {
     chunk_of_char_v_to_take <- seq(init, init + list_element_size - 1)
     section_div(obj[[i]]) <- char_v[chunk_of_char_v_to_take]
   }
+  obj
 })
-setMethod("section_div<-", c("TableRow", "LabelRow"), function(obj, value) {
+setMethod("section_div<-", "TableRow", function(obj, value) {
+  trailing_section_div(obj) <- value
+  obj
+})
+setMethod("section_div<-", "LabelRow", function(obj, value) {
   trailing_section_div(obj) <- value
   obj
 })
 
+# Helper check function
 .check_char_vector_for_section_div <- function(char_v, len) {
   if (length(char_v) != len) {
     stop("Length of section_div must be equal to the number of rows in the table")

@@ -2,7 +2,8 @@
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Section divisors can be set also for analysis rows.
- * Added setter and getter for section dividers.
+ * Added setter and getter for section dividers (`section_div` and `section_div<-`).
+ * Exported tree accessors have now a dedicated documentation page that is visible to users.
  
 ### Bug Fixes
  * Fixed a bug that was failing when wrapping and section dividers were used at the same time.

@@ -12,9 +12,6 @@
 
 
 
-
-
-
 #' @exportMethod nlines
 #' @inheritParams formatters::nlines
 #' @name formatters_methods
@@ -257,8 +254,10 @@ setMethod(
 
 
     if (NROW(content_table(tt)) > 0) {
-      cind <- indent + indent_mod(content_table(tt))
-      contdf <- make_row_df(content_table(tt),
+      ct_tt <- content_table(tt)
+      cind <- indent + indent_mod(ct_tt)
+      trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(ct_tt))
+      contdf <- make_row_df(ct_tt,
         colwidths = colwidths,
         visible_only = visible_only,
         rownum = rownum,
@@ -308,7 +307,7 @@ setMethod(
 
     ret <- do.call(rbind, ret)
     
-    # Case where it is Elementary table or VTableTree (not LabelRow)
+    # Case where it has Elementary table or VTableTree section_div it is overridden
     if (!is.na(trailing_section_div(tt))) {
       ret$trailing_sep[nrow(ret)] <- trailing_section_div(tt)
     }
