@@ -3205,7 +3205,6 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
   obj
 })
 
-# section_div getter from table object parts
 #' @title Section dividers setter ang getter
 #'
 #' @description
@@ -3218,9 +3217,6 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #'
 #' @param obj Table object. This can be of any class that inherits from `VTableTree`
 #'   or `TableRow`/`LabelRow`.
-#' @param value character. Section divider character vector. If any value is `NA_character_`
-#'   the section divider will be absent for that row or section. When you want to only affect sections
-#'   or splits, please use `only_sep_sections` or provide a shorter vector than the number of rows.
 #' @param only_sep_sections logical(1). Defaults to `FALSE` for `section_div<-`. It allows
 #'   to set the section divider only for sections that are splits or analyses if the number of
 #'   values is less than the number of rows in the table. If `TRUE`, the section divider will
@@ -3232,11 +3228,17 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' @seealso [basic_table()] parameter `header_section_div` for a global section divider.
 #'
 #' @details
-#' If `TRUE`, which is the default for `section_div()` produced from the table construction,
-#' the section divider will be set for all the splits and eventually analyses, but not for the
-#' header or each row of the table. This can be set with `header_section_div` in [basic_table()]
-#' or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section divider will
-#' be set for all the rows of the table.
+#' Assigned value to section divider must be a character vector. If any value is `NA_character_`
+#' the section divider will be absent for that row or section. When you want to only affect sections
+#' or splits, please use `only_sep_sections` or provide a shorter vector than the number of rows. 
+#' Ideally, the length of the vector should be less than the number of splits with, eventually, the
+#' leaf-level, i.e. `DataRow` where analyze results are. Note that if only one value is inserted,
+#' only the first split will be affected.
+#' If `only_sep_sections =TRUE`, which is the default for `section_div()` produced from the table 
+#' construction, the section divider will be set for all the splits and eventually analyses, but 
+#' not for the header or each row of the table. This can be set with `header_section_div` in 
+#' [basic_table()] or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section 
+#' divider will be set for all the rows of the table.
 #'
 #' @examples
 #' # Data
@@ -3324,18 +3326,11 @@ setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections 
 
   # Case where only separators or splits need to change externally
   if (only_sep_sections && length(char_v) < nrow(obj)) {
-    if (length(char_v) == 1) {
-      char_v <- rep(char_v, max_tree_depth - 1) # -1 is the data row
-    }
     # Case where char_v is longer than the max depth
     char_v <- char_v[seq_len(min(max_tree_depth, length(char_v)))]
     # Filling up with NAs the rest of the tree depth section div chr vector
     missing_char_v_len <- max_tree_depth - length(char_v)
     char_v <- c(char_v, rep(NA_character_, missing_char_v_len))
-    # char_v <- unlist(
-    #   lapply(tree_depths, function(tree_depth_i) char_v[seq_len(tree_depth_i)]),
-    #   use.names = FALSE
-    # )
   }
 
   # Retrieving if it is a contentRow (no need for labelrow to be visible in this case)

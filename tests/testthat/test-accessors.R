@@ -375,10 +375,16 @@ test_that("the split only setter works", {
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
     analyze("AGE") %>%
     build_table(DM)
+  tbl2 <- tbl
   section_div(tbl) <- c("-", NA_character_)
+  section_div(tbl2) <- c("-")
   expect_identical(
     section_div(tbl)[seq_len(6)],
     c(NA_character_, "-", NA_character_, "-", NA_character_, NA_character_)
+  )
+  expect_identical(
+    section_div(tbl),
+    section_div(tbl2)
   )
 })
 
