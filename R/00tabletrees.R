@@ -1285,7 +1285,7 @@ LabelRow <- function(lev = 1L,
                      vis = !is.na(label) && nzchar(label),
                      cinfo = EmptyColInfo,
                      indent_mod = 0L,
-                     table_inset = 0L, 
+                     table_inset = 0L,
                      trailing_section_div = NA_character_) {
   check_ok_label(label)
   new("LabelRow",
@@ -1354,7 +1354,7 @@ setClass("LabelRow",
                       klass,
                       indent_mod = 0L,
                       footnotes = list(),
-                      table_inset = 0L, 
+                      table_inset = 0L,
                       trailing_section_div = NA_character_) {
   if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label)) {
     name <- label

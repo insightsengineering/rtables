@@ -3207,7 +3207,7 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 
 # section_div getter from table object parts
 #' @title Section dividers setter ang getter
-#' 
+#'
 #' @description
 #' `section_div`can be used to set or get the section divider for a table object
 #' produced by [build_table()]. When assigned in post processing (`section_div<-`)
@@ -3215,35 +3215,35 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' only [split_rows_by()] (and its related row-wise splits) and [analyze()] have a
 #' `section_div` parameters that will produce separators between split sections, or
 #' data subgroups.
-#' 
-#' @param obj Table object. This can be of any class that inherits from `VTableTree` 
+#'
+#' @param obj Table object. This can be of any class that inherits from `VTableTree`
 #'   or `TableRow`/`LabelRow`.
 #' @param value character. Section divider character vector. If any value is `NA_character_`
 #'   the section divider will be absent for that row or section. When you want to only affect sections
 #'   or splits, please use `only_sep_sections` or provide a shorter vector than the number of rows.
 #' @param only_sep_sections logical(1). Defaults to `FALSE` for `section_div<-`. It allows
 #'   to set the section divider only for sections that are splits or analyses if the number of
-#'   values is less than the number of rows in the table. If `TRUE`, the section divider will 
+#'   values is less than the number of rows in the table. If `TRUE`, the section divider will
 #'   be set for all the rows of the table.
 #'
 #' @return The section divider string. Each line that does not have a trailing separator
 #'   will have `NA_character_` as section divider.
-#'   
+#'
 #' @seealso [basic_table()] parameter `header_section_div` for a global section divider.
-#' 
+#'
 #' @details
-#' If `TRUE`, which is the default for `section_div()` produced from the table construction, 
-#' the section divider will be set for all the splits and eventually analyses, but not for the 
-#' header or each row of the table. This can be set with `header_section_div` in [basic_table()] 
-#' or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section divider will 
+#' If `TRUE`, which is the default for `section_div()` produced from the table construction,
+#' the section divider will be set for all the splits and eventually analyses, but not for the
+#' header or each row of the table. This can be set with `header_section_div` in [basic_table()]
+#' or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section divider will
 #' be set for all the rows of the table.
-#' 
+#'
 #' @examples
 #' # Data
 #' df <- data.frame(
 #'   cat = c(
 #'     "really long thing its so ", "long"
-#'    ),
+#'   ),
 #'   value = c(6, 3, 10, 1)
 #' )
 #' fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
@@ -3259,14 +3259,14 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' # Setter
 #' section_div(tbl) <- letters[seq_len(nrow(tbl))]
 #' tbl
-#' 
+#'
 #' # last letter can appear if there is another table
 #' rbind(tbl, tbl)
-#' 
+#'
 #' # header_section_div
 #' header_section_div(tbl) <- "+"
 #' tbl
-#' 
+#'
 #' @docType methods
 #' @rdname section_div
 #' @export
@@ -3304,9 +3304,9 @@ setMethod("section_div", "TableRow", function(obj) {
 # section_div setter from table object
 #' @rdname section_div
 #' @export
-setGeneric("section_div<-", function(obj, value, only_sep_sections = FALSE) 
+setGeneric("section_div<-", function(obj, value, only_sep_sections = FALSE) {
   standardGeneric("section_div<-")
-)
+})
 
 #' @rdname section_div
 #' @aliases section_div<-,VTableTree-method
@@ -3316,12 +3316,12 @@ setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections 
   max_tree_depth <- max(tree_depths)
   stopifnot(is.logical(only_sep_sections))
   .check_char_vector_for_section_div(char_v, max_tree_depth, nrow(obj))
-  
+
   # Automatic establishment of intent
   if (length(char_v) < nrow(obj)) {
     only_sep_sections <- TRUE
   }
-  
+
   # Case where only separators or splits need to change externally
   if (only_sep_sections && length(char_v) < nrow(obj)) {
     if (length(char_v) == 1) {
@@ -3333,18 +3333,18 @@ setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections 
     missing_char_v_len <- max_tree_depth - length(char_v)
     char_v <- c(char_v, rep(NA_character_, missing_char_v_len))
     # char_v <- unlist(
-    #   lapply(tree_depths, function(tree_depth_i) char_v[seq_len(tree_depth_i)]), 
+    #   lapply(tree_depths, function(tree_depth_i) char_v[seq_len(tree_depth_i)]),
     #   use.names = FALSE
     # )
   }
-  
+
   # Retrieving if it is a contentRow (no need for labelrow to be visible in this case)
   content_row_tbl <- content_table(obj)
   is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0
-  
+
   # Main table structure change
   if (labelrow_visible(obj) || is_content_table) {
-    if(only_sep_sections) {
+    if (only_sep_sections) {
       # Only tables are modified
       trailing_section_div(tt_labelrow(obj)) <- NA_character_
       trailing_section_div(obj) <- char_v[1]
@@ -3365,9 +3365,9 @@ setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections 
 setMethod("section_div<-", "list", function(obj, value, only_sep_sections = FALSE) {
   char_v <- as.character(value)
   for (i in seq_along(obj)) {
-    stopifnot(is(obj[[i]], "VTableTree") || 
-                is(obj[[i]], "TableRow") || 
-                is(obj[[i]], "LabelRow"))
+    stopifnot(is(obj[[i]], "VTableTree") ||
+      is(obj[[i]], "TableRow") ||
+      is(obj[[i]], "LabelRow"))
     list_element_size <- nrow(obj[[i]])
     if (only_sep_sections) {
       char_v_i <- char_v[seq_len(min(list_element_size, length(char_v)))]
@@ -3401,8 +3401,10 @@ setMethod("section_div<-", "LabelRow", function(obj, value, only_sep_sections = 
     stop("section_div must be a vector of length between 1 and numer of table rows.")
   }
   if (lcv > min_splits && lcv < max) {
-    warning("section_div will be truncated to the number of splits (", min_splits, ")",
-            " because it is shorter than the number of rows (", max, ").")
+    warning(
+      "section_div will be truncated to the number of splits (", min_splits, ")",
+      " because it is shorter than the number of rows (", max, ")."
+    )
   }
   nchar_check_v <- nchar(char_v)
   if (any(nchar_check_v > 1, na.rm = TRUE)) {
@@ -3416,12 +3418,14 @@ setGeneric("header_section_div", function(obj) standardGeneric("header_section_d
 
 #' @rdname section_div
 #' @aliases header_section_div,PreDataTableLayouts-method
-setMethod("header_section_div", "PreDataTableLayouts", 
+setMethod(
+  "header_section_div", "PreDataTableLayouts",
   function(obj) obj@header_section_div
 )
 #' @rdname section_div
 #' @aliases header_section_div,PreDataTableLayouts-method
-setMethod("header_section_div", "VTableTree", 
+setMethod(
+  "header_section_div", "VTableTree",
   function(obj) obj@header_section_div
 )
 
@@ -3431,26 +3435,28 @@ setGeneric("header_section_div<-", function(obj, value) standardGeneric("header_
 
 #' @rdname section_div
 #' @aliases header_section_div<-,PreDataTableLayouts-method
-setMethod("header_section_div<-", "PreDataTableLayouts", 
-          function(obj, value) {
-            .check_header_section_div(value)
-            obj@header_section_div <- value
-            obj
-          }
+setMethod(
+  "header_section_div<-", "PreDataTableLayouts",
+  function(obj, value) {
+    .check_header_section_div(value)
+    obj@header_section_div <- value
+    obj
+  }
 )
 #' @rdname section_div
 #' @aliases header_section_div<-,PreDataTableLayouts-method
-setMethod("header_section_div<-", "VTableTree", 
-          function(obj, value) {
-            .check_header_section_div(value)
-            obj@header_section_div <- value
-            obj
-          }
+setMethod(
+  "header_section_div<-", "VTableTree",
+  function(obj, value) {
+    .check_header_section_div(value)
+    obj@header_section_div <- value
+    obj
+  }
 )
 .check_header_section_div <- function(chr) {
-  if (!is.na(chr) && 
-      (!is.character(chr) || 
-      length(chr) > 1 || 
+  if (!is.na(chr) &&
+    (!is.character(chr) ||
+      length(chr) > 1 ||
       nchar(chr) > 1 ||
       nchar(chr) == 0)) {
     stop("header_section_div must be a single character or NA_character_ if not used")
