@@ -1,14 +1,16 @@
 ## rtables 0.6.5.9011
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
+ * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` 
+   argument to print a    horizontal line under the table header in rendered HTML output.
  * Section divisors can be set also for analysis rows.
- * Added setter and getter for section dividers (`section_div` and `section_div<-`).
+ * Added setter and getter for section dividers (`section_div` and `section_div<-`). They accept also
+   split section structure assignment.
  * Added `header_section_div` setters and getters for layout and table objects along with 
    related`basic_table` parameter.
  
 ### Bug Fixes
  * Fixed a bug that was failing when wrapping and section dividers were used at the same time.
- * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` argument to print a horizontal line under the table header in rendered HTML output.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.

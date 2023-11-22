@@ -181,6 +181,7 @@ reference:
     - brackets
     - clear_indent_mods
     - head
+    - section_div
 
   - title: Validating and Fixing Table Structure
     contents:

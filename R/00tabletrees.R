@@ -1678,13 +1678,13 @@ TableTree <- function(kids = list(),
       provenance_footer = prov_footer,
       page_title_prefix = page_title,
       horizontal_sep = "-",
-      header_section_div = NA_character_,
+      header_section_div = header_section_div,
       trailing_section_div = trailing_section_div
     ) ## this is overridden below to get recursiveness
     tab <- set_format_recursive(tab, format, na_str, FALSE)
 
     ## these is recursive
-    ## XXX combine thse probably
+    ## XXX combine these probably
     horizontal_sep(tab) <- hsep
     table_inset(tab) <- as.integer(inset)
     tab

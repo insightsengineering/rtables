@@ -360,12 +360,11 @@ test_that("the split only setter works", {
   section_div(tbl) <- c("a", "b")
   expect_identical(section_div(tbl), replace_sec_div)
   
-  
   # multiple analyze
-  tbl <- basic_table() %>%
+  tbl <- basic_table(header_section_div = " ") %>%
     split_cols_by("ARM") %>%
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
-    analyze("AGE") %>%
+    analyze("AGE") 
     split_rows_by("RACE", split_fun = drop_split_levels) %>%
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
     analyze("AGE") %>%
