@@ -224,6 +224,43 @@ test_that("header sep setting works", {
   hsep_test(tbl2, "=")
 })
 
+# section_div tests ------------------------------------------------------------
+check_pattern <- function(element, letter, len) {
+  # Regular expression to match exactly three of the same letter
+  regex <- paste0("^", letter, "{", len,"}$")
+  return(grepl(regex, element))
+}
+
+test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
+  # Main table obj
+  expect_identical(tbl %>% getter(), val_per_lev$global)
+  # Its labelrow (could be also not visible)
+  expect_identical(tt_labelrow(tbl) %>% getter(), val_per_lev$global_labelrow)
+  
+  # First split row + its labels
+  split1 <- tree_children(tbl)[[1]]
+  expect_identical(split1 %>% getter(), val_per_lev$split)
+  expect_identical(tt_labelrow(split1) %>% getter(), val_per_lev$split_labelrow)
+  
+  # Content table checks if there
+  content_elem_tbl <- content_table(split1)
+  if (nrow(content_elem_tbl) > 0) {
+    expect_identical(content_elem_tbl %>% getter(), val_per_lev$content)
+    expect_identical(tt_labelrow(content_elem_tbl) %>% getter(), val_per_lev$content_labelrow)
+    expect_identical(tree_children(content_elem_tbl)[[1]] %>% getter(), val_per_lev$contentrow)
+  }
+  
+  # The elementary table has it?
+  leaves_elementary_tbl <- tree_children(split1)[[1]] 
+  expect_identical(leaves_elementary_tbl %>% getter(), val_per_lev$elem_tbl)
+  expect_identical(tt_labelrow(leaves_elementary_tbl) %>% getter(), val_per_lev$elem_tbl_labelrow)
+  
+  # Data rows has it?
+  for (i in 1:nrow(leaves_elementary_tbl)) {
+    expect_identical(tree_children(leaves_elementary_tbl)[[i]] %>% getter(), val_per_lev$datarow[i])
+  }
+}
+
 test_that("section_div getter and setter works", {
   df <- data.frame(
     cat = c(
@@ -308,6 +345,37 @@ test_that("section_div getter and setter works", {
     expect_true()
 })
 
+test_that("the split only setter works", {
+  fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
+  
+  tbl <- basic_table() %>% 
+    split_rows_by("ARM", section_div = "=") %>% 
+    split_rows_by("STRATA1", section_div = "-") %>% 
+    analyze("BMRKR1") %>% 
+    build_table(DM)
+  
+  replace_sec_div <- section_div(tbl)
+  replace_sec_div[replace_sec_div == "="] <- "a"
+  replace_sec_div[replace_sec_div == "-"] <- "b"
+  section_div(tbl) <- c("a", "b")
+  expect_identical(section_div(tbl), replace_sec_div)
+  
+  
+  # multiple analyze
+  tbl <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", split_fun = drop_split_levels) %>%
+    analyze("AGE") %>%
+    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+    split_rows_by("SEX", split_fun = drop_split_levels) %>%
+    analyze("AGE") %>%
+    build_table(DM)
+  section_div(tbl) <- c("-", NA_character_)
+  expect_identical(section_div(tbl)[seq_len(6)], 
+                   c(NA_character_, "-", NA_character_, "-", NA_character_, NA_character_))
+})
+
+
 test_that("header_section_div works", {
   lyt <- basic_table(header_section_div = "+") %>% 
     split_rows_by("STRATA1") %>% 
@@ -325,38 +393,3 @@ test_that("header_section_div works", {
   expect_true(check_pattern(header_sdiv, "+", nchar(header_sdiv)))
 })
 
-check_pattern <- function(element, letter, len) {
-  # Regular expression to match exactly three of the same letter
-  regex <- paste0("^", letter, "{", len,"}$")
-  return(grepl(regex, element))
-}
-
-test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
-  # Main table obj
-  expect_identical(tbl %>% getter(), val_per_lev$global)
-  # Its labelrow (could be also not visible)
-  expect_identical(tt_labelrow(tbl) %>% getter(), val_per_lev$global_labelrow)
-  
-  # First split row + its labels
-  split1 <- tree_children(tbl)[[1]]
-  expect_identical(split1 %>% getter(), val_per_lev$split)
-  expect_identical(tt_labelrow(split1) %>% getter(), val_per_lev$split_labelrow)
-  
-  # Content table checks if there
-  content_elem_tbl <- content_table(split1)
-  if (nrow(content_elem_tbl) > 0) {
-    expect_identical(content_elem_tbl %>% getter(), val_per_lev$content)
-    expect_identical(tt_labelrow(content_elem_tbl) %>% getter(), val_per_lev$content_labelrow)
-    expect_identical(tree_children(content_elem_tbl)[[1]] %>% getter(), val_per_lev$contentrow)
-  }
-  
-  # The elementary table has it?
-  leaves_elementary_tbl <- tree_children(split1)[[1]] 
-  expect_identical(leaves_elementary_tbl %>% getter(), val_per_lev$elem_tbl)
-  expect_identical(tt_labelrow(leaves_elementary_tbl) %>% getter(), val_per_lev$elem_tbl_labelrow)
-  
-  # Data rows has it?
-  for (i in 1:nrow(leaves_elementary_tbl)) {
-    expect_identical(tree_children(leaves_elementary_tbl)[[i]] %>% getter(), val_per_lev$datarow[i])
-  }
-}

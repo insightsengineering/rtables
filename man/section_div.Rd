@@ -27,15 +27,15 @@ section_div(obj)
 
 \S4method{section_div}{TableRow}(obj)
 
-section_div(obj) <- value
+section_div(obj, only_sep_sections = FALSE) <- value
 
-\S4method{section_div}{VTableTree}(obj) <- value
+\S4method{section_div}{VTableTree}(obj, only_sep_sections = FALSE) <- value
 
-\S4method{section_div}{list}(obj) <- value
+\S4method{section_div}{list}(obj, only_sep_sections = FALSE) <- value
 
-\S4method{section_div}{TableRow}(obj) <- value
+\S4method{section_div}{TableRow}(obj, only_sep_sections = FALSE) <- value
 
-\S4method{section_div}{LabelRow}(obj) <- value
+\S4method{section_div}{LabelRow}(obj, only_sep_sections = FALSE) <- value
 
 header_section_div(obj)
 
@@ -52,6 +52,15 @@ header_section_div(obj) <- value
 \arguments{
 \item{obj}{Table object. This can be of any class that inherits from \code{VTableTree}
 or \code{TableRow}/\code{LabelRow}.}
+
+\item{value}{character. Section divider character vector. If any value is \code{NA_character_}
+the section divider will be absent for that row or section. When you want to only affect sections
+or splits, please use \code{only_sep_sections} or provide a shorter vector than the number of rows.}
+
+\item{only_sep_sections}{logical(1). Defaults to \code{FALSE} for \verb{section_div<-}. It allows
+to set the section divider only for sections that are splits or analyses if the number of
+values is less than the number of rows in the table. If \code{TRUE}, the section divider will
+be set for all the rows of the table.}
 }
 \value{
 The section divider string. Each line that does not have a trailing separator
@@ -64,6 +73,13 @@ the table can have a section divider after each row, independently. Otherwise,
 only \code{\link[=split_rows_by]{split_rows_by()}} (and its related row-wise splits) and \code{\link[=analyze]{analyze()}} have a
 \code{section_div} parameters that will produce separators between split sections, or
 data subgroups.
+}
+\details{
+If \code{TRUE}, which is the default for \code{section_div()} produced from the table construction,
+the section divider will be set for all the splits and eventually analyses, but not for the
+header or each row of the table. This can be set with \code{header_section_div} in \code{\link[=basic_table]{basic_table()}}
+or, eventually, with \code{hsep} in \code{\link[=build_table]{build_table()}}. If \code{FALSE}, the section divider will
+be set for all the rows of the table.
 }
 \examples{
 # Data
