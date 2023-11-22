@@ -84,7 +84,7 @@ tbl <- build_table(lyt, DM)
 
 print(tbl)
 print(class(tbl)) # TableTree
-methods("trailing_section_div")
+# methods("trailing_section_div") # to see this please do devtools::load_all()
 # [1] trailing_section_div,LabelRow-method   
 # trailing_section_div,TableRow-method   
 # trailing_section_div,VTableTree-method
