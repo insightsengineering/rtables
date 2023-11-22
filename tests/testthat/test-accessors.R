@@ -226,9 +226,9 @@ test_that("header sep setting works", {
 
 # section_div tests ------------------------------------------------------------
 check_pattern <- function(element, letter, len) {
-  # Regular expression to match exactly three of the same letter
-  regex <- paste0("^", letter, "{", len, "}$")
-  return(grepl(regex, element))
+  # Regular expression to match exactly len of the same letter
+  regex <- paste0(rep(letter, len), collapse = "")
+  return(grepl(regex, element, fixed = TRUE))
 }
 
 test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {

@@ -90,4 +90,59 @@ print(class(tbl)) # TableTree
 # trailing_section_div,VTableTree-method
 ```
 
-In the above, we show that trailing_section_div has methods for `TableRow` virtual object and `LabelRow`. We are going to add again `TableTree` as we need to have section div (xxx reformat as it will be).
+In the above, we show that `trailing_section_div` has methods for `TableRow` virtual object, `LabelRow`, and `VTableTree`. These three make the whole `section_div` structure as the `VTableTree` is present in `TableTree` and `ElementaryTable` that are the two main table objects. If these are not `NA_character_` then the `section_div` is printed at split divisions. The `LabelRow` and `TableRow` are different as their assignment allows the row-wise modification of separators. When we have a special case for a `ContentRow`, as it is represented as `content_table(obj)` which is a one-line `ElementaryTable`, while label row is turned off. Please take a moment to check the following setter:
+
+```r{eval=FALSE}
+setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections = FALSE) {
+  char_v <- as.character(value)
+  tree_depths <- unname(vapply(collect_leaves(obj), tt_level, numeric(1)))
+  max_tree_depth <- max(tree_depths)
+  stopifnot(is.logical(only_sep_sections))
+  .check_char_vector_for_section_div(char_v, max_tree_depth, nrow(obj))
+
+  # Automatic establishment of intent
+  if (length(char_v) < nrow(obj)) {
+    only_sep_sections <- TRUE
+  }
+
+  # Case where only separators or splits need to change externally
+  if (only_sep_sections && length(char_v) < nrow(obj)) {
+    if (length(char_v) == 1) {
+      char_v <- rep(char_v, max_tree_depth - 1) # -1 is the data row
+    }
+    # Case where char_v is longer than the max depth
+    char_v <- char_v[seq_len(min(max_tree_depth, length(char_v)))]
+    # Filling up with NAs the rest of the tree depth section div chr vector
+    missing_char_v_len <- max_tree_depth - length(char_v)
+    char_v <- c(char_v, rep(NA_character_, missing_char_v_len))
+    # char_v <- unlist(
+    #   lapply(tree_depths, function(tree_depth_i) char_v[seq_len(tree_depth_i)]),
+    #   use.names = FALSE
+    # )
+  }
+
+  # Retrieving if it is a contentRow (no need for labelrow to be visible in this case)
+  content_row_tbl <- content_table(obj)
+  is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0
+
+  # Main table structure change
+  if (labelrow_visible(obj) || is_content_table) {
+    if (only_sep_sections) {
+      # Only tables are modified
+      trailing_section_div(tt_labelrow(obj)) <- NA_character_
+      trailing_section_div(obj) <- char_v[1]
+      section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v[-1]
+    } else {
+      # All leaves are modified
+      trailing_section_div(tt_labelrow(obj)) <- char_v[1]
+      trailing_section_div(obj) <- NA_character_
+      section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v[-1]
+    }
+  } else {
+    section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v
+  }
+  obj
+})
+```
+
+`only_sep_sections` is a parameter that is used to change only the separators (between splits) and not the data rows. It is happening forcefully if set to `TRUE`, but it is automatically activated when `section_div(tbl) <- char_v` is a character vector of length `< nrow(tbl)`. Notice that the exception for `ContentRow` is activated by the switcher `is_content_table`. This is because content rows do not have visible label row. You see that in the main table structure change we have two blocks depending on `only_sep_sections`. If `TRUE` only the `VTableTree` are modified leading to only split section separators to be modified. Also consider looking at `section_div` getter and tests in `test-accessors.R` to have more insights on the structure.

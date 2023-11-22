@@ -86,7 +86,7 @@ be set for all the rows of the table.
 df <- data.frame(
   cat = c(
     "really long thing its so ", "long"
-   ),
+  ),
   value = c(6, 3, 10, 1)
 )
 fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
