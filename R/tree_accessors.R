@@ -3306,13 +3306,13 @@ setMethod("section_div", "TableRow", function(obj) {
 # section_div setter from table object
 #' @rdname section_div
 #' @export
-setGeneric("section_div<-", function(obj, value, only_sep_sections = FALSE) {
+setGeneric("section_div<-", function(obj, only_sep_sections = FALSE, value) {
   standardGeneric("section_div<-")
 })
 
 #' @rdname section_div
 #' @aliases section_div<-,VTableTree-method
-setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections = FALSE) {
+setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE, value) {
   char_v <- as.character(value)
   tree_depths <- unname(vapply(collect_leaves(obj), tt_level, numeric(1)))
   max_tree_depth <- max(tree_depths)
@@ -3357,7 +3357,7 @@ setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections 
 })
 #' @rdname section_div
 #' @aliases section_div<-,list-method
-setMethod("section_div<-", "list", function(obj, value, only_sep_sections = FALSE) {
+setMethod("section_div<-", "list", function(obj, only_sep_sections = FALSE, value) {
   char_v <- as.character(value)
   for (i in seq_along(obj)) {
     stopifnot(is(obj[[i]], "VTableTree") ||
@@ -3378,13 +3378,13 @@ setMethod("section_div<-", "list", function(obj, value, only_sep_sections = FALS
 })
 #' @rdname section_div
 #' @aliases section_div<-,TableRow-method
-setMethod("section_div<-", "TableRow", function(obj, value, only_sep_sections = FALSE) {
+setMethod("section_div<-", "TableRow", function(obj, only_sep_sections = FALSE, value) {
   trailing_section_div(obj) <- value
   obj
 })
 #' @rdname section_div
 #' @aliases section_div<-,LabelRow-method
-setMethod("section_div<-", "LabelRow", function(obj, value, only_sep_sections = FALSE) {
+setMethod("section_div<-", "LabelRow", function(obj, only_sep_sections = FALSE, value) {
   trailing_section_div(obj) <- value
   obj
 })
