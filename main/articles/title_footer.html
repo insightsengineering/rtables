@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9011</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9012</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,18 +76,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -116,7 +104,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-11-16</h4>
+            <h4 data-toc-skip class="date">2023-11-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/title_footer.Rmd" class="external-link"><code>vignettes/title_footer.Rmd</code></a></small>
       <div class="d-none name"><code>title_footer.Rmd</code></div>
@@ -469,13 +457,13 @@ Time<a class="anchor" aria-label="anchor" href="#adding-cell--and-analysis-row-r
 <span><span class="co"># A                                                     </span></span>
 <span><span class="co">#   mean           35.1         31.1           35.6     </span></span>
 <span><span class="co"># B                                                     </span></span>
-<span><span class="co">#   mean           36.6         32.1         34.4 {3}   </span></span>
+<span><span class="co">#   mean           36.6         32.1         34.4 {1}   </span></span>
 <span><span class="co"># C                                                     </span></span>
-<span><span class="co">#   mean {4}       37.4         32.8           32.8     </span></span>
+<span><span class="co">#   mean {2}       37.4         32.8           32.8     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># {3} - these Strata B patients got the drug combination</span></span>
-<span><span class="co"># {4} - This is strata level C for these patients</span></span>
+<span><span class="co"># {1} - these Strata B patients got the drug combination</span></span>
+<span><span class="co"># {2} - This is strata level C for these patients</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
@@ -590,10 +578,10 @@ indicates a cell (and must resolve to an individual cell).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fnotes_at_path</span><span class="op">(</span><span class="va">tbl2</span>, rowpath <span class="op">=</span> <span class="cn">NULL</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"B: Placebo"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"this is a placebo"</span><span class="op">)</span></span>
 <span><span class="va">tbl2</span></span></code></pre></div>
-<pre><code><span><span class="co">#                       A: Drug X              B: Placebo {1}            C: Combination     </span></span>
+<pre><code><span><span class="co">#                       A: Drug X              B: Placebo {NA}           C: Combination     </span></span>
 <span><span class="co">#                    F            M            F            M            F            M     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co"># Asian {2, 3}   41 (53.9%)   25 (54.3%)   36 (52.2%)   30 (60.0%)   39 (60.9%)   32 (57.1%)</span></span>
+<span><span class="co"># Asian {1, 2}   41 (53.9%)   25 (54.3%)   36 (52.2%)   30 (60.0%)   39 (60.9%)   32 (57.1%)</span></span>
 <span><span class="co">#   AGE                                                                                     </span></span>
 <span><span class="co">#     Mean         31.22        34.60        35.06        38.63        36.44        37.66   </span></span>
 <span><span class="co">#   STRATA1                                                                                 </span></span>
@@ -616,9 +604,9 @@ indicates a cell (and must resolve to an individual cell).</p>
 <span><span class="co">#     C              7            2            6            1            3            3     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># {1} - this is a placebo</span></span>
-<span><span class="co"># {2} - hi</span></span>
-<span><span class="co"># {3} - there</span></span>
+<span><span class="co"># {1} - hi</span></span>
+<span><span class="co"># {2} - there</span></span>
+<span><span class="co"># {NA} - this is a placebo</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————</span></span></code></pre>
 <p>Note to step into a content row we must add that to the path, even
 though we didn’t need it to put a footnote on the full row.</p>
@@ -658,10 +646,10 @@ in the output of, e.g., <code>row_paths_summary</code>.</p>
 <span>  colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"B: Placebo"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"These asian women got placebo treatments"</span></span>
 <span><span class="va">tbl2</span></span></code></pre></div>
-<pre><code><span><span class="co">#                       A: Drug X                B: Placebo {1}              C: Combination     </span></span>
+<pre><code><span><span class="co">#                       A: Drug X                B: Placebo {NA}             C: Combination     </span></span>
 <span><span class="co">#                    F            M              F              M            F            M     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co"># Asian {2, 3}   41 (53.9%)   25 (54.3%)   36 (52.2%) {4}   30 (60.0%)   39 (60.9%)   32 (57.1%)</span></span>
+<span><span class="co"># Asian {1, 2}   41 (53.9%)   25 (54.3%)   36 (52.2%) {3}   30 (60.0%)   39 (60.9%)   32 (57.1%)</span></span>
 <span><span class="co">#   AGE                                                                                         </span></span>
 <span><span class="co">#     Mean         31.22        34.60          35.06          38.63        36.44        37.66   </span></span>
 <span><span class="co">#   STRATA1                                                                                     </span></span>
@@ -684,10 +672,10 @@ in the output of, e.g., <code>row_paths_summary</code>.</p>
 <span><span class="co">#     C              7            2              6              1            3            3     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># {1} - this is a placebo</span></span>
-<span><span class="co"># {2} - hi</span></span>
-<span><span class="co"># {3} - there</span></span>
-<span><span class="co"># {4} - These asian women got placebo treatments</span></span>
+<span><span class="co"># {1} - hi</span></span>
+<span><span class="co"># {2} - there</span></span>
+<span><span class="co"># {3} - These asian women got placebo treatments</span></span>
+<span><span class="co"># {NA} - this is a placebo</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span></code></pre>
 </div>
 </div>
