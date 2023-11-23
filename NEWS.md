@@ -2,12 +2,13 @@
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` argument to print a horizontal line under the table header in rendered HTML output.
- 
+ * Duplicate referential footnotes are consolidated when tables are rendered.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
  * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
  * Whitespace is not trimmed when rendering tables with `as_html`.
+ * Started deprecation cycle for `col_fnotes_here` to be replaced with `col_footnotes`.
 
 ## rtables 0.6.5
 ### New Features
