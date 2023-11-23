@@ -9,7 +9,7 @@
     ## to begin with
     idx <- ref_index(refi)
     if (is.na(idx) || !is.na(as.integer(idx))) {
-      ref_index(refi) <- cur_idx_fun()
+      ref_index(refi) <- cur_idx_fun(refi)
     }
     refi
   })
@@ -63,8 +63,8 @@ index_col_refs <- function(tt, cur_idx_fun) {
 
 
 .index_col_refs_inner <- function(ctree, cur_idx_fun) {
-  col_fnotes_here(ctree) <- .reindex_one_pos(
-    col_fnotes_here(ctree),
+  col_footnotes(ctree) <- .reindex_one_pos(
+    col_footnotes(ctree),
     cur_idx_fun
   )
 
@@ -75,9 +75,9 @@ index_col_refs <- function(tt, cur_idx_fun) {
     )
   }
   ctree
-  ## cfs <- col_fnotes_here(ctree)
+  ## cfs <- col_footnotes(ctree)
   ## if(length(unlist(cfs)) > 0) {
-  ##     col_fnotes_here(ctree) <- .reindex_one_pos(lapply(cfs,
+  ##     col_footnotes(ctree) <- .reindex_one_pos(lapply(cfs,
   ##                                      function(refs) lapply(refs, function(refi) {
 }
 
@@ -95,11 +95,17 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' manually.
 #' @export
 update_ref_indexing <- function(tt) {
-  curind <- 0L
-  cur_index <- function() {
-    curind <<- curind + 1L
-    curind
+  col_fnotes <- c(list(row_fnotes = list()), col_footnotes(tt))
+  row_fnotes <- row_footnotes(tt)
+  cell_fnotes <- cell_footnotes(tt)
+  all_fns <- rbind(col_fnotes, cbind(row_fnotes, cell_fnotes))
+  all_fns <- unlist(t(all_fns))
+  unique_fnotes <- unique(sapply(all_fns, ref_msg))
+
+  cur_index <- function(ref_fn) {
+    match(ref_msg(ref_fn), unique_fnotes)
   }
+
   if (ncol(tt) > 0) {
     tt <- index_col_refs(tt, cur_index)
   } ## col_info(tt) <- index_col_refs(col_info(tt), cur_index)

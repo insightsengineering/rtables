@@ -333,7 +333,7 @@ test_that("Can create flextable object that works with different styles", {
   expect_equal(sum(unlist(nrow(ft))), 20)
 
   ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
-  expect_equal(length(ft2), 6)
+  expect_equal(length(ft2), 2)
 
   expect_silent(ft3 <- tt_to_flextable(tbl, theme = NULL))
 

@@ -447,7 +447,7 @@ setMethod(
       sibpos = sibpos,
       nsibs = nsibs,
       leaf_indices = colnum,
-      col_fnotes = col_fnotes_here(ct)
+      col_fnotes = col_footnotes(ct)
     ))
   }
 )
@@ -487,7 +487,7 @@ setMethod(
           sibpos = sibpos,
           nsibs = nsibs,
           pth = thispth,
-          col_fnotes = col_fnotes_here(ct)
+          col_fnotes = col_footnotes(ct)
         ))
         ret <- c(thisone, ret)
       }
