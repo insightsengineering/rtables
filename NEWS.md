@@ -9,6 +9,7 @@
    split section structure assignment.
  * Added `header_section_div` setters and getters for layout and table objects along with 
    related `basic_table` parameter.
+ * Added `na_str` argument to `analyze_colvars` to set custom string to print in place of missing values.
  
 ### Bug Fixes
  * Fixed a bug that was failing when wrapping and section dividers were used at the same time.
