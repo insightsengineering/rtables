@@ -339,6 +339,7 @@ setMethod(
       main_footer = main_footer(obj),
       prov_footer = prov_footer(obj),
       table_inset = table_inset(obj),
+      header_section_div = header_section_div(obj),
       indent_size = indent_size
     )
   }

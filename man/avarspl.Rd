@@ -20,7 +20,8 @@ AnalyzeVarSplit(
   extra_args = list(),
   indent_mod = 0L,
   label_pos = "default",
-  cvar = ""
+  cvar = "",
+  section_div = NA_character_
 )
 
 AnalyzeColVarSplit(
@@ -35,7 +36,8 @@ AnalyzeColVarSplit(
   extra_args = list(),
   indent_mod = 0L,
   label_pos = "default",
-  cvar = ""
+  cvar = "",
+  section_div = NA_character_
 )
 
 AnalyzeMultiVars(
@@ -110,6 +112,10 @@ multiple variables are analyzed at the same level of nesting.}
 \item{cvar}{character(1). The variable, if any, which the content function
 should accept. Defaults to NA.}
 
+\item{section_div}{character(1). String which should be repeated as a section
+divider after each group defined by this split instruction, or
+\code{NA_character_} (the default) for no section divider.}
+
 \item{.payload}{Used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
@@ -119,10 +125,6 @@ which flags the label row as visible only if the child has 0 content rows.}
 
 \item{child_names}{character. Names to be given to the sub splits contained
 by a compound split (typically a \code{AnalyzeMultiVars} split object).}
-
-\item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruction, or
-\code{NA_character_} (the default) for no section divider.}
 }
 \value{
 An \code{AnalyzeVarSplit} object.

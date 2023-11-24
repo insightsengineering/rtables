@@ -486,7 +486,8 @@ gen_rowvalues <- function(dfpart,
 }
 
 # Makes content table xxx renaming
-.make_ctab <- function(df, lvl, ## treepos,
+.make_ctab <- function(df, 
+                       lvl, ## treepos,
                        name,
                        label,
                        cinfo,
@@ -529,6 +530,7 @@ gen_rowvalues <- function(dfpart,
         call. = FALSE
       )
     }
+    
   } else {
     contkids <- list()
   }
@@ -555,8 +557,7 @@ gen_rowvalues <- function(dfpart,
                                dolab = TRUE,
                                lvl,
                                baselines,
-                               spl_context,
-                               section_sep = NA_character_) {
+                               spl_context) {
   stopifnot(is(spl, "VAnalyzeSplit"))
   check_validsplit(spl, df)
   defrlabel <- spl@default_rowlabel
@@ -579,6 +580,10 @@ gen_rowvalues <- function(dfpart,
     ),
     error = function(e) e
   )
+  
+  # Adding section_div for DataRows (analyze leaves)
+  kids <- .set_kids_section_div(kids, spl_section_div(spl), "DataRow")
+  
   if (is(kids, "error")) {
     stop("Error applying analysis function (var - ",
       spl_payload(spl) %||% "colvars", "): ", kids$message,
@@ -596,8 +601,7 @@ gen_rowvalues <- function(dfpart,
     cinfo = cinfo,
     format = obj_format(spl),
     na_str = obj_na_str(spl),
-    indent_mod = indent_mod(spl),
-    trailing_sep = section_sep
+    indent_mod = indent_mod(spl)
   )
 
   labelrow_visible(ret) <- dolab
@@ -652,14 +656,14 @@ setMethod(
   }
 )
 
-.set_kids_sect_sep <- function(lst, spl) {
-  sect_sep <- spl_section_div(spl)
-  if (!is.na(sect_sep)) {
+# Adding section_divisors to TableRow
+.set_kids_section_div <- function(lst, trailing_section_div_char, allowed_class = "VTableTree") {
+  if (!is.na(trailing_section_div_char)) {
     lst <- lapply(
       lst,
       function(k) {
-        if (is(k, "VTableTree")) {
-          trailing_sep(k) <- sect_sep
+        if (is(k, allowed_class)) {
+          trailing_section_div(k) <- trailing_section_div_char
         }
         k
       }
@@ -686,12 +690,8 @@ setMethod(
       have_controws = have_controws,
       make_lrow = make_lrow,
       spl_context = spl_context,
-      ...,
-      section_sep = spl_section_div(spl)
+      ...
     ))
-
-
-
 
     ## XXX this seems like it should be identical not !identical
     ## TODO FIXME
@@ -724,7 +724,6 @@ setMethod(
       }, k = kids, nm = labs, SIMPLIFY = FALSE)
       nms <- labs
     }
-    kids <- .set_kids_sect_sep(kids, spl)
 
     nms[is.na(nms)] <- ""
 
@@ -941,10 +940,14 @@ setMethod(
       splval = splvals,
       SIMPLIFY = FALSE
     ))
-
-    inner <- .set_kids_sect_sep(inner, spl)
+    
+    # Setting the kids section separator if they inherits VTableTree
+    inner <- .set_kids_section_div(inner, 
+                                   trailing_section_div_char = spl_section_div(spl), 
+                                   allowed_class = "VTableTree")
+    
     ## This is where we need to build the structural tables
-    ## even if they are invisible becasue their labels are not
+    ## even if they are invisible because their labels are not
     ## not shown.
     innertab <- TableTree(
       kids = inner,
@@ -1046,7 +1049,6 @@ recursive_applysplit <- function(df,
     spl_context = spl_context
   )
 
-
   nonroot <- lvl != 0L
 
   if (is.na(make_lrow)) {
@@ -1108,7 +1110,6 @@ recursive_applysplit <- function(df,
     ## previously we checked if the child had an identical label
     ## but I don't think thats needed anymore.
     tlabel <- partlabel
-
     ret <- TableTree(
       cont = ctab,
       kids = kids,
@@ -1335,6 +1336,7 @@ build_table <- function(lyt, df,
     subtitles(tab) <- subtitles(lyt)
     main_footer(tab) <- main_footer(lyt)
     prov_footer(tab) <- prov_footer(lyt)
+    header_section_div(tab) <- header_section_div(lyt)
   } else {
     tab <- TableTree(
       cont = ctab,
@@ -1349,7 +1351,8 @@ build_table <- function(lyt, df,
       title = main_title(lyt),
       subtitles = subtitles(lyt),
       main_footer = main_footer(lyt),
-      prov_footer = prov_footer(lyt)
+      prov_footer = prov_footer(lyt),
+      header_section_div = header_section_div(lyt)
     )
   }
 

@@ -3003,10 +3003,6 @@ setMethod(
 )
 
 
-
-
-
-
 #' @export
 #' @rdname ref_fnotes
 setGeneric("ref_msg", function(obj) standardGeneric("ref_msg"))
@@ -3067,7 +3063,6 @@ setMethod(
     ttrp
   }
 )
-
 
 
 #' @param rowpath character or NULL. Path within row structure. \code{NULL}
@@ -3168,7 +3163,7 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 })
 
 
-
+## Horizontal separator --------------------------------------------------------
 #' Access or recursively set header-body separator for tables
 #'
 #' @inheritParams gen_args
@@ -3223,20 +3218,15 @@ setMethod(
 )
 
 
-
+## Section dividers ------------------------------------------------------------
+# Used for splits
 setGeneric("spl_section_div", function(obj) standardGeneric("spl_section_div"))
-
 setMethod(
   "spl_section_div", "Split",
   function(obj) obj@child_section_div
 )
 
-
-setGeneric(
-  "spl_section_div<-",
-  function(obj, value) standardGeneric("spl_section_div<-")
-)
-
+setGeneric("spl_section_div<-", function(obj, value) standardGeneric("spl_section_div<-"))
 setMethod(
   "spl_section_div<-", "Split",
   function(obj, value) {
@@ -3245,14 +3235,292 @@ setMethod(
   }
 )
 
+# Used for table object parts
+setGeneric("trailing_section_div", function(obj) standardGeneric("trailing_section_div"))
+setMethod("trailing_section_div", "VTableTree", function(obj) obj@trailing_section_div)
+setMethod("trailing_section_div", "LabelRow", function(obj) obj@trailing_section_div)
+setMethod("trailing_section_div", "TableRow", function(obj) obj@trailing_section_div)
 
+setGeneric("trailing_section_div<-", function(obj, value) standardGeneric("trailing_section_div<-"))
+setMethod("trailing_section_div<-", "VTableTree", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
+setMethod("trailing_section_div<-", "LabelRow", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
+setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
+  obj@trailing_section_div <- value
+  obj
+})
+
+#' @title Section dividers getter and setter
+#'
+#' @description
+#' `section_div` can be used to set or get the section divider for a table object
+#' produced by [build_table()]. When assigned in post-processing (`section_div<-`)
+#' the table can have a section divider after every row, each assigned independently.
+#' If assigning during layout creation, only [split_rows_by()] (and its related row-wise
+#' splits) and [analyze()] have a `section_div` parameter that will produce separators 
+#' between split sections and data subgroups, respectively.
+#'
+#' @param obj Table object. This can be of any class that inherits from `VTableTree`
+#'   or `TableRow`/`LabelRow`.
+#' @param only_sep_sections logical(1). Defaults to `FALSE` for `section_div<-`. Allows
+#'   you to set the section divider only for sections that are splits or analyses if the number of
+#'   values is less than the number of rows in the table. If `TRUE`, the section divider will
+#'   be set for all rows of the table.
+#' @param value character. Vector of single characters to use as section dividers. Each character 
+#'   is repeated such that all section dividers span the width of the table. Each character that is
+#'   not `NA_character_` will produce a trailing separator for each row of the table. `value` length
+#'   should reflect the number of rows, or be between 1 and the number of splits/levels. 
+#'   See the Details section below for more information.
+#'
+#' @return The section divider string. Each line that does not have a trailing separator
+#'   will have `NA_character_` as section divider.
+#'
+#' @seealso [basic_table()] parameter `header_section_div` for a global section divider.
+#'
+#' @details
+#' Assigned value to section divider must be a character vector. If any value is `NA_character_`
+#' the section divider will be absent for that row or section. When you want to only affect sections
+#' or splits, please use `only_sep_sections` or provide a shorter vector than the number of rows. 
+#' Ideally, the length of the vector should be less than the number of splits with, eventually, the
+#' leaf-level, i.e. `DataRow` where analyze results are. Note that if only one value is inserted,
+#' only the first split will be affected.
+#' If `only_sep_sections = TRUE`, which is the default for `section_div()` produced from the table 
+#' construction, the section divider will be set for all the splits and eventually analyses, but 
+#' not for the header or each row of the table. This can be set with `header_section_div` in 
+#' [basic_table()] or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section 
+#' divider will be set for all the rows of the table.
+#'
+#' @examples
+#' # Data
+#' df <- data.frame(
+#'   cat = c(
+#'     "really long thing its so ", "long"
+#'   ),
+#'   value = c(6, 3, 10, 1)
+#' )
+#' fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
+#'
+#' tbl <- basic_table() %>%
+#'   split_rows_by("cat", section_div = "~") %>%
+#'   analyze("value", afun = fast_afun, section_div = " ") %>%
+#'   build_table(df)
+#'
+#' # Getter
+#' section_div(tbl)
+#'
+#' # Setter
+#' section_div(tbl) <- letters[seq_len(nrow(tbl))]
+#' tbl
+#'
+#' # last letter can appear if there is another table
+#' rbind(tbl, tbl)
+#'
+#' # header_section_div
+#' header_section_div(tbl) <- "+"
+#' tbl
+#'
+#' @docType methods
+#' @rdname section_div
+#' @export
+setGeneric("section_div", function(obj) standardGeneric("section_div"))
+
+#' @rdname section_div
+#' @aliases section_div,VTableTree-method
+setMethod("section_div", "VTableTree", function(obj) {
+  content_row_tbl <- content_table(obj)
+  is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0 # otherwise NA or NULL
+  if (labelrow_visible(obj) || is_content_table) {
+    section_div <- trailing_section_div(obj)
+    labelrow_div <- trailing_section_div(tt_labelrow(obj))
+    rest_of_tree <- section_div(tree_children(obj))
+    # Case it is the section itself and not the labels to have a trailing sep
+    if (!is.na(section_div)) {
+      rest_of_tree[length(rest_of_tree)] <- section_div
+    }
+    unname(c(labelrow_div, rest_of_tree))
+  } else {
+    unname(section_div(tree_children(obj)))
+  }
+})
+#' @rdname section_div
+#' @aliases section_div,list-method
+setMethod("section_div", "list", function(obj) {
+  unlist(lapply(obj, section_div))
+})
+#' @rdname section_div
+#' @aliases section_div,TableRow-method
+setMethod("section_div", "TableRow", function(obj) {
+  trailing_section_div(obj)
+})
+
+# section_div setter from table object
+#' @rdname section_div
+#' @export
+setGeneric("section_div<-", function(obj, only_sep_sections = FALSE, value) {
+  standardGeneric("section_div<-")
+})
+
+#' @rdname section_div
+#' @aliases section_div<-,VTableTree-method
+setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE, value) {
+  char_v <- as.character(value)
+  tree_depths <- unname(vapply(collect_leaves(obj), tt_level, numeric(1)))
+  max_tree_depth <- max(tree_depths)
+  stopifnot(is.logical(only_sep_sections))
+  .check_char_vector_for_section_div(char_v, max_tree_depth, nrow(obj))
+
+  # Automatic establishment of intent
+  if (length(char_v) < nrow(obj)) {
+    only_sep_sections <- TRUE
+  }
+
+  # Case where only separators or splits need to change externally
+  if (only_sep_sections && length(char_v) < nrow(obj)) {
+    # Case where char_v is longer than the max depth
+    char_v <- char_v[seq_len(min(max_tree_depth, length(char_v)))]
+    # Filling up with NAs the rest of the tree depth section div chr vector
+    missing_char_v_len <- max_tree_depth - length(char_v)
+    char_v <- c(char_v, rep(NA_character_, missing_char_v_len))
+  }
+
+  # Retrieving if it is a contentRow (no need for labelrow to be visible in this case)
+  content_row_tbl <- content_table(obj)
+  is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0
+
+  # Main table structure change
+  if (labelrow_visible(obj) || is_content_table) {
+    if (only_sep_sections) {
+      # Only tables are modified
+      trailing_section_div(tt_labelrow(obj)) <- NA_character_
+      trailing_section_div(obj) <- char_v[1]
+      section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v[-1]
+    } else {
+      # All leaves are modified
+      trailing_section_div(tt_labelrow(obj)) <- char_v[1]
+      trailing_section_div(obj) <- NA_character_
+      section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v[-1]
+    }
+  } else {
+    section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v
+  }
+  obj
+})
+#' @rdname section_div
+#' @aliases section_div<-,list-method
+setMethod("section_div<-", "list", function(obj, only_sep_sections = FALSE, value) {
+  char_v <- as.character(value)
+  for (i in seq_along(obj)) {
+    stopifnot(is(obj[[i]], "VTableTree") ||
+      is(obj[[i]], "TableRow") ||
+      is(obj[[i]], "LabelRow"))
+    list_element_size <- nrow(obj[[i]])
+    if (only_sep_sections) {
+      char_v_i <- char_v[seq_len(min(list_element_size, length(char_v)))]
+      char_v_i <- c(char_v_i, rep(NA_character_, list_element_size - length(char_v_i)))
+    } else {
+      init <- (i - 1) * list_element_size + 1
+      chunk_of_char_v_to_take <- seq(init, init + list_element_size - 1)
+      char_v_i <- char_v[chunk_of_char_v_to_take]
+    }
+    section_div(obj[[i]], only_sep_sections = only_sep_sections) <- char_v_i
+  }
+  obj
+})
+#' @rdname section_div
+#' @aliases section_div<-,TableRow-method
+setMethod("section_div<-", "TableRow", function(obj, only_sep_sections = FALSE, value) {
+  trailing_section_div(obj) <- value
+  obj
+})
+#' @rdname section_div
+#' @aliases section_div<-,LabelRow-method
+setMethod("section_div<-", "LabelRow", function(obj, only_sep_sections = FALSE, value) {
+  trailing_section_div(obj) <- value
+  obj
+})
+
+# Helper check function
+.check_char_vector_for_section_div <- function(char_v, min_splits, max) {
+  lcv <- length(char_v)
+  if (lcv < 1 || lcv > max) {
+    stop("section_div must be a vector of length between 1 and numer of table rows.")
+  }
+  if (lcv > min_splits && lcv < max) {
+    warning(
+      "section_div will be truncated to the number of splits (", min_splits, ")",
+      " because it is shorter than the number of rows (", max, ")."
+    )
+  }
+  nchar_check_v <- nchar(char_v)
+  if (any(nchar_check_v > 1, na.rm = TRUE)) {
+    stop("section_div must be a vector of single characters or NAs")
+  }
+}
+
+#' @rdname section_div
+#' @export
+setGeneric("header_section_div", function(obj) standardGeneric("header_section_div"))
+
+#' @rdname section_div
+#' @aliases header_section_div,PreDataTableLayouts-method
+setMethod(
+  "header_section_div", "PreDataTableLayouts",
+  function(obj) obj@header_section_div
+)
+#' @rdname section_div
+#' @aliases header_section_div,PreDataTableLayouts-method
+setMethod(
+  "header_section_div", "VTableTree",
+  function(obj) obj@header_section_div
+)
+
+#' @rdname section_div
+#' @export
+setGeneric("header_section_div<-", function(obj, value) standardGeneric("header_section_div<-"))
+
+#' @rdname section_div
+#' @aliases header_section_div<-,PreDataTableLayouts-method
+setMethod(
+  "header_section_div<-", "PreDataTableLayouts",
+  function(obj, value) {
+    .check_header_section_div(value)
+    obj@header_section_div <- value
+    obj
+  }
+)
+#' @rdname section_div
+#' @aliases header_section_div<-,PreDataTableLayouts-method
+setMethod(
+  "header_section_div<-", "VTableTree",
+  function(obj, value) {
+    .check_header_section_div(value)
+    obj@header_section_div <- value
+    obj
+  }
+)
+.check_header_section_div <- function(chr) {
+  if (!is.na(chr) &&
+    (!is.character(chr) ||
+      length(chr) > 1 ||
+      nchar(chr) > 1 ||
+      nchar(chr) == 0)) {
+    stop("header_section_div must be a single character or NA_character_ if not used")
+  }
+  invisible(TRUE)
+}
+
+## table_inset ----------------------------------------------------------
 #' @rdname formatters_methods
 #' @export
 setMethod(
   "table_inset", "VTableNodeInfo", ## VTableTree",
   function(obj) obj@table_inset
 )
-
 
 #' @rdname formatters_methods
 #' @export
@@ -3265,7 +3533,6 @@ setMethod(
 ## #' @export
 ## setMethod("table_inset", "InstantiatedColumnInfo",
 ##           function(obj) obj@table_inset)
-
 
 #' @rdname formatters_methods
 #' @export
@@ -3296,7 +3563,6 @@ setMethod(
   }
 )
 
-
 #' @rdname formatters_methods
 #' @export
 setMethod(
@@ -3314,16 +3580,6 @@ setMethod(
   }
 )
 
-## covered now by VTableNodeInfo method
-
-## #' @rdname formatters_methods
-## #' @export
-## setMethod("table_inset<-", "TableRow",
-##           function(obj, value) {
-##     obj@table_inset <- value
-##     obj
-## })
-
 #' @rdname formatters_methods
 #' @export
 setMethod(
@@ -3339,59 +3595,3 @@ setMethod(
     obj
   }
 )
-
-
-
-setGeneric("spl_section_div", function(obj) standardGeneric("spl_section_div"))
-
-setMethod(
-  "spl_section_div", "Split",
-  function(obj) obj@child_section_div
-)
-
-
-setGeneric(
-  "spl_section_div<-",
-  function(obj, value) standardGeneric("spl_section_div<-")
-)
-
-setMethod(
-  "spl_section_div<-", "Split",
-  function(obj, value) {
-    obj@child_section_div <- value
-    obj
-  }
-)
-
-
-
-setGeneric("trailing_sep", function(obj) standardGeneric("trailing_sep"))
-
-setMethod("trailing_sep", "VTableTree", function(obj) obj@trailing_section_div)
-
-setGeneric("trailing_sep<-", function(obj, value) standardGeneric("trailing_sep<-"))
-
-setMethod("trailing_sep<-", "VTableTree", function(obj, value) {
-  obj@trailing_section_div <- value
-  obj
-})
-
-## setGeneric("apply_kids_section_sep",
-##            function(tbl, sep) standardGeneric("apply_kids_section_sep"))
-
-## ## eleemntary tables can only have rows and they can't have
-## ## trailing separators
-## setMethod("apply_kids_section_sep", "ElementaryTable",
-##           function(tbl, sep) tbl)
-## setMethod("apply_kids_section_sep", "TableTree",
-##           function(tbl, sep) {
-##    kds <- lapply(tree_children(tbl),
-##                   function(kid) {
-##         if(is(kid, "VTableTree"))
-##             trailing_sep(kid) <- sep
-##         kid
-##     })
-
-##     tree_children(tbl) <- kds
-##     tbl
-## })

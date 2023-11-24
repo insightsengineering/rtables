@@ -2049,6 +2049,7 @@ basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
                         prov_footer = character(),
+                        header_section_div = NA_character_,
                         show_colcounts = FALSE,
                         colcount_format = "(N=xx)",
                         inset = 0L) {
@@ -2056,11 +2057,13 @@ basic_table <- function(title = "",
   if (is.na(inset) || inset < 0L) {
     stop("Got invalid table_inset value, must be an integer > 0")
   }
+  .check_header_section_div(header_section_div)
   ret <- PreDataTableLayouts(
     title = title,
     subtitles = subtitles,
     main_footer = main_footer,
     prov_footer = prov_footer,
+    header_section_div = header_section_div,
     table_inset = as.integer(inset)
   )
   if (show_colcounts) {
