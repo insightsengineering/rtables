@@ -3267,10 +3267,10 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #'
 #' @param obj Table object. This can be of any class that inherits from `VTableTree`
 #'   or `TableRow`/`LabelRow`.
-#' @param only_sep_sections logical(1). Defaults to `FALSE` for `section_div<-`. It allows
-#'   to set the section divider only for sections that are splits or analyses if the number of
+#' @param only_sep_sections logical(1). Defaults to `FALSE` for `section_div<-`. Allows
+#'   you to set the section divider only for sections that are splits or analyses if the number of
 #'   values is less than the number of rows in the table. If `TRUE`, the section divider will
-#'   be set for all the rows of the table.
+#'   be set for all rows of the table.
 #' @param value character. The section divider single character vector. Each character that is
 #'   not `NA_character_` will produce a trailing separator for each row of the table. `value` length
 #'   should reflect the number of rows, or be between 1 and the number of splits/levels. 
