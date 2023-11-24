@@ -3271,10 +3271,11 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #'   you to set the section divider only for sections that are splits or analyses if the number of
 #'   values is less than the number of rows in the table. If `TRUE`, the section divider will
 #'   be set for all rows of the table.
-#' @param value character. The section divider single character vector. Each character that is
+#' @param value character. Vector of single characters to use as section dividers. Each character 
+#'   is repeated such that all section dividers span the width of the table. Each character that is
 #'   not `NA_character_` will produce a trailing separator for each row of the table. `value` length
 #'   should reflect the number of rows, or be between 1 and the number of splits/levels. 
-#'   See details for more information.
+#'   See the Details section below for more information.
 #'
 #' @return The section divider string. Each line that does not have a trailing separator
 #'   will have `NA_character_` as section divider.
