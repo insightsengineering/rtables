@@ -27,11 +27,17 @@ table_shell_str(
 \item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
-\item{widths}{widths of row.name and columns}
+\item{widths}{numeric (or  \code{NULL}). (proposed) widths for the columns
+of \code{x}. The expected length  of this numeric vector can be
+retrieved with  \code{ncol() + 1}  as the  column of row  names must
+also be considered.}
 
-\item{col_gap}{gap between columns}
+\item{col_gap}{numeric(1). Space (in characters) between columns}
 
-\item{hsep}{character to create line separator}
+\item{hsep}{character(1). Characters to repeat to create
+header/body separator line. If \code{NULL}, the object value will be
+used. If \code{" "}, an empty separator will be printed. Check \code{\link[formatters:default_hsep]{default_hsep()}}
+for more information.}
 
 \item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
 and footnotes be wrapped?}
