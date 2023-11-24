@@ -78,7 +78,9 @@ this is calculated automatically based on the specified page
 size). \code{NULL} indicates no horizontal pagination should occur.}
 
 \item{hsep}{character(1). Characters to repeat to create
-header/body separator line.}
+header/body separator line. If \code{NULL}, the object value will be
+used. If \code{" "}, an empty separator will be printed. Check \code{\link[formatters:default_hsep]{default_hsep()}}
+for more information.}
 
 \item{indent_size}{numeric(1). Indent size in characters. Ignored
 when \code{x} is already a \code{MatrixPrintForm} object in favor of information
@@ -87,9 +89,9 @@ there.}
 \item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
 and footnotes be wrapped?}
 
-\item{max_width}{integer(1), character(1) or NULL. Width that title
+\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
 and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If NULL, it is  set to the current print width
+word-wrapped to. If \code{NULL}, it is  set to the current print width
 of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}

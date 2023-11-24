@@ -36,9 +36,9 @@ populated table.}
 \item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
 and footnotes be wrapped?}
 
-\item{max_width}{integer(1), character(1) or NULL. Width that title
+\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
 and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If NULL, it is  set to the current print width
+word-wrapped to. If \code{NULL}, it is  set to the current print width
 of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}
