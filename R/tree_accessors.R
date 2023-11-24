@@ -3288,7 +3288,7 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' Ideally, the length of the vector should be less than the number of splits with, eventually, the
 #' leaf-level, i.e. `DataRow` where analyze results are. Note that if only one value is inserted,
 #' only the first split will be affected.
-#' If `only_sep_sections =TRUE`, which is the default for `section_div()` produced from the table 
+#' If `only_sep_sections = TRUE`, which is the default for `section_div()` produced from the table 
 #' construction, the section divider will be set for all the splits and eventually analyses, but 
 #' not for the header or each row of the table. This can be set with `header_section_div` in 
 #' [basic_table()] or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section 
