@@ -7,6 +7,7 @@ articles:
   clinical_trials: clinical_trials.html
   custom_appearance: custom_appearance.html
   dg_debug_rtables: dev-guide/dg_debug_rtables.html
+  dg_notes: dev-guide/dg_notes.html
   dg_split_machinery: dev-guide/dg_split_machinery.html
   dg_tabulation: dev-guide/dg_tabulation.html
   example_analysis_coxreg: example_analysis_coxreg.html
@@ -20,7 +21,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2023-11-23T20:10Z
+last_built: 2023-11-24T08:48Z
 urls:
   reference: https://insightsengineering.github.io/rtables/reference
   article: https://insightsengineering.github.io/rtables/articles

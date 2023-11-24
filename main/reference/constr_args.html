@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9013</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,23 +46,12 @@
     <a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
     <a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a>
     <a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
+    <a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse notes on {rtables} internals</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -113,11 +102,12 @@
 <span>  <span class="va">page_title</span>,</span>
 <span>  <span class="va">page_prefix</span>,</span>
 <span>  <span class="va">section_div</span>,</span>
-<span>  <span class="va">trailing_sep</span>,</span>
+<span>  <span class="va">trailing_section_div</span>,</span>
 <span>  <span class="va">split_na_str</span>,</span>
 <span>  <span class="va">cna_str</span>,</span>
 <span>  <span class="va">inset</span>,</span>
-<span>  <span class="va">table_inset</span></span>
+<span>  <span class="va">table_inset</span>,</span>
+<span>  <span class="va">header_section_div</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -234,7 +224,7 @@ divider after each group defined by this split instruction, or
 <code>NA_character_</code> (the default) for no section divider.</p></dd>
 
 
-<dt>trailing_sep</dt>
+<dt>trailing_section_div</dt>
 <dd><p>character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
 unless that row is also the last table row to be printed overall, or
@@ -262,6 +252,13 @@ of title, subtitle, and provenance footer. Defaults to 0 (no inset).</p></dd>
 <dd><p>numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).</p></dd>
+
+
+<dt>header_section_div</dt>
+<dd><p>character(1). String which will be used to divide the header
+from the table. See <code><a href="section_div.html">header_section_div()</a></code> for getter and setter of these.
+Please consider changing last element of <code><a href="section_div.html">section_div()</a></code> when concatenating
+tables that need a divider between them.</p></dd>
 
 </dl></div>
     <div class="section level2">

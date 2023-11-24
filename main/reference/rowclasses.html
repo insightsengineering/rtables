@@ -12,7 +12,7 @@ Row constructors and Classes"><meta property="og:image" content="https://insight
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9012</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9013</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,23 +48,12 @@ Row constructors and Classes"><meta property="og:image" content="https://insight
     <a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
     <a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a>
     <a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
+    <a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse notes on {rtables} internals</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -100,7 +89,8 @@ Row constructors and Classes"><meta property="og:image" content="https://insight
 <span>  vis <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nzchar</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span>,</span>
 <span>  cinfo <span class="op">=</span> <span class="va">EmptyColInfo</span>,</span>
 <span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  table_inset <span class="op">=</span> <span class="fl">0L</span></span>
+<span>  table_inset <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  trailing_section_div <span class="op">=</span> <span class="cn">NA_character_</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">.tablerow</span><span class="op">(</span></span>
@@ -116,7 +106,8 @@ Row constructors and Classes"><meta property="og:image" content="https://insight
 <span>  <span class="va">klass</span>,</span>
 <span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
 <span>  footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  table_inset <span class="op">=</span> <span class="fl">0L</span></span>
+<span>  table_inset <span class="op">=</span> <span class="fl">0L</span>,</span>
+<span>  trailing_section_div <span class="op">=</span> <span class="cn">NA_character_</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">DataRow</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
@@ -161,6 +152,15 @@ corresponds to the unmodified default behavior.</p></dd>
 <dd><p>numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).</p></dd>
+
+
+<dt>trailing_section_div</dt>
+<dd><p>character(1). String which will be used as a section
+divider after the printing of the last row contained in this (sub)-table,
+unless that row is also the last table row to be printed overall, or
+<code>NA_character_</code> for none (the default). When generated via layouting, this
+would correspond to the <code>section_div</code> of the split under which this table
+represents a single facet.</p></dd>
 
 
 <dt>vals</dt>
