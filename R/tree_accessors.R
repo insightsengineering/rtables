@@ -3258,12 +3258,12 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' @title Section dividers setter ang getter
 #'
 #' @description
-#' `section_div`can be used to set or get the section divider for a table object
-#' produced by [build_table()]. When assigned in post processing (`section_div<-`)
-#' the table can have a section divider after each row, independently. Otherwise,
-#' only [split_rows_by()] (and its related row-wise splits) and [analyze()] have a
-#' `section_div` parameters that will produce separators between split sections, or
-#' data subgroups.
+#' `section_div` can be used to set or get the section divider for a table object
+#' produced by [build_table()]. When assigned in post-processing (`section_div<-`)
+#' the table can have a section divider after every row, each assigned independently.
+#' If assigning during layout creation, only [split_rows_by()] (and its related row-wise
+#' splits) and [analyze()] have a `section_div` parameter that will produce separators 
+#' between split sections and data subgroups, respectively.
 #'
 #' @param obj Table object. This can be of any class that inherits from `VTableTree`
 #'   or `TableRow`/`LabelRow`.
