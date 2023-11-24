@@ -117,7 +117,8 @@ tables that need a divider between them.}
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
 a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning).}
+charset, and to \code{-} elsewhere (with a once per session warning). See
+\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
 
 \item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
