@@ -3255,7 +3255,7 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
   obj
 })
 
-#' @title Section dividers setter ang getter
+#' @title Section dividers getter and setter
 #'
 #' @description
 #' `section_div` can be used to set or get the section divider for a table object
