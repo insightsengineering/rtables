@@ -1274,8 +1274,10 @@ get_acolvar_vars <- function(lyt) {
 #' tbl2 <- build_table(lyt2, ANL)
 #' tbl2
 #'
-analyze_colvars <- function(lyt, afun,
+analyze_colvars <- function(lyt, 
+                            afun,
                             format = NULL,
+                            na_str = NA_character_,
                             nested = TRUE,
                             extra_args = list(),
                             indent_mod = 0L,
@@ -1314,6 +1316,7 @@ analyze_colvars <- function(lyt, afun,
     afun = afun,
     defrowlab = defrowlab,
     split_format = format,
+    split_na_str = na_str,
     split_name = get_acolvar_name(lyt),
     indent_mod = indent_mod,
     extra_args = extra_args,
