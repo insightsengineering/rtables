@@ -943,8 +943,18 @@ test_that("analyze_colvars works generally", {
     cell_values(one_col_tbl),
     list(Sepal.Width = mean(iris$Sepal.Width))
   )
+  
+  # na_str argument works
+  test$d <- NA
+  l2 <- basic_table() %>%
+    split_cols_by_multivar(c("a", "b", "c", "d")) %>%
+    analyze_colvars(afun = mean, na_str = "no data")
+  tab2 <- build_table(l2, test)
+  expect_identical(
+    toString(tab2[1, 4]),
+    "          d   \n——————————————\nmean   no data\n"
+  )
 })
-
 
 test_that("alt_counts_df works", {
   minidm <- DM[1, ]
