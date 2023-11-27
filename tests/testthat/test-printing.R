@@ -739,3 +739,20 @@ test_that("Separators and wrapping work together with getter and setters", {
     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   )
 })
+
+test_that("horizontal separator is propagated from table to print and export", {
+  # GitHub error #778
+  lyt <- basic_table() %>%
+    split_cols_by("Species") %>%
+    analyze("Sepal.Length", afun = function(x) {
+      list(
+        "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+        "range" = diff(range(x))
+      )
+    })
+  
+  tbl <- build_table(lyt, iris, hsep = "~")
+  tostring_tbl <- strsplit(toString(tbl), "\n")[[1]]
+  export_txt_tbl <- strsplit(export_as_txt(tbl), "\n")[[1]]
+  expect_identical(tostring_tbl, export_txt_tbl)
+})

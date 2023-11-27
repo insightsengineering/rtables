@@ -89,7 +89,8 @@ when forcing pagination between the children of this split/table}
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
 a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning).}
+charset, and to \code{-} elsewhere (with a once per session warning). See
+\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
 
 \item{indent_size}{numeric(1). Number of spaces to use per indent level.
 Defaults to 2}

@@ -19,12 +19,9 @@ NULL
 
 #' Convert an `rtable` object to a string
 #'
+#' @inheritParams formatters::toString
 #' @inheritParams gen_args
 #' @inherit formatters::toString
-#' @param x table object
-#' @param widths widths of row.name and columns
-#' @param col_gap gap between columns
-#' @param hsep character to create line separator
 #' @exportMethod toString
 #'
 #' @return a string representation of \code{x} as it appears when printed.
@@ -340,6 +337,7 @@ setMethod(
       prov_footer = prov_footer(obj),
       table_inset = table_inset(obj),
       header_section_div = header_section_div(obj),
+      horizontal_sep = horizontal_sep(obj),
       indent_size = indent_size
     )
   }
