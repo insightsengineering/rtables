@@ -96,7 +96,7 @@ coltree_split <- function(ctree) ctree@split
 
 col_fnotes_at_path <- function(ctree, path, fnotes) {
   if (length(path) == 0) {
-    col_fnotes_here(ctree) <- fnotes
+    col_footnotes(ctree) <- fnotes
     return(ctree)
   }
 

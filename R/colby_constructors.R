@@ -1274,8 +1274,10 @@ get_acolvar_vars <- function(lyt) {
 #' tbl2 <- build_table(lyt2, ANL)
 #' tbl2
 #'
-analyze_colvars <- function(lyt, afun,
+analyze_colvars <- function(lyt, 
+                            afun,
                             format = NULL,
+                            na_str = NA_character_,
                             nested = TRUE,
                             extra_args = list(),
                             indent_mod = 0L,
@@ -1314,6 +1316,7 @@ analyze_colvars <- function(lyt, afun,
     afun = afun,
     defrowlab = defrowlab,
     split_format = format,
+    split_na_str = na_str,
     split_name = get_acolvar_name(lyt),
     indent_mod = indent_mod,
     extra_args = extra_args,
@@ -2049,6 +2052,7 @@ basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
                         prov_footer = character(),
+                        header_section_div = NA_character_,
                         show_colcounts = FALSE,
                         colcount_format = "(N=xx)",
                         inset = 0L) {
@@ -2056,11 +2060,13 @@ basic_table <- function(title = "",
   if (is.na(inset) || inset < 0L) {
     stop("Got invalid table_inset value, must be an integer > 0")
   }
+  .check_header_section_div(header_section_div)
   ret <- PreDataTableLayouts(
     title = title,
     subtitles = subtitles,
     main_footer = main_footer,
     prov_footer = prov_footer,
+    header_section_div = header_section_div,
     table_inset = as.integer(inset)
   )
   if (show_colcounts) {

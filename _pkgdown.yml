@@ -23,6 +23,8 @@ navbar:
           href: articles/dev-guide/dg_tabulation.html
         - text: Debugging in {rtables} and Beyond
           href: articles/dev-guide/dg_debug_rtables.html
+        - text: Sparse notes on {rtables} internals
+          href: articles/dev-guide/dg_notes.html
 
 repo:
   url:
@@ -81,6 +83,7 @@ articles:
     - 'dev-guide/dg_split_machinery'
     - 'dev-guide/dg_tabulation'
     - 'dev-guide/dg_debug_rtables'
+    - 'dev-guide/dg_notes'
 
 reference:
   - title: Argument Conventions
@@ -178,6 +181,7 @@ reference:
     - brackets
     - clear_indent_mods
     - head
+    - section_div
 
   - title: Validating and Fixing Table Structure
     contents:

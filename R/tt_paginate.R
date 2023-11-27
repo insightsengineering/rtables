@@ -12,9 +12,6 @@
 
 
 
-
-
-
 #' @exportMethod nlines
 #' @inheritParams formatters::nlines
 #' @name formatters_methods
@@ -207,8 +204,8 @@ setMethod(
       ## else if (length(path) > 0 && nzchar(obj_name(tt))) ## don't add "" for root # nolint
       path <- c(path, obj_name(tt))
     }
-
     ret <- list()
+    
     ## note this is the **table** not the label row
     if (!visible_only) {
       ret <- c(
@@ -257,8 +254,10 @@ setMethod(
 
 
     if (NROW(content_table(tt)) > 0) {
-      cind <- indent + indent_mod(content_table(tt))
-      contdf <- make_row_df(content_table(tt),
+      ct_tt <- content_table(tt)
+      cind <- indent + indent_mod(ct_tt)
+      trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(tt))
+      contdf <- make_row_df(ct_tt,
         colwidths = colwidths,
         visible_only = visible_only,
         rownum = rownum,
@@ -307,8 +306,10 @@ setMethod(
     }
 
     ret <- do.call(rbind, ret)
-    if (!is.na(trailing_sep(tt))) {
-      ret$trailing_sep[nrow(ret)] <- trailing_sep(tt)
+    
+    # Case where it has Elementary table or VTableTree section_div it is overridden
+    if (!is.na(trailing_section_div(tt))) {
+      ret$trailing_sep[nrow(ret)] <- trailing_section_div(tt)
     }
     ret
   }
@@ -349,7 +350,8 @@ setMethod(
       ## these two are unlist calls cause they come in lists even with no footnotes
       nrowrefs = length(rrefs),
       ncellrefs = length(unlist(crefs)),
-      nreflines = reflines
+      nreflines = reflines,
+      trailing_sep = trailing_section_div(tt)
     )
     ret
   }
@@ -387,10 +389,11 @@ setMethod(
       nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
         colwidths = colwidths,
         max_width = max_width
-      ))
+      )),
+      trailing_sep = trailing_section_div(tt)
     )
     if (!labelrow_visible(tt)) {
-      ret <- ret[0, ]
+      ret <- ret[0, , drop = FALSE]
     }
     ret
   }
@@ -444,7 +447,7 @@ setMethod(
       sibpos = sibpos,
       nsibs = nsibs,
       leaf_indices = colnum,
-      col_fnotes = col_fnotes_here(ct)
+      col_fnotes = col_footnotes(ct)
     ))
   }
 )
@@ -484,7 +487,7 @@ setMethod(
           sibpos = sibpos,
           nsibs = nsibs,
           pth = thispth,
-          col_fnotes = col_fnotes_here(ct)
+          col_fnotes = col_footnotes(ct)
         ))
         ret <- c(thisone, ret)
       }

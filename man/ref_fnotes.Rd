@@ -6,7 +6,10 @@
 \alias{cell_footnotes}
 \alias{cell_footnotes<-}
 \alias{col_fnotes_here}
+\alias{col_fnotes_here,ANY-method}
 \alias{col_fnotes_here<-}
+\alias{col_footnotes}
+\alias{col_footnotes<-}
 \alias{ref_index}
 \alias{ref_index<-}
 \alias{ref_symbol}
@@ -25,7 +28,13 @@ cell_footnotes(obj) <- value
 
 col_fnotes_here(obj)
 
+\S4method{col_fnotes_here}{ANY}(obj)
+
 col_fnotes_here(obj) <- value
+
+col_footnotes(obj)
+
+col_footnotes(obj) <- value
 
 ref_index(obj)
 

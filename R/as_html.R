@@ -78,49 +78,34 @@ as_html <- function(x,
 
   mat <- matrix_form(x)
 
-  nrh <- mf_nrheader(mat)
+  nlh <- mf_nlheader(mat)
   nc <- ncol(x) + 1
 
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
-  cells <- matrix(rep(list(list()), (nrh + nrow(x)) * (nc)), ncol = nc)
+  cells <- matrix(rep(list(list()), (nlh + nrow(x)) * (nc)), ncol = nc)
 
-  for (i in unique(mat$line_grouping)) {
-    rows <- which(mat$line_grouping == i)
+  for (i in seq_len(nrow(mat$strings))) {
     for (j in seq_len(ncol(mat$strings))) {
-      curstrs <- mat$strings[rows, j]
-      curspans <- mat$spans[rows, j]
-      curaligns <- mat$aligns[rows, j]
+      curstrs <- mat$strings[i, j]
+      curspn <- mat$spans[i, j]
+      algn <- mat$aligns[i, j]
 
-      curspn <- unique(curspans)
-      stopifnot(length(curspn) == 1)
-      inhdr <- i <= nrh
+      inhdr <- i <= nlh
       tagfun <- if (inhdr) tags$th else tags$td
-      algn <- unique(curaligns)
-      stopifnot(length(algn) == 1)
       cells[i, j][[1]] <- tagfun(
         class = if (inhdr) class_th else class_tr,
-        class = if (j > 1 || i > nrh) paste0("text-", algn),
+        style = paste0("text-align: ", algn, ";"),
         style = if (inhdr && !"header" %in% bold) "font-weight: normal;",
-        style = if (i == nrh && header_sep_line) "border-bottom: 1px solid black;",
+        style = if (i == nlh && header_sep_line) "border-bottom: 1px solid black;",
         colspan = if (curspn != 1) curspn,
         insert_brs(curstrs)
       )
     }
   }
 
-  ## special casing hax for top_left. We probably want to do this better someday
-  cells[1:nrh, 1] <- mapply(
-    FUN = function(x, algn) {
-      tags$th(x, class = class_th, style = "white-space: pre;")
-    },
-    x = mat$strings[1:nrh, 1],
-    algn = mat$aligns[1:nrh, 1],
-    SIMPLIFY = FALSE
-  )
-
   if (header_sep_line) {
-    cells[nrh][[1]] <- htmltools::tagAppendAttributes(
-      cells[nrh, 1][[1]],
+    cells[nlh][[1]] <- htmltools::tagAppendAttributes(
+      cells[nlh, 1][[1]],
       style = "border-bottom: 1px solid black;"
     )
   }
@@ -129,13 +114,13 @@ as_html <- function(x,
   for (i in seq_len(nrow(x))) {
     indent <- mat$row_info$indent[i]
     if (indent > 0) { # indentation
-      cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nrh, 1][[1]],
+      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nlh, 1][[1]],
         style = paste0("padding-left: ", indent * 3, "ch;")
       )
     }
     if ("row_names" %in% bold) { # font weight
-      cells[i + nrh, 1][[1]] <- htmltools::tagAppendAttributes(
-        cells[i + nrh, 1][[1]],
+      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i + nlh, 1][[1]],
         style = paste0("font-weight: bold;")
       )
     }
@@ -144,8 +129,8 @@ as_html <- function(x,
   # label rows style
   if ("label_rows" %in% bold) {
     which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
-    cells[which_lbl_rows + nrh, ] <- lapply(
-      cells[which_lbl_rows + nrh, ],
+    cells[which_lbl_rows + nlh, ] <- lapply(
+      cells[which_lbl_rows + nlh, ],
       htmltools::tagAppendAttributes,
       style = "font-weight: bold;"
     )
@@ -154,8 +139,8 @@ as_html <- function(x,
   # content rows style
   if ("content_rows" %in% bold) {
     which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))
-    cells[which_cntnt_rows + nrh, ] <- lapply(
-      cells[which_cntnt_rows + nrh, ],
+    cells[which_cntnt_rows + nlh, ] <- lapply(
+      cells[which_cntnt_rows + nlh, ],
       htmltools::tagAppendAttributes,
       style = "font-weight: bold;"
     )
