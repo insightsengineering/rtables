@@ -50,4 +50,20 @@ test_that("Result Data Frame generation works v0", {
   result_df3 <- as_result_df(tbl3, spec_version)
 
   expect_identical(nrow(result_df3), 1L)
+  
+  ## test labels when no row splits
+  lyt4 <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    analyze(c("AGE", "SEX"))
+  
+  tbl4 <- build_table(lyt4, DM) 
+  result_df4 <- as_result_df(tbl4)
+  
+  expect_identical(
+    names(result_df4),
+    c(
+      "avar_name", "row_name", "row_num", "is_group_summary", 
+      "node_class", "A: Drug X", "B: Placebo", "C: Combination"
+    )
+  )
 })

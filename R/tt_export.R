@@ -141,8 +141,9 @@ do_data_row <- function(rdfrow, maxlen) {
   if (pthlen %% 2 == 1) {
     pth <- pth[-1 * (pthlen - 2)]
   }
+  pthlen_new <- length(pth)
   c(
-    as.list(pth[seq_len(pthlen - 2)]),
+    as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
     as.list(tail(pth, 2)),
     list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
