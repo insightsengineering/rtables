@@ -7,7 +7,7 @@
 \alias{path_enriched_df}
 \title{Generate a Result Data Frame}
 \usage{
-as_result_df(tt, spec = "v0_experimental", ...)
+as_result_df(tt, spec = "v0_experimental", simplify = FALSE, ...)
 
 result_df_specs()
 
@@ -20,7 +20,21 @@ populated table.}
 \item{spec}{character(1). The specification to use to
 extract the result data frame. See details}
 
-\item{...}{Passed to spec-specific result data frame conversion function.}
+\item{simplify}{logical(1). If \code{TRUE}, the result data frame will have only visible
+labels and result columns.}
+
+\item{...}{Passed to spec-specific result data frame conversion function. Currently it can be
+one or more of the following parameters (valid only for \code{v0_experimental} spec for now):
+\itemize{
+\item \code{expanded_colnames}: when \code{TRUE}, the result data frame will have expanded column names above the usual
+output. This is useful when the result data frame is used for further processing.
+\item \code{simplify}: when \code{TRUE}, the result data frame will have only visible labels and result columns.
+\item \code{as_strings}: when \code{TRUE}, the result data frame will have all values as strings, as they appear
+in the final table (it can also be retrieved from \code{matrix_form(tt)$strings}). This is also true for
+column counts if \code{expanded_colnames = TRUE}.
+\item \code{as_viewer}: when \code{TRUE}, the result data frame will have all values as they appear in the final table,
+i.e. with the same precision and numbers, but in easy-to-use numeric form.
+}}
 
 \item{path_fun}{function. Function to transform paths into single-string
 row/column names.}

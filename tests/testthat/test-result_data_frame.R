@@ -1,6 +1,5 @@
 context("Result Data Frames")
 
-
 test_that("Result Data Frame generation works v0", {
   ## change here (only) when v0 is crystalized (no longer experimental)
   spec_version <- "v0_experimental"
@@ -66,4 +65,10 @@ test_that("Result Data Frame generation works v0", {
       "node_class", "A: Drug X", "B: Placebo", "C: Combination"
     )
   )
+})
+
+test_that("as_result_df works with visual output (as_viewer)", {
+  lyt <- make_big_lyt()
+  tbl <- build_table(lyt, rawdat)
+  as_result_df(tbl, simplify = TRUE, as_viewer = TRUE)
 })

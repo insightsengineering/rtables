@@ -80,8 +80,19 @@ formatters::export_as_txt
 #'
 #' @inheritParams gen_args
 #' @param spec character(1). The specification to use to
-#' extract the result data frame. See details
-#' @param ... Passed to spec-specific result data frame conversion function.
+#'   extract the result data frame. See details
+#' @param simplify logical(1). If \code{TRUE}, the result data frame will have only visible
+#'   labels and result columns.
+#' @param ... Passed to spec-specific result data frame conversion function. Currently it can be
+#'   one or more of the following parameters (valid only for `v0_experimental` spec for now):
+#'   - `expanded_colnames`: when `TRUE`, the result data frame will have expanded column names above the usual
+#'     output. This is useful when the result data frame is used for further processing.
+#'   - `simplify`: when `TRUE`, the result data frame will have only visible labels and result columns.
+#'   - `as_strings`: when `TRUE`, the result data frame will have all values as strings, as they appear
+#'     in the final table (it can also be retrieved from `matrix_form(tt)$strings`). This is also true for
+#'     column counts if `expanded_colnames = TRUE`.
+#'   - `as_viewer`: when `TRUE`, the result data frame will have all values as they appear in the final table,
+#'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
 #'
 #' @details `as_result_df()`: Result data frame specifications may differ in the exact information 
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
@@ -99,9 +110,28 @@ formatters::export_as_txt
 #' 
 #' @name data.frame_export
 #' @export
-as_result_df <- function(tt, spec = "v0_experimental", ...) {
+as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
+  checkmate::assert_class(tt, "VTableTree")
+  checkmate::assert_string(spec)
+  checkmate::assert_flag(simplify)
+  
   result_df_fun <- lookup_result_df_specfun(spec)
-  result_df_fun(tt, ...)
+  out <- result_df_fun(tt, ...)
+  
+  if (simplify) {
+    out <- .simplify_result_df(out)
+  }
+  
+  out
+}
+
+# Function that selects specific outputs from the result data frame
+.simplify_result_df <- function(df) {
+  col_df <- colnames(df)
+  row_names_col <- which(col_df == "row_name")
+  result_cols <- seq(which(col_df == "node_class") + 1, length(col_df))
+  
+  df[, c(row_names_col, result_cols)]
 }
 
 # Not used in rtables
@@ -122,7 +152,7 @@ as_result_df <- function(tt, spec = "v0_experimental", ...) {
 #   ret
 # }
 
-#' @describeIn data.frame_export list of functions that extract result data frames from \code{TableTree}s.
+#' @describeIn data.frame_export list of functions that extract result data frames from \code{TableTree}s. 
 #'
 #' @return `result_df_specs()`: returns a named list of result data frame extraction functions by "specification".
 #' 
@@ -145,17 +175,47 @@ lookup_result_df_specfun <- function(spec) {
   result_df_specs()[[spec]]
 }
 
-result_df_v0_experimental <- function(tt) {
+result_df_v0_experimental <- function(tt, 
+                                      as_viewer = FALSE, 
+                                      as_strings = FALSE, 
+                                      expanded_colnames = FALSE) {
+  checkmate::assert_flag(as_viewer)
+  checkmate::assert_flag(as_string)
+  checkmate::assert_flag(expanded_colnames)
+  
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
-  ## rather than a list of length 1 reprsenting the single row. This is bad but may not be changable
+  ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
   ## at this point.
   if (nrow(tt) == 1 && length(raw_cvals) > 1) {
     raw_cvals <- list(raw_cvals)
   }
+  
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
+  
+  if (as_viewer || as_strings) {
+    # we keep previous calculations to check the format of the data
+    mf_tt <- matrix_form(tt)
+    mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1]
+    mf_result_chars <- .remove_empty_elements(mf_result_chars)
+    mf_result_numeric <- .make_numeric_char_mf(mf_result_chars)
+    if (!setequal(dim(mf_result_numeric), dim(cellvals)) || 
+        !setequal(dim(mf_result_chars), dim(cellvals))) {
+      stop("The extracted numeric data.frame does not have the same dimension of the",
+           " cell values extracted with cell_values(). This is a bug. Please report it.") # nocov
+    }
+    if (as_strings) {
+      colnames(mf_result_chars) <- colnames(cellvals)
+      cellvals <- mf_result_chars
+    } else {
+      colnames(mf_result_numeric) <- colnames(cellvals)
+      cellvals <- mf_result_numeric
+    }
+  }
+  
   rdf <- make_row_df(tt)
+  
   df <- cbind(
     rdf[
       rdf$node_class != "LabelRow",
@@ -163,15 +223,76 @@ result_df_v0_experimental <- function(tt) {
     ],
     cellvals
   )
+  
   maxlen <- max(lengths(df$path))
-  metadf <- do.call(rbind.data.frame, lapply(
-    seq_len(NROW(df)),
-    function(ii) handle_rdf_row(df[ii, ], maxlen = maxlen)
-  ))
-  cbind(
+  metadf <- do.call(
+    rbind.data.frame, 
+    lapply(
+      seq_len(NROW(df)),
+      function(ii) 
+        handle_rdf_row(df[ii, ], maxlen = maxlen)
+    )
+  )
+  
+  ret <- cbind(
     metadf[metadf$node_class != "LabelRow", ],
     cellvals
   )
+  
+  # If we want to expand colnames
+  if (expanded_colnames) {
+    col_name_structure <- .get_formatted_colnames(clayout(tt))
+    number_of_non_data_cols <- which(colnames(ret) == "node_class")
+    if (NCOL(ret) - number_of_non_data_cols != NCOL(col_name_structure)) {
+      stop("When expanding colnames structure, we were not able to find the same",
+           " number of columns as in the result data frame. This is a bug. Please report it.") # nocov
+    }
+    
+    buffer_rows_for_colnames <- matrix(
+      rep("<only_for_column_names>", number_of_non_data_cols * NROW(col_name_structure)), 
+      nrow = NROW(col_name_structure)
+    )
+    
+    header_colnames_matrix <- cbind(buffer_rows_for_colnames, data.frame(col_name_structure))
+    colnames(header_colnames_matrix) <- colnames(ret)
+    
+    count_row <- NULL
+    if (disp_ccounts(tt)) {
+      ccounts <- col_counts(tt)
+      if (as_strings) {
+        ccounts <- mf_strings(mf_tt)[mf_nlheader(mf_tt), ]
+        ccounts <- .remove_empty_elements(ccounts)
+      }
+      count_row <- c(rep("<only_for_column_counts>", number_of_non_data_cols), ccounts)
+      header_colnames_matrix <- rbind(header_colnames_matrix, count_row)
+    }
+    ret <- rbind(header_colnames_matrix, ret)
+  }
+  
+  ret
+}
+
+.remove_empty_elements <- function(char_df) {
+  if (is.null(dim(char_df))) {
+    return(char_df[nzchar(char_df, keepNA = TRUE)])
+  }
+  
+  apply(char_df, 2, function(col_i) col_i[nzchar(col_i, keepNA = TRUE)])
+}
+
+# Helper function to make the character matrix numeric
+.make_numeric_char_mf <- function(char_df) {
+  if (is.null(dim(char_df))) {
+    return(as.numeric(stringi::stri_extract_all(char_df, regex = "\\d+.\\d+")))
+  }
+  
+  apply(char_df, 2, function(col_i) {
+    lapply(
+      stringi::stri_extract_all(col_i, regex = "\\d+.\\d+"),
+      as.numeric
+    )
+  }) %>% 
+    do.call(cbind, .)
 }
 
 do_label_row <- function(rdfrow, maxlen) {
@@ -234,6 +355,19 @@ handle_rdf_row <- function(rdfrow, maxlen) {
                 stop("Unrecognized node type in row dataframe, unable to generate result data frame")
   )
   setNames(ret, make_result_df_md_colnames(maxlen))
+}
+
+# Helper recurrent function to get the column names for the result data frame from the VTableTree
+.get_formatted_colnames <- function(clyt) {
+  ret <- names(clyt)
+  if (is.null(tree_children(clyt))) {
+    return(ret)
+  } else {
+    ret <- rbind(ret, lapply(tree_children(clyt), .get_formatted_colnames) %>% do.call(c, .))
+    colnames(ret) <- NULL
+    rownames(ret) <- NULL
+    return(ret)
+  }
 }
 
 #' @describeIn data.frame_export transform `TableTree` object to Path-Enriched `data.frame`.
@@ -727,7 +861,7 @@ tt_to_flextable <- function(tt,
                             tf_wrap = !is.null(cpp),
                             max_width = cpp,
                             total_width = 10) {
-  check_required_packages(c("flextable", "checkmate"))
+  check_required_packages("flextable")
   if (!inherits(tt, "VTableTree")) {
     stop("Input table is not an rtables' object.")
   }
@@ -932,7 +1066,7 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
                                bold_manual = NULL,
                                border = flextable::fp_border_default(width = 0.5)) {
   function(flx) {
-    check_required_packages(c("flextable", "checkmate"))
+    check_required_packages("flextable")
     if (!inherits(flx, "flextable")) {
       stop(sprintf(
         "Function `%s` supports only flextable objects.",

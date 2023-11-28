@@ -34,13 +34,13 @@ Depends:
     methods,
     R (>= 2.10)
 Imports:
+    checkmate (>= 2.1.0),
     grid,
     htmltools (>= 0.5.4),
     stats
 Suggests:
     broom (>= 0.7.10),
     car (>= 3.0-13),
-    checkmate (>= 2.1.0),
     dplyr (>= 1.0.5),
     flextable (>= 0.8.4),
     knitr (>= 1.42),
