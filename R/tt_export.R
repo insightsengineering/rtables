@@ -299,12 +299,12 @@ result_df_v0_experimental <- function(tt,
 # Helper function to make the character matrix numeric
 .make_numeric_char_mf <- function(char_df) {
   if (is.null(dim(char_df))) {
-    return(as.numeric(stringi::stri_extract_all(char_df, regex = "\\d+.\\d+")))
+    return(as.numeric(stringi::stri_extract_all(char_df, regex = "\\d+.\\d+|\\d+")))
   }
 
   ret <- apply(char_df, 2, function(col_i) {
     lapply(
-      stringi::stri_extract_all(col_i, regex = "\\d+.\\d+"),
+      stringi::stri_extract_all(col_i, regex = "\\d+.\\d+|\\d+"),
       as.numeric
     )
   })
