@@ -302,13 +302,14 @@ result_df_v0_experimental <- function(tt,
     return(as.numeric(stringi::stri_extract_all(char_df, regex = "\\d+.\\d+")))
   }
 
-  apply(char_df, 2, function(col_i) {
+  ret <- apply(char_df, 2, function(col_i) {
     lapply(
       stringi::stri_extract_all(col_i, regex = "\\d+.\\d+"),
       as.numeric
     )
-  }) %>%
-    do.call(cbind, .)
+  })
+  
+  do.call(cbind, ret)
 }
 
 do_label_row <- function(rdfrow, maxlen) {
