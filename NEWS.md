@@ -24,6 +24,8 @@
  * Started deprecation cycle for `col_fnotes_here` to be replaced with `col_footnotes`.
  * Exported `section_div` methods now have a dedicated documentation page that is visible to users.
  * When tables are exported as `txt`, they preserve the horizontal separator of the table.
+ * Added imports on `stringi` and `checkmate` as they are fundamental packages for string handling and
+   argument checking.
 
 ## rtables 0.6.5
 ### New Features
