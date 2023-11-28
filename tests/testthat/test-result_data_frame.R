@@ -70,5 +70,32 @@ test_that("Result Data Frame generation works v0", {
 test_that("as_result_df works with visual output (as_viewer)", {
   lyt <- make_big_lyt()
   tbl <- build_table(lyt, rawdat)
-  as_result_df(tbl, simplify = TRUE, as_viewer = TRUE)
+  
+  res <- expect_silent(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE))
+  expect_equal(res$ARM1.M[[1]], c(116.0, 45.3))
+  
+  res <- expect_silent(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE, as_strings = TRUE))
+  expect_equal(res$ARM1.M[[1]], "116 (45.3%)")
+  
+  mf <- matrix_form(tbl)
+  string_tbl <- mf_strings(mf)[-seq_len(mf_nlheader(mf)),]
+  string_tbl <- string_tbl[nzchar(string_tbl[, 2]), ]
+  colnames(string_tbl) <- colnames(res)
+  expect_equal(res, data.frame(string_tbl))
+  
+  res <- expect_silent(as_result_df(tbl, simplify = TRUE, as_strings = TRUE, expand_colnames = TRUE))
+  string_tbl <- mf_strings(mf)
+  string_tbl <- data.frame(string_tbl[nzchar(string_tbl[, 2]), ])
+  colnames(string_tbl) <- colnames(res)
+  string_tbl$row_name[seq_len(mf_nlheader(mf))] <- res$row_name[seq_len(mf_nlheader(mf))]
+  expect_equal(res, string_tbl)
+  
+  expect_silent(basic_table() %>% build_table(DM) %>% as_result_df())
+  tbl <- basic_table() %>% analyze("BMRKR1") %>% build_table(DM) 
+  
+  expect_equal(as_result_df(tbl)$V1, 5.851948, tolerance = 1e-6) # V1?
+
+  # as_result_df(tbl, as_strings = TRUE)  
+  # as_result_df(tbl, as_viewer = TRUE)  
+  as_result_df(tbl, expand_colnames = TRUE)  
 })

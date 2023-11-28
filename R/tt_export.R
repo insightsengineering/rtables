@@ -85,12 +85,12 @@ formatters::export_as_txt
 #'   labels and result columns.
 #' @param ... Passed to spec-specific result data frame conversion function. Currently it can be
 #'   one or more of the following parameters (valid only for `v0_experimental` spec for now):
-#'   - `expanded_colnames`: when `TRUE`, the result data frame will have expanded column names above the usual
+#'   - `expand_colnames`: when `TRUE`, the result data frame will have expanded column names above the usual
 #'     output. This is useful when the result data frame is used for further processing.
 #'   - `simplify`: when `TRUE`, the result data frame will have only visible labels and result columns.
 #'   - `as_strings`: when `TRUE`, the result data frame will have all values as strings, as they appear
 #'     in the final table (it can also be retrieved from `matrix_form(tt)$strings`). This is also true for
-#'     column counts if `expanded_colnames = TRUE`.
+#'     column counts if `expand_colnames = TRUE`.
 #'   - `as_viewer`: when `TRUE`, the result data frame will have all values as they appear in the final table,
 #'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
 #'
@@ -114,6 +114,10 @@ as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
   checkmate::assert_class(tt, "VTableTree")
   checkmate::assert_string(spec)
   checkmate::assert_flag(simplify)
+  
+  if (nrow(tt) == 0) {
+    return(sanitize_table_struct(tt))
+  }
   
   result_df_fun <- lookup_result_df_specfun(spec)
   out <- result_df_fun(tt, ...)
@@ -169,7 +173,7 @@ lookup_result_df_specfun <- function(spec) {
     stop(
       "unrecognized result data frame specification: ",
       spec,
-      "If that specification is correct you may  need to update your version of rtables"
+      "If that specification is correct you may need to update your version of rtables"
     )
   }
   result_df_specs()[[spec]]
@@ -178,10 +182,10 @@ lookup_result_df_specfun <- function(spec) {
 result_df_v0_experimental <- function(tt, 
                                       as_viewer = FALSE, 
                                       as_strings = FALSE, 
-                                      expanded_colnames = FALSE) {
+                                      expand_colnames = FALSE) {
   checkmate::assert_flag(as_viewer)
-  checkmate::assert_flag(as_string)
-  checkmate::assert_flag(expanded_colnames)
+  checkmate::assert_flag(as_strings)
+  checkmate::assert_flag(expand_colnames)
   
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
@@ -240,7 +244,7 @@ result_df_v0_experimental <- function(tt,
   )
   
   # If we want to expand colnames
-  if (expanded_colnames) {
+  if (expand_colnames) {
     col_name_structure <- .get_formatted_colnames(clayout(tt))
     number_of_non_data_cols <- which(colnames(ret) == "node_class")
     if (NCOL(ret) - number_of_non_data_cols != NCOL(col_name_structure)) {
@@ -359,11 +363,14 @@ handle_rdf_row <- function(rdfrow, maxlen) {
 
 # Helper recurrent function to get the column names for the result data frame from the VTableTree
 .get_formatted_colnames <- function(clyt) {
-  ret <- names(clyt)
+  ret <- obj_label(clyt)
+  if (!nzchar(ret)) {
+    ret <- NULL
+  }
   if (is.null(tree_children(clyt))) {
     return(ret)
   } else {
-    ret <- rbind(ret, lapply(tree_children(clyt), .get_formatted_colnames) %>% do.call(c, .))
+    ret <- rbind(ret, lapply(tree_children(clyt), .get_formatted_colnames) %>% do.call(cbind, .))
     colnames(ret) <- NULL
     rownames(ret) <- NULL
     return(ret)
