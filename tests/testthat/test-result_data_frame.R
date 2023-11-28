@@ -91,11 +91,13 @@ test_that("as_result_df works with visual output (as_viewer)", {
   expect_equal(res, string_tbl)
   
   expect_silent(basic_table() %>% build_table(DM) %>% as_result_df())
-  tbl <- basic_table() %>% analyze("BMRKR1") %>% build_table(DM) 
   
-  expect_equal(as_result_df(tbl)$V1, 5.851948, tolerance = 1e-6) # V1?
-
-  # as_result_df(tbl, as_strings = TRUE)  
-  # as_result_df(tbl, as_viewer = TRUE)  
-  as_result_df(tbl, expand_colnames = TRUE)  
+  tbl <- basic_table(show_colcounts = TRUE) %>% analyze("BMRKR1") %>% build_table(DM)
+  expect_equal(as_result_df(tbl)$`all obs`, 5.851948, tolerance = 1e-6) 
+  expect_equal(
+    as_result_df(tbl, as_viewer = TRUE)$`all obs`, 
+    as.numeric(as_result_df(tbl, as_strings = TRUE)$`all obs`)
+  )
+  expect_equal(as_result_df(tbl, expand_colnames = TRUE)$`all obs`[2], "356")
+  expect_equal(as_result_df(tbl, expand_colnames = TRUE, as_strings = TRUE)$`all obs`[2], "(N=356)")
 })

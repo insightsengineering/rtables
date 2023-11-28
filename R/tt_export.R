@@ -194,16 +194,23 @@ result_df_v0_experimental <- function(tt,
   if (nrow(tt) == 1 && length(raw_cvals) > 1) {
     raw_cvals <- list(raw_cvals)
   }
-  
+
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
+
+  if (nrow(tt) == 1 && ncol(tt) == 1) {
+    colnames(cellvals) <- names(raw_cvals)
+  }
   
   if (as_viewer || as_strings) {
     # we keep previous calculations to check the format of the data
     mf_tt <- matrix_form(tt)
     mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1]
     mf_result_chars <- .remove_empty_elements(mf_result_chars)
-    mf_result_numeric <- .make_numeric_char_mf(mf_result_chars)
+    mf_result_numeric <- as.data.frame(
+      .make_numeric_char_mf(mf_result_chars)
+    )
+    mf_result_chars <- as.data.frame(mf_result_chars)
     if (!setequal(dim(mf_result_numeric), dim(cellvals)) || 
         !setequal(dim(mf_result_chars), dim(cellvals))) {
       stop("The extracted numeric data.frame does not have the same dimension of the",
