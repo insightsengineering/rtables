@@ -1,13 +1,11 @@
 #' @importFrom tools file_ext
 NULL
-### XXX is the stuff in this file correct or should we be exporting *formatted* values to
-### meet the needs of consumers of this? Do we ened to support both?
 
 #' Create Enriched flat value table with paths
 #'
-#'
+#' @description
 #' This function creates a flat tabular file of cell values and
-#' corresponding paths via \code{\link{path_enriched_df}}. I then
+#' corresponding paths via [path_enriched_df()]. I then
 #' writes that data.frame out as a `tsv` file.
 #'
 #' By default (i.e. when \code{value_func} is not specified,
@@ -20,25 +18,23 @@ NULL
 #'
 #' @inheritParams gen_args
 #' @param file character(1). The path of the file to written to or read from.
-#' @inheritParams path_enriched_df
+#' @inheritParams data.frame_export
+#' 
 #' @return \code{NULL} silently for \code{export_as_tsv}, a data.frame with
 #' re-constituted list values for \code{export_as_tsv}.
-#' @export
+#' 
+#' @seealso [path_enriched_df()] for the underlying function that does the work.
+#' 
 #' @rdname tsv_io
 #' @importFrom utils write.table read.table
-
+#' @export
 export_as_tsv <- function(tt, file = NULL, path_fun = collapse_path,
                           value_fun = collapse_values) {
   df <- path_enriched_df(tt, path_fun = path_fun, value_fun = value_fun)
   write.table(df, file, sep = "\t")
 }
-
-
-.collapse_char <- "|"
-.collapse_char_esc <- "\\|"
-
-##' @export
-##' @rdname tsv_io
+#' @rdname tsv_io
+#' @export
 import_from_tsv <- function(file) {
   rawdf <- read.table(file, header = TRUE, sep = "\t")
   as.data.frame(lapply(
@@ -53,126 +49,87 @@ import_from_tsv <- function(file) {
   ))
 }
 
-collapse_path <- function(paths) {
-  if (is.list(paths)) {
-    return(vapply(paths, collapse_path, ""))
-  }
-  paste(paths, collapse = .collapse_char)
-}
+### Migrated to formatters.
 
-collapse_values <- function(colvals) {
-  if (!is.list(colvals)) { ## || all(vapply(colvals, length, 1L) == 1))
-    return(colvals)
-  } else if (all(vapply(colvals, length, 1L) == 1)) {
-    return(unlist(colvals))
-  }
-  vapply(colvals, paste, "", collapse = .collapse_char)
-}
-
-#' Transform `TableTree` object to Path-Enriched data.frame
+#' @importFrom formatters export_as_txt
 #'
-#' @inheritParams gen_args
-#' @param path_fun function. Function to transform paths into single-string
-#'   row/column names.
-#' @param value_fun function. Function to transform cell values into cells of
-#'   the data.frame. Defaults to \code{collapse_values} which creates strings
-#'   where multi-valued cells are collapsed together, separated by \code{|}.
-#' @export
-#' @return A data frame of \code{tt}'s cell values (processed by
-#'   \code{value_fun}, with columns named by the full column paths (processed by
-#'   \code{path_fun} and an additional \code{row_path} column with the row paths
-#'   (processed by by \code{path_fun}).
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
+#'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#'
+#' cat(export_as_txt(tbl, file = NULL, paginate = TRUE, lpp = 8))
+#'
+#' \dontrun{
+#' tf <- tempfile(fileext = ".txt")
+#' export_as_txt(tbl, file = tf)
+#' system2("cat", tf)
+#' }
+#'
+#' @export
+formatters::export_as_txt
+
+# data.frame output ------------------------------------------------------------
+
+#' Generate a Result Data Frame
+#' 
+#' @description
+#' Collection of utilities to exctract `data.frame` from `TableTree` objects. 
+#'
+#' @inheritParams gen_args
+#' @param spec character(1). The specification to use to
+#' extract the result data frame. See details
+#' @param ... Passed to spec-specific result data frame conversion function.
+#'
+#' @details `as_result_df()`: Result data frame specifications may differ in the exact information 
+#' they include and the form in which they represent it. Specifications whose names end in "_experimental"
+#' are subject to change without notice, but specifications without the "_experimental"
+#' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#'
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_rows_by("STRATA1") %>%
 #'   analyze(c("AGE", "BMRKR2"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' path_enriched_df(tbl)
-path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_values) {
-  rdf <- make_row_df(tt)
-  cdf <- make_col_df(tt)
-  cvs <- as.data.frame(do.call(rbind, cell_values(tt)))
-  cvs <- as.data.frame(lapply(cvs, value_fun))
-  row.names(cvs) <- NULL
-  colnames(cvs) <- path_fun(cdf$path)
-  preppaths <- path_fun(rdf[rdf$node_class != "LabelRow", ]$path)
-  cbind.data.frame(row_path = preppaths, cvs)
-}
-
-do_label_row <- function(rdfrow, maxlen) {
-  pth <- rdfrow$path[[1]]
-  c(
-    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
-  )
-}
-
-
-make_result_df_md_colnames <- function(maxlen) {
-  spllen <- floor((maxlen - 2) / 2)
-  ret <- character()
-  if (spllen > 0) {
-    ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
-  }
-  ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
-}
-
-
-do_content_row <- function(rdfrow, maxlen) {
-  pth <- rdfrow$path[[1]]
-
-  contpos <- which(pth == "@content")
-
-  seq_before <- seq_len(contpos - 1)
-
-  c(
-    as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
-    list(tail(pth, 1)),
-    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class)
-  )
-}
-
-do_data_row <- function(rdfrow, maxlen) {
-  pth <- rdfrow$path[[1]]
-  pthlen <- length(pth)
-  ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
-  if (pthlen %% 2 == 1) {
-    pth <- pth[-1 * (pthlen - 2)]
-  }
-  pthlen_new <- length(pth)
-  c(
-    as.list(pth[seq_len(pthlen_new - 2)]),
-    replicate(maxlen - pthlen, list(NA_character_)),
-    as.list(tail(pth, 2)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
-  )
-}
-
-
-handle_rdf_row <- function(rdfrow, maxlen) {
-  nclass <- rdfrow$node_class
-  if (rdfrow$path[[1]][1] == "root") {
-    rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
-    maxlen <- maxlen - 1
-  }
-  ret <- switch(nclass,
-    LabelRow = do_label_row(rdfrow, maxlen),
-    ContentRow = do_content_row(rdfrow, maxlen),
-    DataRow = do_data_row(rdfrow, maxlen),
-    stop("Unrecognized node type in row dataframe, unable to generate result data frame")
-  )
-  setNames(ret, make_result_df_md_colnames(maxlen))
-}
-
-
-#' Result Data Frame Specifications
-#'
-#' @return a named list of result data frame extraction functions by "specification"
+#' as_result_df(tbl)
+#' 
+#' @name data.frame_export
 #' @export
+as_result_df <- function(tt, spec = "v0_experimental", ...) {
+  result_df_fun <- lookup_result_df_specfun(spec)
+  result_df_fun(tt, ...)
+}
+
+# Not used in rtables
+# .split_colwidths <- function(ptabs, nctot, colwidths) {
+#   ret <- list()
+#   i <- 1L
+#   
+#   rlw <- colwidths[1]
+#   colwidths <- colwidths[-1]
+#   donenc <- 0
+#   while (donenc < nctot) {
+#     curnc <- NCOL(ptabs[[i]])
+#     ret[[i]] <- c(rlw, colwidths[seq_len(curnc)])
+#     colwidths <- colwidths[-1 * seq_len(curnc)]
+#     donenc <- donenc + curnc
+#     i <- i + 1
+#   }
+#   ret
+# }
+
+#' @describeIn data.frame_export list of functions that extract result data frames from \code{TableTree}s.
+#'
+#' @return `result_df_specs()`: returns a named list of result data frame extraction functions by "specification".
+#' 
 #' @examples
 #' result_df_specs()
+#' 
+#' @export
 result_df_specs <- function() {
   list(v0_experimental = result_df_v0_experimental)
 }
@@ -217,75 +174,122 @@ result_df_v0_experimental <- function(tt) {
   )
 }
 
-#' Generate a Result Data Frame
+do_label_row <- function(rdfrow, maxlen) {
+  pth <- rdfrow$path[[1]]
+  c(
+    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
+}
+
+make_result_df_md_colnames <- function(maxlen) {
+  spllen <- floor((maxlen - 2) / 2)
+  ret <- character()
+  if (spllen > 0) {
+    ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
+  }
+  ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
+}
+
+do_content_row <- function(rdfrow, maxlen) {
+  pth <- rdfrow$path[[1]]
+  
+  contpos <- which(pth == "@content")
+  
+  seq_before <- seq_len(contpos - 1)
+  
+  c(
+    as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+    list(tail(pth, 1)),
+    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class)
+  )
+}
+
+do_data_row <- function(rdfrow, maxlen) {
+  pth <- rdfrow$path[[1]]
+  pthlen <- length(pth)
+  ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
+  if (pthlen %% 2 == 1) {
+    pth <- pth[-1 * (pthlen - 2)]
+  }
+  pthlen_new <- length(pth)
+  c(
+    as.list(pth[seq_len(pthlen_new - 2)]),
+    replicate(maxlen - pthlen, list(NA_character_)),
+    as.list(tail(pth, 2)),
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
+}
+
+handle_rdf_row <- function(rdfrow, maxlen) {
+  nclass <- rdfrow$node_class
+  if (rdfrow$path[[1]][1] == "root") {
+    rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
+    maxlen <- maxlen - 1
+  }
+  ret <- switch(nclass,
+                LabelRow = do_label_row(rdfrow, maxlen),
+                ContentRow = do_content_row(rdfrow, maxlen),
+                DataRow = do_data_row(rdfrow, maxlen),
+                stop("Unrecognized node type in row dataframe, unable to generate result data frame")
+  )
+  setNames(ret, make_result_df_md_colnames(maxlen))
+}
+
+#' @describeIn data.frame_export transform `TableTree` object to Path-Enriched `data.frame`.
 #'
-#' @param tt `VTableTree`. The table.
-#' @param spec character(1). The specification to use to
-#' extract the result data frame. See details
-#' @param ... Passed to spec-specific result data frame conversion function.
+#' @param path_fun function. Function to transform paths into single-string
+#'   row/column names.
+#' @param value_fun function. Function to transform cell values into cells of
+#'   the data.frame. Defaults to \code{collapse_values} which creates strings
+#'   where multi-valued cells are collapsed together, separated by \code{|}.
 #'
-#' @details Result data frame specifications may differ in the exact information they include and
-#' the form in which they represent it. Specifications whose names end in "_experimental"
-#' are subject to change without notice, but specifications without the "_experimental"
-#' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#' @return `path_enriched_df()`: returns a data frame of \code{tt}'s cell values (processed by
+#'   \code{value_fun}, with columns named by the full column paths (processed by
+#'   \code{path_fun} and an additional \code{row_path} column with the row paths
+#'   (processed by by \code{path_fun}).
 #'
-#' @note This function may eventually be migrated to a separate package, and so should
-#' not be called via `::`
-#' @export
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
-#'   split_rows_by("STRATA1") %>%
 #'   analyze(c("AGE", "BMRKR2"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' as_result_df(tbl)
-as_result_df <- function(tt, spec = "v0_experimental", ...) {
-  result_df_fun <- lookup_result_df_specfun(spec)
-  result_df_fun(tt, ...)
-}
-
-.split_colwidths <- function(ptabs, nctot, colwidths) {
-  ret <- list()
-  i <- 1L
-
-  rlw <- colwidths[1]
-  colwidths <- colwidths[-1]
-  donenc <- 0
-  while (donenc < nctot) {
-    curnc <- NCOL(ptabs[[i]])
-    ret[[i]] <- c(rlw, colwidths[seq_len(curnc)])
-    colwidths <- colwidths[-1 * seq_len(curnc)]
-    donenc <- donenc + curnc
-    i <- i + 1
-  }
-  ret
-}
-
-### Migrated to formatters.
-
-#' @importFrom formatters export_as_txt
-#'
-#' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
-#'
-#' tbl <- build_table(lyt, ex_adsl)
-#'
-#' cat(export_as_txt(tbl, file = NULL, paginate = TRUE, lpp = 8))
-#'
-#' \dontrun{
-#' tf <- tempfile(fileext = ".txt")
-#' export_as_txt(tbl, file = tf)
-#' system2("cat", tf)
-#' }
-#'
+#' path_enriched_df(tbl)
+#' 
 #' @export
-formatters::export_as_txt
+path_enriched_df <- function(tt, path_fun = collapse_path, value_fun = collapse_values) {
+  rdf <- make_row_df(tt)
+  cdf <- make_col_df(tt)
+  cvs <- as.data.frame(do.call(rbind, cell_values(tt)))
+  cvs <- as.data.frame(lapply(cvs, value_fun))
+  row.names(cvs) <- NULL
+  colnames(cvs) <- path_fun(cdf$path)
+  preppaths <- path_fun(rdf[rdf$node_class != "LabelRow", ]$path)
+  cbind.data.frame(row_path = preppaths, cvs)
+}
+
+.collapse_char <- "|"
+.collapse_char_esc <- "\\|"
+
+collapse_path <- function(paths) {
+  if (is.list(paths)) {
+    return(vapply(paths, collapse_path, ""))
+  }
+  paste(paths, collapse = .collapse_char)
+}
+
+collapse_values <- function(colvals) {
+  if (!is.list(colvals)) { ## || all(vapply(colvals, length, 1L) == 1))
+    return(colvals)
+  } else if (all(vapply(colvals, length, 1L) == 1)) {
+    return(unlist(colvals))
+  }
+  vapply(colvals, paste, "", collapse = .collapse_char)
+}
 
 
+# pdf output -------------------------------------------------------------------
 #' Export as PDF
 #'
 #' The PDF output is based on the ASCII output created with `toString`
@@ -462,6 +466,22 @@ export_as_pdf <- function(tt,
     lpp = lpp, cpp = cpp
   )
 }
+
+# only used in pagination
+.tab_to_colpath_set <- function(tt) {
+  vapply(
+    collect_leaves(coltree(tt)),
+    function(y) paste(pos_to_path(tree_pos(y)), collapse = " "),
+    ""
+  )
+}
+.figure_out_colinds <- function(subtab, fulltab) {
+  match(
+    .tab_to_colpath_set(subtab),
+    .tab_to_colpath_set(fulltab)
+  )
+}
+
 # Flextable and docx -----------------------------------------------------------
 #' Export as word document
 #'
@@ -1073,30 +1093,4 @@ apply_alignments <- function(flx, aligns_df, part) {
   }
 
   flx
-}
-
-# only used in pagination
-.tab_to_colpath_set <- function(tt) {
-  vapply(
-    collect_leaves(coltree(tt)),
-    function(y) paste(pos_to_path(tree_pos(y)), collapse = " "),
-    ""
-  )
-}
-.figure_out_colinds <- function(subtab, fulltab) {
-  match(
-    .tab_to_colpath_set(subtab),
-    .tab_to_colpath_set(fulltab)
-  )
-}
-
-check_required_packages <- function(pkgs) {
-  for (pkgi in pkgs) {
-    if (!requireNamespace(pkgi)) {
-      stop(
-        "This function requires the ", pkgi, " package. ",
-        "Please install it if you wish to use it"
-      )
-    }
-  }
 }

@@ -18,4 +18,5 @@ Create \code{ElementaryTable} from data.frame
 }
 \examples{
 df_to_tt(mtcars)
+
 }
