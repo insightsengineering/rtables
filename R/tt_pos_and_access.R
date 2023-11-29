@@ -293,7 +293,7 @@ setMethod(
       path <- path[-1]
     }
     ## handle pathing that hits the root split by name
-    if (identical(obj_name(tt), path[1])) {
+    if (identical(unname(obj_name(tt)), unname(path[1]))) {
       path <- path[-1]
     }
     cur <- tt
