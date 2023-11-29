@@ -540,3 +540,26 @@ test_that("bracket methods all work", {
     tbl[, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE)]
   )
 })
+
+test_that("tt_at_path and cell_values work with values even if they differ in naming", {
+  # see issue #794
+  tbl <- basic_table() %>%
+    split_cols_by(var = "ARM", split_label = "asdar") %>%
+    # split_rows_by(var = "SEX") %>%
+    add_colcounts() %>%
+    analyze("AGE",
+      afun = function(x) {
+        out_list <- list(a = mean(x), b = 3)
+        labs <- c("argh", "argh2")
+        attr(out_list[[1]], "label") <- "aa"
+        attr(out_list[[2]], "label") <- "aa2"
+        in_rows(.list = out_list, .labels = labs, .names = labs)
+      },
+      show_labels = "visible", table_names = "nope"
+    ) %>%
+    build_table(df = DM)
+
+  rdf <- make_row_df(tbl)
+  names(rdf$path[[2]]) <- c("a", "b")
+  expect_silent(tt_at_path(tbl, rdf$path[[2]]))
+})

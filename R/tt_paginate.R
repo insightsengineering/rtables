@@ -342,7 +342,7 @@ setMethod(
       colwidths = colwidths,
       sibpos = sibpos,
       nsibs = nsibs,
-      pth = c(path, obj_name(tt)),
+      pth = c(path, unname(obj_name(tt))),
       repext = repr_ext,
       repind = repr_inds,
       indent = indent,
