@@ -11,8 +11,6 @@ is_rtable <- function(x) {
   is(x, "VTableTree")
 }
 
-
-
 # nocov start
 ## is each object in a collection from a class
 are <- function(object_collection, class2) {
@@ -51,7 +49,6 @@ is_logical_vector_modif <- function(x, min_length = 1) {
 }
 # nocov end
 
-
 # Shorthand for functions that take df as first parameter
 .takes_df <- function(f) {
   func_takes(f, "df", is_first = TRUE)
@@ -79,11 +76,11 @@ func_takes <- function(func, params, is_first = FALSE) {
 
 #' Translate spl_context to Path for display in error messages
 #'
-#'
 #' @param ctx data.frame. The `spl_context` data.frame where the error occurred
 #'
 #' @return A character string containing a description of the row path corresponding
 #' to the `ctx`
+#' 
 #' @export
 spl_context_to_disp_path <- function(ctx) {
   ## this can happen in the first split in column space, but
@@ -107,3 +104,16 @@ spl_context_to_disp_path <- function(ctx) {
 paste_vec <- function(vec) {
   paste0('c("', paste(vec, collapse = '", "'), '")')
 }
+
+# Utility for checking if a package is installed
+check_required_packages <- function(pkgs) {
+  for (pkgi in pkgs) {
+    if (!requireNamespace(pkgi)) {
+      stop(
+        "This function requires the ", pkgi, " package. ",
+        "Please install it if you wish to use it"
+      )
+    }
+  }
+}
+
