@@ -9,9 +9,10 @@ basic_table(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
-  header_section_div = NA_character_,
   show_colcounts = FALSE,
   colcount_format = "(N=xx)",
+  header_section_div = NA_character_,
+  top_level_section_div = NA_character_,
   inset = 0L
 )
 }
@@ -30,17 +31,21 @@ lines.}
 (\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
-\item{header_section_div}{character(1). String which will be used to divide the header
-from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
-Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
-tables that need a divider between them.}
-
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
 resulting table when this layout is applied to data}
 
 \item{colcount_format}{character(1). Format for use when displaying the
 column counts. Must be 1d, or 2d where one component is a percent. See
 details.}
+
+\item{header_section_div}{character(1). String which will be used to divide the header
+from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
+Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
+tables that need a divider between them.}
+
+\item{top_level_section_div}{character(1). If assigned to a single character,
+the larger sections of the table will be divided by a line made of that character.
+See \link{section_div} for more information.}
 
 \item{inset}{numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
@@ -76,7 +81,6 @@ indentation on multiple lines.
 }
 }
 \examples{
-
 lyt <- basic_table() \%>\%
   analyze("AGE", afun = mean)
 

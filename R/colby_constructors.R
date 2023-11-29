@@ -1987,16 +1987,17 @@ list_wrap_df <- function(f) {
 #'
 #' Every layout must start with a basic table.
 #'
-#' @export
 #' @inheritParams constr_args
 #' @param show_colcounts logical(1). Should column counts be displayed in the
 #'   resulting table when this layout is applied to data
 #' @param colcount_format character(1). Format for use when displaying the
-#' column counts. Must be 1d, or 2d where one component is a percent. See
-#' details.
+#'   column counts. Must be 1d, or 2d where one component is a percent. See
+#'   details.
+#' @param top_level_section_div character(1). If assigned to a single character,
+#'   the larger sections of the table will be divided by a line made of that character.
+#'   See [section_div] for more information.
 #'
 #' @details
-#'
 #' `colcount_format` is ignored if `show_colcounts` is `FALSE` (the default).
 #' When `show_colcounts` is `TRUE`, and `colcount_format` is 2-dimensional with
 #' a percent component, the value component for the percent is always populated
@@ -2006,10 +2007,10 @@ list_wrap_df <- function(f) {
 #' `colcount` format. See [formatters::list_valid_format_labels()] for
 #' the list of valid format labels to select from.
 #'
-#'
 #' @inherit split_cols_by return
 #'
-#' @note - Because percent components in `colcount_format` are *always*
+#' @note 
+#' - Because percent components in `colcount_format` are *always*
 #' populated with the value 1, we can get arguably strange results, such as
 #' that individual arm columns and a combined "all patients" column all
 #' list "100%" as their percentage, even though the individual arm columns
@@ -2020,7 +2021,6 @@ list_wrap_df <- function(f) {
 #' indentation on multiple lines.
 #'
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   analyze("AGE", afun = mean)
 #'
@@ -2048,25 +2048,30 @@ list_wrap_df <- function(f) {
 #' ) %>%
 #'   split_cols_by("ARM")
 #'
+#' @export
 basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
                         prov_footer = character(),
-                        header_section_div = NA_character_,
                         show_colcounts = FALSE,
                         colcount_format = "(N=xx)",
+                        header_section_div = NA_character_,
+                        top_level_section_div = NA_character_,
                         inset = 0L) {
   inset <- as.integer(inset)
   if (is.na(inset) || inset < 0L) {
     stop("Got invalid table_inset value, must be an integer > 0")
   }
   .check_header_section_div(header_section_div)
+  checkmate::assert_character(top_level_section_div, len = 1, n.chars = 1)
+  
   ret <- PreDataTableLayouts(
     title = title,
     subtitles = subtitles,
     main_footer = main_footer,
     prov_footer = prov_footer,
     header_section_div = header_section_div,
+    top_level_section_div = top_level_section_div,
     table_inset = as.integer(inset)
   )
   if (show_colcounts) {
