@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.908740039840637" branch-rate="0" lines-covered="7299" lines-valid="8032" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-11-29 14:00:14.300633">
+<coverage line-rate="0.908740039840637" branch-rate="0" lines-covered="7299" lines-valid="8032" branches-covered="0" branches-valid="0" complexity="0" version="3.6.3" timestamp="2023-11-29 19:11:16.493538">
   <sources>
     <source>/__w/rtables/rtables/rtables</source>
   </sources>
@@ -9817,8 +9817,8 @@
           <methods>
             <method name="row_paths" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="29" hits="52" branch="false"/>
-                <line number="30" hits="52" branch="false"/>
+                <line number="29" hits="51" branch="false"/>
+                <line number="30" hits="51" branch="false"/>
               </lines>
             </method>
             <method name="col_paths" signature="" line-rate="0.666666666666667" branch-rate="0" complexity="0">
@@ -10940,8 +10940,8 @@
             </method>
           </methods>
           <lines>
-            <line number="29" hits="52" branch="false"/>
-            <line number="30" hits="52" branch="false"/>
+            <line number="29" hits="51" branch="false"/>
+            <line number="30" hits="51" branch="false"/>
             <line number="37" hits="1552" branch="false"/>
             <line number="38" hits="0" branch="false"/>
             <line number="40" hits="1552" branch="false"/>
@@ -30236,7 +30236,7 @@
           <methods>
             <method name="is_rtable" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="11" hits="54" branch="false"/>
+                <line number="11" hits="53" branch="false"/>
               </lines>
             </method>
             <method name=".takes_df" signature="" line-rate="1" branch-rate="0" complexity="0">
@@ -30289,7 +30289,7 @@
             </method>
           </methods>
           <lines>
-            <line number="11" hits="54" branch="false"/>
+            <line number="11" hits="53" branch="false"/>
             <line number="54" hits="1543" branch="false"/>
             <line number="59" hits="10493" branch="false"/>
             <line number="60" hits="2176" branch="false"/>
