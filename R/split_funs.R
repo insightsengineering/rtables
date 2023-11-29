@@ -134,6 +134,7 @@ NULL
   extr <- partinfo$extras
   dpart <- partinfo$datasplit
   labels <- partinfo$labels
+
   if (is.null(labels)) {
     if (!is.null(names(vals))) {
       labels <- names(vals)
@@ -142,6 +143,14 @@ NULL
     } else if (!is.null(names(extr))) {
       labels <- names(extr)
     }
+  }
+
+  subsets <- partinfo$subset_exprs
+  if(is.null(subsets)) {
+      subsets <- vector(mode = "list", length = length(vals))
+      ## use labels here cause we already did all that work
+      ## to get the names on the labels vector right
+      names(subsets) <- names(labels)
   }
 
   if (is.null(vals) && !is.null(extr)) {
@@ -173,7 +182,7 @@ NULL
     if (is.null(extr)) {
       extr <- rep(list(list()), length(vals))
     }
-    vals <- make_splvalue_vec(vals, extr, labels = labels)
+    vals <- make_splvalue_vec(vals, extr, labels = labels, subset_exprs = subsets)
   }
   ## we're done with this so take it off
   partinfo$extras <- NULL
@@ -675,7 +684,8 @@ setMethod(
   function(spl, df, vals, labels) value_labels(spl)
 )
 
-make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
+make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
+                              subset_exprs) {
   if (length(vals) == 0) {
     return(vals)
   }
@@ -691,6 +701,7 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
   mapply(SplitValue,
     val = vals, extr = extrs,
     label = labels,
+    sub_expr = subset_exprs,
     SIMPLIFY = FALSE
   )
 }

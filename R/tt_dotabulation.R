@@ -1587,13 +1587,17 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
 
 
     kids <- mapply(
-      function(dfpart, value, partlab) {
+        function(dfpart, value, partlab) {
+        ## we could pass subset expression in here but the spec
+        ## currently doesn't call for it in column space
         newprev <- context_df_row(
           split = obj_name(spl),
           value = value_names(value),
           full_parent_df = list(dfpart),
           cinfo = NULL
         )
+        ## subset expressions handled inside make_child_pos,
+        ## value is (optionally, for the moment) carrying it around
         newpos <- make_child_pos(pos, spl, value, partlab)
         splitvec_to_coltree(dfpart, splvec, newpos,
           lvl + 1L, partlab,
