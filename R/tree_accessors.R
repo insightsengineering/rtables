@@ -1652,6 +1652,14 @@ setMethod(
 #' @rdname int_methods
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
+#' @rdname int_methods
+setGeneric("value_expr", function(obj) standardGeneric("value_expr"))
+#' @rdname int_methods
+setMethod("value_expr", "ValueWrapper", function(obj) obj@subset_expression)
+#' @rdname int_methods
+setMethod("value_expr", "ANY", function(obj) NULL)
+## no setters for now, we'll see about that.
+
 
 #' @rdname int_methods
 setGeneric("spl_varlabels", function(obj) standardGeneric("spl_varlabels"))
