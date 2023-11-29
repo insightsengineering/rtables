@@ -130,9 +130,6 @@
     <loc>https://insightsengineering.github.io/rtables/reference/as_html.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/as_result_df.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/asvec.html</loc>
   </url>
   <url>
@@ -185,6 +182,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/cutsplits.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/reference/data.frame_export.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/df_to_tt.html</loc>
@@ -292,9 +292,6 @@
     <loc>https://insightsengineering.github.io/rtables/reference/paginate.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/path_enriched_df.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/prune_table.html</loc>
   </url>
   <url>
@@ -311,9 +308,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/ref_fnotes.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/result_df_specs.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/rheader.html</loc>
