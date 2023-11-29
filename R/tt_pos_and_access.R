@@ -289,7 +289,8 @@ setMethod(
       length(path) > 0,
       !anyNA(path)
     )
-    if (path[1] == "root" & obj_name(tt) != "root") {
+    
+    if (path[1] == "root" && obj_name(tt) != "root") {
       path <- path[-1]
     }
     ## handle pathing that hits the root split by name
