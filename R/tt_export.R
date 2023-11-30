@@ -270,46 +270,9 @@ as_result_df <- function(tt, spec = "v0_experimental", ...) {
 #' @export
 formatters::export_as_txt
 
+### Migrated to formatters.
 
-#' Export as PDF
-#'
-#' The PDF output is based on the ASCII output created with `toString`
-#'
-#' @inheritParams formatters::export_as_txt
-#' @inheritParams tostring
-#' @inheritParams grid::plotViewport
-#' @inheritParams paginate_table
-#' @param file file to write, must have `.pdf` extension
-#' @param   width  Deprecated,  please  use   `pg_width`  or  specify
-#'     `page_type`.  The width of  the graphics  region in inches
-#' @param  height  Deprecated,  please  use  `pg_height`  or  specify
-#'     `page_type`. The height of  the graphics  region in
-#'     inches
-#' @param  fontsize Deprecated,  please use  `font_size`. the  size of
-#'     text (in points)
-#' @param margins numeric(4). The number of lines/characters of margin on the
-#'     bottom, left, top, and right sides of the page.
-#' @param ... arguments passed on to `paginate_table`
-#'
-#' @importFrom grDevices pdf
-#' @importFrom grid textGrob grid.newpage gpar pushViewport plotViewport unit grid.draw
-#'   convertWidth convertHeight grobHeight grobWidth
-#'
-#' @details By default, pagination is performed, with default
-#' `cpp` and `lpp` defined by specified page dimensions and margins.
-#' User-specified `lpp` and `cpp` values override this, and should
-#' be used with caution.
-#'
-#' Title and footer materials are also word-wrapped by default
-#' (unlike when printed to the terminal), with `cpp`, as
-#' defined above, as the default `max_width`.
-#'
-#' @seealso [formatters::export_as_txt()]
-#'
-#'
-#' @importFrom grid textGrob get.gpar
-#' @importFrom grDevices dev.off
-#' @export
+#' @importFrom formatters export_as_pdf
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -324,112 +287,10 @@ formatters::export_as_txt
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
-#'
-export_as_pdf <- function(tt,
-                          file,
-                          page_type = "letter",
-                          landscape = FALSE,
-                          pg_width = page_dim(page_type)[if(landscape) 2 else 1],
-                          pg_height = page_dim(page_type)[if(landscape) 1 else 2],
-                          width = NULL,
-                          height = NULL, # passed to pdf()
-                          margins = c(4, 4, 4, 4),
-                          font_family = "Courier",
-                          fontsize = 8,  # grid parameters
-                          font_size = fontsize,
-                          paginate = TRUE,
-                          lpp = NULL,
-                          cpp = NULL,
-                          hsep = "-",
-                          indent_size = 2,
-                          tf_wrap = TRUE,
-                          max_width = NULL,
-                          colwidths = propose_column_widths(matrix_form(tt, TRUE)),
-                          ... # passed to paginate_table
-) {
-    stopifnot(file_ext(file) != ".pdf")
-    if(!is.null(colwidths) && length(colwidths) != ncol(tt) + 1)
-        stop("non-null colwidths argument must have length ncol(tt) + 1 [",
-             ncol(tt) + 1, "], got length ", length(colwidths))
+#' 
+#' @export
+formatters::export_as_pdf
 
-    gp_plot <- gpar(fontsize = font_size, fontfamily = font_family)
-
-    ## soft deprecation. To become hard deprecation.
-    if(!is.null(height))
-        pg_height <- height
-
-    if(!is.null(width))
-        pg_width <- width
-
-    if(missing(font_size) && !missing(fontsize))
-        font_size <- fontsize
-
-    pdf(file = file, width = pg_width, height = pg_height)
-    on.exit(dev.off())
-    grid.newpage()
-    pushViewport(plotViewport(margins = margins, gp = gp_plot))
-
-    cur_gpar <-  get.gpar()
-    if (is.null(lpp)) {
-        lpp <- floor(convertHeight(unit(1, "npc"), "lines", valueOnly = TRUE) /
-                     (cur_gpar$cex * cur_gpar$lineheight)) - sum(margins[c(1, 3)]) # bottom, top
-    }
-    if(is.null(cpp)) {
-        cpp <- floor(convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE) *
-                     font_lcpi(font_family, font_size, cur_gpar$lineheight)$cpi) - sum(margins[c(2, 4)]) # left, right
-    }
-    if(tf_wrap && is.null(max_width))
-        max_width <- cpp
-
-    tbls <- if (paginate) {
-                paginate_table(tt, lpp = lpp, cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, 
-                               colwidths = colwidths, ...)
-            } else {
-                list(tt)
-            }
-    stbls <- lapply(lapply(tbls,
-                           function(tbl_i) {
-        cinds <- c(1, .figure_out_colinds(tbl_i, tt) + 1L)
-        toString(tbl_i, widths = colwidths[cinds], hsep = hsep,
-                 indent_size = indent_size, tf_wrap = tf_wrap,
-                 max_width = max_width)
-    }), function(xi) substr(xi, 1, nchar(xi) - nchar("\n")))
-    gtbls <- lapply(stbls, function(txt) {
-        textGrob(
-            label = txt,
-            x = unit(0, "npc"), y = unit(1, "npc"),
-            just = c("left", "top")
-        )
-    })
-
-    npages <- length(gtbls)
-    exceeds_width <- rep(FALSE, npages)
-    exceeds_height <- rep(FALSE, npages)
-
-    for (i in seq_along(gtbls)) {
-        g <- gtbls[[i]]
-
-        if (i > 1) {
-            grid.newpage()
-            pushViewport(plotViewport(margins = margins, gp = gp_plot))
-        }
-
-        if (convertHeight(grobHeight(g), "inches", valueOnly = TRUE) >
-            convertHeight(unit(1, "npc"), "inches", valueOnly = TRUE)) {
-            exceeds_height[i] <- TRUE
-            warning("height of page ", i, " exceeds the available space")
-        }
-        if (convertWidth(grobWidth(g), "inches", valueOnly = TRUE) >
-            convertWidth(unit(1, "npc"), "inches", valueOnly = TRUE)) {
-            exceeds_width[i] <- TRUE
-            warning("width of page ", i, " exceeds the available space")
-        }
-
-        grid.draw(g)
-    }
-     list(file = file, npages = npages, exceeds_width = exceeds_width, exceeds_height = exceeds_height, 
-          lpp = lpp, cpp = cpp)
-}
 # Flextable and docx -----------------------------------------------------------
 #' Export as word document
 #'
