@@ -40,19 +40,21 @@ Add an virtual 'overall' level to split
 \examples{
 
 lyt <- basic_table() \%>\%
-   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
-                                                      first = FALSE)) \%>\%
-   analyze("AGE")
+  split_cols_by("ARM", split_fun = add_overall_level("All Patients",
+    first = FALSE
+  )) \%>\%
+  analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 lyt2 <- basic_table() \%>\%
-   split_cols_by("ARM") \%>\%
-   split_rows_by("RACE",
-                 split_fun = add_overall_level("All Ethnicities")) \%>\%
-   summarize_row_groups(label_fstr = "\%s (n)") \%>\%
-   analyze("AGE")
+  split_cols_by("ARM") \%>\%
+  split_rows_by("RACE",
+    split_fun = add_overall_level("All Ethnicities")
+  ) \%>\%
+  summarize_row_groups(label_fstr = "\%s (n)") \%>\%
+  analyze("AGE")
 lyt2
 
 tbl2 <- build_table(lyt2, DM)

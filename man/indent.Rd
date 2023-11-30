@@ -22,7 +22,7 @@ Change indentation of all \code{rrows} in an \code{rtable}
 is_setosa <- iris$Species == "setosa"
 m_tbl <- rtable(
   header = rheader(
-    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan=2)),
+    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2), rcell("Petal.Length", colspan = 2)),
     rrow(NULL, "mean", "median", "mean", "median")
   ),
   rrow(

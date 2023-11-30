@@ -8,6 +8,7 @@ analyze_colvars(
   lyt,
   afun,
   format = NULL,
+  na_str = NA_character_,
   nested = TRUE,
   extra_args = list(),
   indent_mod = 0L,
@@ -26,6 +27,9 @@ parameters as \link{analyze} like \code{afun} and \code{format}. For further inf
 \item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
+
+\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
+Defaults to \code{"NA"}.}
 
 \item{nested}{boolean. Should this layout instruction be applied within the
 existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
@@ -60,29 +64,36 @@ ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the
 ## count of >.5 for the second.
-colfuns <- list(function(x) rcell(mean(x), format = "xx.x"),
-                function(x) rcell(sum(x > .5), format = "xx"))
+colfuns <- list(
+  function(x) rcell(mean(x), format = "xx.x"),
+  function(x) rcell(sum(x > .5), format = "xx")
+)
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by_multivar(c("value", "pctdiff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity",
-                  split_fun = drop_split_levels) \%>\%
-    summarize_row_groups() \%>\%
-    analyze_colvars(afun = colfuns)
+  split_cols_by("ARM") \%>\%
+  split_cols_by_multivar(c("value", "pctdiff")) \%>\%
+  split_rows_by("RACE",
+    split_label = "ethnicity",
+    split_fun = drop_split_levels
+  ) \%>\%
+  summarize_row_groups() \%>\%
+  analyze_colvars(afun = colfuns)
 lyt
 
 tbl <- build_table(lyt, ANL)
 tbl
 
 lyt2 <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by_multivar(c("value", "pctdiff"),
-                           varlabels = c("Measurement", "Pct Diff")) \%>\%
-    split_rows_by("RACE", split_label = "ethnicity",
-                  split_fun = drop_split_levels) \%>\%
-    summarize_row_groups() \%>\%
-    analyze_colvars(afun = mean, format = "xx.xx")
+  split_cols_by("ARM") \%>\%
+  split_cols_by_multivar(c("value", "pctdiff"),
+    varlabels = c("Measurement", "Pct Diff")
+  ) \%>\%
+  split_rows_by("RACE",
+    split_label = "ethnicity",
+    split_fun = drop_split_levels
+  ) \%>\%
+  summarize_row_groups() \%>\%
+  analyze_colvars(afun = mean, format = "xx.xx")
 
 tbl2 <- build_table(lyt2, ANL)
 tbl2

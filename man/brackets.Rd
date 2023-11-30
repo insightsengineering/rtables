@@ -59,13 +59,15 @@ using \code{sort_at_path()}. Also note that \code{character} indices are treated
 not vectors of names in both \code{[} and \verb{[<-}.
 }
 \examples{
-lyt <- basic_table(title = "Title",
-                   subtitles = c("Sub", "titles"),
-                   prov_footer = "prov footer",
-                   main_footer = "main footer") \%>\%
-   split_cols_by("ARM") \%>\%
-   split_rows_by("SEX") \%>\%
-   analyze(c("AGE"))
+lyt <- basic_table(
+  title = "Title",
+  subtitles = c("Sub", "titles"),
+  prov_footer = "prov footer",
+  main_footer = "main footer"
+) \%>\%
+  split_cols_by("ARM") \%>\%
+  split_rows_by("SEX") \%>\%
+  analyze(c("AGE"))
 
 tbl <- build_table(lyt, DM)
 top_left(tbl) <- "Info"

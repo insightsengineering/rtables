@@ -6,7 +6,10 @@
 \alias{cell_footnotes}
 \alias{cell_footnotes<-}
 \alias{col_fnotes_here}
+\alias{col_fnotes_here,ANY-method}
 \alias{col_fnotes_here<-}
+\alias{col_footnotes}
+\alias{col_footnotes<-}
 \alias{ref_index}
 \alias{ref_index<-}
 \alias{ref_symbol}
@@ -25,7 +28,13 @@ cell_footnotes(obj) <- value
 
 col_fnotes_here(obj)
 
+\S4method{col_fnotes_here}{ANY}(obj)
+
 col_fnotes_here(obj) <- value
+
+col_footnotes(obj)
+
+col_footnotes(obj) <- value
 
 ref_index(obj)
 
@@ -59,8 +68,8 @@ Get and set referential footnotes on aspects of a built table
 \examples{
 # How to add referencial footnotes after having created a table
 lyt <- basic_table() \%>\%
-    split_rows_by("SEX", page_by = TRUE) \%>\%
-    analyze("AGE")
+  split_rows_by("SEX", page_by = TRUE) \%>\%
+  analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl <- trim_rows(tbl)

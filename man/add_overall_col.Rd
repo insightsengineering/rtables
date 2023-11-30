@@ -25,9 +25,9 @@ way to add overall columns more generally within existing splits.
 }
 \examples{
 lyt <- basic_table() \%>\%
-   split_cols_by("ARM") \%>\%
-   add_overall_col("All Patients") \%>\%
-   analyze("AGE")
+  split_cols_by("ARM") \%>\%
+  add_overall_col("All Patients") \%>\%
+  analyze("AGE")
 lyt
 
 tbl <- build_table(lyt, DM)

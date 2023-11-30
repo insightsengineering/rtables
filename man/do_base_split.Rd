@@ -33,20 +33,24 @@ those default splits can be further manipulated.
 \examples{
 
 uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-    ret <- do_base_split(spl, df, vals, labels, trim)
-    if(NROW(df) == 0)
-        ret <- lapply(ret, function(x) x[1])
-    ret
+  ret <- do_base_split(spl, df, vals, labels, trim)
+  if (NROW(df) == 0) {
+    ret <- lapply(ret, function(x) x[1])
+  }
+  ret
 }
 
 lyt <- basic_table() \%>\%
-    split_cols_by("ARM") \%>\%
-    split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
-                           varlabels = c("N", "E", "BMR1"),
-                           split_fun = uneven_splfun) \%>\%
-    analyze_colvars(list(USUBJID = function(x, ...) length(unique(x)),
-                         AESEQ = max,
-                         BMRKR1 = mean))
+  split_cols_by("ARM") \%>\%
+  split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
+    varlabels = c("N", "E", "BMR1"),
+    split_fun = uneven_splfun
+  ) \%>\%
+  analyze_colvars(list(
+    USUBJID = function(x, ...) length(unique(x)),
+    AESEQ = max,
+    BMRKR1 = mean
+  ))
 
 tbl <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
 tbl
