@@ -383,7 +383,7 @@ handle_rdf_row <- function(rdfrow, maxlen) {
   if (is.null(tree_children(clyt))) {
     return(ret)
   } else {
-    ret <- rbind(ret, lapply(tree_children(clyt), .get_formatted_colnames) %>% do.call(cbind, .))
+    ret <- do.call(cbind, rbind(ret, lapply(tree_children(clyt), .get_formatted_colnames)))
     colnames(ret) <- NULL
     rownames(ret) <- NULL
     return(ret)
