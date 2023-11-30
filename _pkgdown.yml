@@ -25,6 +25,13 @@ navbar:
           href: articles/dev-guide/dg_debug_rtables.html
         - text: Sparse notes on {rtables} internals
           href: articles/dev-guide/dg_notes.html
+    reports:
+      text: Reports
+      menu:
+        - text: Coverage report
+          href: coverage-report/
+        - text: Unit test report
+          href: unit-test-report/
 
 repo:
   url:

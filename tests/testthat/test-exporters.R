@@ -296,6 +296,7 @@ test_that("path_enriched_df works for tables with a column that has all length 1
 })
 
 test_that("export_as_rtf works", {
+  testthat::skip_if_not_installed("r2rtf")
   tbl <- tt_to_export()
   tmpf <- tempfile(fileext = ".rtf")
 
