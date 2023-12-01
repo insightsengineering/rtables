@@ -35,7 +35,6 @@ Depends:
     R (>= 2.10)
 Imports:
     checkmate (>= 2.1.0),
-    grid,
     htmltools (>= 0.5.4),
     stats,
     stringi (>= 1.6)
