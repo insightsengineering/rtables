@@ -19,12 +19,9 @@ NULL
 
 #' Convert an `rtable` object to a string
 #'
+#' @inheritParams formatters::toString
 #' @inheritParams gen_args
 #' @inherit formatters::toString
-#' @param x table object
-#' @param widths widths of row.name and columns
-#' @param col_gap gap between columns
-#' @param hsep character to create line separator
 #' @exportMethod toString
 #'
 #' @return a string representation of \code{x} as it appears when printed.
@@ -339,6 +336,8 @@ setMethod(
       main_footer = main_footer(obj),
       prov_footer = prov_footer(obj),
       table_inset = table_inset(obj),
+      header_section_div = header_section_div(obj),
+      horizontal_sep = horizontal_sep(obj),
       indent_size = indent_size
     )
   }
@@ -435,13 +434,12 @@ get_formatted_fnotes <- function(tt) {
   )
 
   inds <- vapply(lst, ref_index, 1L)
-  stopifnot(all(is.na(inds)) || !is.unsorted(inds))
+  ord <- order(inds)
+  lst <- lst[ord]
   syms <- vapply(lst, ref_symbol, "")
   keep <- is.na(syms) | !duplicated(syms)
-  inds <- inds[keep]
   lst <- lst[keep]
-  syms <- syms[keep]
-  vapply(lst, format_fnote_note, "")
+  unique(vapply(lst, format_fnote_note, ""))
 
 
 

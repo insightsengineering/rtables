@@ -53,7 +53,8 @@ NULL
 #' @param hsep character(1). Set of character(s) to be repeated as the separator
 #'   between the header and body of the table when rendered as text. Defaults to
 #'   a connected horizontal line (unicode 2014) in locals that use a UTF
-#'   charset, and to `-` elsewhere (with a once per session warning).
+#'   charset, and to `-` elsewhere (with a once per session warning). See 
+#'   [formatters::set_default_hsep()] for further information.
 #' @param indent_size numeric(1). Number of spaces to use per indent level.
 #'   Defaults to 2
 #' @param section_div character(1). String which should be repeated as a section
@@ -219,20 +220,24 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current
 #'   level. In post-processing, this can be achieved with [`fnotes_at_path<-`].
-#' @param trailing_sep character(1). String which will be used as a section
+#' @param trailing_section_div character(1). String which will be used as a section
 #'   divider after the printing of the last row contained in this (sub)-table,
 #'   unless that row is also the last table row to be printed overall, or
 #'   `NA_character_` for none (the default). When generated via layouting, this
 #'   would correspond to the `section_div` of the split under which this table
 #'   represents a single facet.
+#' @param header_section_div character(1). String which will be used to divide the header
+#'   from the table. See [header_section_div()] for getter and setter of these.
+#'   Please consider changing last element of [section_div()] when concatenating 
+#'   tables that need a divider between them.
 #' @param page_title character. Page specific title(s).
 #' @rdname constr_args
 constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         cspan, label_pos, cindent_mod, cvar, label, cextra_args,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
-                        trailing_sep, split_na_str,
-                        cna_str, inset, table_inset) {
+                        trailing_section_div, split_na_str,
+                        cna_str, inset, table_inset, header_section_div) {
   NULL
 }
 

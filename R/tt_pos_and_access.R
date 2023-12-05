@@ -96,7 +96,7 @@ coltree_split <- function(ctree) ctree@split
 
 col_fnotes_at_path <- function(ctree, path, fnotes) {
   if (length(path) == 0) {
-    col_fnotes_here(ctree) <- fnotes
+    col_footnotes(ctree) <- fnotes
     return(ctree)
   }
 
@@ -289,11 +289,12 @@ setMethod(
       length(path) > 0,
       !anyNA(path)
     )
-    if (identical(path[1], "root")) {
+    
+    if (path[1] == "root" && obj_name(tt) != "root") {
       path <- path[-1]
     }
     ## handle pathing that hits the root split by name
-    if (identical(obj_name(tt), path[1])) {
+    if (obj_name(tt) == path[1]) {
       path <- path[-1]
     }
     cur <- tt

@@ -1,9 +1,34 @@
-## rtables 0.6.5.9009
+## rtables 0.6.5.9022
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
+ * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` 
+   argument to print a horizontal line under the table header in rendered HTML output.
+ * Duplicate referential footnotes are consolidated when tables are rendered.
+ * Section divisors can be set for analysis rows.
+ * Added setter and getter for section dividers (`section_div` and `section_div<-`). They also accept
+   split section structure assignment.
+ * Added `header_section_div` setters and getters for layout and table objects along with 
+   related `basic_table` parameter.
+ * Added `na_str` argument to `analyze_colvars` to set custom string to print in place of missing values.
+ * Added flat `data.frame` outputs for `as_result_df()` via flag parameters `as_viewer`, `as_strings`, and 
+   `expand_colnames`.
+ * Migrated `export_as_pdf` function to `formatters`. 
+ 
+### Bug Fixes
+ * Fixed a bug that was failing when wrapping and section dividers were used at the same time.
+ * Fixed a bug in `as_result_df` causing misalignment of column names.
+ * Fixed a bug that was not allowing path indexing as `row_paths()` was giving a different path due to it being made of 
+   named values.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
+ * Added Developer Guide to pkgdown site with Debugging, Split Machinery, and Tabulation sections.
+ * Whitespace is not trimmed when rendering tables with `as_html`.
+ * Started deprecation cycle for `col_fnotes_here` to be replaced with `col_footnotes`.
+ * Exported `section_div` methods now have a dedicated documentation page that is visible to users.
+ * When tables are exported as `txt`, they preserve the horizontal separator of the table.
+ * Added imports on `stringi` and `checkmate` as they are fundamental packages for string handling and
+   argument checking.
 
 ## rtables 0.6.5
 ### New Features
@@ -16,9 +41,6 @@
 
 ### Miscellaneous
  * Added slide decks for advanced training as internal files.
-
-### Miscellaneous
-* Added Developer Guide to pkgdown site with Debugging, Split Machinery, Table Hierarchy, and Tabulation sections.
 
 ## rtables 0.6.4
 ### New Features

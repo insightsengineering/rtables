@@ -223,3 +223,185 @@ test_that("header sep setting works", {
   horizontal_sep(tbl2) <- "="
   hsep_test(tbl2, "=")
 })
+
+# section_div tests ------------------------------------------------------------
+check_pattern <- function(element, letter, len) {
+  # Regular expression to match exactly len of the same letter
+  regex <- paste0(rep(letter, len), collapse = "")
+  return(grepl(regex, element, fixed = TRUE))
+}
+
+test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
+  # Main table obj
+  expect_identical(tbl %>% getter(), val_per_lev$global)
+  # Its labelrow (could be also not visible)
+  expect_identical(tt_labelrow(tbl) %>% getter(), val_per_lev$global_labelrow)
+
+  # First split row + its labels
+  split1 <- tree_children(tbl)[[1]]
+  expect_identical(split1 %>% getter(), val_per_lev$split)
+  expect_identical(tt_labelrow(split1) %>% getter(), val_per_lev$split_labelrow)
+
+  # Content table checks if there
+  content_elem_tbl <- content_table(split1)
+  if (nrow(content_elem_tbl) > 0) {
+    expect_identical(content_elem_tbl %>% getter(), val_per_lev$content)
+    expect_identical(tt_labelrow(content_elem_tbl) %>% getter(), val_per_lev$content_labelrow)
+    expect_identical(tree_children(content_elem_tbl)[[1]] %>% getter(), val_per_lev$contentrow)
+  }
+
+  # The elementary table has it?
+  leaves_elementary_tbl <- tree_children(split1)[[1]]
+  expect_identical(leaves_elementary_tbl %>% getter(), val_per_lev$elem_tbl)
+  expect_identical(tt_labelrow(leaves_elementary_tbl) %>% getter(), val_per_lev$elem_tbl_labelrow)
+
+  # Data rows has it?
+  for (i in 1:nrow(leaves_elementary_tbl)) {
+    expect_identical(tree_children(leaves_elementary_tbl)[[i]] %>% getter(), val_per_lev$datarow[i])
+  }
+}
+
+test_that("section_div getter and setter works", {
+  df <- data.frame(
+    cat = c(
+      "re", "long"
+    ),
+    value = c(6, 3, 10, 1)
+  )
+  fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
+
+  tbl <- basic_table() %>%
+    split_rows_by("cat", section_div = "~") %>%
+    analyze("value", afun = fast_afun, section_div = " ") %>%
+    build_table(df)
+
+  tbl_content <- basic_table() %>%
+    split_rows_by("cat", section_div = "~") %>%
+    summarize_row_groups() %>% # This makes them not visible
+    analyze("value", afun = fast_afun, section_div = " ") %>%
+    build_table(df)
+
+  val_per_lev <- list(
+    "global" = NA_character_,
+    "global_labelrow" = NA_character_,
+    "split" = "~",
+    "split_labelrow" = NA_character_,
+    "content" = NA_character_, # If there is a summarize_row_groups this is present
+    "contentrow" = NA_character_,
+    "content_labelrow" = NA_character_,
+    "elem_tbl_labelrow" = NA_character_,
+    "datarow" = c(" ", " ")
+  )
+
+  # Checks of structure - precedence is top to bottom
+  test_structure_with_a_getter(tbl,
+    getter = trailing_section_div,
+    val_per_lev = val_per_lev
+  )
+  test_structure_with_a_getter(tbl_content,
+    getter = trailing_section_div,
+    val_per_lev = val_per_lev
+  )
+
+
+  # Checks that section div and printing works together
+  expect_identical(section_div(tbl), make_row_df(tbl)$trailing_sep)
+  expect_identical(section_div(tbl_content), make_row_df(tbl_content)$trailing_sep)
+
+  # MAIN assignment setter - this is clean, i.e. is only node base and not real section div
+  section_div(tbl) <- section_div(tbl_content) <- letters[seq_len(nrow(tbl))]
+
+  val_per_lev <- list(
+    "global" = NA_character_,
+    "global_labelrow" = NA_character_,
+    "split" = NA_character_,
+    "split_labelrow" = "a",
+    "content" = NA_character_,
+    "contentrow" = NA_character_,
+    "content_labelrow" = NA_character_,
+    "elem_tbl_labelrow" = NA_character_,
+    "datarow" = c("b", "c")
+  )
+
+  # Checks of structure - precedence is top to bottom
+  test_structure_with_a_getter(tbl,
+    getter = trailing_section_div,
+    val_per_lev = val_per_lev
+  )
+  test_structure_with_a_getter(tbl_content,
+    getter = trailing_section_div,
+    val_per_lev = val_per_lev
+  )
+
+  # Checks that section div and printing works together
+  expect_identical(section_div(tbl), make_row_df(tbl)$trailing_sep)
+  expect_identical(section_div(tbl_content), make_row_df(tbl_content)$trailing_sep)
+
+  separators <- strsplit(toString(tbl, widths = c(4, 10)), "\n")[[1]][c(4, 6, 9, 11, 13)]
+  separators2 <- strsplit(toString(tbl_content, widths = c(4, 10)), "\n")[[1]][c(4, 6, 9, 11, 13)]
+  expect_identical(separators, separators2)
+
+
+  mapply(separators,
+    FUN = check_pattern,
+    letter = letters[seq_len(nrow(tbl) - 1)], # -1 is the table end
+    len = 17
+  ) %>%
+    all() %>%
+    expect_true()
+})
+
+test_that("the split only setter works", {
+  fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
+
+  tbl <- basic_table() %>%
+    split_rows_by("ARM", section_div = "=") %>%
+    split_rows_by("STRATA1", section_div = "-") %>%
+    analyze("BMRKR1") %>%
+    build_table(DM)
+
+  replace_sec_div <- section_div(tbl)
+  replace_sec_div[replace_sec_div == "="] <- "a"
+  replace_sec_div[replace_sec_div == "-"] <- "b"
+  section_div(tbl) <- c("a", "b")
+  expect_identical(section_div(tbl), replace_sec_div)
+
+  # multiple analyze
+  tbl <- basic_table(header_section_div = " ") %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX", split_fun = drop_split_levels) %>%
+    analyze("AGE") %>%
+    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+    split_rows_by("SEX", split_fun = drop_split_levels) %>%
+    analyze("AGE") %>%
+    build_table(DM)
+  tbl2 <- tbl
+  section_div(tbl) <- c("-", NA_character_)
+  section_div(tbl2) <- c("-")
+  expect_identical(
+    section_div(tbl)[seq_len(6)],
+    c(NA_character_, "-", NA_character_, "-", NA_character_, NA_character_)
+  )
+  expect_identical(
+    section_div(tbl),
+    section_div(tbl2)
+  )
+})
+
+
+test_that("header_section_div works", {
+  lyt <- basic_table(header_section_div = "+") %>%
+    split_rows_by("STRATA1") %>%
+    analyze("BMRKR1")
+  expect_identical(header_section_div(lyt), "+")
+  header_section_div(lyt) <- "<"
+  expect_identical(header_section_div(lyt), "<")
+
+  tbl <- lyt %>% build_table(DM)
+  expect_identical(header_section_div(tbl), "<")
+  header_section_div(tbl) <- "+"
+  expect_identical(header_section_div(tbl), "+")
+  header_sdiv <- strsplit(toString(tbl), "\n")[[1]][3]
+
+  expect_true(check_pattern(header_sdiv, "+", nchar(header_sdiv)))
+})

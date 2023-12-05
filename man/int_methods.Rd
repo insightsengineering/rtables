@@ -315,10 +315,12 @@
 \alias{cell_footnotes<-,CellValue-method}
 \alias{cell_footnotes<-,DataRow-method}
 \alias{cell_footnotes<-,ContentRow-method}
-\alias{col_fnotes_here,LayoutColTree-method}
-\alias{col_fnotes_here,LayoutColLeaf-method}
-\alias{col_fnotes_here<-,LayoutColTree-method}
-\alias{col_fnotes_here<-,LayoutColLeaf-method}
+\alias{col_fnotes_here<-,ANY-method}
+\alias{col_footnotes,LayoutColTree-method}
+\alias{col_footnotes,LayoutColLeaf-method}
+\alias{col_footnotes<-,LayoutColTree-method}
+\alias{col_footnotes<-,LayoutColLeaf-method}
+\alias{col_footnotes,VTableTree-method}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-,RefFootnote-method}
 \alias{ref_symbol,RefFootnote-method}
@@ -1023,13 +1025,17 @@ spl_varnames(object) <- value
 
 \S4method{cell_footnotes}{ContentRow}(obj) <- value
 
-\S4method{col_fnotes_here}{LayoutColTree}(obj)
+\S4method{col_fnotes_here}{ANY}(obj) <- value
 
-\S4method{col_fnotes_here}{LayoutColLeaf}(obj)
+\S4method{col_footnotes}{LayoutColTree}(obj)
 
-\S4method{col_fnotes_here}{LayoutColTree}(obj) <- value
+\S4method{col_footnotes}{LayoutColLeaf}(obj)
 
-\S4method{col_fnotes_here}{LayoutColLeaf}(obj) <- value
+\S4method{col_footnotes}{LayoutColTree}(obj) <- value
+
+\S4method{col_footnotes}{LayoutColLeaf}(obj) <- value
+
+\S4method{col_footnotes}{VTableTree}(obj)
 
 \S4method{ref_index}{RefFootnote}(obj)
 

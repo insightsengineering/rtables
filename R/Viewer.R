@@ -1,17 +1,13 @@
 #' @importFrom utils  browseURL
 NULL
 
-#' Display an \code{\link{rtable}} object in the Viewer pane in `RStudio` or in a
-#' browser
+#' Display an [`rtable`] object in the Viewer pane in RStudio or in a browser
 #'
 #' The table will be displayed using the bootstrap styling for tables.
 #'
-#' @param x object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})
-#' @param y optional second argument of same type as \code{x}
-#' @param row.names.bold row.names.bold boolean, make `row.names` bold
-#' @param ... arguments passed to \code{as_html}
-#'
-#'
+#' @param x object of class `rtable` or `shiny.tag` (defined in `htmltools` package)
+#' @param y optional second argument of same type as `x`
+#' @param ... arguments passed to [`as_html`]
 #'
 #' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
 #'
@@ -43,7 +39,7 @@ NULL
 #'   Viewer(tbl, tbl2)
 #' }
 #' @export
-Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
+Viewer <- function(x, y = NULL, ...) {
   check_convert <- function(x, name, accept_NULL = FALSE) {
     if (accept_NULL && is.null(x)) {
       NULL
