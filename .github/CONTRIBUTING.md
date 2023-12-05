@@ -1,8 +1,8 @@
----
-title: Contributing to {rtables}
----
+# Contributing to {rtables}
 
 We welcome contributions big and small to the ongoing development of the {rtables} package. For most, the best way to contribute to the package is by filing issues for feature requests or bugs that you have encountered. For those who are interested in contributing code to the package, contributions can be made by working on current issues and opening pull requests with code changes. Any help that you are able to provide is greatly appreciated!
+
+Contributions to this project are [released](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service#6-contributions-under-repository-license) to the public under the project's open source license.
 
 ---
 
@@ -71,3 +71,7 @@ After making updates to the package, please add a descriptive entry to the NEWS 
 Once the previous two steps are complete, you can create a pull request. Indicate in the description which issue is addressed in the pull request, and again utilize labels to help reviewers identify the category of the changes contained within the pull request.
 
 Once your pull request has been created, a series of checks will be automatically triggered, including `R CMD check`, tests/code coverage, auto-documentation, and more. All checks must be passing in order to eventually merge your pull request, and further changes may be required in order to resolve the status of these checks. All pull requests must also be reviewed and approved by at least one of the package maintainers before they can be merged. A review will be automatically requested from several {rtables} maintainers upon creating your pull request. When a maintainer reviews your pull request, please try to address the comments in short order - the {rtables} package is updated on a regular basis and leaving a pull request open too long is likely to result in merge conflicts which create more work for the developer.
+
+## Code of Conduct
+
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.html). By participating in this project you agree to abide by its terms.
