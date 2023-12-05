@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{export_as_txt}
+\alias{export_as_pdf}
 \title{Objects exported from other packages}
 \examples{
 lyt <- basic_table() \%>\%
@@ -20,6 +21,19 @@ export_as_txt(tbl, file = tf)
 system2("cat", tf)
 }
 
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze(c("AGE", "BMRKR2", "COUNTRY"))
+
+tbl <- build_table(lyt, ex_adsl)
+
+\dontrun{
+tf <- tempfile(fileext = ".pdf")
+export_as_pdf(tbl, file = tf, pg_height = 4)
+tf <- tempfile(fileext = ".pdf")
+export_as_pdf(tbl, file = tf, lpp = 8)
+}
+
 }
 \keyword{internal}
 \description{
@@ -27,6 +41,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{formatters}{\code{\link[formatters]{export_as_txt}}}
+  \item{formatters}{\code{\link[formatters]{export_as_pdf}}, \code{\link[formatters]{export_as_txt}}}
 }}
 
