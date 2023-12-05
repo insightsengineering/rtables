@@ -1,4 +1,4 @@
-## rtables 0.6.5.9021
+## rtables 0.6.5.9022
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` 
