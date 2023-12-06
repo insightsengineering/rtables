@@ -1,10 +1,10 @@
 ---
-title: "Introspecting tables"
+title: "Introspecting Tables"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introspecting tables}
+  %\VignetteIndexEntry{Introspecting Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
