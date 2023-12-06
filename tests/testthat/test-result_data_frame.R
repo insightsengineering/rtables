@@ -112,4 +112,20 @@ test_that("as_result_df works with visual output (as_viewer)", {
   
   tbl <- build_table(lyt, ex_adsl)
   expect_equal(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE)[2, 2][[1]], c(24, 46))
+  
+  # Test for tables with less than 3 rows
+  tbl <- rtable(
+    header = rheader(rrow("", "c1", "c2")),
+    rrow("row 1", 1, c(.8, 1.2))
+  )
+  expect_equal(
+    as_result_df(tbl)[, 1:5], 
+    data.frame(
+      "avar_name" = "row 1", 
+      "row_name" = "row 1", 
+      "row_num" = 1, 
+      "is_group_summary" = FALSE, 
+      "node_class" = "DataRow"
+    )
+  )
 })
