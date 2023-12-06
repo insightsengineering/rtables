@@ -15,13 +15,7 @@ editor_options:
 knitr::opts_chunk$set(comment = "#")
 ```
 
-```{css, echo=FALSE}
-.reveal .r code {
-    white-space: pre;
-}
-```
-
-The packages used for this vignette are `rtables` and `dplyr`:
+The packages used in this vignette are `rtables` and `dplyr`:
 
 ```{r, message=FALSE}
 library(rtables)
@@ -47,15 +41,15 @@ tbl
 
 ## Getting Started
 
-We can get basic table dimensions for the number of rows and columns with 
-the following code:
+We can get basic table dimensions, the number of rows, and the number of columns with the following code:
+
 ```{r}
 dim(tbl)
 nrow(tbl)
 ncol(tbl)
 ```
 
-## Detailed Table Strucutres
+## Detailed Table Structure
 
 The `table_structure()` function prints a summary of a table's row
 structure at one of two levels of detail. By default, it summarizes
@@ -66,7 +60,7 @@ table_structure(tbl)
 ```
 
 When the `detail` argument is set to `"row"`, however, it provides a
-more detailed row-level summary, which acts as a useful alternative to
+more detailed row-level summary which acts as a useful alternative to
 how we might normally use the `str()` function to interrogate compound
 nested lists.
 
@@ -74,36 +68,31 @@ nested lists.
 table_structure(tbl, detail = "row")
 ```
 
-The `make_row_df()` and `make_col_df()` functions create a data.frame
-which has a variety of information about the table's structure. Most
-useful for introspection purposes are the `label`, `name`,
-`abs_rownumber`, `path` and `node_class` columns (the remainder of
-information in the returned data.frame is used for pagination)
+The `make_row_df()` and `make_col_df()` functions each create a `data.frame` with a variety of information about 
+the table's structure. Most useful for introspection purposes are the `label`, `name`, `abs_rownumber`, `path` and 
+`node_class` columns (the remainder of the information in the returned `data.frame` is used for pagination)
 
 ```{r}
-make_row_df(tbl)[,c("label", "name", "abs_rownumber", "path", "node_class")]
+make_row_df(tbl)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
-There is also wrapper available for `make_row_df` to display only the row path
-structure:
+There is also a wrapper function, `row_paths()` available for `make_row_df` to display only the row path structure:
+
 ```{r}
 row_paths(tbl)
 ```
 
-By default `make_row_df()` summarizes only visible rows, but setting
-`visible_only` to `FALSE` gives us a structural summary of the table,
-including the full hierarchy of subtables, including those that aren't
-represented directly by any visible rows:
+By default `make_row_df()` summarizes only visible rows, but setting `visible_only` to `FALSE` gives us a structural 
+summary of the table with the full hierarchy of subtables, including those that are not represented directly by any 
+visible rows:
 
 ```{r}
 make_row_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
-`make_col_df()` similarly accepts `visible_only`, though here the
-meaning is slightly different, indicating whether only *leaf* columns
-should be summarized (`TRUE`, the default) or whether higher level
-groups of columns, analogous to subtables in row space, should be
-summarized as well.
+`make_col_df()` similarly accepts `visible_only`, though here the meaning is slightly different, indicating whether 
+only *leaf* columns should be summarized (defaults to `TRUE`) or whether higher level groups of columns - analogous to 
+subtables in row space - should be summarized as well.
 
 ```{r}
 make_col_df(tbl)[, c("label", "name", "abs_pos", "path", "leaf_indices")]
@@ -113,39 +102,35 @@ make_col_df(tbl)[, c("label", "name", "abs_pos", "path", "leaf_indices")]
 make_col_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_pos", "path", "leaf_indices")]
 ```
 
-Similarly, there is a wrapper available displaying only the column structure:
+Similarly, there is wrapper function `col_paths()` available, which displays only the column structure:
+
 ```{r}
 col_paths(tbl)
 ```
 
-The `row_paths_summary()` and `col_paths_summary()` functions wrap the
-respective `make_*_df` functions, printing the `name`, `node_class`
-and `path` information (in the row case), or the `label` and `path`
-information (in the column case), indented to illustrate table
-structure:
+The `row_paths_summary()` and `col_paths_summary()` functions wrap the respective `make_*_df` functions, printing the 
+`name`, `node_class`, and `path` information (in the row case), or the `label` and `path` information (in the column 
+case), indented to illustrate table structure:
 
 ```{r}
 row_paths_summary(tbl)
 ```
-
 
 ```{r}
 col_paths_summary(tbl)
 ```
 
 ## Applications
-Knowing the structure of an `rtable` object is helpful for retrieving specific
-values from the table. 
-For examples see [`subsetting_tables`](https://insightsengineering.github.io/rtables/main/articles/subsetting_tables.html#path-based-cell-value-accessing) vignette.
 
-Understanding the table structure is also important for post-processing tables
-such as sorting and pruning. More details on this are covered in the [`sorting_pruning`](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html)
+Knowing the structure of an `rtable` object is helpful for retrieving specific values from the table. 
+For examples, see the [Path Based Cell Value Accessing](https://insightsengineering.github.io/rtables/latest-tag/articles/subsetting_tables.html#path-based-cell-value-accessing)
+section of the Subsetting and Manipulating Table Contents vignette.
+
+Understanding table structure is also important for post-processing processes such as sorting and pruning. More details 
+on this are covered in the [Pruning and Sorting Tables vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/sorting_pruning.html)
 vignette.
-
 
 ## Summary
 
-In this vignette learned that:
-
-* A number of utility functions are available for examining the underlying structure
-of an `rtables` object.
+In this vignette you have learned a number of utility functions that are available for examining the underlying 
+structure of `rtable` objects.
