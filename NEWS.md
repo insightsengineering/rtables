@@ -30,6 +30,7 @@
  * When tables are exported as `txt`, they preserve the horizontal separator of the table.
  * Added imports on `stringi` and `checkmate` as they are fundamental packages for string handling and
    argument checking.
+ * Updated introduction vignette and split it into two. Section on introspecting tables is now located in a separate vignette.
 
 ## rtables 0.6.5
 ### New Features
