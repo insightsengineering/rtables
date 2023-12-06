@@ -83,7 +83,6 @@ Note that we use factor variables so that the level order is
 represented in the row or column order when we tabulate the
 information of `df` below.
 
-
 ## Building a Table
 
 The aim of this vignette is to build the following table step by step:
@@ -103,7 +102,8 @@ tbl
 ```
 
 ## Quick Start
-The table above can be achieved via the `qtable` function. If you are new
+
+The table above can be achieved via the `qtable()` function. If you are new
 to tabulation with the `rtables` layout framework, you can use this
 convenience wrapper to create many types of two-way frequency tables.
 
@@ -134,7 +134,7 @@ The user needs to define:
 
 In the sections below we will look at translating each of these questions
 to a set of features part of the `rtables` layout framework. Now let's take a
-look building the example table with a layout.
+look at building the example table with a layout.
 
 ## Layout Instructions
 
@@ -149,7 +149,6 @@ lyt <- basic_table() %>%
 tbl <- build_table(lyt, df)
 tbl
 ```
-
 
 In the code above we first described the table and assigned that
 description to a variable `lyt`. We then built the table using the
@@ -184,12 +183,10 @@ The general layouting instructions are summarized below:
 Using those functions, it is possible to create a wide variety of
 tables as we will show in this document.
 
-
 ## Adding Column Structure
 
 We will now add more structure to the columns by adding a column split
 based on the factor variable `arm`:
-
 
 ```{r}
 lyt <- basic_table() %>%
