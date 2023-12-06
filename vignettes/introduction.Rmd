@@ -11,45 +11,48 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
 ```
 
-```{css, echo=FALSE}
-.reveal .r code {
-    white-space: pre;
-}
-```
-
 ## Introduction
 
-The `rtables` R package provides a framework to create, tabulate and
-output tables in `R`. Most of the design requirements for `rtables`
+The `rtables` package provides a framework to create, tabulate, and
+output tables in R. Most of the design requirements for `rtables`
 have their origin in studying tables that are commonly used to report
 analyses from clinical trials; however, we were careful to keep
 `rtables` a general purpose toolkit.
 
-In the remainder of this vignette, we give a short introduction into
-`rtables` and tabulating a table. The content is based on the [useR
-2020 presentation from Gabriel
-Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) and
-[rtables - A Framework For Creating Complex Structured Reporting Tables Via
+In this vignette, we give a short introduction into `rtables` and 
+tabulating a table.
+
+The content in this vignette is based on the following two resources:
+
+* The [`rtables` useR 2020 presentation](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) 
+by Gabriel Becker
+* [`rtables` - A Framework For Creating Complex Structured Reporting Tables Via
 Multi-Level Faceted Computations](https://arxiv.org/pdf/2306.16610.pdf).
 
-The packages used for this vignette are `rtables` and `dplyr`:
+The packages used in this vignette are `rtables` and `dplyr`:
 
 ```{r, message=FALSE}
 library(rtables)
 library(dplyr)
 ```
 
-## Conceptual Model
-- tables as a faceted data visualization
-- ggplot2 example
-
 ## Overview
-- graphic: layout --> formatted table
+
+To build a table using `rtables` two components are required: A layout constructed 
+using `rtables` functions, and a `data.frame` of unaggregated data. These two
+elements are combined to build a table object. Table objects contain information
+about both the content and the structure of the table, as well as instructions on
+how this information should be processed to construct the table. After obtaining the 
+table object, a formatted table can be printed in ASCII format, or exported to a 
+variety of other formats (.txt, .pdf, .docx, etc.).
+
+```{r echo=FALSE, fig.align='center'}
+knitr::include_graphics("../man/figures/rtables-basics.png")
+```
 
 ## Data
 
@@ -110,13 +113,13 @@ The purpose of `qtable` is to enable quick exploratory data analysis. See the
 Here is the code to recreate the table above:
 ```{r}
 qtable(df,
-       row_vars = c("country", "handed"),
-       col_vars = c("arm", "gender"),
-       avar = "age",
-       afun = mean,
-       summarize_groups = TRUE,
-       row_labels = "mean"
-       )
+  row_vars = c("country", "handed"),
+  col_vars = c("arm", "gender"),
+  avar = "age",
+  afun = mean,
+  summarize_groups = TRUE,
+  row_labels = "mean"
+)
 ```
 
 From the `qtable` function arguments above we can see many of the
@@ -344,114 +347,41 @@ tbl <- build_table(lyt, df)
 tbl
 ```
 
-
-## Introspecting `rtables` Table Objects
-
-Once we have created a table, we can inspect its structure using a
-number of functions.
-
-The `table_structure()` function prints a summary of a table's row
-structure at one of two levels of detail. By default, it summarizes
-the structure at the subtable level.
-
-```{r}
-table_structure(tbl)
-```
-
-When the `detail` argument is set to `"row"`, however, it provides a
-more detailed row-level summary, which acts as a useful alternative to
-how we might normally use the `str()` function to interrogate compound
-nested lists.
-
-```{r}
-table_structure(tbl, detail = "row")
-```
-
-The `make_row_df()` and `make_col_df()` functions create a data.frame
-which has a variety of information about the table's structure. Most
-useful for introspection purposes are the `label`, `name`,
-`abs_rownumber`, `path` and `node_class` columns (the remainder of
-information in the returned data.frame is used for pagination)
-
-```{r}
-make_row_df(tbl)[, c("label", "name", "abs_rownumber", "path", "node_class")]
-```
-
-By default `make_row_df()` summarizes only visible rows, but setting
-`visible_only` to `FALSE` gives us a structural summary of the table,
-including the full hierarchy of subtables, including those that aren't
-represented directly by any visible rows:
-
-```{r}
-make_row_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_rownumber", "path", "node_class")]
-```
-
-`make_col_df()` similarly accepts `visible_only`, though here the
-meaning is slightly different, indicating whether only *leaf* columns
-should be summarized (`TRUE`, the default) or whether higher level
-groups of columns, analogous to subtables in row space, should be
-summarized as well.
-
-```{r}
-make_col_df(tbl)
-```
-
-```{r}
-make_col_df(tbl, visible_only = FALSE)
-```
-
-The `row_paths_summary()` and `col_paths_summary()` functions wrap the
-respective `make_*_df` functions, printing the `name`, `node_class`
-and `path` information (in the row case), or the `label` and `path`
-information (in the column case), indented to illustrate table
-structure:
-
-```{r}
-row_paths_summary(tbl)
-```
-
-
-```{r}
-col_paths_summary(tbl)
-```
-
-
-
-
 ## Comparing with Other Tabulation Frameworks
 
-There are a number of other table frameworks available in `R` such as
-[gt](https://gt.rstudio.com/) from `RStudio`,
-[xtable](https://CRAN.R-project.org/package=xtable),
-[tableone](https://CRAN.R-project.org/package=tableone), and
-[tables](https://CRAN.R-project.org/package=tables) to name a
-few. There is a number of reasons to implement `rtables` (yet another
-tables R package):
+There are a number of other table frameworks available in `R`, including:
 
-* output tables in ASCII to text files
-* table rendering (ASCII, HTML, etc.) is separate from the data
+* [gt](https://gt.rstudio.com/)
+* [xtable](https://CRAN.R-project.org/package=xtable)
+* [tableone](https://CRAN.R-project.org/package=tableone)
+* [tables](https://CRAN.R-project.org/package=tables)
+
+There are a number of reasons to choose `rtables` (yet another tables R package):
+
+* Output tables in ASCII to text files.
+* Table rendering (ASCII, HTML, etc.) is separate from the data
   model. Hence, one always has access to the non-rounded/non-formatted
   numbers.
-* pagination in both horizontal and vertical directions to meet the
-  health authority submission requirements
-* cell, row, column, table reference system
-* titles, footers, and referential footnotes
-* path based access to cell content which will be useful for automated
-  content generation
+* Pagination in both horizontal and vertical directions to meet the
+  health authority submission requirements.
+* Cell, row, column, and table reference system.
+* Titles, footers, and referential footnotes.
+* Path based access to cell content which is useful for automated
+  content generation.
 
-More comparisons of the various tabulation frameworks can be found in
-a summary compiled by the
-[R Consortium Tables Working Group](https://github.com/RConsortium/rtrs-wg).
+More in depth comparisons of the various tabulation frameworks can be found in the 
+[Overview of table R packages](https://rconsortium.github.io/rtrs-wg/tablepkgs.html#tablepkgs)
+chapter of the Tables in Clinical Trials with R book compiled by the R Consortium 
+Tables Working Group.
 
 ## Summary
 
 In this vignette you have learned:
 
-* every cell has an associated subset of data
-   * this means that much of tabulation has to do with
-     splitting/subsetting data
-* tables can be described pre-data using layouts
-* tables are a form of visualization of data
+* Every cell has an associated subset of data - this means that much of tabulation 
+  has to do with splitting/subsetting data.
+* Tables can be described with pre-data using layouts.
+* Tables are a form of visualization of data.
 
 The other vignettes in the `rtables` package will provide more
 detailed information about the `rtables` package. We recommend that
