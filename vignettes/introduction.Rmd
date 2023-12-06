@@ -1,10 +1,10 @@
 ---
-title: "Introduction to rtables"
+title: "Introduction to {rtables}"
 author: "Gabriel Becker and Adrian Waddell"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to rtables}
+  %\VignetteIndexEntry{Introduction to {rtables}}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
