@@ -53,7 +53,8 @@ NULL
 #' @param hsep character(1). Set of character(s) to be repeated as the separator
 #'   between the header and body of the table when rendered as text. Defaults to
 #'   a connected horizontal line (unicode 2014) in locals that use a UTF
-#'   charset, and to `-` elsewhere (with a once per session warning).
+#'   charset, and to `-` elsewhere (with a once per session warning). See 
+#'   [formatters::set_default_hsep()] for further information.
 #' @param indent_size numeric(1). Number of spaces to use per indent level.
 #'   Defaults to 2
 #' @param section_div character(1). String which should be repeated as a section
@@ -71,9 +72,9 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
                      table_inset,
-                     ...) NULL
-
-
+                     ...) {
+  NULL
+}
 
 #' Layouting Function Arg Conventions
 #' @name lyt_args
@@ -104,7 +105,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #'   declared via strings (\code{"xx.x"}) or function. In cases such as
 #'   \code{analyze} calls, they can character vectors or lists of functions.
 #' @param align character(1) or `NULL`. Alignment the value should be rendered with.
-#'   It defaults to `"center"` if `NULL` is used. See \code{\link{rtables_aligns}} 
+#'   It defaults to `"center"` if `NULL` is used. See [formatters::list_valid_aligns()]
 #'   for currently supported alignments.
 #' @param cfun list/function/NULL. tabulation function(s) for creating content
 #'   rows. Must accept \code{x} or \code{df} as first parameter. Must accept
@@ -163,7 +164,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param table_names character. Names for the tables representing each atomic
 #'   analysis. Defaults to \code{var}.
 #' @param page_by logical(1). Should pagination be forced between different
-#'   children resulting form this split.
+#'   children resulting form this split. An error will rise if the selected split
+#'   does not contain at least one value that is not `NA`.
 #' @param format_na_str character(1). String which should be displayed when
 #'   formatted if this cell's value(s) are all NA.
 #' @inherit gen_args return
@@ -173,10 +175,12 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
                      split_name, split_label, afun, inclNAs, valorder,
                      ref_group, compfun, label_fstr, child_labels, extra_args, name,
                      cuts, cutlabels, cutfun, cutlabelfun, cumulative,
-                     indent_mod, show_labels, label_pos, #visible_label,
+                     indent_mod, show_labels, label_pos, # visible_label,
                      var_labels, cvar,
                      table_names, topleft, align, page_by, page_prefix,
-                     format_na_str, section_div, na_str) NULL
+                     format_na_str, section_div, na_str) {
+  NULL
+}
 
 
 #' Constructor Arg Conventions
@@ -204,27 +208,38 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   when tabulating row group summaries.
 #' @param child_names character. Names to be given to the sub splits contained
 #'   by a compound split (typically a `AnalyzeMultiVars` split object).
-#' @param title character(1). Main title. Ignored for subtables.
-#' @param subtitles character. Subtitles. Ignored for subtables.
-#' @param main_footer character. Main global (non-referential) footer materials.
-#' @param prov_footer character. Provenance-related global footer materials.
+#' @param title character(1). Main title ([main_title()]) is a single string.
+#'   Ignored for subtables.
+#' @param subtitles character. Subtitles ([subtitles()]) can be vector of strings, where
+#'   every element is printed in a separate line. Ignored for subtables.
+#' @param main_footer character. Main global (non-referential) footer materials
+#'   ([main_footer()]). If it is a vector of strings, they will be printed on separate
+#'   lines.
+#' @param prov_footer character. Provenance-related global footer materials
+#'   ([prov_footer()]). It can be also a vector of strings, printed on different lines.
 #'   Generally should not be modified by hand.
 #' @param footnotes list or NULL. Referential footnotes to be applied at current
-#'   level
-#' @param trailing_sep character(1). String which will be used as a section
+#'   level. In post-processing, this can be achieved with [`fnotes_at_path<-`].
+#' @param trailing_section_div character(1). String which will be used as a section
 #'   divider after the printing of the last row contained in this (sub)-table,
 #'   unless that row is also the last table row to be printed overall, or
 #'   `NA_character_` for none (the default). When generated via layouting, this
 #'   would correspond to the `section_div` of the split under which this table
 #'   represents a single facet.
+#' @param header_section_div character(1). String which will be used to divide the header
+#'   from the table. See [header_section_div()] for getter and setter of these.
+#'   Please consider changing last element of [section_div()] when concatenating 
+#'   tables that need a divider between them.
 #' @param page_title character. Page specific title(s).
 #' @rdname constr_args
 constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         cspan, label_pos, cindent_mod, cvar, label, cextra_args,
                         child_names, title, subtitles, main_footer, prov_footer,
                         footnotes, page_title, page_prefix, section_div,
-                        trailing_sep, split_na_str,
-                        cna_str, inset, table_inset) NULL
+                        trailing_section_div, split_na_str,
+                        cna_str, inset, table_inset, header_section_div) {
+  NULL
+}
 
 #' Compatibility Arg Conventions
 #' @name compat_args
@@ -234,11 +249,11 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
 #' @param .lst list. An already-collected list of arguments to be used instead
 #'   of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
 #'   ignored if this is specified.
-#' @param row.name if \code{NULL} then an empty string is used as 
+#' @param row.name if \code{NULL} then an empty string is used as
 #'   \code{row.name} of the \code{\link{rrow}}.
-#' @param format character(1) or function. The format label (string) or 
-#'   formatter function to apply to the cell values passed via `...`. See 
-#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported 
+#' @param format character(1) or function. The format label (string) or
+#'   formatter function to apply to the cell values passed via `...`. See
+#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported
 #'   format labels.
 #' @param indent deprecated.
 #' @param inset integer(1). The table inset for the row or table being

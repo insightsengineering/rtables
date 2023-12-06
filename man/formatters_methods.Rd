@@ -22,12 +22,16 @@
 \alias{obj_na_str,Split-method}
 \alias{main_title,VTitleFooter-method}
 \alias{main_title<-,VTitleFooter-method}
+\alias{main_title,TableRow-method}
 \alias{subtitles,VTitleFooter-method}
 \alias{subtitles<-,VTitleFooter-method}
+\alias{subtitles,TableRow-method}
 \alias{main_footer,VTitleFooter-method}
 \alias{main_footer<-,VTitleFooter-method}
+\alias{main_footer,TableRow-method}
 \alias{prov_footer,VTitleFooter-method}
 \alias{prov_footer<-,VTitleFooter-method}
+\alias{prov_footer,TableRow-method}
 \alias{table_inset,VTableNodeInfo-method}
 \alias{table_inset,PreDataTableLayouts-method}
 \alias{table_inset<-,VTableNodeInfo-method}
@@ -85,17 +89,25 @@
 
 \S4method{main_title}{VTitleFooter}(obj) <- value
 
+\S4method{main_title}{TableRow}(obj)
+
 \S4method{subtitles}{VTitleFooter}(obj)
 
 \S4method{subtitles}{VTitleFooter}(obj) <- value
+
+\S4method{subtitles}{TableRow}(obj)
 
 \S4method{main_footer}{VTitleFooter}(obj)
 
 \S4method{main_footer}{VTitleFooter}(obj) <- value
 
+\S4method{main_footer}{TableRow}(obj)
+
 \S4method{prov_footer}{VTitleFooter}(obj)
 
 \S4method{prov_footer}{VTitleFooter}(obj) <- value
+
+\S4method{prov_footer}{TableRow}(obj)
 
 \S4method{table_inset}{VTableNodeInfo}(obj)
 
@@ -223,6 +235,6 @@ and should not be set during a top-level call
 }
 \note{
 the technically present root tree node is excluded from the summary returned by
-both \code{make_row_df} and \code{make_col_df}, as it is simply the
+both \code{make_row_df} and \code{make_col_df} (see \code{rtables::make_col_df}), as it is simply the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }

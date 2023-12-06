@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Introduction to rtables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -33,7 +33,7 @@ analyses from clinical trials; however, we were careful to keep
 In the remainder of this vignette, we give a short introduction into
 `rtables` and tabulating a table. The content is based on the [useR
 2020 presentation from Gabriel
-Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) and 
+Becker](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) and
 [rtables - A Framework For Creating Complex Structured Reporting Tables Via
 Multi-Level Faceted Computations](https://arxiv.org/pdf/2306.16610.pdf).
 
@@ -51,7 +51,7 @@ library(dplyr)
 ## Overview
 - graphic: layout --> formatted table
 
-## Data 
+## Data
 
 The data used in this vignette is a made up using random number
 generators. The data content is relatively simple: one row per
@@ -104,7 +104,7 @@ The table above can be achieved via the `qtable` function. If you are new
 to tabulation with the `rtables` layout framework, you can use this
 convenience wrapper to create many types of two-way frequency tables.
 
-The purpose of `qtable` is to enable quick exploratory data analysis. See the 
+The purpose of `qtable` is to enable quick exploratory data analysis. See the
 [`exploratory_analysis`](https://insightsengineering.github.io/rtables/main/articles/exploratory_analysis.html) vignette for more details.
 
 Here is the code to recreate the table above:
@@ -121,17 +121,17 @@ qtable(df,
 
 From the `qtable` function arguments above we can see many of the
 key concepts of the underlying `rtables` layout framework.
-The user needs to define: 
+The user needs to define:
 
  - Which variables should be used as facets in the row and/or column space?
  - Which variable should be used in the summary analysis?
- - Which function should be used as a summary? 
+ - Which function should be used as a summary?
  - Should the table include any marginal summaries?
  - Are any labels needed to clarify the table content?
- 
-In the sections below we will look at translating each of these questions 
+
+In the sections below we will look at translating each of these questions
 to a set of features part of the `rtables` layout framework. Now let's take a
-look building the example table with a layout. 
+look building the example table with a layout.
 
 ## Layout Instructions
 
@@ -258,12 +258,11 @@ lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
   split_rows_by("country", page_by = TRUE) %>%
-  split_rows_by("handed") %>%  
+  split_rows_by("handed") %>%
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
-cat(export_as_txt(tbl, page_type = "letter",
-                  page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
+cat(export_as_txt(tbl, page_type = "letter", page_break = "\n\n~~~~~~ Page Break ~~~~~~\n\n"))
 ```
 
 We go into more detail on page-by splits and how to control the
@@ -345,6 +344,80 @@ tbl <- build_table(lyt, df)
 tbl
 ```
 
+
+## Introspecting `rtables` Table Objects
+
+Once we have created a table, we can inspect its structure using a
+number of functions.
+
+The `table_structure()` function prints a summary of a table's row
+structure at one of two levels of detail. By default, it summarizes
+the structure at the subtable level.
+
+```{r}
+table_structure(tbl)
+```
+
+When the `detail` argument is set to `"row"`, however, it provides a
+more detailed row-level summary, which acts as a useful alternative to
+how we might normally use the `str()` function to interrogate compound
+nested lists.
+
+```{r}
+table_structure(tbl, detail = "row")
+```
+
+The `make_row_df()` and `make_col_df()` functions create a data.frame
+which has a variety of information about the table's structure. Most
+useful for introspection purposes are the `label`, `name`,
+`abs_rownumber`, `path` and `node_class` columns (the remainder of
+information in the returned data.frame is used for pagination)
+
+```{r}
+make_row_df(tbl)[, c("label", "name", "abs_rownumber", "path", "node_class")]
+```
+
+By default `make_row_df()` summarizes only visible rows, but setting
+`visible_only` to `FALSE` gives us a structural summary of the table,
+including the full hierarchy of subtables, including those that aren't
+represented directly by any visible rows:
+
+```{r}
+make_row_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_rownumber", "path", "node_class")]
+```
+
+`make_col_df()` similarly accepts `visible_only`, though here the
+meaning is slightly different, indicating whether only *leaf* columns
+should be summarized (`TRUE`, the default) or whether higher level
+groups of columns, analogous to subtables in row space, should be
+summarized as well.
+
+```{r}
+make_col_df(tbl)
+```
+
+```{r}
+make_col_df(tbl, visible_only = FALSE)
+```
+
+The `row_paths_summary()` and `col_paths_summary()` functions wrap the
+respective `make_*_df` functions, printing the `name`, `node_class`
+and `path` information (in the row case), or the `label` and `path`
+information (in the column case), indented to illustrate table
+structure:
+
+```{r}
+row_paths_summary(tbl)
+```
+
+
+```{r}
+col_paths_summary(tbl)
+```
+
+
+
+
 ## Comparing with Other Tabulation Frameworks
 
 There are a number of other table frameworks available in `R` such as
@@ -367,7 +440,7 @@ tables R package):
   content generation
 
 More comparisons of the various tabulation frameworks can be found in
-a summary compiled by the 
+a summary compiled by the
 [R Consortium Tables Working Group](https://github.com/RConsortium/rtrs-wg).
 
 ## Summary

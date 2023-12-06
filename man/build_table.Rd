@@ -38,7 +38,8 @@ displayed during printing.}
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
 a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning).}
+charset, and to \code{-} elsewhere (with a once per session warning). See
+\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
 
 \item{\dots}{currently ignored.}
 }
@@ -74,11 +75,11 @@ counts are fully respected.
 lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze("Sepal.Length", afun = function(x) {
-  list(
-    "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-    "range" = diff(range(x))
-  )
-})
+    list(
+      "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "range" = diff(range(x))
+    )
+  })
 
 lyt
 
@@ -89,22 +90,24 @@ tbl
 lyt2 <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze(c("Sepal.Length", "Petal.Width"), afun = function(x) {
-  list(
-    "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
-    "range" = diff(range(x))
-  )
-})
+    list(
+      "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
+      "range" = diff(range(x))
+    )
+  })
 
 tbl2 <- build_table(lyt2, iris)
 tbl2
 
 # an example more relevant for clinical trials with column counts
 lyt3 <- basic_table(show_colcounts = TRUE) \%>\%
-    split_cols_by("ARM") \%>\%
-    analyze("AGE", afun = function(x) {
-      setNames(as.list(fivenum(x)), c("minimum", "lower-hinge", "median",
-                                      "upper-hinge", "maximum"))
-    })
+  split_cols_by("ARM") \%>\%
+  analyze("AGE", afun = function(x) {
+    setNames(as.list(fivenum(x)), c(
+      "minimum", "lower-hinge", "median",
+      "upper-hinge", "maximum"
+    ))
+  })
 
 tbl3 <- build_table(lyt3, DM)
 tbl3
@@ -113,7 +116,7 @@ tbl4 <- build_table(lyt3, subset(DM, AGE > 40))
 tbl4
 
 # with column counts calculated based on different data
-miniDM <- DM[sample(1:NROW(DM), 100),]
+miniDM <- DM[sample(1:NROW(DM), 100), ]
 tbl5 <- build_table(lyt3, DM, alt_counts_df = miniDM)
 tbl5
 

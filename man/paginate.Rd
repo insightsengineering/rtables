@@ -49,9 +49,9 @@ considerations. Defaults to none.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{max_width}{integer(1), character(1) or NULL. Width that title
+\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
 and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If NULL, it is  set to the current print width
+word-wrapped to. If \code{NULL}, it is  set to the current print width
 of the  session (\code{getOption("width")}). If set to \code{"auto"},
 the width of the table (plus any table inset) is used. Ignored
 completely if \code{tf_wrap} is \code{FALSE}.}
@@ -134,7 +134,8 @@ The full multi-direction pagination algorithm then is as follows:
 \enumerate{
 \item Perform 'forced pagination' representing page-by row splits, generating 1 or more tables
 \item Perform vertical pagination separately on each table generated in (1)
-\item Perform horizontal pagination \strong{on the entire table} and apply the results to each table page generated in (1)-(2)
+\item Perform horizontal pagination \strong{on the entire table} and apply the results to each table
+page generated in (1)-(2)
 \item Return a list of subtables representing full bi-directional pagination
 }
 
@@ -200,28 +201,29 @@ it has less than \code{min_siblings} preceding or following siblings
 \examples{
 
 s_summary <- function(x) {
- if (is.numeric(x)) {
-     in_rows(
-         "n" = rcell(sum(!is.na(x)), format = "xx"),
-         "Mean (sd)" = rcell(c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)),
-                             format = "xx.xx (xx.xx)"),
-         "IQR" = rcell(IQR(x, na.rm = TRUE), format = "xx.xx"),
-         "min - max" = rcell(range(x, na.rm = TRUE), format = "xx.xx - xx.xx")
-     )
- } else if (is.factor(x)) {
-
-     vs <- as.list(table(x))
-     do.call(in_rows, lapply(vs, rcell, format = "xx"))
-
- } else (
-     stop("type not supported")
- )
+  if (is.numeric(x)) {
+    in_rows(
+      "n" = rcell(sum(!is.na(x)), format = "xx"),
+      "Mean (sd)" = rcell(c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)),
+        format = "xx.xx (xx.xx)"
+      ),
+      "IQR" = rcell(IQR(x, na.rm = TRUE), format = "xx.xx"),
+      "min - max" = rcell(range(x, na.rm = TRUE), format = "xx.xx - xx.xx")
+    )
+  } else if (is.factor(x)) {
+    vs <- as.list(table(x))
+    do.call(in_rows, lapply(vs, rcell, format = "xx"))
+  } else {
+    (
+      stop("type not supported")
+    )
+  }
 }
 
 
 lyt <- basic_table() \%>\%
-split_cols_by(var = "ARM") \%>\%
-    analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary)
+  split_cols_by(var = "ARM") \%>\%
+  analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary)
 
 tbl <- build_table(lyt, ex_adsl)
 tbl
@@ -241,6 +243,5 @@ tmp <- lapply(tbls, function(tbli) {
   cat("~~~~ PAGE BREAK ~~~~")
   cat("\n\n")
 })
-
 
 }

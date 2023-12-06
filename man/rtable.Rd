@@ -24,7 +24,8 @@ format labels.}
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
 a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning).}
+charset, and to \code{-} elsewhere (with a once per session warning). See
+\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
 
 \item{inset}{integer(1). The table inset for the row or table being
 constructed. See \code{\link[formatters]{table_inset}}.}
@@ -49,8 +50,10 @@ rtable(
 sel <- iris$Species == "setosa"
 mtbl <- rtable(
   header = rheader(
-    rrow(row.name = NULL, rcell("Sepal.Length", colspan = 2),
-         rcell("Petal.Length", colspan=2)),
+    rrow(
+      row.name = NULL, rcell("Sepal.Length", colspan = 2),
+      rcell("Petal.Length", colspan = 2)
+    ),
     rrow(NULL, "mean", "median", "mean", "median")
   ),
   rrow(
@@ -92,12 +95,12 @@ names(tbl)
 tbl[1, ]
 tbl[, 1]
 
-tbl[1,2]
+tbl[1, 2]
 tbl[2, 1]
 
-tbl[3,2]
-tbl[5,1]
-tbl[5,2]
+tbl[3, 2]
+tbl[5, 1]
+tbl[5, 2]
 
 # # Data Structure methods
 dim(tbl)
@@ -112,7 +115,6 @@ tbl2 <- rtable(
   c("A", "B", "C", "D", "E"),
   format = "xx",
   rrow("r1", 1, 2, 3, 4, 5),
-
   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 )
 

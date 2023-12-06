@@ -18,7 +18,8 @@ LabelRow(
   vis = !is.na(label) && nzchar(label),
   cinfo = EmptyColInfo,
   indent_mod = 0L,
-  table_inset = 0L
+  table_inset = 0L,
+  trailing_section_div = NA_character_
 )
 
 .tablerow(
@@ -34,7 +35,8 @@ LabelRow(
   klass,
   indent_mod = 0L,
   footnotes = list(),
-  table_inset = 0L
+  table_inset = 0L,
+  trailing_section_div = NA_character_
 )
 
 DataRow(...)
@@ -65,6 +67,13 @@ corresponds to the unmodified default behavior.}
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
+\item{trailing_section_div}{character(1). String which will be used as a section
+divider after the printing of the last row contained in this (sub)-table,
+unless that row is also the last table row to be printed overall, or
+\code{NA_character_} for none (the default). When generated via layouting, this
+would correspond to the \code{section_div} of the split under which this table
+represents a single facet.}
+
 \item{vals}{list. cell values for the row}
 
 \item{cspan}{integer. Column span. \code{1} indicates no spanning.}
@@ -81,7 +90,7 @@ Defaults to \code{"NA"}.}
 \item{klass}{Internal detail.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level}
+level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
 \item{\dots}{passed to shared constructor (\code{.tablerow}).}
 }

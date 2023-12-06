@@ -1,49 +1,45 @@
 #' @importFrom utils  browseURL
 NULL
 
-#' Display an \code{\link{rtable}} object in the Viewer pane in `RStudio` or in a
-#' browser
+#' Display an [`rtable`] object in the Viewer pane in RStudio or in a browser
 #'
 #' The table will be displayed using the bootstrap styling for tables.
 #'
-#' @param x object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})
-#' @param y optional second argument of same type as \code{x}
-#' @param row.names.bold row.names.bold boolean, make `row.names` bold
-#' @param ... arguments passed to \code{as_html}
-#'
-#'
-#' @export
+#' @param x object of class `rtable` or `shiny.tag` (defined in `htmltools` package)
+#' @param y optional second argument of same type as `x`
+#' @param ... arguments passed to [`as_html`]
 #'
 #' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
 #'
 #' @examples
 #'
-#' if(interactive()) {
-#' sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-#'    labels = c("S.L > 5", "S.L <= 5"))
+#' if (interactive()) {
+#'   sl5 <- factor(iris$Sepal.Length > 5,
+#'     levels = c(TRUE, FALSE),
+#'     labels = c("S.L > 5", "S.L <= 5")
+#'   )
 #'
-#' df <- cbind(iris, sl5 = sl5)
+#'   df <- cbind(iris, sl5 = sl5)
 #'
-#' lyt <- basic_table() %>%
-#'    split_cols_by("sl5") %>%
-#'    analyze("Sepal.Length")
-#' 
-#' tbl <- build_table(lyt, df)
+#'   lyt <- basic_table() %>%
+#'     split_cols_by("sl5") %>%
+#'     analyze("Sepal.Length")
 #'
-#' Viewer(tbl)
-#' Viewer(tbl, tbl)
+#'   tbl <- build_table(lyt, df)
+#'
+#'   Viewer(tbl)
+#'   Viewer(tbl, tbl)
 #'
 #'
-#' tbl2 <- htmltools::tags$div(
-#'   class = "table-responsive",
-#'   as_html(tbl, class_table = "table")
-#' )
+#'   tbl2 <- htmltools::tags$div(
+#'     class = "table-responsive",
+#'     as_html(tbl, class_table = "table")
+#'   )
 #'
-#' Viewer(tbl, tbl2)
-#'
+#'   Viewer(tbl, tbl2)
 #' }
-Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
-
+#' @export
+Viewer <- function(x, y = NULL, ...) {
   check_convert <- function(x, name, accept_NULL = FALSE) {
     if (accept_NULL && is.null(x)) {
       NULL
@@ -62,9 +58,10 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   html_output <- if (is.null(y)) {
     x_tag
   } else {
-    tags$div(class = "container-fluid",  htmltools::tags$div(class = "row",
-    tags$div(class = "col-xs-6", x_tag),
-    tags$div(class = "col-xs-6", y_tag)
+    tags$div(class = "container-fluid", htmltools::tags$div(
+      class = "row",
+      tags$div(class = "col-xs-6", x_tag),
+      tags$div(class = "col-xs-6", y_tag)
     ))
   }
 
@@ -94,11 +91,15 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
     tags$head(
       tags$meta(charset = "utf-8"),
       tags$meta("http-equiv" = "X-UA-Compatible", content = "IE=edge"),
-      tags$meta(name = "viewport",
-                content = "width=device-width, initial-scale=1"),
+      tags$meta(
+        name = "viewport",
+        content = "width=device-width, initial-scale=1"
+      ),
       tags$title("rtable"),
-      tags$link(href = "css/bootstrap.min.css",
-                rel = "stylesheet")
+      tags$link(
+        href = "css/bootstrap.min.css",
+        rel = "stylesheet"
+      )
     ),
     tags$body(
       html_output
@@ -106,7 +107,7 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   )
 
   cat(
-    paste("<!DOCTYPE html>\n",  htmltools::doRenderTags(html_bs)),
+    paste("<!DOCTYPE html>\n", htmltools::doRenderTags(html_bs)),
     file = htmlFile, append = FALSE
   )
 
@@ -117,5 +118,4 @@ Viewer <- function(x, y = NULL, row.names.bold = FALSE, ...) {
   } else {
     browseURL(htmlFile)
   }
-
 }

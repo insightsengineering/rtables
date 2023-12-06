@@ -38,14 +38,14 @@ adsl <- ex_adsl
 levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 
 tbl_to_trim <- basic_table() \%>\%
-    analyze("BMRKR1") \%>\%
-    split_cols_by("ARM") \%>\% 
-    split_rows_by("SEX") \%>\% 
-    summarize_row_groups() \%>\%
-    split_rows_by("STRATA1") \%>\%
-    summarize_row_groups() \%>\%
-    analyze("AGE") \%>\%
-    build_table(adsl)
+  analyze("BMRKR1") \%>\%
+  split_cols_by("ARM") \%>\%
+  split_rows_by("SEX") \%>\%
+  summarize_row_groups() \%>\%
+  split_rows_by("STRATA1") \%>\%
+  summarize_row_groups() \%>\%
+  analyze("AGE") \%>\%
+  build_table(adsl)
 
 tbl_to_trim \%>\% trim_rows()
 

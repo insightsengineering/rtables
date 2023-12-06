@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - devel
 
 jobs:
   audit:
@@ -18,12 +17,23 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
-      enable-staged-dependencies-check: false
-      junit-xml-comparison: false
-      sd-direction: upstream
+      additional-env-vars: |
+        _R_CHECK_CRAN_INCOMING_REMOTE_=false
+      additional-r-cmd-check-params: --as-cran
+      enforce-note-blocklist: true
+      note-blocklist: |
+        checking dependencies in R code .* NOTE
+        checking R code for possible problems .* NOTE
+        checking examples .* NOTE
+        checking Rd line widths .* NOTE
+        checking S3 generic/method consistency .* NOTE
+        checking Rd .usage sections .* NOTE
+        checking for unstated dependencies in vignettes .* NOTE
+      unit-test-report-brand: >-
+        https://raw.githubusercontent.com/insightsengineering/hex-stickers/main/thumbs/rtables.png
   coverage:
     if: github.event_name == 'pull_request'
-    name: Coverage 📔 
+    name: Coverage 📔
     uses: insightsengineering/r.pkg.template/.github/workflows/test-coverage.yaml@main
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}

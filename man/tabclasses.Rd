@@ -26,8 +26,9 @@ ElementaryTable(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
+  header_section_div = NA_character_,
   hsep = default_hsep(),
-  trailing_sep = NA_character_,
+  trailing_section_div = NA_character_,
   inset = 0L
 )
 
@@ -52,7 +53,8 @@ TableTree(
   prov_footer = character(),
   page_title = NA_character_,
   hsep = default_hsep(),
-  trailing_sep = NA_character_,
+  header_section_div = NA_character_,
+  trailing_section_div = NA_character_,
   inset = 0L
 )
 }
@@ -93,21 +95,32 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
+every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
+
+\item{header_section_div}{character(1). String which will be used to divide the header
+from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
+Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
+tables that need a divider between them.}
 
 \item{hsep}{character(1). Set of character(s) to be repeated as the separator
 between the header and body of the table when rendered as text. Defaults to
 a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning).}
+charset, and to \code{-} elsewhere (with a once per session warning). See
+\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
 
-\item{trailing_sep}{character(1). String which will be used as a section
+\item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
 unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this

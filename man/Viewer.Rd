@@ -2,19 +2,16 @@
 % Please edit documentation in R/Viewer.R
 \name{Viewer}
 \alias{Viewer}
-\title{Display an \code{\link{rtable}} object in the Viewer pane in \code{RStudio} or in a
-browser}
+\title{Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a browser}
 \usage{
-Viewer(x, y = NULL, row.names.bold = FALSE, ...)
+Viewer(x, y = NULL, ...)
 }
 \arguments{
-\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools})}
+\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools} package)}
 
 \item{y}{optional second argument of same type as \code{x}}
 
-\item{row.names.bold}{row.names.bold boolean, make \code{row.names} bold}
-
-\item{...}{arguments passed to \code{as_html}}
+\item{...}{arguments passed to \code{\link{as_html}}}
 }
 \value{
 not meaningful. Called for the side effect of opening a browser or viewer pane.
@@ -24,28 +21,29 @@ The table will be displayed using the bootstrap styling for tables.
 }
 \examples{
 
-if(interactive()) {
-sl5 <- factor(iris$Sepal.Length > 5, levels = c(TRUE, FALSE),
-   labels = c("S.L > 5", "S.L <= 5"))
+if (interactive()) {
+  sl5 <- factor(iris$Sepal.Length > 5,
+    levels = c(TRUE, FALSE),
+    labels = c("S.L > 5", "S.L <= 5")
+  )
 
-df <- cbind(iris, sl5 = sl5)
+  df <- cbind(iris, sl5 = sl5)
 
-lyt <- basic_table() \%>\%
-   split_cols_by("sl5") \%>\%
-   analyze("Sepal.Length")
+  lyt <- basic_table() \%>\%
+    split_cols_by("sl5") \%>\%
+    analyze("Sepal.Length")
 
-tbl <- build_table(lyt, df)
+  tbl <- build_table(lyt, df)
 
-Viewer(tbl)
-Viewer(tbl, tbl)
+  Viewer(tbl)
+  Viewer(tbl, tbl)
 
 
-tbl2 <- htmltools::tags$div(
-  class = "table-responsive",
-  as_html(tbl, class_table = "table")
-)
+  tbl2 <- htmltools::tags$div(
+    class = "table-responsive",
+    as_html(tbl, class_table = "table")
+  )
 
-Viewer(tbl, tbl2)
-
+  Viewer(tbl, tbl2)
 }
 }

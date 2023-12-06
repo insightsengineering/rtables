@@ -33,10 +33,9 @@ re-constituted list values for \code{export_as_tsv}.
 }
 \description{
 This function creates a flat tabular file of cell values and
-corresponding paths via \code{\link{path_enriched_df}}. I then
+corresponding paths via \code{\link[=path_enriched_df]{path_enriched_df()}}. I then
 writes that data.frame out as a \code{tsv} file.
-}
-\details{
+
 By default (i.e. when \code{value_func} is not specified,
 List columns where at least one value has length > 1 are collapsed
 to character vectors by collapsing the list element with \code{"|"}.
@@ -45,4 +44,7 @@ to character vectors by collapsing the list element with \code{"|"}.
 There is currently no round-trip capability for this type of export.
 You can read values exported this way back in via \code{import_from_tsv}
 but you will receive only the data.frame version back, NOT a \code{TableTree}.
+}
+\seealso{
+\code{\link[=path_enriched_df]{path_enriched_df()}} for the underlying function that does the work.
 }

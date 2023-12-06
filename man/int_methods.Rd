@@ -42,6 +42,7 @@
 \alias{summarize_rows_inner,TableRow-method}
 \alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure_inner}
+\alias{str}
 \alias{str,VTableTree-method}
 \alias{table_structure_inner,TableTree-method}
 \alias{table_structure_inner,ElementaryTable-method}
@@ -314,10 +315,12 @@
 \alias{cell_footnotes<-,CellValue-method}
 \alias{cell_footnotes<-,DataRow-method}
 \alias{cell_footnotes<-,ContentRow-method}
-\alias{col_fnotes_here,LayoutColTree-method}
-\alias{col_fnotes_here,LayoutColLeaf-method}
-\alias{col_fnotes_here<-,LayoutColTree-method}
-\alias{col_fnotes_here<-,LayoutColLeaf-method}
+\alias{col_fnotes_here<-,ANY-method}
+\alias{col_footnotes,LayoutColTree-method}
+\alias{col_footnotes,LayoutColLeaf-method}
+\alias{col_footnotes<-,LayoutColTree-method}
+\alias{col_footnotes<-,LayoutColLeaf-method}
+\alias{col_footnotes,VTableTree-method}
 \alias{ref_index,RefFootnote-method}
 \alias{ref_index<-,RefFootnote-method}
 \alias{ref_symbol,RefFootnote-method}
@@ -475,6 +478,8 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 \S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
+
+str(object, ...)
 
 \S4method{str}{VTableTree}(object, max.level = 3L, ...)
 
@@ -1020,13 +1025,17 @@ spl_varnames(object) <- value
 
 \S4method{cell_footnotes}{ContentRow}(obj) <- value
 
-\S4method{col_fnotes_here}{LayoutColTree}(obj)
+\S4method{col_fnotes_here}{ANY}(obj) <- value
 
-\S4method{col_fnotes_here}{LayoutColLeaf}(obj)
+\S4method{col_footnotes}{LayoutColTree}(obj)
 
-\S4method{col_fnotes_here}{LayoutColTree}(obj) <- value
+\S4method{col_footnotes}{LayoutColLeaf}(obj)
 
-\S4method{col_fnotes_here}{LayoutColLeaf}(obj) <- value
+\S4method{col_footnotes}{LayoutColTree}(obj) <- value
+
+\S4method{col_footnotes}{LayoutColLeaf}(obj) <- value
+
+\S4method{col_footnotes}{VTableTree}(obj)
 
 \S4method{ref_index}{RefFootnote}(obj)
 
@@ -1144,7 +1153,7 @@ not match a formal argument of the tabulation function.}
 
 \item{print_indent}{indent for print}
 
-\item{object}{The object to modify in-place}
+\item{object}{a table object}
 
 \item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
 \code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
@@ -1220,10 +1229,13 @@ iris2 <- iris \%>\%
 lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   split_cols_by("group") \%>\%
-  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary),
-          format = "xx.xx")
+  analyze(c("Sepal.Length", "Petal.Width"),
+    afun = list_wrap_x(summary),
+    format = "xx.xx"
+  )
 
 tbl <- build_table(lyt, iris2)
+
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl

@@ -27,11 +27,12 @@ constr_args(
   page_title,
   page_prefix,
   section_div,
-  trailing_sep,
+  trailing_section_div,
   split_na_str,
   cna_str,
   inset,
-  table_inset
+  table_inset,
+  header_section_div
 )
 }
 \arguments{
@@ -76,17 +77,22 @@ when tabulating row group summaries.}
 \item{child_names}{character. Names to be given to the sub splits contained
 by a compound split (typically a \code{AnalyzeMultiVars} split object).}
 
-\item{title}{character(1). Main title. Ignored for subtables.}
+\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
+Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles. Ignored for subtables.}
+\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
+every element is printed in a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials.}
+\item{main_footer}{character. Main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
+lines.}
 
-\item{prov_footer}{character. Provenance-related global footer materials.
+\item{prov_footer}{character. Provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
 Generally should not be modified by hand.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level}
+level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
 \item{page_title}{character. Page specific title(s).}
 
@@ -97,7 +103,7 @@ when forcing pagination between the children of this split/table}
 divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
-\item{trailing_sep}{character(1). String which will be used as a section
+\item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
 unless that row is also the last table row to be printed overall, or
 \code{NA_character_} for none (the default). When generated via layouting, this
@@ -116,6 +122,11 @@ of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 \item{table_inset}{numeric(1). Number of spaces to inset the table header, table
 body, referential footnotes, and main_footer, as compared to alignment
 of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+
+\item{header_section_div}{character(1). String which will be used to divide the header
+from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
+Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
+tables that need a divider between them.}
 }
 \value{
 NULL (this is an argument template dummy function)
