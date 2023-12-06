@@ -1,4 +1,4 @@
-## rtables 0.6.5.9022
+## rtables 0.6.5.9023
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` 
@@ -19,6 +19,7 @@
  * Fixed a bug in `as_result_df` causing misalignment of column names.
  * Fixed a bug that was not allowing path indexing as `row_paths()` was giving a different path due to it being made of 
    named values.
+ * Fixed a bug in `as_result_df` when called on tables with less than 3 rows.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
