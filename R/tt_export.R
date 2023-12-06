@@ -351,6 +351,7 @@ do_data_row <- function(rdfrow, maxlen) {
     pth <- pth[-1 * (pthlen - 2)]
   }
   pthlen_new <- length(pth)
+  if (maxlen == 1) pthlen_new <- 3 
   c(
     as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
