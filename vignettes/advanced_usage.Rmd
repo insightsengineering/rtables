@@ -1,10 +1,10 @@
 ---
-title: "rtables Advanced Usage"
+title: "{rtables} Advanced Usage"
 author: "Gabriel Becker"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rtables Advanced Usage}
+  %\VignetteIndexEntry{{rtables} Advanced Usage}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

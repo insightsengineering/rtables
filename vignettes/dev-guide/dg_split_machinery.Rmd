@@ -2,12 +2,7 @@
 title: "Split Machinery"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
-output:
-  html_document:
-    theme: spacelab
-    toc: true
-    toc_float:
-      collapsed: false
+output: html_document
 editor_options:
   chunk_output_type: console
 ---
@@ -34,7 +29,7 @@ The following article will describe how the split machinery works in the row dom
 
 ## Process and Methods
 
-Beforehand, we encourage the reader to familiarize themselves with the Debugging in `rtables`(xxx link here) article from the `rtables` Developers Guide. This document is generally valid for R programming, but has been tailored to study and understand complex packages that rely heavily on S3 and S4 object programming like `rtables`.
+Beforehand, we encourage the reader to familiarize themselves with the [Debugging in {rtables} article](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_debug_rtables.html) from the `rtables` Developers Guide. This document is generally valid for R programming, but has been tailored to study and understand complex packages that rely heavily on S3 and S4 object programming like `rtables`.
 
 Here, we explore and study the split machinery with a growing amount of complexity, following relevant functions and methods throughout their execution. By going from basic to complex and by discussing important and special cases, we hope to be able to give you a good understanding of how the split machinery works.
 
@@ -133,7 +128,7 @@ We will see where and how input parameters are used. The most important paramete
 
 We will start by looking at the first function called from `do_split`. This will give us a good overview of how the split itself is defined. This function is, of course, the check function (`check_validsplit`) that is used to verify if the split is valid for the data. In the following we will describe the split-class hierarchy step-by-step, but we invite the reader to explore this further on their own as well.
 
-Let's first search the package for `check_validsplit`. You will find that it is defined as a generic in `R/split_funs.R`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is by using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (by convention virtual classes start with "V") defines the main parent of the analysis split which we discuss in detail in the related vignette `vignette()` (xxx). From this, we can see that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, the main `R/tt_dotabulation.R` source file. This is again something related to making "analyze" rows as it mainly checks for `VAnalyzeSplit` (link to tabulation dev guide xxx). We will discuss the other classes as they appear in our examples (link to class hierarchy xxx).
+Let's first search the package for `check_validsplit`. You will find that it is defined as a generic in `R/split_funs.R`, where it is applied to the following "split" classes: `VarLevelSplit`, `MultiVarSplit`, `VAnalyzeSplit`, `CompoundSplit`, and `Split`. Another way to find this information, which is more useful for more spread out and complicated objects, is by using `showMethods(check_validsplit)`. The virtual class `VAnalyzeSplit` (by convention virtual classes start with "V") defines the main parent of the analysis split which we discuss in detail in the related vignette `vignette()` (xxx). From this, we can see that the `analyze()` calls actually mimic split objects as they create different results under a specific final split (or node). Now, notice that `check_validsplit` is also called in another location, the main `R/tt_dotabulation.R` source file. This is again something related to making "analyze" rows as it mainly checks for `VAnalyzeSplit`. See the [Tabulation article](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_tabulation.html) for more details. We will discuss the other classes as they appear in our examples. See more about class hierarchy in the [Table Hierarchy article](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_table_hierarchy.html).
 
 For the moment, we see with `class(spl)` (from the main `do_split` function) that we are dealing with an `AllSplit` object. By calling `showMethods(check_validsplit)` we produce the following:
 
@@ -197,7 +192,7 @@ AllSplit <- function(split_label = "",
 }
 ```
 
-We can also print this information by calling `getClass("AllSplit")` for the general slot definition, or by calling `getClass(spl)`. Note that the first call will give also a lot of information about the class hierarchy. For more information regarding class hierarchy, please refer to the relevant article (xxx). We will discuss the majority of the slots by the end of this document. Now, let's see if we can find some of the values described in the constructor within our object. To do so, we will show the more compact representation given by `str`. When there are multiple and hierarchical slots that contain objects themselves, calling `str` will be much less or not at all informative if the maximum level of nesting is not set (e.g. `max.level = 2`).
+We can also print this information by calling `getClass("AllSplit")` for the general slot definition, or by calling `getClass(spl)`. Note that the first call will give also a lot of information about the class hierarchy. For more information regarding class hierarchy, please refer to the relevant article [here](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_talbe_hierarchy.html). We will discuss the majority of the slots by the end of this document. Now, let's see if we can find some of the values described in the constructor within our object. To do so, we will show the more compact representation given by `str`. When there are multiple and hierarchical slots that contain objects themselves, calling `str` will be much less or not at all informative if the maximum level of nesting is not set (e.g. `max.level = 2`).
 
 ```{r, eval=FALSE}
 # rtables 0.6.2
