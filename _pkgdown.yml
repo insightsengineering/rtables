@@ -78,6 +78,7 @@ articles:
     - split_functions
     - format_precedence
     - tabulation_concepts
+    - introspecting_tables
 
   - title: Advanced Usage
     contents:

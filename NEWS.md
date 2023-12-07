@@ -1,4 +1,4 @@
-## rtables 0.6.5.9023
+## rtables 0.6.5.9024
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` 
@@ -30,6 +30,7 @@
  * When tables are exported as `txt`, they preserve the horizontal separator of the table.
  * Added imports on `stringi` and `checkmate` as they are fundamental packages for string handling and
    argument checking.
+ * Updated introduction vignette and split it into two. Section on introspecting tables is now located in a separate vignette.
 
 ## rtables 0.6.5
 ### New Features
