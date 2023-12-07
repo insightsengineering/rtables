@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9023</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5.9024</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,25 +70,14 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
     <a class="dropdown-item" href="../../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
     <a class="dropdown-item" href="../../articles/dev-guide/dg_tabulation.html">Tabulation</a>
+    <a class="dropdown-item" href="../../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a>
     <a class="dropdown-item" href="../../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
-    <a class="dropdown-item" href="../../articles/dev-guide/dg_notes.html">Sparse notes on {rtables} internals</a>
+    <a class="dropdown-item" href="../../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a>
   </div>
 </li>
 <li class="nav-item">
   <a class="nav-link" href="../../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -124,7 +113,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini</h4>
             
-            <h4 data-toc-skip class="date">2023-12-06</h4>
+            <h4 data-toc-skip class="date">2023-12-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/dev-guide/dg_tabulation.Rmd" class="external-link"><code>vignettes/dev-guide/dg_tabulation.Rmd</code></a></small>
       <div class="d-none name"><code>dg_tabulation.Rmd</code></div>
@@ -160,16 +149,15 @@ placeholders for warnings and to-do’s that need further work.</p>
 </h2>
 <p>Tabulation in <code>rtables</code> is a process that takes a
 pre-defined layout and applies it to data. The layout object, with all
-of its splits (see xxx link split machinery article) and
-<code>analyze</code>s, can be applied to different data to produce valid
-tables. This process happens principally within the
-<code>tt_dotabulation.R</code> file and the user-facing function
+of its splits and <code>analyze</code>s, can be applied to different
+data to produce valid tables. This process happens principally within
+the <code>tt_dotabulation.R</code> file and the user-facing function
 <code>build_table</code> that resides in it. We will occasionally use
 functions and methods that are present in other files, like
 <code>colby_construction.R</code> or <code>make_subset_expr.R</code>. We
 assume the reader is already familiar with the documentation for
-<code>build_table</code>. We suggest reading the split machinery
-vignette (xxx link) prior to this one, as it is instrumental in
+<code>build_table</code>. We suggest reading the <a href="https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_split_machinery.html">Split
+Machinery article</a> prior to this one, as it is instrumental in
 understanding how the layout object, which is essentially built out of
 splits, is tabulated when data is supplied.</p>
 </div>
@@ -231,8 +219,7 @@ consider the initial checks and defensive programming.</p>
 and column layouts inherit from. Virtual classes are handy for group
 classes that need to share things like labels or functions that need to
 be applicable to their relative classes. See more information about the
-<code>rtables</code> class hierarchy in the dedicated article here (xxx
-add).</p>
+<code>rtables</code> class hierarchy in the dedicated article <a href="https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_table_hierarchy.html">here</a>.</p>
 <p>Now, we continue with <code>build_table</code>. After the checks, we
 notice <code>TreePos()</code> which is a constructor for an object that
 retains a representation of the tree position along with split values
