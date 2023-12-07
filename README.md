@@ -206,7 +206,7 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 - Part 1
   [Slides](inst/extdata/Advanced_rtables_part1.pdf)
 - Part 2 
-  [Slides](inst/extdata/Advanced_rtables_part2.pdf)
+  [Slides](inst/extdata/Advances_rtables_part2.pdf)
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 
