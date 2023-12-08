@@ -16,6 +16,12 @@
     declaring table layouts and the corresponding computations, and then
     applying them to data.">
 <title>Reporting Tables • rtables</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -31,6 +37,7 @@
     summary computations. A convenient pipe-able interface is provided for
     declaring table layouts and the corresponding computations, and then
     applying them to data.">
+<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -41,11 +48,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +68,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="articles/introduction.html">Introduction to rtables</a>
+    <a class="dropdown-item" href="articles/introduction.html">Introduction to {rtables}</a>
     <a class="dropdown-item" href="articles/exploratory_analysis.html">Exploratory Analysis</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6>
@@ -76,6 +83,16 @@
     <a class="dropdown-item" href="articles/index.html">More articles...</a>
   </div>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-developer-guide">Developer Guide</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
+    <a class="dropdown-item" href="articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
+    <a class="dropdown-item" href="articles/dev-guide/dg_tabulation.html">Tabulation</a>
+    <a class="dropdown-item" href="articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a>
+    <a class="dropdown-item" href="articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
+    <a class="dropdown-item" href="articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
@@ -84,15 +101,23 @@
           data-bs-toggle="dropdown" role="button"
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
 <!-- end dropdown for versions -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
+    <a class="dropdown-item" href="coverage-report/">Coverage report</a>
+    <a class="dropdown-item" href="unit-test-report/">Unit test report</a>
+  </div>
+</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -113,9 +138,11 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="rtables-">rtables <a href="https://github.com/insightsengineering/rtables" class="external-link"><img src="reference/figures/rtables_logo_small.png" align="right"></a>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="rtables-">rtables 
 <a class="anchor" aria-label="anchor" href="#rtables-"></a>
-</h1></div>
+</h1>
+</div>
 <!-- start badges -->
 <p><a href="https://github.com/insightsengineering/rtables/actions/workflows/check.yaml" class="external-link"><img src="https://github.com/insightsengineering/rtables/actions/workflows/check.yaml/badge.svg" alt="Check 🛠"></a> <a href="https://insightsengineering.github.io/rtables/"><img src="https://github.com/insightsengineering/rtables/actions/workflows/docs.yaml/badge.svg" alt="Docs 📚"></a> <a href="https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/coverage.xml" class="external-link"><img src="https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/badge.svg" alt="Code Coverage 📔"></a></p>
 <p><img src="https://img.shields.io/github/forks/insightsengineering/rtables?style=social" alt="GitHub forks"><img src="https://img.shields.io/github/stars/insightsengineering/rtables?style=social" alt="GitHub repo stars"></p>
@@ -258,9 +285,9 @@
 <h3 id="advanced-rtables-training">Advanced rtables Training<a class="anchor" aria-label="anchor" href="#advanced-rtables-training"></a>
 </h3>
 <ul>
-<li>Part 1 <a href="inst/extdata/Advanced_rtables_part1.pdf">Slides</a>
+<li>Part 1 <a href="https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf" class="external-link">Slides</a>
 </li>
-<li>Part 2 <a href="inst/extdata/Advanced_rtables_part2.pdf">Slides</a>
+<li>Part 2 <a href="https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf" class="external-link">Slides</a>
 </li>
 </ul>
 </div>
@@ -268,7 +295,7 @@
 <h3 id="rinpharma-workshop-creating-submission-quality-clinical-trial-reporting-tables-in-r-with-rtables">RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables<a class="anchor" aria-label="anchor" href="#rinpharma-workshop-creating-submission-quality-clinical-trial-reporting-tables-in-r-with-rtables"></a>
 </h3>
 <ul>
-<li><a href="https://docs.google.com/presentation/d/1t0098eh1b8_FaFfRoD7jhP1nxhLmjrJeD5X5MkmKC48" class="external-link">Slides</a></li>
+<li><a href="https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf" class="external-link">Slides</a></li>
 </ul>
 </div>
 <div class="section level3">
@@ -276,7 +303,7 @@
 </h3>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=1i6vOId2h4A" class="external-link">R Adoption Series presentation 2022</a></li>
-<li>Slides: <a href="https://github.com/gmbecker/rtables_radoption_webinar" class="external-link uri">https://github.com/gmbecker/rtables_radoption_webinar</a> (index.html)</li>
+<li><a href="https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf" class="external-link">Slides</a></li>
 </ul>
 </div>
 <div class="section level3">
@@ -306,6 +333,13 @@
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
@@ -319,8 +353,6 @@
 <ul class="list-unstyled">
 <li>Gabriel Becker <br><small class="roles"> Author </small>  </li>
 <li>Adrian Waddell <br><small class="roles"> Author </small>  </li>
-<li>Joe Zhu <br><small class="roles"> Contributor, maintainer </small>  </li>
-<li>F. Hoffmann-La Roche AG <br><small class="roles"> Copyright holder, funder </small>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>

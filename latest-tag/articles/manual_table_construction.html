@@ -7,12 +7,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="rtables">
 <title>Constructing rtables Manually • rtables</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Constructing rtables Manually">
 <meta property="og:description" content="rtables">
+<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -23,11 +30,11 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-default navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +50,7 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/introduction.html">Introduction to rtables</a>
+    <a class="dropdown-item" href="../articles/introduction.html">Introduction to {rtables}</a>
     <a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a>
     <div class="dropdown-divider"></div>
     <h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6>
@@ -58,6 +65,16 @@
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
 </li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-developer-guide">Developer Guide</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
+    <a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
+    <a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a>
+    <a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a>
+    <a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
+    <a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a>
+  </div>
+</li>
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
@@ -66,15 +83,23 @@
           data-bs-toggle="dropdown" role="button"
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
 <!-- end dropdown for versions -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
+    <a class="dropdown-item" href="../coverage-report/">Coverage report</a>
+    <a class="dropdown-item" href="../unit-test-report/">Unit test report</a>
+  </div>
+</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -99,13 +124,13 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Constructing rtables Manually</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Constructing rtables Manually</h1>
                         <h4 data-toc-skip class="author">Adrian
 Waddell</h4>
             
-            <h4 data-toc-skip class="date">2023-10-19</h4>
+            <h4 data-toc-skip class="date">2023-12-08</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/HEAD/vignettes/manual_table_construction.Rmd" class="external-link"><code>vignettes/manual_table_construction.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/manual_table_construction.Rmd" class="external-link"><code>vignettes/manual_table_construction.Rmd</code></a></small>
       <div class="d-none name"><code>manual_table_construction.Rmd</code></div>
     </div>
 
@@ -159,53 +184,52 @@ this table we continue with the html conversion of the
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/as_html.html">as_html</a></span><span class="op">(</span><span class="va">tbl</span>, width <span class="op">=</span> <span class="st">"80%"</span><span class="op">)</span></span></code></pre></div>
 <div class="rtables-all-parts-block rtables-container">
-<table class="table table table-condensed table-hover">
-<tr>
-<th style="white-space:pre;"></th>
-<th class="text-center">Treatement</th>
-<th class="text-center">Comparison</th>
-</tr>
-<tr>
-<th style="white-space:pre;"></th>
-<th class="text-center">N=100</th>
-<th class="text-center">N=300</th>
-</tr>
-<tr>
-<td class="text-left">A</td>
-<td class="text-center">104 (20.00%)</td>
-<td class="text-center">100 (40.00%)</td>
-</tr>
-<tr>
-<td class="text-left">B</td>
-<td class="text-center">23 (40.00%)</td>
-<td class="text-center">43 (50.00%)</td>
-</tr>
-<tr>
-<td class="text-left"></td>
-<td class="text-center"></td>
-<td class="text-center"></td>
-</tr>
-<tr>
-<td class="text-left">this is a very long section header</td>
-<td class="text-center"></td>
-<td class="text-center"></td>
-</tr>
-<tr>
-<td class="text-left">estimate</td>
-<td class="text-center" colspan="2">55.23</td>
-</tr>
-<tr>
-<td class="text-left">95% CI</td>
-<td class="text-center" colspan="2">(44.8, 67.4)</td>
-</tr>
-<caption style="caption-side:top;">
 <div class="rtables-titles-block rtables-container">
 <div class="rtables-main-titles-block rtables-container">
 <p class="rtables-main-title"></p>
 </div>
 <div class="rtables-subtitles-block rtables-container"></div>
 </div>
-</caption>
+<table class="table table table-condensed table-hover" style=" width: 80%">
+<tr style="white-space: pre;">
+<th style="text-align: left;"></th>
+<th style="text-align: center;">Treatement</th>
+<th style="text-align: center;">Comparison</th>
+</tr>
+<tr style="white-space: pre;">
+<th style="text-align: left; border-bottom: 1px solid black; border-bottom: 1px solid black;"></th>
+<th style="text-align: center; border-bottom: 1px solid black;">N=100</th>
+<th style="text-align: center; border-bottom: 1px solid black;">N=300</th>
+</tr>
+<tr style="white-space: pre;">
+<td style="text-align: left;">A</td>
+<td style="text-align: center;">104 (20.00%)</td>
+<td style="text-align: center;">100 (40.00%)</td>
+</tr>
+<tr style="white-space: pre;">
+<td style="text-align: left;">B</td>
+<td style="text-align: center;">23 (40.00%)</td>
+<td style="text-align: center;">43 (50.00%)</td>
+</tr>
+<tr style="white-space: pre;">
+<td style="text-align: left;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="white-space: pre;">
+<td style="text-align: left;">this is a very long section header</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="white-space: pre;">
+<td style="text-align: left;">estimate</td>
+<td style="text-align: center;" colspan="2">55.23</td>
+</tr>
+<tr style="white-space: pre;">
+<td style="text-align: left;">95% CI</td>
+<td style="text-align: center;" colspan="2">(44.8, 67.4)</td>
+</tr>
+<caption style="caption-side: top;"></caption>
 </table>
 <div class="rtables-footers-block rtables-container"></div>
 </div>
