@@ -4,6 +4,12 @@
     <loc>https://insightsengineering.github.io/rtables/404.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/CONTRIBUTING.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/ISSUE_TEMPLATE.html</loc>
   </url>
   <url>
@@ -22,6 +28,21 @@
     <loc>https://insightsengineering.github.io/rtables/articles/custom_appearance.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/articles/dev-guide/dg_debug_rtables.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/articles/dev-guide/dg_notes.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/articles/dev-guide/dg_split_machinery.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/articles/dev-guide/dg_table_hierarchy.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/articles/dev-guide/dg_tabulation.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/articles/example_analysis_coxreg.html</loc>
   </url>
   <url>
@@ -35,6 +56,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/articles/introduction.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/articles/introspecting_tables.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/articles/manual_table_construction.html</loc>
@@ -118,9 +142,6 @@
     <loc>https://insightsengineering.github.io/rtables/reference/as_html.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/as_result_df.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/asvec.html</loc>
   </url>
   <url>
@@ -175,6 +196,9 @@
     <loc>https://insightsengineering.github.io/rtables/reference/cutsplits.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/reference/data.frame_export.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/df_to_tt.html</loc>
   </url>
   <url>
@@ -188,9 +212,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/export_as_docx.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/export_as_pdf.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/find_degen_struct.html</loc>
@@ -280,9 +301,6 @@
     <loc>https://insightsengineering.github.io/rtables/reference/paginate.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/path_enriched_df.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/prune_table.html</loc>
   </url>
   <url>
@@ -299,9 +317,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/ref_fnotes.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/result_df_specs.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/rheader.html</loc>
@@ -332,6 +347,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/score_funs.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/rtables/reference/section_div.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/sf_args.html</loc>
