@@ -3,7 +3,7 @@
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
     rev: v0.3.2.9027
-    hooks: 
+    hooks:
     -   id: roxygenize
         # roxygen requires loading pkg -> add dependencies from DESCRIPTION
         additional_dependencies:
@@ -31,14 +31,14 @@ repos:
           .*\.Rproj|
           .*\.sh|
           (.*/|)\.gitignore|
-          (.*/|)\.gitlab-ci\.yml|
+          (.*/|)\.gitlab-ci\.y[a]?ml|
           (.*/|)\.lintr|
           (.*/|)\.pre-commit-.*|
           (.*/|)\.Rbuildignore|
           (.*/|)\.Renviron|
           (.*/|)\.Rprofile|
-          (.*/|)\.travis\.yml|
-          (.*/|)appveyor\.yml|
+          (.*/|)\.travis\.y[a]?ml|
+          (.*/|)appveyor\.y[a]?ml|
           (.*/|)NAMESPACE|
           (.*/|)renv/settings\.dcf|
           (.*/|)renv\.lock|
@@ -53,7 +53,7 @@ repos:
     -   id: deps-in-desc
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
-    hooks: 
+    hooks:
     -   id: check-added-large-files
         args: ['--maxkb=200']
     -   id: file-contents-sorter

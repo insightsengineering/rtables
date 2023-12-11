@@ -33,3 +33,4 @@ inst/extdata/Advanced_rtables_part1.pdf
 inst/extdata/Advances_rtables_part2.pdf
 inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf
 inst/extdata/r_adoption_slides.pdf
+^pkgdown$
