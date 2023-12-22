@@ -407,7 +407,6 @@ test_that("header_section_div works", {
 })
 
 test_that("top_level_section_div works", {
-  tbl <- build_table(lyt, DM)
   lyt <- basic_table(top_level_section_div = "a") %>%
     split_cols_by("ARM") %>%
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
@@ -415,6 +414,7 @@ test_that("top_level_section_div works", {
     split_rows_by("RACE", split_fun = drop_split_levels) %>%
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
     analyze("AGE")
+  tbl <- build_table(lyt, DM)
   expect_identical(top_level_section_div(lyt), "a")
   top_level_section_div(lyt) <- "="
   expect_identical(top_level_section_div(lyt), "=")
