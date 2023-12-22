@@ -1,5 +1,5 @@
 ---
-title: "Sparse notes on {rtables} internals"
+title: "Sparse Notes on {rtables} Internals"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
 output:

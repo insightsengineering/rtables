@@ -204,19 +204,19 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 ### Advanced rtables Training
 
 - Part 1
-  [Slides](inst/extdata/Advanced_rtables_part1.pdf)
+  [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)
 - Part 2 
-  [Slides](inst/extdata/Advanced_rtables_part2.pdf)
+  [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
 
-- [Slides](inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)
+- [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)
 
 ### R Adoption Series
 
 - [R Adoption Series presentation
   2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
-- [Slides](inst/extdata/r_adoption_slides.pdf)
+- [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)
 
 ### New (Current) Layouting and Tabulation Framework (v.0.3+)
 

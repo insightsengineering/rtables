@@ -1,10 +1,8 @@
 ---
-title: "Debugging in `rtables` and Beyond"
+title: "Debugging in {rtables} and Beyond"
 author: "Davide Garolini"
 date: '`r Sys.Date()`'
-output:
-  html_document:
-    theme: spacelab
+output: html_document
 editor_options:
   chunk_output_type: console
 ---

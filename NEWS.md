@@ -1,4 +1,8 @@
-## rtables 0.6.5.9019
+## rtables 0.6.6.9001
+### New Features
+ * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
+
+## rtables 0.6.6
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
  * Added `bold` argument to `as_html` to bold specified elements, and `header_sep_line` 
@@ -12,13 +16,15 @@
  * Added `na_str` argument to `analyze_colvars` to set custom string to print in place of missing values.
  * Added flat `data.frame` outputs for `as_result_df()` via flag parameters `as_viewer`, `as_strings`, and 
    `expand_colnames`.
- * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
+ * Migrated `export_as_pdf` function to `formatters`. 
+
  
 ### Bug Fixes
  * Fixed a bug that was failing when wrapping and section dividers were used at the same time.
  * Fixed a bug in `as_result_df` causing misalignment of column names.
  * Fixed a bug that was not allowing path indexing as `row_paths()` was giving a different path due to it being made of 
    named values.
+ * Fixed a bug in `as_result_df` when called on tables with less than 3 rows.
 
 ### Miscellaneous
  * Applied `styler` and resolved package lint. Changed default indentation from 4 spaces to 2.
@@ -29,6 +35,7 @@
  * When tables are exported as `txt`, they preserve the horizontal separator of the table.
  * Added imports on `stringi` and `checkmate` as they are fundamental packages for string handling and
    argument checking.
+ * Updated introduction vignette and split it into two. Section on introspecting tables is now located in a separate vignette.
 
 ## rtables 0.6.5
 ### New Features
