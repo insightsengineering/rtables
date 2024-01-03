@@ -120,6 +120,18 @@ row_paths_summary(tbl)
 col_paths_summary(tbl)
 ```
 
+## Insights on the format structure and values
+
+This is principally possible thanks to `table_shell()`, which returns a table with the same output of `print()` but with the values replaced by underlying format strings (e.g. instead of `N=3`, there will be `N=xx`, and so on). This is useful for understanding the structure of the table, and for debugging purposes. Another useful tool is `value_formats()` that returns a matrix with only format strings. Here, the printout for the above examples:
+
+```{r}
+table_shell(tbl)
+```
+
+```{r}
+value_formats(tbl)
+```
+
 ## Applications
 
 Knowing the structure of an `rtable` object is helpful for retrieving specific values from the table. 
