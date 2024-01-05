@@ -28,6 +28,7 @@ Lets track down what is going under the hood when a standard table is printed. T
 
 ```{r}
 library(rtables)
+library(dplyr)
 lyt <- basic_table() %>% 
   split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>% 
   split_cols_by("ARM") %>% 
@@ -37,5 +38,40 @@ tbl <- build_table(lyt, ex_adsl) %>%
   print()
 ```
 
-We see that also a layout object (`PreDataTableLayouts`) is created and printed. This is because `print` is a generic function that dispatches to different methods depending on the class of the object. In this case, the S4 class of the object is `PreDataTableLayouts` and the method that is called is `print`. This method is defined in `00_print.R` and it is the following:
+We see that also a layout object (`PreDataTableLayouts`) is created and printed. This is because `print` is a generic function that dispatches to different methods depending on the class of the object. In this case, the S4 class of the object is `PreDataTableLayouts` and the method that is called is `print`. In the case of {rtables} the method is dispatched towards the `show` method of the class `PreDataTableLayouts`. It can be found by searching `A Pre-data Table Layout` into {rtables} source code. I think R dispatcher for `print` methods looks for `show` S4 methods instead if there are no S3 `print` methods available. Indeed, this is the code that is executed:
 
+```{r, eval=FALSE}
+setMethod(
+  "show", "PreDataTableLayouts",
+  function(object) {
+    cat("A Pre-data Table Layout\n")
+    cat("\nColumn-Split Structure:\n")
+    docat_predataxis(object@col_layout)
+    cat("\nRow-Split Structure:\n")
+    docat_predataxis(object@row_layout)
+    cat("\n")
+    invisible(object)
+  }
+)
+```
+
+This was evident if we searched for methods associated with the class `PreDataTableLayouts`, where only show is connected to a sort of printing machinery:
+
+```{r, eval=TRUE}
+methods(class = "PreDataTableLayouts")
+```
+
+Now, lets see the same for our result table `tbl`: 
+
+```{r}
+class(tbl) %>% print()
+
+getClass("TableTree") %>% print() # Main object representing a table in {rtables}
+
+methods(class = "TableTree") %>% print() # more than 70 methods but no print method
+```
+
+Again, lets see how the `show` method is used here. Note: if you search for `VTableTree"` you will find the `show` method for the `TableTree` class. This is because `VTableTree` is a virtual class that inherits from `TableTree` and is used to define the `show` method for `TableTree` objects. You will find also a `print` statement that does the same thing, i.e. it calls `toString` and `cat` on the object. Hence, we know that every table is printed by `toString` with `\n` as separator for different lines while `cat` reproduces the object into file.
+
+
+### `toString`
