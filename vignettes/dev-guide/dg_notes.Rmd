@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Disclaimer
+
 This is a collection of notes divided by issues and it is a working document that will end up being a dev vignette one day.
 
 
