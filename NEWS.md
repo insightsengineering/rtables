@@ -1,5 +1,9 @@
 ## rtables 0.6.6.9001
 
+### Miscellaneous
+ * Added new chapter to Developer Guide on `rtables` internals about the printing machinery.
+ * `expand_newlines = FALSE` now works for all the secondary elements of the table (e.g. titles and footers).
+
 ## rtables 0.6.6
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.

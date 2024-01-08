@@ -15,7 +15,7 @@
 \item{obj}{ANY. The object for the accessor to access or modify}
 
 \item{indent_rownames}{logical(1), if TRUE the column with the row names in
-the \code{strings} matrix of has indented row names (strings pre-fixed)}
+the \code{strings} matrix has indented row names (strings pre-fixed)}
 
 \item{expand_newlines}{logical(1). Should the matrix form generated
 expand  rows  whose  values   contain  newlines  into  multiple

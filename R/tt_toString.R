@@ -55,7 +55,7 @@ setMethod("toString", "VTableTree", function(x,
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
-      indent_size = indent_size
+      indent_size = indent_size # Only modifies the rownames in matrix_form
     ),
     widths = widths, col_gap = col_gap,
     hsep = hsep,
@@ -132,6 +132,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
   )
 }
 
+## matrix_form -----------------------------------------------------------------
 
 #' Transform `rtable` to a list of matrices which can be used for outputting
 #'
@@ -140,7 +141,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'
 #' @inheritParams gen_args
 #' @param indent_rownames logical(1), if TRUE the column with the row names in
-#'   the `strings` matrix of has indented row names (strings pre-fixed)
+#'   the `strings` matrix has indented row names (strings pre-fixed)
 #' @param expand_newlines logical(1). Should the matrix form generated
 #'     expand  rows  whose  values   contain  newlines  into  multiple
 #'     'physical'  rows  (as  they  will  appear  when  rendered  into
@@ -196,10 +197,14 @@ setMethod(
            expand_newlines = TRUE,
            indent_size = 2) {
     stopifnot(is(obj, "VTableTree"))
-    header_content <- .tbl_header_mat(obj) # first col are for row.names
-
+    
+    header_content <- .tbl_header_mat(obj) # first col are for row.names or topleft info
+    nr_header <- nrow(header_content$body) # colcounts were added in .tbl_header_mat
+    
+    # Summary of row contents - reprint_inds specifies which rows to reprint (hence the grouping)
     sr <- make_row_df(obj)
-
+    
+    # With get_formatted_cells we get relevant information inside the table tree
     body_content_strings <- if (NROW(sr) == 0) {
       character()
     } else {
@@ -211,7 +216,8 @@ setMethod(
     } else {
       cbind("", get_formatted_cells(obj, shell = TRUE))
     }
-
+    
+    # Takes the flatten spans for each row and repeats them according to the number of elements
     tsptmp <- lapply(collect_leaves(obj, TRUE, TRUE), function(rr) {
       sp <- row_cspans(rr)
       rep(sp, times = sp)
@@ -232,27 +238,21 @@ setMethod(
 
     body <- rbind(header_content$body, body_content_strings)
 
+    # Init column format for header (empty if not for column counts)
     hdr_fmt_blank <- matrix("",
       nrow = nrow(header_content$body),
       ncol = ncol(header_content$body)
     )
+    # If column counts are displayed, add column count format
     if (disp_ccounts(obj)) {
       hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
-    ## if(disp_ccounts(obj)) {
-    ##     formats <- rbind(matrix("", nrow = nrow(header_content$body) - 1L,
-    ##                             ncol = ncol(header_content$body)),
 
-    ##                      formats_strings)
-    ## } else {
-    ##     formats <- rbind(header_content$body, formats_strings)
-    ## }
     formats <- rbind(hdr_fmt_blank, formats_strings)
 
     spans <- rbind(header_content$span, body_spans)
     row.names(spans) <- NULL
 
-    ## unused??? space <- matrix(rep(0, length(body)), nrow = nrow(body))
     aligns <- rbind(
       matrix(rep("center", length(header_content$body)),
         nrow = nrow(header_content$body)
@@ -262,11 +262,7 @@ setMethod(
 
     aligns[, 1] <- "left" # row names and topleft (still needed for topleft)
 
-    ## if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
-    ##   stop("no \\n allowed at the moment")
-
-
-    nr_header <- nrow(header_content$body)
+    # Main indentation of the table rownames
     if (indent_rownames) {
       body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent),
         incr = indent_size
@@ -275,7 +271,8 @@ setMethod(
         incr = indent_size
       )
     }
-
+    
+    # Handling of references in header and body
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
       if (length(x) == 0) {
         ""
@@ -284,7 +281,6 @@ setMethod(
       }
     }, ""), ncol = ncol(body))
     body_ref_strs <- get_ref_matrix(obj)
-
     body <- matrix(
       paste0(
         body,
@@ -296,20 +292,21 @@ setMethod(
       nrow = nrow(body),
       ncol = ncol(body)
     )
+    
     # Solve \n in titles
     if (any(grepl("\n", all_titles(obj)))) {
       if (any(grepl("\n", main_title(obj)))) {
-        tmp_title_vec <- .quick_handle_nl(main_title(obj))
+        tmp_title_vec <- .quick_handle_nl(main_title(obj), expand_newlines)
         main_title(obj) <- tmp_title_vec[1]
-        subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj)))
+        subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj), expand_newlines))
       } else {
-        subtitles(obj) <- .quick_handle_nl(subtitles(obj))
+        subtitles(obj) <- .quick_handle_nl(subtitles(obj), expand_newlines)
       }
     }
 
     # Solve \n in footers
-    main_footer(obj) <- .quick_handle_nl(main_footer(obj))
-    prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
+    main_footer(obj) <- .quick_handle_nl(main_footer(obj), expand_newlines)
+    prov_footer(obj) <- .quick_handle_nl(prov_footer(obj), expand_newlines)
 
     # xxx \n in page titles are not working atm (I think)
     # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
@@ -343,8 +340,8 @@ setMethod(
   }
 )
 
-.quick_handle_nl <- function(str_v) {
-  if (any(grepl("\n", str_v))) {
+.quick_handle_nl <- function(str_v, expand_newlines) {
+  if (any(grepl("\n", str_v)) && isTRUE(expand_newlines)) {
     return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
   } else {
     return(str_v)
@@ -574,8 +571,7 @@ get_formatted_fnotes <- function(tt) {
     })
   )
 
-
-
+  # Information about coulumn counts is set here from cinfo
   if (disp_ccounts(cinfo)) {
     counts <- col_counts(cinfo)
     cformat <- colcount_format(cinfo)
@@ -604,6 +600,7 @@ get_formatted_fnotes <- function(tt) {
     fnote <- rbind(fnote, rep(list(list()), nc))
   }
 
+  # topleft information is set here from cinfo
   tl <- top_left(cinfo)
   lentl <- length(tl)
   nli <- nrow(body)
@@ -617,8 +614,11 @@ get_formatted_fnotes <- function(tt) {
     # We want topleft alignment that goes to the bottom!
     tl <- c(rep("", nli - lentl), tl)
   }
+  
+  # Final output is a list of strings, spans, and footnotes
   list(
-    body = cbind(tl, body, deparse.level = 0), span = cbind(1, span),
+    body = cbind(tl, body, deparse.level = 0), 
+    span = cbind(1, span),
     footnotes = cbind(list(list()), fnote)
   )
 }
