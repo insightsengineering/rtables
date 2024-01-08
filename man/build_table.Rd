@@ -71,7 +71,6 @@ column counts at all (even implicitly) is the only way to ensure overridden
 counts are fully respected.
 }
 \examples{
-
 lyt <- basic_table() \%>\%
   split_cols_by("Species") \%>\%
   analyze("Sepal.Length", afun = function(x) {
@@ -122,6 +121,7 @@ tbl5
 
 tbl6 <- build_table(lyt3, DM, col_counts = 1:3)
 tbl6
+
 }
 \author{
 Gabriel Becker
