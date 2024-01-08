@@ -3280,7 +3280,8 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' @return The section divider string. Each line that does not have a trailing separator
 #'   will have `NA_character_` as section divider.
 #'
-#' @seealso [basic_table()] parameter `header_section_div` for a global section divider.
+#' @seealso [basic_table()] parameter `header_section_div` and `top_level_section_div` for global 
+#'   section dividers.
 #'
 #' @details
 #' Assigned value to section divider must be a character vector. If any value is `NA_character_`
@@ -3513,6 +3514,32 @@ setMethod(
   }
   invisible(TRUE)
 }
+
+#' @rdname section_div
+#' @export
+setGeneric("top_level_section_div", function(obj) standardGeneric("top_level_section_div"))
+
+#' @rdname section_div
+#' @aliases top_level_section_div,PreDataTableLayouts-method
+setMethod(
+  "top_level_section_div", "PreDataTableLayouts",
+  function(obj) obj@top_level_section_div
+)
+
+#' @rdname section_div
+#' @export
+setGeneric("top_level_section_div<-", function(obj, value) standardGeneric("top_level_section_div<-"))
+
+#' @rdname section_div
+#' @aliases top_level_section_div<-,PreDataTableLayouts-method
+setMethod(
+  "top_level_section_div<-", "PreDataTableLayouts",
+  function(obj, value) {
+    checkmate::assert_character(value, len = 1, n.chars = 1)
+    obj@top_level_section_div <- value
+    obj
+  }
+)
 
 ## table_inset ----------------------------------------------------------
 #' @rdname formatters_methods

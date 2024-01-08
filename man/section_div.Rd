@@ -17,6 +17,10 @@
 \alias{header_section_div<-}
 \alias{header_section_div<-,PreDataTableLayouts-method}
 \alias{header_section_div<-,VTableTree-method}
+\alias{top_level_section_div}
+\alias{top_level_section_div,PreDataTableLayouts-method}
+\alias{top_level_section_div<-}
+\alias{top_level_section_div<-,PreDataTableLayouts-method}
 \title{Section dividers getter and setter}
 \usage{
 section_div(obj)
@@ -48,6 +52,14 @@ header_section_div(obj) <- value
 \S4method{header_section_div}{PreDataTableLayouts}(obj) <- value
 
 \S4method{header_section_div}{VTableTree}(obj) <- value
+
+top_level_section_div(obj)
+
+\S4method{top_level_section_div}{PreDataTableLayouts}(obj)
+
+top_level_section_div(obj) <- value
+
+\S4method{top_level_section_div}{PreDataTableLayouts}(obj) <- value
 }
 \arguments{
 \item{obj}{Table object. This can be of any class that inherits from \code{VTableTree}
@@ -120,5 +132,6 @@ tbl
 
 }
 \seealso{
-\code{\link[=basic_table]{basic_table()}} parameter \code{header_section_div} for a global section divider.
+\code{\link[=basic_table]{basic_table()}} parameter \code{header_section_div} and \code{top_level_section_div} for global
+section dividers.
 }
