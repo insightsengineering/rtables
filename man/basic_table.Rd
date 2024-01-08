@@ -44,7 +44,7 @@ Please consider changing last element of \code{\link[=section_div]{section_div()
 tables that need a divider between them.}
 
 \item{top_level_section_div}{character(1). If assigned to a single character,
-the larger sections of the table will be divided by a line made of that character.
+the first (top level) split or division of the table will be highlighted by a line made of that character.
 See \link{section_div} for more information.}
 
 \item{inset}{numeric(1). Number of spaces to inset the table header, table
