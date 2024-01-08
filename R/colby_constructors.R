@@ -1994,7 +1994,7 @@ list_wrap_df <- function(f) {
 #'   column counts. Must be 1d, or 2d where one component is a percent. See
 #'   details.
 #' @param top_level_section_div character(1). If assigned to a single character,
-#'   the larger sections of the table will be divided by a line made of that character.
+#'   the first (top level) split or division of the table will be highlighted by a line made of that character.
 #'   See [section_div] for more information.
 #'
 #' @details
