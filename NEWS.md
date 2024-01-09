@@ -1,5 +1,8 @@
 ## rtables 0.6.6.9001
 
+### Bug Fixes
+ * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.
+
 ## rtables 0.6.6
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.

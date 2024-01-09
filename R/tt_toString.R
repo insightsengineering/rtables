@@ -239,20 +239,12 @@ setMethod(
     if (disp_ccounts(obj)) {
       hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
-    ## if(disp_ccounts(obj)) {
-    ##     formats <- rbind(matrix("", nrow = nrow(header_content$body) - 1L,
-    ##                             ncol = ncol(header_content$body)),
-
-    ##                      formats_strings)
-    ## } else {
-    ##     formats <- rbind(header_content$body, formats_strings)
-    ## }
+    
     formats <- rbind(hdr_fmt_blank, formats_strings)
 
     spans <- rbind(header_content$span, body_spans)
     row.names(spans) <- NULL
 
-    ## unused??? space <- matrix(rep(0, length(body)), nrow = nrow(body))
     aligns <- rbind(
       matrix(rep("center", length(header_content$body)),
         nrow = nrow(header_content$body)
@@ -261,10 +253,6 @@ setMethod(
     )
 
     aligns[, 1] <- "left" # row names and topleft (still needed for topleft)
-
-    ## if (any(apply(body, c(1, 2), function(x) grepl("\n", x, fixed = TRUE))))
-    ##   stop("no \\n allowed at the moment")
-
 
     nr_header <- nrow(header_content$body)
     if (indent_rownames) {
@@ -296,23 +284,7 @@ setMethod(
       nrow = nrow(body),
       ncol = ncol(body)
     )
-    # Solve \n in titles
-    if (any(grepl("\n", all_titles(obj)))) {
-      if (any(grepl("\n", main_title(obj)))) {
-        tmp_title_vec <- .quick_handle_nl(main_title(obj))
-        main_title(obj) <- tmp_title_vec[1]
-        subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj)))
-      } else {
-        subtitles(obj) <- .quick_handle_nl(subtitles(obj))
-      }
-    }
-
-    # Solve \n in footers
-    main_footer(obj) <- .quick_handle_nl(main_footer(obj))
-    prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
-
-    # xxx \n in page titles are not working atm (I think)
-    # ref_fnotes <- strsplit(get_formatted_fnotes(obj), "\n", fixed = TRUE)
+  
     ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
     pag_titles <- page_titles(obj)
 
