@@ -1145,7 +1145,6 @@ recursive_applysplit <- function(df,
 #' Layouts are used to describe a table pre-data. `build_table` is used to
 #' create a table using a layout and a dataset.
 #'
-#'
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
 #' @param col_counts numeric (or `NULL`). Deprecated. If non-null, column counts
@@ -1157,7 +1156,6 @@ recursive_applysplit <- function(df,
 #' @param \dots currently ignored.
 #'
 #' @details
-#'
 #' When \code{alt_counts_df} is specified, column counts are calculated by
 #' applying the exact column subsetting expressions determined when applying
 #' column splitting to the main data (\code{df}) to \code{alt_counts_df} and
@@ -1174,14 +1172,12 @@ recursive_applysplit <- function(df,
 #'   column counts at all (even implicitly) is the only way to ensure overridden
 #'   counts are fully respected.
 #'
-#' @export
 #' @return A \code{TableTree} or \code{ElementaryTable} object representing the
 #'   table created by performing the tabulations declared in \code{lyt} to the
 #'   data \code{df}.
 #' @author Gabriel Becker
 #'
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("Species") %>%
 #'   analyze("Sepal.Length", afun = function(x) {
@@ -1232,6 +1228,8 @@ recursive_applysplit <- function(df,
 #'
 #' tbl6 <- build_table(lyt3, DM, col_counts = 1:3)
 #' tbl6
+#' 
+#' @export
 build_table <- function(lyt, df,
                         alt_counts_df = NULL,
                         col_counts = NULL,
@@ -1293,6 +1291,7 @@ build_table <- function(lyt, df,
     cvar = content_var(rtspl),
     extra_args = content_extra_args(rtspl)
   )
+
   kids <- lapply(seq_along(rlyt), function(i) {
     splvec <- rlyt[[i]]
     if (length(splvec) == 0) {
@@ -1330,6 +1329,14 @@ build_table <- function(lyt, df,
   kids <- kids[!sapply(kids, is.null)]
   if (length(kids) > 0) names(kids) <- sapply(kids, obj_name)
 
+  # top level divisor
+  if (!is.na(top_level_section_div(lyt))) {
+    kids <- lapply(kids, function(first_level_kids) {
+      trailing_section_div(first_level_kids) <- top_level_section_div(lyt)
+      first_level_kids
+    })
+  }
+  
   if (nrow(ctab) == 0L && length(kids) == 1L && is(kids[[1]], "VTableTree")) {
     tab <- kids[[1]]
     main_title(tab) <- main_title(lyt)
