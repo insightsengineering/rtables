@@ -287,3 +287,104 @@ setMethod(
   }
 )
 ```
+
+Now lets see the `matrix_form` in `rlistings`:
+```{r, eval=FALSE}
+library(rlistings)
+lsting <- as_listing(mtcars)
+trace("matrix_form", signature = "listing_df", tracer = browser, exit = browser)
+mf <- matrix_form(lsting)
+untrace("matrix_form", signature = "listing_df")
+```
+
+
+```{r, eval=FALSE}
+setMethod(
+  "matrix_form", "listing_df",
+  rix_form <- function(obj, indent_rownames = FALSE) { #-> I have no idea why here there is an assignment xxx
+    ##  we intentionally silently ignore indent_rownames because listings have
+    ## no rownames, but formatters::vert_pag_indices calls matrix_form(obj, TRUE)
+    ## unconditionally.
+    
+    
+    # Keeping only displayed columns
+    cols <- attr(obj, "listing_dispcols") # this is the list of columns to be displayed
+    listing <- obj[, cols]
+    atts <- attributes(obj)
+    atts$names <- cols 
+    attributes(listing) <- atts
+    keycols <- get_keycols(listing)
+
+
+    bodymat <- matrix("",
+      nrow = nrow(listing),
+      ncol = ncol(listing)
+    )
+
+    colnames(bodymat) <- names(listing)
+
+
+    # Print only first appearer of key columns if repeated
+    curkey <- ""
+    for (i in seq_along(keycols)) {
+      kcol <- keycols[i]
+      kcolvec <- listing[[kcol]]
+      #-> format_value transforms the values of the column into strings
+      kcolvec <- vapply(kcolvec, format_value, "", format = obj_format(kcolvec), na_str = obj_na_str(kcolvec))
+      curkey <- paste0(curkey, kcolvec)
+      disp <- c(TRUE, tail(curkey, -1) != head(curkey, -1)) #-> This condition only show the first appearer of a key
+      bodymat[disp, kcol] <- kcolvec[disp]
+    }
+
+    # Print all other columns directly
+    nonkeycols <- setdiff(names(listing), keycols)
+    if (length(nonkeycols) > 0) {
+      for (nonk in nonkeycols) {
+        vec <- listing[[nonk]]
+        vec <- vapply(vec, format_value, "", format = obj_format(vec), na_str = obj_na_str(vec))
+        bodymat[, nonk] <- vec
+      }
+    }
+
+
+    fullmat <- rbind(
+      var_labels(listing, fill = TRUE), # Extracts the variable labels
+      bodymat
+    )
+
+    colaligns <- rbind(
+      rep("center", length(cols)), # Col names are always centered?
+      matrix(sapply(listing, obj_align),
+        ncol = length(cols),
+        nrow = nrow(fullmat) - 1,
+        byrow = TRUE
+      )
+    )
+
+    MatrixPrintForm(
+      strings = fullmat,
+      spans = matrix(1,
+        nrow = nrow(fullmat),
+        ncol = ncol(fullmat)
+      ),
+      ref_fnotes = list(),
+      aligns = colaligns,
+      formats = matrix(1,
+        nrow = nrow(fullmat),
+        ncol = ncol(fullmat)
+      ),
+      row_info = make_row_df(obj),
+      nlines_header = 1, ## XXX this is probably wrong!!!
+      nrow_header = 1,
+      has_topleft = FALSE,
+      has_rowlabs = FALSE,
+      expand_newlines = TRUE, # Always expand newlines, but this happens later!! XXX to fix
+      main_title = main_title(obj),
+      subtitles = subtitles(obj),
+      page_titles = page_titles(obj),
+      main_footer = main_footer(obj),
+      prov_footer = prov_footer(obj)
+    )
+  }
+)
+```
