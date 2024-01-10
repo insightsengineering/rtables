@@ -120,9 +120,11 @@ row_paths_summary(tbl)
 col_paths_summary(tbl)
 ```
 
-## Insights on the format structure and values
+## Insights on Value Format Structure
 
-This is principally possible thanks to `table_shell()`, which returns a table with the same output of `print()` but with the values replaced by underlying format strings (e.g. instead of `N=3`, there will be `N=xx`, and so on). This is useful for understanding the structure of the table, and for debugging purposes. Another useful tool is `value_formats()` that returns a matrix with only format strings. Here, the printout for the above examples:
+We can gain insight into the value formatting structure of a table using `table_shell()`, which returns a table with the same output as `print()` but with the cell values replaced by their underlying format strings (e.g. instead of `40.0`, `xx.x` is displayed, and so on). This is useful for understanding the structure of the table, and for debugging purposes. Another useful tool is the `value_formats()` function which instead of a table returns a matrix of the format strings for each cell value in the table.
+
+See below the printout for the above examples:
 
 ```{r}
 table_shell(tbl)
