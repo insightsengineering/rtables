@@ -1173,18 +1173,22 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #' Returns a matrix of formats for the cells in a table
 #' @param obj A table or row object.
 #' @param default `FormatSpec`.
-#' @export
+#'
 #' @return Matrix (storage mode list) containing the effective format for each
 #' cell position in the table (including 'virtual' cells implied by label rows,
-#' whose formats are always `NULL`)
-#' @examples
+#' whose formats are always `NULL`).
 #'
+#' @seealso [table_shell()] and [table_shell_str()] for information on the table format structure.
+#'
+#' @examples
 #' lyt <- basic_table() %>%
 #'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' value_formats(tbl)
+#'
+#' @export
 setGeneric("value_formats", function(obj, default = obj_format(obj)) standardGeneric("value_formats"))
 #' @rdname value_formats
 setMethod(
@@ -1193,7 +1197,6 @@ setMethod(
     obj_format(obj) %||% default
   }
 )
-
 #' @rdname value_formats
 setMethod(
   "value_formats", "TableRow",

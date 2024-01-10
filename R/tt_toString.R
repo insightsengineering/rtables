@@ -72,8 +72,10 @@ setMethod("toString", "VTableTree", function(x,
 #' @inheritParams tostring
 #' @inheritParams gen_args
 #' @return for `table_shell_str` the string representing the table shell, for `table_shell`,
-#' `NULL`, as the function is called for the side effect of printing the shell to the console
-#' @export
+#' `NULL`, as the function is called for the side effect of printing the shell to the console.
+#'
+#' @seealso [value_formats()] for a matrix of formats for each cell in a table.
+#'
 #' @examples
 #' library(dplyr)
 #'
@@ -89,6 +91,8 @@ setMethod("toString", "VTableTree", function(x,
 #'
 #' tbl <- build_table(lyt, iris2)
 #' table_shell(tbl)
+#'
+#' @export
 table_shell <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(),
                         tf_wrap = FALSE, max_width = NULL) {
   cat(table_shell_str(
