@@ -1806,6 +1806,7 @@ setClass("PreDataTableLayouts",
     col_layout = "PreDataColLayout",
     top_left = "character",
     header_section_div = "character",
+    top_level_section_div = "character",
     table_inset = "integer"
   )
 )
@@ -1818,6 +1819,7 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                 main_footer = character(),
                                 prov_footer = character(),
                                 header_section_div = NA_character_,
+                                top_level_section_div = NA_character_,
                                 table_inset = 0L) {
   new("PreDataTableLayouts",
     row_layout = rlayout,
@@ -1828,6 +1830,7 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
     main_footer = main_footer,
     provenance_footer = prov_footer,
     header_section_div = header_section_div,
+    top_level_section_div = top_level_section_div,
     table_inset = table_inset
   )
 }

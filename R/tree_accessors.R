@@ -1173,18 +1173,22 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #' Returns a matrix of formats for the cells in a table
 #' @param obj A table or row object.
 #' @param default `FormatSpec`.
-#' @export
+#'
 #' @return Matrix (storage mode list) containing the effective format for each
 #' cell position in the table (including 'virtual' cells implied by label rows,
-#' whose formats are always `NULL`)
-#' @examples
+#' whose formats are always `NULL`).
 #'
+#' @seealso [table_shell()] and [table_shell_str()] for information on the table format structure.
+#'
+#' @examples
 #' lyt <- basic_table() %>%
 #'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' value_formats(tbl)
+#'
+#' @export
 setGeneric("value_formats", function(obj, default = obj_format(obj)) standardGeneric("value_formats"))
 #' @rdname value_formats
 setMethod(
@@ -1193,7 +1197,6 @@ setMethod(
     obj_format(obj) %||% default
   }
 )
-
 #' @rdname value_formats
 setMethod(
   "value_formats", "TableRow",
@@ -3280,7 +3283,8 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' @return The section divider string. Each line that does not have a trailing separator
 #'   will have `NA_character_` as section divider.
 #'
-#' @seealso [basic_table()] parameter `header_section_div` for a global section divider.
+#' @seealso [basic_table()] parameter `header_section_div` and `top_level_section_div` for global 
+#'   section dividers.
 #'
 #' @details
 #' Assigned value to section divider must be a character vector. If any value is `NA_character_`
@@ -3513,6 +3517,32 @@ setMethod(
   }
   invisible(TRUE)
 }
+
+#' @rdname section_div
+#' @export
+setGeneric("top_level_section_div", function(obj) standardGeneric("top_level_section_div"))
+
+#' @rdname section_div
+#' @aliases top_level_section_div,PreDataTableLayouts-method
+setMethod(
+  "top_level_section_div", "PreDataTableLayouts",
+  function(obj) obj@top_level_section_div
+)
+
+#' @rdname section_div
+#' @export
+setGeneric("top_level_section_div<-", function(obj, value) standardGeneric("top_level_section_div<-"))
+
+#' @rdname section_div
+#' @aliases top_level_section_div<-,PreDataTableLayouts-method
+setMethod(
+  "top_level_section_div<-", "PreDataTableLayouts",
+  function(obj, value) {
+    checkmate::assert_character(value, len = 1, n.chars = 1)
+    obj@top_level_section_div <- value
+    obj
+  }
+)
 
 ## table_inset ----------------------------------------------------------
 #' @rdname formatters_methods

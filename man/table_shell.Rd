@@ -51,7 +51,7 @@ completely if \code{tf_wrap} is \code{FALSE}.}
 }
 \value{
 for \code{table_shell_str} the string representing the table shell, for \code{table_shell},
-\code{NULL}, as the function is called for the side effect of printing the shell to the console
+\code{NULL}, as the function is called for the side effect of printing the shell to the console.
 }
 \description{
 A table shell is a rendering of the table which maintains the structure, but does not
@@ -72,4 +72,8 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, iris2)
 table_shell(tbl)
+
+}
+\seealso{
+\code{\link[=value_formats]{value_formats()}} for a matrix of formats for each cell in a table.
 }
