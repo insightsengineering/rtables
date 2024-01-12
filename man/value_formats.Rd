@@ -26,17 +26,20 @@ value_formats(obj, default = obj_format(obj))
 \value{
 Matrix (storage mode list) containing the effective format for each
 cell position in the table (including 'virtual' cells implied by label rows,
-whose formats are always \code{NULL})
+whose formats are always \code{NULL}).
 }
 \description{
 Returns a matrix of formats for the cells in a table
 }
 \examples{
-
 lyt <- basic_table() \%>\%
   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 value_formats(tbl)
+
+}
+\seealso{
+\code{\link[=table_shell]{table_shell()}} and \code{\link[=table_shell_str]{table_shell_str()}} for information on the table format structure.
 }
