@@ -2,6 +2,10 @@
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
 
+### Miscellaneous
+ * Added new chapter to Developer Guide on `rtables` internals about the printing machinery.
+ * `expand_newlines = FALSE` now works for all the secondary elements of the table (e.g. titles and footers).
+
 ## rtables 0.6.6
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.
