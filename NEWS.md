@@ -1,4 +1,4 @@
-## rtables 0.6.6.9004
+## rtables 0.6.6.9005
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
 
