@@ -189,6 +189,7 @@ tt_for_wrap <- tt_to_test_wrapping()
 tt_to_test_newline_chars <- function() {
   set.seed(1)
   DM_trick <- DM %>%
+    mutate(ARM = "ARM \n\nA\n") %>%
     mutate(ARM2 = sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),
       replace = TRUE, nrow(DM)
     )) # last \n is eaten up if no empty space
@@ -198,12 +199,13 @@ tt_to_test_newline_chars <- function() {
       split_label = "m\nannaggia\nsda\n",
       label_pos = "visible"
     ) %>%
+    split_cols_by("ARM") %>%
     split_cols_by("ARM2", split_label = "sda") %>%
     analyze("BMRKR1", na_str = "asd\nasd") %>%
     build_table(DM_trick)
 
-  main_footer(tbl) <- c("This", "is\na\n\nweird one\n")
-  prov_footer(tbl) <- c("This", "is\na\n\nweird one\n")
+  main_footer(tbl) <- c("main_footer: This", "is\na\n\nweird one\n")
+  prov_footer(tbl) <- c("prov_footer: This", "is\na\n\nweird one\n")
   fnotes_at_path(tbl, rowpath = row_paths(tbl)[[6]]) <- c("a fancy footnote\ncrazy\n", "ahahha")
   top_left(tbl) <- c("\na", "b\nd\n\n", "c\n\n") # last \n is eaten up if empty line everywhere
   main_title(tbl) <- "why not\nalso here\n"
