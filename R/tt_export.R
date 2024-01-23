@@ -195,6 +195,7 @@ result_df_v0_experimental <- function(tt,
     raw_cvals <- list(raw_cvals)
   }
 
+  # Flatten the list of lists (rows) of cell values into a data frame
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
 
@@ -237,7 +238,14 @@ result_df_v0_experimental <- function(tt,
     cellvals
   )
 
+  # Removing initial root elements from path (out of the loop -> right maxlen)
+  df$path <- lapply(df$path, .remove_root_elems_from_path,
+    which_root_name = c("root", "rbind_root"),
+    all = TRUE
+  )
   maxlen <- max(lengths(df$path))
+
+  # Loop for metadata (path and details from make_row_df)
   metadf <- do.call(
     rbind.data.frame,
     lapply(
@@ -308,16 +316,8 @@ result_df_v0_experimental <- function(tt,
       as.numeric
     )
   })
-  
-  do.call(cbind, ret)
-}
 
-do_label_row <- function(rdfrow, maxlen) {
-  pth <- rdfrow$path[[1]]
-  c(
-    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
-  )
+  do.call(cbind, ret)
 }
 
 make_result_df_md_colnames <- function(maxlen) {
@@ -329,9 +329,16 @@ make_result_df_md_colnames <- function(maxlen) {
   ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
 }
 
+do_label_row <- function(rdfrow, maxlen) {
+  pth <- rdfrow$path[[1]]
+  c(
+    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
+    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+  )
+}
+
 do_content_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
-
   contpos <- which(pth == "@content")
 
   seq_before <- seq_len(contpos - 1)
@@ -351,7 +358,7 @@ do_data_row <- function(rdfrow, maxlen) {
     pth <- pth[-1 * (pthlen - 2)]
   }
   pthlen_new <- length(pth)
-  if (maxlen == 1) pthlen_new <- 3 
+  if (maxlen == 1) pthlen_new <- 3
   c(
     as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
@@ -360,12 +367,29 @@ do_data_row <- function(rdfrow, maxlen) {
   )
 }
 
+.remove_root_elems_from_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
+  any_root_paths <- path[1] %in% c("root", "rbind_root")
+  if (any_root_paths) {
+    if (isTRUE(all)) {
+      # Selecting the header grouping of root and rbind_root (we do not want to remove other root labels-path later)
+      root_indices <- which(path %in% c("root", "rbind_root"))
+      if (any(diff(root_indices) > 1)) { # integer(0) for diff means FALSE
+        end_point_root_headers <- which(diff(root_indices) > 1)[1]
+      } else {
+        end_point_root_headers <- length(root_indices)
+      }
+      root_path_to_remove <- seq_len(end_point_root_headers)
+    } else {
+      root_path_to_remove <- 1
+    }
+    path <- path[-root_path_to_remove]
+  }
+  path
+}
+
 handle_rdf_row <- function(rdfrow, maxlen) {
   nclass <- rdfrow$node_class
-  if (rdfrow$path[[1]][1] == "root") {
-    rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
-    maxlen <- maxlen - 1
-  }
+
   ret <- switch(nclass,
     LabelRow = do_label_row(rdfrow, maxlen),
     ContentRow = do_content_row(rdfrow, maxlen),
