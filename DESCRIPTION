@@ -62,7 +62,6 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
 Collate:
     '00tabletrees.R'
     'Viewer.R'
@@ -95,3 +94,4 @@ Collate:
     'tt_from_df.R'
     'validate_table_struct.R'
     'zzz_constants.R'
+RoxygenNote: 7.2.0
