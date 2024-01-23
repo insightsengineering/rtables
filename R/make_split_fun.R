@@ -177,7 +177,7 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' Core  splitting functions  override  the  fundamental
 #' splitting procedure,  and are only  necessary in rare  cases. These
 #' must  accept  `spl`, `df`,  `vals`,  `labels`,  and can  optionally
-#' accept `.spl_context`. They should return an split result object
+#' accept `.spl_context`. They should return a split result object
 #' constructed via `make_split_result()`.
 #'
 #' In particular, if the custom split function will be used in
