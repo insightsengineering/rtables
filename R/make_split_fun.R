@@ -290,14 +290,9 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 
     if (is.null(core_split)) {
       ret <- do_base_split(spl = spl, df = df, vals = vals, labels = labels)
-    } else if (TRUE||!in_col_split(.spl_context)) {
+    } else {
       ret <- core_split(spl = spl, df = df, vals = vals, labels = labels, .spl_context)
       validate_split_result(ret, component = "core_split")
-    } else {
-      ## stop(
-      ##   "Use of custom split functions which override core splitting ",
-      ##   "behavior is not currently supported in column space."
-      ## )
     }
 
     for (post_fn in post) {
