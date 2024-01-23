@@ -1,9 +1,11 @@
 ## rtables 0.6.6.9005
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
+ * `sort_at_path` now gives informative error messages when the given path does not exist.
 
 ### Bug Fixes
  * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.
+ * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
 
 ## rtables 0.6.6
 ### New Features
