@@ -4,6 +4,7 @@
 
 ### Bug Fixes
  * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.
+ * Fixed issue with `rtables_root` not being removed when using `as_result_df`.
 
 ## rtables 0.6.6
 ### New Features
