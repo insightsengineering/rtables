@@ -230,16 +230,13 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   ## the counts will obviously be wrong.
   if (is.null(counts)) {
     counts <- rep(NA_integer_, length(cexprs))
-  } else {
-    if (length(counts) != length(cexprs)) {
-      stop(
-        "Length of overriding counts must equal number of columns. Got ",
-        length(counts), " values for ", length(cexprs), " columns. ",
-        "Use NAs to specify that the default counting machinery should be ",
-        "used for that position."
-      )
-    }
-    counts <- as.integer(counts)
+  } else if (length(counts) != length(cexprs)) {
+    stop(
+      "Length of overriding counts must equal number of columns. Got ",
+      length(counts), " values for ", length(cexprs), " columns. ",
+      "Use NAs to specify that the default counting machinery should be ",
+      "used for that position."
+    )
   }
 
   counts_df_name <- "alt_counts_df"
@@ -253,7 +250,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     if (identical(ex, expression(TRUE))) {
       nrow(alt_counts_df)
     } else if (identical(ex, expression(FALSE))) {
-      0
+      0L
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
       if (is(vec, "try-error")) {
@@ -276,9 +273,11 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     }
   })
   counts[calcpos] <- calccounts[calcpos]
+  counts <- as.integer(counts)
   if (is.null(total)) {
     total <- sum(counts)
   }
+
   format <- colcount_format(lyt)
   InstantiatedColumnInfo(
     treelyt = ctree,

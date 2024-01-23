@@ -2176,7 +2176,8 @@ setGeneric("col_counts<-", function(obj, path = NULL, value) standardGeneric("co
 setMethod(
   "col_counts<-", "InstantiatedColumnInfo",
   function(obj, path = NULL, value) {
-    obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- value
+    ## all methods funnel to this one so ensure integer-ness here.
+    obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- as.integer(value)
     obj
   }
 )
@@ -2220,7 +2221,8 @@ setGeneric("col_total<-", function(obj, value) standardGeneric("col_total<-"))
 setMethod(
   "col_total<-", "InstantiatedColumnInfo",
   function(obj, value) {
-    obj@total_count <- value
+    ## all methods funnel to this one so ensure integer-ness here.
+    obj@total_count <- as.integer(value)
     obj
   }
 )
