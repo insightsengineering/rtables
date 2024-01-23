@@ -129,3 +129,19 @@ test_that("as_result_df works with visual output (as_viewer)", {
     )
   )
 })
+
+test_that("as_result_df works fine also with multiple rbind_root", {
+  # regression test for rtables#815
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("STRATA1") %>%
+    analyze(c("AGE", "BMRKR2"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  mega_rbind_tbl <- rbind(tbl, rbind(tbl, tbl, rbind(tbl, tbl)))
+  
+  out <- expect_silent(as_result_df(mega_rbind_tbl))
+  
+  expect_true(all(out[,1] == "STRATA1"))
+})
