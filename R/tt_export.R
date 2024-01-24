@@ -93,7 +93,7 @@ formatters::export_as_txt
 #'     column counts if `expand_colnames = TRUE`.
 #'   - `as_viewer`: when `TRUE`, the result data frame will have all values as they appear in the final table,
 #'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
-#'   - `keep_label_rows`: when `TRUE`, the result data frame will have all labels as they appear in the 
+#'   - `keep_label_rows`: when `TRUE`, the result data frame will have all labels as they appear in the
 #'     final table.
 #'
 #' @details `as_result_df()`: Result data frame specifications may differ in the exact information
@@ -233,7 +233,7 @@ result_df_v0_experimental <- function(tt,
   }
 
   rdf <- make_row_df(tt)
-  
+
   df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
   # Removing initial root elements from path (out of the loop -> right maxlen)
   df$path <- lapply(df$path, .remove_root_elems_from_path,
@@ -252,7 +252,7 @@ result_df_v0_experimental <- function(tt,
       }
     )
   )
-  
+
   # Should we keep label rows with NAs instead of values?
   if (keep_label_rows) {
     cellvals_mat_struct <- as.data.frame(
@@ -299,6 +299,7 @@ result_df_v0_experimental <- function(tt,
     }
     ret <- rbind(header_colnames_matrix, ret)
   }
+  rownames(ret) <- NULL
 
   ret
 }
