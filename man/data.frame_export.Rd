@@ -34,6 +34,8 @@ in the final table (it can also be retrieved from \code{matrix_form(tt)$strings}
 column counts if \code{expand_colnames = TRUE}.
 \item \code{as_viewer}: when \code{TRUE}, the result data frame will have all values as they appear in the final table,
 i.e. with the same precision and numbers, but in easy-to-use numeric form.
+\item \code{keep_label_rows}: when \code{TRUE}, the result data frame will have all labels as they appear in the
+final table.
 }}
 
 \item{path_fun}{function. Function to transform paths into single-string
