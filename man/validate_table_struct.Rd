@@ -46,5 +46,4 @@ validate_table_struct(rtable("hahaha"))
 \dontrun{
 assert_valid_table(rtable("oops"))
 }
-
 }

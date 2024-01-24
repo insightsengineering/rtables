@@ -12,6 +12,7 @@ dplyr
 emph
 facetted
 facetting
+flextable
 formatter
 getter
 getters
@@ -19,6 +20,7 @@ Godwin
 Heng
 ing
 initializer
+integerish
 Kelkhoff
 Layouting
 layouting
@@ -48,6 +50,7 @@ Resync
 reusability
 RinPharma
 roadmap
+RStudio
 rtables
 Saibah
 sortable

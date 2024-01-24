@@ -357,7 +357,7 @@
 
 split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
-\S4method{split_rows}{`NULL`}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
+\S4method{split_rows}{NULL}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
 \S4method{split_rows}{PreDataRowLayout}(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
@@ -369,7 +369,7 @@ split_rows(lyt = NULL, spl, pos, cmpnd_fun = AnalyzeMultiVars)
 
 cmpnd_last_rowsplit(lyt, spl, constructor)
 
-\S4method{cmpnd_last_rowsplit}{`NULL`}(lyt, spl, constructor)
+\S4method{cmpnd_last_rowsplit}{NULL}(lyt, spl, constructor)
 
 \S4method{cmpnd_last_rowsplit}{PreDataRowLayout}(lyt, spl, constructor)
 
@@ -381,7 +381,7 @@ cmpnd_last_rowsplit(lyt, spl, constructor)
 
 split_cols(lyt = NULL, spl, pos)
 
-\S4method{split_cols}{`NULL`}(lyt = NULL, spl, pos)
+\S4method{split_cols}{NULL}(lyt = NULL, spl, pos)
 
 \S4method{split_cols}{PreDataColLayout}(lyt = NULL, spl, pos)
 
@@ -533,7 +533,7 @@ next_cpos(obj, nested = TRUE)
 
 last_rowsplit(obj)
 
-\S4method{last_rowsplit}{`NULL`}(obj)
+\S4method{last_rowsplit}{NULL}(obj)
 
 \S4method{last_rowsplit}{SplitVector}(obj)
 
@@ -773,7 +773,7 @@ content_na_str(obj) <- value
 
 \S4method{collect_leaves}{VLeaf}(tt, incl.cont = TRUE, add.labrows = FALSE)
 
-\S4method{collect_leaves}{`NULL`}(tt, incl.cont = TRUE, add.labrows = FALSE)
+\S4method{collect_leaves}{NULL}(tt, incl.cont = TRUE, add.labrows = FALSE)
 
 \S4method{collect_leaves}{ANY}(tt, incl.cont = TRUE, add.labrows = FALSE)
 
@@ -1049,7 +1049,7 @@ spl_varnames(object) <- value
 
 \S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
-\S4method{fnotes_at_path}{VTableTree,`NULL`}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
+\S4method{fnotes_at_path}{VTableTree,NULL}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 \S4method{rbind2}{VTableNodeInfo,missing}(x, y)
 
@@ -1057,7 +1057,7 @@ spl_varnames(object) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,VTableTree}(tt, path, ...) <- value
 
-\S4method{tt_at_path}{VTableTree,ANY,`NULL`}(tt, path, ...) <- value
+\S4method{tt_at_path}{VTableTree,ANY,NULL}(tt, path, ...) <- value
 
 \S4method{tt_at_path}{VTableTree,ANY,TableRow}(tt, path, ...) <- value
 
@@ -1218,7 +1218,6 @@ These are internal methods that are documented only to satisfy
 \verb{R CMD check}. End users should pay no attention to this documentation.
 }
 \examples{
-
 library(dplyr)
 
 iris2 <- iris \%>\%

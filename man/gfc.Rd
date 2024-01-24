@@ -46,7 +46,6 @@ the formatted print-strings for all (body) cells in \code{obj}.
 get formatted cells
 }
 \examples{
-
 library(dplyr)
 
 iris2 <- iris \%>\%

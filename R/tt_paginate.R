@@ -205,7 +205,7 @@ setMethod(
       path <- c(path, obj_name(tt))
     }
     ret <- list()
-    
+
     ## note this is the **table** not the label row
     if (!visible_only) {
       ret <- c(
@@ -306,7 +306,7 @@ setMethod(
     }
 
     ret <- do.call(rbind, ret)
-    
+
     # Case where it has Elementary table or VTableTree section_div it is overridden
     if (!is.na(trailing_section_div(tt))) {
       ret$trailing_sep[nrow(ret)] <- trailing_section_div(tt)
@@ -608,7 +608,6 @@ setMethod(
 #' The subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
 #'
 #' @examples
-#'
 #' s_summary <- function(x) {
 #'   if (is.numeric(x)) {
 #'     in_rows(

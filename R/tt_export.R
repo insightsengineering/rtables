@@ -53,6 +53,8 @@ import_from_tsv <- function(file) {
 
 #' @importFrom formatters export_as_txt
 #'
+#' @export
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -67,8 +69,6 @@ import_from_tsv <- function(file) {
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-#'
-#' @export
 formatters::export_as_txt
 
 # data.frame output ------------------------------------------------------------
@@ -308,7 +308,7 @@ result_df_v0_experimental <- function(tt,
       as.numeric
     )
   })
-  
+
   do.call(cbind, ret)
 }
 
@@ -351,7 +351,7 @@ do_data_row <- function(rdfrow, maxlen) {
     pth <- pth[-1 * (pthlen - 2)]
   }
   pthlen_new <- length(pth)
-  if (maxlen == 1) pthlen_new <- 3 
+  if (maxlen == 1) pthlen_new <- 3
   c(
     as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
@@ -451,6 +451,8 @@ collapse_values <- function(colvals) {
 
 #' @importFrom formatters export_as_pdf
 #'
+#' @export
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -464,8 +466,6 @@ collapse_values <- function(colvals) {
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
-#'
-#' @export
 formatters::export_as_pdf
 
 # only used in pagination
@@ -507,6 +507,11 @@ formatters::export_as_pdf
 #'   specific formats and details to use [tt_to_flextable()] first and then `export_as_docx`.
 #'   Only `title_as_header` and `footer_as_text` need to be specified again if changed in
 #'   `tt_to_flextable()`.
+#' }
+#'
+#' @name export_as_docx
+#'
+#' @export
 #'
 #' @seealso [tt_to_flextable()]
 #'
@@ -521,10 +526,6 @@ formatters::export_as_pdf
 #' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
-#' }
-#'
-#' @name export_as_docx
-#' @export
 export_as_docx <- function(tt,
                            file,
                            doc_metadata = NULL,
@@ -669,7 +670,7 @@ margins_landscape <- function() {
 #'   for [export_as_docx()]. This adds titles and subtitles as a text paragraph above
 #'   the table. Same style is applied.
 #' @param footers_as_text logical(1). Defaults to `FALSE` for [tt_to_flextable()], so
-#'   the table is self-contained with the flextable definition of footnotes. `TRUE` is
+#'   the table is self-contained with the `flextable` definition of footnotes. `TRUE` is
 #'   used for [export_as_docx()] to add the footers as a new paragraph after the table.
 #'   Same style is applied, but with a smaller font.
 #' @param counts_in_newline logical(1). Defaults to `FALSE`. In `rtables` text printing
@@ -893,7 +894,7 @@ tt_to_flextable <- function(tt,
 }
 
 #' @describeIn tt_to_flextable main theme function for [export_as_docx()]
-#' @param font character(1). Defaults to `"Arial"`. If the font is not vailable, `flextable`
+#' @param font character(1). Defaults to `"Arial"`. If the font is not available, `flextable`
 #'   default is used.
 #' @param font_size integer(1). Positive integerish value that defaults to 9.
 #' @param bold character vector. It can be any combination of `c("header", "content_rows",

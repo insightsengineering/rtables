@@ -38,7 +38,6 @@ or \code{TableTree})
 Create a Table
 }
 \examples{
-
 rtable(
   header = LETTERS[1:3],
   rrow("one to three", 1, 2, 3),

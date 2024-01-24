@@ -135,7 +135,6 @@ their outputs.
 }
 
 \examples{
-
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("RACE", split_fun = drop_split_levels) \%>\%

@@ -130,7 +130,6 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #'
 #' @export
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
 #'   analyze("AGE")
@@ -240,7 +239,6 @@ setMethod(
 #' rows.
 #'
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
 #'   analyze("AGE")
@@ -289,7 +287,7 @@ setMethod(
       length(path) > 0,
       !anyNA(path)
     )
-    
+
     if (path[1] == "root" && obj_name(tt) != "root") {
       path <- path[-1]
     }

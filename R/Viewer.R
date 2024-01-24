@@ -11,8 +11,9 @@ NULL
 #'
 #' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
 #'
-#' @examples
+#' @export
 #'
+#' @examples
 #' if (interactive()) {
 #'   sl5 <- factor(iris$Sepal.Length > 5,
 #'     levels = c(TRUE, FALSE),
@@ -38,7 +39,6 @@ NULL
 #'
 #'   Viewer(tbl, tbl2)
 #' }
-#' @export
 Viewer <- function(x, y = NULL, ...) {
   check_convert <- function(x, name, accept_NULL = FALSE) {
     if (accept_NULL && is.null(x)) {

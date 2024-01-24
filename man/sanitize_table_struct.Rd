@@ -28,7 +28,6 @@ which spans all columns with the message \code{empty_msg} at each one,
 generating a table guaranteed to be non-degenerate.
 }
 \examples{
-
 sanitize_table_struct(rtable("cool beans"))
 
 lyt <- basic_table() \%>\%

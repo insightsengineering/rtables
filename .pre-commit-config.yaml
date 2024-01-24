@@ -39,7 +39,11 @@ repos:
           (.*/|)\.Rprofile|
           (.*/|)\.travis\.y[a]?ml|
           (.*/|)appveyor\.y[a]?ml|
+          (.*/|)CODEOWNERS|
+          (.*/|)DESCRIPTION|
+          (.*/|)LICENSE|
           (.*/|)NAMESPACE|
+          (.*/|)staged_dependencies\.y[a]?ml|
           (.*/|)renv/settings\.dcf|
           (.*/|)renv\.lock|
           (.*/|)WORDLIST|

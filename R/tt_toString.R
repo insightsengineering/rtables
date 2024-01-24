@@ -639,7 +639,6 @@ get_formatted_fnotes <- function(tt) {
 #' @param shell logical(1). Should the formats themselves be returned instead of the
 #' values with formats applied. Defaults to \code{FALSE}.
 #' @examples
-#'
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -933,7 +932,6 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' @return a string
 #'
 #' @examples
-#'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(mat_as_string(mat))
 #' cat("\n")

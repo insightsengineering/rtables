@@ -58,12 +58,12 @@ find_degen_struct <- function(tt) {
 #' is subject to change in future releases.
 #'
 #' @export
+#'
 #' @examples
 #' validate_table_struct(rtable("hahaha"))
 #' \dontrun{
 #' assert_valid_table(rtable("oops"))
 #' }
-#'
 validate_table_struct <- function(tt) {
   degen_pths <- find_degen_struct(tt)
   length(degen_pths) == 0
@@ -175,7 +175,6 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
 #'
 #' @export
 #' @examples
-#'
 #' sanitize_table_struct(rtable("cool beans"))
 #'
 #' lyt <- basic_table() %>%

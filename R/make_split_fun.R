@@ -205,7 +205,6 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' @seealso [custom_split_funs] for a more detailed discussion on what
 #' custom split functions do.
 #' @examples
-#'
 #' mysplitfun <- make_split_fun(
 #'   pre = list(drop_facet_levels),
 #'   post = list(add_overall_facet("ALL", "All Arms"))

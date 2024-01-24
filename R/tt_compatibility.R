@@ -7,7 +7,6 @@
 #' @return A row object of the context-appropriate type (label or data)
 #' @family compatibility
 #' @examples
-#'
 #' rrow("ABC", c(1, 2), c(3, 2), format = "xx (xx.%)")
 #' rrow("")
 #'
@@ -37,7 +36,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
     ## if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
     ##     format = unique(formats)
     DataRow(
-      val = vals, lev = as.integer(indent), label = row.name,
+      vals = vals, lev = as.integer(indent), label = row.name,
       name = row.name, ## XXX TODO
       cspan = csps,
       format = format,
@@ -175,7 +174,6 @@ hrows_to_colinfo <- function(rows) {
 #' @return a \code{InstantiatedColumnInfo} object.
 #' @family compatibility
 #' @examples
-#'
 #' h1 <- rheader(c("A", "B", "C"))
 #'
 #' h2 <- rheader(
@@ -239,7 +237,6 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #'   or \code{TableTree})
 #' @family compatibility
 #' @examples
-#'
 #' rtable(
 #'   header = LETTERS[1:3],
 #'   rrow("one to three", 1, 2, 3),
@@ -668,7 +665,6 @@ chk_cbindable_many <- function(lst) {
 #' @export
 #'
 #' @examples
-#'
 #' x <- rtable(c("A", "B"), rrow("row 1", 1, 2), rrow("row 2", 3, 4))
 #'
 #' y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
@@ -854,7 +850,7 @@ setMethod(
   ## This is ok because LabelRow is special cased
   constr_fun <- get(class(x), mode = "function")
   constr_fun(
-    val = vals,
+    vals = vals,
     cspan = cspans,
     cinfo = cinfo,
     var = obj_avar(x),
