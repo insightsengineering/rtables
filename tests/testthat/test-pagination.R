@@ -447,9 +447,11 @@ test_that("Pagination works with non-default min_siblings", {
   expect_identical(length(ttlst), nlevels(DM$RACE))
   expect_identical(tt[1], ttlst[[1]])
 
-  expect_error(
-    paginate_table(tt, lpp = 3, min_siblings = 1),
-    "Unable to find any valid pagination split between rows 1 and 1"
+  suppressMessages(
+    expect_error(
+      paginate_table(tt, lpp = 3, min_siblings = 1),
+      "*Unable to find any valid pagination split for page 1 between rows 1 and 1*"
+    )
   )
 })
 

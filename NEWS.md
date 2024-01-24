@@ -1,6 +1,9 @@
-## rtables 0.6.6.9003
+## rtables 0.6.6.9005
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
+
+### Bug Fixes
+ * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.
 
 ## rtables 0.6.6
 ### New Features
