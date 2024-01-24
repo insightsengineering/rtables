@@ -145,3 +145,29 @@ test_that("as_result_df works fine also with multiple rbind_root", {
   
   expect_true(all(out[,1] == "STRATA1"))
 })
+
+test_that("as_result_df keeps label rows", {
+  # regression test for rtables#815
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA2") %>%
+    split_rows_by("STRATA1") %>%
+    analyze(c("AGE", "BMRKR2"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  rd1 <- as_result_df(tbl, keep_label_rows = TRUE)
+  rd2 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE)
+  rd3 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, as_strings = TRUE)
+  rd4 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, as_viewer = TRUE)
+  
+  expect_equal(nrow(rd1), nrow(rd2) - 2)
+  expect_equal(nrow(rd1), nrow(rd3) - 2)
+  expect_equal(nrow(rd1), nrow(rd4) - 2)
+  expect_identical(ncol(rd1), ncol(rd2))
+  expect_identical(ncol(rd1), ncol(rd3))
+  expect_identical(ncol(rd1), ncol(rd4))
+  
+  expect_identical(as.character(rd1[3, ]), as.character(rd2[5, ]))
+  expect_identical(rd2[is.na(rd2[, ncol(rd2)]), ], rd4[is.na(rd4[, ncol(rd4)]), ])
+})

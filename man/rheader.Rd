@@ -42,8 +42,8 @@ h2
 }
 \seealso{
 Other compatibility: 
-\code{\link{rrowl}()},
 \code{\link{rrow}()},
+\code{\link{rrowl}()},
 \code{\link{rtable}()}
 }
 \concept{compatibility}

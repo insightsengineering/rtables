@@ -93,6 +93,8 @@ formatters::export_as_txt
 #'     column counts if `expand_colnames = TRUE`.
 #'   - `as_viewer`: when `TRUE`, the result data frame will have all values as they appear in the final table,
 #'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
+#'   - `keep_label_rows`: when `TRUE`, the result data frame will have all labels as they appear in the 
+#'     final table.
 #'
 #' @details `as_result_df()`: Result data frame specifications may differ in the exact information
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
@@ -182,10 +184,12 @@ lookup_result_df_specfun <- function(spec) {
 result_df_v0_experimental <- function(tt,
                                       as_viewer = FALSE,
                                       as_strings = FALSE,
-                                      expand_colnames = FALSE) {
+                                      expand_colnames = FALSE,
+                                      keep_label_rows = FALSE) {
   checkmate::assert_flag(as_viewer)
   checkmate::assert_flag(as_strings)
   checkmate::assert_flag(expand_colnames)
+  checkmate::assert_flag(keep_label_rows)
 
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
@@ -229,15 +233,8 @@ result_df_v0_experimental <- function(tt,
   }
 
   rdf <- make_row_df(tt)
-
-  df <- cbind(
-    rdf[
-      rdf$node_class != "LabelRow",
-      c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")
-    ],
-    cellvals
-  )
-
+  
+  df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
   # Removing initial root elements from path (out of the loop -> right maxlen)
   df$path <- lapply(df$path, .remove_root_elems_from_path,
     which_root_name = c("root", "rbind_root"),
@@ -255,11 +252,21 @@ result_df_v0_experimental <- function(tt,
       }
     )
   )
-
-  ret <- cbind(
-    metadf[metadf$node_class != "LabelRow", ],
-    cellvals
-  )
+  
+  # Should we keep label rows with NAs instead of values?
+  if (keep_label_rows) {
+    cellvals_mat_struct <- as.data.frame(
+      matrix(NA, nrow = nrow(rdf), ncol = ncol(cellvals))
+    )
+    colnames(cellvals_mat_struct) <- colnames(cellvals)
+    cellvals_mat_struct[metadf$node_class != "LabelRow", ] <- cellvals
+    ret <- cbind(metadf, cellvals_mat_struct)
+  } else {
+    ret <- cbind(
+      metadf[metadf$node_class != "LabelRow", ],
+      cellvals
+    )
+  }
 
   # If we want to expand colnames
   if (expand_colnames) {
