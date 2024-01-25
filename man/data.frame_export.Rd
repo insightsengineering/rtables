@@ -62,11 +62,11 @@ suffix will remain available \emph{including any bugs in their construction} ind
 }
 \section{Functions}{
 \itemize{
-\item \code{result_df_specs}: list of functions that extract result data frames from \code{TableTree}s.
+\item \code{result_df_specs()}: list of functions that extract result data frames from \code{TableTree}s.
 
-\item \code{path_enriched_df}: transform \code{TableTree} object to Path-Enriched \code{data.frame}.
+\item \code{path_enriched_df()}: transform \code{TableTree} object to Path-Enriched \code{data.frame}.
+
 }}
-
 \examples{
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%

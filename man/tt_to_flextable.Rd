@@ -113,9 +113,9 @@ from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style 
 }
 \section{Functions}{
 \itemize{
-\item \code{theme_docx_default}: main theme function for \code{\link[=export_as_docx]{export_as_docx()}}
-}}
+\item \code{theme_docx_default()}: main theme function for \code{\link[=export_as_docx]{export_as_docx()}}
 
+}}
 \examples{
 analysisfun <- function(x, ...) {
   in_rows(
