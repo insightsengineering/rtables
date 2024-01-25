@@ -53,8 +53,6 @@ import_from_tsv <- function(file) {
 
 #' @importFrom formatters export_as_txt
 #'
-#' @export
-#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -69,6 +67,7 @@ import_from_tsv <- function(file) {
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
+#' @export
 formatters::export_as_txt
 
 # data.frame output ------------------------------------------------------------
@@ -451,8 +450,6 @@ collapse_values <- function(colvals) {
 
 #' @importFrom formatters export_as_pdf
 #'
-#' @export
-#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -466,6 +463,7 @@ collapse_values <- function(colvals) {
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
+#' @export
 formatters::export_as_pdf
 
 # only used in pagination
@@ -509,10 +507,6 @@ formatters::export_as_pdf
 #'   `tt_to_flextable()`.
 #' }
 #'
-#' @name export_as_docx
-#'
-#' @export
-#'
 #' @seealso [tt_to_flextable()]
 #'
 #' @examples
@@ -526,6 +520,9 @@ formatters::export_as_pdf
 #' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
+#' }
+#' @name export_as_docx
+#' @export
 export_as_docx <- function(tt,
                            file,
                            doc_metadata = NULL,

@@ -78,6 +78,19 @@ Only \code{title_as_header} and \code{footer_as_text} need to be specified again
 \code{tt_to_flextable()}.
 }
 }
+\examples{
+lyt <- basic_table() \%>\%
+  split_cols_by("ARM") \%>\%
+  analyze(c("AGE", "BMRKR2", "COUNTRY"))
+
+tbl <- build_table(lyt, ex_adsl)
+
+# See how section_properties_portrait function is built for custom
+\dontrun{
+tf <- tempfile(fileext = ".docx")
+export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
+}
+}
 \seealso{
 \code{\link[=tt_to_flextable]{tt_to_flextable()}}
 }
