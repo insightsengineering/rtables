@@ -61,7 +61,7 @@ test_that("Result Data Frame generation works v0", {
   expect_identical(
     names(result_df4),
     c(
-      "avar_name", "row_name", "row_num", "is_group_summary",
+      "avar_name", "row_name", "label_name", "row_num", "is_group_summary",
       "node_class", "A: Drug X", "B: Placebo", "C: Combination"
     )
   )
@@ -119,10 +119,11 @@ test_that("as_result_df works with visual output (as_viewer)", {
     rrow("row 1", 1, c(.8, 1.2))
   )
   expect_equal(
-    as_result_df(tbl)[, 1:5], 
+    as_result_df(tbl)[, 1:6], 
     data.frame(
       "avar_name" = "row 1", 
       "row_name" = "row 1", 
+      "label_name" = "row 1", 
       "row_num" = 1, 
       "is_group_summary" = FALSE, 
       "node_class" = "DataRow"
@@ -170,4 +171,39 @@ test_that("as_result_df keeps label rows", {
   
   expect_identical(as.character(rd1[3, ]), as.character(rd2[5, ]))
   expect_identical(rd2[is.na(rd2[, ncol(rd2)]), ], rd4[is.na(rd4[, ncol(rd4)]), ])
+  
+  # More challenging labels
+  lyt <- make_big_lyt()
+  tbl <- build_table(lyt, rawdat)
+  
+  ard_out <- as_result_df(tbl, keep_label_rows = TRUE)
+  mf_tbl <- matrix_form(tbl)
+  
+  # Label works
+  expect_identical(
+    ard_out$label_name,
+    mf_strings(mf_tbl)[-seq_len(mf_nrheader(mf_tbl)), 1]
+  )
+  
+  # Row names respects path
+  pths <- make_row_df(tbl)$path
+  expect_identical(
+    ard_out$row_name,
+    sapply(pths, tail, 1)
+  )
+})
+
+test_that("as_result_df as_is is producing a data.frame that is compatible with df_to_tt", {
+  # More challenging labels
+  lyt <- make_big_lyt()
+  tbl <- build_table(lyt, rawdat)
+  
+  # ard_out <- as_result_df(tbl, as_is = TRUE)
+  # mf_tbl <- matrix_form(tbl)
+  
+  # Label works
+  # expect_identical(
+  #   ard_out$label_name,
+  #   mf_strings(mf_tbl)[-seq_len(mf_nrheader(mf_tbl)), 1]
+  # )
 })

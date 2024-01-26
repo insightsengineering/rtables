@@ -95,11 +95,17 @@ formatters::export_as_txt
 #'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
 #'   - `keep_label_rows`: when `TRUE`, the result data frame will have all labels as they appear in the
 #'     final table.
+#'   - `as_is`: when `TRUE`, the result data frame will have all the values as they appear in the final table,
+#'     but without information about the row structure. Row labels will be assigned to rows so to work well
+#'     with [df_to_tt()].
 #'
 #' @details `as_result_df()`: Result data frame specifications may differ in the exact information
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#' 
+#' @seealso [df_to_tt()] when using `as_is = TRUE` and [make_row_df()] to have a comprehensive view of the
+#'   hierarchical structure of the rows.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -185,11 +191,18 @@ result_df_v0_experimental <- function(tt,
                                       as_viewer = FALSE,
                                       as_strings = FALSE,
                                       expand_colnames = FALSE,
-                                      keep_label_rows = FALSE) {
+                                      keep_label_rows = FALSE,
+                                      as_is = FALSE) {
   checkmate::assert_flag(as_viewer)
   checkmate::assert_flag(as_strings)
   checkmate::assert_flag(expand_colnames)
   checkmate::assert_flag(keep_label_rows)
+  checkmate::assert_flag(as_is)
+  
+  if (as_is) {
+    keep_label_rows <- TRUE
+    expand_colnames <- FALSE
+  }
 
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
@@ -299,7 +312,14 @@ result_df_v0_experimental <- function(tt,
     }
     ret <- rbind(header_colnames_matrix, ret)
   }
-  rownames(ret) <- NULL
+  
+  # Using only labels for row names and losing information about paths
+  if (as_is) {
+    rownames(ret) <- ret$label_name
+    ret <- ret[, -seq_len(which(colnames(ret) == "node_class"))]
+  } else {
+    rownames(ret) <- NULL
+  }
 
   ret
 }
@@ -334,14 +354,29 @@ make_result_df_md_colnames <- function(maxlen) {
   if (spllen > 0) {
     ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
   }
-  ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
+  ret <- c(ret, c("avar_name", "row_name", "label_name", "row_num", "is_group_summary", "node_class"))
 }
 
 do_label_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
+  # Adjusting for the fact that we have two columns for each split
+  extra_nas_from_splits <- floor((maxlen - length(pth)) / 2) * 2
+  
+  # Special cases with hidden labels
+  if (length(pth) %% 2 == 1) {
+    extra_nas_from_splits <- extra_nas_from_splits + 1
+  }
+
   c(
-    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+    as.list(pth[seq_len(length(pth) - 1)]), 
+    as.list(replicate(extra_nas_from_splits, list(NA_character_))),
+    as.list(tail(pth, 1)),
+    list(
+      label_name = rdfrow$label,
+      row_num = rdfrow$abs_rownumber, 
+      content = FALSE, 
+      node_class = rdfrow$node_class
+    )
   )
 }
 
@@ -352,9 +387,15 @@ do_content_row <- function(rdfrow, maxlen) {
   seq_before <- seq_len(contpos - 1)
 
   c(
-    as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+    as.list(pth[seq_before]), 
+    as.list(replicate(maxlen - contpos, list(NA_character_))),
     list(tail(pth, 1)),
-    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class)
+    list(
+      label_name = rdfrow$label,
+      row_num = rdfrow$abs_rownumber, 
+      content = TRUE, 
+      node_class = rdfrow$node_class
+    )
   )
 }
 
@@ -371,7 +412,12 @@ do_data_row <- function(rdfrow, maxlen) {
     as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
     as.list(tail(pth, 2)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+    list(
+      label_name = rdfrow$label,
+      row_num = rdfrow$abs_rownumber, 
+      content = FALSE, 
+      node_class = rdfrow$node_class
+    )
   )
 }
 
