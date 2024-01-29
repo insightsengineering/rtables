@@ -7,12 +7,13 @@ repos:
     -   id: roxygenize
         # roxygen requires loading pkg -> add dependencies from DESCRIPTION
         additional_dependencies:
-        -    methods
-        -    magrittr
-        -    insightsengineering/formatters
-        -    stats
-        -    htmltools
-        -    grid
+        - formatters
+        - magrittr
+        - methods
+        - checkmate
+        - htmltools
+        - stats
+        - stringi
     # codemeta must be above use-tidy-description when both are used
     # -   id: codemeta-description-updated
     -   id: use-tidy-description
