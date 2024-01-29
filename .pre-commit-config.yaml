@@ -9,7 +9,7 @@ repos:
         additional_dependencies:
         -    methods
         -    magrittr
-        -    insightsengineering/formatters
+        -    formatters
         -    stats
         -    htmltools
         -    grid

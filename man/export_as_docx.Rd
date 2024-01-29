@@ -77,7 +77,6 @@ specific formats and details to use \code{\link[=tt_to_flextable]{tt_to_flextabl
 Only \code{title_as_header} and \code{footer_as_text} need to be specified again if changed in
 \code{tt_to_flextable()}.
 }
-}
 \examples{
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%

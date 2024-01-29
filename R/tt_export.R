@@ -505,7 +505,6 @@ formatters::export_as_pdf
 #'   specific formats and details to use [tt_to_flextable()] first and then `export_as_docx`.
 #'   Only `title_as_header` and `footer_as_text` need to be specified again if changed in
 #'   `tt_to_flextable()`.
-#' }
 #'
 #' @seealso [tt_to_flextable()]
 #'
