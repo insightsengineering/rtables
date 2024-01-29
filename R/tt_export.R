@@ -315,8 +315,14 @@ result_df_v0_experimental <- function(tt,
   
   # Using only labels for row names and losing information about paths
   if (as_is) {
-    rownames(ret) <- ret$label_name
+    tmp_rownames <- ret$label_name
     ret <- ret[, -seq_len(which(colnames(ret) == "node_class"))]
+    if (length(unique(tmp_rownames)) == length(tmp_rownames)) {
+      rownames(ret) <- tmp_rownames
+    } else {
+      ret <- cbind("label_name" = tmp_rownames, ret)
+      rownames(ret) <- NULL
+    }
   } else {
     rownames(ret) <- NULL
   }

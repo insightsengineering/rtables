@@ -198,12 +198,25 @@ test_that("as_result_df as_is is producing a data.frame that is compatible with 
   lyt <- make_big_lyt()
   tbl <- build_table(lyt, rawdat)
   
-  # ard_out <- as_result_df(tbl, as_is = TRUE)
-  # mf_tbl <- matrix_form(tbl)
+  ard_out <- as_result_df(tbl, as_is = TRUE)
+  mf_tbl <- matrix_form(tbl)
   
   # Label works
-  # expect_identical(
-  #   ard_out$label_name,
-  #   mf_strings(mf_tbl)[-seq_len(mf_nrheader(mf_tbl)), 1]
-  # )
+  expect_identical(
+    ard_out$label_name,
+    mf_strings(mf_tbl)[-seq_len(mf_nrheader(mf_tbl)), 1]
+  )
+  
+  expect_identical(
+    ard_out$label_name,
+    df_to_tt(ard_out) %>% row.names()
+  )
+  
+  init_tbl <- df_to_tt(mtcars) 
+  end_tbl <- init_tbl %>% as_result_df(as_is = TRUE) %>% df_to_tt()
+  
+  expect_equal(
+    matrix_form(init_tbl)$strings, 
+    matrix_form(end_tbl)$strings
+  )
 })
