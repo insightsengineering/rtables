@@ -2,17 +2,18 @@
 # R specific hooks: https://github.com/lorenzwalthert/precommit
 repos:
 -   repo: https://github.com/lorenzwalthert/precommit
-    rev: v0.3.2.9027
+    rev: v0.4.0
     hooks:
     -   id: roxygenize
         # roxygen requires loading pkg -> add dependencies from DESCRIPTION
         additional_dependencies:
-        -    methods
-        -    magrittr
-        -    formatters
-        -    stats
-        -    htmltools
-        -    grid
+        - formatters
+        - magrittr
+        - methods
+        - checkmate
+        - htmltools
+        - stats
+        - stringi
     # codemeta must be above use-tidy-description when both are used
     # -   id: codemeta-description-updated
     -   id: use-tidy-description
