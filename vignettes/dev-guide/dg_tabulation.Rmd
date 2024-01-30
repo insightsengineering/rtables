@@ -121,7 +121,9 @@ lyt <- basic_table() %>%
 
 rlyt <- rtables:::rlayout(lyt)
 str(rlyt, max.level = 2)
+```
 
+```c
 Formal class 'PreDataRowLayout' [package "rtables"] with 2 slots
   ..@ .Data     :List of 2 # rlyt is a rtables object (PreDataRowLayout) that is also a list!
   ..@ root_split:Formal class 'RootSplit' [package "rtables"] with 17 slots # another object!
@@ -142,7 +144,7 @@ The last print is very informative. We can see from the layout construction that
 
 xxx To get multiple split vectors, you need to escape the nesting with `nest = FALSE` or by adding a `split_rows_by` call after an `analyze` call.
 
-```{r, eval=FALSE}
+```c
 # rtables 0.6.2
 str(rlyt[[2]], max.level = 5)
 Formal class 'SplitVector' [package "rtables"] with 1 slot

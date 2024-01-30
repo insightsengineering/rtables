@@ -71,16 +71,15 @@ You'll notice there are classes that fall under "Extends". The classes contained
 
 
 ```{r}
-
-lyt <- basic_table(title = "big title")  %>%
-        split_rows_by("SEX", page_by = TRUE) %>%
-        analyze("AGE")
+lyt <- basic_table(title = "big title") %>%
+  split_rows_by("SEX", page_by = TRUE) %>%
+  analyze("AGE")
 
 tt <- build_table(lyt, DM)
 
-# Though we don't recommend using str for studying rtable objects, 
+# Though we don't recommend using str for studying rtable objects,
 # we do find it useful in this instance to visualize the parent/child relationships.
-str(tt, max.level=2)
+str(tt, max.level = 2)
 ```
 
 ## Tree Paths 

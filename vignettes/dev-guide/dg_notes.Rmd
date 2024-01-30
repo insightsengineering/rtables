@@ -28,13 +28,13 @@ Everything in the layout is built over split objects, that reside in `00_tabletr
 ```{r}
 library(rtables)
 getClass("Split")
-# Known Subclasses: 
-#? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)
+# Known Subclasses:
+# ? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)
 # Class "AllSplit", directly            # NX
 # Class "VarStaticCutSplit", directly   # X via make_static_cut_split
 # Class "VarDynCutSplit", directly      # X
 # Class "VAnalyzeSplit", directly       # X
-#? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)
+# ? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)
 # Class "VarLevelSplit", by class "CustomizableSplit", distance 2            # X
 # Class "MultiVarSplit", by class "CustomizableSplit", distance 2            # X
 # Class "RootSplit", by class "AllSplit", distance 2                         # NX
@@ -52,20 +52,20 @@ Now it is relevant to understand where this information is saved in the table ob
 
 ```{r}
 getClass("TableRow")
-# Extends: 
+# Extends:
 # Class "VLeaf", directly
 # Class "VTableNodeInfo", directly
 # Class "VNodeInfo", by class "VLeaf", distance 2
-# 
+#
 # Known Subclasses: "DataRow", "ContentRow", "LabelRow"
 
 getClass("VTableTree")
-# Extends: 
+# Extends:
 # Class "VTableNodeInfo", directly
 # Class "VTree", directly
 # Class "VTitleFooter", directly
 # Class "VNodeInfo", by class "VTableNodeInfo", distance 2
-# 
+#
 # Known Subclasses: "ElementaryTable", "TableTree"
 ```
 
@@ -73,20 +73,21 @@ Always check the constructors after finding the classes. In the above case for e
 
 ```{r}
 lyt <- basic_table() %>%
-    split_rows_by("ARM", section_div = "+") %>%
-    split_rows_by("STRATA1", section_div = "") %>%
-    analyze("AGE", 
-            afun = function(x) list("Mean" = mean(x), "Standard deviation" = sd(x)), 
-            format = list("Mean" = "xx.", "Standard deviation" = "xx."), 
-            section_div = "~")
+  split_rows_by("ARM", section_div = "+") %>%
+  split_rows_by("STRATA1", section_div = "") %>%
+  analyze("AGE",
+    afun = function(x) list("Mean" = mean(x), "Standard deviation" = sd(x)),
+    format = list("Mean" = "xx.", "Standard deviation" = "xx."),
+    section_div = "~"
+  )
 
 tbl <- build_table(lyt, DM)
 
 print(tbl)
 print(class(tbl)) # TableTree
 # methods("trailing_section_div") # to see this please do devtools::load_all()
-# [1] trailing_section_div,LabelRow-method   
-# trailing_section_div,TableRow-method   
+# [1] trailing_section_div,LabelRow-method
+# trailing_section_div,TableRow-method
 # trailing_section_div,VTableTree-method
 ```
 

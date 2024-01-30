@@ -243,7 +243,7 @@ setMethod(
     if (disp_ccounts(obj)) {
       hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
-    
+
     formats <- rbind(hdr_fmt_blank, formats_strings)
 
     spans <- rbind(header_content$span, body_spans)
@@ -288,7 +288,7 @@ setMethod(
       nrow = nrow(body),
       ncol = ncol(body)
     )
-  
+
     ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
     pag_titles <- page_titles(obj)
 
