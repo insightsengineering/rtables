@@ -256,7 +256,7 @@ test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
   expect_identical(tt_labelrow(leaves_elementary_tbl) %>% getter(), val_per_lev$elem_tbl_labelrow)
 
   # Data rows has it?
-  for (i in 1:nrow(leaves_elementary_tbl)) {
+  for (i in seq_len(nrow(leaves_elementary_tbl))) {
     expect_identical(tree_children(leaves_elementary_tbl)[[i]] %>% getter(), val_per_lev$datarow[i])
   }
 }

@@ -210,8 +210,7 @@ result_df_v0_experimental <- function(tt,
       .make_numeric_char_mf(mf_result_chars)
     )
     mf_result_chars <- as.data.frame(mf_result_chars)
-    if (!setequal(dim(mf_result_numeric), dim(cellvals)) ||
-      !setequal(dim(mf_result_chars), dim(cellvals))) {
+    if (!setequal(dim(mf_result_numeric), dim(cellvals)) || !setequal(dim(mf_result_chars), dim(cellvals))) {
       stop(
         "The extracted numeric data.frame does not have the same dimension of the",
         " cell values extracted with cell_values(). This is a bug. Please report it."

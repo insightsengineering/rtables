@@ -3419,9 +3419,7 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
 setMethod("section_div<-", "list", function(obj, only_sep_sections = FALSE, value) {
   char_v <- as.character(value)
   for (i in seq_along(obj)) {
-    stopifnot(is(obj[[i]], "VTableTree") ||
-      is(obj[[i]], "TableRow") ||
-      is(obj[[i]], "LabelRow"))
+    stopifnot(is(obj[[i]], "VTableTree") || is(obj[[i]], "TableRow") || is(obj[[i]], "LabelRow"))
     list_element_size <- nrow(obj[[i]])
     if (only_sep_sections) {
       char_v_i <- char_v[seq_len(min(list_element_size, length(char_v)))]
@@ -3508,11 +3506,7 @@ setMethod(
   }
 )
 .check_header_section_div <- function(chr) {
-  if (!is.na(chr) &&
-    (!is.character(chr) ||
-      length(chr) > 1 ||
-      nchar(chr) > 1 ||
-      nchar(chr) == 0)) {
+  if (!is.na(chr) && (!is.character(chr) || length(chr) > 1 || nchar(chr) > 1 || nchar(chr) == 0)) {
     stop("header_section_div must be a single character or NA_character_ if not used")
   }
   invisible(TRUE)
