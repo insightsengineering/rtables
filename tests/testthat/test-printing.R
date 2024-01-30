@@ -694,13 +694,13 @@ test_that("Separators and wrapping work together with getter and setters", {
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
   lyt <- basic_table() %>%
-    split_rows_by("cat", section_div = "~") 
-  
+    split_rows_by("cat", section_div = "~")
+
   lyt1 <- lyt %>%
     analyze("value", afun = fast_afun, section_div = " ")
-  
+
   lyt2 <- lyt %>%
-    summarize_row_groups() %>% 
+    summarize_row_groups() %>%
     analyze("value", afun = fast_afun, section_div = " ")
 
   tbl1 <- build_table(lyt1, df)
@@ -709,7 +709,7 @@ test_that("Separators and wrapping work together with getter and setters", {
   mf2 <- matrix_form(tbl2)
   expect_identical(mf1$row_info$trailing_sep, mf2$row_info$trailing_sep)
   expect_identical(mf1$row_info$trailing_sep, rep(c(NA, " ", "~"), 2))
-  
+
   exp1 <- c(
     "            all obs",
     "———————————————————",
@@ -730,10 +730,10 @@ test_that("Separators and wrapping work together with getter and setters", {
   cw <- propose_column_widths(tbl1)
   cw[1] <- ceiling(cw[1] / 3)
   expect_identical(strsplit(toString(tbl1, widths = cw), "\n")[[1]], exp1)
-  
-  # setter and getter 
-  a_sec_div <- section_div(tbl1) 
-  a_sec_div[1] <- "a"  
+
+  # setter and getter
+  a_sec_div <- section_div(tbl1)
+  a_sec_div[1] <- "a"
   section_div(tbl1) <- a_sec_div
   expect_identical(
     strsplit(toString(tbl1[seq_len(2), ]), "\\n")[[1]][4],
@@ -751,7 +751,7 @@ test_that("horizontal separator is propagated from table to print and export", {
         "range" = diff(range(x))
       )
     })
-  
+
   tbl <- build_table(lyt, iris, hsep = "~")
   tostring_tbl <- strsplit(toString(tbl), "\n")[[1]]
   export_txt_tbl <- strsplit(export_as_txt(tbl), "\n")[[1]]

@@ -943,7 +943,7 @@ test_that("analyze_colvars works generally", {
     cell_values(one_col_tbl),
     list(Sepal.Width = mean(iris$Sepal.Width))
   )
-  
+
   # na_str argument works
   test$d <- NA
   l2 <- basic_table() %>%

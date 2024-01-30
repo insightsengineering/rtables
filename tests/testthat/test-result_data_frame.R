@@ -102,29 +102,29 @@ test_that("as_result_df works with visual output (as_viewer)", {
   )
   expect_equal(as_result_df(tbl, expand_colnames = TRUE)$`all obs`[2], "356")
   expect_equal(as_result_df(tbl, expand_colnames = TRUE, as_strings = TRUE)$`all obs`[2], "(N=356)")
-  
-  
+
+
   # Test for integer extraction and ranges
   lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("STRATA1") %>%
     analyze("AGE", afun = function(x) list(a = mean(x), b = range(x)))
-  
+
   tbl <- build_table(lyt, ex_adsl)
   expect_equal(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE)[2, 2][[1]], c(24, 46))
-  
+
   # Test for tables with less than 3 rows
   tbl <- rtable(
     header = rheader(rrow("", "c1", "c2")),
     rrow("row 1", 1, c(.8, 1.2))
   )
   expect_equal(
-    as_result_df(tbl)[, 1:5], 
+    as_result_df(tbl)[, 1:5],
     data.frame(
-      "avar_name" = "row 1", 
-      "row_name" = "row 1", 
-      "row_num" = 1, 
-      "is_group_summary" = FALSE, 
+      "avar_name" = "row 1",
+      "row_name" = "row 1",
+      "row_num" = 1,
+      "is_group_summary" = FALSE,
       "node_class" = "DataRow"
     )
   )

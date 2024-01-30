@@ -123,7 +123,7 @@ tbl2
 \seealso{
 Other compatibility: 
 \code{\link{rheader}()},
-\code{\link{rrowl}()},
-\code{\link{rrow}()}
+\code{\link{rrow}()},
+\code{\link{rrowl}()}
 }
 \concept{compatibility}

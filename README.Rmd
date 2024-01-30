@@ -47,7 +47,7 @@ any high-dimensional data structure which can then be displayed with cell-specif
 `rtables` can be outputted in `ascii` `html`, and `pdf`, as well Power Point (via conversion to `flextable` objects). `rtf` support is in development and will be in a future release.
 
 `rtables` is developed and copy written by `F. Hoffmann-La Roche` and it is released open source under Apache
-License Version 2. 
+License Version 2.
 
 `rtables` development is driven by the need to create regulatory ready tables for health authority review. Some of the key requirements for this undertaking are listed below:
 
@@ -121,10 +121,10 @@ library(dplyr)
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
 
 biomarker_ave <- function(x, ...) {
-     val <- if(length(x) > 0) round(mean(x), 2) else "no data"
-     in_rows(
-        "Biomarker 1 (mean)" = rcell(val)
-     )
+  val <- if (length(x) > 0) round(mean(x), 2) else "no data"
+  in_rows(
+    "Biomarker 1 (mean)" = rcell(val)
+  )
 }
 
 basic_table(show_colcounts = TRUE) %>%

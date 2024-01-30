@@ -530,7 +530,6 @@ gen_rowvalues <- function(dfpart,
         call. = FALSE
       )
     }
-
   } else {
     contkids <- list()
   }
@@ -943,8 +942,9 @@ setMethod(
 
     # Setting the kids section separator if they inherits VTableTree
     inner <- .set_kids_section_div(inner,
-                                   trailing_section_div_char = spl_section_div(spl),
-                                   allowed_class = "VTableTree")
+      trailing_section_div_char = spl_section_div(spl),
+      allowed_class = "VTableTree"
+    )
 
     ## This is where we need to build the structural tables
     ## even if they are invisible because their labels are not
