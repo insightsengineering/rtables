@@ -10,13 +10,13 @@ repos:
     hooks:
       - id: roxygenize
         additional_dependencies:
-        - formatters
-        - magrittr
-        - methods
-        - checkmate
-        - htmltools
-        - stats
-        - stringi
+          - formatters
+          - magrittr
+          - methods
+          - checkmate
+          - htmltools
+          - stats
+          - stringi
       - id: use-tidy-description
       - id: spell-check
         exclude: >
@@ -81,4 +81,4 @@ repos:
         # `exclude: <regex>` to allow committing specific files
 
 ci:
-    autoupdate_schedule: monthly
+  autoupdate_schedule: monthly
