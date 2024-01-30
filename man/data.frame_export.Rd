@@ -52,7 +52,7 @@ where multi-valued cells are collapsed together, separated by \code{|}.}
 (processed by by \code{path_fun}).
 }
 \description{
-Collection of utilities to exctract \code{data.frame} from \code{TableTree} objects.
+Collection of utilities to extract \code{data.frame} from \code{TableTree} objects.
 }
 \details{
 \code{as_result_df()}: Result data frame specifications may differ in the exact information

@@ -75,7 +75,7 @@ formatters::export_as_txt
 #' Generate a Result Data Frame
 #'
 #' @description
-#' Collection of utilities to exctract `data.frame` from `TableTree` objects.
+#' Collection of utilities to extract `data.frame` from `TableTree` objects.
 #'
 #' @inheritParams gen_args
 #' @param spec character(1). The specification to use to

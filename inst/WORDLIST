@@ -1,5 +1,6 @@
 amongst
 Arg
+binded
 Carreras
 charset
 Chohan
@@ -12,7 +13,7 @@ dplyr
 emph
 facetted
 facetting
-flextable
+FFFL
 formatter
 getter
 getters
@@ -21,7 +22,9 @@ Heng
 ing
 initializer
 integerish
+iteratively
 Kelkhoff
+labelled
 Layouting
 layouting
 Lewandowski
@@ -34,6 +37,7 @@ orderable
 Paszty
 pathing
 Phuse
+postfix
 Postprocessing
 postprocessing
 Pre
@@ -56,6 +60,7 @@ Saibah
 sortable
 spl
 Stoilova
+STUDYID
 Subtable
 subtable
 subtable's
@@ -65,6 +70,8 @@ summarization
 tableone
 TableTree
 Tadeusz
+todo
+unaggregated
 unicode
 univariable
 unnested

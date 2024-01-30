@@ -476,7 +476,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #' @param \dots ANY. Elements to be stacked.
 #'
 #' @note
-#' When objects are rbinded, titles and footer information is retained from the first object (if any exists) if all
+#' When objects are row-binded, titles and footer information is retained from the first object (if any exists) if all
 #' other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed
 #' and must be set for the bound table via the [main_title()], [subtitles()], [main_footer()], and [prov_footer()]
 #' functions.

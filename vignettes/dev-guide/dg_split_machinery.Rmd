@@ -989,4 +989,4 @@ prune_table(tbl) # (xxx) what is going on here? it is degenerate so it has no re
 #  table tree
 ```
 
-(xxx) add the pre-proc with z-scoring
+(xxx) add the pre-processing with z-scoring
