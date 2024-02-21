@@ -45,7 +45,7 @@ or to reorder levels based on observed counts, etc.
 Core  splitting functions  override  the  fundamental
 splitting procedure,  and are only  necessary in rare  cases. These
 must  accept  \code{spl}, \code{df},  \code{vals},  \code{labels},  and can  optionally
-accept \code{.spl_context}. They should return an split result object
+accept \code{.spl_context}. They should return a split result object
 constructed via \code{make_split_result()}.
 
 In particular, if the custom split function will be used in

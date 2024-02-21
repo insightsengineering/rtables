@@ -334,8 +334,8 @@ test_that("cell and column wrapping works in pagination", {
     list(1:5, 6:10)
   )
   expect_identical(
-    nlines(col_info(tt_for_wrap), colwidths = clw),
-    nlines(col_info(tt_for_wrap)) + 2L
+    nlines(col_info(tt_for_wrap), colwidths = clw, fontspec = NULL),
+    nlines(col_info(tt_for_wrap), fontspec = NULL) + 2L
   ) ## 2 new lines from wrapping
 
   pdf <- make_row_df(tt_for_wrap, colwidths = clw)
@@ -450,7 +450,7 @@ test_that("Pagination works with non-default min_siblings", {
   suppressMessages(
     expect_error(
       paginate_table(tt, lpp = 3, min_siblings = 1),
-      "*Unable to find any valid pagination split for page 1 between rows 1 and 1*"
+      ".*Unable to find any valid pagination .*between rows 1 and 1.*"
     )
   )
 })
@@ -572,3 +572,20 @@ test_that("Pagination works with referential footnotes", {
   expect_equal(ref_fn_res4$ref_index, 1)
   expect_equal(ref_fn_res4$symbol, "3")
 })
+
+
+test_that("setting colgap during pagination works", {
+
+  tt <- tt_to_export()
+  ## row labels take up 12, all other columns 10 + 3 (default colgap)
+  ## so 2 cols per page, 3 pages total
+  pags1 <- paginate_table(tt, lpp = NULL, cpp = 38)
+  expect_equal(length(pags1), 3)
+  ## increase col_gap by one prevents second column on each page
+  ## so 6 pages  
+  pags2 <- paginate_table(tt, lpp = NULL, cpp = 38, col_gap = 4)
+  expect_equal(length(pags2), ncol(tt))
+  ## too wide a column gap, no columns fit after labels 
+  expect_error(suppressMessages(paginate_table(tt, lpp = NULL, cpp = 38, col_gap = 26)))
+})
+
