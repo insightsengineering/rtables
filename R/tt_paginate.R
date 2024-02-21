@@ -695,7 +695,9 @@ pag_tt_indices <- function(tt,
     nosplitin = nosplitin,
     verbose = verbose,
     have_col_fnotes = have_cfnotes,
-    div_height = dheight
+    div_height = dheight,
+    col_gap = col_gap,
+    has_rowlabels = TRUE
   )
 }
 
