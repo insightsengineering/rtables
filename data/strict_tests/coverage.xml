@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.909249781550368" branch-rate="0" lines-covered="7284" lines-valid="8011" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-02-21 16:10:07.68336">
+<coverage line-rate="0.909238451935081" branch-rate="0" lines-covered="7283" lines-valid="8010" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-02-21 16:19:40.672001">
   <sources>
     <source>/__w/rtables/rtables/rtables</source>
   </sources>
   <packages>
-    <package name="rtables" line-rate="0.909249781550368" branch-rate="0" complexity="0">
+    <package name="rtables" line-rate="0.909238451935081" branch-rate="0" complexity="0">
       <classes>
         <class name="00tabletrees.R" filename="R/00tabletrees.R" line-rate="0.916778523489933" branch-rate="0" complexity="0">
           <methods>
@@ -22462,17 +22462,16 @@
                 <line number="23" hits="4" branch="false"/>
                 <line number="24" hits="4" branch="false"/>
                 <line number="26" hits="4" branch="false"/>
-                <line number="27" hits="4" branch="false"/>
+                <line number="27" hits="1" branch="false"/>
                 <line number="28" hits="1" branch="false"/>
                 <line number="29" hits="1" branch="false"/>
                 <line number="30" hits="1" branch="false"/>
                 <line number="31" hits="1" branch="false"/>
-                <line number="32" hits="1" branch="false"/>
+                <line number="34" hits="4" branch="false"/>
                 <line number="35" hits="4" branch="false"/>
                 <line number="36" hits="4" branch="false"/>
                 <line number="37" hits="4" branch="false"/>
-                <line number="38" hits="4" branch="false"/>
-                <line number="40" hits="4" branch="false"/>
+                <line number="39" hits="4" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -22482,17 +22481,16 @@
             <line number="23" hits="4" branch="false"/>
             <line number="24" hits="4" branch="false"/>
             <line number="26" hits="4" branch="false"/>
-            <line number="27" hits="4" branch="false"/>
+            <line number="27" hits="1" branch="false"/>
             <line number="28" hits="1" branch="false"/>
             <line number="29" hits="1" branch="false"/>
             <line number="30" hits="1" branch="false"/>
             <line number="31" hits="1" branch="false"/>
-            <line number="32" hits="1" branch="false"/>
+            <line number="34" hits="4" branch="false"/>
             <line number="35" hits="4" branch="false"/>
             <line number="36" hits="4" branch="false"/>
             <line number="37" hits="4" branch="false"/>
-            <line number="38" hits="4" branch="false"/>
-            <line number="40" hits="4" branch="false"/>
+            <line number="39" hits="4" branch="false"/>
           </lines>
         </class>
         <class name="tt_paginate.R" filename="R/tt_paginate.R" line-rate="0.915909090909091" branch-rate="0" complexity="0">
