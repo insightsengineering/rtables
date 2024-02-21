@@ -23,8 +23,7 @@ df_to_tt <- function(df) {
   rnames <- rownames(df)
   havern <- !is.null(rnames)
 
-  if ((!havern || all(grepl("[0-9]+", rnames))) &&
-    "label_name" %in% colnms) {
+  if ((!havern || all(grepl("[0-9]+", rnames))) && "label_name" %in% colnms) {
     rnames <- df$label_name
     df <- df[, -match("label_name", colnms)]
     colnms <- colnames(df)
