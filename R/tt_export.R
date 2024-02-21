@@ -92,11 +92,19 @@ formatters::export_as_txt
 #'     column counts if `expand_colnames = TRUE`.
 #'   - `as_viewer`: when `TRUE`, the result data frame will have all values as they appear in the final table,
 #'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
+#'   - `keep_label_rows`: when `TRUE`, the result data frame will have all labels as they appear in the
+#'     final table.
+#'   - `as_is`: when `TRUE`, the result data frame will have all the values as they appear in the final table,
+#'     but without information about the row structure. Row labels will be assigned to rows so to work well
+#'     with [df_to_tt()].
 #'
 #' @details `as_result_df()`: Result data frame specifications may differ in the exact information
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#'
+#' @seealso [df_to_tt()] when using `as_is = TRUE` and [make_row_df()] to have a comprehensive view of the
+#'   hierarchical structure of the rows.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -181,10 +189,19 @@ lookup_result_df_specfun <- function(spec) {
 result_df_v0_experimental <- function(tt,
                                       as_viewer = FALSE,
                                       as_strings = FALSE,
-                                      expand_colnames = FALSE) {
+                                      expand_colnames = FALSE,
+                                      keep_label_rows = FALSE,
+                                      as_is = FALSE) {
   checkmate::assert_flag(as_viewer)
   checkmate::assert_flag(as_strings)
   checkmate::assert_flag(expand_colnames)
+  checkmate::assert_flag(keep_label_rows)
+  checkmate::assert_flag(as_is)
+
+  if (as_is) {
+    keep_label_rows <- TRUE
+    expand_colnames <- FALSE
+  }
 
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
@@ -194,6 +211,7 @@ result_df_v0_experimental <- function(tt,
     raw_cvals <- list(raw_cvals)
   }
 
+  # Flatten the list of lists (rows) of cell values into a data frame
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
 
@@ -227,15 +245,15 @@ result_df_v0_experimental <- function(tt,
 
   rdf <- make_row_df(tt)
 
-  df <- cbind(
-    rdf[
-      rdf$node_class != "LabelRow",
-      c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")
-    ],
-    cellvals
+  df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
+  # Removing initial root elements from path (out of the loop -> right maxlen)
+  df$path <- lapply(df$path, .remove_root_elems_from_path,
+    which_root_name = c("root", "rbind_root"),
+    all = TRUE
   )
-
   maxlen <- max(lengths(df$path))
+
+  # Loop for metadata (path and details from make_row_df)
   metadf <- do.call(
     rbind.data.frame,
     lapply(
@@ -246,10 +264,20 @@ result_df_v0_experimental <- function(tt,
     )
   )
 
-  ret <- cbind(
-    metadf[metadf$node_class != "LabelRow", ],
-    cellvals
-  )
+  # Should we keep label rows with NAs instead of values?
+  if (keep_label_rows) {
+    cellvals_mat_struct <- as.data.frame(
+      matrix(NA, nrow = nrow(rdf), ncol = ncol(cellvals))
+    )
+    colnames(cellvals_mat_struct) <- colnames(cellvals)
+    cellvals_mat_struct[metadf$node_class != "LabelRow", ] <- cellvals
+    ret <- cbind(metadf, cellvals_mat_struct)
+  } else {
+    ret <- cbind(
+      metadf[metadf$node_class != "LabelRow", ],
+      cellvals
+    )
+  }
 
   # If we want to expand colnames
   if (expand_colnames) {
@@ -283,6 +311,20 @@ result_df_v0_experimental <- function(tt,
     ret <- rbind(header_colnames_matrix, ret)
   }
 
+  # Using only labels for row names and losing information about paths
+  if (as_is) {
+    tmp_rownames <- ret$label_name
+    ret <- ret[, -seq_len(which(colnames(ret) == "node_class"))]
+    if (length(unique(tmp_rownames)) == length(tmp_rownames)) {
+      rownames(ret) <- tmp_rownames
+    } else {
+      ret <- cbind("label_name" = tmp_rownames, ret)
+      rownames(ret) <- NULL
+    }
+  } else {
+    rownames(ret) <- NULL
+  }
+
   ret
 }
 
@@ -310,34 +352,54 @@ result_df_v0_experimental <- function(tt,
   do.call(cbind, ret)
 }
 
-do_label_row <- function(rdfrow, maxlen) {
-  pth <- rdfrow$path[[1]]
-  c(
-    as.list(pth), replicate(maxlen - length(pth), list(NA_character_)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
-  )
-}
-
 make_result_df_md_colnames <- function(maxlen) {
   spllen <- floor((maxlen - 2) / 2)
   ret <- character()
   if (spllen > 0) {
     ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
   }
-  ret <- c(ret, c("avar_name", "row_name", "row_num", "is_group_summary", "node_class"))
+  ret <- c(ret, c("avar_name", "row_name", "label_name", "row_num", "is_group_summary", "node_class"))
+}
+
+do_label_row <- function(rdfrow, maxlen) {
+  pth <- rdfrow$path[[1]]
+  # Adjusting for the fact that we have two columns for each split
+  extra_nas_from_splits <- floor((maxlen - length(pth)) / 2) * 2
+
+  # Special cases with hidden labels
+  if (length(pth) %% 2 == 1) {
+    extra_nas_from_splits <- extra_nas_from_splits + 1
+  }
+
+  c(
+    as.list(pth[seq_len(length(pth) - 1)]),
+    as.list(replicate(extra_nas_from_splits, list(NA_character_))),
+    as.list(tail(pth, 1)),
+    list(
+      label_name = rdfrow$label,
+      row_num = rdfrow$abs_rownumber,
+      content = FALSE,
+      node_class = rdfrow$node_class
+    )
+  )
 }
 
 do_content_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
-
   contpos <- which(pth == "@content")
 
   seq_before <- seq_len(contpos - 1)
 
   c(
-    as.list(pth[seq_before]), replicate(maxlen - contpos, list(NA_character_)),
+    as.list(pth[seq_before]),
+    as.list(replicate(maxlen - contpos, list(NA_character_))),
     list(tail(pth, 1)),
-    list(row_num = rdfrow$abs_rownumber, content = TRUE, node_class = rdfrow$node_class)
+    list(
+      label_name = rdfrow$label,
+      row_num = rdfrow$abs_rownumber,
+      content = TRUE,
+      node_class = rdfrow$node_class
+    )
   )
 }
 
@@ -354,16 +416,38 @@ do_data_row <- function(rdfrow, maxlen) {
     as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(maxlen - pthlen, list(NA_character_)),
     as.list(tail(pth, 2)),
-    list(row_num = rdfrow$abs_rownumber, content = FALSE, node_class = rdfrow$node_class)
+    list(
+      label_name = rdfrow$label,
+      row_num = rdfrow$abs_rownumber,
+      content = FALSE,
+      node_class = rdfrow$node_class
+    )
   )
+}
+
+.remove_root_elems_from_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
+  any_root_paths <- path[1] %in% c("root", "rbind_root")
+  if (any_root_paths) {
+    if (isTRUE(all)) {
+      # Selecting the header grouping of root and rbind_root (we do not want to remove other root labels-path later)
+      root_indices <- which(path %in% c("root", "rbind_root"))
+      if (any(diff(root_indices) > 1)) { # integer(0) for diff means FALSE
+        end_point_root_headers <- which(diff(root_indices) > 1)[1]
+      } else {
+        end_point_root_headers <- length(root_indices)
+      }
+      root_path_to_remove <- seq_len(end_point_root_headers)
+    } else {
+      root_path_to_remove <- 1
+    }
+    path <- path[-root_path_to_remove]
+  }
+  path
 }
 
 handle_rdf_row <- function(rdfrow, maxlen) {
   nclass <- rdfrow$node_class
-  if (rdfrow$path[[1]][1] == "root") {
-    rdfrow$path[[1]] <- rdfrow$path[[1]][-1]
-    maxlen <- maxlen - 1
-  }
+
   ret <- switch(nclass,
     LabelRow = do_label_row(rdfrow, maxlen),
     ContentRow = do_content_row(rdfrow, maxlen),
