@@ -144,7 +144,7 @@ test_that("as_result_df works fine also with multiple rbind_root", {
 
   out <- expect_silent(as_result_df(mega_rbind_tbl))
 
-  expect_true(all(out[,1] == "STRATA1"))
+  expect_true(all(out[, 1] == "STRATA1"))
 })
 
 test_that("as_result_df keeps label rows", {
@@ -213,7 +213,9 @@ test_that("as_result_df as_is is producing a data.frame that is compatible with 
   )
 
   init_tbl <- df_to_tt(mtcars)
-  end_tbl <- init_tbl %>% as_result_df(as_is = TRUE) %>% df_to_tt()
+  end_tbl <- init_tbl %>%
+    as_result_df(as_is = TRUE) %>%
+    df_to_tt()
 
   expect_equal(
     matrix_form(init_tbl)$strings,
