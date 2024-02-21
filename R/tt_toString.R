@@ -189,11 +189,13 @@ setMethod(
   function(obj,
            indent_rownames = FALSE,
            expand_newlines = TRUE,
-           indent_size = 2) {
+           indent_size = 2,
+           fontspec = NULL,
+           col_gap = 3L) {
     stopifnot(is(obj, "VTableTree"))
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
-    sr <- make_row_df(obj)
+    sr <- make_row_df(obj, fontspec = fontspec)
 
     body_content_strings <- if (NROW(sr) == 0) {
       character()
@@ -293,6 +295,7 @@ setMethod(
       formats = formats,
       ## display = display, purely a function of spans, handled in constructor now
       row_info = sr,
+      colpaths = make_col_df(obj)[["path"]],
       ## line_grouping handled internally now line_grouping = 1:nrow(body),
       ref_fnotes = ref_fnotes,
       nlines_header = nr_header, ## this is fixed internally
@@ -308,7 +311,9 @@ setMethod(
       table_inset = table_inset(obj),
       header_section_div = header_section_div(obj),
       horizontal_sep = horizontal_sep(obj),
-      indent_size = indent_size
+      indent_size = indent_size,
+      fontspec = fontspec,
+      col_gap = col_gap
     )
   }
 )

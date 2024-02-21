@@ -119,13 +119,19 @@
 
 \S4method{table_inset}{InstantiatedColumnInfo}(obj) <- value
 
-\S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
 
-\S4method{nlines}{LabelRow}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{LabelRow}(
+  x,
+  colwidths = NULL,
+  max_width = NULL,
+  fontspec = fontspec,
+  col_gap = NULL
+)
 
-\S4method{nlines}{RefFootnote}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{RefFootnote}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = NULL)
 
-\S4method{nlines}{InstantiatedColumnInfo}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{InstantiatedColumnInfo}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
 
 \S4method{make_row_df}{VTableTree}(
   tt,
@@ -139,7 +145,9 @@
   repr_inds = integer(),
   sibpos = NA_integer_,
   nsibs = NA_integer_,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = NULL,
+  col_gap = 3
 )
 
 \S4method{make_row_df}{TableRow}(
@@ -154,7 +162,9 @@
   repr_inds = integer(),
   sibpos = NA_integer_,
   nsibs = NA_integer_,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = font_spec(),
+  col_gap = 3
 )
 
 \S4method{make_row_df}{LabelRow}(
@@ -169,7 +179,9 @@
   repr_inds = integer(),
   sibpos = NA_integer_,
   nsibs = NA_integer_,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = font_spec(),
+  col_gap = 3
 )
 }
 \arguments{
@@ -183,6 +195,12 @@
 
 \item{max_width}{(\code{numeric(1)})\cr width that strings should be wrapped to when
 determining how many lines they require.}
+
+\item{fontspec}{(\code{font_spec})\cr a font_spec object specifying the font information to use for
+calculating string widths and heights, as returned by \code{\link[formatters:font_spec]{font_spec()}}.}
+
+\item{col_gap}{(\code{numeric(1)})\cr width of gap between columns in number of spaces.
+Only used by methods which must calculate span widths after wrapping.}
 
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 

@@ -8,7 +8,9 @@
   obj,
   indent_rownames = FALSE,
   expand_newlines = TRUE,
-  indent_size = 2
+  indent_size = 2,
+  fontspec = NULL,
+  col_gap = 3L
 )
 }
 \arguments{
