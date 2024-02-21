@@ -34,6 +34,11 @@ in the final table (it can also be retrieved from \code{matrix_form(tt)$strings}
 column counts if \code{expand_colnames = TRUE}.
 \item \code{as_viewer}: when \code{TRUE}, the result data frame will have all values as they appear in the final table,
 i.e. with the same precision and numbers, but in easy-to-use numeric form.
+\item \code{keep_label_rows}: when \code{TRUE}, the result data frame will have all labels as they appear in the
+final table.
+\item \code{as_is}: when \code{TRUE}, the result data frame will have all the values as they appear in the final table,
+but without information about the row structure. Row labels will be assigned to rows so to work well
+with \code{\link[=df_to_tt]{df_to_tt()}}.
 }}
 
 \item{path_fun}{function. Function to transform paths into single-string
@@ -85,4 +90,8 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, ex_adsl)
 path_enriched_df(tbl)
 
+}
+\seealso{
+\code{\link[=df_to_tt]{df_to_tt()}} when using \code{as_is = TRUE} and \code{\link[=make_row_df]{make_row_df()}} to have a comprehensive view of the
+hierarchical structure of the rows.
 }
