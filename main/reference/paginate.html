@@ -12,7 +12,7 @@ direction, as required for the specified page size."><meta property="og:image" c
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9007</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,21 +55,6 @@ direction, as required for the specified page size."><meta property="og:image" c
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -410,12 +395,12 @@ it has less than <code>min_siblings</code> preceding or following siblings</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>   CHE                 DataRow       ma_AGE_SEX_BEP01FL_BMRKR1_BMRKR2_COUNTRY, COUNTRY, CHE         </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbls</span> <span class="op">&lt;-</span> <span class="fu">paginate_table</span><span class="op">(</span><span class="va">tbl</span>, lpp <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/matrix_form.html" class="external-link">matrix_form</a></span><span class="op">(</span><span class="va">tbl</span>, indent_rownames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">w_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/propose_column_widths.html" class="external-link">propose_column_widths</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span> <span class="co"># so that we have the same column widths</span></span></span>
+<span class="r-in"><span><span class="va">mf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/matrix_form.html" class="external-link">matrix_form</a></span><span class="op">(</span><span class="va">tbl</span>, indent_rownames <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">w_tbls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/propose_column_widths.html" class="external-link">propose_column_widths</a></span><span class="op">(</span><span class="va">mf</span><span class="op">)</span> <span class="co"># so that we have the same column widths</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">tbls</span>, <span class="kw">function</span><span class="op">(</span><span class="va">tbli</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/tostring.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">tbli</span>, widths <span class="op">=</span> <span class="va">w_tbls</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/tostring.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">tbli</span>, widths <span class="op">=</span> <span class="va">w_tbls</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"~~~~ PAGE BREAK ~~~~"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"\n\n"</span><span class="op">)</span></span></span>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9007</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -136,6 +121,11 @@ in the final table (it can also be retrieved from <code>matrix_form(tt)$strings<
 column counts if <code>expand_colnames = TRUE</code>.</p></li>
 <li><p><code>as_viewer</code>: when <code>TRUE</code>, the result data frame will have all values as they appear in the final table,
 i.e. with the same precision and numbers, but in easy-to-use numeric form.</p></li>
+<li><p><code>keep_label_rows</code>: when <code>TRUE</code>, the result data frame will have all labels as they appear in the
+final table.</p></li>
+<li><p><code>as_is</code>: when <code>TRUE</code>, the result data frame will have all the values as they appear in the final table,
+but without information about the row structure. Row labels will be assigned to rows so to work well
+with <code><a href="df_to_tt.html">df_to_tt()</a></code>.</p></li>
 </ul></dd>
 
 
@@ -175,6 +165,11 @@ suffix will remain available <em>including any bugs in their construction</em> i
 <ul><li><p><code>result_df_specs()</code>: list of functions that extract result data frames from <code>TableTree</code>s.</p></li>
 <li><p><code>path_enriched_df()</code>: transform <code>TableTree</code> object to Path-Enriched <code>data.frame</code>.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="df_to_tt.html">df_to_tt()</a></code> when using <code>as_is = TRUE</code> and <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df()</a></code> to have a comprehensive view of the
+hierarchical structure of the rows.</p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -185,42 +180,51 @@ suffix will remain available <em>including any bugs in their construction</em> i
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ex_adsl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">as_result_df</span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    spl_var_1 spl_value_1 avar_name row_name row_num is_group_summary node_class</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    STRATA1           A       AGE     Mean       3            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    STRATA1           A    BMRKR2      LOW       5            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    STRATA1           A    BMRKR2   MEDIUM       6            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4    STRATA1           A    BMRKR2     HIGH       7            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5    STRATA1           B       AGE     Mean      10            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6    STRATA1           B    BMRKR2      LOW      12            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7    STRATA1           B    BMRKR2   MEDIUM      13            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8    STRATA1           B    BMRKR2     HIGH      14            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9    STRATA1           C       AGE     Mean      17            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10   STRATA1           C    BMRKR2      LOW      19            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11   STRATA1           C    BMRKR2   MEDIUM      20            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12   STRATA1           C    BMRKR2     HIGH      21            FALSE    DataRow</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    A: Drug X B: Placebo C: Combination</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   33.07895   35.11364         34.225</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         12         16             14</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         10         17             13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         16         11             13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   33.85106         36       36.32558</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         19         13             10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7         13         22             16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8         15         10             17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   34.22449   35.17778       35.63265</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10        19         16             16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11        14         17             13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12        16         12             20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    spl_var_1 spl_value_1 avar_name row_name label_name row_num is_group_summary</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    STRATA1           A       AGE     Mean       Mean       3            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    STRATA1           A    BMRKR2      LOW        LOW       5            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    STRATA1           A    BMRKR2   MEDIUM     MEDIUM       6            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    STRATA1           A    BMRKR2     HIGH       HIGH       7            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    STRATA1           B       AGE     Mean       Mean      10            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    STRATA1           B    BMRKR2      LOW        LOW      12            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7    STRATA1           B    BMRKR2   MEDIUM     MEDIUM      13            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8    STRATA1           B    BMRKR2     HIGH       HIGH      14            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9    STRATA1           C       AGE     Mean       Mean      17            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10   STRATA1           C    BMRKR2      LOW        LOW      19            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11   STRATA1           C    BMRKR2   MEDIUM     MEDIUM      20            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12   STRATA1           C    BMRKR2     HIGH       HIGH      21            FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    node_class A: Drug X B: Placebo C: Combination</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     DataRow  33.07895   35.11364         34.225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     DataRow        12         16             14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     DataRow        10         17             13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     DataRow        16         11             13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     DataRow  33.85106         36       36.32558</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     DataRow        19         13             10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7     DataRow        13         22             16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8     DataRow        15         10             17</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9     DataRow  34.22449   35.17778       35.63265</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10    DataRow        19         16             16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11    DataRow        14         17             13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    DataRow        16         12             20</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">result_df_specs</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $v0_experimental</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function(tt,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                       as_viewer = FALSE,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                       as_strings = FALSE,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                       expand_colnames = FALSE) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                       expand_colnames = FALSE,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                       keep_label_rows = FALSE,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                       as_is = FALSE) {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   checkmate::assert_flag(as_viewer)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   checkmate::assert_flag(as_strings)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   checkmate::assert_flag(expand_colnames)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   checkmate::assert_flag(keep_label_rows)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   checkmate::assert_flag(as_is)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   if (as_is) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     keep_label_rows &lt;- TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     expand_colnames &lt;- FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   raw_cvals &lt;- cell_values(tt)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values</span>
@@ -230,6 +234,7 @@ suffix will remain available <em>including any bugs in their construction</em> i
 <span class="r-out co"><span class="r-pr">#&gt;</span>     raw_cvals &lt;- list(raw_cvals)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # Flatten the list of lists (rows) of cell values into a data frame</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   cellvals &lt;- as.data.frame(do.call(rbind, raw_cvals))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   row.names(cellvals) &lt;- NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -264,15 +269,15 @@ suffix will remain available <em>including any bugs in their construction</em> i
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   rdf &lt;- make_row_df(tt)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   df &lt;- cbind(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     rdf[</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       rdf$node_class != "LabelRow",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     cellvals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   df &lt;- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # Removing initial root elements from path (out of the loop -&gt; right maxlen)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   df$path &lt;- lapply(df$path, .remove_root_elems_from_path,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     which_root_name = c("root", "rbind_root"),</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     all = TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   maxlen &lt;- max(lengths(df$path))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # Loop for metadata (path and details from make_row_df)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   metadf &lt;- do.call(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     rbind.data.frame,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     lapply(</span>
@@ -283,10 +288,20 @@ suffix will remain available <em>including any bugs in their construction</em> i
 <span class="r-out co"><span class="r-pr">#&gt;</span>     )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ret &lt;- cbind(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     metadf[metadf$node_class != "LabelRow", ],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     cellvals</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # Should we keep label rows with NAs instead of values?</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   if (keep_label_rows) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     cellvals_mat_struct &lt;- as.data.frame(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       matrix(NA, nrow = nrow(rdf), ncol = ncol(cellvals))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     colnames(cellvals_mat_struct) &lt;- colnames(cellvals)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     cellvals_mat_struct[metadf$node_class != "LabelRow", ] &lt;- cellvals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ret &lt;- cbind(metadf, cellvals_mat_struct)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   } else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ret &lt;- cbind(</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       metadf[metadf$node_class != "LabelRow", ],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       cellvals</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     )</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   # If we want to expand colnames</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   if (expand_colnames) {</span>
@@ -318,6 +333,20 @@ suffix will remain available <em>including any bugs in their construction</em> i
 <span class="r-out co"><span class="r-pr">#&gt;</span>       header_colnames_matrix &lt;- rbind(header_colnames_matrix, count_row)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     ret &lt;- rbind(header_colnames_matrix, ret)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   # Using only labels for row names and losing information about paths</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   if (as_is) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     tmp_rownames &lt;- ret$label_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ret &lt;- ret[, -seq_len(which(colnames(ret) == "node_class"))]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     if (length(unique(tmp_rownames)) == length(tmp_rownames)) {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       rownames(ret) &lt;- tmp_rownames</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     } else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       ret &lt;- cbind("label_name" = tmp_rownames, ret)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       rownames(ret) &lt;- NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   } else {</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     rownames(ret) &lt;- NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ret</span>
