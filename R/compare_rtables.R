@@ -23,7 +23,6 @@
 #' @export
 #'
 #' @examples
-#'
 #' t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
 #' t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 #'

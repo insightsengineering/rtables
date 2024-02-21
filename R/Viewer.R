@@ -12,7 +12,6 @@ NULL
 #' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
 #'
 #' @examples
-#'
 #' if (interactive()) {
 #'   sl5 <- factor(iris$Sepal.Length > 5,
 #'     levels = c(TRUE, FALSE),

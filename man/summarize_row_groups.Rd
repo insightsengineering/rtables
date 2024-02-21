@@ -72,7 +72,6 @@ In addition, if complex custom functions are needed, we suggest checking the
 available \link{additional_fun_params} that apply here as for \code{afun}.
 }
 \examples{
-
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
 
 lyt <- basic_table() \%>\%

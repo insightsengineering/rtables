@@ -53,7 +53,7 @@ NULL
 #' @param hsep character(1). Set of character(s) to be repeated as the separator
 #'   between the header and body of the table when rendered as text. Defaults to
 #'   a connected horizontal line (unicode 2014) in locals that use a UTF
-#'   charset, and to `-` elsewhere (with a once per session warning). See 
+#'   charset, and to `-` elsewhere (with a once per session warning). See
 #'   [formatters::set_default_hsep()] for further information.
 #' @param indent_size numeric(1). Number of spaces to use per indent level.
 #'   Defaults to 2
@@ -228,7 +228,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   represents a single facet.
 #' @param header_section_div character(1). String which will be used to divide the header
 #'   from the table. See [header_section_div()] for getter and setter of these.
-#'   Please consider changing last element of [section_div()] when concatenating 
+#'   Please consider changing last element of [section_div()] when concatenating
 #'   tables that need a divider between them.
 #' @param page_title character. Page specific title(s).
 #' @rdname constr_args

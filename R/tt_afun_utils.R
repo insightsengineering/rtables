@@ -318,7 +318,6 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #' @export
 #'
 #' @examples
-#'
 #' s_summary <- function(x) {
 #'   stopifnot(is.numeric(x))
 #'
@@ -390,7 +389,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 #'     .N_col = "count in column"
 #'   ),
 #'   .formats = c(nrow_df = "xx.", .N_col = "xx."),
-#'   .indent_mod = c(letters = 1L),
+#'   .indent_mods = c(letters = 1L),
 #'   .ungroup_stats = "letters"
 #' )
 #' a_grp(iris, 40)

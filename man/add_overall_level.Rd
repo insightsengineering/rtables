@@ -38,7 +38,6 @@ when creating a table layout
 Add an virtual 'overall' level to split
 }
 \examples{
-
 lyt <- basic_table() \%>\%
   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
     first = FALSE

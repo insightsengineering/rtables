@@ -80,7 +80,7 @@ func_takes <- function(func, params, is_first = FALSE) {
 #'
 #' @return A character string containing a description of the row path corresponding
 #' to the `ctx`
-#' 
+#'
 #' @export
 spl_context_to_disp_path <- function(ctx) {
   ## this can happen in the first split in column space, but
@@ -116,4 +116,3 @@ check_required_packages <- function(pkgs) {
     }
   }
 }
-

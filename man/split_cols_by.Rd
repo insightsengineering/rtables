@@ -107,7 +107,6 @@ their outputs.
 }
 
 \examples{
-
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze(c("AGE", "BMRKR2"))
