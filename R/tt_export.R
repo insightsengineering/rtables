@@ -428,11 +428,11 @@ do_data_row <- function(rdfrow, maxlen) {
 }
 
 .remove_root_elems_from_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
-  any_root_paths <- path[1] %in% c("root", "rbind_root")
+  any_root_paths <- path[1] %in% which_root_name
   if (any_root_paths) {
     if (isTRUE(all)) {
       # Selecting the header grouping of root and rbind_root (we do not want to remove other root labels-path later)
-      root_indices <- which(path %in% c("root", "rbind_root"))
+      root_indices <- which(path %in% which_root_name)
       if (any(diff(root_indices) > 1)) { # integer(0) for diff means FALSE
         end_point_root_headers <- which(diff(root_indices) > 1)[1]
       } else {
@@ -444,6 +444,12 @@ do_data_row <- function(rdfrow, maxlen) {
     }
     path <- path[-root_path_to_remove]
   }
+  
+  # Fix for very edge case where we have only root elements
+  if (length(path) == 0) {
+    path <- which_root_name[1]
+  }
+  
   path
 }
 
