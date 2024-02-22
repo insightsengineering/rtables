@@ -61,7 +61,7 @@ test_that("Result Data Frame generation works v0", {
   expect_identical(
     names(result_df4),
     c(
-      "avar_name", "row_name", "row_num", "is_group_summary",
+      "avar_name", "row_name", "label_name", "row_num", "is_group_summary",
       "node_class", "A: Drug X", "B: Placebo", "C: Combination"
     )
   )
@@ -119,13 +119,104 @@ test_that("as_result_df works with visual output (as_viewer)", {
     rrow("row 1", 1, c(.8, 1.2))
   )
   expect_equal(
-    as_result_df(tbl)[, 1:5], 
+    as_result_df(tbl)[, 1:6], 
     data.frame(
       "avar_name" = "row 1", 
       "row_name" = "row 1", 
+      "label_name" = "row 1", 
       "row_num" = 1, 
       "is_group_summary" = FALSE, 
       "node_class" = "DataRow"
     )
+  )
+})
+
+test_that("as_result_df works fine also with multiple rbind_root", {
+  # regression test for rtables#815
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("STRATA1") %>%
+    analyze(c("AGE", "BMRKR2"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  mega_rbind_tbl <- rbind(tbl, rbind(tbl, tbl, rbind(tbl, tbl)))
+  
+  out <- expect_silent(as_result_df(mega_rbind_tbl))
+  
+  expect_true(all(out[,1] == "STRATA1"))
+})
+
+test_that("as_result_df keeps label rows", {
+  # regression test for rtables#815
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA2") %>%
+    split_rows_by("STRATA1") %>%
+    analyze(c("AGE", "BMRKR2"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  rd1 <- as_result_df(tbl, keep_label_rows = TRUE)
+  rd2 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE)
+  rd3 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, as_strings = TRUE)
+  rd4 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, as_viewer = TRUE)
+  
+  expect_equal(nrow(rd1), nrow(rd2) - 2)
+  expect_equal(nrow(rd1), nrow(rd3) - 2)
+  expect_equal(nrow(rd1), nrow(rd4) - 2)
+  expect_identical(ncol(rd1), ncol(rd2))
+  expect_identical(ncol(rd1), ncol(rd3))
+  expect_identical(ncol(rd1), ncol(rd4))
+  
+  expect_identical(as.character(rd1[3, ]), as.character(rd2[5, ]))
+  expect_identical(rd2[is.na(rd2[, ncol(rd2)]), ], rd4[is.na(rd4[, ncol(rd4)]), ])
+  
+  # More challenging labels
+  lyt <- make_big_lyt()
+  tbl <- build_table(lyt, rawdat)
+  
+  ard_out <- as_result_df(tbl, keep_label_rows = TRUE)
+  mf_tbl <- matrix_form(tbl)
+  
+  # Label works
+  expect_identical(
+    ard_out$label_name,
+    mf_strings(mf_tbl)[-seq_len(mf_nrheader(mf_tbl)), 1]
+  )
+  
+  # Row names respects path
+  pths <- make_row_df(tbl)$path
+  expect_identical(
+    ard_out$row_name,
+    sapply(pths, tail, 1)
+  )
+})
+
+test_that("as_result_df as_is is producing a data.frame that is compatible with df_to_tt", {
+  # More challenging labels
+  lyt <- make_big_lyt()
+  tbl <- build_table(lyt, rawdat)
+  
+  ard_out <- as_result_df(tbl, as_is = TRUE)
+  mf_tbl <- matrix_form(tbl)
+  
+  # Label works
+  expect_identical(
+    ard_out$label_name,
+    mf_strings(mf_tbl)[-seq_len(mf_nrheader(mf_tbl)), 1]
+  )
+  
+  expect_identical(
+    ard_out$label_name,
+    df_to_tt(ard_out) %>% row.names()
+  )
+  
+  init_tbl <- df_to_tt(mtcars) 
+  end_tbl <- init_tbl %>% as_result_df(as_is = TRUE) %>% df_to_tt()
+  
+  expect_equal(
+    matrix_form(init_tbl)$strings, 
+    matrix_form(end_tbl)$strings
   )
 })
