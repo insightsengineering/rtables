@@ -941,7 +941,8 @@ setMethod(
     ))
 
     # Setting the kids section separator if they inherits VTableTree
-    inner <- .set_kids_section_div(inner,
+    inner <- .set_kids_section_div(
+      inner,
       trailing_section_div_char = spl_section_div(spl),
       allowed_class = "VTableTree"
     )
