@@ -442,12 +442,12 @@ do_data_row <- function(rdfrow, maxlen) {
     }
     path <- path[-root_path_to_remove]
   }
-  
+
   # Fix for very edge case where we have only root elements
   if (length(path) == 0) {
     path <- which_root_name[1]
   }
-  
+
   path
 }
 
