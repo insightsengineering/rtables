@@ -37,7 +37,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
     ## if(is.character(formats) && length(unique(formats)) == 1L && is.null(format))
     ##     format = unique(formats)
     DataRow(
-      val = vals, lev = as.integer(indent), label = row.name,
+      vals = vals, lev = as.integer(indent), label = row.name,
       name = row.name, ## XXX TODO
       cspan = csps,
       format = format,
@@ -854,7 +854,7 @@ setMethod(
   ## This is ok because LabelRow is special cased
   constr_fun <- get(class(x), mode = "function")
   constr_fun(
-    val = vals,
+    vals = vals,
     cspan = cspans,
     cinfo = cinfo,
     var = obj_avar(x),
