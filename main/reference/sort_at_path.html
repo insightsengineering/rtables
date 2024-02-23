@@ -12,7 +12,7 @@ at a particular Path in the table tree."><meta property="og:image" content="http
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9009</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,21 +55,6 @@ at a particular Path in the table tree."><meta property="og:image" content="http
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -162,11 +147,28 @@ that the requested sorting has been done at <code>path</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The <code>path</code> here can include the "wildcard" <code>"*"</code> as a step,
+    <p><code>sort_at_path</code>,  given a path, locates  the (sub)table(s) described
+by the path (see below for handling of the <code>"*"</code> wildcard). For
+each such  subtable, it  then calls  <code>scorefun</code> on  each direct
+child of  the table,  using the  resulting scores  to determine
+their sorted  order. <code>tt</code> is  then modified to reflect  each of
+these one or more sorting operations.</p>
+<p>In <code>path</code>, a leading <code>"root"</code> element will be ignored, regardless
+of whether  this matches  the object name  (and thus  actual root
+path name) of <code>tt</code>. Including <code>"root"</code> in paths where it does not
+match the name of <code>tt</code>  may mask deeper misunderstandings of how
+valid paths within a <code>TableTree</code> object correspond to the layout
+used to originally declare it, which we encourage users to
+avoid.</p>
+<p><code>path</code> can include the "wildcard" <code>"*"</code> as a step,
 which translates roughly to <em>any</em> node/branching element and means
 that each child at that step will be <em>separately</em> sorted based on
 <code>scorefun</code> and the remaining <code>path</code> entries. This can occur
 multiple times in a path.</p>
+<p>A list of valid (non-wildcard) paths can be seen in the <code>path</code> column
+of the data.frame created by <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df()</a></code> with the <code>visible_only</code>
+argument set to <code>FALSE</code>. It can also be inferred from the summary
+given by <code><a href="table_structure.html">table_structure()</a></code>.</p>
 <p>Note that sorting needs a deeper understanding of table structure in
 <code>rtables</code>. Please consider reading related vignette
 (<a href="https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html">Sorting and Pruning</a>)
@@ -193,7 +195,9 @@ should not happen in practice).</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="score_funs.html">cont_n_allcols()</a></code> and <code><a href="score_funs.html">cont_n_onecol()</a></code></p></div>
+    <div class="dont-index"><p>score functions <code><a href="score_funs.html">cont_n_allcols()</a></code> and <code><a href="score_funs.html">cont_n_onecol()</a></code>;
+<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df()</a></code> and <code><a href="table_structure.html">table_structure()</a></code> for pathing information;
+<code><a href="ttap.html">tt_at_path()</a></code> to select a table's (sub)structure at a given path.</p></div>
     </div>
 
     <div class="section level2">
