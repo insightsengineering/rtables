@@ -120,7 +120,6 @@ of extra arguments and the unmodified values provided by the
 tabulation framework.
 }
 \examples{
-
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")

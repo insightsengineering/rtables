@@ -67,7 +67,6 @@ import_from_tsv <- function(file) {
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-#'
 #' @export
 formatters::export_as_txt
 
@@ -76,7 +75,7 @@ formatters::export_as_txt
 #' Generate a Result Data Frame
 #'
 #' @description
-#' Collection of utilities to exctract `data.frame` from `TableTree` objects.
+#' Collection of utilities to extract `data.frame` from `TableTree` objects.
 #'
 #' @inheritParams gen_args
 #' @param spec character(1). The specification to use to
@@ -103,7 +102,7 @@ formatters::export_as_txt
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available \emph{including any bugs in their construction} indefinitely.
-#' 
+#'
 #' @seealso [df_to_tt()] when using `as_is = TRUE` and [make_row_df()] to have a comprehensive view of the
 #'   hierarchical structure of the rows.
 #'
@@ -198,7 +197,7 @@ result_df_v0_experimental <- function(tt,
   checkmate::assert_flag(expand_colnames)
   checkmate::assert_flag(keep_label_rows)
   checkmate::assert_flag(as_is)
-  
+
   if (as_is) {
     keep_label_rows <- TRUE
     expand_colnames <- FALSE
@@ -229,8 +228,7 @@ result_df_v0_experimental <- function(tt,
       .make_numeric_char_mf(mf_result_chars)
     )
     mf_result_chars <- as.data.frame(mf_result_chars)
-    if (!setequal(dim(mf_result_numeric), dim(cellvals)) ||
-      !setequal(dim(mf_result_chars), dim(cellvals))) {
+    if (!setequal(dim(mf_result_numeric), dim(cellvals)) || !setequal(dim(mf_result_chars), dim(cellvals))) {
       stop(
         "The extracted numeric data.frame does not have the same dimension of the",
         " cell values extracted with cell_values(). This is a bug. Please report it."
@@ -312,7 +310,7 @@ result_df_v0_experimental <- function(tt,
     }
     ret <- rbind(header_colnames_matrix, ret)
   }
-  
+
   # Using only labels for row names and losing information about paths
   if (as_is) {
     tmp_rownames <- ret$label_name
@@ -367,20 +365,20 @@ do_label_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
   # Adjusting for the fact that we have two columns for each split
   extra_nas_from_splits <- floor((maxlen - length(pth)) / 2) * 2
-  
+
   # Special cases with hidden labels
   if (length(pth) %% 2 == 1) {
     extra_nas_from_splits <- extra_nas_from_splits + 1
   }
 
   c(
-    as.list(pth[seq_len(length(pth) - 1)]), 
+    as.list(pth[seq_len(length(pth) - 1)]),
     as.list(replicate(extra_nas_from_splits, list(NA_character_))),
     as.list(tail(pth, 1)),
     list(
       label_name = rdfrow$label,
-      row_num = rdfrow$abs_rownumber, 
-      content = FALSE, 
+      row_num = rdfrow$abs_rownumber,
+      content = FALSE,
       node_class = rdfrow$node_class
     )
   )
@@ -393,13 +391,13 @@ do_content_row <- function(rdfrow, maxlen) {
   seq_before <- seq_len(contpos - 1)
 
   c(
-    as.list(pth[seq_before]), 
+    as.list(pth[seq_before]),
     as.list(replicate(maxlen - contpos, list(NA_character_))),
     list(tail(pth, 1)),
     list(
       label_name = rdfrow$label,
-      row_num = rdfrow$abs_rownumber, 
-      content = TRUE, 
+      row_num = rdfrow$abs_rownumber,
+      content = TRUE,
       node_class = rdfrow$node_class
     )
   )
@@ -420,8 +418,8 @@ do_data_row <- function(rdfrow, maxlen) {
     as.list(tail(pth, 2)),
     list(
       label_name = rdfrow$label,
-      row_num = rdfrow$abs_rownumber, 
-      content = FALSE, 
+      row_num = rdfrow$abs_rownumber,
+      content = FALSE,
       node_class = rdfrow$node_class
     )
   )
@@ -554,7 +552,6 @@ collapse_values <- function(colvals) {
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
-#'
 #' @export
 formatters::export_as_pdf
 
@@ -612,7 +609,6 @@ formatters::export_as_pdf
 #' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 #' }
-#'
 #' @name export_as_docx
 #' @export
 export_as_docx <- function(tt,
@@ -759,7 +755,7 @@ margins_landscape <- function() {
 #'   for [export_as_docx()]. This adds titles and subtitles as a text paragraph above
 #'   the table. Same style is applied.
 #' @param footers_as_text logical(1). Defaults to `FALSE` for [tt_to_flextable()], so
-#'   the table is self-contained with the flextable definition of footnotes. `TRUE` is
+#'   the table is self-contained with the `flextable` definition of footnotes. `TRUE` is
 #'   used for [export_as_docx()] to add the footers as a new paragraph after the table.
 #'   Same style is applied, but with a smaller font.
 #' @param counts_in_newline logical(1). Defaults to `FALSE`. In `rtables` text printing
@@ -983,7 +979,7 @@ tt_to_flextable <- function(tt,
 }
 
 #' @describeIn tt_to_flextable main theme function for [export_as_docx()]
-#' @param font character(1). Defaults to `"Arial"`. If the font is not vailable, `flextable`
+#' @param font character(1). Defaults to `"Arial"`. If the font is not available, `flextable`
 #'   default is used.
 #' @param font_size integer(1). Positive integerish value that defaults to 9.
 #' @param bold character vector. It can be any combination of `c("header", "content_rows",

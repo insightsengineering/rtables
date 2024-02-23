@@ -18,6 +18,5 @@ A \code{RowsVerticalSection} object with counts (and percents) for each level of
 Analysis function to count levels of a factor with percentage of the column total
 }
 \examples{
-
 counts_wpcts(DM$SEX, 400)
 }

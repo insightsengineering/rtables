@@ -50,7 +50,6 @@ different variables entirely, rather than different levels of a single
 variable, we use \code{split_cols_by_multivar}
 }
 \examples{
-
 library(dplyr)
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 

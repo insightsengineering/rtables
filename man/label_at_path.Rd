@@ -40,7 +40,6 @@ not exhibit the behavior you want, and are thus an error. See
 rows.
 }
 \examples{
-
 lyt <- basic_table() \%>\%
   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) \%>\%
   analyze("AGE")

@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Exploratory Analysis}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -49,7 +49,7 @@ table(ex_adsl$SEX, ex_adsl$ARM)
 We can easily recreate the cross-tables above with `qtable()` by
 specifying a data.frame with variable(s) to tabulate. The `col_vars` and
 `row_vars` arguments control how to split the data across columns and rows
-respectively. 
+respectively.
 
 ```{r}
 qtable(ex_adsl, col_vars = "ARM")
@@ -64,8 +64,8 @@ will add (N=xx) in the table header by default. This can be removed with
 qtable(ex_adsl, "ARM", show_colcounts = FALSE)
 ```
 
-Any variables used as the row or column facets should not have any empty 
-strings (""). This is because non empty values are required as labels when 
+Any variables used as the row or column facets should not have any empty
+strings (""). This is because non empty values are required as labels when
 generating the table. The code below will generate an error.
 
 ```{r, eval = FALSE}
@@ -120,7 +120,7 @@ ftable(t1, row.vars = c("SEX", "STRATA1"))
 So far in all the examples we have seen, we used counts to summarize the data
 in each table cell as this is the default analysis used by
 `qtable()`. Internally, a single analysis variable specified by `avar` is used
-to generate the counts in the table. The default analysis variable is the first 
+to generate the counts in the table. The default analysis variable is the first
 variable in `data`. In the case of `ex_adsl` this is "STUDYID".
 
 Let's see what happens when we introduce some `NA` values into the
@@ -134,13 +134,13 @@ qtable(tmp_adsl, row_vars = "ARM", col_vars = "SEX")
 ```
 
 The resulting table is showing 0's across all cells because all the values of
-the analysis variable are `NA`. 
+the analysis variable are `NA`.
 
-Keep this behavior in mind when doing quick exploratory analysis using the 
-default counts aggregate function of `qtable`. 
+Keep this behavior in mind when doing quick exploratory analysis using the
+default counts aggregate function of `qtable`.
 
-If this does not suit your purpose, you can either pre-process your data to 
-recode the `NA` values or use another analysis function. We will see how
+If this does not suit your purpose, you can either pre-process your data to
+re-code the `NA` values or use another analysis function. We will see how
 the latter is done in the [Custom Aggregation] section.
 
 ```{r}
@@ -150,7 +150,7 @@ tmp_adsl[[1]] <- addNA(tmp_adsl[[1]])
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "SEX")
 ```
 
-In addition, row and column variables should have `NA` levels explicitly 
+In addition, row and column variables should have `NA` levels explicitly
 labelled as above. If this is not done, the columns and/or rows will not reflect
 the full data.
 ```{r}

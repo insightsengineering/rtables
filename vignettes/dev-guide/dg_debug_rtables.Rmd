@@ -52,9 +52,9 @@ as you did recover.
 
 `<<-` for `recover` or `debugger` gives it to the global environment
 
-#### lo-fi debugging
+#### direct-modification techniques
 
-* PRINT / CAT is always a low level debugging that can be used. It is helpful for server jobs where maybe only terminal or console output is available and no `browser()` can be used. For example, you can print the position or state of a function at a certain point untill you find the break point.
+* PRINT / CAT is always a low level debugging that can be used. It is helpful for server jobs where maybe only terminal or console output is available and no `browser()` can be used. For example, you can print the position or state of a function at a certain point until you find the break point.
 * comment blocks -> does not work with pipes (you can use `identity()` it is a step that does nothing but does not break the pipes)
 * `browser()` bombing
 

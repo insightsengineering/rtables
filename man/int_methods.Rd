@@ -1218,7 +1218,6 @@ These are internal methods that are documented only to satisfy
 \verb{R CMD check}. End users should pay no attention to this documentation.
 }
 \examples{
-
 library(dplyr)
 
 iris2 <- iris \%>\%

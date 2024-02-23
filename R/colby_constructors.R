@@ -276,7 +276,6 @@ setMethod(
 #' @return A \code{PreDataTableLayouts} object suitable for passing to further
 #'   layouting functions, and to \code{build_table}.
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2"))
@@ -427,7 +426,6 @@ setMethod(
 #' @author Gabriel Becker
 #' @inherit split_cols_by return
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   split_rows_by("RACE", split_fun = drop_split_levels) %>%
@@ -535,7 +533,6 @@ split_rows_by <- function(lyt,
 #' @seealso [analyze_colvars()]
 #' @inherit split_cols_by return
 #' @examples
-#'
 #' library(dplyr)
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
@@ -1108,7 +1105,6 @@ NULL
 #'
 #'
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
@@ -1234,7 +1230,6 @@ get_acolvar_vars <- function(lyt) {
 #' @author Gabriel Becker
 #'
 #' @examples
-#'
 #' library(dplyr)
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
@@ -1274,7 +1269,7 @@ get_acolvar_vars <- function(lyt) {
 #' tbl2 <- build_table(lyt2, ANL)
 #' tbl2
 #'
-analyze_colvars <- function(lyt, 
+analyze_colvars <- function(lyt,
                             afun,
                             format = NULL,
                             na_str = NA_character_,
@@ -1584,7 +1579,6 @@ setMethod(
 #' @return A `RowsVerticalSection` object with counts (and percents) for each level of the factor
 #' @export
 #' @examples
-#'
 #' counts_wpcts(DM$SEX, 400)
 counts_wpcts <- function(x, .N_col) {
   if (!is.factor(x)) {
@@ -1625,7 +1619,6 @@ counts_wpcts <- function(x, .N_col) {
 #' @author Gabriel Becker
 #'
 #' @examples
-#'
 #' DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
 #'
 #' lyt <- basic_table() %>%
@@ -1943,7 +1936,6 @@ manual_cols <- function(..., .lst = list(...)) {
 #'   \code{CellValue} objects.
 #' @author Gabriel Becker
 #' @examples
-#'
 #' summary(iris$Sepal.Length)
 #'
 #' f <- list_wrap_x(summary)
@@ -2009,7 +2001,7 @@ list_wrap_df <- function(f) {
 #'
 #' @inherit split_cols_by return
 #'
-#' @note 
+#' @note
 #' - Because percent components in `colcount_format` are *always*
 #' populated with the value 1, we can get arguably strange results, such as
 #' that individual arm columns and a combined "all patients" column all
@@ -2064,7 +2056,7 @@ basic_table <- function(title = "",
   }
   .check_header_section_div(header_section_div)
   checkmate::assert_character(top_level_section_div, len = 1, n.chars = 1)
-  
+
   ret <- PreDataTableLayouts(
     title = title,
     subtitles = subtitles,

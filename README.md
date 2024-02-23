@@ -147,10 +147,10 @@ library(dplyr)
 ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
 
 biomarker_ave <- function(x, ...) {
-     val <- if(length(x) > 0) round(mean(x), 2) else "no data"
-     in_rows(
-        "Biomarker 1 (mean)" = rcell(val)
-     )
+  val <- if (length(x) > 0) round(mean(x), 2) else "no data"
+  in_rows(
+    "Biomarker 1 (mean)" = rcell(val)
+  )
 }
 
 basic_table(show_colcounts = TRUE) %>%
@@ -205,7 +205,7 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 - Part 1
   [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)
-- Part 2 
+- Part 2
   [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)
 
 ### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables

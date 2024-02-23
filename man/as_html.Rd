@@ -46,7 +46,6 @@ A \code{shiny.tag} object representing \code{x} in HTML.
 The returned \code{html} object can be immediately used in \code{shiny} and \code{rmarkdown}.
 }
 \examples{
-
 tbl <- rtable(
   header = LETTERS[1:3],
   format = "xx",

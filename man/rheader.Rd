@@ -27,7 +27,6 @@ a \code{InstantiatedColumnInfo} object.
 Create a header
 }
 \examples{
-
 h1 <- rheader(c("A", "B", "C"))
 
 h2 <- rheader(

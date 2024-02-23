@@ -243,7 +243,7 @@ setMethod(
     if (disp_ccounts(obj)) {
       hdr_fmt_blank[nrow(hdr_fmt_blank), ] <- c("", rep(colcount_format(obj), ncol(obj)))
     }
-    
+
     formats <- rbind(hdr_fmt_blank, formats_strings)
 
     spans <- rbind(header_content$span, body_spans)
@@ -288,7 +288,7 @@ setMethod(
       nrow = nrow(body),
       ncol = ncol(body)
     )
-  
+
     ref_fnotes <- get_formatted_fnotes(obj) # pagination will not count extra lines coming from here
     pag_titles <- page_titles(obj)
 
@@ -611,7 +611,6 @@ get_formatted_fnotes <- function(tt) {
 #' @param shell logical(1). Should the formats themselves be returned instead of the
 #' values with formats applied. Defaults to \code{FALSE}.
 #' @examples
-#'
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -905,7 +904,6 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' @return a string
 #'
 #' @examples
-#'
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(mat_as_string(mat))
 #' cat("\n")

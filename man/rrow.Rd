@@ -29,7 +29,6 @@ A row object of the context-appropriate type (label or data)
 row
 }
 \examples{
-
 rrow("ABC", c(1, 2), c(3, 2), format = "xx (xx.\%)")
 rrow("")
 
