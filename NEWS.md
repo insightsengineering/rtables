@@ -1,11 +1,14 @@
-## rtables 0.6.6.9008
+## rtables 0.6.6.9010
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
+ * `sort_at_path` now gives informative error messages when the given path does not exist.
 
 ### Bug Fixes
  * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.
  * Fixed issue with `rtables_root` not being removed when using `as_result_df`.
+ * Fixed edge case bug in `as_result_df` where rows of the table have only `"root"` as path index.
+ * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
 
 ## rtables 0.6.6
 ### New Features
