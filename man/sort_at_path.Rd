@@ -47,11 +47,31 @@ Main sorting function to order the substructure of a \code{TableTree}
 at a particular Path in the table tree.
 }
 \details{
-The \code{path} here can include the "wildcard" \code{"*"} as a step,
+\code{sort_at_path},  given a path, locates  the (sub)table(s) described
+by the path (see below for handling of the \code{"*"} wildcard). For
+each such  subtable, it  then calls  \code{scorefun} on  each direct
+child of  the table,  using the  resulting scores  to determine
+their sorted  order. \code{tt} is  then modified to reflect  each of
+these one or more sorting operations.
+
+In \code{path}, a leading \code{"root"} element will be ignored, regardless
+of whether  this matches  the object name  (and thus  actual root
+path name) of \code{tt}. Including \code{"root"} in paths where it does not
+match the name of \code{tt}  may mask deeper misunderstandings of how
+valid paths within a \code{TableTree} object correspond to the layout
+used to originally declare it, which we encourage users to
+avoid.
+
+\code{path} can include the "wildcard" \code{"*"} as a step,
 which translates roughly to \emph{any} node/branching element and means
 that each child at that step will be \emph{separately} sorted based on
 \code{scorefun} and the remaining \code{path} entries. This can occur
 multiple times in a path.
+
+A list of valid (non-wildcard) paths can be seen in the \code{path} column
+of the data.frame created by \code{\link[=make_row_df]{make_row_df()}} with the \code{visible_only}
+argument set to \code{FALSE}. It can also be inferred from the summary
+given by \code{\link[=table_structure]{table_structure()}}.
 
 Note that sorting needs a deeper understanding of table structure in
 \code{rtables}. Please consider reading related vignette
@@ -127,5 +147,7 @@ sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
 
 }
 \seealso{
-\code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}}
+score functions \code{\link[=cont_n_allcols]{cont_n_allcols()}} and \code{\link[=cont_n_onecol]{cont_n_onecol()}};
+\code{\link[=make_row_df]{make_row_df()}} and \code{\link[=table_structure]{table_structure()}} for pathing information;
+\code{\link[=tt_at_path]{tt_at_path()}} to select a table's (sub)structure at a given path.
 }

@@ -258,6 +258,16 @@ test_that("provided score functions throw informative errors when invalid and * 
     )
   })
 
+  ## leading "root" doesn't bother it #816
+  expect_silent({
+    stbl2 <- sort_at_path(raw_tbl,
+      path = c("root", "AEBODSYS", "*", "AEDECOD"),
+      scorefun = real_scorefun, # cont_n_allcols,
+      decreasing = TRUE
+    )
+  })
+  expect_identical(cell_values(stbl), cell_values(stbl2))
+
   ## spot check that things were reordered as we expect
   expect_identical(
     row_paths(raw_tbl)[63:71], ## "cl B.2" ->  "dcd B.2.1.2.1" old position
@@ -285,6 +295,19 @@ test_that("provided score functions throw informative errors when invalid and * 
     "occurred at path: AEBODSYS -> * (cl A.1) -> AEDECOD -> dcd A.1.1.1.1",
     fixed = TRUE
   )
+  ## paths that are entirely wrong (don't exist at all) work out ok.
+  expect_error(
+    {
+      sort_at_path(raw_tbl,
+        path = c("AEBODSYS", "*", "WRONG"),
+        scorefun = cont_n_onecol(1),
+        decreasing = TRUE
+      )
+    },
+    "occurred at path: AEBODSYS -> * (cl A.1)",
+    fixed = TRUE
+  )
+
 })
 
 test_that("paths come out correct when sorting with '*'", {
