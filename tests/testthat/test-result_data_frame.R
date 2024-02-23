@@ -222,3 +222,19 @@ test_that("as_result_df as_is is producing a data.frame that is compatible with 
     matrix_form(end_tbl)$strings
   )
 })
+
+test_that("as_result_df works fine with empty tables and no character(0) is allowed", {
+  tbl <- basic_table() %>%
+    build_table(mtcars)
+
+  expect_silent(as_result_df(tbl))
+
+  expect_equal(
+    .remove_root_elems_from_path(
+      c("a", "b", "c"),
+      which_root_name = c("a", "b", "c"),
+      all = TRUE
+    ),
+    "a"
+  )
+})

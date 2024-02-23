@@ -66,11 +66,33 @@ cont_n_onecol <- function(j) {
 #' @return A `TableTree` with the same structure as \code{tt} with the exception
 #'   that the requested sorting has been done at \code{path}.
 #'
-#' @details The \code{path} here can include the "wildcard" \code{"*"} as a step,
+#' @details
+#'
+#'   `sort_at_path`,  given a path, locates  the (sub)table(s) described
+#'   by the path (see below for handling of the `"*"` wildcard). For
+#'   each such  subtable, it  then calls  `scorefun` on  each direct
+#'   child of  the table,  using the  resulting scores  to determine
+#'   their sorted  order. `tt` is  then modified to reflect  each of
+#'   these one or more sorting operations.
+#'
+#'   In `path`, a leading `"root"` element will be ignored, regardless
+#'   of whether  this matches  the object name  (and thus  actual root
+#'   path name) of `tt`. Including `"root"` in paths where it does not
+#'   match the name of `tt`  may mask deeper misunderstandings of how
+#'   valid paths within a `TableTree` object correspond to the layout
+#'   used to originally declare it, which we encourage users to
+#'   avoid.
+#'
+#'   `path` can include the "wildcard" \code{"*"} as a step,
 #'   which translates roughly to *any* node/branching element and means
 #'   that each child at that step will be \emph{separately} sorted based on
 #'   \code{scorefun} and the remaining \code{path} entries. This can occur
 #'   multiple times in a path.
+#'
+#'   A list of valid (non-wildcard) paths can be seen in the `path` column
+#'   of the data.frame created by [make_row_df()] with the `visible_only`
+#'   argument set to `FALSE`. It can also be inferred from the summary
+#'   given by [table_structure()].
 #'
 #'   Note that sorting needs a deeper understanding of table structure in
 #'   `rtables`. Please consider reading related vignette
@@ -98,7 +120,9 @@ cont_n_onecol <- function(j) {
 #'      (either subtables, rows or possibly a mix thereof, though that
 #'      should not happen in practice).
 #'
-#' @seealso [cont_n_allcols()] and [cont_n_onecol()]
+#' @seealso score functions [cont_n_allcols()] and [cont_n_onecol()];
+#' [make_row_df()] and [table_structure()] for pathing information;
+#' [tt_at_path()] to select a table's (sub)structure at a given path.
 #'
 #' @examples
 #' # Creating a table to sort
@@ -156,7 +180,16 @@ sort_at_path <- function(tt,
   }
 
   ## XXX hacky fix this!!!
+  ## tt_at_path removes root even if actual root table isn't named root, we need to match that behavior
+  if(path[1] == "root") {
+    ## always remove first root element but only add it to
+    ## .prev_path (used for error reporting) if it actually matched the name
+    if(obj_name(tt) == "root")
+      .prev_path <- c(.prev_path, path[1])
+    path <- path[-1]
+  }
   if (identical(obj_name(tt), path[1])) {
+    .prev_path <- c(.prev_path, path[1])
     path <- path[-1]
   }
 
@@ -166,10 +199,10 @@ sort_at_path <- function(tt,
   count <- 0
   while (length(curpath) > 0) {
     curname <- curpath[1]
+    oldkids <- tree_children(subtree)
     ## we sort each child separately based on the score function
     ## and the remaining path
     if (curname == "*") {
-      oldkids <- tree_children(subtree)
       oldnames <- vapply(oldkids, obj_name, "")
       newkids <- lapply(
         seq_along(oldkids),
@@ -194,6 +227,11 @@ sort_at_path <- function(tt,
         ret <- newtab
       }
       return(ret)
+    } else if(!(curname %in% names(oldkids))) {
+        stop("Unable to find child(ren) '",
+             curname, "'\n\t occurred at path: ",
+             paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+             "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or\n\      'table_structure(obj)' to explore valid paths.")
     }
     subtree <- tree_children(subtree)[[curname]]
     backpath <- c(backpath, curpath[1])
