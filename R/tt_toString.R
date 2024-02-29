@@ -47,16 +47,22 @@ setMethod("toString", "VTableTree", function(x,
                                              hsep = horizontal_sep(x),
                                              indent_size = 2,
                                              tf_wrap = FALSE,
-                                             max_width = NULL) {
+                                             max_width = NULL,
+                                             fontspec = font_spec(),
+                                             ttype_ok = FALSE) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
-      indent_size = indent_size
+      indent_size = indent_size,
+      fontspec = fontspec,
+      col_gap = col_gap
     ),
     widths = widths, col_gap = col_gap,
     hsep = hsep,
     tf_wrap = tf_wrap,
-    max_width = max_width
+    max_width = max_width,
+    fontspec = fontspec,
+    ttype_ok = ttype_ok
   )
 })
 
