@@ -110,7 +110,7 @@ validate_split_result <- function(pinfo, component = NULL) {
 #'   values = "med",
 #'   datasplit = list(med = mtcars[1:20, ]),
 #'   labels = "kinda some data",
-#'   sub_expr = quote(seq_along(wt) <= 20)
+#'   subset_exprs = quote(seq_along(wt) <= 20)
 #' )
 #'
 #' @family make_custom_split
@@ -132,9 +132,9 @@ make_split_result <- function(values, datasplit, labels, extras = NULL, subset_e
 #'
 #' @rdname make_split_result
 #' @export
-add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL, sub_expr = NULL) {
+add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL, subset_exprs = NULL) {
   validate_split_result(splres)
-  newstuff <- make_split_result(values, datasplit, labels, extras, subset_exprs = list(sub_expr))
+  newstuff <- make_split_result(values, datasplit, labels, extras, subset_exprs = list(subset_exprs))
   ret <- lapply(
     names(splres),
     function(nm) c(splres[[nm]], newstuff[[nm]])

@@ -19,7 +19,7 @@ add_to_split_result(
   datasplit,
   labels,
   extras = NULL,
-  sub_expr = NULL
+  subset_exprs = NULL
 )
 }
 \arguments{
@@ -69,7 +69,7 @@ splres2 <- add_to_split_result(splres,
   values = "med",
   datasplit = list(med = mtcars[1:20, ]),
   labels = "kinda some data",
-  sub_expr = quote(seq_along(wt) <= 20)
+  subset_exprs = quote(seq_along(wt) <= 20)
 )
 
 }
