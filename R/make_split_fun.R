@@ -348,7 +348,7 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
             subexpr <- expression(TRUE)
             datpart <- list(fulldf)
         } else {
-            subexpr <- Reduce(.or_combine_exprs, lapply(ret$value[levels], value_expr))
+            subexpr <- .combine_value_exprs(ret$value[levels]) #Reduce(.or_combine_exprs, lapply(ret$value[levels], value_expr))
             datpart <- list(do.call(rbind, ret$datasplit[levels]))
         }
 
@@ -362,21 +362,27 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
   }
 }
 
-
-.or_combine_exprs <- function(ex1, ex2) {
-    if(is.null(ex1) || identical(ex1, expression(FALSE))) {
-        if(is.expression(ex2) && !identical(ex2, expression(FALSE))) {
-            return(ex2)
-        } else {
-            return(expression(FALSE))
-        }
-    } else if (is.null(ex2) || identical(ex2, expression(FALSE))) {
-        return(ex1)
-    } else if(identical(ex1, expression(TRUE)) ||
-              identical(ex2, expression(TRUE))) {
-        return(expression(TRUE))
+.combine_value_exprs <- function(val_lst, spl) {
+    exprs <- lapply(val_lst, value_expr)
+    nulls <- vapply(exprs, is.null, TRUE)
+    if(all(nulls))
+        return(NULL) #default behavior all the way down the line, no need to do anything.
+    else if(any(nulls)) {
+       exprs[nulls] <- lapply(val_lst[nulls], function(vali) make_subest_expr(spl, vali))
     }
+    Reduce(.or_combine_exprs, exprs)
+}
 
+## no NULLS coming in here, everything has been populated
+## by either custom subsetting expressions or the result of make_subset_expr(spl, val)
+.or_combine_exprs <- function(ex1, ex2) {
+    if(identical(ex1, expression(FALSE)))
+        return(ex2)
+    else if(identical(ex2, expression(FALSE)))
+        return(ex1)
+    else if(identical(ex1, expression(TRUE)) ||
+            identical(ex2, expression(TRUE)))
+        return(TRUE)
     as.expression(bquote((.(a)) | .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
 
