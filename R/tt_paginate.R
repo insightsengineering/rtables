@@ -217,7 +217,8 @@ setMethod(
           nsibs = nsibs,
           nrowrefs = 0L,
           ncellrefs = 0L,
-          nreflines = 0L
+          nreflines = 0L,
+          fontspec = fontspec
         ))
       )
     }
@@ -348,7 +349,8 @@ setMethod(
       nrowrefs = length(rrefs),
       ncellrefs = length(unlist(crefs)),
       nreflines = reflines,
-      trailing_sep = trailing_section_div(tt)
+      trailing_sep = trailing_section_div(tt),
+      fontspec = fontspec
     )
     ret
   }
@@ -391,7 +393,8 @@ setMethod(
         fontspec = fontspec,
         col_gap = col_gap
       )),
-      trailing_sep = trailing_section_div(tt)
+      trailing_sep = trailing_section_div(tt),
+      fontspec = fontspec
     )
     if (!labelrow_visible(tt)) {
       ret <- ret[0, , drop = FALSE]
