@@ -368,7 +368,7 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
     if(all(nulls))
         return(NULL) #default behavior all the way down the line, no need to do anything.
     else if(any(nulls)) {
-       exprs[nulls] <- lapply(val_lst[nulls], function(vali) make_subest_expr(spl, vali))
+       exprs[nulls] <- lapply(val_lst[nulls], function(vali) make_subset_expr(spl, vali))
     }
     Reduce(.or_combine_exprs, exprs)
 }

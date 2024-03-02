@@ -82,5 +82,5 @@ cat(toString(tbl, col_gap = 3))
 
 }
 \seealso{
-\code{\link[formatters:wrap_string]{wrap_string()}}n
+\code{\link[formatters:wrap_string]{wrap_string()}}
 }
