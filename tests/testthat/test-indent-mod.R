@@ -171,7 +171,7 @@ test_that("getters and setters work", {
   t0 <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
-    summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
     analyze("AGE") %>%
     build_table(ex_adae)
 
@@ -218,14 +218,14 @@ test_that("clear_indent_mods works as desired", {
   lytm <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary", indent_mod = 1L) %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
-    summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
     analyze("AGE", indent_mod = -1L)
   tm <- build_table(lytm, ex_adae)
 
   t0 <- basic_table() %>%
     summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
     split_rows_by("AEBODSYS", child_labels = "visible") %>%
-    summarize_row_groups("STUDYID", label = "subgroup summary") %>%
+    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
     analyze("AGE") %>%
     build_table(ex_adae)
 

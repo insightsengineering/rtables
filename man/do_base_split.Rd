@@ -31,7 +31,6 @@ the current split \emph{as if it had no custom splitting function} so that
 those default splits can be further manipulated.
 }
 \examples{
-
 uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
   ret <- do_base_split(spl, df, vals, labels, trim)
   if (NROW(df) == 0) {

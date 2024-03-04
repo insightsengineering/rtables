@@ -48,7 +48,6 @@ col_paths <- function(x) {
 #' @export
 #' @return A data.frame summarizing the row- or column-structure of \code{x}.
 #' @examples
-#'
 #' library(dplyr)
 #'
 #' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
@@ -228,7 +227,6 @@ summarize_rows <- function(obj) {
 #' @param indent numeric(1). Indent.
 #'
 #' @examples
-#'
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%

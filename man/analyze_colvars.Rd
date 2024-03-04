@@ -58,7 +58,6 @@ layouting functions, and to \code{build_table}.
 Generate Rows Analyzing Different Variables Across Columns
 }
 \examples{
-
 library(dplyr)
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 

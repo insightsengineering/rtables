@@ -199,7 +199,6 @@ it has less than \code{min_siblings} preceding or following siblings
 }
 
 \examples{
-
 s_summary <- function(x) {
   if (is.numeric(x)) {
     in_rows(

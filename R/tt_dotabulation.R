@@ -486,7 +486,7 @@ gen_rowvalues <- function(dfpart,
 }
 
 # Makes content table xxx renaming
-.make_ctab <- function(df, 
+.make_ctab <- function(df,
                        lvl, ## treepos,
                        name,
                        label,
@@ -530,7 +530,6 @@ gen_rowvalues <- function(dfpart,
         call. = FALSE
       )
     }
-    
   } else {
     contkids <- list()
   }
@@ -580,10 +579,10 @@ gen_rowvalues <- function(dfpart,
     ),
     error = function(e) e
   )
-  
+
   # Adding section_div for DataRows (analyze leaves)
   kids <- .set_kids_section_div(kids, spl_section_div(spl), "DataRow")
-  
+
   if (is(kids, "error")) {
     stop("Error applying analysis function (var - ",
       spl_payload(spl) %||% "colvars", "): ", kids$message,
@@ -940,12 +939,14 @@ setMethod(
       splval = splvals,
       SIMPLIFY = FALSE
     ))
-    
+
     # Setting the kids section separator if they inherits VTableTree
-    inner <- .set_kids_section_div(inner, 
-                                   trailing_section_div_char = spl_section_div(spl), 
-                                   allowed_class = "VTableTree")
-    
+    inner <- .set_kids_section_div(
+      inner,
+      trailing_section_div_char = spl_section_div(spl),
+      allowed_class = "VTableTree"
+    )
+
     ## This is where we need to build the structural tables
     ## even if they are invisible because their labels are not
     ## not shown.
@@ -1228,7 +1229,7 @@ recursive_applysplit <- function(df,
 #'
 #' tbl6 <- build_table(lyt3, DM, col_counts = 1:3)
 #' tbl6
-#' 
+#'
 #' @export
 build_table <- function(lyt, df,
                         alt_counts_df = NULL,
@@ -1336,7 +1337,7 @@ build_table <- function(lyt, df,
       first_level_kids
     })
   }
-  
+
   if (nrow(ctab) == 0L && length(kids) == 1L && is(kids[[1]], "VTableTree")) {
     tab <- kids[[1]]
     main_title(tab) <- main_title(lyt)
@@ -1893,7 +1894,6 @@ n_cells_res <- function(res) {
 #' the desired table, suitable for passing to `build_table`.
 #'
 #' @examples
-#'
 #' qtable(ex_adsl)
 #' qtable(ex_adsl, row_vars = "ARM")
 #' qtable(ex_adsl, col_vars = "ARM")

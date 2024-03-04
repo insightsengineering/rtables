@@ -27,8 +27,8 @@ div_helper <- function(lst, class) {
 #' @param class_table class for `table` tag
 #' @param class_tr class for `tr` tag
 #' @param class_th class for `th` tag
-#' @param width a string to indicate the desired width of the table. Common input formats include a 
-#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`). 
+#' @param width a string to indicate the desired width of the table. Common input formats include a
+#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`).
 #'   Defaults to `NULL`.
 #' @param link_label link anchor label (not including `tab:` prefix) for the table.
 #' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`,
@@ -40,7 +40,6 @@ div_helper <- function(lst, class) {
 #' @return A `shiny.tag` object representing `x` in HTML.
 #'
 #' @examples
-#'
 #' tbl <- rtable(
 #'   header = LETTERS[1:3],
 #'   format = "xx",
@@ -208,7 +207,7 @@ as_html <- function(x,
       list(
         class = class_table,
         style = paste(
-          if (no_spaces_between_cells) "border-collapse: collapse;", 
+          if (no_spaces_between_cells) "border-collapse: collapse;",
           if (!is.null(width)) paste("width:", width)
         ),
         tags$caption(sprintf("(\\#tag:%s)", link_label),

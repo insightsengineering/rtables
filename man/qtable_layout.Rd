@@ -117,7 +117,6 @@ directly modify the top-left area (via \code{row_labels}) is the case of
 a table with row facets and an \code{afun} which returns a single row.
 }
 \examples{
-
 qtable(ex_adsl)
 qtable(ex_adsl, row_vars = "ARM")
 qtable(ex_adsl, col_vars = "ARM")

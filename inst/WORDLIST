@@ -12,6 +12,7 @@ dplyr
 emph
 facetted
 facetting
+FFFL
 formatter
 getter
 getters
@@ -19,7 +20,10 @@ Godwin
 Heng
 ing
 initializer
+integerish
+iteratively
 Kelkhoff
+labelled
 Layouting
 layouting
 Lewandowski
@@ -32,6 +36,7 @@ orderable
 Paszty
 pathing
 Phuse
+postfix
 Postprocessing
 postprocessing
 Pre
@@ -48,11 +53,13 @@ Resync
 reusability
 RinPharma
 roadmap
+RStudio
 rtables
 Saibah
 sortable
 spl
 Stoilova
+STUDYID
 Subtable
 subtable
 subtable's
@@ -62,6 +69,8 @@ summarization
 tableone
 TableTree
 Tadeusz
+todo
+unaggregated
 unicode
 univariable
 unnested
