@@ -97,6 +97,10 @@ Packaged releases (both those on CRAN and those between official CRAN
 releases) can be found in the [releases
 list](https://github.com/insightsengineering/rtables/releases).
 
+## Cheatsheet
+
+<a href="https://github.com/insightsengineering/rtables/blob/main/inst/cheatsheet/rtables_cheatsheet_01-24.pdf"><img src="https://raw.githubusercontent.com/insightsengineering/rtables/main/inst/cheatsheet/rtables_cheatsheet_01-24_thumbs.png" width="630" height="247"/></a>
+
 ## Usage
 
 We first demonstrate with a demographic table-like example and then show
