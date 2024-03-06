@@ -226,7 +226,7 @@ tt_for_nl <- tt_to_test_newline_chars()
 
 # Utility function for section_div tests
 check_pattern <- function(element, letter, len) {
-# Regular expression to match exactly len of the same letter
-regex <- paste0(rep(letter, len), collapse = "")
-return(grepl(regex, element, fixed = TRUE))
+  # Regular expression to match exactly len of the same letter
+  regex <- paste0(rep(letter, len), collapse = "")
+  return(grepl(regex, element, fixed = TRUE))
 }
