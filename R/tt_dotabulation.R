@@ -691,7 +691,9 @@ setMethod(
       spl_context = spl_context,
       ...
     ))
-
+    
+    kids <- .set_kids_section_div(kids, spl_section_div(spl), "VTableTree")
+    
     ## XXX this seems like it should be identical not !identical
     ## TODO FIXME
     if (!identical(make_lrow, FALSE) && !have_controws && length(kids) == 1) {
