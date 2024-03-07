@@ -62,7 +62,6 @@ License Version 2.
 
 `rtables` currently covers virtually all of these requirements, and further advances remain under active development.
 
-
 ## Installation
 
 `rtables` is available on CRAN and you can install the latest released version with:
@@ -91,7 +90,6 @@ found in the [releases list](https://github.com/insightsengineering/rtables/rele
 
 We first demonstrate with a demographic table-like example and then show the creation of a more complex table.
 
-
 ```{r, message=FALSE}
 library(rtables)
 
@@ -114,7 +112,6 @@ lyt <- basic_table() %>%
 
 build_table(lyt, ex_adsl)
 ```
-
 
 ```{r, message=FALSE}
 library(rtables)
@@ -139,7 +136,6 @@ basic_table(show_colcounts = TRUE) %>%
   analyze("BMRKR1", biomarker_ave) %>%
   build_table(ADSL)
 ```
-
 
 # Acknowledgments
 
