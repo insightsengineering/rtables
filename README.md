@@ -41,7 +41,7 @@ Version](https://www.r-pkg.org/badges/version/rtables)](https://CRAN.R-project.o
 Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
 <!-- end badges -->
 
-## Reporting tables with R
+## Reporting Tables with R
 
 The `rtables` R package was designed to create and display complex
 tables with R. The cells in an `rtable` may contain any high-dimensional
@@ -205,24 +205,27 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 ## Presentations
 
-### Advanced rtables Training
-
-- Part 1
-  [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)
-- Part 2
-  [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)
-
-### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
-
-- [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)
-
-### R Adoption Series
-
-- [R Adoption Series presentation
-  2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
-- [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)
-
-### New (Current) Layouting and Tabulation Framework (v.0.3+)
-
-- [useR!2020 Presentation (on v0.3.1.1) July
-  2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
+- R in Pharma 2023
+  - Generating Tables, Listings, and Graphs using NEST /
+    [falcon](https://pharmaverse.github.io/falcon/)
+    \[[Video](https://www.youtube.com/watch?v=YPmbLPSYFYM)\]
+  - BBS Session on Regulatory Submissions of Clinical Trials
+    \[[Video](https://www.youtube.com/watch?v=yZS4OBuJe_Q)\]
+- R Medicine Virtual Conference 2023
+  \[[Video](https://www.youtube.com/watch?v=sxFsavKI7s4)\]
+- Advanced rtables Training 2023 \[[Part 1
+  Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)\]
+  \[[Part 2
+  Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)\]
+- R in Pharma 2022 - Creating Submission-Quality Clinical Trial
+  Reporting Tables in R with rtables
+  \[[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)\]
+  \[[Video](https://www.youtube.com/watch?v=zBm_NZ0VtKs)\]
+- R Consortium 2022
+  - R Adoption Series - Reporting Table Creation in R
+    \[[Video](https://www.youtube.com/watch?v=1i6vOId2h4A)\]
+    \[[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)\]
+  - Tables in Clinical Trials with R
+    \[[Book](https://rconsortium.github.io/rtrs-wg/)\]
+- useR! 2020 - rtables Layouting and Tabulation Framework
+  \[[Video](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)\]
