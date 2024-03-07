@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9011</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,21 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -128,7 +113,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini</h4>
             
-            <h4 data-toc-skip class="date">2024-02-23</h4>
+            <h4 data-toc-skip class="date">2024-03-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/dev-guide/dg_notes.Rmd" class="external-link"><code>vignettes/dev-guide/dg_notes.Rmd</code></a></small>
       <div class="d-none name"><code>dg_notes.Rmd</code></div>
@@ -140,7 +125,7 @@ Garolini</h4>
 <h2 id="disclaimer">Disclaimer<a class="anchor" aria-label="anchor" href="#disclaimer"></a>
 </h2>
 <p>This is a collection of notes divided by issues and it is a working
-document that will end up being a dev vignette one day.</p>
+document that will end up being a developer vignette one day.</p>
 </div>
 <div class="section level2">
 <h2 id="section_div-notes">
@@ -152,9 +137,9 @@ internally in each split object as <code>child_section_div</code> and
 assigned to <code>NA_character</code> as default. This needs to be in
 all split objects that need to have a separator divisor. Object-wise,
 the virtual class <code>Split</code> contains <code>section_div</code>
-and it has the following subclasses. I tagged with “X” constructor that
+and it has the following sub-classes. I tagged with “X” constructor that
 allows for <code>section_div</code> to be assigned to a value different
-than <code>NA_character</code>, and “NX” otherwise.</p>
+than <code>NA_character</code>, and <code>"NX"</code> otherwise.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/rtables" class="external-link">rtables</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Loading required package: formatters</span></span></code></pre>
@@ -205,13 +190,13 @@ than <code>NA_character</code>, and “NX” otherwise.</p>
 <span><span class="co">## Class "AnalyzeMultiVars", by class "CompoundSplit", distance 2</span></span>
 <span><span class="co">## Class "VarLevWBaselineSplit", by class "VarLevelSplit", distance 3</span></span></code></pre>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Known Subclasses: </span></span>
-<span><span class="co">#? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)</span></span>
+<code class="sourceCode R"><span><span class="co"># Known Subclasses:</span></span>
+<span><span class="co"># ? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)</span></span>
 <span><span class="co"># Class "AllSplit", directly            # NX</span></span>
 <span><span class="co"># Class "VarStaticCutSplit", directly   # X via make_static_cut_split</span></span>
 <span><span class="co"># Class "VarDynCutSplit", directly      # X</span></span>
 <span><span class="co"># Class "VAnalyzeSplit", directly       # X</span></span>
-<span><span class="co">#? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)</span></span>
+<span><span class="co"># ? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)</span></span>
 <span><span class="co"># Class "VarLevelSplit", by class "CustomizableSplit", distance 2            # X</span></span>
 <span><span class="co"># Class "MultiVarSplit", by class "CustomizableSplit", distance 2            # X</span></span>
 <span><span class="co"># Class "RootSplit", by class "AllSplit", distance 2                         # NX</span></span>
@@ -258,11 +243,11 @@ makes `trailing_section_div:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Known Subclasses: "DataRow", "ContentRow", "LabelRow"</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Extends: </span></span>
+<code class="sourceCode R"><span><span class="co"># Extends:</span></span>
 <span><span class="co"># Class "VLeaf", directly</span></span>
 <span><span class="co"># Class "VTableNodeInfo", directly</span></span>
 <span><span class="co"># Class "VNodeInfo", by class "VLeaf", distance 2</span></span>
-<span><span class="co"># </span></span>
+<span><span class="co">#</span></span>
 <span><span class="co"># Known Subclasses: "DataRow", "ContentRow", "LabelRow"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/methods/getClass.html" class="external-link">getClass</a></span><span class="op">(</span><span class="st">"VTableTree"</span><span class="op">)</span></span></code></pre></div>
@@ -296,12 +281,12 @@ makes `trailing_section_div:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## Known Subclasses: "ElementaryTable", "TableTree"</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Extends: </span></span>
+<code class="sourceCode R"><span><span class="co"># Extends:</span></span>
 <span><span class="co"># Class "VTableNodeInfo", directly</span></span>
 <span><span class="co"># Class "VTree", directly</span></span>
 <span><span class="co"># Class "VTitleFooter", directly</span></span>
 <span><span class="co"># Class "VNodeInfo", by class "VTableNodeInfo", distance 2</span></span>
-<span><span class="co"># </span></span>
+<span><span class="co">#</span></span>
 <span><span class="co"># Known Subclasses: "ElementaryTable", "TableTree"</span></span></code></pre></div>
 <p>Always check the constructors after finding the classes. In the above
 case for example, the <code>DataRow</code> and <code>ContentRow</code>
@@ -313,12 +298,13 @@ two have this feature, lets see the structure of a table built with
 section dividers:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, section_div <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, section_div <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="../../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, </span>
-<span>            afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"Standard deviation"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>            format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="st">"xx."</span>, <span class="st">"Standard deviation"</span> <span class="op">=</span> <span class="st">"xx."</span><span class="op">)</span>, </span>
-<span>            section_div <span class="op">=</span> <span class="st">"~"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"ARM"</span>, section_div <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, section_div <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>,</span>
+<span>    afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"Standard deviation"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    format <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Mean"</span> <span class="op">=</span> <span class="st">"xx."</span>, <span class="st">"Standard deviation"</span> <span class="op">=</span> <span class="st">"xx."</span><span class="op">)</span>,</span>
+<span>    section_div <span class="op">=</span> <span class="st">"~"</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
 <span></span>
@@ -379,8 +365,8 @@ section dividers:</p>
 <span><span class="co">## [1] "rtables"</span></span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># methods("trailing_section_div") # to see this please do devtools::load_all()</span></span>
-<span><span class="co"># [1] trailing_section_div,LabelRow-method   </span></span>
-<span><span class="co"># trailing_section_div,TableRow-method   </span></span>
+<span><span class="co"># [1] trailing_section_div,LabelRow-method</span></span>
+<span><span class="co"># trailing_section_div,TableRow-method</span></span>
 <span><span class="co"># trailing_section_div,VTableTree-method</span></span></code></pre></div>
 <p>In the above, we show that <code>trailing_section_div</code> has
 methods for <code>TableRow</code> virtual object, <code>LabelRow</code>,

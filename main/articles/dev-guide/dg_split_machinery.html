@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6.9011</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,21 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -128,7 +113,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini</h4>
             
-            <h4 data-toc-skip class="date">2024-02-23</h4>
+            <h4 data-toc-skip class="date">2024-03-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/dev-guide/dg_split_machinery.Rmd" class="external-link"><code>vignettes/dev-guide/dg_split_machinery.Rmd</code></a></small>
       <div class="d-none name"><code>dg_split_machinery.Rmd</code></div>
@@ -222,13 +207,13 @@ roughly one section of this article.</p>
 <span>                     <span class="va">labels</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>                     <span class="va">trim</span> <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                     <span class="va">spl_context</span><span class="op">)</span> <span class="op">{</span></span>
-<span><span class="co"># - CHECKS - #</span></span>
+<span>  <span class="co"># - CHECKS - #</span></span>
 <span>  <span class="co">## This will error if, e.g., df does not have columns</span></span>
 <span>  <span class="co">##  required by spl, or generally any time the split (spl)</span></span>
 <span>  <span class="co">##  can not be applied to df</span></span>
 <span>  <span class="fu">check_validsplit</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># - SPLIT FUNCTION - #</span></span>
+<span>  <span class="co"># - SPLIT FUNCTION - #</span></span>
 <span>  <span class="co">## In special cases, we need to partition data (split)</span></span>
 <span>  <span class="co">##  in a very specific way, e.g. depending on the data or</span></span>
 <span>  <span class="co">##  external values. These can be achieved by using a custom</span></span>
@@ -261,20 +246,20 @@ roughly one section of this article.</p>
 <span>      <span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span><span class="co"># - .apply_split_inner - #</span></span>
+<span>    <span class="co"># - .apply_split_inner - #</span></span>
 <span>    <span class="co">## This is called when no split function is provided. Please note that this function</span></span>
 <span>    <span class="co">##  will also probably be called when the split function is provided, as long as the</span></span>
 <span>    <span class="co">##  main splitting method is not willingly modified by the split function.</span></span>
 <span>    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">.apply_split_inner</span><span class="op">(</span>df <span class="op">=</span> <span class="va">df</span>, spl <span class="op">=</span> <span class="va">spl</span>, vals <span class="op">=</span> <span class="va">vals</span>, labels <span class="op">=</span> <span class="va">labels</span>, trim <span class="op">=</span> <span class="va">trim</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
-<span><span class="co"># - EXTRA - #</span></span>
+<span>  <span class="co"># - EXTRA - #</span></span>
 <span>  <span class="co">## this adds .ref_full and .in_ref_col</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">spl</span>, <span class="st">"VarLevWBaselineSplit"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">.add_ref_extras</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span>, <span class="va">ret</span><span class="op">)</span></span>
 <span>  <span class="op">}</span></span>
 <span></span>
-<span><span class="co"># - FIXUPVALS - #</span></span>
+<span>  <span class="co"># - FIXUPVALS - #</span></span>
 <span>  <span class="co">## This:</span></span>
 <span>  <span class="co">##  - guarantees that ret$values contains SplitValue objects</span></span>
 <span>  <span class="co">##  - removes the extras element since its redundant after the above</span></span>
@@ -282,7 +267,7 @@ roughly one section of this article.</p>
 <span>  <span class="co">##  - ensures labels are character not factor</span></span>
 <span>  <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu">.fixupvals</span><span class="op">(</span><span class="va">ret</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># - RETURN - #</span></span>
+<span>  <span class="co"># - RETURN - #</span></span>
 <span>  <span class="va">ret</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>We will see where and how input parameters are used. The most
@@ -365,7 +350,7 @@ following:</p>
 <span>      <span class="va">split_name</span> <span class="op">&lt;-</span> <span class="va">split_label</span></span>
 <span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>      <span class="va">split_name</span> <span class="op">&lt;-</span> <span class="st">"all obs"</span> <span class="co"># No label, a standard split with all</span></span>
-<span>                              <span class="co"># observations is assigned.</span></span>
+<span>      <span class="co"># observations is assigned.</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="st">"AllSplit"</span>,</span>
@@ -401,26 +386,26 @@ hierarchical slots that contain objects themselves, calling
 <code>str</code> will be much less or not at all informative if the
 maximum level of nesting is not set
 (e.g. <code>max.level = 2</code>).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>Browse[<span class="dv">2</span>]<span class="sc">&gt;</span> <span class="fu">str</span>(spl, <span class="at">max.level =</span> <span class="dv">2</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>Formal class <span class="st">'AllSplit'</span> [package <span class="st">"rtables"</span>] with <span class="dv">17</span> slots</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  ..<span class="sc">@</span> payload                <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  ..<span class="sc">@</span> name                   <span class="sc">:</span> chr <span class="st">"all obs"</span></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  ..<span class="sc">@</span> split_label            <span class="sc">:</span> chr <span class="st">""</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  ..<span class="sc">@</span> split_format           <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  ..<span class="sc">@</span> split_na_str           <span class="sc">:</span> chr <span class="cn">NA</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  ..<span class="sc">@</span> split_label_position   <span class="sc">:</span> chr <span class="st">"hidden"</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  ..<span class="sc">@</span> content_fun            <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  ..<span class="sc">@</span> content_format         <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  ..<span class="sc">@</span> content_na_str         <span class="sc">:</span> chr <span class="cn">NA</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  ..<span class="sc">@</span> content_var            <span class="sc">:</span> chr <span class="st">""</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  ..<span class="sc">@</span> label_children         <span class="sc">:</span> logi <span class="cn">FALSE</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  ..<span class="sc">@</span> extra_args             <span class="sc">:</span> <span class="fu">list</span>()</span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  ..<span class="sc">@</span> indent_modifier        <span class="sc">:</span> int <span class="dv">0</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  ..<span class="sc">@</span> content_indent_modifier<span class="sc">:</span> int <span class="dv">0</span></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  ..<span class="sc">@</span> content_extra_args     <span class="sc">:</span> <span class="fu">list</span>()</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  ..<span class="sc">@</span> page_title_prefix      <span class="sc">:</span> chr <span class="cn">NA</span></span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  ..<span class="sc">@</span> child_section_div      <span class="sc">:</span> chr <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="pp"># </span><span class="er">rtables 0.6.2</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">2</span><span class="op">]&gt;</span> str<span class="op">(</span>spl<span class="op">,</span> max<span class="op">.</span>level <span class="op">=</span> <span class="dv">2</span><span class="op">)</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>Formal class <span class="ch">'A</span><span class="er">llSplit</span><span class="ch">'</span> <span class="op">[</span>package <span class="st">"rtables"</span><span class="op">]</span> with <span class="dv">17</span> slots</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="op">..</span>@ payload                <span class="op">:</span> NULL</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="op">..</span>@ name                   <span class="op">:</span> chr <span class="st">"all obs"</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="op">..</span>@ split_label            <span class="op">:</span> chr <span class="st">""</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="op">..</span>@ split_format           <span class="op">:</span> NULL</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  <span class="op">..</span>@ split_na_str           <span class="op">:</span> chr NA</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  <span class="op">..</span>@ split_label_position   <span class="op">:</span> chr <span class="st">"hidden"</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>  <span class="op">..</span>@ content_fun            <span class="op">:</span> NULL</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="op">..</span>@ content_format         <span class="op">:</span> NULL</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="op">..</span>@ content_na_str         <span class="op">:</span> chr NA</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="op">..</span>@ content_var            <span class="op">:</span> chr <span class="st">""</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="op">..</span>@ label_children         <span class="op">:</span> logi FALSE</span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="op">..</span>@ extra_args             <span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="op">..</span>@ indent_modifier        <span class="op">:</span> <span class="dt">int</span> <span class="dv">0</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="op">..</span>@ content_indent_modifier<span class="op">:</span> <span class="dt">int</span> <span class="dv">0</span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>  <span class="op">..</span>@ content_extra_args     <span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>  <span class="op">..</span>@ page_title_prefix      <span class="op">:</span> chr NA</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>  <span class="op">..</span>@ child_section_div      <span class="op">:</span> chr NA</span></code></pre></div>
 <p>Details about these slots will become necessary in future examples,
 and we will deal with them at that time. Now, we gave you a hint of the
 complex class hierarchy that makes up <code>rtables</code>, and how to
@@ -602,30 +587,30 @@ that will be called first. This is because we did not specify any
 <code>S4</code> generic function as can be seen by
 <code>showMethod(.applysplit_extras)</code>, and its definition can be
 seen in the following:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>Browse[<span class="dv">3</span>]<span class="sc">&gt;</span> <span class="fu">getMethod</span>(<span class="st">".applysplit_rawvals"</span>, <span class="st">"AllSplit"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>Method Definition<span class="sc">:</span></span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="pp"># </span><span class="er">rtables 0.6.2</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">3</span><span class="op">]&gt;</span> getMethod<span class="op">(</span><span class="st">".applysplit_rawvals"</span><span class="op">,</span> <span class="st">"AllSplit"</span><span class="op">)</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>Method Definition<span class="op">:</span></span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="cf">function</span> (spl, df)</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">obj_name</span>(spl)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>function <span class="op">(</span>spl<span class="op">,</span> df<span class="op">)</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>obj_name<span class="op">(</span>spl<span class="op">)</span></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>Signatures<span class="sc">:</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>Signatures<span class="op">:</span></span>
 <span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>        spl</span>
 <span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>target  <span class="st">"AllSplit"</span></span>
 <span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>defined <span class="st">"AllSplit"</span></span>
 <span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co"># What is obj_name -&gt; slot in spl</span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>Browse[<span class="dv">3</span>]<span class="sc">&gt;</span> <span class="fu">obj_name</span>(spl)</span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"all obs"</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="pp"># </span><span class="er">What is obj_name -&gt; slot in spl</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">3</span><span class="op">]&gt;</span> obj_name<span class="op">(</span>spl<span class="op">)</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="st">"all obs"</span></span>
 <span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co"># coming from</span></span>
-<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>Browse[<span class="dv">3</span>]<span class="sc">&gt;</span> <span class="fu">getMethod</span>(<span class="st">"obj_name"</span>, <span class="st">"Split"</span>)</span>
-<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>Method Definition<span class="sc">:</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="pp"># </span><span class="er">coming from</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">3</span><span class="op">]&gt;</span> getMethod<span class="op">(</span><span class="st">"obj_name"</span><span class="op">,</span> <span class="st">"Split"</span><span class="op">)</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a>Method Definition<span class="op">:</span></span>
 <span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a></span>
-<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="cf">function</span> (obj)</span>
-<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>obj<span class="sc">@</span>name <span class="do">##### Slot that we could see from str(spl, max.level = 2)</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a>function <span class="op">(</span>obj<span class="op">)</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>obj@name ##### Slot that we could see from str<span class="op">(</span>spl<span class="op">,</span> max<span class="op">.</span>level <span class="op">=</span> <span class="dv">2</span><span class="op">)</span></span>
 <span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a></span>
-<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>Signatures<span class="sc">:</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>Signatures<span class="op">:</span></span>
 <span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>        obj</span>
 <span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a>target  <span class="st">"Split"</span></span>
 <span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>defined <span class="st">"Split"</span></span></code></pre></div>
@@ -713,29 +698,29 @@ once finished to remove the trace.</p>
 <code class="sourceCode R"><span><span class="co"># undebug(rtables:::do_split)</span></span></code></pre></div>
 <p>Before continuing, we want to check the formal class of
 <code>spl</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>Browse[<span class="dv">2</span>]<span class="sc">&gt;</span> <span class="fu">str</span>(spl, <span class="at">max.level =</span> <span class="dv">2</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>Formal class <span class="st">'VarLevelSplit'</span> [package <span class="st">"rtables"</span>] with <span class="dv">20</span> slots</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  ..<span class="sc">@</span> value_label_var        <span class="sc">:</span> chr <span class="st">"ARM"</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  ..<span class="sc">@</span> value_order            <span class="sc">:</span> chr [<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  ..<span class="sc">@</span> split_fun              <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  ..<span class="sc">@</span> payload                <span class="sc">:</span> chr <span class="st">"ARM"</span></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  ..<span class="sc">@</span> name                   <span class="sc">:</span> chr <span class="st">"ARM"</span></span>
-<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  ..<span class="sc">@</span> split_label            <span class="sc">:</span> chr <span class="st">"ARM"</span></span>
-<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  ..<span class="sc">@</span> split_format           <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>  ..<span class="sc">@</span> split_na_str           <span class="sc">:</span> chr <span class="cn">NA</span></span>
-<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  ..<span class="sc">@</span> split_label_position   <span class="sc">:</span> chr <span class="st">"hidden"</span></span>
-<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  ..<span class="sc">@</span> content_fun            <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  ..<span class="sc">@</span> content_format         <span class="sc">:</span> <span class="cn">NULL</span></span>
-<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  ..<span class="sc">@</span> content_na_str         <span class="sc">:</span> chr <span class="cn">NA</span></span>
-<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>  ..<span class="sc">@</span> content_var            <span class="sc">:</span> chr <span class="st">""</span></span>
-<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>  ..<span class="sc">@</span> label_children         <span class="sc">:</span> logi <span class="cn">NA</span></span>
-<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>  ..<span class="sc">@</span> extra_args             <span class="sc">:</span> <span class="fu">list</span>()</span>
-<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>  ..<span class="sc">@</span> indent_modifier        <span class="sc">:</span> int <span class="dv">0</span></span>
-<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>  ..<span class="sc">@</span> content_indent_modifier<span class="sc">:</span> int <span class="dv">0</span></span>
-<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>  ..<span class="sc">@</span> content_extra_args     <span class="sc">:</span> <span class="fu">list</span>()</span>
-<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a>  ..<span class="sc">@</span> page_title_prefix      <span class="sc">:</span> chr <span class="cn">NA</span></span>
-<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a>  ..<span class="sc">@</span> child_section_div      <span class="sc">:</span> chr <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="pp"># </span><span class="er">rtables 0.6.2</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">2</span><span class="op">]&gt;</span> str<span class="op">(</span>spl<span class="op">,</span> max<span class="op">.</span>level <span class="op">=</span> <span class="dv">2</span><span class="op">)</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>Formal class <span class="ch">'V</span><span class="er">arLevelSplit</span><span class="ch">'</span> <span class="op">[</span>package <span class="st">"rtables"</span><span class="op">]</span> with <span class="dv">20</span> slots</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="op">..</span>@ value_label_var        <span class="op">:</span> chr <span class="st">"ARM"</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="op">..</span>@ value_order            <span class="op">:</span> chr <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="op">]</span> <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="op">..</span>@ split_fun              <span class="op">:</span> NULL</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="op">..</span>@ payload                <span class="op">:</span> chr <span class="st">"ARM"</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="op">..</span>@ name                   <span class="op">:</span> chr <span class="st">"ARM"</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="op">..</span>@ split_label            <span class="op">:</span> chr <span class="st">"ARM"</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="op">..</span>@ split_format           <span class="op">:</span> NULL</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>  <span class="op">..</span>@ split_na_str           <span class="op">:</span> chr NA</span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>  <span class="op">..</span>@ split_label_position   <span class="op">:</span> chr <span class="st">"hidden"</span></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>  <span class="op">..</span>@ content_fun            <span class="op">:</span> NULL</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a>  <span class="op">..</span>@ content_format         <span class="op">:</span> NULL</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>  <span class="op">..</span>@ content_na_str         <span class="op">:</span> chr NA</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a>  <span class="op">..</span>@ content_var            <span class="op">:</span> chr <span class="st">""</span></span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a>  <span class="op">..</span>@ label_children         <span class="op">:</span> logi NA</span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>  <span class="op">..</span>@ extra_args             <span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>  <span class="op">..</span>@ indent_modifier        <span class="op">:</span> <span class="dt">int</span> <span class="dv">0</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>  <span class="op">..</span>@ content_indent_modifier<span class="op">:</span> <span class="dt">int</span> <span class="dv">0</span></span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>  <span class="op">..</span>@ content_extra_args     <span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a>  <span class="op">..</span>@ page_title_prefix      <span class="op">:</span> chr NA</span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a>  <span class="op">..</span>@ child_section_div      <span class="op">:</span> chr NA</span></code></pre></div>
 <p>From this, we can directly infer that the class is different now
 (<code>VarLevelSplit</code>) and understand that the split label will be
 hidden (<code>split_label_position</code> slot). Moreover, we see a
@@ -818,49 +803,49 @@ in the <code>SplitValue</code>.</li>
 <p>Note that this function can occasionally be called more than once on
 the same return object (a named list for now). Of course, after the
 first call only checks are applied.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
+<div class="sourceCode" id="cb17"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="pp"># </span><span class="er">rtables 0.6.2</span></span>
 <span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a></span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co"># Can find the following core function:</span></span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># vals &lt;- make_splvalue_vec(vals, extr, labels = labels)</span></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co"># ---&gt; Main list of SplitValue objects: iterative call of</span></span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#      new("SplitValue", value = val, extra = extr, label = label)</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="pp"># </span><span class="er">Can find the following core function:</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="pp"># </span><span class="er">vals &lt;- make_splvalue_vec(vals, extr, labels = labels)</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="pp"># </span><span class="er">---&gt; Main list of SplitValue objects: iterative call of</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="pp">#      </span><span class="er">new("SplitValue", value = val, extra = extr, label = label)</span></span>
 <span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co"># Structure of ret before calling .fixupvals</span></span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>Browse[<span class="dv">2</span>]<span class="sc">&gt;</span> <span class="fu">str</span>(ret, <span class="at">max.level =</span> <span class="dv">2</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="pp"># </span><span class="er">Structure of ret before calling .fixupvals</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">2</span><span class="op">]&gt;</span> str<span class="op">(</span>ret<span class="op">,</span> max<span class="op">.</span>level <span class="op">=</span> <span class="dv">2</span><span class="op">)</span></span>
 <span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>List of <span class="dv">4</span></span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a> <span class="sc">$</span> values   <span class="sc">:</span> chr [<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a> <span class="sc">$</span> datasplit<span class="sc">:</span>List of <span class="dv">2</span></span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>  ..<span class="sc">$</span> A<span class="sc">:</span> Drug X <span class="sc">:</span> tibble [<span class="dv">121</span> × <span class="dv">8</span>] (S3<span class="sc">:</span> tbl_df<span class="sc">/</span>tbl<span class="sc">/</span>data.frame)</span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  ..<span class="sc">$</span> B<span class="sc">:</span> Placebo<span class="sc">:</span> tibble [<span class="dv">106</span> × <span class="dv">8</span>] (S3<span class="sc">:</span> tbl_df<span class="sc">/</span>tbl<span class="sc">/</span>data.frame)</span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a> <span class="sc">$</span> labels   <span class="sc">:</span> Named chr [<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
-<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>  ..<span class="sc">-</span> <span class="fu">attr</span>(<span class="sc">*</span>, <span class="st">"names"</span>)<span class="ot">=</span> chr [<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
-<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a> <span class="sc">$</span> extras   <span class="sc">:</span>List of <span class="dv">2</span></span>
-<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>  ..<span class="sc">$</span> <span class="er">:</span> <span class="fu">list</span>()</span>
-<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>  ..<span class="sc">$</span> <span class="er">:</span> <span class="fu">list</span>()</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a> $ values   <span class="op">:</span> chr <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="op">]</span> <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a> $ datasplit<span class="op">:</span>List of <span class="dv">2</span></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>  <span class="op">..</span>$ A<span class="op">:</span> Drug X <span class="op">:</span> tibble <span class="op">[</span><span class="dv">121</span> × <span class="dv">8</span><span class="op">]</span> <span class="op">(</span>S3<span class="op">:</span> tbl_df<span class="op">/</span>tbl<span class="op">/</span>data<span class="op">.</span>frame<span class="op">)</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  <span class="op">..</span>$ B<span class="op">:</span> Placebo<span class="op">:</span> tibble <span class="op">[</span><span class="dv">106</span> × <span class="dv">8</span><span class="op">]</span> <span class="op">(</span>S3<span class="op">:</span> tbl_df<span class="op">/</span>tbl<span class="op">/</span>data<span class="op">.</span>frame<span class="op">)</span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a> $ labels   <span class="op">:</span> Named chr <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="op">]</span> <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>  <span class="op">..-</span> attr<span class="op">(*,</span> <span class="st">"names"</span><span class="op">)=</span> chr <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="op">]</span> <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a> $ extras   <span class="op">:</span>List of <span class="dv">2</span></span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>  <span class="op">..</span>$ <span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>  <span class="op">..</span>$ <span class="op">:</span> list<span class="op">()</span></span>
 <span id="cb17-20"><a href="#cb17-20" tabindex="-1"></a></span>
-<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a><span class="co"># Structure of ret after the function call</span></span>
-<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a>Browse[<span class="dv">2</span>]<span class="sc">&gt;</span> <span class="fu">str</span>(<span class="fu">.fixupvals</span>(ret), <span class="at">max.level =</span> <span class="dv">2</span>)</span>
+<span id="cb17-21"><a href="#cb17-21" tabindex="-1"></a><span class="pp"># </span><span class="er">Structure of ret after the function call</span></span>
+<span id="cb17-22"><a href="#cb17-22" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">2</span><span class="op">]&gt;</span> str<span class="op">(.</span>fixupvals<span class="op">(</span>ret<span class="op">),</span> max<span class="op">.</span>level <span class="op">=</span> <span class="dv">2</span><span class="op">)</span></span>
 <span id="cb17-23"><a href="#cb17-23" tabindex="-1"></a>List of <span class="dv">3</span></span>
-<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a> <span class="sc">$</span> values   <span class="sc">:</span>List of <span class="dv">2</span></span>
-<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a>  ..<span class="sc">$</span> A<span class="sc">:</span> Drug X <span class="sc">:</span>Formal class <span class="st">'SplitValue'</span> [package <span class="st">"rtables"</span>] with <span class="dv">3</span> slots</span>
-<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a>  ..<span class="sc">$</span> B<span class="sc">:</span> Placebo<span class="sc">:</span>Formal class <span class="st">'SplitValue'</span> [package <span class="st">"rtables"</span>] with <span class="dv">3</span> slots</span>
-<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a> <span class="sc">$</span> datasplit<span class="sc">:</span>List of <span class="dv">2</span></span>
-<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a>  ..<span class="sc">$</span> A<span class="sc">:</span> Drug X <span class="sc">:</span> tibble [<span class="dv">121</span> × <span class="dv">8</span>] (S3<span class="sc">:</span> tbl_df<span class="sc">/</span>tbl<span class="sc">/</span>data.frame)</span>
-<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a>  ..<span class="sc">$</span> B<span class="sc">:</span> Placebo<span class="sc">:</span> tibble [<span class="dv">106</span> × <span class="dv">8</span>] (S3<span class="sc">:</span> tbl_df<span class="sc">/</span>tbl<span class="sc">/</span>data.frame)</span>
-<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a> <span class="sc">$</span> labels   <span class="sc">:</span> Named chr [<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
-<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a>  ..<span class="sc">-</span> <span class="fu">attr</span>(<span class="sc">*</span>, <span class="st">"names"</span>)<span class="ot">=</span> chr [<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
+<span id="cb17-24"><a href="#cb17-24" tabindex="-1"></a> $ values   <span class="op">:</span>List of <span class="dv">2</span></span>
+<span id="cb17-25"><a href="#cb17-25" tabindex="-1"></a>  <span class="op">..</span>$ A<span class="op">:</span> Drug X <span class="op">:</span>Formal class <span class="ch">'S</span><span class="er">plitValue</span><span class="ch">'</span> <span class="op">[</span>package <span class="st">"rtables"</span><span class="op">]</span> with <span class="dv">3</span> slots</span>
+<span id="cb17-26"><a href="#cb17-26" tabindex="-1"></a>  <span class="op">..</span>$ B<span class="op">:</span> Placebo<span class="op">:</span>Formal class <span class="ch">'S</span><span class="er">plitValue</span><span class="ch">'</span> <span class="op">[</span>package <span class="st">"rtables"</span><span class="op">]</span> with <span class="dv">3</span> slots</span>
+<span id="cb17-27"><a href="#cb17-27" tabindex="-1"></a> $ datasplit<span class="op">:</span>List of <span class="dv">2</span></span>
+<span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a>  <span class="op">..</span>$ A<span class="op">:</span> Drug X <span class="op">:</span> tibble <span class="op">[</span><span class="dv">121</span> × <span class="dv">8</span><span class="op">]</span> <span class="op">(</span>S3<span class="op">:</span> tbl_df<span class="op">/</span>tbl<span class="op">/</span>data<span class="op">.</span>frame<span class="op">)</span></span>
+<span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a>  <span class="op">..</span>$ B<span class="op">:</span> Placebo<span class="op">:</span> tibble <span class="op">[</span><span class="dv">106</span> × <span class="dv">8</span><span class="op">]</span> <span class="op">(</span>S3<span class="op">:</span> tbl_df<span class="op">/</span>tbl<span class="op">/</span>data<span class="op">.</span>frame<span class="op">)</span></span>
+<span id="cb17-30"><a href="#cb17-30" tabindex="-1"></a> $ labels   <span class="op">:</span> Named chr <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="op">]</span> <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
+<span id="cb17-31"><a href="#cb17-31" tabindex="-1"></a>  <span class="op">..-</span> attr<span class="op">(*,</span> <span class="st">"names"</span><span class="op">)=</span> chr <span class="op">[</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span><span class="op">]</span> <span class="st">"A: Drug X"</span> <span class="st">"B: Placebo"</span></span>
 <span id="cb17-32"><a href="#cb17-32" tabindex="-1"></a></span>
-<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a><span class="co"># The SplitValue object is fundamental</span></span>
-<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a>Browse[<span class="dv">2</span>]<span class="sc">&gt;</span> <span class="fu">str</span>(ret<span class="sc">$</span>values)</span>
+<span id="cb17-33"><a href="#cb17-33" tabindex="-1"></a><span class="pp"># </span><span class="er">The SplitValue object is fundamental</span></span>
+<span id="cb17-34"><a href="#cb17-34" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">2</span><span class="op">]&gt;</span> str<span class="op">(</span>ret$values<span class="op">)</span></span>
 <span id="cb17-35"><a href="#cb17-35" tabindex="-1"></a>List of <span class="dv">2</span></span>
-<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a> <span class="sc">$</span> A<span class="sc">:</span> Drug X <span class="sc">:</span>Formal class <span class="st">'SplitValue'</span> [package <span class="st">"rtables"</span>] with <span class="dv">3</span> slots</span>
-<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a>  .. ..<span class="sc">@</span> extra<span class="sc">:</span> <span class="fu">list</span>()</span>
-<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a>  .. ..<span class="sc">@</span> value<span class="sc">:</span> chr <span class="st">"A: Drug X"</span></span>
-<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a>  .. ..<span class="sc">@</span> label<span class="sc">:</span> chr <span class="st">"A: Drug X"</span></span>
-<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a> <span class="sc">$</span> B<span class="sc">:</span> Placebo<span class="sc">:</span>Formal class <span class="st">'SplitValue'</span> [package <span class="st">"rtables"</span>] with <span class="dv">3</span> slots</span>
-<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a>  .. ..<span class="sc">@</span> extra<span class="sc">:</span> <span class="fu">list</span>()</span>
-<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a>  .. ..<span class="sc">@</span> value<span class="sc">:</span> chr <span class="st">"B: Placebo"</span></span>
-<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a>  .. ..<span class="sc">@</span> label<span class="sc">:</span> chr <span class="st">"B: Placebo"</span></span></code></pre></div>
+<span id="cb17-36"><a href="#cb17-36" tabindex="-1"></a> $ A<span class="op">:</span> Drug X <span class="op">:</span>Formal class <span class="ch">'S</span><span class="er">plitValue</span><span class="ch">'</span> <span class="op">[</span>package <span class="st">"rtables"</span><span class="op">]</span> with <span class="dv">3</span> slots</span>
+<span id="cb17-37"><a href="#cb17-37" tabindex="-1"></a>  <span class="op">..</span> <span class="op">..</span>@ extra<span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb17-38"><a href="#cb17-38" tabindex="-1"></a>  <span class="op">..</span> <span class="op">..</span>@ value<span class="op">:</span> chr <span class="st">"A: Drug X"</span></span>
+<span id="cb17-39"><a href="#cb17-39" tabindex="-1"></a>  <span class="op">..</span> <span class="op">..</span>@ label<span class="op">:</span> chr <span class="st">"A: Drug X"</span></span>
+<span id="cb17-40"><a href="#cb17-40" tabindex="-1"></a> $ B<span class="op">:</span> Placebo<span class="op">:</span>Formal class <span class="ch">'S</span><span class="er">plitValue</span><span class="ch">'</span> <span class="op">[</span>package <span class="st">"rtables"</span><span class="op">]</span> with <span class="dv">3</span> slots</span>
+<span id="cb17-41"><a href="#cb17-41" tabindex="-1"></a>  <span class="op">..</span> <span class="op">..</span>@ extra<span class="op">:</span> list<span class="op">()</span></span>
+<span id="cb17-42"><a href="#cb17-42" tabindex="-1"></a>  <span class="op">..</span> <span class="op">..</span>@ value<span class="op">:</span> chr <span class="st">"B: Placebo"</span></span>
+<span id="cb17-43"><a href="#cb17-43" tabindex="-1"></a>  <span class="op">..</span> <span class="op">..</span>@ label<span class="op">:</span> chr <span class="st">"B: Placebo"</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="pre-made-split-functions">Pre-Made Split Functions<a class="anchor" aria-label="anchor" href="#pre-made-split-functions"></a>
 </h3>
@@ -899,27 +884,28 @@ take a moment to look at how <code>drop_split_levels</code> is defined.
 You will see that the function is fundamentally a wrapper of
 <code>.apply_split_inner</code> that drops empty factor levels,
 therefore avoiding empty splits.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="sc">&gt;</span> drop_split_levels</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="cf">function</span>(df,</span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>         spl,</span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>         <span class="at">vals =</span> <span class="cn">NULL</span>,</span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>         <span class="at">labels =</span> <span class="cn">NULL</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>         <span class="at">trim =</span> <span class="cn">FALSE</span>) {</span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="co"># Retrieve split column</span></span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  var <span class="ot">&lt;-</span> <span class="fu">spl_payload</span>(spl)</span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>  df2 <span class="ot">&lt;-</span> df</span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>  <span class="do">## This call is exactly the one we used when filtering to get rid of empty levels</span></span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>  df2[[var]] <span class="ot">&lt;-</span> <span class="fu">factor</span>(df[[var]])</span>
-<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a></span>
-<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>  <span class="do">## Our main function!</span></span>
-<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>  <span class="fu">.apply_split_inner</span>(spl, df2,</span>
-<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>    <span class="at">vals =</span> vals,</span>
-<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>    <span class="at">labels =</span> labels,</span>
-<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a>    <span class="at">trim =</span> trim</span>
-<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a>  )</span>
-<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># rtables 0.6.2</span></span>
+<span><span class="co"># &gt; drop_split_levels</span></span>
+<span><span class="kw">function</span><span class="op">(</span><span class="va">df</span>,</span>
+<span>         <span class="va">spl</span>,</span>
+<span>         <span class="va">vals</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>         <span class="va">labels</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>         <span class="va">trim</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># Retrieve split column</span></span>
+<span>  <span class="va">var</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/int_methods.html">spl_payload</a></span><span class="op">(</span><span class="va">spl</span><span class="op">)</span></span>
+<span>  <span class="va">df2</span> <span class="op">&lt;-</span> <span class="va">df</span></span>
+<span></span>
+<span>  <span class="co">## This call is exactly the one we used when filtering to get rid of empty levels</span></span>
+<span>  <span class="va">df2</span><span class="op">[[</span><span class="va">var</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">df</span><span class="op">[[</span><span class="va">var</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">## Our main function!</span></span>
+<span>  <span class="fu">.apply_split_inner</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df2</span>,</span>
+<span>    vals <span class="op">=</span> <span class="va">vals</span>,</span>
+<span>    labels <span class="op">=</span> <span class="va">labels</span>,</span>
+<span>    trim <span class="op">=</span> <span class="va">trim</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p>There are many pre-made split functions included in
 <code>rtables</code>. A list of these functions can be found in the <a href="https://insightsengineering.github.io/rtables/main/articles/split_functions.html">Split
 Functions vignette</a>, or via <code><a href="../../reference/split_funcs.html">?split_funcs</a></code>. We leave it to
@@ -969,16 +955,16 @@ Selecting the last frame number (10 in this case) will allow you to see
 the value of <code>ret</code> from <code>rtables:::do_split</code> that
 causes the error and how the informative error message that follows is
 created.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co"># Debugging level</span></span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="dv">10</span><span class="sc">:</span> tt_dotabulation.R<span class="co">#627: do_split(spl, df, spl_context = spl_context)</span></span>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="pp"># </span><span class="er">rtables 0.6.2</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="pp"># </span><span class="er">Debugging level</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="dv">10</span><span class="op">:</span> tt_dotabulation<span class="op">.</span>R#<span class="dv">627</span><span class="op">:</span> do_split<span class="op">(</span>spl<span class="op">,</span> df<span class="op">,</span> spl_context <span class="op">=</span> spl_context<span class="op">)</span></span>
 <span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co"># Original call and final error</span></span>
-<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">simple_table</span>(DM, exploratory_split_fun)</span>
-<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>Error <span class="cf">in</span> <span class="fu">do_split</span>(spl, df, <span class="at">spl_context =</span> spl_context) <span class="sc">:</span></span>
-<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  Error applying custom split <span class="cf">function</span><span class="sc">:</span> unused <span class="fu">arguments</span> (vals, labels, <span class="at">trim =</span> trim) <span class="co"># This is main error</span></span>
-<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>    split<span class="sc">:</span> <span class="fu">VarLevelSplit</span> (ARM) <span class="co"># Split reference</span></span>
-<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>    occured at path<span class="sc">:</span> root <span class="co"># Path level (where it occurred)</span></span></code></pre></div>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="pp"># </span><span class="er">Original call and final error</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="op">&gt;</span> simple_table<span class="op">(</span>DM<span class="op">,</span> exploratory_split_fun<span class="op">)</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>Error in do_split<span class="op">(</span>spl<span class="op">,</span> df<span class="op">,</span> spl_context <span class="op">=</span> spl_context<span class="op">)</span> <span class="op">:</span></span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  Error applying custom split function<span class="op">:</span> unused arguments <span class="op">(</span>vals<span class="op">,</span> labels<span class="op">,</span> trim <span class="op">=</span> trim<span class="op">)</span> # This is main error</span>
+<span id="cb24-9"><a href="#cb24-9" tabindex="-1"></a>    split<span class="op">:</span> VarLevelSplit <span class="op">(</span>ARM<span class="op">)</span> # Split reference</span>
+<span id="cb24-10"><a href="#cb24-10" tabindex="-1"></a>    occured at path<span class="op">:</span> root # Path level <span class="op">(</span>where it occurred<span class="op">)</span></span></code></pre></div>
 <p>The previous split function fails because
 <code>exploratory_split_fun</code> is given more arguments than it
 accepts. A simple way to avoid this is to add <code>...</code> to the
@@ -1093,51 +1079,51 @@ encourage using the replacement functions
 for trimming. Nowadays, it should even be impossible to set it
 differently from <code>trim = FALSE</code>.</p>
 <p>(write an issue informative error for not list xxx).</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># rtables 0.6.2</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>browsing_f <span class="ot">&lt;-</span> <span class="cf">function</span>(df, spl, .spl_context, ...) {</span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="co"># browser()</span></span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>  <span class="co"># do_base_split(df, spl, ...) # order matters!! This would fail if done</span></span>
-<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>  <span class="fu">do_base_split</span>(<span class="at">spl =</span> spl, <span class="at">df =</span> df, <span class="at">vals =</span> <span class="cn">NULL</span>, <span class="at">labels =</span> <span class="cn">NULL</span>, <span class="at">trim =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>}</span>
-<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>fnc_tmp <span class="ot">&lt;-</span> <span class="cf">function</span>(innervar) { <span class="co"># Exploring trim_levels_in_facets (check its form)</span></span>
-<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>  <span class="cf">function</span>(ret, ...) {</span>
-<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>    <span class="co"># browser()</span></span>
-<span id="cb30-11"><a href="#cb30-11" tabindex="-1"></a>    <span class="cf">for</span> (var <span class="cf">in</span> innervar) { <span class="co"># of course AGE is not here, so nothing is dropped!!</span></span>
-<span id="cb30-12"><a href="#cb30-12" tabindex="-1"></a>      ret<span class="sc">$</span>datasplit <span class="ot">&lt;-</span> <span class="fu">lapply</span>(ret<span class="sc">$</span>datasplit, <span class="cf">function</span>(df) {</span>
-<span id="cb30-13"><a href="#cb30-13" tabindex="-1"></a>        df[[var]] <span class="ot">&lt;-</span> <span class="fu">factor</span>(df[[var]])</span>
-<span id="cb30-14"><a href="#cb30-14" tabindex="-1"></a>        df</span>
-<span id="cb30-15"><a href="#cb30-15" tabindex="-1"></a>      })</span>
-<span id="cb30-16"><a href="#cb30-16" tabindex="-1"></a>    }</span>
-<span id="cb30-17"><a href="#cb30-17" tabindex="-1"></a>    ret</span>
-<span id="cb30-18"><a href="#cb30-18" tabindex="-1"></a>  }</span>
-<span id="cb30-19"><a href="#cb30-19" tabindex="-1"></a>}</span>
-<span id="cb30-20"><a href="#cb30-20" tabindex="-1"></a></span>
-<span id="cb30-21"><a href="#cb30-21" tabindex="-1"></a><span class="fu">basic_table</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-22"><a href="#cb30-22" tabindex="-1"></a>  <span class="fu">split_rows_by</span>(<span class="st">"ARM"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-23"><a href="#cb30-23" tabindex="-1"></a>  <span class="fu">split_rows_by</span>(<span class="st">"STRATA1"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb30-24"><a href="#cb30-24" tabindex="-1"></a>  <span class="fu">split_rows_by_cuts</span>(<span class="st">"AGE"</span>,</span>
-<span id="cb30-25"><a href="#cb30-25" tabindex="-1"></a>    <span class="at">cuts =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>),</span>
-<span id="cb30-26"><a href="#cb30-26" tabindex="-1"></a>    <span class="at">cutlabels =</span> <span class="fu">c</span>(<span class="st">"young"</span>, <span class="st">"old"</span>)</span>
-<span id="cb30-27"><a href="#cb30-27" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb30-28"><a href="#cb30-28" tabindex="-1"></a>  <span class="fu">split_rows_by</span>(<span class="st">"SEX"</span>, <span class="at">split_fun =</span> <span class="fu">make_split_fun</span>(</span>
-<span id="cb30-29"><a href="#cb30-29" tabindex="-1"></a>    <span class="at">pre =</span> <span class="fu">list</span>(drop_facet_levels), <span class="co"># This is dropping the SEX levels (AGE is upper level)</span></span>
-<span id="cb30-30"><a href="#cb30-30" tabindex="-1"></a>    <span class="at">core_split =</span> browsing_f,</span>
-<span id="cb30-31"><a href="#cb30-31" tabindex="-1"></a>    <span class="at">post =</span> <span class="fu">list</span>(<span class="fu">fnc_tmp</span>(<span class="st">"AGE"</span>)) <span class="co"># To drop these we should use a split_fun in the above level</span></span>
-<span id="cb30-32"><a href="#cb30-32" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
-<span id="cb30-33"><a href="#cb30-33" tabindex="-1"></a>  <span class="fu">summarize_row_groups</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-34"><a href="#cb30-34" tabindex="-1"></a>  <span class="fu">build_table</span>(DM)</span>
-<span id="cb30-35"><a href="#cb30-35" tabindex="-1"></a></span>
-<span id="cb30-36"><a href="#cb30-36" tabindex="-1"></a><span class="co"># The following is the .spl_contest printout:</span></span>
-<span id="cb30-37"><a href="#cb30-37" tabindex="-1"></a>Browse[<span class="dv">1</span>]<span class="sc">&gt;</span> .spl_context</span>
-<span id="cb30-38"><a href="#cb30-38" tabindex="-1"></a>    split     value full_parent_df all_cols_n      all obs</span>
-<span id="cb30-39"><a href="#cb30-39" tabindex="-1"></a><span class="dv">1</span>    root      root   <span class="fu">c</span>(<span class="st">"S1"</span>, ....        <span class="dv">356</span> <span class="cn">TRUE</span>, TR....</span>
-<span id="cb30-40"><a href="#cb30-40" tabindex="-1"></a><span class="dv">2</span>     ARM A<span class="sc">:</span> Drug X   <span class="fu">c</span>(<span class="st">"S6"</span>, ....        <span class="dv">121</span> <span class="cn">TRUE</span>, TR....</span>
-<span id="cb30-41"><a href="#cb30-41" tabindex="-1"></a><span class="dv">3</span> STRATA1         A   <span class="fu">c</span>(<span class="st">"S14"</span>,....         <span class="dv">36</span> <span class="cn">TRUE</span>, TR....</span>
-<span id="cb30-42"><a href="#cb30-42" tabindex="-1"></a><span class="dv">4</span>     AGE     young   <span class="fu">c</span>(<span class="st">"S14"</span>,....         <span class="dv">36</span> <span class="cn">TRUE</span>, TR....</span>
-<span id="cb30-43"><a href="#cb30-43" tabindex="-1"></a></span>
-<span id="cb30-44"><a href="#cb30-44" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: make_split_fun(pre = list(drop_facet_levels)) and drop_split_levels</span></span>
-<span id="cb30-45"><a href="#cb30-45" tabindex="-1"></a><span class="co">#       do the same thing in this case</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># rtables 0.6.2</span></span>
+<span><span class="va">browsing_f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">spl</span>, <span class="va">.spl_context</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># browser()</span></span>
+<span>  <span class="co"># do_base_split(df, spl, ...) # order matters!! This would fail if done</span></span>
+<span>  <span class="fu"><a href="../../reference/do_base_split.html">do_base_split</a></span><span class="op">(</span>spl <span class="op">=</span> <span class="va">spl</span>, df <span class="op">=</span> <span class="va">df</span>, vals <span class="op">=</span> <span class="cn">NULL</span>, labels <span class="op">=</span> <span class="cn">NULL</span>, trim <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">fnc_tmp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">innervar</span><span class="op">)</span> <span class="op">{</span> <span class="co"># Exploring trim_levels_in_facets (check its form)</span></span>
+<span>  <span class="kw">function</span><span class="op">(</span><span class="va">ret</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># browser()</span></span>
+<span>    <span class="kw">for</span> <span class="op">(</span><span class="va">var</span> <span class="kw">in</span> <span class="va">innervar</span><span class="op">)</span> <span class="op">{</span> <span class="co"># of course AGE is not here, so nothing is dropped!!</span></span>
+<span>      <span class="va">ret</span><span class="op">$</span><span class="va">datasplit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">ret</span><span class="op">$</span><span class="va">datasplit</span>, <span class="kw">function</span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">df</span><span class="op">[[</span><span class="va">var</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">df</span><span class="op">[[</span><span class="va">var</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span>        <span class="va">df</span></span>
+<span>      <span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>    <span class="va">ret</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="../../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/varcuts.html">split_rows_by_cuts</a></span><span class="op">(</span><span class="st">"AGE"</span>,</span>
+<span>    cuts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
+<span>    cutlabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"young"</span>, <span class="st">"old"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../../reference/make_split_fun.html">make_split_fun</a></span><span class="op">(</span></span>
+<span>    pre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">drop_facet_levels</span><span class="op">)</span>, <span class="co"># This is dropping the SEX levels (AGE is upper level)</span></span>
+<span>    core_split <span class="op">=</span> <span class="va">browsing_f</span>,</span>
+<span>    post <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu">fnc_tmp</span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span><span class="op">)</span> <span class="co"># To drop these we should use a split_fun in the above level</span></span>
+<span>  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="pp"># </span><span class="er">The following is the .spl_contest printout:</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>Browse<span class="op">[</span><span class="dv">1</span><span class="op">]&gt;</span> <span class="op">.</span>spl_context</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>    split     value full_parent_df all_cols_n      all obs</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="dv">1</span>    root      root   c<span class="op">(</span><span class="st">"S1"</span><span class="op">,</span> <span class="op">....</span>        <span class="dv">356</span> TRUE<span class="op">,</span> TR<span class="op">....</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="dv">2</span>     ARM A<span class="op">:</span> Drug X   c<span class="op">(</span><span class="st">"S6"</span><span class="op">,</span> <span class="op">....</span>        <span class="dv">121</span> TRUE<span class="op">,</span> TR<span class="op">....</span></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="dv">3</span> STRATA1         A   c<span class="op">(</span><span class="st">"S14"</span><span class="op">,....</span>         <span class="dv">36</span> TRUE<span class="op">,</span> TR<span class="op">....</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="dv">4</span>     AGE     young   c<span class="op">(</span><span class="st">"S14"</span><span class="op">,....</span>         <span class="dv">36</span> TRUE<span class="op">,</span> TR<span class="op">....</span></span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a><span class="pp"># </span><span class="er">NOTE: make_split_fun(pre = list(drop_facet_levels)) and drop_split_levels</span></span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="pp">#       </span><span class="er">do the same thing in this case</span></span></code></pre></div>
 <p>Here we can see what the split column variable is
 (<code>split</code>, first column) at this level of the splitting
 procedure. <code>value</code> is the current split value that is being
@@ -1163,7 +1149,7 @@ simplify within <code>rtables</code> as the need becomes apparent.</p>
 functions (a somewhat complicated example of this can be found in the <a href="https://insightsengineering.github.io/rtables/main/articles/example_analysis_coxreg.html#constructing-the-table">Example
 Complex Analysis Function vignette</a>), but we will show here how this
 can also apply to splits.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rtables 0.6.2</span></span>
 <span></span>
 <span><span class="co"># Let's use the tracer!!</span></span>
@@ -1265,7 +1251,7 @@ from split).</p>
 <p>First, we want to see how the <code>MultiVarSplit</code> class
 behaves for an example case taken from
 <code><a href="../../reference/split_rows_by_multivar.html">?split_rows_by_multivar</a></code>.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rtables 0.6.2</span></span>
 <span></span>
 <span><span class="va">my_tracer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html" class="external-link">quote</a></span><span class="op">(</span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">spl</span>, <span class="st">"MultiVarSplit"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/browser.html" class="external-link">browser</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -1310,7 +1296,7 @@ linked in the source code by their GitHub issue number
 <p>Lastly, we will briefly show an example of a split by cut function
 and how to replace it to solve the empty age groups problem as we did
 before. We propose the same simplified situation:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rtables 0.6.2</span></span>
 <span></span>
 <span><span class="va">cutfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1375,7 +1361,7 @@ these two differently as is described in the <a href="https://insightsengineerin
 with Row Structure section</a> of the Tabulation vignette.</p>
 <p>We can try to construct the split function for cuts manually with
 <code>make_split_fun</code>:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_count_afun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">.N_col</span>, <span class="va">.spl_context</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># browser()</span></span>
 <span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="va">.N_col</span><span class="op">)</span><span class="op">)</span></span>
@@ -1429,7 +1415,7 @@ with Row Structure section</a> of the Tabulation vignette.</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <p>Alternatively, we could choose to prune these rows out with
 <code>prune_table</code>!</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># rtables 0.6.2</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -1467,16 +1453,16 @@ with Row Structure section</a> of the Tabulation vignette.</p>
 <span><span class="co">##     old              </span></span>
 <span><span class="co">##       F     2 (0.6%) </span></span>
 <span><span class="co">##       M     2 (0.6%)</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Trying with pruning</span></span>
 <span><span class="fu"><a href="../../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="co"># (xxx) what is going on here? it is degenerate so it has no real leaves</span></span></code></pre></div>
 <pre><code><span><span class="co">## NULL</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># It is degenerate -&gt; what to do?</span></span>
 <span><span class="co"># The same mechanism is applied in the case of NULL leaves, they are rolled up in the</span></span>
 <span><span class="co">#  table tree</span></span></code></pre></div>
 <ol start="30" style="list-style-type: lower-roman">
-<li>add the pre-proc with z-scoring</li>
+<li>add the pre-processing with z-scoring</li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
