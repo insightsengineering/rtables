@@ -39,7 +39,7 @@ suppressPackageStartupMessages(library(dplyr))
 [![Current Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple\&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
 <!-- end badges -->
 
-## Reporting tables with R
+## Reporting Tables with R
 
 The `rtables` R package was designed to create and display complex tables with R. The cells in an `rtable` may contain
 any high-dimensional data structure which can then be displayed with cell-specific formatting instructions. Currently,
@@ -62,7 +62,6 @@ License Version 2.
 
 `rtables` currently covers virtually all of these requirements, and further advances remain under active development.
 
-
 ## Installation
 
 `rtables` is available on CRAN and you can install the latest released version with:
@@ -83,10 +82,13 @@ Note you might need to set your `GITHUB_PAT` environment variable in order to be
 Packaged releases (both those on CRAN and those between official CRAN releases) can be
 found in the [releases list](https://github.com/insightsengineering/rtables/releases).
 
+## Cheatsheet
+
+<a href="https://github.com/insightsengineering/rtables/blob/main/inst/cheatsheet/rtables_cheatsheet_01-24.pdf"><img src="https://raw.githubusercontent.com/insightsengineering/rtables/main/inst/cheatsheet/rtables_cheatsheet_01-24_thumbs.png" width="630" height="247"/></a>  
+
 ## Usage
 
 We first demonstrate with a demographic table-like example and then show the creation of a more complex table.
-
 
 ```{r, message=FALSE}
 library(rtables)
@@ -110,7 +112,6 @@ lyt <- basic_table() %>%
 
 build_table(lyt, ex_adsl)
 ```
-
 
 ```{r, message=FALSE}
 library(rtables)
@@ -136,7 +137,6 @@ basic_table(show_colcounts = TRUE) %>%
   build_table(ADSL)
 ```
 
-
 # Acknowledgments
 
 We would like to thank everyone who has made `rtables` a better project by providing feedback and improving examples & vignettes. The following list of contributors is alphabetical:
@@ -145,24 +145,13 @@ Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Pasz
 
 ## Presentations
 
-### Advanced rtables Training
-
-- Part 1
-  [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)
-- Part 2
-  [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)
-
-### RinPharma Workshop: Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables
-
-- [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)
-
-### R Adoption Series
-
-- [R Adoption Series presentation
-  2022](https://www.youtube.com/watch?v=1i6vOId2h4A)
-- [Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)
-
-### New (Current) Layouting and Tabulation Framework (v.0.3+)
-
-- [useR!2020 Presentation (on v0.3.1.1) July
-  2020](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
+- R in Pharma 2023
+  - Generating Tables, Listings, and Graphs using NEST / [falcon](https://pharmaverse.github.io/falcon/) [[Video](https://www.youtube.com/watch?v=YPmbLPSYFYM)]
+  - BBS Session on Regulatory Submissions of Clinical Trials [[Video](https://www.youtube.com/watch?v=yZS4OBuJe_Q)]
+- R Medicine Virtual Conference 2023 [[Video](https://www.youtube.com/watch?v=sxFsavKI7s4)]
+- Advanced rtables Training 2023 [[Part 1 Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)] [[Part 2 Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)]
+- R in Pharma 2022 - Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables [[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)] [[Video](https://www.youtube.com/watch?v=zBm_NZ0VtKs)]
+- R Consortium 2022
+  - R Adoption Series - Reporting Table Creation in R [[Video](https://www.youtube.com/watch?v=1i6vOId2h4A)] [[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)] 
+  - Tables in Clinical Trials with R [[Book](https://rconsortium.github.io/rtrs-wg/)]
+- useR! 2020 - rtables Layouting and Tabulation Framework [[Video](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)]
