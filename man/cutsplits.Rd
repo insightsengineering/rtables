@@ -131,9 +131,8 @@ splitting data during tabulation}
 cuts or NULL when passed the return value of \code{cutfun}}
 }
 \value{
-a \code{VarStaticCutSplit}, \code{CumulativeCutSplit} object for
-\code{make_static_cut_split}, or a \code{VarDynCutSplit} object for
-\code{VarDynCutSplit()}
+A \code{VarStaticCutSplit}, \code{CumulativeCutSplit} object for \code{make_static_cut_split}, or a \code{VarDynCutSplit}
+object for \code{\link[=VarDynCutSplit]{VarDynCutSplit()}}.
 }
 \description{
 Splits for cutting by values of a numeric variable

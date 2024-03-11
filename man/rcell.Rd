@@ -62,10 +62,8 @@ formatted if this cell's value(s) are all NA.}
 to \code{NULL}}
 }
 \value{
-An object representing the value within a single cell within a
-populated table. The underlying structure of this object is an
-implementation detail and should not be relied upon beyond calling
-accessors for the class.
+An object representing the value within a single cell within a populated table. The underlying structure
+of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.
 }
 \description{
 Construct a cell value and associate formatting, labeling,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/00tabletrees.R
 \name{CellValue}
 \alias{CellValue}
-\title{Cell Value constructor}
+\title{Constructor for Cell Value}
 \usage{
 CellValue(
   val,
@@ -16,8 +16,7 @@ CellValue(
 )
 }
 \arguments{
-\item{val}{ANY. value in the cell exactly as it should be passed to a
-formatter or returned when extracted}
+\item{val}{(\code{any})\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.}
 
 \item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
 declared via strings (\code{"xx.x"}) or function. In cases such as
@@ -43,11 +42,9 @@ for currently supported alignments.}
 formatted if this cell's value(s) are all NA.}
 }
 \value{
-An object representing the value within a single cell within a
-populated table. The underlying structure of this object is an
-implementation detail and should not be relied upon beyond calling
-accessors for the class.
+An object representing the value within a single cell within a populated table. The underlying structure
+of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.
 }
 \description{
-Cell Value constructor
+Constructor for Cell Value
 }

@@ -73,7 +73,7 @@ object/structure.}
 \item{labelrow}{\code{LabelRow}. The \code{LabelRow} object to assign to this Table.
 Constructed from \code{label} by default if not specified.}
 
-\item{rspans}{data.frame. Currently stored but otherwise ignored.}
+\item{rspans}{(\code{data.frame})\cr currently stored but otherwise ignored.}
 
 \item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
 object being created.}
@@ -140,7 +140,7 @@ A formal object representing a populated table.
 \description{
 \code{TableTree} classes
 
-Table Constructors and Classes
+Table constructors and classes
 }
 \author{
 Gabriel Becker

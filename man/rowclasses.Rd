@@ -53,7 +53,7 @@ object/structure.}
 \item{name}{character(1). Name of the split/table/row being created. Defaults
 to same as the corresponding label, but is not required to be.}
 
-\item{vis}{logical. Should the row be visible (\code{LabelRow} only).}
+\item{vis}{(\code{logical(1)})\cr whether the row should be visible (\code{LabelRow} only).}
 
 \item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
 object being created.}
@@ -86,12 +86,12 @@ declared via strings (\code{"xx.x"}) or function. In cases such as
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{klass}{Internal detail.}
+\item{klass}{(\code{character})\cr internal detail.}
 
 \item{footnotes}{list or NULL. Referential footnotes to be applied at current
 level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
-\item{\dots}{passed to shared constructor (\code{.tablerow}).}
+\item{...}{additional parameters passed to shared constructor (\code{.tablerow}).}
 }
 \value{
 A formal object representing a table row of the constructed type.
@@ -99,7 +99,7 @@ A formal object representing a table row of the constructed type.
 \description{
 Row classes and constructors
 
-Row constructors and Classes
+Row constructors and classes
 }
 \author{
 Gabriel Becker

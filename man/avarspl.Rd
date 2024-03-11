@@ -72,8 +72,7 @@ its first parameter. Can optionally take other parameters which will be
 populated by the tabulation framework. See Details in
 \code{\link{analyze}}.}
 
-\item{defrowlab}{character. Default row labels if they are not specified by
-the return value of \code{afun}}
+\item{defrowlab}{(\code{character})\cr default row labels, if not specified by the return value of \code{afun}.}
 
 \item{cfun}{list/function/NULL. tabulation function(s) for creating content
 rows. Must accept \code{x} or \code{df} as first parameter. Must accept
@@ -116,7 +115,7 @@ should accept. Defaults to NA.}
 divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
-\item{.payload}{Used internally, not intended to be set by end users.}
+\item{.payload}{(\code{list})\cr used internally, not intended to be set by end users.}
 
 \item{child_labels}{string. One of \code{"default"}, \code{"visible"},
 \code{"hidden"}. What should the display behavior be for the  labels (i.e.
