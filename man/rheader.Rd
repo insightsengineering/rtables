@@ -11,14 +11,11 @@ rheader(..., format = "xx", .lst = NULL)
 from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}},
 etc.}
 
-\item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
-format labels.}
+\item{format}{(\code{character(1)} or \code{function})\cr the format label (string) or formatter function to apply to the
+cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{.lst}{list. An already-collected list of arguments to be used instead
-of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
-ignored if this is specified.}
+\item{.lst}{(\code{list})\cr an already-collected list of arguments to be used instead of the elements of \code{...}.
+Arguments passed via \code{...} will be ignored if this is specified.}
 }
 \value{
 a \code{InstantiatedColumnInfo} object.

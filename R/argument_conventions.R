@@ -191,27 +191,24 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
   NULL
 }
 
-#' Compatibility Arg Conventions
-#' @name compat_args
-#' @family conventions
-#' @inherit gen_args return
+#' Compatibility argument conventions
+#' 
 #' @inheritParams gen_args
-#' @param .lst list. An already-collected list of arguments to be used instead
-#'   of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
-#'   ignored if this is specified.
-#' @param row.name if \code{NULL} then an empty string is used as
-#'   \code{row.name} of the \code{\link{rrow}}.
-#' @param format character(1) or function. The format label (string) or
-#'   formatter function to apply to the cell values passed via `...`. See
-#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported
-#'   format labels.
-#' @param indent deprecated.
-#' @param inset integer(1). The table inset for the row or table being
-#'   constructed. See \code{\link[formatters]{table_inset}}.
-#' @rdname compat_args
+#' @param .lst (`list`)\cr an already-collected list of arguments to be used instead of the elements of `...`.
+#'   Arguments passed via `...` will be ignored if this is specified.
+#' @param row.name (`character(1)` or `NULL`)\cr row name. If `NULL`, an empty string is used as `row.name` of the 
+#'   [rrow()].
+#' @param format (`character(1)` or `function`)\cr the format label (string) or formatter function to apply to the 
+#'   cell values passed via `...`. See [formatters::list_valid_format_labels()] for currently supported format labels.
+#' @param indent `r lifecycle::badge("deprecated")`
+#' @param inset (`integer(1)`)\cr the table inset for the row or table being constructed. See
+#'   [formatters::table_inset()] for details.
+#'   
+#' @inherit gen_args return
+#' 
+#' @family conventions
+#' @name compat_args
 compat_args <- function(.lst, row.name, format, indent, label, inset) NULL
-
-
 
 #' Split Function Arg Conventions
 #' @name sf_args

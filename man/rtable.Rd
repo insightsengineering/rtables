@@ -16,18 +16,16 @@ This can be as row objects (legacy), character vectors or a
 
 \item{\dots}{Rows to place in the table.}
 
-\item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
-format labels.}
+\item{format}{(\code{character(1)} or \code{function})\cr the format label (string) or formatter function to apply to the
+cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
 \item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}
 
-\item{inset}{integer(1). The table inset for the row or table being
-constructed. See \code{\link[formatters]{table_inset}}.}
+\item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
+\code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 }
 \value{
 a formal table object of the appropriate type (\code{ElementaryTable}

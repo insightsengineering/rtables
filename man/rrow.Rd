@@ -7,20 +7,18 @@
 rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 }
 \arguments{
-\item{row.name}{if \code{NULL} then an empty string is used as
-\code{row.name} of the \code{\link{rrow}}.}
+\item{row.name}{(\code{character(1)} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
+\code{\link[=rrow]{rrow()}}.}
 
 \item{\dots}{cell values}
 
-\item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
-format labels.}
+\item{format}{(\code{character(1)} or \code{function})\cr the format label (string) or formatter function to apply to the
+cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{indent}{deprecated.}
+\item{indent}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{inset}{integer(1). The table inset for the row or table being
-constructed. See \code{\link[formatters]{table_inset}}.}
+\item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
+\code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 }
 \value{
 A row object of the context-appropriate type (label or data)
