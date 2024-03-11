@@ -210,17 +210,17 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
 #' @name compat_args
 compat_args <- function(.lst, row.name, format, indent, label, inset) NULL
 
-#' Split Function Arg Conventions
-#' @name sf_args
-#' @family conventions
-#' @inherit gen_args return
+#' Split function argument conventions
 #'
 #' @inheritParams gen_args
-#' @param trim logical(1). Should splits corresponding with 0 observations be
-#'   kept when tabulating.
-#' @param first logical(1). Should the created split level be placed first in
-#'   the levels (\code{TRUE}) or last (\code{FALSE}, the default).
+#' @param trim (`logical(1)`)\cr whether splits corresponding with 0 observations should be kept when tabulating.
+#' @param first (`logical(1)`)\cr whether the created split level should be placed first in the levels (`TRUE`) or 
+#'   last (`FALSE`, the default).
 #'
+#' @inherit gen_args return
+#' 
+#' @family conventions
+#' @name sf_args
 sf_args <- function(trim, label, first) NULL
 
 # nocov end

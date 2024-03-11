@@ -25,8 +25,7 @@ not match a formal argument of the tabulation function.}
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE})
 or last \code{FALSE}. Defaults to \code{TRUE}.}
 
-\item{trim}{logical(1). Should splits corresponding with 0 observations be
-kept when tabulating.}
+\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 }
 \value{
 a closure suitable for use as a splitting function (\code{splfun})

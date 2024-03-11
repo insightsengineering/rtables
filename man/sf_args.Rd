@@ -2,24 +2,23 @@
 % Please edit documentation in R/argument_conventions.R
 \name{sf_args}
 \alias{sf_args}
-\title{Split Function Arg Conventions}
+\title{Split function argument conventions}
 \usage{
 sf_args(trim, label, first)
 }
 \arguments{
-\item{trim}{logical(1). Should splits corresponding with 0 observations be
-kept when tabulating.}
+\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{first}{logical(1). Should the created split level be placed first in
-the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
+\item{first}{(\code{logical(1)})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
+last (\code{FALSE}, the default).}
 }
 \value{
 No return value.
 }
 \description{
-Split Function Arg Conventions
+Split function argument conventions
 }
 \seealso{
 Other conventions: 

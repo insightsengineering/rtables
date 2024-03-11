@@ -19,11 +19,10 @@ add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 \code{select_all_levels} object as a value in the \code{comblevels} column
 indicates that an overall/all-observations level should be created.}
 
-\item{trim}{logical(1). Should splits corresponding with 0 observations be
-kept when tabulating.}
+\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
-\item{first}{logical(1). Should the created split level be placed first in
-the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
+\item{first}{(\code{logical(1)})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
+last (\code{FALSE}, the default).}
 
 \item{keep_levels}{character or NULL. If non-NULL, the levels to retain
 across both combination and individual levels.}

@@ -40,8 +40,7 @@ order of the children of the split. defaults to \code{TRUE}}
 \item{labels}{character. Labels to use for the remaining levels instead of
 the existing ones.}
 
-\item{trim}{logical(1). Should splits corresponding with 0 observations be
-kept when tabulating.}
+\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
 \item{neworder}{character. New order or factor levels.}
 
