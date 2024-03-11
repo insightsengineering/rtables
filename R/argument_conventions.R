@@ -7,67 +7,53 @@
 #' @import methods
 NULL
 
-
-#' General Argument Conventions
-#' @name gen_args
+#' General argument conventions
+#' 
 #' @inheritParams formatters::format_value
+#' @param df (`data.frame` or `tibble`)\cr dataset.
+#' @param alt_counts_df (`data.frame` or `tibble`)\cr alternative full dataset the rtables framework will use 
+#'   *only* when calculating column counts.
+#' @param spl (`Split`)\cr a `Split` object defining a partitioning or analysis/tabulation of the data.
+#' @param pos (`numeric`)\cr which top-level set of nested splits should the new layout feature be added to. Defaults 
+#'   to the current split.
+#' @param tt (`TableTree` or related class)\cr a `TableTree` object representing a populated table.
+#' @param tr (`TableRow` or related class)\cr a `TableRow` object representing a single row within a populated table.
+#' @param verbose (`logical(1)`)\cr whether additional information should be displayed to the user. Defaults to `FALSE`.
+#' @param colwidths (`numeric`)\cr a vector of column widths for use in vertical pagination.
+#' @param obj (`any`)\cr the object for the accessor to access or modify.
+#' @param x (`any`)\cr an object.
+#' @param ... additional parameters passed to methods or tabulation functions.
+#' @param value (`any`)\cr the new value.
+#' @param object (`any`)\cr the object to modify in place.
+#' @param verbose (`logical(1)`)\cr whether extra debugging messages should be shown. Defaults to `FALSE`.
+#' @param path (`character`)\cr a vector path for a position within the structure of a `TableTree`. Each element 
+#'   represents a subsequent choice amongst the children of the previous choice.
+#' @param label (`character(1)`)\cr a label (not to be confused with the name) for the object/structure.
+#' @param label_pos (`character(1)`)\cr location where the variable label should be displayed. Accepts `"hidden"` 
+#'   (default for non-analyze row splits), `"visible"`, `"topleft"`, and `"default"` (for analyze splits only). For 
+#'   analyze calls, `"default"` indicates that the variable should be visible if and only if multiple variables are 
+#'   analyzed at the same level of nesting.
+#' @param cvar (`character(1)`)\cr the variable, if any, that the content function should accept. Defaults to `NA`.
+#' @param topleft (`character`)\cr override values for the "top left" material to be displayed during printing.
+#' @param page_prefix (`character(1)`)\cr prefix to be appended with the split value when forcing pagination between 
+#'   the children of a split/table.
+#' @param hsep (`character(1)`)\cr set of character(s) to be repeated as the separator between the header and body of 
+#'   the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+#'   charset, and to `-` elsewhere (with a once per session warning). See [formatters::set_default_hsep()] for further 
+#'   information.
+#' @param indent_size (`numeric(1)`)\cr number of spaces to use per indent level. Defaults to 2.
+#' @param section_div (`character(1)`)\cr string which should be repeated as a section divider after each group defined 
+#'   by this split instruction, or `NA_character_` (the default) for no section divider.
+#' @param inset (`numeric(1)`)\cr number of spaces to inset the table header, table body, referential footnotes, and
+#'   main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).
+#' @param table_inset (`numeric(1)`)\cr number of spaces to inset the table header, table body, referential footnotes,
+#'   and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).
+#' 
+#' @return No return value.
+#' 
 #' @family conventions
-#' @param df dataset (`data.frame` or `tibble`)
-#' @param alt_counts_df dataset (`data.frame` or `tibble`). Alternative full data
-#'   the rtables framework will use (\emph{only}) when calculating column
-#'   counts.
-#' @param spl A Split object defining a partitioning or analysis/tabulation of
-#'   the data.
-#' @param pos numeric.  Which top-level set of nested splits should the new
-#'   layout feature be added to. Defaults to the current
-#' @param tt `TableTree` (or related class). A `TableTree` object representing a
-#'   populated table.
-#' @param tr `TableRow` (or related class). A `TableRow` object representing a
-#'   single row within a populated table.
-#' @param verbose logical. Should additional information be displayed to the
-#'   user. Defaults to FALSE.
-#' @param colwidths numeric vector. Column widths for use with vertical pagination.
-#' @param obj ANY. The object for the accessor to access or modify
-#' @param x An object
-#' @param \dots Passed on to methods or tabulation functions.
-#' @param value The new value
-#' @param object The object to modify in-place
-#' @param verbose logical(1). Should extra debugging messages be shown. Defaults
-#'   to \code{FALSE}.
-#' @param path character. A vector path for a position within the structure of a
-#'   `tabletree`. Each element represents a subsequent choice amongst the children
-#'   of the previous choice.
-#' @param label character(1). A label (not to be confused with the name) for the
-#'   object/structure.
-#' @param label_pos character(1). Location the variable label should be
-#'   displayed, Accepts `"hidden"` (default for non-analyze row splits), `"visible"`,
-#'   `"topleft"`, and - for analyze splits only - `"default"`.  For analyze calls,
-#'   `"default"` indicates that the variable should be visible if and only if
-#'   multiple variables are analyzed at the same level of nesting.
-#' @param cvar character(1). The variable, if any, which the content function
-#'   should accept. Defaults to NA.
-#' @param topleft character. Override values for the "top left" material to be
-#'   displayed during printing.
-#' @param page_prefix character(1). Prefix, to be appended with the split value,
-#'   when forcing pagination between the children of this split/table
-#' @param hsep character(1). Set of character(s) to be repeated as the separator
-#'   between the header and body of the table when rendered as text. Defaults to
-#'   a connected horizontal line (unicode 2014) in locals that use a UTF
-#'   charset, and to `-` elsewhere (with a once per session warning). See
-#'   [formatters::set_default_hsep()] for further information.
-#' @param indent_size numeric(1). Number of spaces to use per indent level.
-#'   Defaults to 2
-#' @param section_div character(1). String which should be repeated as a section
-#'   divider after each group defined by this split instruction, or
-#'   `NA_character_` (the default) for no section divider.
-#' @param inset numeric(1). Number of spaces to inset the table header, table
-#' body, referential footnotes, and main_footer, as compared to alignment
-#' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
-#' @param table_inset numeric(1). Number of spaces to inset the table header, table
-#' body, referential footnotes, and main_footer, as compared to alignment
-#' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
-#' @return NULL (this is an argument template dummy function)
-#' @rdname gen_args
+#' @name gen_args
+#' @keywords internal
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
@@ -76,7 +62,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
   NULL
 }
 
-#' Layouting Function Arg Conventions
+#' Layouting function argument conventions
+#' 
 #' @name lyt_args
 #' @rdname lyt_args
 #' @inheritParams gen_args

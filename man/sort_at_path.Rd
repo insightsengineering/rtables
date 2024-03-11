@@ -14,12 +14,10 @@ sort_at_path(
 )
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
 \item{scorefun}{function. Scoring function, should accept the type of
 children directly under the position at \code{path} (either \code{VTableTree},

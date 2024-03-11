@@ -24,8 +24,7 @@ declared via strings (\code{"xx.x"}) or function. In cases such as
 
 \item{colspan}{integer(1). Column span value.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)

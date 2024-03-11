@@ -37,8 +37,7 @@ table is printed.}
 \item{count_na_str}{(\code{character})\cr string to use in place of missing values when formatting counts. Defaults
 to \code{""}.}
 
-\item{topleft}{character. Override values for the "top left" material to be
-displayed during printing.}
+\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 }
 \value{
 An \code{InstantiateadColumnInfo} object.

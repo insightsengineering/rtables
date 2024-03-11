@@ -47,8 +47,7 @@ ContentRow(...)
 \item{lev}{integer. Nesting level (roughly, indentation level in practical
 terms).}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{name}{character(1). Name of the split/table/row being created. Defaults
 to same as the corresponding label, but is not required to be.}
@@ -63,9 +62,8 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{table_inset}{numeric(1). Number of spaces to inset the table header, table
-body, referential footnotes, and main_footer, as compared to alignment
-of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+\item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
+and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
 
 \item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,

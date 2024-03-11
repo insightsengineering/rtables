@@ -9,8 +9,7 @@ add_existing_table(lyt, tt, indent_mod = 0)
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)

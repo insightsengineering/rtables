@@ -10,14 +10,12 @@ label_at_path(tt, path)
 label_at_path(tt, path) <- value
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
-\item{value}{The new value}
+\item{value}{(\code{any})\cr the new value.}
 }
 \description{
 Gets or sets the label at a path

@@ -112,15 +112,13 @@ declared via strings (\code{"xx.x"}) or function. In cases such as
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
-\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
-\code{"default"} indicates that the variable should be visible if and only if
-multiple variables are analyzed at the same level of nesting.}
+\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+(default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
+analyze calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+analyzed at the same level of nesting.}
 
-\item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruction, or
-\code{NA_character_} (the default) for no section divider.}
+\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{cutfun}{function. Function which accepts the full vector of \code{var}
 values and returns cut points to be passed to \code{cut}.}

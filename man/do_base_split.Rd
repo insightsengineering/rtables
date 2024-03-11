@@ -7,10 +7,9 @@
 do_base_split(spl, df, vals = NULL, labels = NULL, trim = FALSE)
 }
 \arguments{
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of
-the data.}
+\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
 
-\item{df}{dataset (\code{data.frame} or \code{tibble})}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
 \item{vals}{ANY. Already calculated/known values of the split. Generally
 should be left as \code{NULL}.}

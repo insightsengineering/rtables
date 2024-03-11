@@ -2,7 +2,7 @@
 % Please edit documentation in R/argument_conventions.R
 \name{lyt_args}
 \alias{lyt_args}
-\title{Layouting Function Arg Conventions}
+\title{Layouting function argument conventions}
 \usage{
 lyt_args(
   lyt,
@@ -58,8 +58,7 @@ lyt_args(
 
 \item{vars}{character vector. Multiple variable names.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{labels_var}{string, name of variable containing labels to be displayed
 for the values of \code{var}}
@@ -164,22 +163,19 @@ corresponds to the unmodified default behavior.}
 \item{show_labels}{character(1). Should the variable labels for corresponding
 to the variable(s) in \code{vars} be visible in the resulting table.}
 
-\item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
-\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
-\code{"default"} indicates that the variable should be visible if and only if
-multiple variables are analyzed at the same level of nesting.}
+\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+(default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
+analyze calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+analyzed at the same level of nesting.}
 
 \item{var_labels}{character. Variable labels for 1 or more variables}
 
-\item{cvar}{character(1). The variable, if any, which the content function
-should accept. Defaults to NA.}
+\item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
 \item{table_names}{character. Names for the tables representing each atomic
 analysis. Defaults to \code{var}.}
 
-\item{topleft}{character. Override values for the "top left" material to be
-displayed during printing.}
+\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
 \item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
 It defaults to \code{"center"} if \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}}
@@ -189,23 +185,22 @@ for currently supported alignments.}
 children resulting form this split. An error will rise if the selected split
 does not contain at least one value that is not \code{NA}.}
 
-\item{page_prefix}{character(1). Prefix, to be appended with the split value,
-when forcing pagination between the children of this split/table}
+\item{page_prefix}{(\code{character(1)})\cr prefix to be appended with the split value when forcing pagination between
+the children of a split/table.}
 
 \item{format_na_str}{character(1). String which should be displayed when
 formatted if this cell's value(s) are all NA.}
 
-\item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruction, or
-\code{NA_character_} (the default) for no section divider.}
+\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 }
 \value{
-NULL (this is an argument template dummy function)
+No return value.
 }
 \description{
-Layouting Function Arg Conventions
+Layouting function argument conventions
 }
 \seealso{
 Other conventions: 

@@ -12,8 +12,7 @@ prune_table(
 )
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{prune_func}{function. A Function to be called on each subtree which
 returns TRUE if the entire subtree should be removed.}

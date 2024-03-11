@@ -67,8 +67,7 @@ to same as the corresponding label, but is not required to be.}
 \item{lev}{integer. Nesting level (roughly, indentation level in practical
 terms).}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{labelrow}{\code{LabelRow}. The \code{LabelRow} object to assign to this Table.
 Constructed from \code{label} by default if not specified.}
@@ -113,11 +112,10 @@ from the table. See \code{\link[=header_section_div]{header_section_div()}} for 
 Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
 tables that need a divider between them.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning). See
-\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
+\item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
+the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
+information.}
 
 \item{trailing_section_div}{character(1). String which will be used as a section
 divider after the printing of the last row contained in this (sub)-table,
@@ -126,9 +124,8 @@ unless that row is also the last table row to be printed overall, or
 would correspond to the \code{section_div} of the split under which this table
 represents a single facet.}
 
-\item{inset}{numeric(1). Number of spaces to inset the table header, table
-body, referential footnotes, and main_footer, as compared to alignment
-of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+\item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
+main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{cont}{\code{ElementaryTable}. Content table.}
 

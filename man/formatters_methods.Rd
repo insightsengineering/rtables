@@ -173,19 +173,18 @@
 )
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
 
-\item{value}{The new value}
+\item{value}{(\code{any})\cr the new value.}
 
-\item{x}{An object}
+\item{x}{(\code{any})\cr an object.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
+\item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
 \item{max_width}{(\code{numeric(1)})\cr width that strings should be wrapped to when
 determining how many lines they require.}
 
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{visible_only}{(\code{logical(1)})\cr should only visible aspects of the table structure be reflected
 in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
@@ -194,9 +193,8 @@ in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 
 \item{indent}{(\code{integer(1)})\cr internal detail, do not set manually.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
 \item{incontent}{(\code{logical(1)})\cr internal detail, do not set manually.}
 

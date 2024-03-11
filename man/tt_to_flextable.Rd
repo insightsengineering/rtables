@@ -33,8 +33,7 @@ theme_docx_default(
 )
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{theme}{function(1). Defaults to \code{theme_docx_default(tt)}. It expects a
 a theme function that is designed internally as a function of a \code{flextable} object
@@ -74,9 +73,9 @@ horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be in
 the page size; \code{NULL} indicates no horizontal pagination should be done
 regardless of page size.}
 
-\item{...}{Passed on to methods or tabulation functions.}
+\item{...}{additional parameters passed to methods or tabulation functions.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
+\item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
 \item{tf_wrap}{(\code{logical(1)})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 

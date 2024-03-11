@@ -54,9 +54,8 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruction, or
-\code{NA_character_} (the default) for no section divider.}
+\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
 function. Element position in the list corresponds to the children of this

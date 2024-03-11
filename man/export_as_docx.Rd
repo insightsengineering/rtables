@@ -27,8 +27,7 @@ margins_potrait()
 margins_landscape()
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{file}{character(1). String that indicates the final file output. It needs to have \code{.docx}
 extension.}

@@ -7,8 +7,7 @@
 update_ref_indexing(tt)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 }
 \description{
 Re-indexes footnotes within a built table

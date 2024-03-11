@@ -13,7 +13,7 @@ no_colinfo(obj)
 \S4method{no_colinfo}{InstantiatedColumnInfo}(obj)
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
 }
 \value{
 \code{TRUE} if the object has no/empty instantiated column information,

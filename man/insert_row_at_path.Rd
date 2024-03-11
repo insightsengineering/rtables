@@ -13,14 +13,12 @@ insert_row_at_path(tt, path, value, after = FALSE)
 \S4method{insert_row_at_path}{VTableTree,ANY}(tt, path, value)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
-\item{value}{The new value}
+\item{value}{(\code{any})\cr the new value.}
 
 \item{after}{logical(1). Should \code{value} be added as a row directly before (\code{FALSE},
 the default) or after (\code{TRUE}) the row specified by \code{path}.}

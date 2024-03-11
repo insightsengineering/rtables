@@ -15,8 +15,7 @@ export_as_tsv(
 import_from_tsv(file)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{file}{character(1). The path of the file to written to or read from.}
 

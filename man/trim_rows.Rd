@@ -7,8 +7,7 @@
 trim_rows(tt, criteria = all_zero_or_na)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{criteria}{function. Function which takes a \code{TableRow} object and returns
 \code{TRUE} if that row should be removed. Defaults to

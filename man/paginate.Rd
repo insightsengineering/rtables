@@ -36,8 +36,7 @@ paginate_table(
 )
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
 
@@ -47,15 +46,14 @@ mid-subtable split to be valid. Defaults to 2.}
 \item{nosplitin}{character. List of names of sub-tables where page-breaks are not allowed, regardless of other
 considerations. Defaults to none.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
+\item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
 \item{max_width}{(\code{integer(1)}, \code{character(1)} or \code{NULL})\cr width that title and footer (including
 footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
-\item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
-to \code{FALSE}.}
+\item{verbose}{(\code{logical(1)})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
 
 \item{page_type}{(\code{character(1)})\cr name of a page type. See \code{\link[formatters]{page_types}}. Ignored
 when \code{pg_width} and \code{pg_height} are set directly.}

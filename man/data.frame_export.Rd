@@ -14,8 +14,7 @@ result_df_specs()
 path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{spec}{character(1). The specification to use to
 extract the result data frame. See details}

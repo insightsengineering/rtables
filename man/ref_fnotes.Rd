@@ -49,9 +49,9 @@ ref_msg(obj)
 fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
 
-\item{value}{The new value}
+\item{value}{(\code{any})\cr the new value.}
 
 \item{rowpath}{character or NULL. Path within row structure. \code{NULL}
 indicates the footnote should go on the column rather than cell.}

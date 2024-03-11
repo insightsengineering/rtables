@@ -16,8 +16,7 @@ add_overall_level(
 \item{valname}{character(1). 'Value' to be assigned to the implicit
 all-observations split level. Defaults to \code{"Overall"}}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
 function. Element position in the list corresponds to the children of this

@@ -12,7 +12,7 @@
 )
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
 
 \item{indent_rownames}{logical(1), if TRUE the column with the row names in
 the \code{strings} matrix of has indented row names (strings pre-fixed)}
@@ -22,8 +22,7 @@ expand  rows  whose  values   contain  newlines  into  multiple
 'physical'  rows  (as  they  will  appear  when  rendered  into
 ASCII). Defaults to \code{TRUE}}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level.
-Defaults to 2}
+\item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
 }
 \value{
 A list with the following elements:

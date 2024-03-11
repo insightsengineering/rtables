@@ -21,14 +21,13 @@ format labels.}
 
 \item{indent}{deprecated.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{inset}{integer(1). The table inset for the row or table being
 constructed. See \code{\link[formatters]{table_inset}}.}
 }
 \value{
-NULL (this is an argument template dummy function)
+No return value.
 }
 \description{
 Compatibility Arg Conventions

@@ -18,11 +18,10 @@ build_table(
 \arguments{
 \item{lyt}{layout object pre-data used for tabulation}
 
-\item{df}{dataset (\code{data.frame} or \code{tibble})}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{alt_counts_df}{dataset (\code{data.frame} or \code{tibble}). Alternative full data
-the rtables framework will use (\emph{only}) when calculating column
-counts.}
+\item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
+\emph{only} when calculating column counts.}
 
 \item{col_counts}{numeric (or \code{NULL}). Deprecated. If non-null, column counts
 which override those calculated automatically during tabulation. Must
@@ -32,14 +31,12 @@ elements will be replaced with the automatically calculated counts.}
 \item{col_total}{integer(1). The total observations across all columns.
 Defaults to \code{nrow(df)}.}
 
-\item{topleft}{character. Override values for the "top left" material to be
-displayed during printing.}
+\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning). See
-\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
+\item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
+the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
+information.}
 
 \item{\dots}{currently ignored.}
 }

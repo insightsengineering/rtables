@@ -13,8 +13,7 @@ clear_indent_mods(tt)
 \S4method{clear_indent_mods}{TableRow}(tt)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 }
 \value{
 The same class as \code{tt}, with all indent mods set to zero.

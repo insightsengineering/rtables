@@ -28,8 +28,7 @@ must also be considered.}
 \code{NULL}, the object value will be used. If \code{" "}, an empty separator will be printed. See
 \code{\link[formatters:default_hsep]{default_hsep()}} for more information.}
 
-\item{indent_size}{numeric(1). Number of spaces to use per indent level.
-Defaults to 2}
+\item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
 
 \item{tf_wrap}{(\code{logical(1)})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 

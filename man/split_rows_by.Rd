@@ -52,11 +52,10 @@ analyses, which is not allowed.}
 label rows) of the children of this split. Defaults to \code{"default"}
 which flags the label row as visible only if the child has 0 content rows.}
 
-\item{label_pos}{character(1). Location the variable label should be
-displayed, Accepts \code{"hidden"} (default for non-analyze row splits), \code{"visible"},
-\code{"topleft"}, and - for analyze splits only - \code{"default"}.  For analyze calls,
-\code{"default"} indicates that the variable should be visible if and only if
-multiple variables are analyzed at the same level of nesting.}
+\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+(default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
+analyze calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+analyzed at the same level of nesting.}
 
 \item{indent_mod}{numeric. Modifier for the default indent position for the
 structure created by this function(subtable, content table, or row)
@@ -67,12 +66,11 @@ corresponds to the unmodified default behavior.}
 children resulting form this split. An error will rise if the selected split
 does not contain at least one value that is not \code{NA}.}
 
-\item{page_prefix}{character(1). Prefix, to be appended with the split value,
-when forcing pagination between the children of this split/table}
+\item{page_prefix}{(\code{character(1)})\cr prefix to be appended with the split value when forcing pagination between
+the children of a split/table.}
 
-\item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruction, or
-\code{NA_character_} (the default) for no section divider.}
+\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further

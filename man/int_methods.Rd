@@ -1112,8 +1112,7 @@ spl_varnames(object) <- value
 
 \item{constructor}{function.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{cfun}{list/function/NULL. tabulation function(s) for creating content
 rows. Must accept \code{x} or \code{df} as first parameter. Must accept
@@ -1135,15 +1134,14 @@ structure created by this function(subtable, content table, or row)
 \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{cvar}{character(1). The variable, if any, which the content function
-should accept. Defaults to NA.}
+\item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
 \item{extra_args}{list. Extra arguments to be passed to the tabulation
 function. Element position in the list corresponds to the children of this
 split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{df}{dataset (\code{data.frame} or \code{tibble})}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
 \item{obj}{The object.}
 
@@ -1159,7 +1157,7 @@ not match a formal argument of the tabulation function.}
 \code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
 appropriate for \code{VTableTree} objects.}
 
-\item{value}{The new value}
+\item{value}{(\code{any})\cr the new value.}
 
 \item{nested}{boolean. Should this layout instruction be applied within the
 existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
@@ -1176,8 +1174,7 @@ declared via strings (\code{"xx.x"}) or function. In cases such as
 
 \item{override}{logical(1).}
 
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}
 
@@ -1196,9 +1193,8 @@ be immediately recalculated. Defaults to TRUE.}
 
 \item{y}{Second element to be \code{rbound} via \code{rbind2}}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
 \item{i}{index}
 
