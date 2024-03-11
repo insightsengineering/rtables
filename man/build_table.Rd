@@ -16,7 +16,7 @@ build_table(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 

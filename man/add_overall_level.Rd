@@ -18,9 +18,8 @@ all-observations split level. Defaults to \code{"Overall"}}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
 \item{first}{logical(1). Should the implicit level appear first (\code{TRUE})

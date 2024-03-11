@@ -1102,7 +1102,7 @@ spl_varnames(object) <- value
 
 \item{...}{Splits or \code{SplitVector} objects}
 
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
 \item{spl}{Split. The split.}
 
@@ -1114,31 +1114,26 @@ spl_varnames(object) <- value
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{cfun}{list/function/NULL. tabulation function(s) for creating content
-rows. Must accept \code{x} or \code{df} as first parameter. Must accept
-\code{labelstr} as the second argument. Can optionally accept all optional
-arguments accepted by analysis functions. See \code{\link{analyze}}.}
+\item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
+or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
 
-\item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (i.e.
-label rows) of the children of this split. Defaults to \code{"default"}
-which flags the label row as visible only if the child has 0 content rows.}
+\item{child_labels}{(\code{string})\cr the display behavior for the labels (i.e. label rows) of the children of this
+split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
+visible only if the child has 0 content rows.}
 
-\item{cformat}{format spec. Format for content rows}
+\item{cformat}{(\verb{format spec})\cr format for content rows.}
 
-\item{cna_str}{character. NA string for use with \code{cformat} for content
-table.}
+\item{cna_str}{(\code{character})\cr NA string for use with \code{cformat} for content table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
 \item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
@@ -1159,16 +1154,14 @@ appropriate for \code{VTableTree} objects.}
 
 \item{value}{(\code{any})\cr the new value.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the
-existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
-new top-level element (`FALSE). Ignored if it would nest a split underneath
-analyses, which is not allowed.}
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
 
 \item{for_analyze}{logical(1).}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 

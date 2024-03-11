@@ -66,7 +66,7 @@ represents a subsequent choice amongst the children of the previous choice.}
 
 \item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
-analyze calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+\code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
 \item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}

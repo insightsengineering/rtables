@@ -7,7 +7,7 @@
 append_topleft(lyt, newlines)
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
 \item{newlines}{character. The new line(s) to be added to the materials}
 }

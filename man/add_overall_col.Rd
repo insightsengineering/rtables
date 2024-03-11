@@ -7,7 +7,7 @@
 add_overall_col(lyt, label)
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 }

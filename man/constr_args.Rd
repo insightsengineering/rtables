@@ -58,7 +58,7 @@ Constructed from \code{label} by default if not specified.}
 
 \item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
-analyze calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+\code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
 \item{cindent_mod}{numeric(1). The indent modifier for the content tables
@@ -106,10 +106,9 @@ unless that row is also the last table row to be printed overall, or
 would correspond to the \code{section_div} of the split under which this table
 represents a single facet.}
 
-\item{split_na_str}{character. NA string vector for use with \code{split_format}.}
+\item{split_na_str}{(\code{character})\cr NA string vector for use with \code{split_format}.}
 
-\item{cna_str}{character. NA string for use with \code{cformat} for content
-table.}
+\item{cna_str}{(\code{character})\cr NA string for use with \code{cformat} for content table.}
 
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}

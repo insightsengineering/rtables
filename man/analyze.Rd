@@ -21,46 +21,38 @@ analyze(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{vars}{character vector. Multiple variable names.}
+\item{vars}{(\code{character})\cr vector of variable names.}
 
-\item{afun}{function. Analysis function, must take \code{x} or \code{df} as
-its first parameter. Can optionally take other parameters which will be
-populated by the tabulation framework. See Details in
-\code{\link{analyze}}.}
+\item{afun}{(\code{function})\cr analysis function. Must accept \code{x} or \code{df} as its first parameter. Can optionally take
+other parameters which will be populated by the tabulation framework. See Details in \code{\link[=analyze]{analyze()}}.}
 
-\item{var_labels}{character. Variable labels for 1 or more variables}
+\item{var_labels}{(\code{character})\cr vector of labels for one or more variables.}
 
-\item{table_names}{character. Names for the tables representing each atomic
-analysis. Defaults to \code{var}.}
+\item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the
-existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
-new top-level element (`FALSE). Ignored if it would nest a split underneath
-analyses, which is not allowed.}
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
 
-\item{inclNAs}{boolean. Should observations with NA in the \code{var}
-variable(s) be included when performing this analysis. Defaults to
-\code{FALSE}}
+\item{inclNAs}{(\code{logical})\cr whether NA observations in the \code{var} variable(s) should be included when performing
+the analysis. Defaults to \code{FALSE}.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{show_labels}{character(1). Should the variable labels for corresponding
-to the variable(s) in \code{vars} be visible in the resulting table.}
+\item{show_labels}{(\code{character(1)})\cr whether the variable labels corresponding to the variable(s) in \code{vars}
+should be visible in the resulting table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
 \item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined

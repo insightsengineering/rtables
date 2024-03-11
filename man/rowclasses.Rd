@@ -49,17 +49,16 @@ terms).}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{name}{character(1). Name of the split/table/row being created. Defaults
-to same as the corresponding label, but is not required to be.}
+\item{name}{(\code{character(1)})\cr name of the split/table/row being created. Defaults to the value of the
+corresponding label, but is not required to be.}
 
 \item{vis}{(\code{logical(1)})\cr whether the row should be visible (\code{LabelRow} only).}
 
 \item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
 object being created.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
@@ -76,11 +75,10 @@ represents a single facet.}
 
 \item{cspan}{integer. Column span. \code{1} indicates no spanning.}
 
-\item{var}{string, variable name}
+\item{var}{(\code{string})\cr variable name.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 

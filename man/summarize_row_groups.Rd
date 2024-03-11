@@ -16,34 +16,29 @@ summarize_row_groups(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{var}{string, variable name}
+\item{var}{(\code{string})\cr variable name.}
 
-\item{label_fstr}{string. An \code{sprintf} style format string containing. For
-non-comparison splits, it can contain  up to one \code{"\%s"} which takes
-the current split value and generates the row/column label.
-Comparison-based splits it can contain up to two \code{"\%s"}.}
+\item{label_fstr}{(\code{string})\cr a \code{sprintf} style format string. For non-comparison splits, it can contain up to
+one \code{"\\\%s"} which takes the current split value and generates the row/column label. For comparison-based splits
+it can contain up to two \code{"\\\%s"}.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
 \item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{cfun}{list/function/NULL. tabulation function(s) for creating content
-rows. Must accept \code{x} or \code{df} as first parameter. Must accept
-\code{labelstr} as the second argument. Can optionally accept all optional
-arguments accepted by analysis functions. See \code{\link{analyze}}.}
+\item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
+or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 }
 \value{

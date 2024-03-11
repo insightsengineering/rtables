@@ -23,17 +23,15 @@ ManualSplit(
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{name}{character(1). Name of the split/table/row being created. Defaults
-to same as the corresponding label, but is not required to be.}
+\item{name}{(\code{character(1)})\cr name of the split/table/row being created. Defaults to the value of the
+corresponding label, but is not required to be.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
 \item{cindent_mod}{numeric(1). The indent modifier for the content tables
@@ -46,7 +44,7 @@ when tabulating row group summaries.}
 
 \item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
-analyze calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+\code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
 \item{page_prefix}{(\code{character(1)})\cr prefix to be appended with the split value when forcing pagination between
