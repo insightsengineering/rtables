@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_html.R
 \name{as_html}
 \alias{as_html}
-\title{Convert an \code{rtable} object to a \code{shiny.tag} html object}
+\title{Convert an \code{rtable} object to a \code{shiny.tag} HTML object}
 \usage{
 as_html(
   x,
@@ -17,33 +17,34 @@ as_html(
 )
 }
 \arguments{
-\item{x}{\code{rtable} object}
+\item{x}{(\code{TableTree})\cr a \code{TableTree} object.}
 
-\item{width}{a string to indicate the desired width of the table. Common input formats include a
-percentage of the viewer window width (e.g. \code{"100\%"}) or a distance value (e.g. \code{"300px"}).
-Defaults to \code{NULL}.}
+\item{width}{(\code{character})\cr a string to indicate the desired width of the table. Common input formats include a
+percentage of the viewer window width (e.g. \code{"100\%"}) or a distance value (e.g. \code{"300px"}). Defaults to \code{NULL}.}
 
-\item{class_table}{class for \code{table} tag}
+\item{class_table}{(\code{character})\cr class for \code{table} tag.}
 
-\item{class_tr}{class for \code{tr} tag}
+\item{class_tr}{(\code{character})\cr class for \code{tr} tag.}
 
-\item{class_th}{class for \code{th} tag}
+\item{class_th}{(\code{character})\cr class for \code{th} tag.}
 
-\item{link_label}{link anchor label (not including \verb{tab:} prefix) for the table.}
+\item{link_label}{(\code{character})\cr link anchor label (not including \verb{tab:} prefix) for the table.}
 
-\item{bold}{elements in table output that should be bold. Options are \code{"main_title"}, \code{"subtitles"},
-\code{"header"}, \code{"row_names"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label rows).
-Defaults to \code{"header"}.}
+\item{bold}{(\code{character})\cr elements in table output that should be bold. Options are \code{"main_title"},
+\code{"subtitles"}, \code{"header"}, \code{"row_names"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label
+rows). Defaults to \code{"header"}.}
 
-\item{header_sep_line}{whether a black line should be printed to under the table header. Defaults to \code{TRUE}.}
+\item{header_sep_line}{(\code{logical(1)})\cr whether a black line should be printed to under the table header. Defaults
+to \code{TRUE}.}
 
-\item{no_spaces_between_cells}{whether spaces between table cells should be collapsed. Defaults to \code{FALSE}.}
+\item{no_spaces_between_cells}{(\code{logical(1)})\cr whether spaces between table cells should be collapsed. Defaults
+to \code{FALSE}.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.
 }
 \description{
-The returned \code{html} object can be immediately used in \code{shiny} and \code{rmarkdown}.
+The returned HTML object can be immediately used in \code{shiny} and \code{rmarkdown}.
 }
 \examples{
 tbl <- rtable(
