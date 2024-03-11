@@ -17,19 +17,16 @@ basic_table(
 )
 }
 \arguments{
-\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
-Ignored for subtables.}
+\item{title}{(\code{character(1)})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
-every element is printed in a separate line. Ignored for subtables.}
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
+printed on a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials
-(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
-lines.}
+\item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}), where every element is printed on a separate line.}
 
-\item{prov_footer}{character. Provenance-related global footer materials
-(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
-Generally should not be modified by hand.}
+\item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
 resulting table when this layout is applied to data}
@@ -38,10 +35,9 @@ resulting table when this layout is applied to data}
 column counts. Must be 1d, or 2d where one component is a percent. See
 details.}
 
-\item{header_section_div}{character(1). String which will be used to divide the header
-from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
-Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
-tables that need a divider between them.}
+\item{header_section_div}{(\code{character(1)})\cr string which will be used to divide the header from the table. See
+\code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of
+\code{\link[=section_div]{section_div()}} when concatenating tables that require a divider between them.}
 
 \item{top_level_section_div}{character(1). If assigned to a single character,
 the first (top level) split or division of the table will be highlighted by a line made of that character.

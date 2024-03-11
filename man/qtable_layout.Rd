@@ -58,19 +58,16 @@ lists are interpreted as multiple cells.}
 
 \item{summarize_groups}{logical(1). Should each level of nesting include marginal summary rows. Defaults to \code{FALSE}}
 
-\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
-Ignored for subtables.}
+\item{title}{(\code{character(1)})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
-every element is printed in a separate line. Ignored for subtables.}
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
+printed on a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials
-(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
-lines.}
+\item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}), where every element is printed on a separate line.}
 
-\item{prov_footer}{character. Provenance-related global footer materials
-(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
-Generally should not be modified by hand.}
+\item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
 \item{show_colcounts}{logical(1). Should column counts be displayed in the
 resulting table when this layout is applied to data}

@@ -44,8 +44,7 @@ DataRow(...)
 ContentRow(...)
 }
 \arguments{
-\item{lev}{integer. Nesting level (roughly, indentation level in practical
-terms).}
+\item{lev}{(\code{integer(1)})\cr nesting level (roughly, indentation level in practical terms).}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
@@ -54,8 +53,7 @@ corresponding label, but is not required to be.}
 
 \item{vis}{(\code{logical(1)})\cr whether the row should be visible (\code{LabelRow} only).}
 
-\item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
-object being created.}
+\item{cinfo}{(\code{InstantiatedColumnInfo} or \code{NULL})\cr column structure for the object being created.}
 
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
@@ -64,16 +62,14 @@ corresponds to the unmodified default behavior.}
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
 and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
 
-\item{trailing_section_div}{character(1). String which will be used as a section
-divider after the printing of the last row contained in this (sub)-table,
-unless that row is also the last table row to be printed overall, or
-\code{NA_character_} for none (the default). When generated via layouting, this
-would correspond to the \code{section_div} of the split under which this table
-represents a single facet.}
+\item{trailing_section_div}{(\code{character(1)})\cr string which will be used as a section divider after the printing
+of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
+or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
+\code{section_div} of the split under which this table represents a single facet.}
 
-\item{vals}{list. cell values for the row}
+\item{vals}{(\code{list})\cr cell values for the row.}
 
-\item{cspan}{integer. Column span. \code{1} indicates no spanning.}
+\item{cspan}{(\code{integer})\cr column span. \code{1} indicates no spanning.}
 
 \item{var}{(\code{string})\cr variable name.}
 
@@ -84,8 +80,8 @@ or function. In cases such as \code{analyze} calls, they can be character vector
 
 \item{klass}{(\code{character})\cr internal detail.}
 
-\item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
+\item{footnotes}{(\code{list} or \code{NULL})\cr referential footnotes to be applied at current level. In post-processing,
+this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
 \item{...}{additional parameters passed to shared constructor (\code{.tablerow}).}
 }

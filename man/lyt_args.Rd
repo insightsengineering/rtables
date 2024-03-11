@@ -186,3 +186,4 @@ Other conventions:
 \code{\link{sf_args}()}
 }
 \concept{conventions}
+\keyword{internal}

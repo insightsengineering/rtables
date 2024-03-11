@@ -110,8 +110,8 @@ by this split instruction, or \code{NA_character_} (the default) for no section 
 split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
 visible only if the child has 0 content rows.}
 
-\item{child_names}{character. Names to be given to the sub splits contained
-by a compound split (typically a \code{AnalyzeMultiVars} split object).}
+\item{child_names}{(\code{character})\cr names to be given to the subsplits contained by a compound split (typically
+an \code{AnalyzeMultiVars} split object).}
 }
 \value{
 An \code{AnalyzeVarSplit} object.
