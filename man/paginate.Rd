@@ -49,48 +49,42 @@ considerations. Defaults to none.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
-and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If \code{NULL}, it is  set to the current print width
-of the  session (\code{getOption("width")}). If set to \code{"auto"},
-the width of the table (plus any table inset) is used. Ignored
-completely if \code{tf_wrap} is \code{FALSE}.}
+\item{max_width}{(\code{integer(1)}, \code{character(1)} or \code{NULL})\cr width that title and footer (including
+footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
+session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
+used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{verbose}{logical(1). Should extra debugging messages be shown. Defaults
 to \code{FALSE}.}
 
-\item{page_type}{character(1).   Name   of  a  page  type.   See
-\code{page_types}.   Ignored when  \code{pg_width} and  \code{pg_height}
-are set directly.}
+\item{page_type}{(\code{character(1)})\cr name of a page type. See \code{\link[formatters]{page_types}}. Ignored
+when \code{pg_width} and \code{pg_height} are set directly.}
 
-\item{font_family}{character(1). Name of a font family. An error
-will be thrown if the family named is not monospaced. Defaults
-to Courier.}
+\item{font_family}{(\code{character(1)})\cr name of a font family. An error will be thrown
+if the family named is not monospaced. Defaults to \code{"Courier"}.}
 
-\item{font_size}{numeric(1). Font size, defaults to 12.}
+\item{font_size}{(\code{numeric(1)})\cr font size. Defaults to \code{12}.}
 
-\item{lineheight}{numeric(1). Line height, defaults to 1.}
+\item{lineheight}{(\code{numeric(1)})\cr line height. Defaults to \code{1}.}
 
-\item{landscape}{logical(1). Should the  dimensions of \code{page_type}
-be inverted  for landscape?  Defaults to  \code{FALSE}, ignored when
-\code{pg_width} and \code{pg_height} are set directly.}
+\item{landscape}{(\code{logical(1)})\cr whether the dimensions of \code{page_type} should be
+inverted for landscape orientation. Defaults to \code{FALSE}, ignored when \code{pg_width} and
+\code{pg_height} are set directly.}
 
-\item{pg_width}{numeric(1). Page width in inches.}
+\item{pg_width}{(\code{numeric(1)})\cr page width in inches.}
 
-\item{pg_height}{numeric(1). Page height in inches.}
+\item{pg_height}{(\code{numeric(1)})\cr page height in inches.}
 
-\item{margins}{numeric(4). Named numeric vector containing \code{'bottom'},
-\code{'left'}, \code{'top'}, and \code{'right'} margins in inches. Defaults
-to \code{.5} inches for both vertical margins and \code{.75} for both
-horizontal margins.}
+\item{margins}{(\code{numeric(4)})\cr named numeric vector containing \code{"bottom"}, \code{"left"},
+\code{"top"}, and \code{"right"} margins in inches. Defaults to \code{.5} inches for both vertical
+margins and \code{.75} for both horizontal margins.}
 
 \item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
 horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be inferred from
 the page size; \code{NULL} indicates no horizontal pagination should be done
 regardless of page size.}
 
-\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
-and footnotes be wrapped?}
+\item{tf_wrap}{(\code{logical(1)})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 }
 \value{
 for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
@@ -146,52 +140,50 @@ implemented in the \code{formatters} package:
 
 
 
-Pagination  is performed independently in  the vertical  and horizontal
-directions based solely on a \emph{pagination data.frame}, which includes the
+Pagination is performed independently in the vertical and horizontal
+directions based solely on a \emph{pagination data frame}, which includes the
 following information for each row/column:
 \itemize{
-\item number of  lines/characters rendering the row  will take \strong{after
+\item Number of lines/characters rendering the row will take \strong{after
 word-wrapping} (\code{self_extent})
-\item the indices (\code{reprint_inds})  and number of lines (\code{par_extent})
+\item The indices (\code{reprint_inds}) and number of lines (\code{par_extent})
 of the rows which act as \strong{context} for the row
-\item the row's number of siblings and position within its siblings
+\item The row's number of siblings and position within its siblings
 }
 
-Given \code{lpp}  (\code{cpp}) already  adjusted for rendered  elements which
-are  not rows/columns  and a  dataframe of  pagination information,
-pagination is  performed via  the following  algorithm, and  with a
-\code{start = 1}:
+Given \code{lpp} (\code{cpp}) is already adjusted for rendered elements which
+are not rows/columns and a data frame of pagination information,
+pagination is performed via the following algorithm with \code{start = 1}.
 
 Core Pagination Algorithm:
 \enumerate{
-\item Initial guess for pagination point is \code{start + lpp} (\code{start + cpp})
-\item While the guess is not a valid pagination position, and \code{guess > start}, decrement guess and repeat
-}
+\item Initial guess for pagination position is \code{start + lpp} (\code{start + cpp})
+\item While the guess is not a valid pagination position, and \code{guess > start},
+decrement guess and repeat.
 \itemize{
-\item an error is thrown if all possible pagination positions between
-\code{start} and \code{start + lpp} (\code{start + cpp}) would ever be \verb{< start}
+\item An error is thrown if all possible pagination positions between
+\code{start} and \code{start + lpp} (\code{start + cpp}) would be \verb{< start}
 after decrementing
 }
-\enumerate{
 \item Retain pagination index
-\item if pagination  point was less than  \code{NROW(tt)} (\code{ncol(tt)}), set
+\item If pagination point was less than \code{NROW(tt)} (\code{ncol(tt)}), set
 \code{start} to \code{pos + 1}, and repeat steps (1) - (4).
 }
 
-Validating pagination position:
+Validating Pagination Position:
 
 Given an (already adjusted) \code{lpp} or \code{cpp} value, a pagination is invalid if:
 \itemize{
-\item The rows/columns on the page would take  more than (adjusted) \code{lpp} lines/\code{cpp}
-characters to render \strong{including}
+\item The rows/columns on the page would take more than (adjusted) \code{lpp} lines/\code{cpp}
+characters to render \strong{including}:
 \itemize{
 \item word-wrapping
 \item (vertical only) context repetition
 }
-\item (vertical only) footnote messages  and or section divider lines
+\item (vertical only) footnote messages and/or section divider lines
 take up too many lines after rendering rows
 \item (vertical only) row is a label or content (row-group summary) row
-\item (vertical only)  row at the pagination point  has siblings, and
+\item (vertical only) row at the pagination point has siblings, and
 it has less than \code{min_siblings} preceding or following siblings
 \item pagination would occur within a sub-table listed in \code{nosplitin}
 }

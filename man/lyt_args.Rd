@@ -199,8 +199,7 @@ formatted if this cell's value(s) are all NA.}
 divider after each group defined by this split instruction, or
 \code{NA_character_} (the default) for no section divider.}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
-Defaults to \code{"NA"}.}
+\item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 }
 \value{
 NULL (this is an argument template dummy function)

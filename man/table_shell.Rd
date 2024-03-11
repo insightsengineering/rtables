@@ -27,27 +27,22 @@ table_shell_str(
 \item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
 populated table.}
 
-\item{widths}{numeric (or  \code{NULL}). (proposed) widths for the columns
-of \code{x}. The expected length  of this numeric vector can be
-retrieved with  \code{ncol() + 1}  as the  column of row  names must
-also be considered.}
+\item{widths}{(\code{numeric} or  \code{NULL})\cr Proposed widths for the columns of \code{x}. The expected
+length of this numeric vector can be retrieved with \code{ncol(x) + 1} as the column of row names
+must also be considered.}
 
-\item{col_gap}{numeric(1). Space (in characters) between columns}
+\item{col_gap}{(\code{numeric(1)})\cr space (in characters) between columns.}
 
-\item{hsep}{character(1). Characters to repeat to create
-header/body separator line. If \code{NULL}, the object value will be
-used. If \code{" "}, an empty separator will be printed. Check \code{\link[formatters:default_hsep]{default_hsep()}}
-for more information.}
+\item{hsep}{(\code{character(1)})\cr character to repeat to create header/body separator line. If
+\code{NULL}, the object value will be used. If \code{" "}, an empty separator will be printed. See
+\code{\link[formatters:default_hsep]{default_hsep()}} for more information.}
 
-\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
-and footnotes be wrapped?}
+\item{tf_wrap}{(\code{logical(1)})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 
-\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
-and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If \code{NULL}, it is  set to the current print width
-of the  session (\code{getOption("width")}). If set to \code{"auto"},
-the width of the table (plus any table inset) is used. Ignored
-completely if \code{tf_wrap} is \code{FALSE}.}
+\item{max_width}{(\code{integer(1)}, \code{character(1)} or \code{NULL})\cr width that title and footer (including
+footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
+session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
+used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 }
 \value{
 for \code{table_shell_str} the string representing the table shell, for \code{table_shell},
