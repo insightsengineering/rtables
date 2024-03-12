@@ -397,6 +397,34 @@ test_that("section_div works throughout", {
   expect_identical(length(mylns), 31L) ## sect div not printed for last one
 })
 
+test_that("section_div works when analyzing multiple variables", {
+  # Regression test for #835
+  lyt <- basic_table() %>%
+    split_rows_by("Species", section_div = "|") %>%
+    analyze(c("Petal.Width", "Petal.Length"),
+      afun = function(x) list("m" = mean(x), "sd" = sd(x)), section_div = "-"
+    )
+
+  tbl <- build_table(lyt, iris)
+  out <- strsplit(toString(tbl), "\n")[[1]]
+
+  expect_true(check_pattern(out[11], "|", length(out[1])))
+  expect_true(check_pattern(out[16], "-", length(out[1])))
+
+  # One-var still works
+  lyt <- basic_table() %>%
+    split_rows_by("Species", section_div = "|") %>%
+    analyze("Petal.Width",
+      afun = function(x) list("m" = mean(x), "sd" = sd(x)), section_div = "-"
+    )
+
+  tbl <- build_table(lyt, iris)
+  out <- strsplit(toString(tbl), "\n")[[1]]
+
+  expect_true(check_pattern(out[7], "|", length(out[1])))
+  expect_true(check_pattern(out[10], "-", length(out[1])))
+})
+
 test_that("Inset works for table, ref_footnotes, and main footer", {
   general_inset <- 3
 
