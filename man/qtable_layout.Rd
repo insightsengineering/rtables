@@ -69,8 +69,8 @@ printed on a separate line. Ignored for subtables.}
 \item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
 (\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
-\item{show_colcounts}{logical(1). Should column counts be displayed in the
-resulting table when this layout is applied to data}
+\item{show_colcounts}{(\code{logical(1)})\cr whether column counts should be displayed in the resulting table when this
+layout is applied to data.}
 
 \item{drop_levels}{logical(1). Should unobserved factor levels be dropped during facetting. Defaults to \code{TRUE}.}
 

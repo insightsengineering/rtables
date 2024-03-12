@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{analyze_colvars}
 \alias{analyze_colvars}
-\title{Generate Rows Analyzing Different Variables Across Columns}
+\title{Generate rows analyzing different variables across columns}
 \usage{
 analyze_colvars(
   lyt,
@@ -18,11 +18,10 @@ analyze_colvars(
 \arguments{
 \item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{afun}{function or list. Function(s) to be used to calculate the values
-in each column.  The list will be repped out as needed and matched by
-position with the columns during tabulation. This functions accepts the same
-parameters as \link{analyze} like \code{afun} and \code{format}. For further information see
-\code{\link{additional_fun_params}}.}
+\item{afun}{(\code{function} or \code{list})\cr function(s) to be used to calculate the values in each column. The list
+will be repped out as needed and matched by position with the columns during tabulation. This functions
+accepts the same parameters as \code{\link[=analyze]{analyze()}} like \code{afun} and \code{format}. For further information see
+\link{additional_fun_params}.}
 
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
@@ -45,14 +44,14 @@ corresponds to the unmodified default behavior.}
 the analysis. Defaults to \code{FALSE}.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-Generate Rows Analyzing Different Variables Across Columns
+Generate rows analyzing different variables across columns
 }
 \examples{
 library(dplyr)
+
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the

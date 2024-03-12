@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{analyze}
 \alias{analyze}
-\title{Generate Rows Analyzing Variables Across Columns}
+\title{Generate rows analyzing variables across columns}
 \usage{
 analyze(
   lyt,
@@ -59,55 +59,36 @@ corresponds to the unmodified default behavior.}
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-Adding \emph{analyzed variables} to our table layout defines the primary
-tabulation to be performed. We do this by adding calls to \code{analyze}
-and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
-further splitting, the tabulation will occur at the current/next level of
-nesting by default.
+Adding \emph{analyzed variables} to our table layout defines the primary tabulation to be performed. We do this by
+adding calls to \code{analyze} and/or \code{\link[=analyze_colvars]{analyze_colvars()}} into our layout pipeline. As with adding further splitting,
+the tabulation will occur at the current/next level of nesting by default.
 }
 \details{
-When non-NULL \code{format} is used to specify formats for all generated
-rows, and can be a character vector, a function, or a list of functions. It
-will be repped out to the number of rows once this is known during the
-tabulation process, but will be overridden by formats specified within
-\code{rcell} calls in \code{afun}.
+When non-\code{NULL}, \code{format} is used to specify formats for all generated rows, and can be a character vector, a
+function, or a list of functions. It will be repped out to the number of rows once this is calculated during the
+tabulation process, but will be overridden by formats specified within \code{rcell} calls in \code{afun}.
 
-The analysis function (\code{afun}) should take as its first parameter either
-\code{x} or \code{df}. Which of these the function accepts changes the
-behavior when tabulation is performed.
-
+The analysis function (\code{afun}) should take as its first parameter either \code{x} or \code{df}. Whichever of these the
+function accepts will change the behavior when tabulation is performed as follows:
 \itemize{
-\item{
-If \code{afun}'s first parameter is x, it will receive the corresponding
-subset \emph{vector} of data from the relevant column (from \code{var}
-here) of the raw data being used to build the table.
+\item If \code{afun}'s first parameter is \code{x}, it will receive the corresponding subset \emph{vector} of data from the relevant
+column (from \code{var} here) of the raw data being used to build the table.
+\item If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data frame} (i.e. all columns) of
+the raw data being tabulated.
 }
 
-\item{
-If \code{afun}'s first parameter is \code{df}, it will receive the
-corresponding subset \emph{data.frame} (i.e. all columns) of the raw data
-being tabulated
-}
-}
-
-In addition to differentiation on the first argument, the analysis function
-can optionally accept a number of other parameters which, \emph{if and only
-if} present in the formals will be passed to the function by the tabulation
-machinery. These are listed and described in \code{\link{additional_fun_params}}.
+In addition to differentiation on the first argument, the analysis function can optionally accept a number of
+other parameters which, \emph{if and only if} present in the formals, will be passed to the function by the tabulation
+machinery. These are listed and described in \link{additional_fun_params}.
 }
 \note{
-None of the arguments described in the Details section
-can be overridden via \code{extra_args} or when calling
-\code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
-be overridden via the \code{col_counts} argument to
-\code{\link{build_table}}. Alternative values for the others
-must be calculated within \code{afun} based on a combination
-of extra arguments and the unmodified values provided by the
-tabulation framework.
+None of the arguments described in the Details section can be overridden via \code{extra_args} or when calling
+\code{\link[=make_afun]{make_afun()}}. \code{.N_col} and \code{.N_total} can be overridden via the \code{col_counts} argument to \code{\link[=build_table]{build_table()}}.
+Alternative values for the others must be calculated within \code{afun} based on a combination of extra arguments and
+the unmodified values provided by the tabulation framework.
 }
 \examples{
 lyt <- basic_table() \%>\%

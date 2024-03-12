@@ -13,19 +13,16 @@ add_colcounts(lyt, format = "(N=xx)")
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 Add the data derived column counts.
 }
 \details{
 It is often the case that the the column counts derived from the
-input data to \code{build_table} is not representative of the population counts.
+input data to \code{\link[=build_table]{build_table()}} is not representative of the population counts.
 For example, if events are counted in the table and the header should
-display the number of subjects and not the total number of events. In that
-case use the \code{col_count} argument in \code{build_table} to control the counts
-displayed in the table header.
+display the number of subjects and not the total number of events.
 }
 \examples{
 lyt <- basic_table() \%>\%

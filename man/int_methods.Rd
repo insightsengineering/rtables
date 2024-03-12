@@ -351,7 +351,7 @@
 \alias{value_at,LabelRow-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
-\title{combine \code{SplitVector} objects}
+\title{Combine \code{SplitVector} objects}
 \usage{
 \S4method{c}{SplitVector}(x, ...)
 
@@ -1100,17 +1100,17 @@ spl_varnames(object) <- value
 \arguments{
 \item{x}{The object.}
 
-\item{...}{Splits or \code{SplitVector} objects}
+\item{...}{splits or \code{SplitVector} objects.}
 
 \item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{spl}{Split. The split.}
+\item{spl}{(\code{Split})\cr the split.}
 
-\item{pos}{numeric(1). Intended for internal use.}
+\item{pos}{(\code{numeric(1)})\cr intended for internal use.}
 
-\item{cmpnd_fun}{function. Intended for internal use.}
+\item{cmpnd_fun}{(\code{function})\cr intended for internal use.}
 
-\item{constructor}{function.}
+\item{constructor}{(\code{function})\cr constructor function.}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 

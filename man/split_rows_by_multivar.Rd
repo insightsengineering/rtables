@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{split_rows_by_multivar}
 \alias{split_rows_by_multivar}
-\title{Associate Multiple Variables with Rows}
+\title{Associate multiple variables with rows}
 \usage{
 split_rows_by_multivar(
   lyt,
@@ -56,8 +56,7 @@ corresponds to the children of this split. Named elements in the child-specific 
 not match a formal argument of the tabulation function.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 When we need rows to reflect different variables rather than different
@@ -75,6 +74,6 @@ tbl
 
 }
 \seealso{
-\code{\link[=split_rows_by]{split_rows_by()}} for typical row splitting, and
-\code{\link[=split_cols_by_multivar]{split_cols_by_multivar()}} to perform the same type of split on a column basis.
+\code{\link[=split_rows_by]{split_rows_by()}} for typical row splitting, and \code{\link[=split_cols_by_multivar]{split_cols_by_multivar()}} to perform the same type of
+split on a column basis.
 }

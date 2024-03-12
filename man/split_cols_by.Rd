@@ -44,15 +44,13 @@ visible only if the child has 0 content rows.}
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{ref_group}{character(1) or \code{NULL}. Level of \code{var} which should be
-considered ref_group/reference}
+\item{ref_group}{(\code{character(1)} or \code{NULL})\cr level of \code{var} that should be considered \code{ref_group}/reference.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-Will generate children for each subset of a categorical variable
+Will generate children for each subset of a categorical variable.
 }
 \section{Custom Splitting Function Details}{
 
@@ -125,6 +123,7 @@ tbl2
 
 # By default sequentially adding layouts results in nesting
 library(dplyr)
+
 DM_MF <- DM \%>\%
   filter(SEX \%in\% c("M", "F")) \%>\%
   mutate(SEX = droplevels(SEX))

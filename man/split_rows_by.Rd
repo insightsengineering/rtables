@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{split_rows_by}
 \alias{split_rows_by}
-\title{Add Rows according to levels of a variable}
+\title{Add rows according to levels of a variable}
 \usage{
 split_rows_by(
   lyt,
@@ -65,18 +65,15 @@ the children of a split/table.}
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-Add Rows according to levels of a variable
+Add rows according to levels of a variable
 }
 \note{
-If \code{var} is a factor with empty unobserved levels and
-\code{labels_var} is specified, it must also be a factor
-with the same number of levels as \code{var}. Currently the
-error that occurs when this is not the case is not very informative,
-but that will change in the future.
+If \code{var} is a factor with empty unobserved levels and \code{labels_var} is specified, it must also be a factor
+with the same number of levels as \code{var}. Currently the error that occurs when this is not the case is not very
+informative, but that will change in the future.
 }
 \section{Custom Splitting Function Details}{
 
@@ -154,6 +151,7 @@ lyt3 <- basic_table() \%>\%
 lyt3
 
 library(dplyr)
+
 DM2 <- DM \%>\%
   filter(SEX \%in\% c("M", "F")) \%>\%
   mutate(

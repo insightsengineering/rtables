@@ -16,8 +16,7 @@ function (subtable, content table, or row) \emph{and all of that structure's chi
 corresponds to the unmodified default behavior.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 Add an already calculated table to the layout

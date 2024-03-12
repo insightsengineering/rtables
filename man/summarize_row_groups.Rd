@@ -42,28 +42,24 @@ corresponds to the children of this split. Named elements in the child-specific 
 not match a formal argument of the tabulation function.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 Add a content row of summary counts
 }
 \details{
-If \code{format} expects 1 value (i.e. it is specified as a format string
-and \code{xx} appears for two values (i.e. \code{xx} appears twice in the
-format string) or is specified as a function, then both raw and percent of
-column total counts are calculated. If \code{format} is a format string where
-\code{xx} appears only one time, only raw counts are used.
+If \code{format} expects 1 value (i.e. it is specified as a format string and \code{xx} appears for two values
+(i.e. \code{xx} appears twice in the format string) or is specified as a function, then both raw and percent of
+column total counts are calculated. If \code{format} is a format string where \code{xx} appears only one time, only
+raw counts are used.
 
-\code{cfun} must accept \code{x} or \code{df} as its first argument. For the \code{df} argument
-\code{cfun} will receive the subset \code{data.frame} corresponding with the row-
-and column-splitting for the cell being calculated. Must accept \code{labelstr} as
-the second parameter, which accepts the \code{label} of the level of the parent
-split currently being summarized. Can additionally take any optional argument
-supported by analysis functions. (see \code{\link{analyze}}).
+\code{cfun} must accept \code{x} or \code{df} as its first argument. For the \code{df} argument \code{cfun} will receive the subset
+\code{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept
+\code{labelstr} as the second parameter, which accepts the \code{label} of the level of the parent split currently
+being summarized. Can additionally take any optional argument supported by analysis functions. (see \code{\link[=analyze]{analyze()}}).
 
-In addition, if complex custom functions are needed, we suggest checking the
-available \link{additional_fun_params} that apply here as for \code{afun}.
+In addition, if complex custom functions are needed, we suggest checking the available \link{additional_fun_params}
+that can be used in \code{cfun}.
 }
 \examples{
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
@@ -79,7 +75,6 @@ tbl <- build_table(lyt, DM2)
 tbl
 
 row_paths_summary(tbl) # summary count is a content table
-
 
 ## use a cfun and extra_args to customize summarization
 ## behavior

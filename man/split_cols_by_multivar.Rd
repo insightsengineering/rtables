@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{split_cols_by_multivar}
 \alias{split_cols_by_multivar}
-\title{Associate Multiple Variables with Columns}
+\title{Associate multiple variables with columns}
 \usage{
 split_cols_by_multivar(
   lyt,
@@ -36,17 +36,16 @@ corresponds to the children of this split. Named elements in the child-specific 
 not match a formal argument of the tabulation function.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-In some cases, the variable to be ultimately analyzed is most naturally
-defined on a column, not a row basis. When we need columns to reflect
-different variables entirely, rather than different levels of a single
-variable, we use \code{split_cols_by_multivar}
+In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row, basis.
+When we need columns to reflect different variables entirely, rather than different levels of a single
+variable, we use \code{split_cols_by_multivar}.
 }
 \examples{
 library(dplyr)
+
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the
