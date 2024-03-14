@@ -51,7 +51,7 @@ table object, a formatted table can be printed in ASCII format, or exported to a
 variety of other formats (`.txt`, `.pdf`, `.docx`, etc.).
 
 ```{r echo=FALSE, fig.align='center'}
-knitr::include_graphics("../man/figures/rtables-basics.png")
+knitr::include_graphics("./images/rtables-basics.png")
 ```
 
 ## Data
