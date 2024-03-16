@@ -52,17 +52,16 @@ The  preprocessing   component  is   useful  for  things   such  as
 manipulating factor  levels, e.g.,  to trim  unobserved ones  or to
 reorder levels based on observed counts, etc.
 
-Customization of core splitting (2)  is currently only supported in
-row  splits.  Core  splitting functions  override  the  fundamental
+Core  splitting functions  override  the  fundamental
 splitting procedure,  and are only  necessary in rare  cases. These
 must  accept  \code{spl}, \code{df},  \code{vals},  \code{labels},  and can  optionally
-accept \code{.spl_context}. They must return a named list with elements,
-all of  the same  length, as follows:  - \code{datasplit}  (containing a
-list of data.frames), -  \code{values} containing values associated with
-the   facets,   which   must   be   \code{character}   or   \code{SplitValue}
-objects. These  values will  appear in the  paths of  the resulting
-table.  - \code{labels} containing  the character labels associated with
-\code{values}
+accept \code{.spl_context}. They should return an split result object
+constructed via \code{make_split_result()}.
+
+In particular, if the custom split function will be used in
+column space, subsetting expressions (e.g., as returned by
+\code{quote()} or \code{bquote} must be provided, while they are
+optional (and largely ignored, currently) in row space.
 
 Postprocessing functions  (3) must  accept the  result of  the core
 split  as  their  first  argument  (which  as  of  writing  can  be

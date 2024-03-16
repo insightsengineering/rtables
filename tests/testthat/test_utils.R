@@ -1,6 +1,7 @@
 context("Checking utility functions")
 
 test_that("func_takes works with different inputs", {
+    func_takes <- rtables:::func_takes
   f1 <- function() {}
   f2 <- function(df = "a") {}
   f3 <- function(x = "df") {}

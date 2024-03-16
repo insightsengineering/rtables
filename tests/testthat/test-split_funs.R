@@ -339,7 +339,10 @@ test_that("make_split_fun works", {
   very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
     make_split_result(
       c("stupid", "silly"),
-      datasplit = list(df[1:10, ], df[11:30, ]), labels = c("first 10", "second 20")
+      datasplit = list(df[1:10, ], df[11:30, ]),
+      labels = c("first 10", "second 20"),
+      subset_exprs  = list(quote(seq_along(AGE) <= 10),
+                           quote(seq_along(AGE) %in% 11:30))
     )
   }
 
@@ -350,12 +353,14 @@ test_that("make_split_fun works", {
       levels = c("stupid", "silly")
     ))
   )
-  lyt4a <- basic_table() %>%
+  lyt4a <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = nonsense_splfun) %>%
     analyze("AGE")
 
-  ## not supported in column space, currently
-  expect_error(build_table(lyt4a, DM), "override core splitting")
+  tbl4a <- build_table(lyt4a, DM)
+  expect_equal(col_counts(tbl4a),
+               c(10L, 20L, 30L))
+
 
   lyt4b <- basic_table() %>%
     split_rows_by("ARM", split_fun = nonsense_splfun) %>%
