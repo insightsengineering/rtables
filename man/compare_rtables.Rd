@@ -13,32 +13,32 @@ compare_rtables(
 )
 }
 \arguments{
-\item{object}{\code{rtable} to test}
+\item{object}{(\code{TableTree})\cr \code{rtable} to test.}
 
-\item{expected}{\code{rtable} expected}
+\item{expected}{(\code{TableTree})\cr expected \code{rtable}.}
 
-\item{tol}{numerical tolerance}
+\item{tol}{(\code{numeric(1)})\cr tolerance.}
 
-\item{comp.attr}{boolean. Compare format of cells. Other attributes are
+\item{comp.attr}{(\code{logical(1)})\cr whether to compare cell formats. Other attributes are
 silently ignored.}
 
-\item{structure}{boolean. Should structure (in the form of column and row
-paths to cells) be compared. Currently defaults to \code{FALSE}, but this is
+\item{structure}{(\code{logical(1)})\cr whether structures (in the form of column and row
+paths to cells) should be compared. Currently defaults to \code{FALSE}, but this is
 subject to change in future versions.}
 }
 \value{
-a matrix of class \code{"rtables_diff"} representing the differences
+A matrix of class \code{rtables_diff} representing the differences
 between \code{object} and \code{expected} as described above.
 }
 \description{
 Prints a matrix where \code{.} means cell matches, \code{X} means cell does
 cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 should not be there. If \code{structure} is set to \code{TRUE}, \code{C} indicates
-columnar structure mismatch, \code{R} indicates row-structure mismatch, and
+column-structure mismatch, \code{R} indicates row-structure mismatch, and
 \code{S} indicates mismatch in both row and column structure.
 }
 \note{
-In its current form \code{compare_rtables} does not take structure into
+In its current form, \code{compare_rtables} does not take structure into
 account, only row and cell position.
 }
 \examples{
@@ -103,4 +103,5 @@ object <- rtable(
 )
 
 compare_rtables(object, expected)
+
 }
