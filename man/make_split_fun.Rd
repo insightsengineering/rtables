@@ -47,10 +47,10 @@ fundamental splitting procedure, and are only necessary in rare cases. These mus
 \code{labels}, and can optionally accept \code{.spl_context}. They must return a named list with elements, all of the same
 length, as follows:
 \itemize{
-\item \code{datasplit} containing a list of \code{data.frame}s.
-\item \code{values} containing values associated with the facets, which must be \code{character} or \code{SplitValue} objects.
+\item \code{datasplit}, containing a list of \code{data.frame} objects.
+\item \code{values}, containing values associated with the facets, which must be \code{character} or \code{SplitValue} objects.
 These values will appear in the paths of the resulting table.
-\item \code{labels} containing the character labels associated with \code{values}
+\item \code{labels}, containing the character labels associated with \code{values}
 }
 
 Post-processing functions (3) must accept the result of the core split as their first argument (which can be

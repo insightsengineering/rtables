@@ -2,15 +2,15 @@
 % Please edit documentation in R/summary.R
 \name{summarize_rows}
 \alias{summarize_rows}
-\title{summarize_rows}
+\title{Summarize rows}
 \usage{
 summarize_rows(obj)
 }
 \arguments{
-\item{obj}{\code{VTableTree}.}
+\item{obj}{(\code{VTableTree})\cr an \code{rtable} object.}
 }
 \value{
-A data.frame summarizing the rows in \code{obj}.
+A data frame summarizing the rows in \code{obj}.
 }
 \description{
 \code{summarize_rows} is deprecated in favor of \code{make_row_df}.

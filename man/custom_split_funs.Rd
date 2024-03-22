@@ -2,55 +2,43 @@
 % Please edit documentation in R/split_funs.R
 \name{custom_split_funs}
 \alias{custom_split_funs}
-\title{Custom Split Functions}
+\title{Custom split functions}
 \description{
-Split functions provide the work-horse for \code{rtables}'s
-generalized partitioning. These functions accept a (sub)set of incoming
-data, a split object, and return 'splits' of that data.
+Split functions provide the work-horse for \code{rtables}'s generalized partitioning. These functions accept a (sub)set
+of incoming data and a split object, and return "splits" of that data.
 }
 \section{Custom Splitting Function Details}{
 
 
-User-defined custom split functions can perform any type of computation on
-the incoming data provided that they meet the contract for generating
-'splits' of the incoming data 'based on' the split object.
+User-defined custom split functions can perform any type of computation on the incoming data provided that they
+meet the requirements for generating "splits" of the incoming data based on the split object.
 
 Split functions are functions that accept:
 \describe{
-\item{df}{data.frame of incoming data to be split}
-\item{spl}{a Split object. this is largely an internal detail custom
-functions will not need to worry about, but  \code{obj_name(spl)}, for
-example, will give the name of the split as it will appear in paths in the
-resulting table}
-\item{vals}{Any pre-calculated values. If given non-null values, the values
-returned should match these. Should be NULL in most cases and can likely be
-ignored}
-\item{labels}{Any pre-calculated value labels. Same as above for
-\code{values}}
-\item{trim}{If \code{TRUE}, resulting splits that are empty should be
-removed}
-\item{(Optional) .spl_context}{a data.frame describing previously performed
-splits which collectively arrived at \code{df}}
+\item{df}{a \code{data.frame} of incoming data to be split.}
+\item{spl}{a Split object. This is largely an internal detail custom functions will not need to worry about,
+but \code{obj_name(spl)}, for example, will give the name of the split as it will appear in paths in the resulting
+table.}
+\item{vals}{any pre-calculated values. If given non-\code{NULL} values, the values returned should match these.
+Should be \code{NULL} in most cases and can usually be ignored.}
+\item{labels}{any pre-calculated value labels. Same as above for \code{values}.}
+\item{trim}{if \code{TRUE}, resulting splits that are empty are removed.}
+\item{(optional) .spl_context}{a \code{data.frame} describing previously performed splits which collectively
+arrived at \code{df}.}
 }
 
-The function must then output a \code{named list} with the following
-elements:
+The function must then output a named \code{list} with the following elements:
 
 \describe{
-\item{values}{The vector of all values corresponding to the splits of
-\code{df}}
-\item{datasplit}{a list of data.frames representing the groupings of the
-actual observations from \code{df}.}
-\item{labels}{a character vector giving a string label for each value listed
-in the \code{values} element above}
-\item{(Optional) extras}{If present, extra arguments are to be passed to summary
-and analysis functions whenever they are executed on the corresponding
-element of \code{datasplit} or a subset thereof}
+\item{values}{the vector of all values corresponding to the splits of \code{df}.}
+\item{datasplit}{a list of \code{data.frame}s representing the groupings of the actual observations from \code{df}.}
+\item{labels}{a character vector giving a string label for each value listed in the \code{values} element above.}
+\item{(optional) extras}{if present, extra arguments are to be passed to summary and analysis functions
+whenever they are executed on the corresponding element of \code{datasplit} or a subset thereof.}
 }
 
-One way to generate custom splitting functions is to wrap existing split
-functions and modify either the incoming data before they are called or
-their outputs.
+One way to generate custom splitting functions is to wrap existing split functions and modify either the incoming
+data before they are called or their outputs.
 }
 
 \examples{
@@ -94,6 +82,6 @@ tbl
 
 }
 \seealso{
-\code{\link[=make_split_fun]{make_split_fun()}} for the API for creating custom split functions,
-and \link{split_funcs} for a variety of pre-defined split functions.
+\code{\link[=make_split_fun]{make_split_fun()}} for the API for creating custom split functions, and \link{split_funcs} for a variety of
+pre-defined split functions.
 }

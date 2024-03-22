@@ -166,10 +166,10 @@ add_to_split_result <- function(splres, values, datasplit, labels, extras = NULL
 #' `labels`, and can optionally accept `.spl_context`. They must return a named list with elements, all of the same 
 #' length, as follows:  
 #' 
-#'   - `datasplit` containing a list of `data.frame`s.
-#'   - `values` containing values associated with the facets, which must be `character` or `SplitValue` objects. 
+#'   - `datasplit`, containing a list of `data.frame` objects.
+#'   - `values`, containing values associated with the facets, which must be `character` or `SplitValue` objects. 
 #'     These values will appear in the paths of the resulting table.  
-#'   - `labels` containing the character labels associated with `values`
+#'   - `labels`, containing the character labels associated with `values`
 #'   
 #' Post-processing functions (3) must accept the result of the core split as their first argument (which can be 
 #' anything), in addition to `spl`, and `fulldf`, and can optionally accept `.spl_context`. They must each return a 

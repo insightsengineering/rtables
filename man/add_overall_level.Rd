@@ -2,7 +2,7 @@
 % Please edit documentation in R/split_funs.R
 \name{add_overall_level}
 \alias{add_overall_level}
-\title{Add an virtual 'overall' level to split}
+\title{Add a virtual "overall" level to split}
 \usage{
 add_overall_level(
   valname = "Overall",
@@ -13,8 +13,8 @@ add_overall_level(
 )
 }
 \arguments{
-\item{valname}{character(1). 'Value' to be assigned to the implicit
-all-observations split level. Defaults to \code{"Overall"}}
+\item{valname}{(\code{character(1)})\cr value to be assigned to the implicit all-observations split level. Defaults to
+\code{"Overall"}.}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
@@ -22,17 +22,16 @@ all-observations split level. Defaults to \code{"Overall"}}
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{first}{logical(1). Should the implicit level appear first (\code{TRUE})
-or last \code{FALSE}. Defaults to \code{TRUE}.}
+\item{first}{(\code{logical(1)})\cr whether the implicit level should appear first (\code{TRUE}) or last (\code{FALSE}). Defaults
+to \code{TRUE}.}
 
 \item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 }
 \value{
-a closure suitable for use as a splitting function (\code{splfun})
-when creating a table layout
+A closure suitable for use as a splitting function (\code{splfun}) when creating a table layout.
 }
 \description{
-Add an virtual 'overall' level to split
+Add a virtual "overall" level to split
 }
 \examples{
 lyt <- basic_table() \%>\%

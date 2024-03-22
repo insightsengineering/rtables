@@ -1,10 +1,12 @@
 # paths summary ----
 
-#' @rdname make_col_row_df
+#' Get a list of table row/column paths
 #'
-#' @title Return List with Table Row/Col Paths
+#' @param x (`TableTree`)\cr an `rtable` object.
 #'
-#' @param x an `rtable` object
+#' @return A list of paths to each row/column within `x`.
+#'
+#' @seealso [cell_values()], [`fnotes_at_path<-`], [row_paths_summary()], [col_paths_summary()]
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -19,17 +21,12 @@
 #'
 #' cell_values(tbl, c("AGE", "Mean"), c("ARM", "B: Placebo"))
 #'
-#' @return a list of paths to each row/column within \code{x}
-#'
-#' @seealso [cell_values()], [`fnotes_at_path<-`],
-#'   [row_paths_summary()], [col_paths_summary()]
-#'
+#' @rdname make_col_row_df
 #' @export
 row_paths <- function(x) {
   stopifnot(is_rtable(x))
   make_row_df(x, visible_only = TRUE)$path
 }
-
 
 #' @rdname make_col_row_df
 #' @export
@@ -40,17 +37,14 @@ col_paths <- function(x) {
   make_col_df(x, visible_only = TRUE)$path
 }
 
-
-#' Print Row/Col Paths Summary
+#' Print row/columm paths summary
 #'
-#' @param x an `rtable` object
+#' @param x (`TableTree`)\cr an `rtable` object.
 #'
-#' @export
-#' @return A data.frame summarizing the row- or column-structure of \code{x}.
+#' @return A data frame summarizing the row- or column-structure of `x`.
+#' 
 #' @examples
-#' library(dplyr)
-#'
-#' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
+#' ex_adsl_MF <- ex_adsl %>% dplyr::filter(SEX %in% c("M", "F"))
 #'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -77,6 +71,8 @@ col_paths <- function(x) {
 #'   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 #' )
 #' col_paths_summary(tbl2)
+#' 
+#' @export
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
@@ -105,7 +101,6 @@ row_paths_summary <- function(x) {
   invisible(pagdf[, c("label", "indent", "node_class", "path")])
 }
 
-
 #' @rdname row_paths_summary
 #' @export
 col_paths_summary <- function(x) {
@@ -131,11 +126,8 @@ col_paths_summary <- function(x) {
   invisible(pagdf[, c("label", "path")])
 }
 
-
 # Rows ----
 # . Summarize Rows ----
-
-
 
 # summarize_row_df <-
 #     function(name,
@@ -206,13 +198,14 @@ fast_rsummry_bind <- function(lst) {
   res
 }
 
-
-
-#' summarize_rows
+#' Summarize rows
 #'
 #' `summarize_rows` is deprecated in favor of `make_row_df`.
-#' @param obj `VTableTree`.
-#' @return A data.frame summarizing the rows in \code{obj}.
+#' 
+#' @param obj (`VTableTree`)\cr an `rtable` object.
+#' 
+#' @return A data frame summarizing the rows in `obj`.
+#' 
 #' @export
 summarize_rows <- function(obj) {
   .Deprecated("make_row_df")
