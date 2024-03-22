@@ -15,9 +15,7 @@
   })
 }
 
-
 setGeneric(".idx_helper", function(tr, cur_idx_fun) standardGeneric(".idx_helper"))
-
 
 setMethod(
   ".idx_helper", "TableRow",
@@ -61,7 +59,6 @@ index_col_refs <- function(tt, cur_idx_fun) {
   tt
 }
 
-
 .index_col_refs_inner <- function(ctree, cur_idx_fun) {
   col_footnotes(ctree) <- .reindex_one_pos(
     col_footnotes(ctree),
@@ -81,18 +78,19 @@ index_col_refs <- function(tt, cur_idx_fun) {
   ##                                      function(refs) lapply(refs, function(refi) {
 }
 
-#' Update footnote indexes on a built table
+#' Update footnote indices on a built table
 #'
-#' Re-indexes footnotes within a built table
+#' Re-indexes footnotes within a built table.
+#' 
 #' @inheritParams gen_args
 #'
-#' @details  After adding or removing  referential footnotes manually,
-#'     or  after subsetting  a table,  the reference  indexes (i.e.  the
-#'     number associated  with specific  footnotes) may  be incorrect.
-#'     This function recalculates these based on the full table.
+#' @details
+#' After adding or removing referential footnotes manually, or after subsetting a table, the reference indexes 
+#' (i.e. the number associated with specific footnotes) may be incorrect. This function recalculates these based 
+#' on the full table.
 #'
-#' @note In the future this should not generally need to be called
-#' manually.
+#' @note In the future this should not generally need to be called manually.
+#' 
 #' @export
 update_ref_indexing <- function(tt) {
   col_fnotes <- c(list(row_fnotes = list()), col_footnotes(tt))
@@ -114,7 +112,6 @@ update_ref_indexing <- function(tt) {
   if (nrow(tt) == 0) {
     return(tt)
   }
-
 
   rdf <- make_row_df(tt)
 

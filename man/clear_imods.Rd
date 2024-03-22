@@ -4,7 +4,7 @@
 \alias{clear_indent_mods}
 \alias{clear_indent_mods,VTableTree-method}
 \alias{clear_indent_mods,TableRow-method}
-\title{Clear All Indent Mods from a Table}
+\title{Clear all indent modifiers from a table}
 \usage{
 clear_indent_mods(tt)
 
@@ -16,10 +16,10 @@ clear_indent_mods(tt)
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 }
 \value{
-The same class as \code{tt}, with all indent mods set to zero.
+The same class as \code{tt}, with all indent modifiers set to zero.
 }
 \description{
-Clear All Indent Mods from a Table
+Clear all indent modifiers from a table
 }
 \examples{
 lyt1 <- basic_table() \%>\%
@@ -31,4 +31,5 @@ lyt1 <- basic_table() \%>\%
 tbl1 <- build_table(lyt1, ex_adae)
 tbl1
 clear_indent_mods(tbl1)
+
 }

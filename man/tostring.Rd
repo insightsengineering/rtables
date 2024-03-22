@@ -16,7 +16,7 @@
 )
 }
 \arguments{
-\item{x}{(\code{any})\cr object to be prepared for rendering.}
+\item{x}{(\code{ANY})\cr object to be prepared for rendering.}
 
 \item{widths}{(\code{numeric} or  \code{NULL})\cr Proposed widths for the columns of \code{x}. The expected
 length of this numeric vector can be retrieved with \code{ncol(x) + 1} as the column of row names

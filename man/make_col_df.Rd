@@ -7,7 +7,7 @@
 make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 }
 \arguments{
-\item{tt}{(\code{any})\cr object representing the table-like object to be summarized.}
+\item{tt}{(\code{ANY})\cr object representing the table-like object to be summarized.}
 
 \item{colwidths}{(\code{numeric})\cr internal detail, do not set manually.}
 

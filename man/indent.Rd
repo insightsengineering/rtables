@@ -7,10 +7,10 @@
 indent(x, by = 1)
 }
 \arguments{
-\item{x}{\code{\link{rtable}} object}
+\item{x}{(\code{TableTree})\cr an \code{rtable} object.}
 
-\item{by}{integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
-indentation is set to 0.}
+\item{by}{(\code{integer})\cr number to increase indentation of rows by. Can be negative. If final indentation is
+less than 0, the indentation is set to 0.}
 }
 \value{
 \code{x} with its indent modifier incremented by \code{by}.
