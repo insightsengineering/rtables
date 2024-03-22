@@ -208,7 +208,6 @@ reference:
     contents:
     - prune_table
     - all_zero_or_na
-    - trim_zero_rows
     - trim_rows
     - sort_at_path
     - cont_n_allcols

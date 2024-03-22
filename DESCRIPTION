@@ -73,7 +73,6 @@ Collate:
     'utils.R'
     'colby_constructors.R'
     'compare_rtables.R'
-    'deprecated.R'
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
