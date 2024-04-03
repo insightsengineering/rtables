@@ -108,7 +108,7 @@ paste_vec <- function(vec) {
 # Utility for checking if a package is installed
 check_required_packages <- function(pkgs) {
   for (pkgi in pkgs) {
-    if (!requireNamespace(pkgi)) {
+    if (!requireNamespace(pkgi, quietly = TRUE)) {
       stop(
         "This function requires the ", pkgi, " package. ",
         "Please install it if you wish to use it"
