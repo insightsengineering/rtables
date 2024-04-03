@@ -21,7 +21,7 @@ CellValue(
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
-\item{colspan}{integer(1). Column span value.}
+\item{colspan}{(\code{integer(1)})\cr column span value.}
 
 \item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
 
@@ -29,7 +29,7 @@ or function. In cases such as \code{analyze} calls, they can be character vector
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
+\item{footnotes}{(\code{list} or \code{NULL})\cr referential footnote messages for the cell.}
 
 \item{align}{(\code{character(1)} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
 \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
