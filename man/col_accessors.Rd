@@ -115,18 +115,18 @@ col_total(obj) <- value
 
 \item{value}{(\code{any})\cr the new value.}
 
-\item{df}{data.frame/NULL. Data to use if the column information is being
-generated from a  Pre-Data layout object}
+\item{df}{(\code{data.frame} or \code{NULL})\cr data to use if the column information is being
+generated from a pre-data layout object.}
 
-\item{rtpos}{\code{TreePos}. Root position.}
+\item{rtpos}{(\code{TreePos})\cr root position.}
 
-\item{path}{character or NULL. \code{col_counts} getter and setter only.
+\item{path}{(\code{character} or \code{NULL})\cr \code{col_counts} accessor and setter only.
 Path (in column structure).}
 }
 \value{
 A \code{LayoutColTree} object.
 
-Various column information, depending on the accessor used.
+Returns various information about columns, depending on the accessor used.
 }
 \description{
 Column information/structure accessors

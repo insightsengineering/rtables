@@ -16,7 +16,7 @@
 \alias{ref_symbol<-}
 \alias{ref_msg}
 \alias{fnotes_at_path<-}
-\title{Referential Footnote Accessors}
+\title{Referential footnote accessors}
 \usage{
 row_footnotes(obj)
 
@@ -53,17 +53,17 @@ fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 \item{value}{(\code{any})\cr the new value.}
 
-\item{rowpath}{character or NULL. Path within row structure. \code{NULL}
-indicates the footnote should go on the column rather than cell.}
+\item{rowpath}{(\code{character} or \code{NULL})\cr path within row structure. \code{NULL} indicates the footnote should
+go on the column rather than cell.}
 
-\item{colpath}{character or NULL. Path within column structure. \code{NULL}
-indicates footnote should go on the row rather than cell}
+\item{colpath}{(\code{character} or \code{NULL})\cr path within column structure. \code{NULL} indicates footnote should go
+on the row rather than cell.}
 
-\item{reset_idx}{logical(1). Should the numbering for referential footnotes
-be immediately recalculated. Defaults to TRUE.}
+\item{reset_idx}{(\code{flag})\cr whether the numbering for referential footnotes should be immediately
+recalculated. Defaults to \code{TRUE}.}
 }
 \description{
-Get and set referential footnotes on aspects of a built table
+Access and set the referential footnotes aspects of a built table.
 }
 \examples{
 # How to add referencial footnotes after having created a table
@@ -86,6 +86,5 @@ fnotes_at_path(tbl, rowpath = c("SEX", "UNDIFFERENTIATED")) <- "Unfamous paper 2
 
 }
 \seealso{
-\code{\link[=row_paths]{row_paths()}}, \code{\link[=col_paths]{col_paths()}},
-\code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
+\code{\link[=row_paths]{row_paths()}}, \code{\link[=col_paths]{col_paths()}}, \code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
 }

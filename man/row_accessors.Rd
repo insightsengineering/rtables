@@ -45,7 +45,7 @@ row_values(obj) <- value
 \item{value}{(\code{any})\cr the new value.}
 }
 \value{
-various, depending on the accessor called.
+Various return values depending on the accessor called.
 }
 \description{
 Row attribute accessors

@@ -4,7 +4,7 @@
 \alias{no_colinfo}
 \alias{no_colinfo,VTableNodeInfo-method}
 \alias{no_colinfo,InstantiatedColumnInfo-method}
-\title{Exported for use in tern}
+\title{Exported for use in \code{tern}}
 \usage{
 no_colinfo(obj)
 
@@ -16,8 +16,7 @@ no_colinfo(obj)
 \item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
 }
 \value{
-\code{TRUE} if the object has no/empty instantiated column information,
-\code{FALSE} otherwise.
+\code{TRUE} if the object has no/empty instantiated column information, \code{FALSE} otherwise.
 }
 \description{
 Does the \code{table}/\code{row}/\code{InstantiatedColumnInfo} object contain no column structure information?

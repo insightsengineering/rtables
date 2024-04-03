@@ -9,7 +9,7 @@
 \alias{top_left<-,VTableTree-method}
 \alias{top_left<-,InstantiatedColumnInfo-method}
 \alias{top_left<-,PreDataTableLayouts-method}
-\title{Top Left Material (Experimental)}
+\title{Top left material (experimental)}
 \usage{
 top_left(obj)
 
@@ -33,11 +33,11 @@ top_left(obj) <- value
 \item{value}{(\code{any})\cr the new value.}
 }
 \value{
-A character vector representing the top-left material of \code{obj} (or
-\code{obj} after modification, in the case of the setter).
+A character vector representing the top-left material of \code{obj} (or \code{obj} after modification, in the
+case of the setter).
 }
 \description{
-A \code{TableTree} object can have \emph{top left material} which is a sequence
-of strings which are printed in the area of the table between the column header display
-and the label of the first row.  These functions access and modify that material.
+A \code{TableTree} object can have \emph{top left material} which is a sequence of strings which are printed in the
+area of the table between the column header display and the label of the first row. These functions access
+and modify that material.
 }

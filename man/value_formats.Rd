@@ -6,7 +6,7 @@
 \alias{value_formats,TableRow-method}
 \alias{value_formats,LabelRow-method}
 \alias{value_formats,VTableTree-method}
-\title{Value Formats}
+\title{Value formats}
 \usage{
 value_formats(obj, default = obj_format(obj))
 
@@ -19,17 +19,16 @@ value_formats(obj, default = obj_format(obj))
 \S4method{value_formats}{VTableTree}(obj, default = obj_format(obj))
 }
 \arguments{
-\item{obj}{A table or row object.}
+\item{obj}{(\code{TableTree} or \code{TableRow})\cr a table or row object.}
 
-\item{default}{\code{FormatSpec}.}
+\item{default}{(\code{FormatSpec})\cr default format.}
 }
 \value{
-Matrix (storage mode list) containing the effective format for each
-cell position in the table (including 'virtual' cells implied by label rows,
-whose formats are always \code{NULL}).
+Matrix (storage mode list) containing the effective format for each cell position in the table
+(including 'virtual' cells implied by label rows, whose formats are always \code{NULL}).
 }
 \description{
-Returns a matrix of formats for the cells in a table
+Returns a matrix of formats for the cells in a table.
 }
 \examples{
 lyt <- basic_table() \%>\%

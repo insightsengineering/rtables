@@ -207,8 +207,10 @@ represents a subsequent choice amongst the children of the previous choice.}
 \item{nsibs}{(\code{integer(1)})\cr internal detail, do not set manually.}
 }
 \value{
-for getters, the current value of the component being accessed
-on \code{obj}, for setters, a modified copy of \code{obj} with the new value.
+\itemize{
+\item Accessor functions return the current value of the component being accessed of \code{obj}
+\item Setter functions return a modified copy of \code{obj} with the new value.
+}
 }
 \description{
 See the \code{formatters} documentation for descriptions of these generics.

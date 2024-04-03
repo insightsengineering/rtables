@@ -2,20 +2,20 @@
 % Please edit documentation in R/tree_accessors.R
 \name{collect_leaves}
 \alias{collect_leaves}
-\title{Collect leaves of a table tree}
+\title{Collect leaves of a \code{TableTree}}
 \usage{
 collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
 }
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}
+\item{incl.cont}{(\code{flag})\cr whether to include rows from content tables within the tree. Defaults to \code{TRUE}.}
 
-\item{add.labrows}{logical. Include label rows. Defaults to \code{FALSE}}
+\item{add.labrows}{(\code{flag})\cr whether to include label rows. Defaults to \code{FALSE}.}
 }
 \value{
-A list of \code{TableRow} objects for all rows in the table
+A list of \code{TableRow} objects for all rows in the table.
 }
 \description{
-Collect leaves of a table tree
+Collect leaves of a \code{TableTree}
 }

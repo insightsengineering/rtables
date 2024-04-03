@@ -1157,31 +1157,31 @@ the underlying default of \code{NA}. \code{NA} is \emph{not} appropriate for \co
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
 underneath analyses, which is not allowed.}
 
-\item{for_analyze}{logical(1).}
+\item{for_analyze}{(\code{flag}) whether split is an analyze split.}
 
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
 \item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{override}{logical(1).}
+\item{override}{(\code{flag})\cr whether to override attribute.}
 
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}
+\item{incl.cont}{(\code{flag})\cr whether to include rows from content tables within the tree. Defaults to \code{TRUE}.}
 
-\item{add.labrows}{logical. Include label rows. Defaults to \code{FALSE}}
+\item{add.labrows}{(\code{flag})\cr whether to include label rows. Defaults to \code{FALSE}.}
 
-\item{mode}{character(1). Passed on to \code{\link[base]{as.vector}}}
+\item{mode}{(\code{string})\cr passed on to \code{\link[=as.vector]{as.vector()}}.}
 
-\item{rowpath}{character or NULL. Path within row structure. \code{NULL}
-indicates the footnote should go on the column rather than cell.}
+\item{rowpath}{(\code{character} or \code{NULL})\cr path within row structure. \code{NULL} indicates the footnote should
+go on the column rather than cell.}
 
-\item{colpath}{character or NULL. Path within column structure. \code{NULL}
-indicates footnote should go on the row rather than cell}
+\item{colpath}{(\code{character} or \code{NULL})\cr path within column structure. \code{NULL} indicates footnote should go
+on the row rather than cell.}
 
-\item{reset_idx}{logical(1). Should the numbering for referential footnotes
-be immediately recalculated. Defaults to TRUE.}
+\item{reset_idx}{(\code{flag})\cr whether the numbering for referential footnotes should be immediately
+recalculated. Defaults to \code{TRUE}.}
 
 \item{y}{Second element to be \code{rbound} via \code{rbind2}}
 
@@ -1226,5 +1226,6 @@ tbl <- build_table(lyt, iris2)
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
+
 }
 \keyword{internal}
