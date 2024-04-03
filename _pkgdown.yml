@@ -177,7 +177,6 @@ reference:
     - row_paths
     - row_paths_summary
     - table_structure
-    - summarize_rows
     - table_shell
     - formatters::make_row_df
     - make_col_df

@@ -86,7 +86,7 @@ information.}
 \item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
-\item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}

@@ -27,7 +27,7 @@ it can contain up to two \code{"\\\%s"}.}
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
-\item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
 or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional

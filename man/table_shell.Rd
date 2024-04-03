@@ -32,13 +32,13 @@ must also be considered.}
 
 \item{col_gap}{(\code{numeric(1)})\cr space (in characters) between columns.}
 
-\item{hsep}{(\code{character(1)})\cr character to repeat to create header/body separator line. If
+\item{hsep}{(\code{string})\cr character to repeat to create header/body separator line. If
 \code{NULL}, the object value will be used. If \code{" "}, an empty separator will be printed. See
 \code{\link[formatters:default_hsep]{default_hsep()}} for more information.}
 
-\item{tf_wrap}{(\code{logical(1)})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
+\item{tf_wrap}{(\code{flag})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 
-\item{max_width}{(\code{integer(1)}, \code{character(1)} or \code{NULL})\cr width that title and footer (including
+\item{max_width}{(\code{integer(1)}, \code{string} or \code{NULL})\cr width that title and footer (including
 footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}

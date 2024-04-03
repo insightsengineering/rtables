@@ -11,7 +11,7 @@ make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 
 \item{colwidths}{(\code{numeric})\cr internal detail, do not set manually.}
 
-\item{visible_only}{(\code{logical(1)})\cr should only visible aspects of the table structure be reflected
+\item{visible_only}{(\code{flag})\cr should only visible aspects of the table structure be reflected
 in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 }
 \description{

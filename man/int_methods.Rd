@@ -1098,7 +1098,7 @@ spl_varnames(object) <- value
 \S4method{show}{VTableTree}(object)
 }
 \arguments{
-\item{x}{The object.}
+\item{x}{(\code{SplitVector})\cr a \code{SplitVector} object.}
 
 \item{...}{splits or \code{SplitVector} objects.}
 
@@ -1138,19 +1138,18 @@ not match a formal argument of the tabulation function.}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{obj}{The object.}
+\item{obj}{(\code{TableTree})\cr a table object.}
 
-\item{depth}{depth in tree}
+\item{depth}{(\code{numeric(1)})\cr depth in tree.}
 
-\item{indent}{indent}
+\item{indent}{(\code{numeric(1)})\cr indent.}
 
-\item{print_indent}{indent for print}
+\item{print_indent}{(\code{numeric(1)})\cr indent for printing.}
 
-\item{object}{a table object}
+\item{object}{(\code{TableTree})\cr a table object.}
 
-\item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
-\code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
-appropriate for \code{VTableTree} objects.}
+\item{max.level}{(\code{numeric(1)})\cr passed to \code{utils::str}. Defaults to 3 for the \code{VTableTree} method, unlike
+the underlying default of \code{NA}. \code{NA} is \emph{not} appropriate for \code{VTableTree} objects.}
 
 \item{value}{(\code{any})\cr the new value.}
 
@@ -1163,7 +1162,7 @@ underneath analyses, which is not allowed.}
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
-\item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{override}{logical(1).}
 
@@ -1202,8 +1201,9 @@ Defaults to \code{FALSE}.}
 Various, but should be considered implementation details.
 }
 \description{
-These are internal methods that are documented only to satisfy
-\verb{R CMD check}. End users should pay no attention to this documentation.
+Combine \code{SplitVector} objects
+
+Summarize rows
 }
 \examples{
 library(dplyr)

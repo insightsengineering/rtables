@@ -106,7 +106,7 @@ underneath analyses, which is not allowed.}
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
-\item{na_str}{(\code{character(1)})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For

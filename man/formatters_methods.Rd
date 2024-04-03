@@ -186,7 +186,7 @@ determining how many lines they require.}
 
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{visible_only}{(\code{logical(1)})\cr should only visible aspects of the table structure be reflected
+\item{visible_only}{(\code{flag})\cr should only visible aspects of the table structure be reflected
 in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 
 \item{rownum}{(\code{numeric(1)})\cr internal detail, do not set manually.}
@@ -196,7 +196,7 @@ in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}
 
-\item{incontent}{(\code{logical(1)})\cr internal detail, do not set manually.}
+\item{incontent}{(\code{flag})\cr internal detail, do not set manually.}
 
 \item{repr_ext}{(\code{integer(1)})\cr internal detail, do not set manually.}
 

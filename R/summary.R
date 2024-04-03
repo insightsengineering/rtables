@@ -200,24 +200,9 @@ fast_rsummry_bind <- function(lst) {
 
 #' Summarize rows
 #'
-#' `summarize_rows` is deprecated in favor of `make_row_df`.
-#' 
-#' @param obj (`VTableTree`)\cr an `rtable` object.
-#' 
-#' @return A data frame summarizing the rows in `obj`.
-#' 
-#' @export
-summarize_rows <- function(obj) {
-  .Deprecated("make_row_df")
-  rows <- summarize_rows_inner(obj, 0, 0)
-  fast_rsummry_bind(rows)
-}
-
-#' Summarize Rows
-#'
 #' @inheritParams gen_args
-#' @param depth numeric(1). Depth.
-#' @param indent numeric(1). Indent.
+#' @param depth (`numeric(1)`)\cr depth.
+#' @param indent (`numeric(1)`)\cr indent.
 #'
 #' @examples
 #' library(dplyr)
@@ -288,6 +273,7 @@ setMethod(
     ## df
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "summarize_rows_inner", "ElementaryTable",
@@ -312,6 +298,7 @@ setMethod(
     ## df
   }
 )
+
 .num_cell_refs <- function(tr) {
   sum(vapply(
     cell_footnotes(tr),
@@ -339,6 +326,7 @@ setMethod(
     )
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "summarize_rows_inner", "LabelRow",
@@ -363,19 +351,15 @@ setMethod(
   }
 )
 
-
-
 # Print Table Structure ----
 
-#' Summarize Table
+#' Summarize table
 #'
-#' @param x a table object
-#' @param detail either `row` or `subtable`
+#' @param x (`TableTree`)\cr a table object.
+#' @param detail (`string`)\cr either `row` or `subtable`.
 #'
-#' @export
-#'
-#' @return currently no return value. Called for the side-effect of printing a
-#'   row- or subtable-structure summary of \code{x}.
+#' @return No return value. Called for the side-effect of printing a row- or subtable-structure summary of `x`.
+#'   
 #' @examples
 #' library(dplyr)
 #'
@@ -400,6 +384,8 @@ setMethod(
 #' table_structure(tbl)
 #'
 #' table_structure(tbl, detail = "row")
+#' 
+#' @export
 table_structure <- function(x, detail = c("subtable", "row")) {
   detail <- match.arg(detail)
 
@@ -410,13 +396,12 @@ table_structure <- function(x, detail = c("subtable", "row")) {
   )
 }
 
-
+#' @param obj (`TableTree`)\cr a table object.
+#' @param depth (`numeric(1)`)\cr depth in tree.
+#' @param indent (`numeric(1)`)\cr indent.
+#' @param print_indent (`numeric(1)`)\cr indent for printing.
+#' 
 #' @rdname int_methods
-#'
-#' @param obj a table object
-#' @param depth depth in tree
-#' @param indent indent
-#' @param print_indent indent for print
 setGeneric(
   "table_structure_inner",
   function(obj,
@@ -426,7 +411,6 @@ setGeneric(
     standardGeneric("table_structure_inner")
   }
 )
-
 
 scat <- function(..., indent = 0, newline = TRUE) {
   txt <- paste(..., collapse = "", sep = "")
@@ -449,17 +433,18 @@ is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
 
+#' @param object (`TableTree`)\cr a table object.
+#' 
 #' @rdname int_methods
-#' @param object a table object
 #' @export
 setGeneric("str", function(object, ...) {
   standardGeneric("str")
 })
 
+#' @param max.level (`numeric(1)`)\cr passed to `utils::str`. Defaults to 3 for the `VTableTree` method, unlike 
+#'   the underlying default of `NA`. `NA` is *not* appropriate for `VTableTree` objects.
+#' 
 #' @rdname int_methods
-#' @param max.level numeric(1). Passed to `utils::str`. Defaults to 3 for the
-#' `VTableTree` method, unlike the underlying default of `NA`. `NA` is *not*
-#' appropriate for `VTableTree` objects.
 #' @export
 setMethod(
   "str", "VTableTree",
@@ -473,8 +458,8 @@ setMethod(
   }
 )
 
-#' @rdname int_methods
 #' @inheritParams table_structure_inner
+#' @rdname int_methods
 setMethod(
   "table_structure_inner", "TableTree",
   function(obj, depth = 0, indent = 0, print_indent = 0) {
@@ -527,14 +512,12 @@ setMethod(
       indent = print_indent
     )
 
-
     indent <- indent + indent_mod(obj)
 
     table_structure_inner(
       tt_labelrow(obj), depth,
       indent, print_indent + 1
     )
-
 
     if (length(tree_children(obj)) == 0) {
       scat("children: - ", indent = print_indent + 1)

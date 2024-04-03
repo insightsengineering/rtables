@@ -1,16 +1,19 @@
 ## XXX Do we want add.labrows here or no?
 ## we have to choose one and stick to it.
 
-#' @name internal_methods
-#' @title Internal Generics and Methods
-#' @rdname int_methods
-#' @description These are internal methods that are documented only to satisfy
-#' `R CMD check`. End users should pay no attention to this documentation.
+#' Internal generics and methods
+#' 
+#' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no 
+#' attention to this documentation.
+#' 
 #' @inheritParams gen_args
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
-#' @param x The object.
-#' @param obj The object.
+#' @param x (`ANY`)\cr the object.
+#' @param obj (`ANY`)\cr the object.
+#' 
+#' @name internal_methods
+#' @aliases int_methods
 NULL
 
 #' @rdname dimensions

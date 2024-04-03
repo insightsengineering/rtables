@@ -48,24 +48,24 @@ considerations. Defaults to none.}
 
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
-\item{max_width}{(\code{integer(1)}, \code{character(1)} or \code{NULL})\cr width that title and footer (including
+\item{max_width}{(\code{integer(1)}, \code{string} or \code{NULL})\cr width that title and footer (including
 footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{verbose}{(\code{logical(1)})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
 
-\item{page_type}{(\code{character(1)})\cr name of a page type. See \code{\link[formatters]{page_types}}. Ignored
+\item{page_type}{(\code{string})\cr name of a page type. See \code{\link[formatters]{page_types}}. Ignored
 when \code{pg_width} and \code{pg_height} are set directly.}
 
-\item{font_family}{(\code{character(1)})\cr name of a font family. An error will be thrown
+\item{font_family}{(\code{string})\cr name of a font family. An error will be thrown
 if the family named is not monospaced. Defaults to \code{"Courier"}.}
 
 \item{font_size}{(\code{numeric(1)})\cr font size. Defaults to \code{12}.}
 
 \item{lineheight}{(\code{numeric(1)})\cr line height. Defaults to \code{1}.}
 
-\item{landscape}{(\code{logical(1)})\cr whether the dimensions of \code{page_type} should be
+\item{landscape}{(\code{flag})\cr whether the dimensions of \code{page_type} should be
 inverted for landscape orientation. Defaults to \code{FALSE}, ignored when \code{pg_width} and
 \code{pg_height} are set directly.}
 
@@ -82,7 +82,7 @@ horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be in
 the page size; \code{NULL} indicates no horizontal pagination should be done
 regardless of page size.}
 
-\item{tf_wrap}{(\code{logical(1)})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
+\item{tf_wrap}{(\code{flag})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 }
 \value{
 for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
