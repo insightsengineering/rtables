@@ -162,9 +162,9 @@ setClass("VarLevelSplit",
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' 
+#'
 #' @return a `VarLevelSplit` object.
-#' 
+#'
 #' @export
 VarLevelSplit <- function(var,
                           split_label,
@@ -292,9 +292,9 @@ setClass("ManualSplit",
 #' @inheritParams constr_args
 #' @inheritParams gen_args
 #' @param levels (`character`)\cr levels of the split (i.e. the children of the manual split).
-#' 
+#'
 #' @return A `ManualSplit` object.
-#' 
+#'
 #' @author Gabriel Becker
 #' @export
 ManualSplit <- function(levels, label, name = "manual",
@@ -370,9 +370,9 @@ setClass("MultiVarSplit",
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' 
+#'
 #' @return A `MultiVarSplit` object.
-#' 
+#'
 #' @author Gabriel Becker
 #' @export
 MultiVarSplit <- function(vars,
@@ -432,10 +432,10 @@ MultiVarSplit <- function(vars,
 }
 
 #' Splits for cutting by values of a numeric variable
-#' 
+#'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' 
+#'
 #' @exportClass VarStaticCutSplit
 #' @rdname cutsplits
 setClass("VarStaticCutSplit",
@@ -453,13 +453,13 @@ setClass("VarStaticCutSplit",
 }
 
 #' Create static cut or static cumulative cut split
-#' 
+#'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' 
+#'
 #' @return A `VarStaticCutSplit`, `CumulativeCutSplit` object for `make_static_cut_split`, or a `VarDynCutSplit`
 #'   object for [VarDynCutSplit()].
-#'   
+#'
 #' @rdname cutsplits
 make_static_cut_split <- function(var,
                                   split_label,
@@ -617,9 +617,9 @@ setClass("AnalyzeColVarSplit",
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
 #' @param defrowlab (`character`)\cr default row labels, if not specified by the return value of `afun`.
-#'   
+#'
 #' @return An `AnalyzeVarSplit` object.
-#' 
+#'
 #' @author Gabriel Becker
 #' @export
 #' @rdname avarspl
@@ -672,7 +672,7 @@ AnalyzeVarSplit <- function(var,
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' 
+#'
 #' @author Gabriel Becker
 #' @export
 #' @rdname avarspl
@@ -763,9 +763,9 @@ make_ma_name <- function(spl, pld = spl_payload(spl)) {
 }
 
 #' @param .payload (`list`)\cr used internally, not intended to be set by end users.
-#' 
+#'
 #' @return An `AnalyzeMultiVars` split object.
-#' 
+#'
 #' @export
 #' @rdname avarspl
 AnalyzeMultiVars <- function(var,
@@ -1000,7 +1000,7 @@ make_child_pos <- function(parpos,
 
 ## Virtual Classes for Tree Nodes and Layouts =================================
 ##
-## Virtual class hiearchy for the various types of trees in use in the S4 
+## Virtual class hiearchy for the various types of trees in use in the S4
 ## implementation of the TableTree machinery
 
 ## core basics
@@ -1133,9 +1133,9 @@ LayoutColLeaf <- function(lev = 0L,
 ## once its applied to the data.
 
 #' Instantiated column info
-#' 
+#'
 #' @inheritParams gen_args
-#' 
+#'
 #' @exportClass InstantiatedColumnInfo
 #' @rdname cinfo
 setClass(
@@ -1158,14 +1158,14 @@ setClass(
 #' @param extras (`list`)\cr extra arguments associated with the columns.
 #' @param cnts (`integer`)\cr counts.
 #' @param total_cnt (`integer(1)`)\cr total observations represented across all columns.
-#' @param dispcounts (`logical(1)`)\cr whether the counts should be displayed as header info when the associated 
+#' @param dispcounts (`logical(1)`)\cr whether the counts should be displayed as header info when the associated
 #'   table is printed.
 #' @param countformat (`character(1)`)\cr format for the counts if they are displayed.
 #' @param count_na_str (`character`)\cr string to use in place of missing values when formatting counts. Defaults
 #'   to `""`.
-#'   
+#'
 #' @return An `InstantiateadColumnInfo` object.
-#' 
+#'
 #' @export
 #' @rdname cinfo
 InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
@@ -1246,13 +1246,13 @@ setClass("TableRow",
 ## TableTree Core Non-Virtual Classes ==============
 ##
 #' Row classes and constructors
-#' 
+#'
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
 #' @param vis (`logical(1)`)\cr whether the row should be visible (`LabelRow` only).
-#' 
+#'
 #' @return A formal object representing a table row of the constructed type.
-#' 
+#'
 #' @author Gabriel Becker
 #' @export
 #' @rdname rowclasses
@@ -1282,7 +1282,7 @@ LabelRow <- function(lev = 1L,
 }
 
 #' Row constructors and classes
-#' 
+#'
 #' @rdname rowclasses
 #' @exportClass DataRow
 setClass("DataRow",
@@ -1366,7 +1366,7 @@ setClass("LabelRow",
 }
 
 #' @param ... additional parameters passed to shared constructor (`.tablerow`).
-#' 
+#'
 #' @export
 #' @rdname rowclasses
 DataRow <- function(...) .tablerow(..., klass = "DataRow")
@@ -1413,9 +1413,9 @@ etable_validity <- function(object) {
 ## nocov end
 
 #' `TableTree` classes
-#' 
+#'
 #' @return A formal object representing a populated table.
-#' 
+#'
 #' @author Gabriel Becker
 #' @exportClass ElementaryTable
 #' @rdname tabclasses
@@ -1470,12 +1470,12 @@ setClass("ElementaryTable",
 }
 
 #' Table constructors and classes
-#' 
+#'
 #' @inheritParams constr_args
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
 #' @param rspans (`data.frame`)\cr currently stored but otherwise ignored.
-#' 
+#'
 #' @author Gabriel Becker
 #' @export
 #' @rdname tabclasses
@@ -1814,9 +1814,9 @@ setOldClass("CellValue")
 #' Length of a Cell value
 #'
 #' @param x (`CellValue`)\cr a `CellValue` object.
-#' 
+#'
 #' @return Always returns `1L`.
-#' 
+#'
 #' @exportMethod length
 setMethod(
   "length", "CellValue",
@@ -1856,10 +1856,10 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 #' @inheritParams lyt_args
 #' @inheritParams rcell
 #' @param val (`any`)\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.
-#' 
-#' @return An object representing the value within a single cell within a populated table. The underlying structure 
+#'
+#' @return An object representing the value within a single cell within a populated table. The underlying structure
 #'   of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.
-#'   
+#'
 #' @export
 
 ## Class definition
@@ -1900,7 +1900,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
 }
 
 #' @method print CellValue
-#' 
+#'
 #' @export
 print.CellValue <- function(x, ...) {
   cat(paste("rcell:", format_rcell(x), "\n"))
@@ -1953,7 +1953,7 @@ RowsVerticalSection <- function(values,
 }
 
 #' @method print RowsVerticalSection
-#' 
+#'
 #' @export
 print.RowsVerticalSection <- function(x, ...) {
   cat("RowsVerticalSection (in_rows) object print method:\n-------------------",

@@ -3,10 +3,10 @@
 #' @param x (`ANY`)\cr an object.
 #'
 #' @return `TRUE` if `x` is a formal `TableTree` object, `FALSE` otherwise.
-#' 
+#'
 #' @examples
 #' is_rtable(build_table(basic_table(), iris))
-#' 
+#'
 #' @export
 is_rtable <- function(x) {
   is(x, "VTableTree")

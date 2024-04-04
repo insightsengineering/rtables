@@ -29,16 +29,16 @@ div_helper <- function(lst, class) {
 #' @param width (`character`)\cr a string to indicate the desired width of the table. Common input formats include a
 #'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`). Defaults to `NULL`.
 #' @param link_label (`character`)\cr link anchor label (not including `tab:` prefix) for the table.
-#' @param bold (`character`)\cr elements in table output that should be bold. Options are `"main_title"`, 
-#'   `"subtitles"`, `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label 
+#' @param bold (`character`)\cr elements in table output that should be bold. Options are `"main_title"`,
+#'   `"subtitles"`, `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label
 #'   rows). Defaults to `"header"`.
-#' @param header_sep_line (`logical(1)`)\cr whether a black line should be printed to under the table header. Defaults 
+#' @param header_sep_line (`logical(1)`)\cr whether a black line should be printed to under the table header. Defaults
 #'   to `TRUE`.
-#' @param no_spaces_between_cells (`logical(1)`)\cr whether spaces between table cells should be collapsed. Defaults 
+#' @param no_spaces_between_cells (`logical(1)`)\cr whether spaces between table cells should be collapsed. Defaults
 #'   to `FALSE`.
 #'
 #' @importFrom htmltools tags
-#' 
+#'
 #' @return A `shiny.tag` object representing `x` in HTML.
 #'
 #' @examples

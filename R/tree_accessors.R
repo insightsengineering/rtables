@@ -2,19 +2,19 @@
 ## we have to choose one and stick to it.
 
 #' Internal generics and methods
-#' 
-#' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no 
+#'
+#' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no
 #' attention to this documentation.
-#' 
+#'
 #' @param x (`ANY`)\cr the object.
 #' @param obj (`ANY`)\cr the object.
-#' 
+#'
 #' @name internal_methods
 #' @aliases int_methods
 NULL
 
 #' @return The number of rows (`nrow`), columns (`ncol`), or both (`dim`) of the object.
-#' 
+#'
 #' @rdname dimensions
 #' @exportMethod nrow
 setMethod(
@@ -98,9 +98,9 @@ setMethod(
 #'
 #' @param x (`TableTree` or `ElementaryTable`)\cr an object with a tree structure.
 #' @param value (`list`)\cr new list of children.
-#' 
+#'
 #' @return A list of direct children of `x`.
-#' 
+#'
 #' @export
 #' @rdname tree_children
 setGeneric("tree_children", function(x) standardGeneric("tree_children"))
@@ -158,10 +158,10 @@ setMethod(
 #' Returns the content table of `obj` if it is a `TableTree` object, or `NULL` otherwise.
 #'
 #' @param obj (`TableTree`)\cr the `TableTree`.
-#' 
-#' @return the `ElementaryTable` containing the (top level) *content rows* of `obj` (or `NULL` if `obj` is not 
+#'
+#' @return the `ElementaryTable` containing the (top level) *content rows* of `obj` (or `NULL` if `obj` is not
 #'   a formal table object).
-#'   
+#'
 #' @export
 #' @rdname content_table
 setGeneric("content_table", function(obj) standardGeneric("content_table"))
@@ -181,7 +181,7 @@ setMethod(
 )
 
 #' @param value (`ElementaryTable`)\cr the new content table for `obj`.
-#' 
+#'
 #' @export
 #' @rdname content_table
 setGeneric("content_table<-", function(obj, value) standardGeneric("content_table<-"))
@@ -436,10 +436,10 @@ setMethod("spl_label_var", "Split", function(obj) NULL)
 #' Methods for generics in the `formatters` package
 #'
 #' See the `formatters` documentation for descriptions of these generics.
-#' 
+#'
 #' @inheritParams gen_args
 #'
-#' @return 
+#' @return
 #' * Accessor functions return the current value of the component being accessed of `obj`
 #' * Setter functions return a modified copy of `obj` with the new value.
 #'
@@ -899,11 +899,11 @@ setMethod(
 )
 
 #' Row attribute accessors
-#' 
+#'
 #' @inheritParams gen_args
-#' 
+#'
 #' @return Various return values depending on the accessor called.
-#' 
+#'
 #' @export
 #' @rdname row_accessors
 setGeneric("obj_avar", function(obj) standardGeneric("obj_avar"))
@@ -1141,7 +1141,7 @@ setGeneric("set_format_recursive", function(obj, format, na_str, override = FALS
 })
 
 #' @param override (`flag`)\cr whether to override attribute.
-#' 
+#'
 #' @rdname int_methods
 setMethod(
   "set_format_recursive", "TableRow",
@@ -1238,11 +1238,11 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #' Value formats
 #'
 #' Returns a matrix of formats for the cells in a table.
-#' 
+#'
 #' @param obj (`TableTree` or `TableRow`)\cr a table or row object.
 #' @param default (`FormatSpec`)\cr default format.
 #'
-#' @return Matrix (storage mode list) containing the effective format for each cell position in the table 
+#' @return Matrix (storage mode list) containing the effective format for each cell position in the table
 #'   (including 'virtual' cells implied by label rows, whose formats are always `NULL`).
 #'
 #' @seealso [table_shell()] and [table_shell_str()] for information on the table format structure.
@@ -1309,13 +1309,13 @@ setMethod(
 ### framework.
 
 #' Collect leaves of a `TableTree`
-#' 
+#'
 #' @inheritParams gen_args
 #' @param incl.cont (`flag`)\cr whether to include rows from content tables within the tree. Defaults to `TRUE`.
 #' @param add.labrows (`flag`)\cr whether to include label rows. Defaults to `FALSE`.
-#' 
+#'
 #' @return A list of `TableRow` objects for all rows in the table.
-#' 
+#'
 #' @export
 setGeneric("collect_leaves",
   function(tt, incl.cont = TRUE, add.labrows = FALSE) {
@@ -1325,7 +1325,7 @@ setGeneric("collect_leaves",
 )
 
 #' @inheritParams collect_leaves
-#' 
+#'
 #' @rdname int_methods
 #' @exportMethod collect_leaves
 setMethod(
@@ -1552,7 +1552,7 @@ setMethod(
 #' indent_mod(tbl)
 #' indent_mod(tbl) <- 1L
 #' tbl
-#' 
+#'
 #' @rdname int_methods
 #' @export
 setGeneric("indent_mod<-", function(obj, value) standardGeneric("indent_mod<-"))
@@ -1906,7 +1906,7 @@ setMethod(
 setGeneric("col_info<-", function(obj, value) standardGeneric("col_info<-"))
 
 #' @return Returns various information about columns, depending on the accessor used.
-#' 
+#'
 #' @exportMethod col_info<-
 #' @rdname col_accessors
 setMethod(
@@ -2393,9 +2393,9 @@ setMethod(
 #' Does the `table`/`row`/`InstantiatedColumnInfo` object contain no column structure information?
 #'
 #' @inheritParams gen_args
-#' 
+#'
 #' @return `TRUE` if the object has no/empty instantiated column information, `FALSE` otherwise.
-#' 
+#'
 #' @rdname no_info
 #' @export
 setGeneric("no_colinfo", function(obj) standardGeneric("no_colinfo"))
@@ -2417,13 +2417,13 @@ setMethod(
 #' Names of a `TableTree`
 #'
 #' @param x (`TableTree`)\cr the object.
-#' 
-#' @details 
+#'
+#' @details
 #' For `TableTree`s with more than one level of splitting in columns, the names are defined to be the top-level
 #' split values repped out across the columns that they span.
-#'   
+#'
 #' @return The column names of `x`, as defined in the details above.
-#' 
+#'
 #' @exportMethod names
 #' @rdname names
 setMethod(
@@ -2467,16 +2467,16 @@ setMethod(
 
 #' Convert to a vector
 #'
-#' Convert an `rtables` framework object into a vector, if possible. This is unlikely to be useful in 
+#' Convert an `rtables` framework object into a vector, if possible. This is unlikely to be useful in
 #' realistic scenarios.
 #'
 #' @param x (`ANY`)\cr the object to be converted to a vector.
 #' @param mode (`string`)\cr passed on to [as.vector()].
-#' 
+#'
 #' @return A vector of the chosen mode (or an error is raised if more than one row was present).
-#' 
+#'
 #' @note This only works for a table with a single row or a row object.
-#' 
+#'
 #' @name asvec
 #' @aliases as.vector,VTableTree-method
 #' @exportMethod as.vector
@@ -2491,7 +2491,7 @@ setMethod("as.vector", "VTableTree", function(x, mode) {
 })
 
 #' @inheritParams asvec
-#' 
+#'
 #' @rdname int_methods
 #' @exportMethod as.vector
 setMethod("as.vector", "TableRow", function(x, mode) as.vector(unlist(row_values(x)), mode = mode))
@@ -2583,16 +2583,16 @@ setMethod(
 )
 
 #' Top left material (experimental)
-#' 
-#' A `TableTree` object can have *top left material* which is a sequence of strings which are printed in the 
-#' area of the table between the column header display and the label of the first row. These functions access 
+#'
+#' A `TableTree` object can have *top left material* which is a sequence of strings which are printed in the
+#' area of the table between the column header display and the label of the first row. These functions access
 #' and modify that material.
 #'
 #' @inheritParams gen_args
-#' 
-#' @return A character vector representing the top-left material of `obj` (or `obj` after modification, in the 
+#'
+#' @return A character vector representing the top-left material of `obj` (or `obj` after modification, in the
 #'   case of the setter).
-#'   
+#'
 #' @export
 #' @rdname top_left
 setGeneric("top_left", function(obj) standardGeneric("top_left"))
@@ -2648,18 +2648,18 @@ vil_collapse <- function(x) {
 #' @param lyt (`PreDataTableLayouts`)\cr the layout (or a component thereof).
 #'
 #' @details
-#' This will walk the layout declaration and return a vector of the names of the unique variables that are used 
+#' This will walk the layout declaration and return a vector of the names of the unique variables that are used
 #' in any of the following ways:
-#' 
+#'
 #'   * Variable being split on (directly or via cuts)
 #'   * Element of a Multi-variable column split
 #'   * Content variable
 #'   * Value-label variable
 #'
 #' @return A character vector containing the unique variables explicitly used in the layout (see the notes below).
-#' 
-#' @note 
-#' * This function will not detect dependencies implicit in analysis or summary functions which accept `x` 
+#'
+#' @note
+#' * This function will not detect dependencies implicit in analysis or summary functions which accept `x`
 #'   or `df` and then rely on the existence of particular variables not being split on/analyzed.
 #' * The order these variable names appear within the return vector is undefined and should not be relied upon.
 #'
@@ -2856,7 +2856,7 @@ make_ref_value <- function(value) {
 #' Access and set the referential footnotes aspects of a built table.
 #'
 #' @inheritParams gen_args
-#' 
+#'
 #' @export
 #' @rdname ref_fnotes
 setGeneric("row_footnotes", function(obj) standardGeneric("row_footnotes"))
@@ -3182,11 +3182,11 @@ setMethod(
   }
 )
 
-#' @param rowpath (`character` or `NULL`)\cr path within row structure. `NULL` indicates the footnote should 
+#' @param rowpath (`character` or `NULL`)\cr path within row structure. `NULL` indicates the footnote should
 #'   go on the column rather than cell.
-#' @param colpath (`character` or `NULL`)\cr path within column structure. `NULL` indicates footnote should go 
+#' @param colpath (`character` or `NULL`)\cr path within column structure. `NULL` indicates footnote should go
 #'   on the row rather than cell.
-#' @param reset_idx (`flag`)\cr whether the numbering for referential footnotes should be immediately 
+#' @param reset_idx (`flag`)\cr whether the numbering for referential footnotes should be immediately
 #'   recalculated. Defaults to `TRUE`.
 #'
 #' @examples
@@ -3222,7 +3222,7 @@ setGeneric("fnotes_at_path<-", function(obj,
 
 ## non-null rowpath, null or non-null colpath
 #' @inheritParams fnotes_at_path<-
-#' 
+#'
 #' @export
 #' @rdname int_methods
 setMethod(
@@ -3287,9 +3287,9 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 #' @inheritParams gen_args
 #' @param value (`string`)\cr string to use as new header/body separator.
 #'
-#' @return 
+#' @return
 #' * `horizontal_sep` returns the string acting as the header separator
-#' * `horizontal_sep<-` returns `obj`, with the new header separator applied recursively to it and all its 
+#' * `horizontal_sep<-` returns `obj`, with the new header separator applied recursively to it and all its
 #'   subtables.
 #'
 #' @export

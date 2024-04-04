@@ -37,7 +37,7 @@ NULL
 #' tbl <- build_table(lyt, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
-#' 
+#'
 #' @rdname tostring
 #' @aliases toString,VTableTree-method
 #' @exportMethod toString
@@ -62,13 +62,13 @@ setMethod("toString", "VTableTree", function(x,
 
 #' Table shells
 #'
-#' A table shell is a rendering of the table which maintains the structure, but does not display the values, rather 
+#' A table shell is a rendering of the table which maintains the structure, but does not display the values, rather
 #' displaying the formatting instructions for each cell.
 #'
 #' @inheritParams tostring
 #' @inheritParams gen_args
-#' 
-#' @return 
+#'
+#' @return
 #' * `table_shell_str` returns the string representing the table shell.
 #' * `table_shell` returns `NULL`, as the function is called for the side effect of printing the shell to the console.
 #'
@@ -140,19 +140,19 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' it is useful to map the `rtable` to an in-between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
-#' @param indent_rownames (`flag`)\cr if `TRUE`, the column with the row names in the `strings` matrix of the output 
+#' @param indent_rownames (`flag`)\cr if `TRUE`, the column with the row names in the `strings` matrix of the output
 #'   has indented row names (strings pre-fixed).
-#' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain 
+#' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain
 #'   newlines into multiple 'physical' rows (as they will appear when rendered into ASCII). Defaults to `TRUE`.
 #'
 #' @details
-#' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell 
-#' values are determined using `get_formatted_cells`. (Column labels are calculated using a non-exported internal 
+#' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
+#' values are determined using `get_formatted_cells`. (Column labels are calculated using a non-exported internal
 #' function.
 #'
 #' @return A list with the following elements:
 #'   \describe{
-#'     \item{`strings`}{The content, as it should be printed, of the top-left material, column headers, row labels, 
+#'     \item{`strings`}{The content, as it should be printed, of the top-left material, column headers, row labels,
 #'       and cell values of `tt`.}
 #'     \item{`spans`}{The column-span information for each print-string in the `strings` matrix.}
 #'     \item{`aligns`}{The text alignment for each print-string in the `strings` matrix.}
@@ -161,7 +161,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   }
 #'
 #' With an additional `nrow_header` attribute indicating the number of pseudo "rows" that the column structure defines.
-#' 
+#'
 #' @examples
 #' library(dplyr)
 #'
@@ -182,7 +182,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' tbl <- build_table(lyt, iris2)
 #'
 #' matrix_form(tbl)
-#' 
+#'
 #' @export
 setMethod(
   "matrix_form", "VTableTree",
@@ -585,11 +585,11 @@ get_formatted_fnotes <- function(tt) {
 #' Get formatted cells
 #'
 #' @inheritParams gen_args
-#' @param shell (`flag`)\cr whether the formats themselves should be returned instead of the values with formats 
+#' @param shell (`flag`)\cr whether the formats themselves should be returned instead of the values with formats
 #'   applied. Defaults to `FALSE`.
-#' 
+#'
 #' @return The formatted print-strings for all (body) cells in `obj`.
-#' 
+#'
 #' @examples
 #' library(dplyr)
 #'
@@ -605,7 +605,7 @@ get_formatted_fnotes <- function(tt) {
 #'   build_table(iris2)
 #'
 #' get_formatted_cells(tbl)
-#' 
+#'
 #' @export
 #' @rdname gfc
 setGeneric("get_formatted_cells", function(obj, shell = FALSE) standardGeneric("get_formatted_cells"))
@@ -748,7 +748,7 @@ setMethod(
 #' remove_consecutive_numbers(x = c(2, 4, 5, 9))
 #' remove_consecutive_numbers(x = c(2, 4, 5, 6, 9))
 #' remove_consecutive_numbers(x = 4:9)
-#' 
+#'
 #' @noRd
 remove_consecutive_numbers <- function(x) {
   # actually should be integer
@@ -767,7 +767,7 @@ remove_consecutive_numbers <- function(x) {
 #' @examples
 #' empty_string_after(letters[1:5], 2)
 #' empty_string_after(letters[1:5], c(2, 4))
-#' 
+#'
 #' @noRd
 empty_string_after <- function(x, indices) {
   if (length(indices) > 0) {
@@ -790,7 +790,7 @@ empty_string_after <- function(x, indices) {
 #' @param including_newline (`flag`)\cr whether newlines should also be indented.
 #'
 #' @return `x`, indented with left-padding with `indent * incr` white-spaces.
-#' 
+#'
 #' @examples
 #' indent_string("a", 0)
 #' indent_string("a", 1)
@@ -881,7 +881,7 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(mat_as_string(mat))
 #' cat("\n")
-#' 
+#'
 #' @noRd
 mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = default_hsep()) {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)

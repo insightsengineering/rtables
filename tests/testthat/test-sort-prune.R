@@ -274,7 +274,6 @@ test_that("provided score functions throw informative errors when invalid and * 
     "occurred at path: AEBODSYS -> * (cl A.1)",
     fixed = TRUE
   )
-
 })
 
 test_that("paths come out correct when sorting with '*'", {

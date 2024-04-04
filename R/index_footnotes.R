@@ -81,16 +81,16 @@ index_col_refs <- function(tt, cur_idx_fun) {
 #' Update footnote indices on a built table
 #'
 #' Re-indexes footnotes within a built table.
-#' 
+#'
 #' @inheritParams gen_args
 #'
 #' @details
-#' After adding or removing referential footnotes manually, or after subsetting a table, the reference indexes 
-#' (i.e. the number associated with specific footnotes) may be incorrect. This function recalculates these based 
+#' After adding or removing referential footnotes manually, or after subsetting a table, the reference indexes
+#' (i.e. the number associated with specific footnotes) may be incorrect. This function recalculates these based
 #' on the full table.
 #'
 #' @note In the future this should not generally need to be called manually.
-#' 
+#'
 #' @export
 update_ref_indexing <- function(tt) {
   col_fnotes <- c(list(row_fnotes = list()), col_footnotes(tt))

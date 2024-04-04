@@ -13,16 +13,16 @@
 #'   }
 #'
 #' The [in_rows()] function is called on the resulting value(s). All other classes of input currently lead to an error.
-#' 
+#'
 #' @inherit in_rows return
-#' 
+#'
 #' @author Gabriel Becker and Adrian Waddell
-#' 
+#'
 #' @examples
 #' simple_analysis(1:3)
 #' simple_analysis(iris$Species)
 #' simple_analysis(iris$Species == "setosa")
-#' 
+#'
 #' @rdname rtinner
 #' @export
 setGeneric("simple_analysis", function(x, ...) standardGeneric("simple_analysis"))

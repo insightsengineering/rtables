@@ -83,7 +83,7 @@
 #' )
 #'
 #' compare_rtables(object, expected)
-#' 
+#'
 #' @export
 compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
                             structure = FALSE) {

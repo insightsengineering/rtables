@@ -40,25 +40,25 @@ setGeneric(
 
 #' Custom split functions
 #'
-#' Split functions provide the work-horse for `rtables`'s generalized partitioning. These functions accept a (sub)set 
+#' Split functions provide the work-horse for `rtables`'s generalized partitioning. These functions accept a (sub)set
 #' of incoming data and a split object, and return "splits" of that data.
 #'
 #' @section Custom Splitting Function Details:
 #'
-#' User-defined custom split functions can perform any type of computation on the incoming data provided that they 
+#' User-defined custom split functions can perform any type of computation on the incoming data provided that they
 #' meet the requirements for generating "splits" of the incoming data based on the split object.
 #'
 #' Split functions are functions that accept:
 #'   \describe{
 #'     \item{df}{a `data.frame` of incoming data to be split.}
-#'     \item{spl}{a Split object. This is largely an internal detail custom functions will not need to worry about, 
-#'       but `obj_name(spl)`, for example, will give the name of the split as it will appear in paths in the resulting 
+#'     \item{spl}{a Split object. This is largely an internal detail custom functions will not need to worry about,
+#'       but `obj_name(spl)`, for example, will give the name of the split as it will appear in paths in the resulting
 #'       table.}
-#'     \item{vals}{any pre-calculated values. If given non-`NULL` values, the values returned should match these. 
+#'     \item{vals}{any pre-calculated values. If given non-`NULL` values, the values returned should match these.
 #'       Should be `NULL` in most cases and can usually be ignored.}
 #'     \item{labels}{any pre-calculated value labels. Same as above for `values`.}
 #'     \item{trim}{if `TRUE`, resulting splits that are empty are removed.}
-#'     \item{(optional) .spl_context}{a `data.frame` describing previously performed splits which collectively 
+#'     \item{(optional) .spl_context}{a `data.frame` describing previously performed splits which collectively
 #'       arrived at `df`.}
 #'   }
 #'
@@ -68,14 +68,14 @@ setGeneric(
 #'     \item{values}{the vector of all values corresponding to the splits of `df`.}
 #'     \item{datasplit}{a list of `data.frame`s representing the groupings of the actual observations from `df`.}
 #'     \item{labels}{a character vector giving a string label for each value listed in the `values` element above.}
-#'     \item{(optional) extras}{if present, extra arguments are to be passed to summary and analysis functions 
+#'     \item{(optional) extras}{if present, extra arguments are to be passed to summary and analysis functions
 #'       whenever they are executed on the corresponding element of `datasplit` or a subset thereof.}
 #'   }
 #'
-#' One way to generate custom splitting functions is to wrap existing split functions and modify either the incoming 
+#' One way to generate custom splitting functions is to wrap existing split functions and modify either the incoming
 #' data before they are called or their outputs.
 #'
-#' @seealso [make_split_fun()] for the API for creating custom split functions, and [split_funcs] for a variety of 
+#' @seealso [make_split_fun()] for the API for creating custom split functions, and [split_funcs] for a variety of
 #'   pre-defined split functions.
 #'
 #' @examples
@@ -224,14 +224,14 @@ NULL
 
 #' Apply basic split (for use in custom split functions)
 #'
-#' This function is intended for use inside custom split functions. It applies the current split *as if it had no 
+#' This function is intended for use inside custom split functions. It applies the current split *as if it had no
 #' custom splitting function* so that those default splits can be further manipulated.
 #'
 #' @inheritParams gen_args
 #' @param vals (`ANY`)\cr already calculated/known values of the split. Generally should be left as `NULL`.
-#' @param labels (`character`)\cr labels associated with `vals`. Should be `NULL` whenever `vals` is, which should 
+#' @param labels (`character`)\cr labels associated with `vals`. Should be `NULL` whenever `vals` is, which should
 #'   almost always be the case.
-#' @param trim (`logical(1)`)\cr whether groups corresponding to empty data subsets should be removed. Defaults to 
+#' @param trim (`logical(1)`)\cr whether groups corresponding to empty data subsets should be removed. Defaults to
 #'   `FALSE`.
 #'
 #' @return The result of the split being applied as if it had no custom split function. See [custom_split_funs].
@@ -259,7 +259,7 @@ NULL
 #'
 #' tbl <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
 #' tbl
-#' 
+#'
 #' @export
 do_base_split <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
   spl2 <- spl
@@ -701,13 +701,13 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals) {
 #' @inheritParams gen_args
 #' @param vals (`ANY`)\cr for internal use only.
 #' @param labels (`character`)\cr labels to use for the remaining levels instead of the existing ones.
-#' @param excl (`character`)\cr levels to be excluded (they will not be reflected in the resulting table structure 
+#' @param excl (`character`)\cr levels to be excluded (they will not be reflected in the resulting table structure
 #'   regardless of presence in the data).
 #'
 #' @inheritSection custom_split_funs Custom Splitting Function Details
-#' 
+#'
 #' @inherit add_overall_level return
-#' 
+#'
 #' @name split_funcs
 NULL
 
@@ -747,7 +747,7 @@ remove_split_levels <- function(excl) {
 }
 
 #' @param only (`character`)\cr levels to retain (all others will be dropped).
-#' @param reorder (`logical(1)`)\cr whether the order of `only` should be used as the order of the children of the 
+#' @param reorder (`logical(1)`)\cr whether the order of `only` should be used as the order of the children of the
 #'   split. Defaults to `TRUE`.
 #'
 #' @examples
@@ -760,7 +760,7 @@ remove_split_levels <- function(excl) {
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#' 
+#'
 #' @rdname split_funcs
 #' @export
 keep_split_levels <- function(only, reorder = TRUE) {
@@ -794,7 +794,7 @@ keep_split_levels <- function(only, reorder = TRUE) {
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#' 
+#'
 #' @rdname split_funcs
 #' @export
 drop_split_levels <- function(df,
@@ -825,7 +825,7 @@ drop_split_levels <- function(df,
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#' 
+#'
 #' @rdname split_funcs
 #' @export
 drop_and_remove_levels <- function(excl) {
@@ -846,7 +846,7 @@ drop_and_remove_levels <- function(excl) {
 
 #' @param neworder (`character`)\cr new order of factor levels.
 #' @param newlabels (`character`)\cr labels for (new order of) factor levels.
-#' @param drlevels (`logical(1)`)\cr whether levels in the data which do not appear in `neworder` should be dropped. 
+#' @param drlevels (`logical(1)`)\cr whether levels in the data which do not appear in `neworder` should be dropped.
 #'   Defaults to `TRUE`.
 #'
 #' @rdname split_funcs
@@ -876,11 +876,11 @@ reorder_split_levels <- function(neworder,
   }
 }
 
-#' @param innervar (`character(1)`)\cr variable whose factor levels should be trimmed (e.g. empty levels dropped) 
+#' @param innervar (`character(1)`)\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
 #'   *separately within each grouping defined at this point in the structure*.
 #' @param drop_outlevs (`logical(1)`)\cr whether empty levels in the variable being split on (i.e. the "outer"
 #'   variable, not `innervar`) should be dropped. Defaults to `TRUE`.
-#'   
+#'
 #' @rdname split_funcs
 #' @export
 trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
@@ -952,9 +952,9 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #'
 #' @inheritParams lyt_args
 #' @inheritParams sf_args
-#' @param valname (`character(1)`)\cr value to be assigned to the implicit all-observations split level. Defaults to 
+#' @param valname (`character(1)`)\cr value to be assigned to the implicit all-observations split level. Defaults to
 #'   `"Overall"`.
-#' @param first (`logical(1)`)\cr whether the implicit level should appear first (`TRUE`) or last (`FALSE`). Defaults 
+#' @param first (`logical(1)`)\cr whether the implicit level should appear first (`TRUE`) or last (`FALSE`). Defaults
 #'   to `TRUE`.
 #'
 #' @return A closure suitable for use as a splitting function (`splfun`) when creating a table layout.
@@ -1008,19 +1008,19 @@ select_all_levels <- new("AllLevelsSentinel")
 # nocov end
 
 #' Add combination levels to split
-#' 
+#'
 #' @inheritParams sf_args
-#' @param combosdf (`data.frame` or `tbl_df`)\cr a data frame with columns `valname`, `label`, `levelcombo`, and 
-#'   `exargs`. `levelcombo` and `exargs` should be list columns. Passing the `select_all_levels` object as a value in 
+#' @param combosdf (`data.frame` or `tbl_df`)\cr a data frame with columns `valname`, `label`, `levelcombo`, and
+#'   `exargs`. `levelcombo` and `exargs` should be list columns. Passing the `select_all_levels` object as a value in
 #'   `comblevels` column indicates that an overall/all-observations level should be created.
-#' @param keep_levels (`character` or `NULL`)\cr if non-`NULL`, the levels to retain across both combination and 
+#' @param keep_levels (`character` or `NULL`)\cr if non-`NULL`, the levels to retain across both combination and
 #'   individual levels.
-#'   
+#'
 #' @inherit add_overall_level return
-#' 
-#' @note 
+#'
+#' @note
 #' Analysis or summary functions for which the order matters should never be used within the tabulation framework.
-#'   
+#'
 #' @examples
 #' library(tibble)
 #' combodf <- tribble(
@@ -1069,7 +1069,7 @@ select_all_levels <- new("AllLevelsSentinel")
 #'
 #' tbl3 <- build_table(lyt3, smallerDM)
 #' tbl3
-#' 
+#'
 #' @export
 add_combo_levels <- function(combosdf,
                              trim = FALSE,
@@ -1120,8 +1120,8 @@ add_combo_levels <- function(combosdf,
 
 #' Trim levels to map
 #'
-#' This split function constructor creates a split function which trims levels of a variable to reflect restrictions 
-#' on the possible combinations of two or more variables which the data is split by (along the same axis) within a 
+#' This split function constructor creates a split function which trims levels of a variable to reflect restrictions
+#' on the possible combinations of two or more variables which the data is split by (along the same axis) within a
 #' layout.
 #'
 #' @param map data.frame. A data.frame defining allowed combinations of
@@ -1129,21 +1129,21 @@ add_combo_levels <- function(combosdf,
 #'   map will be removed from the data, both for the variable being split and
 #'   those present in the data but not associated with this split or any parents
 #'   of it.
-#'   
-#' @details 
-#' When splitting occurs, the map is subset to the values of all previously performed splits. The levels of the 
-#' variable being split are then pruned to only those still present within this subset of the map representing the 
+#'
+#' @details
+#' When splitting occurs, the map is subset to the values of all previously performed splits. The levels of the
+#' variable being split are then pruned to only those still present within this subset of the map representing the
 #' current hierarchical splitting context.
 #'
 #' Splitting is then performed via the [keep_split_levels()] split function.
 #'
-#' Each resulting element of the partition is then further trimmed by pruning values of any remaining variables 
+#' Each resulting element of the partition is then further trimmed by pruning values of any remaining variables
 #' specified in the map to those values allowed under the combination of the previous and current split.
-#' 
+#'
 #' @return A function that can be used as a split function.
 #'
 #' @seealso [trim_levels_in_group()]
-#' 
+#'
 #' @examples
 #' map <- data.frame(
 #'   LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
@@ -1157,7 +1157,7 @@ add_combo_levels <- function(combosdf,
 #'   split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
 #'   analyze("ANRIND")
 #' tbl <- build_table(lyt, ex_adlb)
-#' 
+#'
 #' @export
 trim_levels_to_map <- function(map = NULL) {
   if (is.null(map) || any(sapply(map, class) != "character")) {

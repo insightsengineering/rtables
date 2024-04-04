@@ -11,7 +11,7 @@
 ## returns a list of rtable (S3) objects for printing.
 
 #' @inheritParams formatters::nlines
-#' 
+#'
 #' @rdname formatters_methods
 #' @aliases nlines,TableRow-method
 #' @exportMethod nlines
@@ -163,7 +163,7 @@ pos_to_path <- function(pos) {
 
 #' @inherit formatters::make_row_df
 #'
-# #' @note The technically present root tree node is excluded from the summary returned by both `make_row_df` and 
+# #' @note The technically present root tree node is excluded from the summary returned by both `make_row_df` and
 # #'   `make_col_df`, as it is simply the row/column structure of `tt` and thus not useful for pathing or pagination.
 # #'
 # #' @return a data.frame of row/column-structure information used by the pagination machinery.
@@ -308,7 +308,7 @@ setMethod(
 
 # #' @exportMethod make_row_df
 #' @inherit formatters::make_row_df
-#' 
+#'
 #' @export
 #' @rdname formatters_methods
 setMethod(
@@ -403,11 +403,11 @@ setGeneric("inner_col_df", function(ct,
 
 #' Column layout summary
 #'
-#' Used for pagination. Generate a structural summary of the columns of an `rtables` table and return it as a 
-#' `data.frame`. 
-#' 
+#' Used for pagination. Generate a structural summary of the columns of an `rtables` table and return it as a
+#' `data.frame`.
+#'
 #' @inheritParams formatters::make_row_df
-#' 
+#'
 #' @export
 make_col_df <- function(tt,
                         colwidths = NULL,
@@ -553,8 +553,8 @@ setMethod(
 #' * `paginate_table` returns the subtables defined by subsetting by the indices defined by `pag_tt_indices}.
 #'
 #' @details
-#' `rtables` pagination is context aware, meaning that label rows and row-group summaries (content rows) are repeated 
-#' after (vertical) pagination, as appropriate. This allows the reader to immediately understand where they are in the 
+#' `rtables` pagination is context aware, meaning that label rows and row-group summaries (content rows) are repeated
+#' after (vertical) pagination, as appropriate. This allows the reader to immediately understand where they are in the
 #' table after turning to a new page, but does also mean that a rendered, paginated table will take up more lines of
 #' text than rendering the table without pagination would.
 #'
@@ -562,10 +562,10 @@ setMethod(
 #'
 #' Vertical pagination information (pagination `data.frame`) is created using (`make_row_df`).
 #'
-#' Horizontal pagination is performed by creating a pagination data frame for the columns, and then applying the same 
+#' Horizontal pagination is performed by creating a pagination data frame for the columns, and then applying the same
 #' algorithm used for vertical pagination to it.
 #'
-#' If physical page size and font information are specified, these are used to derive lines-per-page (`lpp`) and 
+#' If physical page size and font information are specified, these are used to derive lines-per-page (`lpp`) and
 #' characters-per-page (`cpp`) values.
 #'
 #' The full multi-direction pagination algorithm then is as follows:
@@ -629,7 +629,7 @@ setMethod(
 #'
 #' @rdname paginate
 #' @export
-pag_tt_indices <- function(tt, 
+pag_tt_indices <- function(tt,
                            lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),
@@ -750,10 +750,10 @@ non_null_na <- function(x) !is.null(x) && is.na(x)
 #' @inheritParams formatters::vert_pag_indices
 #' @inheritParams formatters::page_lcpp
 #' @inheritParams formatters::toString
-#' @param cpp (`numeric(1)` or `NULL`)\cr width (in characters) of the pages for horizontal pagination. 
-#'   `NA` (the default) indicates `cpp` should be inferred from the page size; `NULL` indicates no horizontal 
+#' @param cpp (`numeric(1)` or `NULL`)\cr width (in characters) of the pages for horizontal pagination.
+#'   `NA` (the default) indicates `cpp` should be inferred from the page size; `NULL` indicates no horizontal
 #'   pagination should be done regardless of page size.
-#' 
+#'
 #' @rdname paginate
 #' @aliases paginate_table
 #' @export

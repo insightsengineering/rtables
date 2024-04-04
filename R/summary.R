@@ -42,7 +42,7 @@ col_paths <- function(x) {
 #' @param x (`TableTree`)\cr an `rtable` object.
 #'
 #' @return A data frame summarizing the row- or column-structure of `x`.
-#' 
+#'
 #' @examples
 #' ex_adsl_MF <- ex_adsl %>% dplyr::filter(SEX %in% c("M", "F"))
 #'
@@ -71,7 +71,7 @@ col_paths <- function(x) {
 #'   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 #' )
 #' col_paths_summary(tbl2)
-#' 
+#'
 #' @export
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
@@ -359,7 +359,7 @@ setMethod(
 #' @param detail (`string`)\cr either `row` or `subtable`.
 #'
 #' @return No return value. Called for the side-effect of printing a row- or subtable-structure summary of `x`.
-#'   
+#'
 #' @examples
 #' library(dplyr)
 #'
@@ -384,7 +384,7 @@ setMethod(
 #' table_structure(tbl)
 #'
 #' table_structure(tbl, detail = "row")
-#' 
+#'
 #' @export
 table_structure <- function(x, detail = c("subtable", "row")) {
   detail <- match.arg(detail)
@@ -400,7 +400,7 @@ table_structure <- function(x, detail = c("subtable", "row")) {
 #' @param depth (`numeric(1)`)\cr depth in tree.
 #' @param indent (`numeric(1)`)\cr indent.
 #' @param print_indent (`numeric(1)`)\cr indent for printing.
-#' 
+#'
 #' @rdname int_methods
 setGeneric(
   "table_structure_inner",
@@ -434,16 +434,16 @@ is_empty_ElementaryTable <- function(x) {
 }
 
 #' @param object (`TableTree`)\cr a table object.
-#' 
+#'
 #' @rdname int_methods
 #' @export
 setGeneric("str", function(object, ...) {
   standardGeneric("str")
 })
 
-#' @param max.level (`numeric(1)`)\cr passed to `utils::str`. Defaults to 3 for the `VTableTree` method, unlike 
+#' @param max.level (`numeric(1)`)\cr passed to `utils::str`. Defaults to 3 for the `VTableTree` method, unlike
 #'   the underlying default of `NA`. `NA` is *not* appropriate for `VTableTree` objects.
-#' 
+#'
 #' @rdname int_methods
 #' @export
 setMethod(

@@ -6,18 +6,18 @@ NULL
 #' This function creates a flat tabular file of cell values and corresponding paths via [path_enriched_df()]. It then
 #' writes that data frame out as a `tsv` file.
 #'
-#' By default (i.e. when `value_func` is not specified, list columns where at least one value has length > 1 are 
+#' By default (i.e. when `value_func` is not specified, list columns where at least one value has length > 1 are
 #' collapsed to character vectors by collapsing the list element with `"|"`.
 #'
-#' @note 
-#' There is currently no round-trip capability for this type of export. You can read values exported this way back in 
+#' @note
+#' There is currently no round-trip capability for this type of export. You can read values exported this way back in
 #' via `import_from_tsv` but you will receive only the `data.frame` version back, NOT a `TableTree`.
 #'
 #' @inheritParams gen_args
 #' @inheritParams data.frame_export
 #' @param file (`character(1)`)\cr the path of the file to written to or read from.
 #'
-#' @return 
+#' @return
 #' * `export_as_tsv` returns `NULL` silently.
 #' * `import_from_tsv` returns a `data.frame` with re-constituted list values.
 #'
@@ -66,7 +66,7 @@ import_from_tsv <- function(file) {
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
-#' 
+#'
 #' @export
 formatters::export_as_txt
 
@@ -99,7 +99,7 @@ formatters::export_as_txt
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
 #' suffix will remain available *including any bugs in their construction* indefinitely.
-#' 
+#'
 #' @return
 #' * `as_result_df` returns a result `data.frame`.
 #'
@@ -165,7 +165,7 @@ as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
 
 #' @describeIn data.frame_export A list of functions that extract result data frames from `TableTree`s.
 #'
-#' @return 
+#' @return
 #' * `result_df_specs()` returns a named list of result data frame extraction functions by "specification".
 #'
 #' @examples
@@ -483,12 +483,12 @@ handle_rdf_row <- function(rdfrow, maxlen) {
 #' @describeIn data.frame_export Transform a `TableTree` object to a path-enriched `data.frame`.
 #'
 #' @param path_fun (`function`)\cr function to transform paths into single-string row/column names.
-#' @param value_fun (`function`)\cr function to transform cell values into cells of a `data.frame`. Defaults to 
+#' @param value_fun (`function`)\cr function to transform cell values into cells of a `data.frame`. Defaults to
 #'   `collapse_values`, which creates strings where multi-valued cells are collapsed together, separated by `|`.
 #'
-#' @return 
-#' * `path_enriched_df()` returns a `data.frame` of `tt`'s cell values (processed by `value_fun`, with columns named by 
-#'   the full column paths (processed by `path_fun` and an additional `row_path` column with the row paths (processed 
+#' @return
+#' * `path_enriched_df()` returns a `data.frame` of `tt`'s cell values (processed by `value_fun`, with columns named by
+#'   the full column paths (processed by `path_fun` and an additional `row_path` column with the row paths (processed
 #'   by `path_fun`).
 #'
 #' @examples
@@ -549,7 +549,7 @@ collapse_values <- function(colvals) {
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
-#' 
+#'
 #' @export
 formatters::export_as_pdf
 
@@ -582,13 +582,13 @@ formatters::export_as_pdf
 #'   `?officer::set_doc_properties`. Important text values are `title`, `subject`, `creator`, and `description`,
 #'   while `created` is a date object.
 #' @inheritParams tt_to_flextable
-#' @param template_file (`character(1)`)\cr template file that `officer` will use as a starting point for the final 
+#' @param template_file (`character(1)`)\cr template file that `officer` will use as a starting point for the final
 #'   document. Document attaches the table and uses the defaults defined in the template file.
-#' @param section_properties (`officer::prop_section`)\cr an [officer::prop_section()] object which sets margins and 
+#' @param section_properties (`officer::prop_section`)\cr an [officer::prop_section()] object which sets margins and
 #'   page size.
 #'
 #' @note `export_as_docx()` has few customization options available. If you require specific formats and details,
-#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `title_as_header` and 
+#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `title_as_header` and
 #'   `footer_as_text` parameters must be re-specified if the table is changed first using [tt_to_flextable()].
 #'
 #' @seealso [tt_to_flextable()]
@@ -605,7 +605,7 @@ formatters::export_as_pdf
 #' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 #' }
-#' 
+#'
 #' @export
 export_as_docx <- function(tt,
                            file,
@@ -737,24 +737,24 @@ margins_landscape <- function() {
 #'
 #' @inheritParams gen_args
 #' @inheritParams paginate_table
-#' @param theme (`function` or `NULL`)\cr A theme function that is designed internally as a function of a `flextable` 
-#'   object to change its layout and style. If `NULL`, it will produce a table similar to `rtables` default. Defaults 
-#'   to `theme_docx_default(tt)`. 
+#' @param theme (`function` or `NULL`)\cr A theme function that is designed internally as a function of a `flextable`
+#'   object to change its layout and style. If `NULL`, it will produce a table similar to `rtables` default. Defaults
+#'   to `theme_docx_default(tt)`.
 #' @param border (`officer` border object)\cr defaults to `officer::fp_border(width = 0.5)`.
-#' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [matrix_form()] 
+#' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [matrix_form()]
 #'   `indent_size`) is used. To work with `docx`, any size is multiplied by 2 mm (5.67 pt) by default.
-#' @param titles_as_header (`logical(1)`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained 
+#' @param titles_as_header (`logical(1)`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
 #'   as it makes additional header rows for [main_title()] string and [subtitles()] character vector (one per element).
-#'   `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text paragraph above the table. 
+#'   `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text paragraph above the table.
 #'   The same style is applied.
-#' @param footers_as_text (`flag`)\cr defaults to `FALSE` for [tt_to_flextable()], so the table is self-contained with 
-#'   the `flextable` definition of footnotes. `TRUE` is used for [export_as_docx()] to add the footers as a new 
+#' @param footers_as_text (`flag`)\cr defaults to `FALSE` for [tt_to_flextable()], so the table is self-contained with
+#'   the `flextable` definition of footnotes. `TRUE` is used for [export_as_docx()] to add the footers as a new
 #'   paragraph after the table. The same style is applied, but with a smaller font.
-#' @param counts_in_newline (`flag`)\cr defaults to `FALSE`. In `rtables` text printing ([formatters::toString()]), 
-#'   the column counts, i.e. `(N=xx)`, are always on a new line. For `docx` exports it could be necessary to print it 
+#' @param counts_in_newline (`flag`)\cr defaults to `FALSE`. In `rtables` text printing ([formatters::toString()]),
+#'   the column counts, i.e. `(N=xx)`, are always on a new line. For `docx` exports it could be necessary to print it
 #'   on the same line.
-#' @param paginate (`flag`)\cr when exporting `.docx` documents using `export_as_docx`, we suggest relying on the 
-#'   Microsoft Word pagination system. If `TRUE`, this option splits `tt` into different "pages" as multiple 
+#' @param paginate (`flag`)\cr when exporting `.docx` documents using `export_as_docx`, we suggest relying on the
+#'   Microsoft Word pagination system. If `TRUE`, this option splits `tt` into different "pages" as multiple
 #'   `flextables`. Cooperation between the two mechanisms is not guaranteed. Defaults to `FALSE`.
 #' @param total_width (`numeric(1)`)\cr total width (in inches) for the resulting flextable(s). Defaults to 10.
 #'
@@ -967,14 +967,14 @@ tt_to_flextable <- function(tt,
 }
 
 #' @describeIn tt_to_flextable Main theme function for [export_as_docx()]
-#' 
+#'
 #' @inheritParams export_as_docx
 #' @param font (`character(1)`)\cr defaults to `"Arial"`. If the font is not available, `flextable` default is used.
 #' @param font_size (`integer(1)`)\cr font size. Defaults to 9.
-#' @param bold (`character`)\cr parts of the table text that should be in bold. Can be any combination of 
+#' @param bold (`character`)\cr parts of the table text that should be in bold. Can be any combination of
 #'   `c("header", "content_rows", "label_rows")`. The first one renders all column names bold (not `topleft` content).
 #'   The second and third option use [rtables::make_row_df()] to render content or/and label rows as bold.
-#' @param bold_manual (named `list` or `NULL`)\cr list of index lists. See example for needed structure. Accepted 
+#' @param bold_manual (named `list` or `NULL`)\cr list of index lists. See example for needed structure. Accepted
 #'   groupings/names are `c("header", "body")`.
 #'
 #' @seealso [export_as_docx()]

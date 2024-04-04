@@ -5,16 +5,16 @@
 #' @inheritParams compat_args
 #' @inheritParams lyt_args
 #' @param x (`ANY`)\cr cell value.
-#' @param format (`string` or `function`)\cr the format label (string) or `formatters` function to apply to `x`. 
+#' @param format (`string` or `function`)\cr the format label (string) or `formatters` function to apply to `x`.
 #'   See [formatters::list_valid_format_labels()] for currently supported format labels.
 #' @param label (`string` or `NULL`)\cr label. If non-`NULL`, it will be looked at when determining row labels.
 #' @param colspan (`integer(1)`)\cr column span value.
 #' @param footnotes (`list` or `NULL`)\cr referential footnote messages for the cell.
-#' 
+#'
 #' @inherit CellValue return
-#' 
+#'
 #' @note Currently column spanning is only supported for defining header structure.
-#' 
+#'
 #' @rdname rcell
 #' @export
 rcell <- function(x,
@@ -75,12 +75,12 @@ rcell <- function(x,
   ret
 }
 
-#' @param is_ref (`flag`)\cr whether function is being used in the reference column (i.e. `.in_ref_col` should be 
+#' @param is_ref (`flag`)\cr whether function is being used in the reference column (i.e. `.in_ref_col` should be
 #'   passed to this argument).
 #' @param refval (`ANY`)\cr value to use when in the reference column. Defaults to `NULL`.
-#' 
-#' @details 
-#' `non_ref_rcell` provides the common *blank for cells in the reference column, this value otherwise*, and should 
+#'
+#' @details
+#' `non_ref_rcell` provides the common *blank for cells in the reference column, this value otherwise*, and should
 #' be passed the value of `.in_ref_col` when it is used.
 #'
 #' @rdname rcell
@@ -110,16 +110,16 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .indent_mods (`integer` or `NULL`)\cr indent modifications for the defined rows.
 #' @param .cell_footnotes (`list`)\cr referential footnote messages to be associated by name with *cells*.
 #' @param .row_footnotes (`list`)\cr referential footnotes messages to be associated by name with *rows*.
-#' @param .aligns (`character` or `NULL`)\cr alignments for the cells. Standard for `NULL` is `"center"`. 
+#' @param .aligns (`character` or `NULL`)\cr alignments for the cells. Standard for `NULL` is `"center"`.
 #'   See [formatters::list_valid_aligns()] for currently supported alignments.
 #' @param .format_na_strs (`character` or `NULL`)\cr NA strings for the cells.
 #'
 #' @note In post-processing, referential footnotes can also be added using row and column
 #'   paths with [`fnotes_at_path<-`].
 #'
-#' @return A `RowsVerticalSection` object (or `NULL`). The details of this object should be considered an 
+#' @return A `RowsVerticalSection` object (or `NULL`). The details of this object should be considered an
 #'   internal implementation detail.
-#'   
+#'
 #' @seealso [analyze()]
 #'
 #' @examples
@@ -267,27 +267,27 @@ in_rows <- function(..., .list = NULL, .names = NULL,
 
 #' Create a custom analysis function wrapping an existing function
 #'
-#' @param fun (`function`)\cr the function to be wrapped in a new customized analysis function. 
+#' @param fun (`function`)\cr the function to be wrapped in a new customized analysis function.
 #'   `fun` should return a named `list`.
 #' @param .stats (`character`)\cr names of elements to keep from `fun`'s full output.
 #' @param .formats (`ANY`)\cr vector or list of formats to override any defaults applied by `fun`.
 #' @param .labels (`character`)\cr vector of labels to override defaults returned by `fun`.
 #' @param .indent_mods (`integer`)\cr named vector of indent modifiers for the generated rows.
 #' @param .ungroup_stats (`character`)\cr vector of names, which must match elements of `.stats`.
-#' @param ... additional arguments to `fun` which effectively become new defaults. These can still be 
+#' @param ... additional arguments to `fun` which effectively become new defaults. These can still be
 #'   overridden by `extra_args` within a split.
-#' @param .null_ref_cells (`flag`)\cr whether cells for the reference column should be `NULL`-ed by the 
-#'   returned analysis function. Defaults to `TRUE` if `fun` accepts `.in_ref_col` as a formal argument. Note 
+#' @param .null_ref_cells (`flag`)\cr whether cells for the reference column should be `NULL`-ed by the
+#'   returned analysis function. Defaults to `TRUE` if `fun` accepts `.in_ref_col` as a formal argument. Note
 #'   this argument occurs after `...` so it must be *fully* specified by name when set.
 #' @param .format_na_strs (`ANY`)\cr vector/list of `NA` strings to override any defaults applied by `fun`.
-#' 
-#' @return A function suitable for use in [analyze()] with element selection, reformatting, and relabeling 
+#'
+#' @return A function suitable for use in [analyze()] with element selection, reformatting, and relabeling
 #'   performed automatically.
 #'
-#' @note 
-#' Setting `.ungroup_stats` to non-`NULL` changes the *structure* of the value(s) returned by `fun`, rather than 
-#' just labeling (`.labels`), formatting (`.formats`), and selecting amongst (`.stats`) them. This means that 
-#' subsequent `make_afun` calls to customize the output further both can and must operate on the new structure, 
+#' @note
+#' Setting `.ungroup_stats` to non-`NULL` changes the *structure* of the value(s) returned by `fun`, rather than
+#' just labeling (`.labels`), formatting (`.formats`), and selecting amongst (`.stats`) them. This means that
+#' subsequent `make_afun` calls to customize the output further both can and must operate on the new structure,
 #' *not* the original structure returned by `fun`. See the final pair of examples below.
 #'
 #' @seealso [analyze()]

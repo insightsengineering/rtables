@@ -4,7 +4,7 @@
 #' @param ... cell values.
 #'
 #' @return A row object of the context-appropriate type (label or data).
-#' 
+#'
 #' @examples
 #' rrow("ABC", c(1, 2), c(3, 2), format = "xx (xx.%)")
 #' rrow("")
@@ -52,7 +52,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 #' @param ... values in vector/list form.
 #'
 #' @inherit rrow return
-#' 
+#'
 #' @examples
 #' rrowl("a", c(1, 2, 3), format = "xx")
 #' rrowl("a", c(1, 2, 3), c(4, 5, 6), format = "xx")
@@ -68,7 +68,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 #'
 #' rrowl(row.name = "row 1", c(1, 2), c(3, 4))
 #' rrow(row.name = "row 2", c(1, 2), c(3, 4))
-#' 
+#'
 #' @family compatibility
 #' @export
 rrowl <- function(row.name, ..., format = NULL, indent = 0, inset = 0L) {
@@ -164,11 +164,11 @@ hrows_to_colinfo <- function(rows) {
 #' Create a header
 #'
 #' @inheritParams compat_args
-#' @param ... row specifications, either as character vectors or the output from [rrow()], [DataRow()], 
+#' @param ... row specifications, either as character vectors or the output from [rrow()], [DataRow()],
 #'   [LabelRow()], etc.
 #'
 #' @return A `InstantiatedColumnInfo` object.
-#' 
+#'
 #' @examples
 #' h1 <- rheader(c("A", "B", "C"))
 #' h1
@@ -218,13 +218,13 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #'
 #' @inheritParams compat_args
 #' @inheritParams gen_args
-#' @param header (`TableRow`, `character`, or `InstantiatedColumnInfo`)\cr information defining the header 
-#'   (column structure) of the table. This can be as row objects (legacy), character vectors, or an 
+#' @param header (`TableRow`, `character`, or `InstantiatedColumnInfo`)\cr information defining the header
+#'   (column structure) of the table. This can be as row objects (legacy), character vectors, or an
 #'   `InstantiatedColumnInfo` object.
 #' @param ... rows to place in the table.
 #'
 #' @return A formal table object of the appropriate type (`ElementaryTable` or `TableTree`).
-#'   
+#'
 #' @examples
 #' rtable(
 #'   header = LETTERS[1:3],
@@ -233,7 +233,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' )
 #'
 #' # Table with multirow header
-#' 
+#'
 #' sel <- iris$Species == "setosa"
 #' mtbl <- rtable(
 #'   header = rheader(
@@ -278,7 +278,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' names(tbl)
 #'
 #' # Subsetting
-#' 
+#'
 #' tbl[1, ]
 #' tbl[, 1]
 #'
@@ -290,7 +290,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' tbl[5, 2]
 #'
 #' # Data Structure methods
-#' 
+#'
 #' dim(tbl)
 #' nrow(tbl)
 #' ncol(tbl)
@@ -377,9 +377,9 @@ only_first_annot <- function(all_annots) {
 
 #' @param gap `r lifecycle::badge("deprecated")` ignored.
 #' @param check_headers `r lifecycle::badge("deprecated")` ignored.
-#' 
+#'
 #' @return A formal table object.
-#' 
+#'
 #' @rdname rbind
 #' @export
 rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
@@ -460,7 +460,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 }
 
 #' Row-bind `TableTree` and related objects
-#' 
+#'
 #' @param deparse.level (`numeric(1)`)\cr currently ignored.
 #' @param ... (`ANY`)\cr elements to be stacked.
 #'
@@ -500,7 +500,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 #' rbind(mtbl, mtbl2)
 #' rbind(mtbl, rrow(), mtbl2)
 #' rbind(mtbl, rrow("aaa"), indent(mtbl2))
-#' 
+#'
 #' @exportMethod rbind
 #' @rdname rbind
 setMethod(
@@ -511,7 +511,7 @@ setMethod(
 )
 
 #' @param y (`ANY`)\cr second element to be row-bound via `rbind2`.
-#' 
+#'
 #' @exportMethod rbind2
 #' @rdname int_methods
 setMethod(
@@ -523,7 +523,7 @@ setMethod(
 
 #' @param x (`VTableNodeInfo`)\cr `TableTree`, `ElementaryTable`, or `TableRow` object.
 #' @param y (`VTableNodeInfo`)\cr `TableTree`, `ElementaryTable`, or `TableRow` object.
-#' 
+#'
 #' @exportMethod rbind2
 #' @rdname rbind
 setMethod(
@@ -652,7 +652,7 @@ chk_cbindable_many <- function(lst) {
 #'
 #' @param x (`TableTree` or `TableRow`)\cr a table or row object.
 #' @param ... one or more further objects of the same class as `x`.
-#' 
+#'
 #' @inherit rbindl_rtables return
 #'
 #' @examples
@@ -927,9 +927,9 @@ chk_compat_cinfos <- function(tt1, tt2) {
 
 #' **Deprecated:** Insert `rrow`s at (before) a specific location
 #'
-#' This function is deprecated and will be removed in a future release of `rtables`. Please use 
+#' This function is deprecated and will be removed in a future release of `rtables`. Please use
 #' [insert_row_at_path()] or [label_at_path()] instead.
-#' 
+#'
 #' @param tbl (`TableTree`)\cr a `rtable` object.
 #' @param rrow (`TableRow`)\cr an `rrow` to append to `tbl`.
 #' @param at (`integer(1)`)\cr position into which to put the `rrow`, defaults to beginning (i.e. row 1).
@@ -937,10 +937,10 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #'
 #' @return A `TableTree` of the same specific class as `tbl`.
 #'
-#' @note 
-#' Label rows (i.e. a row with no data values, only a `row.name`) can only be inserted at positions which do 
+#' @note
+#' Label rows (i.e. a row with no data values, only a `row.name`) can only be inserted at positions which do
 #' not already contain a label row when there is a non-trivial nested row structure in `tbl`.
-#'   
+#'
 #' @examples
 #' o <- options(warn = 0)
 #' lyt <- basic_table() %>%
@@ -968,7 +968,7 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
 #'
 #' options(o)
-#' 
+#'
 #' @export
 insert_rrow <- function(tbl, rrow, at = 1,
                         ascontent = FALSE) {

@@ -5,9 +5,9 @@
 #' @inheritParams gen_args
 #'
 #' @return A logical value indicating whether `tr` should be included (`TRUE`) or pruned (`FALSE`) during pruning.
-#'   
+#'
 #' @seealso [prune_table()], [trim_rows()]
-#' 
+#'
 #' @details `all_zero_or_na` returns `TRUE` (and thus indicates trimming/pruning) for any *non-`LabelRow`*
 #'   `TableRow` which contain only any mix of `NA` (including `NaN`), `0`, `Inf` and `-Inf` values.
 #'
@@ -55,23 +55,23 @@ all_zero <- function(tr) {
 }
 
 #' Trim rows from a populated table without regard for table structure
-#' 
+#'
 #' @inheritParams gen_args
-#' @param criteria (`function`)\cr function which takes a `TableRow` object and returns `TRUE` if that row 
+#' @param criteria (`function`)\cr function which takes a `TableRow` object and returns `TRUE` if that row
 #'   should be removed. Defaults to [all_zero_or_na()].
-#'   
+#'
 #' @return The table with rows that have only `NA` or 0 cell values removed.
-#' 
-#' @note 
-#' Visible `LabelRow`s are including in this trimming, which can lead to either all label rows being trimmed or 
-#' label rows remaining when all data rows have been trimmed, depending on what `criteria` returns when called on 
+#'
+#' @note
+#' Visible `LabelRow`s are including in this trimming, which can lead to either all label rows being trimmed or
+#' label rows remaining when all data rows have been trimmed, depending on what `criteria` returns when called on
 #' a `LabelRow` object. To avoid this, use the structurally-aware [prune_table()] machinery instead.
-#' 
-#' @details 
-#' This function will be deprecated in the future in favor of the more elegant and versatile [prune_table()] 
-#' function which can perform the same function as `trim_rows()` but is more powerful as it takes table structure 
+#'
+#' @details
+#' This function will be deprecated in the future in favor of the more elegant and versatile [prune_table()]
+#' function which can perform the same function as `trim_rows()` but is more powerful as it takes table structure
 #' into account.
-#' 
+#'
 #' @seealso [prune_table()]
 #'
 #' @examples
@@ -108,13 +108,13 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 }
 
 #' @inheritParams trim_rows
-#' 
-#' @details 
+#'
+#' @details
 #' `content_all_zeros_nas` prunes a subtable if both of the following are true:
-#' 
+#'
 #'   * It has a content table with exactly one row in it.
-#'   * `all_zero_or_na` returns `TRUE` for that single content row. In practice, when the default summary/content 
-#'     function is used, this represents pruning any subtable which corresponds to an empty set of the input data 
+#'   * `all_zero_or_na` returns `TRUE` for that single content row. In practice, when the default summary/content
+#'     function is used, this represents pruning any subtable which corresponds to an empty set of the input data
 #'     (e.g. because a factor variable was used in [split_rows_by()] but not all levels were present in the data).
 #'
 #' @examples
@@ -135,9 +135,9 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
   criteria(cr)
 }
 
-#' @details 
+#' @details
 #' `prune_empty_level` combines `all_zero_or_na` behavior for `TableRow` objects, `content_all_zeros_nas` on
-#' `content_table(tt)` for `TableTree` objects, and an additional check that returns `TRUE` if the `tt` has no 
+#' `content_table(tt)` for `TableTree` objects, and an additional check that returns `TRUE` if the `tt` has no
 #' children.
 #'
 #' @examples
@@ -157,7 +157,7 @@ prune_empty_level <- function(tt) {
   length(kids) == 0
 }
 
-#' @details `prune_zeros_only` behaves as `prune_empty_level` does, except that like `all_zero` it prunes 
+#' @details `prune_zeros_only` behaves as `prune_empty_level` does, except that like `all_zero` it prunes
 #'   only in the case of all non-missing zero values.
 #'
 #' @examples
@@ -182,8 +182,8 @@ prune_zeros_only <- function(tt) {
 #' @param type (`string`)\cr how count values should be aggregated. Must be `"sum"` (the default) or `"mean"`.
 #'
 #' @details
-#' `low_obs_pruner` is a *constructor function* which, when called, returns a pruning criteria function which 
-#' will prune on content rows by comparing sum or mean (dictated by `type`) of the count portions of the cell 
+#' `low_obs_pruner` is a *constructor function* which, when called, returns a pruning criteria function which
+#' will prune on content rows by comparing sum or mean (dictated by `type`) of the count portions of the cell
 #' values (defined as the first value per cell regardless of how many values per cell there are) against `min`.
 #'
 #' @examples
@@ -211,15 +211,15 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #' Recursively prune a `TableTree`
 #'
 #' @inheritParams gen_args
-#' @param prune_func (`function`)\cr a function to be called on each subtree which returns `TRUE` if the 
+#' @param prune_func (`function`)\cr a function to be called on each subtree which returns `TRUE` if the
 #'   entire subtree should be removed.
-#' @param stop_depth (`numeric(1)`)\cr the depth after which subtrees should not be checked for pruning. 
+#' @param stop_depth (`numeric(1)`)\cr the depth after which subtrees should not be checked for pruning.
 #'   Defaults to `NA` which indicates pruning should happen at all levels.
 #' @param depth (`numeric(1)`)\cr used internally, not intended to be set by the end user.
 #'
 #' @return A `TableTree` pruned via recursive application of `prune_func`.
 #'
-#' @seealso [prune_empty_level()] for details on this and several other basic pruning functions included 
+#' @seealso [prune_empty_level()] for details on this and several other basic pruning functions included
 #'   in the `rtables` package.
 #'
 #' @examples
