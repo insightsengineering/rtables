@@ -3,7 +3,7 @@
 \name{export_as_tsv}
 \alias{export_as_tsv}
 \alias{import_from_tsv}
-\title{Create Enriched flat value table with paths}
+\title{Create enriched flat value table with paths}
 \usage{
 export_as_tsv(
   tt,
@@ -17,32 +17,30 @@ import_from_tsv(file)
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{file}{character(1). The path of the file to written to or read from.}
+\item{file}{(\code{character(1)})\cr the path of the file to written to or read from.}
 
-\item{path_fun}{function. Function to transform paths into single-string
-row/column names.}
+\item{path_fun}{(\code{function})\cr function to transform paths into single-string row/column names.}
 
-\item{value_fun}{function. Function to transform cell values into cells of
-the data.frame. Defaults to \code{collapse_values} which creates strings
-where multi-valued cells are collapsed together, separated by \code{|}.}
+\item{value_fun}{(\code{function})\cr function to transform cell values into cells of a \code{data.frame}. Defaults to
+\code{collapse_values}, which creates strings where multi-valued cells are collapsed together, separated by \code{|}.}
 }
 \value{
-\code{NULL} silently for \code{export_as_tsv}, a data.frame with
-re-constituted list values for \code{export_as_tsv}.
+\itemize{
+\item \code{export_as_tsv} returns \code{NULL} silently.
+\item \code{import_from_tsv} returns a \code{data.frame} with re-constituted list values.
+}
 }
 \description{
-This function creates a flat tabular file of cell values and
-corresponding paths via \code{\link[=path_enriched_df]{path_enriched_df()}}. I then
-writes that data.frame out as a \code{tsv} file.
-
-By default (i.e. when \code{value_func} is not specified,
-List columns where at least one value has length > 1 are collapsed
-to character vectors by collapsing the list element with \code{"|"}.
+This function creates a flat tabular file of cell values and corresponding paths via \code{\link[=path_enriched_df]{path_enriched_df()}}. It then
+writes that data frame out as a \code{tsv} file.
+}
+\details{
+By default (i.e. when \code{value_func} is not specified, list columns where at least one value has length > 1 are
+collapsed to character vectors by collapsing the list element with \code{"|"}.
 }
 \note{
-There is currently no round-trip capability for this type of export.
-You can read values exported this way back in via \code{import_from_tsv}
-but you will receive only the data.frame version back, NOT a \code{TableTree}.
+There is currently no round-trip capability for this type of export. You can read values exported this way back in
+via \code{import_from_tsv} but you will receive only the \code{data.frame} version back, NOT a \code{TableTree}.
 }
 \seealso{
 \code{\link[=path_enriched_df]{path_enriched_df()}} for the underlying function that does the work.

@@ -29,52 +29,47 @@ margins_landscape()
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{file}{character(1). String that indicates the final file output. It needs to have \code{.docx}
-extension.}
+\item{file}{(\code{character(1)})\cr string that indicates the final file output. Must have \code{.docx} extension.}
 
-\item{doc_metadata}{list of character(1)s. Any value that can be used as metadata by
-\code{?officer::set_doc_properties}. Important text values are \verb{title, subject, creator, description}
+\item{doc_metadata}{(\code{list} of \code{character(1)})\cr any value that can be used as metadata by
+\code{?officer::set_doc_properties}. Important text values are \code{title}, \code{subject}, \code{creator}, and \code{description},
 while \code{created} is a date object.}
 
-\item{titles_as_header}{logical(1). Defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the
-table is self-contained as it makes additional header rows for \code{\link[=main_title]{main_title()}}
-string and \code{\link[=subtitles]{subtitles()}} character vector (one per element). \code{FALSE} is suggested
-for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above
-the table. Same style is applied.}
+\item{titles_as_header}{(\code{logical(1)})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
+as it makes additional header rows for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element).
+\code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above the table.
+The same style is applied.}
 
-\item{footers_as_text}{logical(1). Defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so
-the table is self-contained with the \code{flextable} definition of footnotes. \code{TRUE} is
-used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
-Same style is applied, but with a smaller font.}
+\item{footers_as_text}{(\code{flag})\cr defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained with
+the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
+paragraph after the table. The same style is applied, but with a smaller font.}
 
-\item{template_file}{character(1). Template file that \code{officer} will use as a starting
-point for the final document. It will attach the table and use the defaults defined in
-the template file. Output will be doc \code{file} nonetheless.}
+\item{template_file}{(\code{character(1)})\cr template file that \code{officer} will use as a starting point for the final
+document. Document attaches the table and uses the defaults defined in the template file.}
 
-\item{section_properties}{\code{officer::prop_section} object. Here you can set margins and page
-size.}
+\item{section_properties}{(\code{officer::prop_section})\cr an \code{\link[officer:prop_section]{officer::prop_section()}} object which sets margins and
+page size.}
 }
 \description{
 From a table, produce a self-contained word document or attach it to a template word
-file (\code{template_file}). This function is based on \code{\link[=tt_to_flextable]{tt_to_flextable()}} transformer and
-\code{officer} package.
+file (\code{template_file}). This function is based on the \code{\link[=tt_to_flextable]{tt_to_flextable()}} transformer and
+the \code{officer} package.
 }
 \section{Functions}{
 \itemize{
-\item \code{section_properties_portrait()}: helper function that defines standard portrait properties for tables.
+\item \code{section_properties_portrait()}: Helper function that defines standard portrait properties for tables.
 
-\item \code{section_properties_landscape()}: helper function that defines standard landscape properties for tables.
+\item \code{section_properties_landscape()}: Helper function that defines standard landscape properties for tables.
 
-\item \code{margins_potrait()}: helper function that defines standard portrait margins for tables.
+\item \code{margins_potrait()}: Helper function that defines standard portrait margins for tables.
 
-\item \code{margins_landscape()}: helper function that defines standard landscape margins for tables.
+\item \code{margins_landscape()}: Helper function that defines standard landscape margins for tables.
 
 }}
 \note{
-\code{export_as_docx()} does not have many options available. We suggest, if you need
-specific formats and details to use \code{\link[=tt_to_flextable]{tt_to_flextable()}} first and then \code{export_as_docx}.
-Only \code{title_as_header} and \code{footer_as_text} need to be specified again if changed in
-\code{tt_to_flextable()}.
+\code{export_as_docx()} has few customization options available. If you require specific formats and details,
+we suggest that you use \code{\link[=tt_to_flextable]{tt_to_flextable()}} prior to \code{export_as_docx}. Only the \code{title_as_header} and
+\code{footer_as_text} parameters must be re-specified if the table is changed first using \code{\link[=tt_to_flextable]{tt_to_flextable()}}.
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -88,6 +83,7 @@ tbl <- build_table(lyt, ex_adsl)
 tf <- tempfile(fileext = ".docx")
 export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 }
+
 }
 \seealso{
 \code{\link[=tt_to_flextable]{tt_to_flextable()}}
