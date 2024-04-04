@@ -10,6 +10,9 @@
  * Fixed edge case bug in `as_result_df` where rows of the table have only `"root"` as path index.
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
+ 
+### Miscellaneous
+ * Added `counts_position` to `tt_to_flextable()` to be able to set the position of the column counts.
 
 ## rtables 0.6.6
 ### New Features

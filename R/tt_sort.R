@@ -181,11 +181,12 @@ sort_at_path <- function(tt,
 
   ## XXX hacky fix this!!!
   ## tt_at_path removes root even if actual root table isn't named root, we need to match that behavior
-  if(path[1] == "root") {
+  if (path[1] == "root") {
     ## always remove first root element but only add it to
     ## .prev_path (used for error reporting) if it actually matched the name
-    if(obj_name(tt) == "root")
+    if (obj_name(tt) == "root") {
       .prev_path <- c(.prev_path, path[1])
+    }
     path <- path[-1]
   }
   if (identical(obj_name(tt), path[1])) {
@@ -227,11 +228,13 @@ sort_at_path <- function(tt,
         ret <- newtab
       }
       return(ret)
-    } else if(!(curname %in% names(oldkids))) {
-        stop("Unable to find child(ren) '",
-             curname, "'\n\t occurred at path: ",
-             paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-             "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or\n\      'table_structure(obj)' to explore valid paths.")
+    } else if (!(curname %in% names(oldkids))) {
+      stop(
+        "Unable to find child(ren) '",
+        curname, "'\n\t occurred at path: ",
+        paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+        "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or\n\      'table_structure(obj)' to explore valid paths."
+      )
     }
     subtree <- tree_children(subtree)[[curname]]
     backpath <- c(backpath, curpath[1])

@@ -881,14 +881,14 @@ tt_to_flextable <- function(tt,
       if (isFALSE(counts_in_newline) && any(has_nclab)) {
         whsnc <- which(has_nclab) # which rows have it
         what_is_nclab <- det_nclab[whsnc, ]
-  
+
         # condition for popping the interested row by merging the upper one
         hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
           hdr[whsnc, what_is_nclab],
           sep = " "
         )
         hdr[whsnc - 1, what_is_nclab] <- ""
-  
+
         # We can remove the row if they are all ""
         row_to_pop <- whsnc - 1
         if (all(!nzchar(hdr[row_to_pop, ]))) {
