@@ -44,6 +44,7 @@ Suggests:
     dplyr (>= 1.0.5),
     flextable (>= 0.8.4),
     knitr (>= 1.42),
+    lifecycle (>= 0.2.0),
     officer (>= 0.5.0),
     r2rtf (>= 0.3.2),
     survival (>= 3.3-1),
@@ -57,9 +58,9 @@ VignetteBuilder:
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gogolewski/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
-    davidgohel/flextable, yihui/knitr, davidgohel/officer, Merck/r2rtf,
-    r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
-    r-lib/xml2
+    davidgohel/flextable, yihui/knitr, r-lib/lifecycle, davidgohel/officer, 
+    Merck/r2rtf, r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, 
+    r-lib/withr, r-lib/xml2
 Encoding: UTF-8
 Language: en-US
 LazyData: true

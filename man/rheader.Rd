@@ -7,9 +7,8 @@
 rheader(..., format = "xx", .lst = NULL)
 }
 \arguments{
-\item{\dots}{row specifications (either as character vectors or the output
-from \code{\link{rrow}} or \code{\link{DataRow}}, \code{\link{LabelRow}},
-etc.}
+\item{...}{row specifications, either as character vectors or the output from \code{\link[=rrow]{rrow()}}, \code{\link[=DataRow]{DataRow()}},
+\code{\link[=LabelRow]{LabelRow()}}, etc.}
 
 \item{format}{(\code{character(1)} or \code{function})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
@@ -18,21 +17,19 @@ cell values passed via \code{...}. See \code{\link[formatters:list_formats]{form
 Arguments passed via \code{...} will be ignored if this is specified.}
 }
 \value{
-a \code{InstantiatedColumnInfo} object.
+A \code{InstantiatedColumnInfo} object.
 }
 \description{
 Create a header
 }
 \examples{
 h1 <- rheader(c("A", "B", "C"))
+h1
 
 h2 <- rheader(
   rrow(NULL, rcell("group 1", colspan = 2), rcell("group 2", colspan = 2)),
   rrow(NULL, "A", "B", "A", "B")
 )
-
-h1
-
 h2
 
 }

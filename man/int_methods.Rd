@@ -1183,7 +1183,7 @@ on the row rather than cell.}
 \item{reset_idx}{(\code{flag})\cr whether the numbering for referential footnotes should be immediately
 recalculated. Defaults to \code{TRUE}.}
 
-\item{y}{Second element to be \code{rbound} via \code{rbind2}}
+\item{y}{(\code{ANY})\cr second element to be row-bound via \code{rbind2}.}
 
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}

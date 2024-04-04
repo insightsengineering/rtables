@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{rrow}
 \alias{rrow}
-\title{row}
+\title{Create an \code{rtable} row}
 \usage{
 rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 }
@@ -10,7 +10,7 @@ rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 \item{row.name}{(\code{character(1)} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
 \code{\link[=rrow]{rrow()}}.}
 
-\item{\dots}{cell values}
+\item{...}{cell values.}
 
 \item{format}{(\code{character(1)} or \code{function})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
@@ -21,10 +21,10 @@ cell values passed via \code{...}. See \code{\link[formatters:list_formats]{form
 \code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 }
 \value{
-A row object of the context-appropriate type (label or data)
+A row object of the context-appropriate type (label or data).
 }
 \description{
-row
+Create an \code{rtable} row
 }
 \examples{
 rrow("ABC", c(1, 2), c(3, 2), format = "xx (xx.\%)")
