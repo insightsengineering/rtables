@@ -802,6 +802,7 @@ AnalyzeMultiVars <- function(var,
     cformat <- .repoutlst(cformat, nv)
     ##        split_format = .repoutlst(split_format, nv)
     inclNAs <- .repoutlst(inclNAs, nv)
+    section_div_if_multivar <- if (length(var) > 1) NA_character_ else section_div
     pld <- mapply(AnalyzeVarSplit,
       var = var,
       split_name = child_names,
@@ -818,7 +819,7 @@ AnalyzeMultiVars <- function(var,
         label_pos = show_kidlabs,
         split_format = split_format,
         split_na_str = split_na_str,
-        section_div = section_div
+        section_div = section_div_if_multivar
       ), ## rvis),
       SIMPLIFY = FALSE
     )

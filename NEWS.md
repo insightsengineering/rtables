@@ -9,6 +9,7 @@
  * Fixed issue with `rtables_root` not being removed when using `as_result_df`.
  * Fixed edge case bug in `as_result_df` where rows of the table have only `"root"` as path index.
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
+ * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
 
 ### Miscellaneous
 * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.

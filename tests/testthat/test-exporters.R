@@ -390,7 +390,7 @@ test_that("Can create flextable object that works with different styles", {
 
   # internal package check
   not_a_pkg <- "bwrereloakdosirabttjtaeerr"
-  suppressMessages(expect_error(check_required_packages(c("flextable", not_a_pkg)), not_a_pkg))
+  expect_error(check_required_packages(c("flextable", not_a_pkg)), not_a_pkg)
 })
 
 test_that("export_as_doc works thanks to tt_to_flextable", {
