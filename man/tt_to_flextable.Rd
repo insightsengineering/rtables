@@ -78,15 +78,12 @@ regardless of page size.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
-and footnotes be wrapped?}
+\item{tf_wrap}{(\code{flag})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 
-\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
-and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If \code{NULL}, it is  set to the current print width
-of the  session (\code{getOption("width")}). If set to \code{"auto"},
-the width of the table (plus any table inset) is used. Ignored
-completely if \code{tf_wrap} is \code{FALSE}.}
+\item{max_width}{(\code{integer(1)}, \code{string} or \code{NULL})\cr width that title and footer (including
+footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
+session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
+used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting
 \code{flextable(s)}. Defaults to 10.}
