@@ -11,7 +11,7 @@
 \alias{get_cell_aligns,ElementaryTable-method}
 \alias{get_cell_aligns,TableRow-method}
 \alias{get_cell_aligns,LabelRow-method}
-\title{get formatted cells}
+\title{Get formatted cells}
 \usage{
 get_formatted_cells(obj, shell = FALSE)
 
@@ -36,14 +36,14 @@ get_cell_aligns(obj)
 \arguments{
 \item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
 
-\item{shell}{logical(1). Should the formats themselves be returned instead of the
-values with formats applied. Defaults to \code{FALSE}.}
+\item{shell}{(\code{flag})\cr whether the formats themselves should be returned instead of the values with formats
+applied. Defaults to \code{FALSE}.}
 }
 \value{
-the formatted print-strings for all (body) cells in \code{obj}.
+The formatted print-strings for all (body) cells in \code{obj}.
 }
 \description{
-get formatted cells
+Get formatted cells
 }
 \examples{
 library(dplyr)
@@ -60,4 +60,5 @@ tbl <- basic_table() \%>\%
   build_table(iris2)
 
 get_formatted_cells(tbl)
+
 }
