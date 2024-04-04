@@ -431,3 +431,16 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
 
   expect_true(file.exists(doc_file))
 })
+
+test_that("export_as_doc works thanks to tt_to_flextable", {
+  lyt <- basic_table(show_colcounts = TRUE) %>% 
+    split_cols_by("ARM") %>% 
+    analyze("BMRKR1")
+  tbl <- build_table(lyt, DM)
+  
+  expect_silent(flx <- tt_to_flextable(tbl, counts_position = "new_line"))
+  expect_equal(flextable::nrow_part(flx, part = "header"), 2)
+  expect_silent(flx <- tt_to_flextable(tbl, counts_position = "same_line"))
+  expect_equal(flextable::nrow_part(flx, part = "header"), 1)
+  expect_error(flx <- tt_to_flextable(tbl, counts_position = "newads_line"))
+})

@@ -9,6 +9,7 @@ tt_to_flextable(
   tt,
   theme = theme_docx_default(tt),
   border = flextable::fp_border_default(width = 0.5),
+  counts_position = "same_line",
   indent_size = NULL,
   titles_as_header = TRUE,
   footers_as_text = FALSE,
@@ -42,6 +43,10 @@ and changes its layout and style. If set to \code{NULL}, it will produce a table
 to \code{rtables} default.}
 
 \item{border}{\code{officer} border object. Defaults to \code{officer::fp_border(width = 0.5)}.}
+
+\item{counts_position}{character(1). Defaults to \code{"same_line"} for printing the counts
+on the same line of column names. If \code{"new_line"}, the counts are printed on a new line
+under the column names.}
 
 \item{indent_size}{integer(1). If \code{NULL}, the default indent size of the table (see
 \code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
@@ -78,15 +83,12 @@ regardless of page size.}
 
 \item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
 
-\item{tf_wrap}{logical(1). Should  the texts for  title, subtitle,
-and footnotes be wrapped?}
+\item{tf_wrap}{(\code{flag})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 
-\item{max_width}{integer(1), character(1) or \code{NULL}. Width that title
-and   footer   (including   footnotes)  materials   should   be
-word-wrapped to. If \code{NULL}, it is  set to the current print width
-of the  session (\code{getOption("width")}). If set to \code{"auto"},
-the width of the table (plus any table inset) is used. Ignored
-completely if \code{tf_wrap} is \code{FALSE}.}
+\item{max_width}{(\code{integer(1)}, \code{string} or \code{NULL})\cr width that title and footer (including
+footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
+session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
+used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{total_width}{numeric(1). Total width in inches for the resulting
 \code{flextable(s)}. Defaults to 10.}

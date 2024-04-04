@@ -1,8 +1,6 @@
 ## Loading relevant libraries for tests
-library(testthat)
 library(xml2)
 library(tibble)
-library(rtables)
 library(dplyr)
 
 # # Load and flag for pdftools to check for it

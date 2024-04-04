@@ -40,8 +40,7 @@ child (which are based on the data and type of split during tabulation).}
 declared via strings (\code{"xx.x"}) or function. In cases such as
 \code{analyze} calls, they can character vectors or lists of functions.}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
-Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{nested}{boolean. Should this layout instruction be applied within the
 existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
