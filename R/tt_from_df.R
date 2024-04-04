@@ -1,15 +1,11 @@
-#' Create `ElementaryTable` from data.frame
+#' Create an `ElementaryTable` from a `data.frame`
 #'
-#' @param df data.frame.
-#'
-#' @return an \code{ElementaryTable} object with unnested columns corresponding to
-#' \code{names(df)} and row labels corresponding to \code{row.names(df)}.
+#' @param df (`data.frame`)\cr a data frame.
 #'
 #' @details
-#' If row names are not defined in `df` (or they are simple numbers), then the
-#' row names are taken from the column `label_name`, if exists. If `label_name` exists,
-#' then it is also removed from the original data. Remember that this behavior is
-#' compatible with [as_result_df()], when `as_is = TRUE` and the row names are not unique.
+#' If row names are not defined in `df` (or they are simple numbers), then the row names are taken from the column 
+#' `label_name`, if it exists. If `label_name` exists, then it is also removed from the original data. This behavior 
+#' is compatible with [as_result_df()], when `as_is = TRUE` and the row names are not unique.
 #'
 #' @seealso [as_result_df()] for the inverse operation.
 #'
