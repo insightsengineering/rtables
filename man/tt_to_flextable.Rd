@@ -61,12 +61,11 @@ on the same line.}
 Microsoft Word pagination system. If \code{TRUE}, this option splits \code{tt} into different "pages" as multiple
 \code{flextables}. Cooperation between the two mechanisms is not guaranteed. Defaults to \code{FALSE}.}
 
-\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
+\item{lpp}{(\code{numeric(1)})\cr maximum lines per page including (re)printed header and context rows.}
 
-\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be inferred from
-the page size; \code{NULL} indicates no horizontal pagination should be done
-regardless of page size.}
+\item{cpp}{(\code{numeric(1)} or \code{NULL})\cr width (in characters) of the pages for horizontal pagination.
+\code{NA} (the default) indicates \code{cpp} should be inferred from the page size; \code{NULL} indicates no horizontal
+pagination should be done regardless of page size.}
 
 \item{...}{additional parameters passed to methods or tabulation functions.}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_paginate.R
 \name{make_col_df}
 \alias{make_col_df}
-\title{Column Layout Summary}
+\title{Column layout summary}
 \usage{
 make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 }
@@ -15,9 +15,6 @@ make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 }
 \description{
-Generate a structural summary of the columns of an
-rtables table and return it as a data.frame.
-}
-\details{
-Used for Pagination
+Used for pagination. Generate a structural summary of the columns of an \code{rtables} table and return it as a
+\code{data.frame}.
 }

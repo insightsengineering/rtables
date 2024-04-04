@@ -10,13 +10,11 @@
 ## Current behavior: paginate_ttree takes a TableTree object and
 ## returns a list of rtable (S3) objects for printing.
 
-
-
-#' @exportMethod nlines
 #' @inheritParams formatters::nlines
-#' @name formatters_methods
+#' 
 #' @rdname formatters_methods
 #' @aliases nlines,TableRow-method
+#' @exportMethod nlines
 setMethod(
   "nlines", "TableRow",
   function(x, colwidths, max_width) {
@@ -80,7 +78,6 @@ setMethod(
     nlines(format_fnote_note(x), colwidths = colwidths, max_width = max_width)
   }
 )
-
 
 #' @export
 #' @rdname formatters_methods
@@ -146,7 +143,6 @@ col_dfrow <- function(col,
   )
 }
 
-
 pos_to_path <- function(pos) {
   spls <- pos_splits(pos)
   vals <- pos_splvals(pos)
@@ -163,19 +159,16 @@ pos_to_path <- function(pos) {
   path
 }
 
-
-
 # make_row_df ---------------------------------------------------------------
-#
+
 #' @inherit formatters::make_row_df
 #'
-# #' @note the technically present root tree node is excluded from the summary
-# #'   returned by both \code{make_row_df} and \code{make_col_df}, as it is simply
-# #'   the row/column structure of \code{tt} and thus not useful for pathing or
-# #'   pagination.
+# #' @note The technically present root tree node is excluded from the summary returned by both `make_row_df` and 
+# #'   `make_col_df`, as it is simply the row/column structure of `tt` and thus not useful for pathing or pagination.
+# #'
+# #' @return a data.frame of row/column-structure information used by the pagination machinery.
+# #'
 # #' @export
-# #' @return a data.frame of row/column-structure information used by the
-# #'   pagination machinery.
 # #' @name make_row_df
 # #' @rdname make_row_df
 # #' @aliases make_row_df,VTableTree-method
@@ -252,7 +245,6 @@ setMethod(
       indent <- indent + 1L
     }
 
-
     if (NROW(content_table(tt)) > 0) {
       ct_tt <- content_table(tt)
       cind <- indent + indent_mod(ct_tt)
@@ -280,7 +272,6 @@ setMethod(
       ret <- c(ret, list(contdf))
       indent <- cind + 1
     }
-
 
     allkids <- tree_children(tt)
     newnsibs <- length(allkids)
@@ -317,6 +308,7 @@ setMethod(
 
 # #' @exportMethod make_row_df
 #' @inherit formatters::make_row_df
+#' 
 #' @export
 #' @rdname formatters_methods
 setMethod(
@@ -399,7 +391,6 @@ setMethod(
   }
 )
 
-
 setGeneric("inner_col_df", function(ct,
                                     colwidths = NULL,
                                     visible_only = TRUE,
@@ -410,14 +401,13 @@ setGeneric("inner_col_df", function(ct,
   standardGeneric("inner_col_df")
 })
 
-
-#' Column Layout Summary
+#' Column layout summary
 #'
-#' Generate a structural summary of the columns of an
-#' rtables table and return it as a data.frame.
-#'
-#' Used for Pagination
+#' Used for pagination. Generate a structural summary of the columns of an `rtables` table and return it as a 
+#' `data.frame`. 
+#' 
 #' @inheritParams formatters::make_row_df
+#' 
 #' @export
 make_col_df <- function(tt,
                         colwidths = NULL,
@@ -451,7 +441,6 @@ setMethod(
     ))
   }
 )
-
 
 setMethod(
   "inner_col_df", "LayoutColTree",
@@ -496,9 +485,6 @@ setMethod(
     ret
   }
 )
-
-
-
 
 ## THIS INCLUDES BOTH "table stub" (i.e. column label and top_left) AND
 ## title/subtitle!!!!!
@@ -552,60 +538,50 @@ setMethod(
 
 #' Pagination of a `TableTree`
 #'
-#'
-#' Paginate  an  `rtables` table  in  the  vertical and/or  horizontal
-#' direction, as required for the specified page size.
-#'
-#' @details
-#'
-#' `rtables` pagination is context aware,  meaning that label rows and
-#' row-group summaries  (content rows)  are repeated  after (vertical)
-#' pagination, as  appropriate. This allows the  reader to immediately
-#' understand where they are in the table after turning to a new page,
-#' but does  also mean that a  rendered, paginated table will  take up
-#' more  lines of  text than  rendering the  table without  pagination
-#' would.
-#'
-#' Pagination also takes into account word-wrapping of title, footer,
-#' column-label, and formatted cell value content.
-#'
-#' Vertical pagination information (pagination data.frame) is created
-#' using (`make_row_df`)
-#'
-#' Horizontal  pagination  is  performed   by  creating  a  pagination
-#' dataframe for  the columns,  and then  applying the  same algorithm
-#' used for vertical pagination to it.
-#'
-#' If physical page size and font information are specified, these are
-#' used  to  derive  lines-per-page  (`lpp`)  and  characters-per-page
-#' (`cpp`) values.
-#'
-#' The full multi-direction pagination algorithm then is as follows:
-#'
-#' 0. Adjust `lpp` and `cpp` to account for rendered elements that are not rows (columns)
-#'   - titles/footers/column labels, and horizontal dividers in the vertical pagination case
-#'   - row-labels, table_inset, and top-left materials in the horizontal case
-#' 1. Perform 'forced pagination' representing page-by row splits, generating 1 or more tables
-#' 2. Perform vertical pagination separately on each table generated in (1)
-#' 3. Perform horizontal pagination **on the entire table** and apply the results to each table
-#'    page generated in (1)-(2)
-#' 4. Return a list of subtables representing full bi-directional pagination
-#'
-#' Pagination in both directions is done using the *Core Pagination Algorithm*
-#' implemented in the `formatters` package:
-#'
-#' @inheritSection formatters::pagination_algo Pagination Algorithm
+#' Paginate an `rtables` table in the vertical and/or horizontal direction, as required for the specified page size.
 #'
 #' @inheritParams gen_args
 #' @inheritParams paginate_table
-#' @param lpp numeric. Maximum lines per page including (re)printed header and context rows
-#' @param min_siblings  numeric. Minimum sibling rows which must appear on either side of pagination row for a
+#' @param lpp (`numeric(1)`)\cr maximum lines per page including (re)printed header and context rows.
+#' @param min_siblings (`numeric(1)`)\cr ninimum sibling rows which must appear on either side of pagination row for a
 #'   mid-subtable split to be valid. Defaults to 2.
-#' @param nosplitin character. List of names of sub-tables where page-breaks are not allowed, regardless of other
+#' @param nosplitin (`character`)\cr names of sub-tables where page-breaks are not allowed, regardless of other
 #'   considerations. Defaults to none.
 #'
-#' @return for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
-#' The subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
+#' @return
+#' * `pag_tt_indices` returns a list of paginated-groups of row-indices of `tt`.
+#' * `paginate_table` returns the subtables defined by subsetting by the indices defined by `pag_tt_indices}.
+#'
+#' @details
+#' `rtables` pagination is context aware, meaning that label rows and row-group summaries (content rows) are repeated 
+#' after (vertical) pagination, as appropriate. This allows the reader to immediately understand where they are in the 
+#' table after turning to a new page, but does also mean that a rendered, paginated table will take up more lines of
+#' text than rendering the table without pagination would.
+#'
+#' Pagination also takes into account word-wrapping of title, footer, column-label, and formatted cell value content.
+#'
+#' Vertical pagination information (pagination `data.frame`) is created using (`make_row_df`).
+#'
+#' Horizontal pagination is performed by creating a pagination data frame for the columns, and then applying the same 
+#' algorithm used for vertical pagination to it.
+#'
+#' If physical page size and font information are specified, these are used to derive lines-per-page (`lpp`) and 
+#' characters-per-page (`cpp`) values.
+#'
+#' The full multi-direction pagination algorithm then is as follows:
+#'
+#' 0. Adjust `lpp` and `cpp` to account for rendered elements that are not rows (columns):
+#'   - titles/footers/column labels, and horizontal dividers in the vertical pagination case
+#'   - row-labels, table_inset, and top-left materials in the horizontal case
+#' 1. Perform 'forced pagination' representing page-by row splits, generating 1 or more tables.
+#' 2. Perform vertical pagination separately on each table generated in (1).
+#' 3. Perform horizontal pagination **on the entire table** and apply the results to each table
+#'    page generated in (1)-(2).
+#' 4. Return a list of subtables representing full bi-directional pagination.
+#'
+#' Pagination in both directions is done using the *Core Pagination Algorithm* implemented in the `formatters` package:
+#'
+#' @inheritSection formatters::pagination_algo Pagination Algorithm
 #'
 #' @examples
 #' s_summary <- function(x) {
@@ -627,7 +603,6 @@ setMethod(
 #'     )
 #'   }
 #' }
-#'
 #'
 #' lyt <- basic_table() %>%
 #'   split_cols_by(var = "ARM") %>%
@@ -654,7 +629,8 @@ setMethod(
 #'
 #' @rdname paginate
 #' @export
-pag_tt_indices <- function(tt, lpp = 15,
+pag_tt_indices <- function(tt, 
+                           lpp = 15,
                            min_siblings = 2,
                            nosplitin = character(),
                            colwidths = NULL,
@@ -706,7 +682,6 @@ pag_tt_indices <- function(tt, lpp = 15,
     div_height = dheight
   )
 }
-
 
 copy_title_footer <- function(to, from, newptitle) {
   main_title(to) <- main_title(from)
@@ -772,15 +747,15 @@ setMethod(
 
 non_null_na <- function(x) !is.null(x) && is.na(x)
 
-#' @aliases paginate_table
-#' @param cpp numeric(1) or NULL. Width (in characters) of the pages for
-#' horizontal pagination. `NA` (the default) indicates `cpp` should be inferred from
-#' the page size; `NULL` indicates no horizontal pagination should be done
-#' regardless of page size.
 #' @inheritParams formatters::vert_pag_indices
 #' @inheritParams formatters::page_lcpp
 #' @inheritParams formatters::toString
+#' @param cpp (`numeric(1)` or `NULL`)\cr width (in characters) of the pages for horizontal pagination. 
+#'   `NA` (the default) indicates `cpp` should be inferred from the page size; `NULL` indicates no horizontal 
+#'   pagination should be done regardless of page size.
+#' 
 #' @rdname paginate
+#' @aliases paginate_table
 #' @export
 paginate_table <- function(tt,
                            page_type = "letter",
@@ -885,7 +860,6 @@ paginate_table <- function(tt,
     max_width = max_width,
     verbose = verbose
   ) ## paginate_table apparently doesn't accept indent_size
-
 
   res <- lapply(
     inds$pag_row_indices,

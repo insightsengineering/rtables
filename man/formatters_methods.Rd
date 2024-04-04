@@ -37,7 +37,6 @@
 \alias{table_inset<-,VTableNodeInfo-method}
 \alias{table_inset<-,PreDataTableLayouts-method}
 \alias{table_inset<-,InstantiatedColumnInfo-method}
-\alias{formatters_methods}
 \alias{nlines,TableRow-method}
 \alias{nlines,LabelRow-method}
 \alias{nlines,RefFootnote-method}

@@ -38,12 +38,12 @@ paginate_table(
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{lpp}{numeric. Maximum lines per page including (re)printed header and context rows}
+\item{lpp}{(\code{numeric(1)})\cr maximum lines per page including (re)printed header and context rows.}
 
-\item{min_siblings}{numeric. Minimum sibling rows which must appear on either side of pagination row for a
+\item{min_siblings}{(\code{numeric(1)})\cr ninimum sibling rows which must appear on either side of pagination row for a
 mid-subtable split to be valid. Defaults to 2.}
 
-\item{nosplitin}{character. List of names of sub-tables where page-breaks are not allowed, regardless of other
+\item{nosplitin}{(\code{character})\cr names of sub-tables where page-breaks are not allowed, regardless of other
 considerations. Defaults to none.}
 
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
@@ -77,62 +77,54 @@ inverted for landscape orientation. Defaults to \code{FALSE}, ignored when \code
 \code{"top"}, and \code{"right"} margins in inches. Defaults to \code{.5} inches for both vertical
 margins and \code{.75} for both horizontal margins.}
 
-\item{cpp}{numeric(1) or NULL. Width (in characters) of the pages for
-horizontal pagination. \code{NA} (the default) indicates \code{cpp} should be inferred from
-the page size; \code{NULL} indicates no horizontal pagination should be done
-regardless of page size.}
+\item{cpp}{(\code{numeric(1)} or \code{NULL})\cr width (in characters) of the pages for horizontal pagination.
+\code{NA} (the default) indicates \code{cpp} should be inferred from the page size; \code{NULL} indicates no horizontal
+pagination should be done regardless of page size.}
 
 \item{tf_wrap}{(\code{flag})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 }
 \value{
-for \code{pag_tt_indices} a list of paginated-groups of row-indices of \code{tt}. For \code{paginate_table},
-The subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
+\itemize{
+\item \code{pag_tt_indices} returns a list of paginated-groups of row-indices of \code{tt}.
+\item \code{paginate_table} returns the subtables defined by subsetting by the indices defined by `pag_tt_indices}.
+}
 }
 \description{
-Paginate  an  \code{rtables} table  in  the  vertical and/or  horizontal
-direction, as required for the specified page size.
+Paginate an \code{rtables} table in the vertical and/or horizontal direction, as required for the specified page size.
 }
 \details{
-\code{rtables} pagination is context aware,  meaning that label rows and
-row-group summaries  (content rows)  are repeated  after (vertical)
-pagination, as  appropriate. This allows the  reader to immediately
-understand where they are in the table after turning to a new page,
-but does  also mean that a  rendered, paginated table will  take up
-more  lines of  text than  rendering the  table without  pagination
-would.
+\code{rtables} pagination is context aware, meaning that label rows and row-group summaries (content rows) are repeated
+after (vertical) pagination, as appropriate. This allows the reader to immediately understand where they are in the
+table after turning to a new page, but does also mean that a rendered, paginated table will take up more lines of
+text than rendering the table without pagination would.
 
-Pagination also takes into account word-wrapping of title, footer,
-column-label, and formatted cell value content.
+Pagination also takes into account word-wrapping of title, footer, column-label, and formatted cell value content.
 
-Vertical pagination information (pagination data.frame) is created
-using (\code{make_row_df})
+Vertical pagination information (pagination \code{data.frame}) is created using (\code{make_row_df}).
 
-Horizontal  pagination  is  performed   by  creating  a  pagination
-dataframe for  the columns,  and then  applying the  same algorithm
-used for vertical pagination to it.
+Horizontal pagination is performed by creating a pagination data frame for the columns, and then applying the same
+algorithm used for vertical pagination to it.
 
-If physical page size and font information are specified, these are
-used  to  derive  lines-per-page  (\code{lpp})  and  characters-per-page
-(\code{cpp}) values.
+If physical page size and font information are specified, these are used to derive lines-per-page (\code{lpp}) and
+characters-per-page (\code{cpp}) values.
 
 The full multi-direction pagination algorithm then is as follows:
 \enumerate{
-\item Adjust \code{lpp} and \code{cpp} to account for rendered elements that are not rows (columns)
+\item Adjust \code{lpp} and \code{cpp} to account for rendered elements that are not rows (columns):
 }
 \itemize{
 \item titles/footers/column labels, and horizontal dividers in the vertical pagination case
 \item row-labels, table_inset, and top-left materials in the horizontal case
 }
 \enumerate{
-\item Perform 'forced pagination' representing page-by row splits, generating 1 or more tables
-\item Perform vertical pagination separately on each table generated in (1)
+\item Perform 'forced pagination' representing page-by row splits, generating 1 or more tables.
+\item Perform vertical pagination separately on each table generated in (1).
 \item Perform horizontal pagination \strong{on the entire table} and apply the results to each table
-page generated in (1)-(2)
-\item Return a list of subtables representing full bi-directional pagination
+page generated in (1)-(2).
+\item Return a list of subtables representing full bi-directional pagination.
 }
 
-Pagination in both directions is done using the \emph{Core Pagination Algorithm}
-implemented in the \code{formatters} package:
+Pagination in both directions is done using the \emph{Core Pagination Algorithm} implemented in the \code{formatters} package:
 }
 \section{Pagination Algorithm}{
 
@@ -208,7 +200,6 @@ s_summary <- function(x) {
     )
   }
 }
-
 
 lyt <- basic_table() \%>\%
   split_cols_by(var = "ARM") \%>\%
