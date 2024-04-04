@@ -3,7 +3,7 @@
 \name{tt_at_path}
 \alias{tt_at_path}
 \alias{tt_at_path<-}
-\title{Get or set table elements at specified path}
+\title{Access or set table elements at specified path}
 \usage{
 tt_at_path(tt, path, ...)
 
@@ -15,15 +15,15 @@ tt_at_path(tt, path, ...) <- value
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}
 
-\item{\dots}{unused.}
+\item{...}{unused.}
 
 \item{value}{(\code{any})\cr the new value.}
 }
 \description{
-Get or set table elements at specified path
+Access or set table elements at specified path
 }
 \note{
-Setting \code{NULL} at a defined path removes the corresponding sub table.
+Setting \code{NULL} at a defined path removes the corresponding sub-table.
 }
 \examples{
 # Accessing sub table.

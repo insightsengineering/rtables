@@ -15,33 +15,28 @@ value_at(tt, rowpath = NULL, colpath = NULL)
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{rowpath}{character. Path in row-split space to the desired row(s). Can
-include \code{"@content"}.}
+\item{rowpath}{(\code{character})\cr path in row-split space to the desired row(s). Can include \code{"@content"}.}
 
-\item{colpath}{character. Path in column-split space to the desired
-column(s). Can include \code{"*"}.}
+\item{colpath}{(\code{character})\cr path in column-split space to the desired column(s). Can include \code{"*"}.}
 
-\item{omit_labrows}{logical(1). Should label rows underneath \code{rowpath}
-be omitted (\code{TRUE}, the default), or return empty lists of cell
-"values" (\code{FALSE}).}
+\item{omit_labrows}{(\code{flag})\cr whether label rows underneath \code{rowpath} should be omitted (\code{TRUE}, the default),
+or return empty lists of cell "values" (\code{FALSE}).}
 }
 \value{
-for \code{cell_values}, a \emph{list} (regardless of the type of
-value the cells hold). if \code{rowpath} defines a path to a single row,
-\code{cell_values} returns the list of cell values for that row, otherwise
-a list of such lists, one for each row captured underneath \code{rowpath}.
-This occurs after subsetting to \code{colpath} has occurred.
-
-For \code{value_at} the "unwrapped" value of a single cell, or an error, if
-the combination of \code{rowpath} and \code{colpath} do not define the
-location of a single cell in \code{tt}.
+\itemize{
+\item \code{cell_values} returns a \code{list} (regardless of the type of value the cells hold). If \code{rowpath} defines a path to
+a single row, \code{cell_values} returns the list of cell values for that row, otherwise a list of such lists, one for
+each row captured underneath \code{rowpath}. This occurs after subsetting to \code{colpath} has occurred.
+\item \code{value_at} returns the "unwrapped" value of a single cell, or an error, if the combination of \code{rowpath} and
+\code{colpath} do not define the location of a single cell in \code{tt}.
+}
 }
 \description{
 Retrieve cell values by row and column path
 }
 \note{
-\code{cell_values} will return a single cell's value wrapped in a list.
-Use \code{value_at} to receive the "bare" cell value.
+\code{cell_values} will return a single cell's value wrapped in a list. Use \code{value_at} to receive the "bare" cell
+value.
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -71,7 +66,6 @@ cell_values(
 )
 cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 
-
 ## any arm, male columns from the ASIAN content (i.e. summary) row
 cell_values(
   tbl, c("RACE", "ASIAN", "@content"),
@@ -100,4 +94,5 @@ cvnolist <- value_at(
   c("ARM", "B: Placebo", "SEX", "M")
 )
 stopifnot(identical(cvlist[[1]], cvnolist))
+
 }

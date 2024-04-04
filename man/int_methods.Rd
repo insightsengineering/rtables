@@ -1188,14 +1188,13 @@ recalculated. Defaults to \code{TRUE}.}
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}
 
-\item{i}{index}
+\item{i}{(\code{numeric(1)})\cr index.}
 
-\item{j}{index}
+\item{j}{(\code{numeric(1)})\cr index.}
 
-\item{drop}{logical(1). Should the value in the cell be returned if one
-cell is selected by the combination of \code{i} and \code{j}. It is not possible
-to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
-Defaults to \code{FALSE}.}
+\item{drop}{(\code{flag})\cr whether the value in the cell should be returned if one cell is selected by the
+combination of \code{i} and \code{j}. It is not possible to return a vector of values. To do so please consider using
+\code{\link[=cell_values]{cell_values()}}. Defaults to \code{FALSE}.}
 }
 \value{
 Various, but should be considered implementation details.
