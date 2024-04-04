@@ -1,15 +1,15 @@
-#' @importFrom utils  browseURL
+#' @importFrom utils browseURL
 NULL
 
-#' Display an [`rtable`] object in the Viewer pane in RStudio or in a browser
+#' Display an `rtable` object in the Viewer pane in RStudio or in a browser
 #'
-#' The table will be displayed using the bootstrap styling for tables.
+#' The table will be displayed using bootstrap styling.
 #'
-#' @param x object of class `rtable` or `shiny.tag` (defined in `htmltools` package)
-#' @param y optional second argument of same type as `x`
-#' @param ... arguments passed to [`as_html`]
+#' @param x (`rtable` or `shiny.tag`)\cr an object of class `rtable` or `shiny.tag` (defined in `htmltools` package).
+#' @param y (`rtable` or `shiny.tag`)\cr optional second argument of same type as `x`.
+#' @param ... arguments passed to [as_html()].
 #'
-#' @return not meaningful. Called for the side effect of opening a browser or viewer pane.
+#' @return Not meaningful. Called for the side effect of opening a browser or viewer pane.
 #'
 #' @examples
 #' if (interactive()) {

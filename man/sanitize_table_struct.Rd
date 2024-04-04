@@ -2,30 +2,28 @@
 % Please edit documentation in R/validate_table_struct.R
 \name{sanitize_table_struct}
 \alias{sanitize_table_struct}
-\title{Sanitize degenerate table structures (Experimental)}
+\title{Sanitize degenerate table structures}
 \usage{
 sanitize_table_struct(tt, empty_msg = "-- This Section Contains No Data --")
 }
 \arguments{
-\item{tt}{\code{TableTree}}
+\item{tt}{(\code{TableTree})\cr a \code{TableTree} object.}
 
-\item{empty_msg}{character(1). The string which should be spanned across
-the inserted empty rows.}
+\item{empty_msg}{(\code{string})\cr the string which should be spanned across the inserted empty rows.}
 }
 \value{
-If \code{tt} is already valid, it is returned unmodified. If \code{tt} is
-degenerate, a modified, non-degenerate version of the table is returned.
+If \code{tt} is already valid, it is returned unmodified. If \code{tt} is degenerate, a modified, non-degenerate
+version of the table is returned.
 }
 \description{
-Experimental function to correct structure
-of degenerate tables by adding messaging rows to empty
-sub-structures.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+Experimental function to correct structure of degenerate tables by adding messaging rows to empty sub-structures.
 }
 \details{
-This function locates degenerate portions of the table (including the table
-overall in the case of a table with no data rows) and inserts a row
-which spans all columns with the message \code{empty_msg} at each one,
-generating a table guaranteed to be non-degenerate.
+This function locates degenerate portions of the table (including the table overall in the case of a table with no
+data rows) and inserts a row which spans all columns with the message \code{empty_msg} at each one, generating a table
+guaranteed to be non-degenerate.
 }
 \examples{
 sanitize_table_struct(rtable("cool beans"))
@@ -38,4 +36,5 @@ lyt <- basic_table() \%>\%
 ## Degenerate because it doesn't have any analyze calls -> no data rows
 badtab <- build_table(lyt, DM)
 sanitize_table_struct(badtab)
+
 }
