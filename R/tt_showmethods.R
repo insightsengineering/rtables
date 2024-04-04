@@ -27,10 +27,6 @@ treestruct <- function(obj, ind = 0L) {
   invisible(NULL)
 }
 
-
-
-
-
 setGeneric(
   "ploads_to_str",
   function(x, collapse = ":") standardGeneric("ploads_to_str")
@@ -68,14 +64,12 @@ setMethod(
   }
 )
 
-
 setMethod(
   "ploads_to_str", "ANY",
   function(x, collapse = ":") {
     paste(x)
   }
 )
-
 
 setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
 
@@ -112,7 +106,6 @@ setMethod(
   function(spl) "all"
 )
 
-
 setMethod(
   "payloadmsg", "ANY",
   function(spl) {
@@ -131,7 +124,6 @@ spldesc <- function(spl, value = "") {
     payloadmsg
   )
 }
-
 
 layoutmsg <- function(obj) {
   ## if(!is(obj, "VLayoutNode"))
@@ -164,7 +156,6 @@ setMethod(
   }
 )
 
-
 setGeneric("spltype_abbrev", function(obj) standardGeneric("spltype_abbrev"))
 
 setMethod(
@@ -176,7 +167,6 @@ setMethod(
   "spltype_abbrev", "VarLevWBaselineSplit",
   function(obj) paste("ref_group", obj@ref_group_value)
 )
-
 
 setMethod(
   "spltype_abbrev", "MultiVarSplit",
@@ -218,9 +208,6 @@ setMethod(
   function(obj) "** col-var analysis **"
 )
 
-
-
-
 docat_splitvec <- function(object, indent = 0) {
   if (indent > 0) {
     cat(rep(" ", times = indent), sep = "")
@@ -253,7 +240,6 @@ setMethod(
   }
 )
 
-
 docat_predataxis <- function(object, indent = 0) {
   lapply(object, docat_splitvec)
 }
@@ -267,7 +253,6 @@ setMethod(
   }
 )
 
-
 setMethod(
   "show", "PreDataRowLayout",
   function(object) {
@@ -276,7 +261,6 @@ setMethod(
     invisible(object)
   }
 )
-
 
 setMethod(
   "show", "PreDataTableLayouts",
@@ -313,7 +297,6 @@ setMethod(
   }
 )
 
-
 #' @rdname int_methods
 setMethod("print", "VTableTree", function(x, ...) {
   msg <- toString(x, ...)
@@ -326,7 +309,6 @@ setMethod("show", "VTableTree", function(object) {
   cat(toString(object))
   invisible(object)
 })
-
 
 setMethod("show", "TableRow", function(object) {
   cat(sprintf(
