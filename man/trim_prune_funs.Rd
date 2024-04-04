@@ -7,7 +7,7 @@
 \alias{prune_empty_level}
 \alias{prune_zeros_only}
 \alias{low_obs_pruner}
-\title{Trimming and Pruning Criteria}
+\title{Trimming and pruning criteria}
 \usage{
 all_zero_or_na(tr)
 
@@ -26,56 +26,44 @@ low_obs_pruner(min, type = c("sum", "mean"))
 
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{criteria}{function. Function which takes a \code{TableRow} object and returns
-\code{TRUE} if that row should be removed. Defaults to
-\code{\link{all_zero_or_na}}}
+\item{criteria}{(\code{function})\cr function which takes a \code{TableRow} object and returns \code{TRUE} if that row
+should be removed. Defaults to \code{\link[=all_zero_or_na]{all_zero_or_na()}}.}
 
-\item{min}{numeric(1). (\code{low_obs_pruner} only). Minimum aggregate count value.
-Subtables whose combined/average count are below this threshold will be
-pruned}
+\item{min}{(\code{numeric(1)})\cr (used by \code{low_obs_pruner} only). Minimum aggregate count value.
+Subtables whose combined/average count are below this threshold will be pruned.}
 
-\item{type}{character(1). How count values should be aggregated. Must be
-\code{"sum"} (the default) or \code{"mean"}}
+\item{type}{(\code{string})\cr how count values should be aggregated. Must be \code{"sum"} (the default) or \code{"mean"}.}
 }
 \value{
-A logical value indicating whether \code{tr} should be included
-(\code{TRUE}) or pruned (\code{FALSE}) during pruning.
+A logical value indicating whether \code{tr} should be included (\code{TRUE}) or pruned (\code{FALSE}) during pruning.
 }
 \description{
-Criteria functions (and constructors thereof) for trimming and pruning
-tables.
+Criteria functions (and constructors thereof) for trimming and pruning tables.
 }
 \details{
-\code{all_zero_or_na} returns \code{TRUE} (and thus indicates
-trimming/pruning) for any \emph{non-\code{LabelRow}} \code{TableRow} which contain
-only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and
-\code{-Inf} values.
+\code{all_zero_or_na} returns \code{TRUE} (and thus indicates trimming/pruning) for any \emph{non-\code{LabelRow}}
+\code{TableRow} which contain only any mix of \code{NA} (including \code{NaN}), \code{0}, \code{Inf} and \code{-Inf} values.
 
-\code{all_zero} returns \code{TRUE} for any non-Label row which
-contains only (non-missing) zero values.
+\code{all_zero} returns \code{TRUE} for any non-\code{LabelRow} which contains only (non-missing) zero values.
 
-\code{content_all_zeros_nas} Prunes a subtable if a) it has a
-content table with exactly one row in it, and b) \code{all_zero_or_na}
-returns \code{TRUE} for that single content row. In practice, when the
-default summary/content function is used, this represents pruning any
-subtable which corresponds to an empty set of the input data (e.g., because
-a factor variable was used in \code{\link{split_rows_by}} but not all
-levels were present in the data).
+\code{content_all_zeros_nas} prunes a subtable if both of the following are true:
+\itemize{
+\item It has a content table with exactly one row in it.
+\item \code{all_zero_or_na} returns \code{TRUE} for that single content row. In practice, when the default summary/content
+function is used, this represents pruning any subtable which corresponds to an empty set of the input data
+(e.g. because a factor variable was used in \code{\link[=split_rows_by]{split_rows_by()}} but not all levels were present in the data).
+}
 
-\code{prune_empty_level} combines \code{all_zero_or_na} behavior for
-\code{TableRow} objects, \code{content_all_zeros_nas} on
-\code{content_table(tt)} for \code{TableTree} objects, and an additional
-check that returns \code{TRUE} if the \code{tt} has no children.
+\code{prune_empty_level} combines \code{all_zero_or_na} behavior for \code{TableRow} objects, \code{content_all_zeros_nas} on
+\code{content_table(tt)} for \code{TableTree} objects, and an additional check that returns \code{TRUE} if the \code{tt} has no
+children.
 
-\code{prune_zeros_only} behaves as \code{prune_empty_level} does,
-except that like \code{all_zero} it prunes only in the case of all
-non-missing zero values.
+\code{prune_zeros_only} behaves as \code{prune_empty_level} does, except that like \code{all_zero} it prunes
+only in the case of all non-missing zero values.
 
-\code{low_obs_pruner} is a \emph{constructor function} which, when
-called, returns a pruning criteria function which will prune on content
-rows by comparing sum or mean (dictated by \code{type}) of the count
-portions of the cell values (defined as the first value per cell regardless
-of how many values per cell there are) against \code{min}.
+\code{low_obs_pruner} is a \emph{constructor function} which, when called, returns a pruning criteria function which
+will prune on content rows by comparing sum or mean (dictated by \code{type}) of the count portions of the cell
+values (defined as the first value per cell regardless of how many values per cell there are) against \code{min}.
 }
 \examples{
 adsl <- ex_adsl
