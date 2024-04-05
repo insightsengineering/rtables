@@ -3275,7 +3275,7 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' produced by [build_table()]. When assigned in post-processing (`section_div<-`)
 #' the table can have a section divider after every row, each assigned independently.
 #' If assigning during layout creation, only [split_rows_by()] (and its related row-wise
-#' splits) and [analyze()] have a `section_div` parameter that will produce separators 
+#' splits) and [analyze()] have a `section_div` parameter that will produce separators
 #' between split sections and data subgroups, respectively.
 #'
 #' @param obj Table object. This can be of any class that inherits from `VTableTree`
@@ -3284,29 +3284,29 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #'   you to set the section divider only for sections that are splits or analyses if the number of
 #'   values is less than the number of rows in the table. If `TRUE`, the section divider will
 #'   be set for all rows of the table.
-#' @param value character. Vector of single characters to use as section dividers. Each character 
+#' @param value character. Vector of single characters to use as section dividers. Each character
 #'   is repeated such that all section dividers span the width of the table. Each character that is
 #'   not `NA_character_` will produce a trailing separator for each row of the table. `value` length
-#'   should reflect the number of rows, or be between 1 and the number of splits/levels. 
+#'   should reflect the number of rows, or be between 1 and the number of splits/levels.
 #'   See the Details section below for more information.
 #'
 #' @return The section divider string. Each line that does not have a trailing separator
 #'   will have `NA_character_` as section divider.
 #'
-#' @seealso [basic_table()] parameter `header_section_div` and `top_level_section_div` for global 
+#' @seealso [basic_table()] parameter `header_section_div` and `top_level_section_div` for global
 #'   section dividers.
 #'
 #' @details
 #' Assigned value to section divider must be a character vector. If any value is `NA_character_`
 #' the section divider will be absent for that row or section. When you want to only affect sections
-#' or splits, please use `only_sep_sections` or provide a shorter vector than the number of rows. 
+#' or splits, please use `only_sep_sections` or provide a shorter vector than the number of rows.
 #' Ideally, the length of the vector should be less than the number of splits with, eventually, the
 #' leaf-level, i.e. `DataRow` where analyze results are. Note that if only one value is inserted,
 #' only the first split will be affected.
-#' If `only_sep_sections = TRUE`, which is the default for `section_div()` produced from the table 
-#' construction, the section divider will be set for all the splits and eventually analyses, but 
-#' not for the header or each row of the table. This can be set with `header_section_div` in 
-#' [basic_table()] or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section 
+#' If `only_sep_sections = TRUE`, which is the default for `section_div()` produced from the table
+#' construction, the section divider will be set for all the splits and eventually analyses, but
+#' not for the header or each row of the table. This can be set with `header_section_div` in
+#' [basic_table()] or, eventually, with `hsep` in [build_table()]. If `FALSE`, the section
 #' divider will be set for all the rows of the table.
 #'
 #' @examples
@@ -3429,9 +3429,7 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
 setMethod("section_div<-", "list", function(obj, only_sep_sections = FALSE, value) {
   char_v <- as.character(value)
   for (i in seq_along(obj)) {
-    stopifnot(is(obj[[i]], "VTableTree") ||
-      is(obj[[i]], "TableRow") ||
-      is(obj[[i]], "LabelRow"))
+    stopifnot(is(obj[[i]], "VTableTree") || is(obj[[i]], "TableRow") || is(obj[[i]], "LabelRow"))
     list_element_size <- nrow(obj[[i]])
     if (only_sep_sections) {
       char_v_i <- char_v[seq_len(min(list_element_size, length(char_v)))]
@@ -3518,11 +3516,7 @@ setMethod(
   }
 )
 .check_header_section_div <- function(chr) {
-  if (!is.na(chr) &&
-    (!is.character(chr) ||
-      length(chr) > 1 ||
-      nchar(chr) > 1 ||
-      nchar(chr) == 0)) {
+  if (!is.na(chr) && (!is.character(chr) || length(chr) > 1 || nchar(chr) > 1 || nchar(chr) == 0)) {
     stop("header_section_div must be a single character or NA_character_ if not used")
   }
   invisible(TRUE)

@@ -18,23 +18,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Disclaimer
-This is a collection of notes divided by issues and it is a working document that will end up being a dev vignette one day.
+This is a collection of notes divided by issues and it is a working document that will end up being a developer vignette one day.
 
 
 ## `section_div` notes
 
-Everything in the layout is built over split objects, that reside in `00_tabletrees.R`. There `section_div` is defined internally in each split object as `child_section_div` and assigned to `NA_character` as default. This needs to be in all split objects that need to have a separator divisor. Object-wise, the virtual class `Split` contains `section_div` and it has the following subclasses. I tagged with "X" constructor that allows for `section_div` to be assigned to a value different than `NA_character`, and "NX" otherwise.
+Everything in the layout is built over split objects, that reside in `00_tabletrees.R`. There `section_div` is defined internally in each split object as `child_section_div` and assigned to `NA_character` as default. This needs to be in all split objects that need to have a separator divisor. Object-wise, the virtual class `Split` contains `section_div` and it has the following sub-classes. I tagged with "X" constructor that allows for `section_div` to be assigned to a value different than `NA_character`, and `"NX"` otherwise.
 
 ```{r}
 library(rtables)
 getClass("Split")
-# Known Subclasses: 
-#? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)
+# Known Subclasses:
+# ? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)
 # Class "AllSplit", directly            # NX
 # Class "VarStaticCutSplit", directly   # X via make_static_cut_split
 # Class "VarDynCutSplit", directly      # X
 # Class "VAnalyzeSplit", directly       # X
-#? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)
+# ? Class "CompoundSplit", directly   # Used only for AnalyzeMultiVars (maybe not needed?)
 # Class "VarLevelSplit", by class "CustomizableSplit", distance 2            # X
 # Class "MultiVarSplit", by class "CustomizableSplit", distance 2            # X
 # Class "RootSplit", by class "AllSplit", distance 2                         # NX
@@ -52,20 +52,20 @@ Now it is relevant to understand where this information is saved in the table ob
 
 ```{r}
 getClass("TableRow")
-# Extends: 
+# Extends:
 # Class "VLeaf", directly
 # Class "VTableNodeInfo", directly
 # Class "VNodeInfo", by class "VLeaf", distance 2
-# 
+#
 # Known Subclasses: "DataRow", "ContentRow", "LabelRow"
 
 getClass("VTableTree")
-# Extends: 
+# Extends:
 # Class "VTableNodeInfo", directly
 # Class "VTree", directly
 # Class "VTitleFooter", directly
 # Class "VNodeInfo", by class "VTableNodeInfo", distance 2
-# 
+#
 # Known Subclasses: "ElementaryTable", "TableTree"
 ```
 
@@ -73,20 +73,21 @@ Always check the constructors after finding the classes. In the above case for e
 
 ```{r}
 lyt <- basic_table() %>%
-    split_rows_by("ARM", section_div = "+") %>%
-    split_rows_by("STRATA1", section_div = "") %>%
-    analyze("AGE", 
-            afun = function(x) list("Mean" = mean(x), "Standard deviation" = sd(x)), 
-            format = list("Mean" = "xx.", "Standard deviation" = "xx."), 
-            section_div = "~")
+  split_rows_by("ARM", section_div = "+") %>%
+  split_rows_by("STRATA1", section_div = "") %>%
+  analyze("AGE",
+    afun = function(x) list("Mean" = mean(x), "Standard deviation" = sd(x)),
+    format = list("Mean" = "xx.", "Standard deviation" = "xx."),
+    section_div = "~"
+  )
 
 tbl <- build_table(lyt, DM)
 
 print(tbl)
 print(class(tbl)) # TableTree
 # methods("trailing_section_div") # to see this please do devtools::load_all()
-# [1] trailing_section_div,LabelRow-method   
-# trailing_section_div,TableRow-method   
+# [1] trailing_section_div,LabelRow-method
+# trailing_section_div,TableRow-method
 # trailing_section_div,VTableTree-method
 ```
 
@@ -145,4 +146,4 @@ setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections 
 })
 ```
 
-`only_sep_sections` is a parameter that is used to change only the separators (between splits) and not the data rows. It is happening forcefully if set to `TRUE`, but it is automatically activated when `section_div(tbl) <- char_v` is a character vector of length `< nrow(tbl)`. Notice that the exception for `ContentRow` is activated by the switcher `is_content_table`. This is because content rows do not have visible label row. You see that in the main table structure change we have two blocks depending on `only_sep_sections`. If `TRUE` only the `VTableTree` are modified leading to only split section separators to be modified. Also consider looking at `section_div` getter and tests in `test-accessors.R` to have more insights on the structure. Also to understand exactly how this is bound to output, please check the result of `make_row_df()` for the column `trailing_sep`. Indeed, an alternative and iterative method is used by `make_row_df` to retrieve the information about the separators for each table row. Being it a trailing separator by definition, we added `header_section_div` as a function and a parameter of `basic_table`, so to possibly add an empty line after the header (e.g. `header_section_div(tbl) = " "`). This is not a trailing separator, but it is a separator that is added after the header. To close the circle, please check how `trailing_sep` and `header_section_div` is propagated and printed/used in `formatters::toString`. 
+`only_sep_sections` is a parameter that is used to change only the separators (between splits) and not the data rows. It is happening forcefully if set to `TRUE`, but it is automatically activated when `section_div(tbl) <- char_v` is a character vector of length `< nrow(tbl)`. Notice that the exception for `ContentRow` is activated by the switcher `is_content_table`. This is because content rows do not have visible label row. You see that in the main table structure change we have two blocks depending on `only_sep_sections`. If `TRUE` only the `VTableTree` are modified leading to only split section separators to be modified. Also consider looking at `section_div` getter and tests in `test-accessors.R` to have more insights on the structure. Also to understand exactly how this is bound to output, please check the result of `make_row_df()` for the column `trailing_sep`. Indeed, an alternative and iterative method is used by `make_row_df` to retrieve the information about the separators for each table row. Being it a trailing separator by definition, we added `header_section_div` as a function and a parameter of `basic_table`, so to possibly add an empty line after the header (e.g. `header_section_div(tbl) = " "`). This is not a trailing separator, but it is a separator that is added after the header. To close the circle, please check how `trailing_sep` and `header_section_div` is propagated and printed/used in `formatters::toString`.

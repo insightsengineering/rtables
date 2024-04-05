@@ -80,7 +80,7 @@ func_takes <- function(func, params, is_first = FALSE) {
 #'
 #' @return A character string containing a description of the row path corresponding
 #' to the `ctx`
-#' 
+#'
 #' @export
 spl_context_to_disp_path <- function(ctx) {
   ## this can happen in the first split in column space, but
@@ -108,7 +108,7 @@ paste_vec <- function(vec) {
 # Utility for checking if a package is installed
 check_required_packages <- function(pkgs) {
   for (pkgi in pkgs) {
-    if (!requireNamespace(pkgi)) {
+    if (!requireNamespace(pkgi, quietly = TRUE)) {
       stop(
         "This function requires the ", pkgi, " package. ",
         "Please install it if you wish to use it"
@@ -116,4 +116,3 @@ check_required_packages <- function(pkgs) {
     }
   }
 }
-

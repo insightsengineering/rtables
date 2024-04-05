@@ -19,7 +19,6 @@ A data.frame summarizing the row- or column-structure of \code{x}.
 Print Row/Col Paths Summary
 }
 \examples{
-
 library(dplyr)
 
 ex_adsl_MF <- ex_adsl \%>\% filter(SEX \%in\% c("M", "F"))

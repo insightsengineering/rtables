@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Customizing Appearance}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -40,10 +40,10 @@ It is possible to align the content by assigning `"left"`, `"center"`
 `in_rows()` and `rcell()`, respectively. It is also possible to use `decimal`,
 `dec_right`, and `dec_left` for decimal alignments. The first takes all numerical
 values and aligns the decimal character `.` in every value of the column that has
-`align = "decimal"`. Also numberic without decimal values are aligned according to
+`align = "decimal"`. Also numeric without decimal values are aligned according to
 an imaginary `.` if specified as such. `dec_left` and `dec_right` behave similarly,
 with the difference that if the column present empty spaces at left or right, it
-pushes values towards left or right taking the one value that has most decimal 
+pushes values towards left or right taking the one value that has most decimal
 characters, if right, or non-decimal values if left. For more details, please read
 the related documentation page `help("decimal_align")`.
 
@@ -192,7 +192,7 @@ build_table(lyt, DM)
 
 Using the post-processing function:
 
-Without inset - 
+Without inset -
 ```{r}
 lyt <- basic_table() %>%
   analyze("AGE")
@@ -201,7 +201,7 @@ tbl <- build_table(lyt, DM)
 tbl
 ```
 
-With an inset of 5 characters - 
+With an inset of 5 characters -
 
 ```{r}
 table_inset(tbl) <- 5
@@ -234,7 +234,7 @@ result <- build_table(lyt, ex_adsl)
 result
 ```
 
-With inset - 
+With inset -
 
 Notice, the inset does not apply to any title materials
 (main title, subtitles, page titles), or provenance footer
@@ -353,7 +353,7 @@ basic_table(
   build_table(DM)
 ```
 
-Modified indent - 
+Modified indent -
 ```{r}
 basic_table(
   title = "Study XXXXXXXX",
@@ -417,7 +417,7 @@ Label order will mirror the order of `split_rows_by` calls. If the
 labels of any subgroups should be hidden, the `label_pos` argument
 should be set to hidden.
 
-"SEX" label position is hidden - 
+"SEX" label position is hidden -
 ```{r}
 basic_table(
   title = "Study XXXXXXXX",
@@ -432,7 +432,7 @@ basic_table(
   build_table(DM)
 ```
 
-"SEX" label position is with the top-left materials - 
+"SEX" label position is with the top-left materials -
 
 ```{r}
 basic_table(

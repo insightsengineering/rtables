@@ -54,7 +54,7 @@ for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtit
 the table. Same style is applied.}
 
 \item{footers_as_text}{logical(1). Defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so
-the table is self-contained with the flextable definition of footnotes. \code{TRUE} is
+the table is self-contained with the \code{flextable} definition of footnotes. \code{TRUE} is
 used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
 Same style is applied, but with a smaller font.}
 
@@ -91,7 +91,7 @@ completely if \code{tf_wrap} is \code{FALSE}.}
 \item{total_width}{numeric(1). Total width in inches for the resulting
 \code{flextable(s)}. Defaults to 10.}
 
-\item{font}{character(1). Defaults to \code{"Arial"}. If the font is not vailable, \code{flextable}
+\item{font}{character(1). Defaults to \code{"Arial"}. If the font is not available, \code{flextable}
 default is used.}
 
 \item{font_size}{integer(1). Positive integerish value that defaults to 9.}

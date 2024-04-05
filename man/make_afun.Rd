@@ -64,7 +64,6 @@ structure, \emph{NOT} the original structure returned by \code{fun}. See
 the final pair of examples below.
 }
 \examples{
-
 s_summary <- function(x) {
   stopifnot(is.numeric(x))
 
@@ -136,7 +135,7 @@ a_grp <- make_afun(s_grp,
     .N_col = "count in column"
   ),
   .formats = c(nrow_df = "xx.", .N_col = "xx."),
-  .indent_mod = c(letters = 1L),
+  .indent_mods = c(letters = 1L),
   .ungroup_stats = "letters"
 )
 a_grp(iris, 40)

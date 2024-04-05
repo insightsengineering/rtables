@@ -44,7 +44,7 @@ for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtit
 the table. Same style is applied.}
 
 \item{footers_as_text}{logical(1). Defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so
-the table is self-contained with the flextable definition of footnotes. \code{TRUE} is
+the table is self-contained with the \code{flextable} definition of footnotes. \code{TRUE} is
 used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
 Same style is applied, but with a smaller font.}
 
@@ -89,7 +89,6 @@ tbl <- build_table(lyt, ex_adsl)
 tf <- tempfile(fileext = ".docx")
 export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 }
-
 }
 \seealso{
 \code{\link[=tt_to_flextable]{tt_to_flextable()}}

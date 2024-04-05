@@ -23,12 +23,12 @@ have their origin in studying tables that are commonly used to report
 analyses from clinical trials; however, we were careful to keep
 `rtables` a general purpose toolkit.
 
-In this vignette, we give a short introduction into `rtables` and 
+In this vignette, we give a short introduction into `rtables` and
 tabulating a table.
 
 The content in this vignette is based on the following two resources:
 
-* The [`rtables` useR 2020 presentation](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) 
+* The [`rtables` useR 2020 presentation](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
 by Gabriel Becker
 * [`rtables` - A Framework For Creating Complex Structured Reporting Tables Via
 Multi-Level Faceted Computations](https://arxiv.org/pdf/2306.16610.pdf).
@@ -42,16 +42,16 @@ library(dplyr)
 
 ## Overview
 
-To build a table using `rtables` two components are required: A layout constructed 
+To build a table using `rtables` two components are required: A layout constructed
 using `rtables` functions, and a `data.frame` of unaggregated data. These two
 elements are combined to build a table object. Table objects contain information
 about both the content and the structure of the table, as well as instructions on
-how this information should be processed to construct the table. After obtaining the 
-table object, a formatted table can be printed in ASCII format, or exported to a 
-variety of other formats (.txt, .pdf, .docx, etc.).
+how this information should be processed to construct the table. After obtaining the
+table object, a formatted table can be printed in ASCII format, or exported to a
+variety of other formats (`.txt`, `.pdf`, `.docx`, etc.).
 
 ```{r echo=FALSE, fig.align='center'}
-knitr::include_graphics("../man/figures/rtables-basics.png")
+knitr::include_graphics("./images/rtables-basics.png")
 ```
 
 ## Data
@@ -366,16 +366,16 @@ There are a number of reasons to choose `rtables` (yet another tables R package)
 * Path based access to cell content which is useful for automated
   content generation.
 
-More in depth comparisons of the various tabulation frameworks can be found in the 
+More in depth comparisons of the various tabulation frameworks can be found in the
 [Overview of table R packages](https://rconsortium.github.io/rtrs-wg/tablepkgs.html#tablepkgs)
-chapter of the Tables in Clinical Trials with R book compiled by the R Consortium 
+chapter of the Tables in Clinical Trials with R book compiled by the R Consortium
 Tables Working Group.
 
 ## Summary
 
 In this vignette you have learned:
 
-* Every cell has an associated subset of data - this means that much of tabulation 
+* Every cell has an associated subset of data - this means that much of tabulation
   has to do with splitting/subsetting data.
 * Tables can be described with pre-data using layouts.
 * Tables are a form of visualization of data.

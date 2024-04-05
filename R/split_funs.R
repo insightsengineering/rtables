@@ -267,7 +267,6 @@ NULL
 #'
 #' @export
 #' @examples
-#'
 #' uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
 #'   ret <- do_base_split(spl, df, vals, labels, trim)
 #'   if (NROW(df) == 0) {
@@ -1021,7 +1020,6 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #' @export
 #'
 #' @examples
-#'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
 #'     first = FALSE

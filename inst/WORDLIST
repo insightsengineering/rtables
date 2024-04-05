@@ -2,6 +2,7 @@ amongst
 Arg
 Carreras
 charset
+Cheatsheet
 Chohan
 combinatorial
 CRAN's
@@ -12,6 +13,7 @@ dplyr
 emph
 facetted
 facetting
+FFFL
 formatter
 getter
 getters
@@ -19,7 +21,10 @@ Godwin
 Heng
 ing
 initializer
+integerish
+iteratively
 Kelkhoff
+labelled
 Layouting
 layouting
 Lewandowski
@@ -31,7 +36,9 @@ NSE
 orderable
 Paszty
 pathing
+Pharma
 Phuse
+postfix
 Postprocessing
 postprocessing
 Pre
@@ -46,13 +53,14 @@ repped
 responder
 Resync
 reusability
-RinPharma
 roadmap
+RStudio
 rtables
 Saibah
 sortable
 spl
 Stoilova
+STUDYID
 Subtable
 subtable
 subtable's
@@ -62,6 +70,8 @@ summarization
 tableone
 TableTree
 Tadeusz
+todo
+unaggregated
 unicode
 univariable
 unnested

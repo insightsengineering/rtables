@@ -57,13 +57,13 @@ do_split <- function(spl,
                      labels = NULL,
                      trim = FALSE,
                      spl_context) {
-# - CHECKS - #
+  # - CHECKS - #
   ## This will error if, e.g., df does not have columns
   ##  required by spl, or generally any time the split (spl)
   ##  can not be applied to df
   check_validsplit(spl, df)
 
-# - SPLIT FUNCTION - #
+  # - SPLIT FUNCTION - #
   ## In special cases, we need to partition data (split)
   ##  in a very specific way, e.g. depending on the data or
   ##  external values. These can be achieved by using a custom
@@ -96,20 +96,20 @@ do_split <- function(spl,
       )
     }
   } else {
-# - .apply_split_inner - #
+    # - .apply_split_inner - #
     ## This is called when no split function is provided. Please note that this function
     ##  will also probably be called when the split function is provided, as long as the
     ##  main splitting method is not willingly modified by the split function.
     ret <- .apply_split_inner(df = df, spl = spl, vals = vals, labels = labels, trim = trim)
   }
 
-# - EXTRA - #
+  # - EXTRA - #
   ## this adds .ref_full and .in_ref_col
   if (is(spl, "VarLevWBaselineSplit")) {
     ret <- .add_ref_extras(spl, df, ret)
   }
 
-# - FIXUPVALS - #
+  # - FIXUPVALS - #
   ## This:
   ##  - guarantees that ret$values contains SplitValue objects
   ##  - removes the extras element since its redundant after the above
@@ -117,7 +117,7 @@ do_split <- function(spl,
   ##  - ensures labels are character not factor
   ret <- .fixupvals(ret)
 
-# - RETURN - #
+  # - RETURN - #
   ret
 }
 ```
@@ -168,7 +168,7 @@ AllSplit <- function(split_label = "",
       split_name <- split_label
     } else {
       split_name <- "all obs" # No label, a standard split with all
-                              # observations is assigned.
+      # observations is assigned.
     }
   }
   new("AllSplit",
@@ -194,7 +194,7 @@ AllSplit <- function(split_label = "",
 
 We can also print this information by calling `getClass("AllSplit")` for the general slot definition, or by calling `getClass(spl)`. Note that the first call will give also a lot of information about the class hierarchy. For more information regarding class hierarchy, please refer to the relevant article [here](https://insightsengineering.github.io/rtables/main/articles/dev-guide/dg_talbe_hierarchy.html). We will discuss the majority of the slots by the end of this document. Now, let's see if we can find some of the values described in the constructor within our object. To do so, we will show the more compact representation given by `str`. When there are multiple and hierarchical slots that contain objects themselves, calling `str` will be much less or not at all informative if the maximum level of nesting is not set (e.g. `max.level = 2`).
 
-```{r, eval=FALSE}
+```c
 # rtables 0.6.2
 Browse[2]> str(spl, max.level = 2)
 Formal class 'AllSplit' [package "rtables"] with 17 slots
@@ -379,7 +379,7 @@ setGeneric(
 
 Now, we know that `.applysplit_extras` is the function that will be called first. This is because we did not specify any `vals` and it is therefore `NULL`. This is an `S4` generic function as can be seen by `showMethod(.applysplit_extras)`, and its definition can be seen in the following:
 
-```{r, eval=FALSE}
+```c
 # rtables 0.6.2
 Browse[3]> getMethod(".applysplit_rawvals", "AllSplit")
 Method Definition:
@@ -443,7 +443,7 @@ lyt %>%
 
 Before continuing, we want to check the formal class of `spl`.
 
-```{r, eval=FALSE}
+```c
 # rtables 0.6.2
 Browse[2]> str(spl, max.level = 2)
 Formal class 'VarLevelSplit' [package "rtables"] with 20 slots
@@ -511,7 +511,7 @@ If we continue with the next call of `do_split`, the same procedure is followed 
 
 Note that this function can occasionally be called more than once on the same return object (a named list for now). Of course, after the first call only checks are applied.
 
-```{r, eval=FALSE}
+```c
 # rtables 0.6.2
 
 # Can find the following core function:
@@ -579,7 +579,7 @@ We invite the reader to always keep an eye on `spl_context`, as it is fundamenta
 
 ```{r, eval=FALSE}
 # rtables 0.6.2
-> drop_split_levels
+# > drop_split_levels
 function(df,
          spl,
          vals = NULL,
@@ -629,7 +629,7 @@ message(err_msg$message)
 
 The commented debugging lines above will allow you to inspect the error. Alternatively, using the recover option will allow you the possibility to select the frame number, i.e. the trace level, to enter. Selecting the last frame number (10 in this case) will allow you to see the value of `ret` from `rtables:::do_split` that causes the error and how the informative error message that follows is created.
 
-```{r, eval=FALSE}
+```c
 # rtables 0.6.2
 # Debugging level
 10: tt_dotabulation.R#627: do_split(spl, df, spl_context = spl_context)
@@ -731,7 +731,9 @@ basic_table() %>%
   )) %>%
   summarize_row_groups() %>%
   build_table(DM)
+```
 
+```c
 # The following is the .spl_contest printout:
 Browse[1]> .spl_context
     split     value full_parent_df all_cols_n      all obs
@@ -987,4 +989,4 @@ prune_table(tbl) # (xxx) what is going on here? it is degenerate so it has no re
 #  table tree
 ```
 
-(xxx) add the pre-proc with z-scoring
+(xxx) add the pre-processing with z-scoring

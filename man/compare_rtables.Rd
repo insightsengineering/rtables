@@ -42,7 +42,6 @@ In its current form \code{compare_rtables} does not take structure into
 account, only row and cell position.
 }
 \examples{
-
 t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
 t2 <- rtable(header = c("A", "B", "C"), format = "xx", rrow("row 1", 1, 2, 3))
 

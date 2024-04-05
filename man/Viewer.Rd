@@ -20,7 +20,6 @@ not meaningful. Called for the side effect of opening a browser or viewer pane.
 The table will be displayed using the bootstrap styling for tables.
 }
 \examples{
-
 if (interactive()) {
   sl5 <- factor(iris$Sepal.Length > 5,
     levels = c(TRUE, FALSE),

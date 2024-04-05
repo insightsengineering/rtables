@@ -31,7 +31,6 @@ anything else notably including \code{x} are passed only the relevant
 subset of the variable being analyzed.
 }
 \examples{
-
 summary(iris$Sepal.Length)
 
 f <- list_wrap_x(summary)
