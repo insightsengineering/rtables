@@ -149,55 +149,6 @@ col_paths_summary <- function(x) {
 #         )
 #     }
 
-summarize_row_df_unclassed <- function(name,
-                                       label,
-                                       indent,
-                                       depth,
-                                       rowtype,
-                                       indent_mod,
-                                       level,
-                                       ## footnotes = list()
-                                       num_row_refs = 0L,
-                                       num_cell_refs = 0L) {
-  list(
-    name = name,
-    label = label,
-    indent = indent,
-    depth = level,
-    rowtype = rowtype,
-    indent_mod = indent_mod,
-    level = level,
-    num_row_refs = num_row_refs,
-    num_cell_refs = num_cell_refs
-  )
-  ##  footnotes = footnotes)##,
-  ## stringsAsFactors = FALSE)
-}
-
-srow_df_names <- names(summarize_row_df_unclassed("hi", "hi", 0L, 0L, "hi", 0L, 0L))
-
-summarize_row_df_empty <- NULL
-
-fast_rsummry_bind <- function(lst) {
-  if (length(lst) == 0) {
-    return(summarize_row_df_empty)
-  } else if (length(lst) == 1L) {
-    return(as.data.frame(lst[[1]]))
-  } else {
-    res <- lapply(
-      seq_along(srow_df_names),
-      function(i) {
-        do.call(c, lapply(lst, function(x) {
-          if (length(x) > 0) x[[i]] else x
-        }))
-      }
-    )
-    names(res) <- srow_df_names
-    res <- as.data.frame(res)
-  }
-  res
-}
-
 #' Summarize rows
 #'
 #' @inheritParams gen_args

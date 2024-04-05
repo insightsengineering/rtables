@@ -133,8 +133,7 @@ test_that("sort_at_path just returns an empty input table", {
   expect_identical(emptytable, result)
 })
 
-
-test_that("trim_rows and prune do the same thing in normal cases", {
+test_that("trim_rows and prune_table do the same thing in normal cases", {
   bigtbl <- basic_table() %>%
     split_rows_by("RACE") %>%
     split_rows_by("COUNTRY") %>%
