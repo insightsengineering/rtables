@@ -311,6 +311,7 @@ test_that("export_as_rtf works", {
 
 # Flextable and docx support ---------------------------------------------------
 test_that("Can create flextable object that works with different styles", {
+  skip_if_not_installed(c("flextable", "officer"))
   analysisfun <- function(x, ...) {
     in_rows(
       row1 = 5,
@@ -394,6 +395,7 @@ test_that("Can create flextable object that works with different styles", {
 })
 
 test_that("export_as_doc works thanks to tt_to_flextable", {
+  skip_if_not_installed(c("flextable", "officer"))
   lyt <- make_big_lyt()
   tbl <- build_table(lyt, rawdat)
   top_left(tbl) <- "Ethnicity"
@@ -433,6 +435,7 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
 })
 
 test_that("tt_to_flextable works with add_counts_to_same_line", {
+  skip_if_not_installed(c("flextable", "officer"))
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM") %>%
     analyze("BMRKR1")
