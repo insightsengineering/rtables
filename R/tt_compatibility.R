@@ -379,7 +379,7 @@ only_first_annot <- function(all_annots) {
 #' @param check_headers `r lifecycle::badge("deprecated")` ignored.
 #'
 #' @return A formal table object.
-#' 
+#'
 #' @rdname rbind
 #' @aliases rbind
 #' @export
