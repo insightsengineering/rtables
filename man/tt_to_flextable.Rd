@@ -9,11 +9,10 @@ tt_to_flextable(
   tt,
   theme = theme_docx_default(tt),
   border = flextable::fp_border_default(width = 0.5),
-  counts_position = "same_line",
   indent_size = NULL,
   titles_as_header = TRUE,
   footers_as_text = FALSE,
-  counts_in_newline = FALSE,
+  add_counts_to_same_line = FALSE,
   paginate = FALSE,
   lpp = NULL,
   cpp = NULL,
@@ -44,10 +43,6 @@ to \code{rtables} default.}
 
 \item{border}{\code{officer} border object. Defaults to \code{officer::fp_border(width = 0.5)}.}
 
-\item{counts_position}{character(1). Defaults to \code{"same_line"} for printing the counts
-on the same line of column names. If \code{"new_line"}, the counts are printed on a new line
-under the column names.}
-
 \item{indent_size}{integer(1). If \code{NULL}, the default indent size of the table (see
 \code{\link[=matrix_form]{matrix_form()}} \code{indent_size}) is used. To work with \code{docx}, any size is multiplied
 by 2 mm (5.67 pt) as default.}
@@ -63,9 +58,8 @@ the table is self-contained with the \code{flextable} definition of footnotes. \
 used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new paragraph after the table.
 Same style is applied, but with a smaller font.}
 
-\item{counts_in_newline}{logical(1). Defaults to \code{FALSE}. In \code{rtables} text printing
-(\code{\link[formatters:tostring]{formatters::toString()}}), the column counts, i.e. \code{(N=xx)}, is always on a new line.
-We noticed that for \code{docx} exports could be necessary to have it on the same line.}
+\item{add_counts_to_same_line}{logical(1). Defaults to \code{TRUE} for printing the counts
+on the same line of column names. If \code{FALSE}, the counts are printed on a new line.}
 
 \item{paginate}{logical(1). If you need \code{.docx} export and you use
 \code{export_as_docx}, we suggest relying on \code{word} pagination system. Cooperation

@@ -12,7 +12,7 @@
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
  
 ### Miscellaneous
- * Added `counts_position` to `tt_to_flextable()` to be able to set the position of the column counts.
+ * Added `add_counts_to_same_line` to `tt_to_flextable()` to be able to set the position of the column counts.
 
 ## rtables 0.6.6
 ### New Features

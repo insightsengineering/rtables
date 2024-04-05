@@ -746,9 +746,8 @@ margins_landscape <- function() {
 #'   and changes its layout and style. If set to `NULL`, it will produce a table similar
 #'   to `rtables` default.
 #' @param border `officer` border object. Defaults to `officer::fp_border(width = 0.5)`.
-#' @param counts_position character(1). Defaults to `"same_line"` for printing the counts
-#'   on the same line of column names. If `"new_line"`, the counts are printed on a new line
-#'   under the column names.
+#' @param add_counts_to_same_line logical(1). Defaults to `TRUE` for printing the counts
+#'   on the same line of column names. If `FALSE`, the counts are printed on a new line.
 #' @param indent_size integer(1). If `NULL`, the default indent size of the table (see
 #'   [matrix_form()] `indent_size`) is used. To work with `docx`, any size is multiplied
 #'   by 2 mm (5.67 pt) as default.
@@ -761,9 +760,6 @@ margins_landscape <- function() {
 #'   the table is self-contained with the `flextable` definition of footnotes. `TRUE` is
 #'   used for [export_as_docx()] to add the footers as a new paragraph after the table.
 #'   Same style is applied, but with a smaller font.
-#' @param counts_in_newline logical(1). Defaults to `FALSE`. In `rtables` text printing
-#'   ([formatters::toString()]), the column counts, i.e. `(N=xx)`, is always on a new line.
-#'   We noticed that for `docx` exports could be necessary to have it on the same line.
 #' @param paginate logical(1). If you need `.docx` export and you use
 #'   `export_as_docx`, we suggest relying on `word` pagination system. Cooperation
 #'   between the two mechanisms is not guaranteed. This option splits `tt` in different
@@ -804,11 +800,10 @@ margins_landscape <- function() {
 tt_to_flextable <- function(tt,
                             theme = theme_docx_default(tt),
                             border = flextable::fp_border_default(width = 0.5),
-                            counts_position = "same_line",
                             indent_size = NULL,
                             titles_as_header = TRUE,
                             footers_as_text = FALSE,
-                            counts_in_newline = FALSE,
+                            add_counts_to_same_line = FALSE,
                             paginate = FALSE,
                             lpp = NULL,
                             cpp = NULL,
@@ -823,9 +818,7 @@ tt_to_flextable <- function(tt,
   }
   checkmate::assert_flag(titles_as_header)
   checkmate::assert_flag(footers_as_text)
-  checkmate::assert_flag(counts_in_newline)
-  checkmate::assert_string(counts_position)
-  checkmate::assert_choice(counts_position, c("same_line", "new_line"))
+  checkmate::assert_flag(add_counts_to_same_line)
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
@@ -874,32 +867,32 @@ tt_to_flextable <- function(tt,
   # IMPORTANT: Fix of (N=xx) which is by default on a new line but we usually do not
   # want this, and it depends on the size of the table, it is not another
   # row with different columns -> All of this should be fixed at source (in toString)
-  if (counts_position == "same_line") {
-    if (hnum > 1) { # otherwise nothing to do
-      det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
-      has_nclab <- apply(det_nclab, 1, any)
-      if (isFALSE(counts_in_newline) && any(has_nclab)) {
-        whsnc <- which(has_nclab) # which rows have it
-        what_is_nclab <- det_nclab[whsnc, ]
+  if (hnum > 1) { # otherwise nothing to do (it is one line header already)
+    det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
+    has_nclab <- apply(det_nclab, 1, any)
+    if (add_counts_to_same_line && any(has_nclab)) {
+      whsnc <- which(has_nclab) # which rows have it
+      what_is_nclab <- det_nclab[whsnc, ]
 
-        # condition for popping the interested row by merging the upper one
-        hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
-          hdr[whsnc, what_is_nclab],
-          sep = " "
-        )
-        hdr[whsnc - 1, what_is_nclab] <- ""
+      # condition for popping the interested row by merging the upper one
+      hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
+        hdr[whsnc, what_is_nclab],
+        sep = " "
+      )
+      hdr[whsnc - 1, what_is_nclab] <- ""
 
-        # We can remove the row if they are all ""
-        row_to_pop <- whsnc - 1
-        if (all(!nzchar(hdr[row_to_pop, ]))) {
-          hdr <- hdr[-row_to_pop, , drop = FALSE]
-          spans <- spans[-row_to_pop, , drop = FALSE]
-          body <- body[-row_to_pop, , drop = FALSE]
-          mpf_aligns <- mpf_aligns[-row_to_pop, , drop = FALSE]
-          hnum <- hnum - 1
-        }
+      # We can remove the row if they are all ""
+      row_to_pop <- whsnc - 1
+      if (all(!nzchar(hdr[row_to_pop, ]))) {
+        hdr <- hdr[-row_to_pop, , drop = FALSE]
+        spans <- spans[-row_to_pop, , drop = FALSE]
+        body <- body[-row_to_pop, , drop = FALSE]
+        mpf_aligns <- mpf_aligns[-row_to_pop, , drop = FALSE]
+        hnum <- hnum - 1
       }
     }
+  } else if (!add_counts_to_same_line) {
+    warning("Header is only one line, add_counts_to_same_line is ignored.")
   }
 
   flx <- flx %>%

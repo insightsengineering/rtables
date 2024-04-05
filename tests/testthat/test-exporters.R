@@ -432,15 +432,20 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
   expect_true(file.exists(doc_file))
 })
 
-test_that("export_as_doc works thanks to tt_to_flextable", {
+test_that("tt_to_flextable works with add_counts_to_same_line", {
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM") %>%
     analyze("BMRKR1")
   tbl <- build_table(lyt, DM)
 
-  expect_silent(flx <- tt_to_flextable(tbl, counts_position = "new_line"))
+  expect_silent(flx <- tt_to_flextable(tbl, add_counts_to_same_line = FALSE))
   expect_equal(flextable::nrow_part(flx, part = "header"), 2)
-  expect_silent(flx <- tt_to_flextable(tbl, counts_position = "same_line"))
+  expect_silent(flx <- tt_to_flextable(tbl, add_counts_to_same_line = TRUE))
   expect_equal(flextable::nrow_part(flx, part = "header"), 1)
-  expect_error(flx <- tt_to_flextable(tbl, counts_position = "newads_line"))
+  
+  lyt <- basic_table(show_colcounts = FALSE) %>%
+    split_cols_by("ARM") %>%
+    analyze("BMRKR1")
+  tbl <- build_table(lyt, DM)
+  expect_warning(flx <- tt_to_flextable(tbl, add_counts_to_same_line = FALSE))
 })
