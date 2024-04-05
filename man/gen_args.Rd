@@ -3,27 +3,64 @@
 \name{gen_args}
 \alias{gen_args}
 \title{General argument conventions}
+\usage{
+gen_args(
+  df,
+  alt_counts_df,
+  spl,
+  pos,
+  tt,
+  tr,
+  verbose,
+  colwidths,
+  obj,
+  x,
+  value,
+  object,
+  path,
+  label,
+  label_pos,
+  cvar,
+  topleft,
+  page_prefix,
+  hsep,
+  indent_size,
+  section_div,
+  na_str,
+  inset,
+  table_inset,
+  ...
+)
+}
 \arguments{
-\item{...}{additional parameters passed to methods or tabulation functions.}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
 \item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
 \emph{only} when calculating column counts.}
 
+\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
+
+\item{pos}{(\code{numeric})\cr which top-level set of nested splits should the new layout feature be added to. Defaults
+to the current split.}
+
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
+
+\item{tr}{(\code{TableRow} or related class)\cr a \code{TableRow} object representing a single row within a populated table.}
+
+\item{verbose}{(\code{flag})\cr whether additional information should be displayed to the user. Defaults to \code{FALSE}.}
+
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
-\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
+\item{x}{(\code{ANY})\cr an object.}
 
-\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
-the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
-information.}
+\item{value}{(\code{ANY})\cr the new value.}
 
-\item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
+\item{object}{(\code{ANY})\cr the object to modify in place.}
 
-\item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
-main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
 \item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
@@ -32,38 +69,30 @@ main_footer, as compared to alignment of title, subtitle, and provenance footer.
 \code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
-\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
+\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
-\item{object}{(\code{ANY})\cr the object to modify in place.}
+\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
 \item{page_prefix}{(\code{string})\cr prefix to be appended with the split value when forcing pagination between
 the children of a split/table.}
 
-\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
-represents a subsequent choice amongst the children of the previous choice.}
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
+the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
+information.}
 
-\item{pos}{(\code{numeric})\cr which top-level set of nested splits should the new layout feature be added to. Defaults
-to the current split.}
+\item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
 
 \item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
-\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
+\item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
+main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
 and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
 
-\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
-
-\item{tr}{(\code{TableRow} or related class)\cr a \code{TableRow} object representing a single row within a populated table.}
-
-\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
-
-\item{value}{(\code{ANY})\cr the new value.}
-
-\item{verbose}{(\code{flag})\cr whether additional information should be displayed to the user. Defaults to \code{FALSE}.}
-
-\item{x}{(\code{ANY})\cr an object.}
+\item{...}{additional parameters passed to methods or tabulation functions.}
 }
 \value{
 No return value.
@@ -73,10 +102,10 @@ General argument conventions
 }
 \seealso{
 Other conventions: 
-\code{\link{compat_args}},
-\code{\link{constr_args}},
-\code{\link{lyt_args}},
-\code{\link{sf_args}}
+\code{\link{compat_args}()},
+\code{\link{constr_args}()},
+\code{\link{lyt_args}()},
+\code{\link{sf_args}()}
 }
 \concept{conventions}
 \keyword{internal}

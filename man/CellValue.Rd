@@ -24,7 +24,7 @@ functions. See \code{\link[formatters:list_formats]{formatters::list_valid_forma
 
 \item{colspan}{(\code{integer(1)})\cr column span value.}
 
-\item{label}{(\code{string} or \code{NULL})\cr label. If non-\code{NULL}, it will be looked at when determining row labels.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which

@@ -46,6 +46,8 @@ ContentRow(...)
 \arguments{
 \item{lev}{(\code{integer(1)})\cr nesting level (roughly, indentation level in practical terms).}
 
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
+
 \item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
 corresponding label, but is not required to be.}
 
@@ -56,6 +58,9 @@ corresponding label, but is not required to be.}
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
+
+\item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
+and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
 
 \item{trailing_section_div}{(\code{string})\cr string which will be used as a section divider after the printing
 of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,

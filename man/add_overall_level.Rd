@@ -16,6 +16,8 @@ add_overall_level(
 \item{valname}{(\code{string})\cr value to be assigned to the implicit all-observations split level. Defaults to
 \code{"Overall"}.}
 
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
+
 \item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}

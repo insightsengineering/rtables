@@ -550,7 +550,7 @@ setMethod(
 #'
 #' @return
 #' * `pag_tt_indices` returns a list of paginated-groups of row-indices of `tt`.
-#' * `paginate_table` returns the subtables defined by subsetting by the indices defined by `pag_tt_indices}.
+#' * `paginate_table` returns the subtables defined by subsetting by the indices defined by `pag_tt_indices`.
 #'
 #' @details
 #' `rtables` pagination is context aware, meaning that label rows and row-group summaries (content rows) are repeated

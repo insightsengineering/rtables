@@ -1,3 +1,5 @@
+# nocov start
+
 #' General argument conventions
 #'
 #' @param ... additional parameters passed to methods or tabulation functions.
@@ -43,10 +45,17 @@
 #' @family conventions
 #' @name gen_args
 #' @keywords internal
-NULL
+gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
+                     value, object, path, label, label_pos, # visible_label,
+                     cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
+                     table_inset,
+                     ...) {
+  NULL
+}
 
 #' Layouting function argument conventions
 #'
+#' @inheritParams gen_args
 #' @param afun (`function`)\cr analysis function. Must accept `x` or `df` as its first parameter. Can optionally take
 #'   other parameters which will be populated by the tabulation framework. See Details in [analyze()].
 #' @param align (`string` or `NULL`)\cr alignment the value should be rendered with. Defaults to `"center"` if
@@ -118,10 +127,22 @@ NULL
 #' @family conventions
 #' @name lyt_args
 #' @keywords internal
-NULL
+lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
+                     split_na_str, nested, format, cfun, cformat, cna_str, split_fun,
+                     split_name, split_label, afun, inclNAs, valorder,
+                     ref_group, compfun, label_fstr, child_labels, extra_args, name,
+                     cuts, cutlabels, cutfun, cutlabelfun, cumulative,
+                     indent_mod, show_labels, label_pos, # visible_label,
+                     var_labels, cvar,
+                     table_names, topleft, align, page_by, page_prefix,
+                     format_na_str, section_div, na_str) {
+  NULL
+}
 
 #' Constructor argument conventions
 #'
+#' @inheritParams gen_args
+#' @inheritParams lyt_args
 #' @param cextra_args (`list`)\cr extra arguments to be passed to the content function when tabulating row group
 #'   summaries.
 #' @param child_names (`character`)\cr names to be given to the subsplits contained by a compound split (typically
@@ -160,10 +181,18 @@ NULL
 #' @family conventions
 #' @name constr_args
 #' @keywords internal
-NULL
+constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
+                        cspan, label_pos, cindent_mod, cvar, label, cextra_args,
+                        child_names, title, subtitles, main_footer, prov_footer,
+                        footnotes, page_title, page_prefix, section_div,
+                        trailing_section_div, split_na_str,
+                        cna_str, inset, table_inset, header_section_div) {
+  NULL
+}
 
 #' Compatibility argument conventions
 #'
+#' @inheritParams gen_args
 #' @param .lst (`list`)\cr an already-collected list of arguments to be used instead of the elements of `...`.
 #'   Arguments passed via `...` will be ignored if this is specified.
 #' @param format (`string`, `function`, or `list`)\cr the format label (string) or formatter function to apply to the
@@ -178,10 +207,11 @@ NULL
 #'
 #' @family conventions
 #' @name compat_args
-NULL
+compat_args <- function(.lst, row.name, format, indent, label, inset) NULL
 
 #' Split function argument conventions
 #'
+#' @inheritParams gen_args
 #' @param first (`flag`)\cr whether the created split level should be placed first in the levels (`TRUE`) or
 #'   last (`FALSE`, the default).
 #' @param trim (`flag`)\cr whether splits corresponding with 0 observations should be kept when tabulating.
@@ -190,5 +220,6 @@ NULL
 #'
 #' @family conventions
 #' @name sf_args
-NULL
+sf_args <- function(trim, label, first) NULL
 
+# nocov end

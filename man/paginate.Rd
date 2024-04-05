@@ -86,7 +86,7 @@ pagination should be done regardless of page size.}
 \value{
 \itemize{
 \item \code{pag_tt_indices} returns a list of paginated-groups of row-indices of \code{tt}.
-\item \code{paginate_table} returns the subtables defined by subsetting by the indices defined by `pag_tt_indices}.
+\item \code{paginate_table} returns the subtables defined by subsetting by the indices defined by \code{pag_tt_indices}.
 }
 }
 \description{

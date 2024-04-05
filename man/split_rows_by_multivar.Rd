@@ -47,6 +47,9 @@ visible only if the child has 0 content rows.}
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
+
 \item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
