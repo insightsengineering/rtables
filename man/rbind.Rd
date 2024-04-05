@@ -2,6 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{rbindl_rtables}
 \alias{rbindl_rtables}
+\alias{rbind}
 \alias{rbind,VTableNodeInfo-method}
 \alias{rbind2,VTableNodeInfo,ANY-method}
 \title{Row-bind \code{TableTree} and related objects}

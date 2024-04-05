@@ -37,7 +37,7 @@ col_paths <- function(x) {
   make_col_df(x, visible_only = TRUE)$path
 }
 
-#' Print row/columm paths summary
+#' Print row/column paths summary
 #'
 #' @param x (`VTableTree`)\cr an `rtable` object.
 #'
@@ -222,83 +222,6 @@ setMethod(
 
     ## row.names(df) <- NULL
     ## df
-  }
-)
-
-#' @rdname int_methods
-setMethod(
-  "summarize_rows_inner", "ElementaryTable",
-  function(obj, depth = 0, indent = 0) {
-    indent <- max(0L, indent + indent_mod(obj))
-    lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
-    if (!is.null(lr)) {
-      ret <- list(lr)
-      indent <- indent + 1
-    } else {
-      ret <- list()
-    }
-
-    els <- lapply(tree_children(obj), summarize_rows_inner,
-      depth = depth + 1,
-      indent = indent
-    )
-
-    c(ret, els)
-    ## df <- do.call(rbind, c(list(lr), els))
-    ## row.names(df) <- NULL
-    ## df
-  }
-)
-
-.num_cell_refs <- function(tr) {
-  sum(vapply(
-    cell_footnotes(tr),
-    function(cfn) length(cfn) > 0,
-    FALSE
-  ))
-}
-
-#' @rdname int_methods
-setMethod(
-  "summarize_rows_inner", "TableRow",
-  function(obj, depth = 0, indent = 0) {
-    indent <- max(0L, indent + indent_mod(obj))
-
-    summarize_row_df_unclassed(
-      name = obj_name(obj),
-      label = obj_label(obj),
-      indent = indent,
-      depth = depth,
-      rowtype = "TableRow",
-      indent_mod = indent_mod(obj),
-      level = tt_level(obj),
-      num_row_refs = length(row_footnotes(obj)),
-      num_cell_refs = .num_cell_refs(obj)
-    )
-  }
-)
-
-#' @rdname int_methods
-setMethod(
-  "summarize_rows_inner", "LabelRow",
-  function(obj, depth = 0, indent = 0) {
-    indent <- max(0L, indent + indent_mod(obj))
-
-    if (labelrow_visible(obj)) {
-      summarize_row_df_unclassed(
-        name = obj_name(obj),
-        label = obj_label(obj),
-        indent = indent,
-        depth = depth,
-        rowtype = "LabelRow",
-        indent_mod = indent_mod(obj),
-        level = tt_level(obj),
-        num_row_refs = length(row_footnotes(obj)),
-        num_cell_refs = 0
-      )
-    } else {
-      summarize_row_df_empty
-    }
   }
 )
 

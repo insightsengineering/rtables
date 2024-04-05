@@ -211,7 +211,8 @@ sort_at_path <- function(tt,
         "Unable to find child(ren) '",
         curname, "'\n\t occurred at path: ",
         paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-        "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or\n\      'table_structure(obj)' to explore valid paths."
+        "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+        "'table_structure(obj)' to explore valid paths."
       )
     }
     subtree <- tree_children(subtree)[[curname]]

@@ -2,6 +2,7 @@
 % Please edit documentation in R/tt_toString.R
 \name{toString,VTableTree-method}
 \alias{toString,VTableTree-method}
+\alias{tostring}
 \title{Convert an \code{rtable} object to a string}
 \usage{
 \S4method{toString}{VTableTree}(

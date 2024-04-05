@@ -3,7 +3,7 @@
 \name{row_paths_summary}
 \alias{row_paths_summary}
 \alias{col_paths_summary}
-\title{Print row/columm paths summary}
+\title{Print row/column paths summary}
 \usage{
 row_paths_summary(x)
 
@@ -16,7 +16,7 @@ col_paths_summary(x)
 A data frame summarizing the row- or column-structure of \code{x}.
 }
 \description{
-Print row/columm paths summary
+Print row/column paths summary
 }
 \examples{
 ex_adsl_MF <- ex_adsl \%>\% dplyr::filter(SEX \%in\% c("M", "F"))

@@ -38,9 +38,6 @@
 \alias{fix_dyncuts,PreDataTableLayouts-method}
 \alias{summarize_rows_inner}
 \alias{summarize_rows_inner,TableTree-method}
-\alias{summarize_rows_inner,ElementaryTable-method}
-\alias{summarize_rows_inner,TableRow-method}
-\alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure_inner}
 \alias{str}
 \alias{str,VTableTree-method}
@@ -471,12 +468,6 @@ fix_dyncuts(spl, df)
 summarize_rows_inner(obj, depth = 0, indent = 0)
 
 \S4method{summarize_rows_inner}{TableTree}(obj, depth = 0, indent = 0)
-
-\S4method{summarize_rows_inner}{ElementaryTable}(obj, depth = 0, indent = 0)
-
-\S4method{summarize_rows_inner}{TableRow}(obj, depth = 0, indent = 0)
-
-\S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
 
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
 

@@ -45,8 +45,8 @@ used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 }
 \value{
 \itemize{
-\item \code{table_shell_str} returns the string representing the table shell.
 \item \code{table_shell} returns \code{NULL}, as the function is called for the side effect of printing the shell to the console.
+\item \code{table_shell_str} returns the string representing the table shell.
 }
 }
 \description{

@@ -445,6 +445,7 @@ setMethod("spl_label_var", "Split", function(obj) NULL)
 #' * Setter functions return a modified copy of `obj` with the new value.
 #'
 #' @rdname formatters_methods
+#' @aliases formatters_methods
 #' @exportMethod obj_name
 setMethod(
   "obj_name", "VNodeInfo",

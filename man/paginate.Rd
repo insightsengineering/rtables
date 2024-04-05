@@ -40,7 +40,7 @@ paginate_table(
 
 \item{lpp}{(\code{numeric(1)})\cr maximum lines per page including (re)printed header and context rows.}
 
-\item{min_siblings}{(\code{numeric(1)})\cr ninimum sibling rows which must appear on either side of pagination row for a
+\item{min_siblings}{(\code{numeric(1)})\cr minimum sibling rows which must appear on either side of pagination row for a
 mid-subtable split to be valid. Defaults to 2.}
 
 \item{nosplitin}{(\code{character})\cr names of sub-tables where page-breaks are not allowed, regardless of other

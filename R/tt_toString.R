@@ -39,7 +39,7 @@ NULL
 #' cat(toString(tbl, col_gap = 3))
 #'
 #' @rdname tostring
-#' @aliases toString,VTableTree-method
+#' @aliases tostring toString,VTableTree-method
 #' @exportMethod toString
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
@@ -69,8 +69,8 @@ setMethod("toString", "VTableTree", function(x,
 #' @inheritParams gen_args
 #'
 #' @return
-#' * `table_shell_str` returns the string representing the table shell.
 #' * `table_shell` returns `NULL`, as the function is called for the side effect of printing the shell to the console.
+#' * `table_shell_str` returns the string representing the table shell.
 #'
 #' @seealso [value_formats()] for a matrix of formats for each cell in a table.
 #'

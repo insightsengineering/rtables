@@ -2,6 +2,7 @@
 % Please edit documentation in R/tree_accessors.R, R/tt_paginate.R
 \name{obj_name,VNodeInfo-method}
 \alias{obj_name,VNodeInfo-method}
+\alias{formatters_methods}
 \alias{obj_name,Split-method}
 \alias{obj_name<-,VNodeInfo-method}
 \alias{obj_name<-,Split-method}

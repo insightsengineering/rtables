@@ -543,7 +543,7 @@ setMethod(
 #' @inheritParams gen_args
 #' @inheritParams paginate_table
 #' @param lpp (`numeric(1)`)\cr maximum lines per page including (re)printed header and context rows.
-#' @param min_siblings (`numeric(1)`)\cr ninimum sibling rows which must appear on either side of pagination row for a
+#' @param min_siblings (`numeric(1)`)\cr minimum sibling rows which must appear on either side of pagination row for a
 #'   mid-subtable split to be valid. Defaults to 2.
 #' @param nosplitin (`character`)\cr names of sub-tables where page-breaks are not allowed, regardless of other
 #'   considerations. Defaults to none.
