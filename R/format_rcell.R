@@ -1,7 +1,7 @@
 #' Format `rcell` objects
 #'
 #' This is a wrapper for [formatters::format_value()] for use with `CellValue` objects
-#' 
+#'
 #' @inheritParams lyt_args
 #' @param x (`CellValue` or `ANY`)\cr an object of class `CellValue`, or a raw value.
 #' @param format (`string` or `function`)\cr the format label or formatter function to

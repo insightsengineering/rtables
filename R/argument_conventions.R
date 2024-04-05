@@ -82,8 +82,8 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param extra_args (`list`)\cr extra arguments to be passed to the tabulation function. Element position in the list
 #'   corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 #'   not match a formal argument of the tabulation function.
-#' @param format (`string`, `function`, or `list`)\cr format associated with this split. Formats can be declared via 
-#'   strings (`"xx.x"`) or function. In cases such as `analyze` calls, they can be character vectors or lists of 
+#' @param format (`string`, `function`, or `list`)\cr format associated with this split. Formats can be declared via
+#'   strings (`"xx.x"`) or function. In cases such as `analyze` calls, they can be character vectors or lists of
 #'   functions. See [formatters::list_valid_format_labels()] for a list of all available format strings.
 #' @param format_na_str (`string`)\cr string which should be displayed when formatted if this cell's value(s)
 #'   are all `NA`.
