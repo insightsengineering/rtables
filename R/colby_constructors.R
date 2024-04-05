@@ -276,7 +276,7 @@ setMethod(
 #' Will generate children for each subset of a categorical variable.
 #'
 #' @inheritParams lyt_args
-#' @param ref_group (`character(1)` or `NULL`)\cr level of `var` that should be considered `ref_group`/reference.
+#' @param ref_group (`string` or `NULL`)\cr level of `var` that should be considered `ref_group`/reference.
 #'
 #' @return A `PreDataTableLayouts` object suitable for passing to further layouting functions, and to [build_table()].
 #'
@@ -1899,11 +1899,11 @@ list_wrap_df <- function(f) {
 #' Every layout must start with a basic table.
 #'
 #' @inheritParams constr_args
-#' @param show_colcounts (`logical(1)`)\cr whether column counts should be displayed in the resulting table when this
+#' @param show_colcounts (`flag`)\cr whether column counts should be displayed in the resulting table when this
 #'   layout is applied to data.
-#' @param colcount_format (`character(1)`)\cr format for use when displaying the column counts. Must be 1d, or 2d
+#' @param colcount_format (`string`)\cr format for use when displaying the column counts. Must be 1d, or 2d
 #'   where one component is a percent. See Details below.
-#' @param top_level_section_div (`character(1)`)\cr if assigned to a single character, the first (top level) split
+#' @param top_level_section_div (`character(1)`)\cr if assigned a single character, the first (top level) split
 #'   or division of the table will be highlighted by a line made of that character. See [section_div] for more
 #'   information.
 #'

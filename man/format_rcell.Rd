@@ -15,21 +15,21 @@ format_rcell(
 )
 }
 \arguments{
-\item{x}{(\code{CellValue} or \code{any})\cr an object of class \code{CellValue}, or a raw value.}
+\item{x}{(\code{CellValue} or \code{ANY})\cr an object of class \code{CellValue}, or a raw value.}
 
-\item{format}{(\code{character(1)} or \code{function})\cr the format label or formatter function to
+\item{format}{(\code{string} or \code{function})\cr the format label or formatter function to
 apply to \code{x}.}
 
-\item{output}{(\code{character(1)})\cr output type.}
+\item{output}{(\code{string})\cr output type.}
 
-\item{na_str}{(\code{character(1)})\cr string that should be displayed when the value of \code{x} is missing.
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing.
 Defaults to \code{"NA"}.}
 
 \item{pr_row_format}{(\code{list})\cr list of default formats coming from the general row.}
 
 \item{pr_row_na_str}{(\code{list})\cr list of default \code{"NA"} strings coming from the general row.}
 
-\item{shell}{(\code{logical(1)})\cr whether the formats themselves should be returned instead of the
+\item{shell}{(\code{flag})\cr whether the formats themselves should be returned instead of the
 values with formats applied. Defaults to \code{FALSE}.}
 }
 \value{

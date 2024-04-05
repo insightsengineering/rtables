@@ -10,9 +10,9 @@ add_combo_facet(name, label = name, levels, extra = list())
 add_overall_facet(name, label, extra = list())
 }
 \arguments{
-\item{name}{(\code{character(1)})\cr name for the resulting facet (for use in pathing, etc.).}
+\item{name}{(\code{string})\cr name for the resulting facet (for use in pathing, etc.).}
 
-\item{label}{(\code{character(1)})\cr label for the resulting facet.}
+\item{label}{(\code{string})\cr label for the resulting facet.}
 
 \item{levels}{(\code{character})\cr vector of levels to combine within the resulting facet.}
 

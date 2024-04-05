@@ -13,19 +13,19 @@ add_overall_level(
 )
 }
 \arguments{
-\item{valname}{(\code{character(1)})\cr value to be assigned to the implicit all-observations split level. Defaults to
+\item{valname}{(\code{string})\cr value to be assigned to the implicit all-observations split level. Defaults to
 \code{"Overall"}.}
 
-\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{first}{(\code{logical(1)})\cr whether the implicit level should appear first (\code{TRUE}) or last (\code{FALSE}). Defaults
+\item{first}{(\code{flag})\cr whether the implicit level should appear first (\code{TRUE}) or last (\code{FALSE}). Defaults
 to \code{TRUE}.}
 
-\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
+\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 }
 \value{
 A closure suitable for use as a splitting function (\code{splfun}) when creating a table layout.

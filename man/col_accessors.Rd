@@ -109,11 +109,11 @@ col_total(obj) <- value
 \S4method{col_total}{VTableNodeInfo}(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{object}{(\code{any})\cr the object to modify in place.}
+\item{object}{(\code{ANY})\cr the object to modify in place.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 
 \item{df}{(\code{data.frame} or \code{NULL})\cr data to use if the column information is being
 generated from a pre-data layout object.}

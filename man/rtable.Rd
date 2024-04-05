@@ -16,10 +16,10 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 \item{...}{rows to place in the table.}
 
-\item{format}{(\code{character(1)} or \code{function})\cr the format label (string) or formatter function to apply to the
+\item{format}{(\code{string} or \code{function})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}

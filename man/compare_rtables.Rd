@@ -19,10 +19,10 @@ compare_rtables(
 
 \item{tol}{(\code{numeric(1)})\cr tolerance.}
 
-\item{comp.attr}{(\code{logical(1)})\cr whether to compare cell formats. Other attributes are
+\item{comp.attr}{(\code{flag})\cr whether to compare cell formats. Other attributes are
 silently ignored.}
 
-\item{structure}{(\code{logical(1)})\cr whether structures (in the form of column and row
+\item{structure}{(\code{flag})\cr whether structures (in the form of column and row
 paths to cells) should be compared. Currently defaults to \code{FALSE}, but this is
 subject to change in future versions.}
 }

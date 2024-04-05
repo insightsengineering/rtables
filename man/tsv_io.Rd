@@ -17,7 +17,7 @@ import_from_tsv(file)
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{file}{(\code{character(1)})\cr the path of the file to written to or read from.}
+\item{file}{(\code{string})\cr the path of the file to written to or read from.}
 
 \item{path_fun}{(\code{function})\cr function to transform paths into single-string row/column names.}
 

@@ -44,10 +44,10 @@ corresponds to the unmodified default behavior.}
 
 \item{footnotes}{(\code{list} or \code{NULL})\cr referential footnote messages for the cell.}
 
-\item{align}{(\code{character(1)} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
+\item{align}{(\code{string} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
 \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
 
-\item{format_na_str}{(\code{character(1)})\cr string which should be displayed when formatted if this cell's value(s)
+\item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
 
 \item{is_ref}{(\code{flag})\cr whether function is being used in the reference column (i.e. \code{.in_ref_col} should be

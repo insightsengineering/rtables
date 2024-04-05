@@ -231,7 +231,7 @@ NULL
 #' @param vals (`ANY`)\cr already calculated/known values of the split. Generally should be left as `NULL`.
 #' @param labels (`character`)\cr labels associated with `vals`. Should be `NULL` whenever `vals` is, which should
 #'   almost always be the case.
-#' @param trim (`logical(1)`)\cr whether groups corresponding to empty data subsets should be removed. Defaults to
+#' @param trim (`flag`)\cr whether groups corresponding to empty data subsets should be removed. Defaults to
 #'   `FALSE`.
 #'
 #' @return The result of the split being applied as if it had no custom split function. See [custom_split_funs].
@@ -747,7 +747,7 @@ remove_split_levels <- function(excl) {
 }
 
 #' @param only (`character`)\cr levels to retain (all others will be dropped).
-#' @param reorder (`logical(1)`)\cr whether the order of `only` should be used as the order of the children of the
+#' @param reorder (`flag`)\cr whether the order of `only` should be used as the order of the children of the
 #'   split. Defaults to `TRUE`.
 #'
 #' @examples
@@ -846,7 +846,7 @@ drop_and_remove_levels <- function(excl) {
 
 #' @param neworder (`character`)\cr new order of factor levels.
 #' @param newlabels (`character`)\cr labels for (new order of) factor levels.
-#' @param drlevels (`logical(1)`)\cr whether levels in the data which do not appear in `neworder` should be dropped.
+#' @param drlevels (`flag`)\cr whether levels in the data which do not appear in `neworder` should be dropped.
 #'   Defaults to `TRUE`.
 #'
 #' @rdname split_funcs
@@ -876,9 +876,9 @@ reorder_split_levels <- function(neworder,
   }
 }
 
-#' @param innervar (`character(1)`)\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
+#' @param innervar (`string`)\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
 #'   *separately within each grouping defined at this point in the structure*.
-#' @param drop_outlevs (`logical(1)`)\cr whether empty levels in the variable being split on (i.e. the "outer"
+#' @param drop_outlevs (`flag`)\cr whether empty levels in the variable being split on (i.e. the "outer"
 #'   variable, not `innervar`) should be dropped. Defaults to `TRUE`.
 #'
 #' @rdname split_funcs
@@ -952,9 +952,9 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #'
 #' @inheritParams lyt_args
 #' @inheritParams sf_args
-#' @param valname (`character(1)`)\cr value to be assigned to the implicit all-observations split level. Defaults to
+#' @param valname (`string`)\cr value to be assigned to the implicit all-observations split level. Defaults to
 #'   `"Overall"`.
-#' @param first (`logical(1)`)\cr whether the implicit level should appear first (`TRUE`) or last (`FALSE`). Defaults
+#' @param first (`flag`)\cr whether the implicit level should appear first (`TRUE`) or last (`FALSE`). Defaults
 #'   to `TRUE`.
 #'
 #' @return A closure suitable for use as a splitting function (`splfun`) when creating a table layout.

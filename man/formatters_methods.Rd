@@ -172,11 +172,11 @@
 )
 }
 \arguments{
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 
-\item{x}{(\code{any})\cr an object.}
+\item{x}{(\code{ANY})\cr an object.}
 
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 

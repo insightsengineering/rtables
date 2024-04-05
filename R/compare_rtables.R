@@ -9,9 +9,9 @@
 #' @param object (`TableTree`)\cr `rtable` to test.
 #' @param expected (`TableTree`)\cr expected `rtable`.
 #' @param tol (`numeric(1)`)\cr tolerance.
-#' @param comp.attr (`logical(1)`)\cr whether to compare cell formats. Other attributes are
+#' @param comp.attr (`flag`)\cr whether to compare cell formats. Other attributes are
 #'   silently ignored.
-#' @param structure (`logical(1)`)\cr whether structures (in the form of column and row
+#' @param structure (`flag`)\cr whether structures (in the form of column and row
 #'   paths to cells) should be compared. Currently defaults to `FALSE`, but this is
 #'   subject to change in future versions.
 #'

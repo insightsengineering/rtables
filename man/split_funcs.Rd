@@ -28,7 +28,7 @@ regardless of presence in the data).}
 
 \item{only}{(\code{character})\cr levels to retain (all others will be dropped).}
 
-\item{reorder}{(\code{logical(1)})\cr whether the order of \code{only} should be used as the order of the children of the
+\item{reorder}{(\code{flag})\cr whether the order of \code{only} should be used as the order of the children of the
 split. Defaults to \code{TRUE}.}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
@@ -39,19 +39,19 @@ split. Defaults to \code{TRUE}.}
 
 \item{labels}{(\code{character})\cr labels to use for the remaining levels instead of the existing ones.}
 
-\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
+\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
 \item{neworder}{(\code{character})\cr new order of factor levels.}
 
 \item{newlabels}{(\code{character})\cr labels for (new order of) factor levels.}
 
-\item{drlevels}{(\code{logical(1)})\cr whether levels in the data which do not appear in \code{neworder} should be dropped.
+\item{drlevels}{(\code{flag})\cr whether levels in the data which do not appear in \code{neworder} should be dropped.
 Defaults to \code{TRUE}.}
 
-\item{innervar}{(\code{character(1)})\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
+\item{innervar}{(\code{string})\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
 \emph{separately within each grouping defined at this point in the structure}.}
 
-\item{drop_outlevs}{(\code{logical(1)})\cr whether empty levels in the variable being split on (i.e. the "outer"
+\item{drop_outlevs}{(\code{flag})\cr whether empty levels in the variable being split on (i.e. the "outer"
 variable, not \code{innervar}) should be dropped. Defaults to \code{TRUE}.}
 }
 \value{

@@ -12,7 +12,7 @@
 )
 }
 \arguments{
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
 \item{indent_rownames}{(\code{flag})\cr if \code{TRUE}, the column with the row names in the \code{strings} matrix of the output
 has indented row names (strings pre-fixed).}

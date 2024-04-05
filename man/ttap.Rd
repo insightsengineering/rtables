@@ -17,7 +17,7 @@ represents a subsequent choice amongst the children of the previous choice.}
 
 \item{...}{unused.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 }
 \description{
 Access or set table elements at specified path

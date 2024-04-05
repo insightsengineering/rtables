@@ -19,7 +19,7 @@ horizontal_sep(obj) <- value
 \S4method{horizontal_sep}{TableRow}(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
 \item{value}{(\code{string})\cr string to use as new header/body separator.}
 }

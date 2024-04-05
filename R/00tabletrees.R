@@ -1158,9 +1158,9 @@ setClass(
 #' @param extras (`list`)\cr extra arguments associated with the columns.
 #' @param cnts (`integer`)\cr counts.
 #' @param total_cnt (`integer(1)`)\cr total observations represented across all columns.
-#' @param dispcounts (`logical(1)`)\cr whether the counts should be displayed as header info when the associated
+#' @param dispcounts (`flag`)\cr whether the counts should be displayed as header info when the associated
 #'   table is printed.
-#' @param countformat (`character(1)`)\cr format for the counts if they are displayed.
+#' @param countformat (`string`)\cr format for the counts if they are displayed.
 #' @param count_na_str (`character`)\cr string to use in place of missing values when formatting counts. Defaults
 #'   to `""`.
 #'
@@ -1249,7 +1249,7 @@ setClass("TableRow",
 #'
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
-#' @param vis (`logical(1)`)\cr whether the row should be visible (`LabelRow` only).
+#' @param vis (`flag`)\cr whether the row should be visible (`LabelRow` only).
 #'
 #' @return A formal object representing a table row of the constructed type.
 #'
@@ -1855,7 +1855,7 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 #'
 #' @inheritParams lyt_args
 #' @inheritParams rcell
-#' @param val (`any`)\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.
+#' @param val (`ANY`)\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.
 #'
 #' @return An object representing the value within a single cell within a populated table. The underlying structure
 #'   of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.

@@ -301,8 +301,8 @@ make_split_fun <- function(pre = list(), core_split = NULL, post = list()) {
 #'
 #' Add a combination facet during the post-processing stage in a custom split fun.
 #'
-#' @param name (`character(1)`)\cr name for the resulting facet (for use in pathing, etc.).
-#' @param label (`character(1)`)\cr label for the resulting facet.
+#' @param name (`string`)\cr name for the resulting facet (for use in pathing, etc.).
+#' @param label (`string`)\cr label for the resulting facet.
 #' @param levels (`character`)\cr vector of levels to combine within the resulting facet.
 #' @param extra (`list`)\cr extra arguments to be passed to analysis functions applied within the resulting facet.
 #'

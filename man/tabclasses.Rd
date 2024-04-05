@@ -61,12 +61,12 @@ TableTree(
 \arguments{
 \item{kids}{(\code{list})\cr list of direct children.}
 
-\item{name}{(\code{character(1)})\cr name of the split/table/row being created. Defaults to the value of the
+\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
 corresponding label, but is not required to be.}
 
 \item{lev}{(\code{integer(1)})\cr nesting level (roughly, indentation level in practical terms).}
 
-\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{labelrow}{(\code{LabelRow})\cr the \code{LabelRow} object to assign to the table. Constructed from \code{label} by default
 if not specified.}
@@ -75,7 +75,7 @@ if not specified.}
 
 \item{cinfo}{(\code{InstantiatedColumnInfo} or \code{NULL})\cr column structure for the object being created.}
 
-\item{iscontent}{(\code{logical(1)})\cr whether the \code{TableTree}/\code{ElementaryTable} is being constructed as the content
+\item{iscontent}{(\code{flag})\cr whether the \code{TableTree}/\code{ElementaryTable} is being constructed as the content
 table for another \code{TableTree}.}
 
 \item{var}{(\code{string})\cr variable name.}
@@ -89,7 +89,7 @@ or function. In cases such as \code{analyze} calls, they can be character vector
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{title}{(\code{character(1)})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
+\item{title}{(\code{string})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
 
 \item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
 printed on a separate line. Ignored for subtables.}
@@ -100,16 +100,16 @@ printed on a separate line. Ignored for subtables.}
 \item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
 (\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
-\item{header_section_div}{(\code{character(1)})\cr string which will be used to divide the header from the table. See
+\item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
 \code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of
 \code{\link[=section_div]{section_div()}} when concatenating tables that require a divider between them.}
 
-\item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}
 
-\item{trailing_section_div}{(\code{character(1)})\cr string which will be used as a section divider after the printing
+\item{trailing_section_div}{(\code{string})\cr string which will be used as a section divider after the printing
 of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
 or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
 \code{section_div} of the split under which this table represents a single facet.}

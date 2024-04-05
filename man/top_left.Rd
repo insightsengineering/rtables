@@ -28,9 +28,9 @@ top_left(obj) <- value
 \S4method{top_left}{PreDataTableLayouts}(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 }
 \value{
 A character vector representing the top-left material of \code{obj} (or \code{obj} after modification, in the

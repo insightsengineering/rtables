@@ -17,7 +17,7 @@ basic_table(
 )
 }
 \arguments{
-\item{title}{(\code{character(1)})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
+\item{title}{(\code{string})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
 
 \item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
 printed on a separate line. Ignored for subtables.}
@@ -28,17 +28,17 @@ printed on a separate line. Ignored for subtables.}
 \item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
 (\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
-\item{show_colcounts}{(\code{logical(1)})\cr whether column counts should be displayed in the resulting table when this
+\item{show_colcounts}{(\code{flag})\cr whether column counts should be displayed in the resulting table when this
 layout is applied to data.}
 
-\item{colcount_format}{(\code{character(1)})\cr format for use when displaying the column counts. Must be 1d, or 2d
+\item{colcount_format}{(\code{string})\cr format for use when displaying the column counts. Must be 1d, or 2d
 where one component is a percent. See Details below.}
 
-\item{header_section_div}{(\code{character(1)})\cr string which will be used to divide the header from the table. See
+\item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
 \code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of
 \code{\link[=section_div]{section_div()}} when concatenating tables that require a divider between them.}
 
-\item{top_level_section_div}{(\code{character(1)})\cr if assigned to a single character, the first (top level) split
+\item{top_level_section_div}{(\code{character(1)})\cr if assigned a single character, the first (top level) split
 or division of the table will be highlighted by a line made of that character. See \link{section_div} for more
 information.}
 

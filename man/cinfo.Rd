@@ -29,10 +29,10 @@ InstantiatedColumnInfo(
 
 \item{total_cnt}{(\code{integer(1)})\cr total observations represented across all columns.}
 
-\item{dispcounts}{(\code{logical(1)})\cr whether the counts should be displayed as header info when the associated
+\item{dispcounts}{(\code{flag})\cr whether the counts should be displayed as header info when the associated
 table is printed.}
 
-\item{countformat}{(\code{character(1)})\cr format for the counts if they are displayed.}
+\item{countformat}{(\code{string})\cr format for the counts if they are displayed.}
 
 \item{count_na_str}{(\code{character})\cr string to use in place of missing values when formatting counts. Defaults
 to \code{""}.}

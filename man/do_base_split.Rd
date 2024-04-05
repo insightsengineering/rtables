@@ -16,7 +16,7 @@ do_base_split(spl, df, vals = NULL, labels = NULL, trim = FALSE)
 \item{labels}{(\code{character})\cr labels associated with \code{vals}. Should be \code{NULL} whenever \code{vals} is, which should
 almost always be the case.}
 
-\item{trim}{(\code{logical(1)})\cr whether groups corresponding to empty data subsets should be removed. Defaults to
+\item{trim}{(\code{flag})\cr whether groups corresponding to empty data subsets should be removed. Defaults to
 \code{FALSE}.}
 }
 \value{

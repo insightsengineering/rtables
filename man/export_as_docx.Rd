@@ -29,13 +29,13 @@ margins_landscape()
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{file}{(\code{character(1)})\cr string that indicates the final file output. Must have \code{.docx} extension.}
+\item{file}{(\code{string})\cr string that indicates the final file output. Must have \code{.docx} extension.}
 
-\item{doc_metadata}{(\code{list} of \code{character(1)})\cr any value that can be used as metadata by
+\item{doc_metadata}{(\code{list} of \code{string}s)\cr any value that can be used as metadata by
 \code{?officer::set_doc_properties}. Important text values are \code{title}, \code{subject}, \code{creator}, and \code{description},
 while \code{created} is a date object.}
 
-\item{titles_as_header}{(\code{logical(1)})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
+\item{titles_as_header}{(\code{flag})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
 as it makes additional header rows for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element).
 \code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above the table.
 The same style is applied.}
@@ -44,7 +44,7 @@ The same style is applied.}
 the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
 paragraph after the table. The same style is applied, but with a smaller font.}
 
-\item{template_file}{(\code{character(1)})\cr template file that \code{officer} will use as a starting point for the final
+\item{template_file}{(\code{string})\cr template file that \code{officer} will use as a starting point for the final
 document. Document attaches the table and uses the defaults defined in the template file.}
 
 \item{section_properties}{(\code{officer::prop_section})\cr an \code{\link[officer:prop_section]{officer::prop_section()}} object which sets margins and

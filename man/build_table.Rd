@@ -31,7 +31,7 @@ resulting columns if non-\code{NULL}. \code{NA} elements will be replaced with t
 
 \item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
-\item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}

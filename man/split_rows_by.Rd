@@ -46,7 +46,7 @@ underneath analyses, which is not allowed.}
 split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
 visible only if the child has 0 content rows.}
 
-\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
 \code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
@@ -55,13 +55,13 @@ analyzed at the same level of nesting.}
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{page_by}{(\code{logical(1)})\cr whether pagination should be forced between different children resulting from this
+\item{page_by}{(\code{flag})\cr whether pagination should be forced between different children resulting from this
 split. An error will occur if the selected split does not contain at least one value that is not \code{NA}.}
 
-\item{page_prefix}{(\code{character(1)})\cr prefix to be appended with the split value when forcing pagination between
+\item{page_prefix}{(\code{string})\cr prefix to be appended with the split value when forcing pagination between
 the children of a split/table.}
 
-\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{

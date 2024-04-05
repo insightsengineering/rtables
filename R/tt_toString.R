@@ -65,7 +65,7 @@ setMethod("toString", "VTableTree", function(x,
 #' A table shell is a rendering of the table which maintains the structure, but does not display the values, rather
 #' displaying the formatting instructions for each cell.
 #'
-#' @inheritParams tostring
+#' @inheritParams formatters::toString
 #' @inheritParams gen_args
 #'
 #' @return

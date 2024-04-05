@@ -2,15 +2,15 @@
 #'
 #' This is a wrapper for [formatters:format_value()] for use with `CellValue` objects
 #'
-#' @param x (`CellValue` or `any`)\cr an object of class `CellValue`, or a raw value.
-#' @param format (`character(1)` or `function`)\cr the format label or formatter function to
+#' @param x (`CellValue` or `ANY`)\cr an object of class `CellValue`, or a raw value.
+#' @param format (`string` or `function`)\cr the format label or formatter function to
 #'   apply to `x`.
-#' @param output (`character(1)`)\cr output type.
-#' @param na_str (`character(1)`)\cr string that should be displayed when the value of `x` is missing.
+#' @param output (`string`)\cr output type.
+#' @param na_str (`string`)\cr string that should be displayed when the value of `x` is missing.
 #'   Defaults to `"NA"`.
 #' @param pr_row_format (`list`)\cr list of default formats coming from the general row.
 #' @param pr_row_na_str (`list`)\cr list of default `"NA"` strings coming from the general row.
-#' @param shell (`logical(1)`)\cr whether the formats themselves should be returned instead of the
+#' @param shell (`flag`)\cr whether the formats themselves should be returned instead of the
 #'   values with formats applied. Defaults to `FALSE`.
 #'
 #' @return Formatted text.

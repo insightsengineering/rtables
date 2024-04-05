@@ -1112,7 +1112,7 @@ spl_varnames(object) <- value
 
 \item{constructor}{(\code{function})\cr constructor function.}
 
-\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
 or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
@@ -1130,7 +1130,7 @@ visible only if the child has 0 content rows.}
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
+\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
 \item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
@@ -1151,7 +1151,7 @@ not match a formal argument of the tabulation function.}
 \item{max.level}{(\code{numeric(1)})\cr passed to \code{utils::str}. Defaults to 3 for the \code{VTableTree} method, unlike
 the underlying default of \code{NA}. \code{NA} is \emph{not} appropriate for \code{VTableTree} objects.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 
 \item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split

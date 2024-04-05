@@ -16,7 +16,7 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{spec}{(\code{character(1)})\cr the specification to use to extract the result data frame. See Details below.}
+\item{spec}{(\code{string})\cr the specification to use to extract the result data frame. See Details below.}
 
 \item{simplify}{(\code{flag})\cr whether the result data frame should only have labels and result columns visible.}
 

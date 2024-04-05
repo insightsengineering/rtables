@@ -34,10 +34,10 @@ percentage of the viewer window width (e.g. \code{"100\%"}) or a distance value 
 \code{"subtitles"}, \code{"header"}, \code{"row_names"}, \code{"label_rows"}, and \code{"content_rows"} (which includes any non-label
 rows). Defaults to \code{"header"}.}
 
-\item{header_sep_line}{(\code{logical(1)})\cr whether a black line should be printed to under the table header. Defaults
+\item{header_sep_line}{(\code{flag})\cr whether a black line should be printed to under the table header. Defaults
 to \code{TRUE}.}
 
-\item{no_spaces_between_cells}{(\code{logical(1)})\cr whether spaces between table cells should be collapsed. Defaults
+\item{no_spaces_between_cells}{(\code{flag})\cr whether spaces between table cells should be collapsed. Defaults
 to \code{FALSE}.}
 }
 \value{

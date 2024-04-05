@@ -46,12 +46,12 @@ ContentRow(...)
 \arguments{
 \item{lev}{(\code{integer(1)})\cr nesting level (roughly, indentation level in practical terms).}
 
-\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{name}{(\code{character(1)})\cr name of the split/table/row being created. Defaults to the value of the
+\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
 corresponding label, but is not required to be.}
 
-\item{vis}{(\code{logical(1)})\cr whether the row should be visible (\code{LabelRow} only).}
+\item{vis}{(\code{flag})\cr whether the row should be visible (\code{LabelRow} only).}
 
 \item{cinfo}{(\code{InstantiatedColumnInfo} or \code{NULL})\cr column structure for the object being created.}
 
@@ -62,7 +62,7 @@ corresponds to the unmodified default behavior.}
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
 and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
 
-\item{trailing_section_div}{(\code{character(1)})\cr string which will be used as a section divider after the printing
+\item{trailing_section_div}{(\code{string})\cr string which will be used as a section divider after the printing
 of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
 or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
 \code{section_div} of the split under which this table represents a single facet.}

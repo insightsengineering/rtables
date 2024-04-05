@@ -18,9 +18,9 @@ add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 \code{exargs}. \code{levelcombo} and \code{exargs} should be list columns. Passing the \code{select_all_levels} object as a value in
 \code{comblevels} column indicates that an overall/all-observations level should be created.}
 
-\item{trim}{(\code{logical(1)})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
+\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
-\item{first}{(\code{logical(1)})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
+\item{first}{(\code{flag})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
 last (\code{FALSE}, the default).}
 
 \item{keep_levels}{(\code{character} or \code{NULL})\cr if non-\code{NULL}, the levels to retain across both combination and

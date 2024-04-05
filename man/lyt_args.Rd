@@ -58,7 +58,7 @@ lyt_args(
 
 \item{vars}{(\code{character})\cr vector of variable names.}
 
-\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{labels_var}{(\code{string})\cr name of variable containing labels to be displayed for the values of \code{var}.}
 
@@ -120,7 +120,7 @@ visible only if the child has 0 content rows.}
 corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{name}{(\code{character(1)})\cr name of the split/table/row being created. Defaults to the value of the
+\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
 corresponding label, but is not required to be.}
 
 \item{cuts}{(\code{numeric})\cr cuts to use.}
@@ -133,41 +133,41 @@ used (via \code{cut}) when splitting data during tabulation.}
 \item{cutlabelfun}{(\code{function})\cr function which returns either labels for the cuts or \code{NULL} when passed the
 return value of \code{cutfun}.}
 
-\item{cumulative}{(\code{logical(1)})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
+\item{cumulative}{(\code{flag})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
 
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{show_labels}{(\code{character(1)})\cr whether the variable labels corresponding to the variable(s) in \code{vars}
+\item{show_labels}{(\code{string})\cr whether the variable labels corresponding to the variable(s) in \code{vars}
 should be visible in the resulting table.}
 
-\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
 \code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
 \item{var_labels}{(\code{character})\cr vector of labels for one or more variables.}
 
-\item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
+\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
 \item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
 \item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
-\item{align}{(\code{character(1)} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
+\item{align}{(\code{string} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
 \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
 
-\item{page_by}{(\code{logical(1)})\cr whether pagination should be forced between different children resulting from this
+\item{page_by}{(\code{flag})\cr whether pagination should be forced between different children resulting from this
 split. An error will occur if the selected split does not contain at least one value that is not \code{NA}.}
 
-\item{page_prefix}{(\code{character(1)})\cr prefix to be appended with the split value when forcing pagination between
+\item{page_prefix}{(\code{string})\cr prefix to be appended with the split value when forcing pagination between
 the children of a split/table.}
 
-\item{format_na_str}{(\code{character(1)})\cr string which should be displayed when formatted if this cell's value(s)
+\item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
 
-\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}

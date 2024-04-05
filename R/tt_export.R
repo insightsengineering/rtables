@@ -15,7 +15,7 @@ NULL
 #'
 #' @inheritParams gen_args
 #' @inheritParams data.frame_export
-#' @param file (`character(1)`)\cr the path of the file to written to or read from.
+#' @param file (`string`)\cr the path of the file to written to or read from.
 #'
 #' @return
 #' * `export_as_tsv` returns `NULL` silently.
@@ -77,7 +77,7 @@ formatters::export_as_txt
 #' Collection of utilities to extract `data.frame` objects from `TableTree` objects.
 #'
 #' @inheritParams gen_args
-#' @param spec (`character(1)`)\cr the specification to use to extract the result data frame. See Details below.
+#' @param spec (`string`)\cr the specification to use to extract the result data frame. See Details below.
 #' @param simplify (`flag`)\cr whether the result data frame should only have labels and result columns visible.
 #' @param ... additional arguments passed to spec-specific result data frame conversion function. Currently it can be
 #'   one or more of the following parameters (valid only for `v0_experimental` spec. for now):
@@ -577,12 +577,12 @@ formatters::export_as_pdf
 #' the `officer` package.
 #'
 #' @inheritParams gen_args
-#' @param file (`character(1)`)\cr string that indicates the final file output. Must have `.docx` extension.
-#' @param doc_metadata (`list` of `character(1)`)\cr any value that can be used as metadata by
+#' @param file (`string`)\cr string that indicates the final file output. Must have `.docx` extension.
+#' @param doc_metadata (`list` of `string`s)\cr any value that can be used as metadata by
 #'   `?officer::set_doc_properties`. Important text values are `title`, `subject`, `creator`, and `description`,
 #'   while `created` is a date object.
 #' @inheritParams tt_to_flextable
-#' @param template_file (`character(1)`)\cr template file that `officer` will use as a starting point for the final
+#' @param template_file (`string`)\cr template file that `officer` will use as a starting point for the final
 #'   document. Document attaches the table and uses the defaults defined in the template file.
 #' @param section_properties (`officer::prop_section`)\cr an [officer::prop_section()] object which sets margins and
 #'   page size.
@@ -743,7 +743,7 @@ margins_landscape <- function() {
 #' @param border (`officer` border object)\cr defaults to `officer::fp_border(width = 0.5)`.
 #' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [matrix_form()]
 #'   `indent_size`) is used. To work with `docx`, any size is multiplied by 2 mm (5.67 pt) by default.
-#' @param titles_as_header (`logical(1)`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
+#' @param titles_as_header (`flag`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
 #'   as it makes additional header rows for [main_title()] string and [subtitles()] character vector (one per element).
 #'   `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text paragraph above the table.
 #'   The same style is applied.
@@ -969,7 +969,7 @@ tt_to_flextable <- function(tt,
 #' @describeIn tt_to_flextable Main theme function for [export_as_docx()]
 #'
 #' @inheritParams export_as_docx
-#' @param font (`character(1)`)\cr defaults to `"Arial"`. If the font is not available, `flextable` default is used.
+#' @param font (`string`)\cr defaults to `"Arial"`. If the font is not available, `flextable` default is used.
 #' @param font_size (`integer(1)`)\cr font size. Defaults to 9.
 #' @param bold (`character`)\cr parts of the table text that should be in bold. Can be any combination of
 #'   `c("header", "content_rows", "label_rows")`. The first one renders all column names bold (not `topleft` content).

@@ -15,7 +15,7 @@ label_at_path(tt, path) <- value
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 }
 \description{
 Accesses or sets the label at a path.

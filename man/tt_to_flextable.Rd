@@ -44,7 +44,7 @@ to \code{theme_docx_default(tt)}.}
 \item{indent_size}{(\code{integer(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[=matrix_form]{matrix_form()}}
 \code{indent_size}) is used. To work with \code{docx}, any size is multiplied by 2 mm (5.67 pt) by default.}
 
-\item{titles_as_header}{(\code{logical(1)})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
+\item{titles_as_header}{(\code{flag})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
 as it makes additional header rows for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element).
 \code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above the table.
 The same style is applied.}
@@ -80,7 +80,7 @@ used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{total_width}{(\code{numeric(1)})\cr total width (in inches) for the resulting flextable(s). Defaults to 10.}
 
-\item{font}{(\code{character(1)})\cr defaults to \code{"Arial"}. If the font is not available, \code{flextable} default is used.}
+\item{font}{(\code{string})\cr defaults to \code{"Arial"}. If the font is not available, \code{flextable} default is used.}
 
 \item{font_size}{(\code{integer(1)})\cr font size. Defaults to 9.}
 

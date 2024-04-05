@@ -101,19 +101,19 @@ with labels assigned to each child (which are based on the data and type of spli
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
 underneath analyses, which is not allowed.}
 
-\item{cumulative}{(\code{logical(1)})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
+\item{cumulative}{(\code{flag})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
 
 \item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
 or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
 
 \item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
 \code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
-\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{cutfun}{(\code{function})\cr function which accepts the \emph{full vector} of \code{var} values and returns cut points to be

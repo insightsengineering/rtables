@@ -32,9 +32,9 @@ div_helper <- function(lst, class) {
 #' @param bold (`character`)\cr elements in table output that should be bold. Options are `"main_title"`,
 #'   `"subtitles"`, `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label
 #'   rows). Defaults to `"header"`.
-#' @param header_sep_line (`logical(1)`)\cr whether a black line should be printed to under the table header. Defaults
+#' @param header_sep_line (`flag`)\cr whether a black line should be printed to under the table header. Defaults
 #'   to `TRUE`.
-#' @param no_spaces_between_cells (`logical(1)`)\cr whether spaces between table cells should be collapsed. Defaults
+#' @param no_spaces_between_cells (`flag`)\cr whether spaces between table cells should be collapsed. Defaults
 #'   to `FALSE`.
 #'
 #' @importFrom htmltools tags

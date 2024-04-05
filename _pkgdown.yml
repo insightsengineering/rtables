@@ -286,7 +286,7 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: Result Dataframe Functions
+  - title: Result Data Frame Functions
     desc: Functions for generating result data frames from rtables TableTree objects
     contents:
     - as_result_df

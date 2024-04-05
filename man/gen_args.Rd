@@ -47,43 +47,43 @@ to the current split.}
 
 \item{tr}{(\code{TableRow} or related class)\cr a \code{TableRow} object representing a single row within a populated table.}
 
-\item{verbose}{(\code{logical(1)})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
+\item{verbose}{(\code{flag})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
 
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{x}{(\code{any})\cr an object.}
+\item{x}{(\code{ANY})\cr an object.}
 
-\item{value}{(\code{any})\cr the new value.}
+\item{value}{(\code{ANY})\cr the new value.}
 
-\item{object}{(\code{any})\cr the object to modify in place.}
+\item{object}{(\code{ANY})\cr the object to modify in place.}
 
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}
 
-\item{label}{(\code{character(1)})\cr a label (not to be confused with the name) for the object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{label_pos}{(\code{character(1)})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
 (default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
 \code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
 analyzed at the same level of nesting.}
 
-\item{cvar}{(\code{character(1)})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
+\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
 \item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
-\item{page_prefix}{(\code{character(1)})\cr prefix to be appended with the split value when forcing pagination between
+\item{page_prefix}{(\code{string})\cr prefix to be appended with the split value when forcing pagination between
 the children of a split/table.}
 
-\item{hsep}{(\code{character(1)})\cr set of character(s) to be repeated as the separator between the header and body of
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
 information.}
 
 \item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
 
-\item{section_div}{(\code{character(1)})\cr string which should be repeated as a section divider after each group defined
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}

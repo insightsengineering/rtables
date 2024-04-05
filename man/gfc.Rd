@@ -34,7 +34,7 @@ get_cell_aligns(obj)
 \S4method{get_cell_aligns}{LabelRow}(obj)
 }
 \arguments{
-\item{obj}{(\code{any})\cr the object for the accessor to access or modify.}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
 \item{shell}{(\code{flag})\cr whether the formats themselves should be returned instead of the values with formats
 applied. Defaults to \code{FALSE}.}
