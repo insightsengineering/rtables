@@ -53,7 +53,7 @@ footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
-\item{verbose}{(\code{flag})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
+\item{verbose}{(\code{flag})\cr whether additional information should be displayed to the user. Defaults to \code{FALSE}.}
 
 \item{page_type}{(\code{string})\cr name of a page type. See \code{\link[formatters]{page_types}}. Ignored
 when \code{pg_width} and \code{pg_height} are set directly.}

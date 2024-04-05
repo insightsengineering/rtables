@@ -33,9 +33,9 @@ with labels assigned to each child (which are based on the data and type of spli
 
 \item{split_fun}{(\code{function} or \code{NULL})\cr custom splitting function. See \link{custom_split_funs}.}
 
-\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
-\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split

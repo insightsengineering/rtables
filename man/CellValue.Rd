@@ -18,9 +18,9 @@ CellValue(
 \arguments{
 \item{val}{(\code{ANY})\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.}
 
-\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
-\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{colspan}{(\code{integer(1)})\cr column span value.}
 

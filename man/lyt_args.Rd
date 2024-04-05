@@ -4,15 +4,97 @@
 \alias{lyt_args}
 \title{Layouting function argument conventions}
 \arguments{
-\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
+\item{afun}{(\code{function})\cr analysis function. Must accept \code{x} or \code{df} as its first parameter. Can optionally take
+other parameters which will be populated by the tabulation framework. See Details in \code{\link[=analyze]{analyze()}}.}
 
-\item{var}{(\code{string})\cr variable name.}
+\item{align}{(\code{string} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
+\code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
 
-\item{vars}{(\code{character})\cr vector of variable names.}
+\item{cformat}{(\code{string}, \code{function}, or \code{list})\cr format for content rows.}
 
-\item{var_labels}{(\code{character})\cr vector of labels for one or more variables.}
+\item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
+or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
+
+\item{child_labels}{(\code{string})\cr the display behavior for the labels (i.e. label rows) of the children of this
+split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
+visible only if the child has 0 content rows.}
+
+\item{cna_str}{(\code{character})\cr NA string for use with \code{cformat} for content table.}
+
+\item{compfun}{(\code{function} or \code{string})\cr the comparison function which accepts the analysis function outputs for
+two different partitions and returns a single value. Defaults to subtraction. If a string, taken as the name of a
+function.}
+
+\item{cumulative}{(\code{flag})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
+
+\item{cutfun}{(\code{function})\cr function which accepts the \emph{full vector} of \code{var} values and returns cut points to be
+used (via \code{cut}) when splitting data during tabulation.}
+
+\item{cutlabels}{(\code{character} or \code{NULL})\cr labels for the cuts.}
+
+\item{cutlabelfun}{(\code{function})\cr function which returns either labels for the cuts or \code{NULL} when passed the
+return value of \code{cutfun}.}
+
+\item{cuts}{(\code{numeric})\cr cuts to use.}
+
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
+not match a formal argument of the tabulation function.}
+
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+
+\item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
+are all \code{NA}.}
+
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
+corresponds to the unmodified default behavior.}
+
+\item{inclNAs}{(\code{logical})\cr whether NA observations in the \code{var} variable(s) should be included when performing
+the analysis. Defaults to \code{FALSE}.}
+
+\item{label_fstr}{(\code{string})\cr a \code{sprintf} style format string. For non-comparison splits, it can contain up to
+one \code{"\\\%s"} which takes the current split value and generates the row/column label. For comparison-based splits
+it can contain up to two \code{"\\\%s"}.}
 
 \item{labels_var}{(\code{string})\cr name of variable containing labels to be displayed for the values of \code{var}.}
+
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
+
+\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
+corresponding label, but is not required to be.}
+
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
+
+\item{page_by}{(\code{flag})\cr whether pagination should be forced between different children resulting from this
+split. An error will occur if the selected split does not contain at least one value that is not \code{NA}.}
+
+\item{ref_group}{(\code{character})\cr value of \code{var} to be taken as the \code{ref_group}/control to be compared against.}
+
+\item{show_labels}{(\code{string})\cr whether the variable labels corresponding to the variable(s) in \code{vars}
+should be visible in the resulting table.}
+
+\item{split_format}{(\code{string}, \code{function}, or \code{list})\cr default format associated with the split being created.}
+
+\item{split_fun}{(\code{function} or \code{NULL})\cr custom splitting function. See \link{custom_split_funs}.}
+
+\item{split_label}{(\code{string})\cr label to be associated with the table generated by the split. Not to be confused
+with labels assigned to each child (which are based on the data and type of split during tabulation).}
+
+\item{split_name}{(\code{string})\cr name associated with the split (for pathing, etc.).}
+
+\item{split_na_str}{(\code{character})\cr NA string vector for use with \code{split_format}.}
+
+\item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
+
+\item{valorder}{(\code{character})\cr the order that the split children should appear in resulting table.}
+
+\item{var}{(\code{string})\cr variable name.}
 
 \item{varlabels}{(\code{character})\cr vector of labels for \code{vars}.}
 
@@ -20,91 +102,9 @@
 unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce
 uniqueness.}
 
-\item{split_format}{(\code{string}, \code{function}, or \code{list})\cr default format associated with the split being created.}
+\item{vars}{(\code{character})\cr vector of variable names.}
 
-\item{split_na_str}{(\code{character})\cr NA string vector for use with \code{split_format}.}
-
-\item{split_label}{(\code{string})\cr label to be associated with the table generated by the split. Not to be confused
-with labels assigned to each child (which are based on the data and type of split during tabulation).}
-
-\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
-\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
-underneath analyses, which is not allowed.}
-
-\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
-\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
-
-\item{align}{(\code{string} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
-\code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
-
-\item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
-or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
-arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
-
-\item{cformat}{(\code{string}, \code{function}, or \code{list})\cr format for content rows.}
-
-\item{cna_str}{(\code{character})\cr NA string for use with \code{cformat} for content table.}
-
-\item{split_fun}{(\code{function} or \code{NULL})\cr custom splitting function. See \link{custom_split_funs}.}
-
-\item{split_name}{(\code{string})\cr name associated with the split (for pathing, etc.).}
-
-\item{afun}{(\code{function})\cr analysis function. Must accept \code{x} or \code{df} as its first parameter. Can optionally take
-other parameters which will be populated by the tabulation framework. See Details in \code{\link[=analyze]{analyze()}}.}
-
-\item{inclNAs}{(\code{logical})\cr whether NA observations in the \code{var} variable(s) should be included when performing
-the analysis. Defaults to \code{FALSE}.}
-
-\item{valorder}{(\code{character})\cr the order that the split children should appear in resulting table.}
-
-\item{ref_group}{(\code{character})\cr value of \code{var} to be taken as the \code{ref_group}/control to be compared against.}
-
-\item{compfun}{(\code{function} or \code{string})\cr the comparison function which accepts the analysis function outputs for
-two different partitions and returns a single value. Defaults to subtraction. If a string, taken as the name of a
-function.}
-
-\item{label_fstr}{(\code{string})\cr a \code{sprintf} style format string. For non-comparison splits, it can contain up to
-one \code{"\\\%s"} which takes the current split value and generates the row/column label. For comparison-based splits
-it can contain up to two \code{"\\\%s"}.}
-
-\item{child_labels}{(\code{string})\cr the display behavior for the labels (i.e. label rows) of the children of this
-split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
-visible only if the child has 0 content rows.}
-
-\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
-corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
-not match a formal argument of the tabulation function.}
-
-\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
-corresponding label, but is not required to be.}
-
-\item{cuts}{(\code{numeric})\cr cuts to use.}
-
-\item{cutlabels}{(\code{character} or \code{NULL})\cr labels for the cuts.}
-
-\item{cutlabelfun}{(\code{function})\cr function which returns either labels for the cuts or \code{NULL} when passed the
-return value of \code{cutfun}.}
-
-\item{cumulative}{(\code{flag})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
-
-\item{cutfun}{(\code{function})\cr function which accepts the \emph{full vector} of \code{var} values and returns cut points to be
-used (via \code{cut}) when splitting data during tabulation.}
-
-\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
-function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
-corresponds to the unmodified default behavior.}
-
-\item{show_labels}{(\code{string})\cr whether the variable labels corresponding to the variable(s) in \code{vars}
-should be visible in the resulting table.}
-
-\item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
-
-\item{page_by}{(\code{flag})\cr whether pagination should be forced between different children resulting from this
-split. An error will occur if the selected split does not contain at least one value that is not \code{NA}.}
-
-\item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
-are all \code{NA}.}
+\item{var_labels}{(\code{character})\cr vector of labels for one or more variables.}
 }
 \value{
 No return value.

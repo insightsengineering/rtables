@@ -7,9 +7,6 @@
 \item{.lst}{(\code{list})\cr an already-collected list of arguments to be used instead of the elements of \code{...}.
 Arguments passed via \code{...} will be ignored if this is specified.}
 
-\item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
-\code{\link[=rrow]{rrow()}}.}
-
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
@@ -17,6 +14,9 @@ cell values passed via \code{...}. See \code{\link[formatters:list_formats]{form
 
 \item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
 \code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
+
+\item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
+\code{\link[=rrow]{rrow()}}.}
 }
 \value{
 No return value.

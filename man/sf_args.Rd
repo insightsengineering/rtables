@@ -4,10 +4,10 @@
 \alias{sf_args}
 \title{Split function argument conventions}
 \arguments{
-\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
-
 \item{first}{(\code{flag})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
 last (\code{FALSE}, the default).}
+
+\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 }
 \value{
 No return value.

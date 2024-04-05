@@ -4,50 +4,16 @@
 \alias{gen_args}
 \title{General argument conventions}
 \arguments{
-\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
+\item{...}{additional parameters passed to methods or tabulation functions.}
 
 \item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
 \emph{only} when calculating column counts.}
 
-\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
-
-\item{pos}{(\code{numeric})\cr which top-level set of nested splits should the new layout feature be added to. Defaults
-to the current split.}
-
-\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
-
-\item{tr}{(\code{TableRow} or related class)\cr a \code{TableRow} object representing a single row within a populated table.}
-
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
-
-\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
-
-\item{x}{(\code{ANY})\cr an object.}
-
-\item{...}{additional parameters passed to methods or tabulation functions.}
-
-\item{value}{(\code{ANY})\cr the new value.}
-
-\item{object}{(\code{ANY})\cr the object to modify in place.}
-
-\item{verbose}{(\code{flag})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
-
-\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
-represents a subsequent choice amongst the children of the previous choice.}
-
-\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
-
-\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
-(default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
-\code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
-analyzed at the same level of nesting.}
 
 \item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
-\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
-
-\item{page_prefix}{(\code{string})\cr prefix to be appended with the split value when forcing pagination between
-the children of a split/table.}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
 \item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
@@ -56,14 +22,48 @@ information.}
 
 \item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
 
-\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
-by this split instruction, or \code{NA_character_} (the default) for no section divider.}
-
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
+
+\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
+(default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
+\code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
+analyzed at the same level of nesting.}
+
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
+
+\item{object}{(\code{ANY})\cr the object to modify in place.}
+
+\item{page_prefix}{(\code{string})\cr prefix to be appended with the split value when forcing pagination between
+the children of a split/table.}
+
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
+
+\item{pos}{(\code{numeric})\cr which top-level set of nested splits should the new layout feature be added to. Defaults
+to the current split.}
+
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
+
+\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
+
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
 and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
+
+\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
+
+\item{tr}{(\code{TableRow} or related class)\cr a \code{TableRow} object representing a single row within a populated table.}
+
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
+
+\item{value}{(\code{ANY})\cr the new value.}
+
+\item{verbose}{(\code{flag})\cr whether additional information should be displayed to the user. Defaults to \code{FALSE}.}
+
+\item{x}{(\code{ANY})\cr an object.}
 }
 \value{
 No return value.

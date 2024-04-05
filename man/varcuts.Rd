@@ -103,9 +103,9 @@ underneath analyses, which is not allowed.}
 
 \item{cumulative}{(\code{flag})\cr whether the cuts should be treated as cumulative. Defaults to \code{FALSE}.}
 
-\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
-\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{cutfun}{(\code{function})\cr function which accepts the \emph{full vector} of \code{var} values and returns cut points to be
 used (via \code{cut}) when splitting data during tabulation.}

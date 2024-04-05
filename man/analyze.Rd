@@ -32,9 +32,9 @@ other parameters which will be populated by the tabulation framework. See Detail
 
 \item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
-\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
-\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
