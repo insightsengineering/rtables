@@ -16,7 +16,7 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 \item{...}{rows to place in the table.}
 
-\item{format}{(\code{string} or \code{function})\cr the format label (string) or formatter function to apply to the
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
 \item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of

@@ -7,7 +7,7 @@
 insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 }
 \arguments{
-\item{tbl}{(\code{TableTree})\cr a \code{rtable} object.}
+\item{tbl}{(\code{VTableTree})\cr a \code{rtable} object.}
 
 \item{rrow}{(\code{TableRow})\cr an \code{rrow} to append to \code{tbl}.}
 

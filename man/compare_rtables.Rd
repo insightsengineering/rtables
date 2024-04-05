@@ -13,9 +13,9 @@ compare_rtables(
 )
 }
 \arguments{
-\item{object}{(\code{TableTree})\cr \code{rtable} to test.}
+\item{object}{(\code{VTableTree})\cr \code{rtable} to test.}
 
-\item{expected}{(\code{TableTree})\cr expected \code{rtable}.}
+\item{expected}{(\code{VTableTree})\cr expected \code{rtable}.}
 
 \item{tol}{(\code{numeric(1)})\cr tolerance.}
 
@@ -32,7 +32,7 @@ between \code{object} and \code{expected} as described above.
 }
 \description{
 Prints a matrix where \code{.} means cell matches, \code{X} means cell does
-cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
+not match, \code{+} cell (row) is missing, and \code{-} cell (row)
 should not be there. If \code{structure} is set to \code{TRUE}, \code{C} indicates
 column-structure mismatch, \code{R} indicates row-structure mismatch, and
 \code{S} indicates mismatch in both row and column structure.

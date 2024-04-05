@@ -1122,7 +1122,7 @@ arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.
 split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
 visible only if the child has 0 content rows.}
 
-\item{cformat}{(\verb{format spec})\cr format for content rows.}
+\item{cformat}{(\code{string}, \code{function}, or \code{list})\cr format for content rows.}
 
 \item{cna_str}{(\code{character})\cr NA string for use with \code{cformat} for content table.}
 
@@ -1138,7 +1138,7 @@ not match a formal argument of the tabulation function.}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{obj}{(\code{TableTree})\cr a table object.}
+\item{obj}{(\code{VTableTree})\cr a table object.}
 
 \item{depth}{(\code{numeric(1)})\cr depth in tree.}
 
@@ -1146,7 +1146,7 @@ not match a formal argument of the tabulation function.}
 
 \item{print_indent}{(\code{numeric(1)})\cr indent for printing.}
 
-\item{object}{(\code{TableTree})\cr a table object.}
+\item{object}{(\code{VTableTree})\cr a table object.}
 
 \item{max.level}{(\code{numeric(1)})\cr passed to \code{utils::str}. Defaults to 3 for the \code{VTableTree} method, unlike
 the underlying default of \code{NA}. \code{NA} is \emph{not} appropriate for \code{VTableTree} objects.}
@@ -1159,10 +1159,9 @@ underneath analyses, which is not allowed.}
 
 \item{for_analyze}{(\code{flag}) whether split is an analyze split.}
 
-\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
-
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
+\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{override}{(\code{flag})\cr whether to override attribute.}
 

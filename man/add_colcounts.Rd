@@ -9,8 +9,9 @@ add_colcounts(lyt, format = "(N=xx)")
 \arguments{
 \item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
+\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.

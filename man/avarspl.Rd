@@ -75,9 +75,9 @@ other parameters which will be populated by the tabulation framework. See Detail
 or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
 arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
 
-\item{cformat}{(\verb{format spec})\cr format for content rows.}
+\item{cformat}{(\code{string}, \code{function}, or \code{list})\cr format for content rows.}
 
-\item{split_format}{(\code{FormatSpec})\cr default format associated with the split being created.}
+\item{split_format}{(\code{string}, \code{function}, or \code{list})\cr default format associated with the split being created.}
 
 \item{split_na_str}{(\code{character})\cr NA string vector for use with \code{split_format}.}
 
@@ -93,16 +93,6 @@ not match a formal argument of the tabulation function.}
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
-
-\item{label_pos}{(\code{string})\cr location where the variable label should be displayed. Accepts \code{"hidden"}
-(default for non-analyze row splits), \code{"visible"}, \code{"topleft"}, and \code{"default"} (for analyze splits only). For
-\code{analyze} calls, \code{"default"} indicates that the variable should be visible if and only if multiple variables are
-analyzed at the same level of nesting.}
-
-\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
-
-\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
-by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
 \item{.payload}{(\code{list})\cr used internally, not intended to be set by end users.}
 

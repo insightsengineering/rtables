@@ -930,7 +930,7 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' This function is deprecated and will be removed in a future release of `rtables`. Please use
 #' [insert_row_at_path()] or [label_at_path()] instead.
 #'
-#' @param tbl (`TableTree`)\cr a `rtable` object.
+#' @param tbl (`VTableTree`)\cr a `rtable` object.
 #' @param rrow (`TableRow`)\cr an `rrow` to append to `tbl`.
 #' @param at (`integer(1)`)\cr position into which to put the `rrow`, defaults to beginning (i.e. row 1).
 #' @param ascontent (`flag`)\cr currently ignored.

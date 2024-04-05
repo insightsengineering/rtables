@@ -7,7 +7,7 @@
 table_structure(x, detail = c("subtable", "row"))
 }
 \arguments{
-\item{x}{(\code{TableTree})\cr a table object.}
+\item{x}{(\code{VTableTree})\cr a table object.}
 
 \item{detail}{(\code{string})\cr either \code{row} or \code{subtable}.}
 }

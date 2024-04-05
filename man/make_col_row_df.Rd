@@ -10,7 +10,7 @@ row_paths(x)
 col_paths(x)
 }
 \arguments{
-\item{x}{(\code{TableTree})\cr an \code{rtable} object.}
+\item{x}{(\code{VTableTree})\cr an \code{rtable} object.}
 }
 \value{
 A list of paths to each row/column within \code{x}.

@@ -1239,8 +1239,8 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #'
 #' Returns a matrix of formats for the cells in a table.
 #'
-#' @param obj (`TableTree` or `TableRow`)\cr a table or row object.
-#' @param default (`FormatSpec`)\cr default format.
+#' @param obj (`VTableTree` or `TableRow`)\cr a table or row object.
+#' @param default (`string`, `function`, or `list`)\cr default format.
 #'
 #' @return Matrix (storage mode list) containing the effective format for each cell position in the table
 #'   (including 'virtual' cells implied by label rows, whose formats are always `NULL`).
@@ -3384,7 +3384,7 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' splits) and [analyze()] have a `section_div` parameter that will produce separators
 #' between split sections and data subgroups, respectively.
 #'
-#' @param obj (`TableTree`)\cr table object. This can be of any class that inherits from `VTableTree`
+#' @param obj (`VTableTree`)\cr table object. This can be of any class that inherits from `VTableTree`
 #'   or `TableRow`/`LabelRow`.
 #' @param only_sep_sections (`flag`)\cr defaults to `FALSE` for `section_div<-`. Allows
 #'   you to set the section divider only for sections that are splits or analyses if the number of

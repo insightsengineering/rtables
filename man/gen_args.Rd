@@ -3,35 +3,6 @@
 \name{gen_args}
 \alias{gen_args}
 \title{General argument conventions}
-\usage{
-gen_args(
-  df,
-  alt_counts_df,
-  spl,
-  pos,
-  tt,
-  tr,
-  verbose,
-  colwidths,
-  obj,
-  x,
-  value,
-  object,
-  path,
-  label,
-  label_pos,
-  cvar,
-  topleft,
-  page_prefix,
-  hsep,
-  indent_size,
-  section_div,
-  na_str,
-  inset,
-  table_inset,
-  ...
-)
-}
 \arguments{
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
@@ -47,17 +18,19 @@ to the current split.}
 
 \item{tr}{(\code{TableRow} or related class)\cr a \code{TableRow} object representing a single row within a populated table.}
 
-\item{verbose}{(\code{flag})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
-
 \item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
 \item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
 \item{x}{(\code{ANY})\cr an object.}
 
+\item{...}{additional parameters passed to methods or tabulation functions.}
+
 \item{value}{(\code{ANY})\cr the new value.}
 
 \item{object}{(\code{ANY})\cr the object to modify in place.}
+
+\item{verbose}{(\code{flag})\cr whether extra debugging messages should be shown. Defaults to \code{FALSE}.}
 
 \item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
 represents a subsequent choice amongst the children of the previous choice.}
@@ -86,15 +59,11 @@ information.}
 \item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
-
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
 and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
-
-\item{...}{additional parameters passed to methods or tabulation functions.}
 }
 \value{
 No return value.
@@ -104,10 +73,10 @@ General argument conventions
 }
 \seealso{
 Other conventions: 
-\code{\link{compat_args}()},
-\code{\link{constr_args}()},
-\code{\link{lyt_args}()},
-\code{\link{sf_args}()}
+\code{\link{compat_args}},
+\code{\link{constr_args}},
+\code{\link{lyt_args}},
+\code{\link{sf_args}}
 }
 \concept{conventions}
 \keyword{internal}

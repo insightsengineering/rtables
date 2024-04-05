@@ -2,7 +2,7 @@
 
 #' Get a list of table row/column paths
 #'
-#' @param x (`TableTree`)\cr an `rtable` object.
+#' @param x (`VTableTree`)\cr an `rtable` object.
 #'
 #' @return A list of paths to each row/column within `x`.
 #'
@@ -39,7 +39,7 @@ col_paths <- function(x) {
 
 #' Print row/columm paths summary
 #'
-#' @param x (`TableTree`)\cr an `rtable` object.
+#' @param x (`VTableTree`)\cr an `rtable` object.
 #'
 #' @return A data frame summarizing the row- or column-structure of `x`.
 #'
@@ -355,7 +355,7 @@ setMethod(
 
 #' Summarize table
 #'
-#' @param x (`TableTree`)\cr a table object.
+#' @param x (`VTableTree`)\cr a table object.
 #' @param detail (`string`)\cr either `row` or `subtable`.
 #'
 #' @return No return value. Called for the side-effect of printing a row- or subtable-structure summary of `x`.
@@ -396,7 +396,7 @@ table_structure <- function(x, detail = c("subtable", "row")) {
   )
 }
 
-#' @param obj (`TableTree`)\cr a table object.
+#' @param obj (`VTableTree`)\cr a table object.
 #' @param depth (`numeric(1)`)\cr depth in tree.
 #' @param indent (`numeric(1)`)\cr indent.
 #' @param print_indent (`numeric(1)`)\cr indent for printing.
@@ -433,7 +433,7 @@ is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
 
-#' @param object (`TableTree`)\cr a table object.
+#' @param object (`VTableTree`)\cr a table object.
 #'
 #' @rdname int_methods
 #' @export

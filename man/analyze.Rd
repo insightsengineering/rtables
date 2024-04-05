@@ -32,10 +32,9 @@ other parameters which will be populated by the tabulation framework. See Detail
 
 \item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
-\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
-
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
+\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
@@ -54,9 +53,6 @@ should be visible in the resulting table.}
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
-
-\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
-by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.

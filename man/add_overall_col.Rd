@@ -8,8 +8,6 @@ add_overall_col(lyt, label)
 }
 \arguments{
 \item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
-
-\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.

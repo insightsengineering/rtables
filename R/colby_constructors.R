@@ -9,11 +9,10 @@ NULL
 #' @param x (`SplitVector`)\cr a `SplitVector` object.
 #' @param ... splits or `SplitVector` objects.
 #'
-#' @exportMethod c
-#'
 #' @return Various, but should be considered implementation details.
 #'
 #' @rdname int_methods
+#' @exportMethod c
 setMethod("c", "SplitVector", function(x, ...) {
   arglst <- list(...)
   stopifnot(all(sapply(arglst, is, "Split")))

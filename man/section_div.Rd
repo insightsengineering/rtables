@@ -62,7 +62,7 @@ top_level_section_div(obj) <- value
 \S4method{top_level_section_div}{PreDataTableLayouts}(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{TableTree})\cr table object. This can be of any class that inherits from \code{VTableTree}
+\item{obj}{(\code{VTableTree})\cr table object. This can be of any class that inherits from \code{VTableTree}
 or \code{TableRow}/\code{LabelRow}.}
 
 \item{only_sep_sections}{(\code{flag})\cr defaults to \code{FALSE} for \verb{section_div<-}. Allows

@@ -12,7 +12,7 @@ rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 
 \item{...}{cell values.}
 
-\item{format}{(\code{string} or \code{function})\cr the format label (string) or formatter function to apply to the
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
 \item{indent}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}

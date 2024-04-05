@@ -22,7 +22,7 @@ div_helper <- function(lst, class) {
 #'
 #' The returned HTML object can be immediately used in `shiny` and `rmarkdown`.
 #'
-#' @param x (`TableTree`)\cr a `TableTree` object.
+#' @param x (`VTableTree`)\cr a `TableTree` object.
 #' @param class_table (`character`)\cr class for `table` tag.
 #' @param class_tr (`character`)\cr class for `tr` tag.
 #' @param class_th (`character`)\cr class for `th` tag.

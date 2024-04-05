@@ -41,9 +41,6 @@ where one component is a percent. See Details below.}
 \item{top_level_section_div}{(\code{character(1)})\cr if assigned a single character, the first (top level) split
 or division of the table will be highlighted by a line made of that character. See \link{section_div} for more
 information.}
-
-\item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
-main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.

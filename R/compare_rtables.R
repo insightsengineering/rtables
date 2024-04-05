@@ -1,13 +1,13 @@
 #' Compare two rtables
 #'
 #' Prints a matrix where `.` means cell matches, `X` means cell does
-#' cells do not match, `+` cell (row) is missing, and `-` cell (row)
+#' not match, `+` cell (row) is missing, and `-` cell (row)
 #' should not be there. If `structure` is set to `TRUE`, `C` indicates
 #' column-structure mismatch, `R` indicates row-structure mismatch, and
 #' `S` indicates mismatch in both row and column structure.
 #'
-#' @param object (`TableTree`)\cr `rtable` to test.
-#' @param expected (`TableTree`)\cr expected `rtable`.
+#' @param object (`VTableTree`)\cr `rtable` to test.
+#' @param expected (`VTableTree`)\cr expected `rtable`.
 #' @param tol (`numeric(1)`)\cr tolerance.
 #' @param comp.attr (`flag`)\cr whether to compare cell formats. Other attributes are
 #'   silently ignored.

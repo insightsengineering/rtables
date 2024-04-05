@@ -2,7 +2,7 @@
 #'
 #' Change indentation of all `rrows` in an `rtable`
 #'
-#' @param x (`TableTree`)\cr an `rtable` object.
+#' @param x (`VTableTree`)\cr an `rtable` object.
 #' @param by (`integer`)\cr number to increase indentation of rows by. Can be negative. If final indentation is
 #'   less than 0, the indentation is set to 0.
 #'

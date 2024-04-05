@@ -80,10 +80,9 @@ table for another \code{TableTree}.}
 
 \item{var}{(\code{string})\cr variable name.}
 
-\item{format}{(\code{FormatSpec})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
-or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions.}
-
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via strings (\code{"xx.x"})
+or function. In cases such as \code{analyze} calls, they can be character vectors or lists of functions. See
+\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which

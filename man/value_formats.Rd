@@ -19,9 +19,9 @@ value_formats(obj, default = obj_format(obj))
 \S4method{value_formats}{VTableTree}(obj, default = obj_format(obj))
 }
 \arguments{
-\item{obj}{(\code{TableTree} or \code{TableRow})\cr a table or row object.}
+\item{obj}{(\code{VTableTree} or \code{TableRow})\cr a table or row object.}
 
-\item{default}{(\code{FormatSpec})\cr default format.}
+\item{default}{(\code{string}, \code{function}, or \code{list})\cr default format.}
 }
 \value{
 Matrix (storage mode list) containing the effective format for each cell position in the table

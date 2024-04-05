@@ -7,7 +7,7 @@
 indent(x, by = 1)
 }
 \arguments{
-\item{x}{(\code{TableTree})\cr an \code{rtable} object.}
+\item{x}{(\code{VTableTree})\cr an \code{rtable} object.}
 
 \item{by}{(\code{integer})\cr number to increase indentation of rows by. Can be negative. If final indentation is
 less than 0, the indentation is set to 0.}

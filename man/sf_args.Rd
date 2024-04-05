@@ -3,13 +3,8 @@
 \name{sf_args}
 \alias{sf_args}
 \title{Split function argument conventions}
-\usage{
-sf_args(trim, label, first)
-}
 \arguments{
 \item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
-
-\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
 \item{first}{(\code{flag})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
 last (\code{FALSE}, the default).}
@@ -22,9 +17,9 @@ Split function argument conventions
 }
 \seealso{
 Other conventions: 
-\code{\link{compat_args}()},
-\code{\link{constr_args}()},
-\code{\link{gen_args}()},
-\code{\link{lyt_args}()}
+\code{\link{compat_args}},
+\code{\link{constr_args}},
+\code{\link{gen_args}},
+\code{\link{lyt_args}}
 }
 \concept{conventions}

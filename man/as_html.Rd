@@ -17,7 +17,7 @@ as_html(
 )
 }
 \arguments{
-\item{x}{(\code{TableTree})\cr a \code{TableTree} object.}
+\item{x}{(\code{VTableTree})\cr a \code{TableTree} object.}
 
 \item{width}{(\code{character})\cr a string to indicate the desired width of the table. Common input formats include a
 percentage of the viewer window width (e.g. \code{"100\%"}) or a distance value (e.g. \code{"300px"}). Defaults to \code{NULL}.}

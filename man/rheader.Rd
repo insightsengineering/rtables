@@ -10,7 +10,7 @@ rheader(..., format = "xx", .lst = NULL)
 \item{...}{row specifications, either as character vectors or the output from \code{\link[=rrow]{rrow()}}, \code{\link[=DataRow]{DataRow()}},
 \code{\link[=LabelRow]{LabelRow()}}, etc.}
 
-\item{format}{(\code{string} or \code{function})\cr the format label (string) or formatter function to apply to the
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
 cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
 \item{.lst}{(\code{list})\cr an already-collected list of arguments to be used instead of the elements of \code{...}.

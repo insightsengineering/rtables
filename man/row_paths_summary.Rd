@@ -10,7 +10,7 @@ row_paths_summary(x)
 col_paths_summary(x)
 }
 \arguments{
-\item{x}{(\code{TableTree})\cr an \code{rtable} object.}
+\item{x}{(\code{VTableTree})\cr an \code{rtable} object.}
 }
 \value{
 A data frame summarizing the row- or column-structure of \code{x}.
