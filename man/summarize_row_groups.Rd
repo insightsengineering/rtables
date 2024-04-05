@@ -28,6 +28,8 @@ it can contain up to two \code{"\\\%s"}.}
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
 functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+
 \item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
 or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
 arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}

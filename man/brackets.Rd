@@ -125,6 +125,6 @@ tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
 \seealso{
 \itemize{
 \item \code{\link[=sort_at_path]{sort_at_path()}} to understand sorting.
-\item \code{\link[=summarize_row_groups]{summarize_row_groups()}} and \code{\link[=summarize_col_groups]{summarize_col_groups()}} to understand path structure.
+\item \code{\link[=summarize_row_groups]{summarize_row_groups()}} to understand path structure.
 }
 }

@@ -423,7 +423,7 @@ setMethod(
 #'
 #' @seealso
 #' * [sort_at_path()] to understand sorting.
-#' * [summarize_row_groups()] and [summarize_col_groups()] to understand path structure.
+#' * [summarize_row_groups()] to understand path structure.
 #'
 #' @examples
 #' lyt <- basic_table(

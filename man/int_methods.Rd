@@ -48,6 +48,7 @@
 \alias{table_structure_inner,ElementaryTable-method}
 \alias{table_structure_inner,TableRow-method}
 \alias{table_structure_inner,LabelRow-method}
+\alias{int_methods}
 \alias{nrow,TableRow-method}
 \alias{ncol,TableRow-method}
 \alias{ncol,LabelRow-method}
@@ -1098,7 +1099,7 @@ spl_varnames(object) <- value
 \S4method{show}{VTableTree}(object)
 }
 \arguments{
-\item{x}{(\code{SplitVector})\cr a \code{SplitVector} object.}
+\item{x}{(\code{ANY})\cr the object.}
 
 \item{...}{splits or \code{SplitVector} objects.}
 
@@ -1138,7 +1139,7 @@ not match a formal argument of the tabulation function.}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{obj}{(\code{VTableTree})\cr a table object.}
+\item{obj}{(\code{ANY})\cr the object.}
 
 \item{depth}{(\code{numeric(1)})\cr depth in tree.}
 
@@ -1162,6 +1163,8 @@ underneath analyses, which is not allowed.}
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
 functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{override}{(\code{flag})\cr whether to override attribute.}
 
@@ -1199,9 +1202,8 @@ combination of \code{i} and \code{j}. It is not possible to return a vector of v
 Various, but should be considered implementation details.
 }
 \description{
-Combine \code{SplitVector} objects
-
-Summarize rows
+These are internal methods that are documented only to satisfy \verb{R CMD check}. End users should pay no
+attention to this documentation.
 }
 \examples{
 library(dplyr)

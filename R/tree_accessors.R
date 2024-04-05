@@ -10,6 +10,7 @@
 #' @param obj (`ANY`)\cr the object.
 #'
 #' @name internal_methods
+#' @rdname int_methods
 #' @aliases int_methods
 NULL
 

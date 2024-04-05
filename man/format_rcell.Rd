@@ -22,8 +22,7 @@ apply to \code{x}.}
 
 \item{output}{(\code{string})\cr output type.}
 
-\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing.
-Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
 \item{pr_row_format}{(\code{list})\cr list of default formats coming from the general row.}
 
@@ -36,7 +35,7 @@ values with formats applied. Defaults to \code{FALSE}.}
 Formatted text.
 }
 \description{
-This is a wrapper for \code{\link[=formatters:format_value]{formatters:format_value()}} for use with \code{CellValue} objects
+This is a wrapper for \code{\link[formatters:format_value]{formatters::format_value()}} for use with \code{CellValue} objects
 }
 \examples{
 cll <- CellValue(pi, format = "xx.xxx")

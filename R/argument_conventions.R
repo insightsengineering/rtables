@@ -20,6 +20,7 @@
 #'   (default for non-analyze row splits), `"visible"`, `"topleft"`, and `"default"` (for analyze splits only). For
 #'   `analyze` calls, `"default"` indicates that the variable should be visible if and only if multiple variables are
 #'   analyzed at the same level of nesting.
+#' @param na_str (`string`)\cr string that should be displayed when the value of `x` is missing. Defaults to `"NA"`.
 #' @param obj (`ANY`)\cr the object for the accessor to access or modify.
 #' @param object (`ANY`)\cr the object to modify in place.
 #' @param page_prefix (`string`)\cr prefix to be appended with the split value when forcing pagination between

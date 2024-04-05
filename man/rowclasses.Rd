@@ -77,6 +77,8 @@ or \code{NA_character_} for none (the default). When generated via layouting, th
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
 functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+
 \item{klass}{(\code{character})\cr internal detail.}
 
 \item{footnotes}{(\code{list} or \code{NULL})\cr referential footnotes to be applied at current level. In post-processing,
