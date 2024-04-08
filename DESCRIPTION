@@ -44,6 +44,7 @@ Suggests:
     dplyr (>= 1.0.5),
     flextable (>= 0.8.4),
     knitr (>= 1.42),
+    lifecycle (>= 0.2.0),
     officer (>= 0.5.0),
     r2rtf (>= 0.3.2),
     rmarkdown (>= 2.19),
@@ -58,9 +59,9 @@ VignetteBuilder:
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
-    davidgohel/flextable, yihui/knitr, davidgohel/officer, Merck/r2rtf,
-    rstudio/rmarkdown, r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
-    r-lib/xml2
+    davidgohel/flextable, yihui/knitr, r-lib/lifecycle, davidgohel/officer, 
+    Merck/r2rtf, rstudio/rmarkdown, r-lib/testthat, tidyverse/tibble, 
+    tidyverse/tidyr, r-lib/withr, r-lib/xml2
 Encoding: UTF-8
 Language: en-US
 LazyData: true
@@ -74,7 +75,6 @@ Collate:
     'utils.R'
     'colby_constructors.R'
     'compare_rtables.R'
-    'deprecated.R'
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
@@ -82,6 +82,7 @@ Collate:
     'split_funs.R'
     'make_split_fun.R'
     'summary.R'
+    'package.R'
     'tree_accessors.R'
     'tt_afun_utils.R'
     'tt_compare_tables.R'

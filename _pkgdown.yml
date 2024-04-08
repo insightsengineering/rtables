@@ -177,7 +177,6 @@ reference:
     - row_paths
     - row_paths_summary
     - table_structure
-    - summarize_rows
     - table_shell
     - formatters::make_row_df
     - make_col_df
@@ -208,7 +207,6 @@ reference:
     contents:
     - prune_table
     - all_zero_or_na
-    - trim_zero_rows
     - trim_rows
     - sort_at_path
     - cont_n_allcols
@@ -288,7 +286,7 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: Result Dataframe Functions
+  - title: Result Data Frame Functions
     desc: Functions for generating result data frames from rtables TableTree objects
     contents:
     - as_result_df

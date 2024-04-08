@@ -1,38 +1,37 @@
 #' @importFrom tools file_ext
 NULL
 
-#' Create Enriched flat value table with paths
+#' Create enriched flat value table with paths
 #'
-#' @description
-#' This function creates a flat tabular file of cell values and
-#' corresponding paths via [path_enriched_df()]. I then
-#' writes that data.frame out as a `tsv` file.
+#' This function creates a flat tabular file of cell values and corresponding paths via [path_enriched_df()]. It then
+#' writes that data frame out as a `tsv` file.
 #'
-#' By default (i.e. when \code{value_func} is not specified,
-#' List columns where at least one value has length > 1 are collapsed
-#' to character vectors by collapsing the list element with \code{"|"}.
+#' By default (i.e. when `value_func` is not specified, list columns where at least one value has length > 1 are
+#' collapsed to character vectors by collapsing the list element with `"|"`.
 #'
-#' @note There is currently no round-trip capability for this type of export.
-#' You can read values exported this way back in via \code{import_from_tsv}
-#' but you will receive only the data.frame version back, NOT a \code{TableTree}.
+#' @note
+#' There is currently no round-trip capability for this type of export. You can read values exported this way back in
+#' via `import_from_tsv` but you will receive only the `data.frame` version back, NOT a `TableTree`.
 #'
 #' @inheritParams gen_args
-#' @param file character(1). The path of the file to written to or read from.
 #' @inheritParams data.frame_export
+#' @param file (`string`)\cr the path of the file to written to or read from.
 #'
-#' @return \code{NULL} silently for \code{export_as_tsv}, a data.frame with
-#' re-constituted list values for \code{export_as_tsv}.
+#' @return
+#' * `export_as_tsv` returns `NULL` silently.
+#' * `import_from_tsv` returns a `data.frame` with re-constituted list values.
 #'
 #' @seealso [path_enriched_df()] for the underlying function that does the work.
 #'
-#' @rdname tsv_io
 #' @importFrom utils write.table read.table
+#' @rdname tsv_io
 #' @export
 export_as_tsv <- function(tt, file = NULL, path_fun = collapse_path,
                           value_fun = collapse_values) {
   df <- path_enriched_df(tt, path_fun = path_fun, value_fun = value_fun)
   write.table(df, file, sep = "\t")
 }
+
 #' @rdname tsv_io
 #' @export
 import_from_tsv <- function(file) {
@@ -49,7 +48,7 @@ import_from_tsv <- function(file) {
   ))
 }
 
-### Migrated to formatters.
+### Migrated to formatters ----
 
 #' @importFrom formatters export_as_txt
 #'
@@ -67,23 +66,21 @@ import_from_tsv <- function(file) {
 #' export_as_txt(tbl, file = tf)
 #' system2("cat", tf)
 #' }
+#'
 #' @export
 formatters::export_as_txt
 
 # data.frame output ------------------------------------------------------------
 
-#' Generate a Result Data Frame
+#' Generate a result data frame
 #'
-#' @description
-#' Collection of utilities to extract `data.frame` from `TableTree` objects.
+#' Collection of utilities to extract `data.frame` objects from `TableTree` objects.
 #'
 #' @inheritParams gen_args
-#' @param spec character(1). The specification to use to
-#'   extract the result data frame. See details
-#' @param simplify logical(1). If \code{TRUE}, the result data frame will have only visible
-#'   labels and result columns.
-#' @param ... Passed to spec-specific result data frame conversion function. Currently it can be
-#'   one or more of the following parameters (valid only for `v0_experimental` spec for now):
+#' @param spec (`string`)\cr the specification to use to extract the result data frame. See Details below.
+#' @param simplify (`flag`)\cr whether the result data frame should only have labels and result columns visible.
+#' @param ... additional arguments passed to spec-specific result data frame conversion function. Currently it can be
+#'   one or more of the following parameters (valid only for `v0_experimental` spec. for now):
 #'   - `expand_colnames`: when `TRUE`, the result data frame will have expanded column names above the usual
 #'     output. This is useful when the result data frame is used for further processing.
 #'   - `simplify`: when `TRUE`, the result data frame will have only visible labels and result columns.
@@ -101,7 +98,10 @@ formatters::export_as_txt
 #' @details `as_result_df()`: Result data frame specifications may differ in the exact information
 #' they include and the form in which they represent it. Specifications whose names end in "_experimental"
 #' are subject to change without notice, but specifications without the "_experimental"
-#' suffix will remain available \emph{including any bugs in their construction} indefinitely.
+#' suffix will remain available *including any bugs in their construction* indefinitely.
+#'
+#' @return
+#' * `as_result_df` returns a result `data.frame`.
 #'
 #' @seealso [df_to_tt()] when using `as_is = TRUE` and [make_row_df()] to have a comprehensive view of the
 #'   hierarchical structure of the rows.
@@ -163,9 +163,10 @@ as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
 #   ret
 # }
 
-#' @describeIn data.frame_export list of functions that extract result data frames from \code{TableTree}s.
+#' @describeIn data.frame_export A list of functions that extract result data frames from `TableTree`s.
 #'
-#' @return `result_df_specs()`: returns a named list of result data frame extraction functions by "specification".
+#' @return
+#' * `result_df_specs()` returns a named list of result data frame extraction functions by "specification".
 #'
 #' @examples
 #' result_df_specs()
@@ -479,18 +480,16 @@ handle_rdf_row <- function(rdfrow, maxlen) {
   }
 }
 
-#' @describeIn data.frame_export transform `TableTree` object to Path-Enriched `data.frame`.
+#' @describeIn data.frame_export Transform a `TableTree` object to a path-enriched `data.frame`.
 #'
-#' @param path_fun function. Function to transform paths into single-string
-#'   row/column names.
-#' @param value_fun function. Function to transform cell values into cells of
-#'   the data.frame. Defaults to \code{collapse_values} which creates strings
-#'   where multi-valued cells are collapsed together, separated by \code{|}.
+#' @param path_fun (`function`)\cr function to transform paths into single-string row/column names.
+#' @param value_fun (`function`)\cr function to transform cell values into cells of a `data.frame`. Defaults to
+#'   `collapse_values`, which creates strings where multi-valued cells are collapsed together, separated by `|`.
 #'
-#' @return `path_enriched_df()`: returns a data frame of \code{tt}'s cell values (processed by
-#'   \code{value_fun}, with columns named by the full column paths (processed by
-#'   \code{path_fun} and an additional \code{row_path} column with the row paths
-#'   (processed by by \code{path_fun}).
+#' @return
+#' * `path_enriched_df()` returns a `data.frame` of `tt`'s cell values (processed by `value_fun`, with columns named by
+#'   the full column paths (processed by `path_fun` and an additional `row_path` column with the row paths (processed
+#'   by `path_fun`).
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -531,11 +530,9 @@ collapse_values <- function(colvals) {
   vapply(colvals, paste, "", collapse = .collapse_char)
 }
 
-
 # pdf output -------------------------------------------------------------------
-#' Export as PDF
 
-### Migrated to formatters.
+### Export as PDF - migrated to formatters
 
 #' @importFrom formatters export_as_pdf
 #'
@@ -552,6 +549,7 @@ collapse_values <- function(colvals) {
 #' tf <- tempfile(fileext = ".pdf")
 #' export_as_pdf(tbl, file = tf, lpp = 8)
 #' }
+#'
 #' @export
 formatters::export_as_pdf
 
@@ -569,31 +567,29 @@ formatters::export_as_pdf
     .tab_to_colpath_set(fulltab)
   )
 }
+
 # Flextable and docx -----------------------------------------------------------
+
 #' Export as word document
 #'
-#' @description
 #' From a table, produce a self-contained word document or attach it to a template word
-#' file (`template_file`). This function is based on [tt_to_flextable()] transformer and
-#' `officer` package.
+#' file (`template_file`). This function is based on the [tt_to_flextable()] transformer and
+#' the `officer` package.
 #'
 #' @inheritParams gen_args
-#' @param file character(1). String that indicates the final file output. It needs to have `.docx`
-#'   extension.
-#' @param doc_metadata list of character(1)s. Any value that can be used as metadata by
-#'   `?officer::set_doc_properties`. Important text values are `title, subject, creator, description`
+#' @param file (`string`)\cr string that indicates the final file output. Must have `.docx` extension.
+#' @param doc_metadata (`list` of `string`s)\cr any value that can be used as metadata by
+#'   `?officer::set_doc_properties`. Important text values are `title`, `subject`, `creator`, and `description`,
 #'   while `created` is a date object.
 #' @inheritParams tt_to_flextable
-#' @param template_file character(1). Template file that `officer` will use as a starting
-#'   point for the final document. It will attach the table and use the defaults defined in
-#'   the template file. Output will be doc `file` nonetheless.
-#' @param section_properties `officer::prop_section` object. Here you can set margins and page
-#'   size.
+#' @param template_file (`string`)\cr template file that `officer` will use as a starting point for the final
+#'   document. Document attaches the table and uses the defaults defined in the template file.
+#' @param section_properties (`officer::prop_section`)\cr an [officer::prop_section()] object which sets margins and
+#'   page size.
 #'
-#' @note `export_as_docx()` does not have many options available. We suggest, if you need
-#'   specific formats and details to use [tt_to_flextable()] first and then `export_as_docx`.
-#'   Only `title_as_header` and `footer_as_text` need to be specified again if changed in
-#'   `tt_to_flextable()`.
+#' @note `export_as_docx()` has few customization options available. If you require specific formats and details,
+#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `title_as_header` and
+#'   `footer_as_text` parameters must be re-specified if the table is changed first using [tt_to_flextable()].
 #'
 #' @seealso [tt_to_flextable()]
 #'
@@ -609,7 +605,7 @@ formatters::export_as_pdf
 #' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
 #' }
-#' @name export_as_docx
+#'
 #' @export
 export_as_docx <- function(tt,
                            file,
@@ -696,7 +692,7 @@ add_text_par <- function(doc, chr_v, text_format) {
   doc
 }
 
-#' @describeIn export_as_docx helper function that defines standard portrait properties for tables.
+#' @describeIn export_as_docx Helper function that defines standard portrait properties for tables.
 #' @export
 section_properties_portrait <- function() {
   officer::prop_section(
@@ -709,7 +705,7 @@ section_properties_portrait <- function() {
   )
 }
 
-#' @describeIn export_as_docx helper function that defines standard landscape properties for tables.
+#' @describeIn export_as_docx Helper function that defines standard landscape properties for tables.
 #' @export
 section_properties_landscape <- function() {
   officer::prop_section(
@@ -722,54 +718,47 @@ section_properties_landscape <- function() {
   )
 }
 
-#' @describeIn export_as_docx helper function that defines standard portrait margins for tables.
+#' @describeIn export_as_docx Helper function that defines standard portrait margins for tables.
 #' @export
 margins_potrait <- function() {
   officer::page_mar(bottom = 0.98, top = 0.95, left = 1.5, right = 1, gutter = 0)
 }
-#' @describeIn export_as_docx helper function that defines standard landscape margins for tables.
+#' @describeIn export_as_docx Helper function that defines standard landscape margins for tables.
 #' @export
 margins_landscape <- function() {
   officer::page_mar(bottom = 1, top = 1.5, left = 0.98, right = 0.95, gutter = 0)
 }
 
-#' Create a `FlexTable` from an `rtables` table
+#' Create a `flextable` from an `rtables` table
 #'
-#' @description
 #' Principally used for export ([export_as_docx()]), this function produces a `flextable`
 #' from an `rtables` table. If `theme = NULL`, `rtables`-like style will be used. Otherwise,
 #' [theme_docx_default()] will produce a `.docx`-friendly table.
 #'
 #' @inheritParams gen_args
-#' @param theme function(1). Defaults to `theme_docx_default(tt)`. It expects a
-#'   a theme function that is designed internally as a function of a `flextable` object
-#'   and changes its layout and style. If set to `NULL`, it will produce a table similar
-#'   to `rtables` default.
-#' @param border `officer` border object. Defaults to `officer::fp_border(width = 0.5)`.
-#' @param indent_size integer(1). If `NULL`, the default indent size of the table (see
-#'   [matrix_form()] `indent_size`) is used. To work with `docx`, any size is multiplied
-#'   by 2 mm (5.67 pt) as default.
-#' @param titles_as_header logical(1). Defaults to `TRUE` for [tt_to_flextable()], so the
-#'   table is self-contained as it makes additional header rows for [main_title()]
-#'   string and [subtitles()] character vector (one per element). `FALSE` is suggested
-#'   for [export_as_docx()]. This adds titles and subtitles as a text paragraph above
-#'   the table. Same style is applied.
-#' @param footers_as_text logical(1). Defaults to `FALSE` for [tt_to_flextable()], so
-#'   the table is self-contained with the `flextable` definition of footnotes. `TRUE` is
-#'   used for [export_as_docx()] to add the footers as a new paragraph after the table.
-#'   Same style is applied, but with a smaller font.
-#' @param counts_in_newline logical(1). Defaults to `FALSE`. In `rtables` text printing
-#'   ([formatters::toString()]), the column counts, i.e. `(N=xx)`, is always on a new line.
-#'   We noticed that for `docx` exports could be necessary to have it on the same line.
-#' @param paginate logical(1). If you need `.docx` export and you use
-#'   `export_as_docx`, we suggest relying on `word` pagination system. Cooperation
-#'   between the two mechanisms is not guaranteed. This option splits `tt` in different
-#'   "pages" as multiple `flextables`. Defaults to `FALSE`.
 #' @inheritParams paginate_table
-#' @param total_width numeric(1). Total width in inches for the resulting
-#'   `flextable(s)`. Defaults to 10.
+#' @param theme (`function` or `NULL`)\cr A theme function that is designed internally as a function of a `flextable`
+#'   object to change its layout and style. If `NULL`, it will produce a table similar to `rtables` default. Defaults
+#'   to `theme_docx_default(tt)`.
+#' @param border (`officer` border object)\cr defaults to `officer::fp_border(width = 0.5)`.
+#' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [matrix_form()]
+#'   `indent_size`) is used. To work with `docx`, any size is multiplied by 2 mm (5.67 pt) by default.
+#' @param titles_as_header (`flag`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
+#'   as it makes additional header rows for [main_title()] string and [subtitles()] character vector (one per element).
+#'   `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text paragraph above the table.
+#'   The same style is applied.
+#' @param footers_as_text (`flag`)\cr defaults to `FALSE` for [tt_to_flextable()], so the table is self-contained with
+#'   the `flextable` definition of footnotes. `TRUE` is used for [export_as_docx()] to add the footers as a new
+#'   paragraph after the table. The same style is applied, but with a smaller font.
+#' @param counts_in_newline (`flag`)\cr defaults to `FALSE`. In `rtables` text printing ([formatters::toString()]),
+#'   the column counts, i.e. `(N=xx)`, are always on a new line. For `docx` exports it could be necessary to print it
+#'   on the same line.
+#' @param paginate (`flag`)\cr when exporting `.docx` documents using `export_as_docx`, we suggest relying on the
+#'   Microsoft Word pagination system. If `TRUE`, this option splits `tt` into different "pages" as multiple
+#'   `flextables`. Cooperation between the two mechanisms is not guaranteed. Defaults to `FALSE`.
+#' @param total_width (`numeric(1)`)\cr total width (in inches) for the resulting flextable(s). Defaults to 10.
 #'
-#' @return a `flextable` object.
+#' @return A `flextable` object.
 #'
 #' @seealso [export_as_docx()]
 #'
@@ -796,7 +785,6 @@ margins_landscape <- function() {
 #'
 #' tt_to_flextable(tbl, theme = theme_docx_default(tbl, font_size = 7))
 #'
-#' @name tt_to_flextable
 #' @export
 tt_to_flextable <- function(tt,
                             theme = theme_docx_default(tt),
@@ -978,17 +966,16 @@ tt_to_flextable <- function(tt,
   flx
 }
 
-#' @describeIn tt_to_flextable main theme function for [export_as_docx()]
-#' @param font character(1). Defaults to `"Arial"`. If the font is not available, `flextable`
-#'   default is used.
-#' @param font_size integer(1). Positive integerish value that defaults to 9.
-#' @param bold character vector. It can be any combination of `c("header", "content_rows",
-#'   "label_rows")`. The first one renders all column names bold (not `topleft` content).
-#'   Second and third option use [rtables::make_row_df()] to render content or/and label
-#'   rows as bold.
-#' @param bold_manual named list. List of indexes lists. See example for needed structure.
-#'   Accepted groupings/names are `c("header", "body")`.
+#' @describeIn tt_to_flextable Main theme function for [export_as_docx()]
+#'
 #' @inheritParams export_as_docx
+#' @param font (`string`)\cr defaults to `"Arial"`. If the font is not available, `flextable` default is used.
+#' @param font_size (`integer(1)`)\cr font size. Defaults to 9.
+#' @param bold (`character`)\cr parts of the table text that should be in bold. Can be any combination of
+#'   `c("header", "content_rows", "label_rows")`. The first one renders all column names bold (not `topleft` content).
+#'   The second and third option use [rtables::make_row_df()] to render content or/and label rows as bold.
+#' @param bold_manual (named `list` or `NULL`)\cr list of index lists. See example for needed structure. Accepted
+#'   groupings/names are `c("header", "body")`.
 #'
 #' @seealso [export_as_docx()]
 #'
@@ -1101,11 +1088,13 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
     flx
   }
 }
+
 # Padding helper functions to transform mm to pt and viceversa
 # # General note for word: 1pt -> 0.3527777778mm -> 0.013888888888889"
 word_inch_to_pt <- function(inch) { # nocov
   inch / 0.013888888888889 # nocov
 }
+
 word_mm_to_pt <- function(mm) {
   mm / 0.3527777778
 }

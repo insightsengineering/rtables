@@ -17,67 +17,55 @@ basic_table(
 )
 }
 \arguments{
-\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
-Ignored for subtables.}
+\item{title}{(\code{string})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
-every element is printed in a separate line. Ignored for subtables.}
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
+printed on a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials
-(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
-lines.}
+\item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}), where every element is printed on a separate line.}
 
-\item{prov_footer}{character. Provenance-related global footer materials
-(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
-Generally should not be modified by hand.}
+\item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
-\item{show_colcounts}{logical(1). Should column counts be displayed in the
-resulting table when this layout is applied to data}
+\item{show_colcounts}{(\code{flag})\cr whether column counts should be displayed in the resulting table when this
+layout is applied to data.}
 
-\item{colcount_format}{character(1). Format for use when displaying the
-column counts. Must be 1d, or 2d where one component is a percent. See
-details.}
+\item{colcount_format}{(\code{string})\cr format for use when displaying the column counts. Must be 1d, or 2d
+where one component is a percent. See Details below.}
 
-\item{header_section_div}{character(1). String which will be used to divide the header
-from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
-Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
-tables that need a divider between them.}
+\item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
+\code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of
+\code{\link[=section_div]{section_div()}} when concatenating tables that require a divider between them.}
 
-\item{top_level_section_div}{character(1). If assigned to a single character,
-the first (top level) split or division of the table will be highlighted by a line made of that character.
-See \link{section_div} for more information.}
+\item{top_level_section_div}{(\code{character(1)})\cr if assigned a single character, the first (top level) split
+or division of the table will be highlighted by a line made of that character. See \link{section_div} for more
+information.}
 
-\item{inset}{numeric(1). Number of spaces to inset the table header, table
-body, referential footnotes, and main_footer, as compared to alignment
-of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+\item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
+main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 Every layout must start with a basic table.
 }
 \details{
-\code{colcount_format} is ignored if \code{show_colcounts} is \code{FALSE} (the default).
-When \code{show_colcounts} is \code{TRUE}, and \code{colcount_format} is 2-dimensional with
-a percent component, the value component for the percent is always populated
-with \code{1} (i.e. 100\%). 1d formats are used to render the counts exactly as they
-normally would be, while 2d formats which don't include a percent, and all 3d
-formats result in an error. Formats in the form of functions are not supported for
-\code{colcount} format. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for
-the list of valid format labels to select from.
+\code{colcount_format} is ignored if \code{show_colcounts} is \code{FALSE} (the default). When \code{show_colcounts} is \code{TRUE},
+and \code{colcount_format} is 2-dimensional with a percent component, the value component for the percent is always
+populated with \code{1} (i.e. 100\%). 1d formats are used to render the counts exactly as they normally would be,
+while 2d formats which don't include a percent, and all 3d formats result in an error. Formats in the form of
+functions are not supported for \code{colcount} format. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for the list
+of valid format labels to select from.
 }
 \note{
 \itemize{
-\item Because percent components in \code{colcount_format} are \emph{always}
-populated with the value 1, we can get arguably strange results, such as
-that individual arm columns and a combined "all patients" column all
-list "100\%" as their percentage, even though the individual arm columns
-represent strict subsets of the all patients column.
-\item Note that subtitles (\code{\link[=subtitles]{subtitles()}}) and footers (\code{\link[=main_footer]{main_footer()}} and \code{\link[=prov_footer]{prov_footer()}})
-that spans more than one line can be supplied as a character vector to maintain
-indentation on multiple lines.
+\item Because percent components in \code{colcount_format} are \emph{always} populated with the value 1, we can get arguably
+strange results, such as that individual arm columns and a combined "all patients" column all list "100\%" as
+their percentage, even though the individual arm columns represent strict subsets of the "all patients" column.
+\item Note that subtitles (\code{\link[=subtitles]{subtitles()}}) and footers (\code{\link[=main_footer]{main_footer()}} and \code{\link[=prov_footer]{prov_footer()}}) that span more than one
+line can be supplied as a character vector to maintain indentation on multiple lines.
 }
 }
 \examples{

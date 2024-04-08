@@ -1,26 +1,25 @@
 #' Compare two rtables
 #'
-#' Prints a matrix where \code{.} means cell matches, \code{X} means cell does
-#' cells do not match, \code{+} cell (row) is missing, and \code{-} cell (row)
-#' should not be there. If `structure` is set to `TRUE`, \code{C} indicates
-#' columnar structure mismatch, \code{R} indicates row-structure mismatch, and
-#' \code{S} indicates mismatch in both row and column structure.
+#' Prints a matrix where `.` means cell matches, `X` means cell does
+#' not match, `+` cell (row) is missing, and `-` cell (row)
+#' should not be there. If `structure` is set to `TRUE`, `C` indicates
+#' column-structure mismatch, `R` indicates row-structure mismatch, and
+#' `S` indicates mismatch in both row and column structure.
 #'
-#' @param object `rtable` to test
-#' @param expected `rtable` expected
-#' @param tol numerical tolerance
-#' @param comp.attr boolean. Compare format of cells. Other attributes are
-#'  silently ignored.
-#' @param structure boolean. Should structure (in the form of column and row
-#'  paths to cells) be compared. Currently defaults to `FALSE`, but this is
-#'  subject to change in future versions.
+#' @param object (`VTableTree`)\cr `rtable` to test.
+#' @param expected (`VTableTree`)\cr expected `rtable`.
+#' @param tol (`numeric(1)`)\cr tolerance.
+#' @param comp.attr (`flag`)\cr whether to compare cell formats. Other attributes are
+#'   silently ignored.
+#' @param structure (`flag`)\cr whether structures (in the form of column and row
+#'   paths to cells) should be compared. Currently defaults to `FALSE`, but this is
+#'   subject to change in future versions.
 #'
-#' @note In its current form \code{compare_rtables} does not take structure into
-#' account, only row and cell position.
+#' @note In its current form, `compare_rtables` does not take structure into
+#'   account, only row and cell position.
 #'
-#' @return a matrix of class \code{"rtables_diff"} representing the differences
-#'  between \code{object} and \code{expected} as described above.
-#' @export
+#' @return A matrix of class `rtables_diff` representing the differences
+#'  between `object` and `expected` as described above.
 #'
 #' @examples
 #' t1 <- rtable(header = c("A", "B"), format = "xx", rrow("row 1", 1, 2))
@@ -84,6 +83,8 @@
 #' )
 #'
 #' compare_rtables(object, expected)
+#'
+#' @export
 compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
                             structure = FALSE) {
   # if (identical(object, expected)) return(invisible(TRUE))
@@ -149,7 +150,6 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
 
   ## from here dimensions match!
 
-
   orows <- cell_values(object, omit_labrows = FALSE)
   erows <- cell_values(expected, omit_labrows = FALSE)
   if (nrow(object) == 1) {
@@ -198,8 +198,6 @@ compare_rtables <- function(object, expected, tol = 0.1, comp.attr = TRUE,
   class(X) <- c("rtables_diff", class(X))
   X
 }
-
-
 
 ## for (i in 1:dim(X)[1]) {
 ##   for (j in 1:dim(X)[2]) {
@@ -250,6 +248,7 @@ compare_value <- function(x, y, tol) {
     "X"
   }
 }
+
 compare_rrows <- function(row1, row2, tol, ncol) {
   if (length(row1) == ncol && length(row2) == ncol) {
     mapply(compare_value, x = row1, y = row2, tol = tol, USE.NAMES = FALSE)

@@ -19,14 +19,16 @@ horizontal_sep(obj) <- value
 \S4method{horizontal_sep}{TableRow}(obj) <- value
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{value}{character(1). String to use as new header/body separator.}
+\item{value}{(\code{string})\cr string to use as new header/body separator.}
 }
 \value{
-for \code{horizontal_sep} the string acting as the header separator.
-for \verb{horizontal_sep<-}, the \code{obj}, with the new header separator
-applied recursively to it and all its subtables.
+\itemize{
+\item \code{horizontal_sep} returns the string acting as the header separator.
+\item \verb{horizontal_sep<-} returns \code{obj}, with the new header separator applied recursively to it and all its
+subtables.
+}
 }
 \description{
 Access or recursively set header-body separator for tables

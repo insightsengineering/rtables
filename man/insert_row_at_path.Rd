@@ -4,7 +4,7 @@
 \alias{insert_row_at_path}
 \alias{insert_row_at_path,VTableTree,DataRow-method}
 \alias{insert_row_at_path,VTableTree,ANY-method}
-\title{Insert Row at Path}
+\title{Insert row at path}
 \usage{
 insert_row_at_path(tt, path, value, after = FALSE)
 
@@ -13,21 +13,19 @@ insert_row_at_path(tt, path, value, after = FALSE)
 \S4method{insert_row_at_path}{VTableTree,ANY}(tt, path, value)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
-\item{value}{The new value}
+\item{value}{(\code{ANY})\cr the new value.}
 
-\item{after}{logical(1). Should \code{value} be added as a row directly before (\code{FALSE},
-the default) or after (\code{TRUE}) the row specified by \code{path}.}
+\item{after}{(\code{flag})\cr whether \code{value} should be added as a row directly before (\code{FALSE}, the default) or after
+(\code{TRUE}) the row specified by \code{path}.}
 }
 \description{
-Insert a row into an existing table directly before or directly after an existing
-data (i.e., non-content and non-label) row, specified by its path.
+Insert a row into an existing table directly before or directly after an existing data (i.e., non-content and
+non-label) row, specified by its path.
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -47,7 +45,8 @@ tbl3 <- insert_row_at_path(tbl2, c("COUNTRY", "CHN", "AGE", "Mean"),
   after = TRUE
 )
 tbl3
+
 }
 \seealso{
-\code{\link[=DataRow]{DataRow()}} \code{\link[=rrow]{rrow()}}
+\code{\link[=DataRow]{DataRow()}}, \code{\link[=rrow]{rrow()}}
 }

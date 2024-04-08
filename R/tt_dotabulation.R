@@ -67,9 +67,9 @@ match_extra_args <- function(f,
 }
 
 #' @noRd
-#' @return a RowsVerticalSection object representing the k x 1 section of the
-#'   table being generated, with k the number of rows the analysis function
-#'   generates
+#' @return A `RowsVerticalSection` object representing the `k x 1` section of the
+#'   table being generated, with `k` the number of rows the analysis function
+#'   generates.
 gen_onerv <- function(csub, col, count, cextr, cpath,
                       dfpart, func, totcount, splextra,
                       all_col_exprs,
@@ -156,7 +156,6 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
 
   args <- c(args, exargs)
 
-
   val <- do.call(func, args)
   if (!is(val, "RowsVerticalSection")) {
     if (!is(val, "list")) {
@@ -173,17 +172,14 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
   ret
 }
 
-
 strip_multivar_suffix <- function(x) {
   gsub("\\._\\[\\[[0-9]\\]\\]_\\.$", "", x)
 }
 
-
 ## Generate all values (one for each column) for one or more rows
 ## by calling func once per column (as defined by cinfo)
 #' @noRd
-#' @return A list of m RowsVerticalSection objects, one for each
-#' (leaf) column in the table.
+#' @return A list of `m` `RowsVerticalSection` objects, one for each (leaf) column in the table.
 gen_rowvalues <- function(dfpart,
                           datcol,
                           cinfo,
@@ -204,7 +200,6 @@ gen_rowvalues <- function(dfpart,
 
   colleaves <- collect_leaves(cinfo@tree_layout)
 
-
   gotflist <- is.list(func)
 
   ## one set of named args to be applied to all columns
@@ -213,7 +208,6 @@ gen_rowvalues <- function(dfpart,
   } else {
     length(splextra) <- ncol(cinfo)
   }
-
 
   if (!gotflist) {
     func <- list(func)
@@ -299,19 +293,16 @@ gen_rowvalues <- function(dfpart,
     SIMPLIFY = FALSE
   )
 
-
   names(rawvals) <- names(colexprs)
   rawvals
 }
-
-
 
 .strip_lst_rvals <- function(lst) {
   lapply(lst, rawvalues)
 }
 
 #' @noRd
-#' @return a list of table rows, even when only one is generated
+#' @return A list of table rows, even when only one is generated.
 .make_tablerows <- function(dfpart,
                             alt_dfpart,
                             func,
@@ -422,8 +413,6 @@ gen_rowvalues <- function(dfpart,
     }
     formatvec <- rep(format, length.out = ncrows)
   }
-
-
 
   trows <- lapply(1:ncrows, function(i) {
     rowvals <- lapply(unwrapped_vals, function(colvals) {
@@ -547,7 +536,6 @@ gen_rowvalues <- function(dfpart,
   ctab
 }
 
-
 .make_analyzed_tab <- function(df,
                                alt_df,
                                spl,
@@ -607,11 +595,10 @@ gen_rowvalues <- function(dfpart,
   ret
 }
 
-#' @noRd
-#' @param \dots ALL arguments to recurse_applysplit, methods may only use some
-#'   of them.
-#' @return list of children to place at this level
+#' @param ... all arguments to `recurse_applysplit`, methods may only use some of them.
+#' @return A `list` of children to place at this level.
 #'
+#' @noRd
 setGeneric(".make_split_kids", function(spl, have_controws, make_lrow, ...) {
   standardGeneric(".make_split_kids")
 })
@@ -733,7 +720,6 @@ setMethod(
   }
 )
 
-
 setMethod(
   ".make_split_kids", "Split",
   function(spl,
@@ -761,7 +747,6 @@ setMethod(
       nms <- as.character(nms)
     }
 
-    ##
     ## Get new baseline values
     ##
     ## XXX this is a lot of data churn, if it proves too slow
@@ -1005,7 +990,6 @@ context_df_row <- function(split = character(),
   ret
 }
 
-
 recursive_applysplit <- function(df,
                                  lvl = 0L,
                                  alt_df,
@@ -1141,44 +1125,35 @@ recursive_applysplit <- function(df,
   ret
 }
 
-
-
 #' Create a table from a layout and data
 #'
-#' Layouts are used to describe a table pre-data. `build_table` is used to
-#' create a table using a layout and a dataset.
+#' Layouts are used to describe a table pre-data. `build_table` is used to create a table
+#' using a layout and a dataset.
 #'
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param col_counts numeric (or `NULL`). Deprecated. If non-null, column counts
-#'   which override those calculated automatically during tabulation. Must
-#'   specify "counts" for \emph{all} resulting columns if non-NULL. \code{NA}
-#'   elements will be replaced with the automatically calculated counts.
-#' @param col_total integer(1). The total observations across all columns.
-#'   Defaults to \code{nrow(df)}.
-#' @param \dots currently ignored.
+#' @param col_counts (`numeric` or `NULL`)\cr `r lifecycle::badge("deprecated")` if non-`NULL`, column counts
+#'   which override those calculated automatically during tabulation. Must specify "counts" for *all*
+#'   resulting columns if non-`NULL`. `NA` elements will be replaced with the automatically calculated counts.
+#' @param col_total (`integer(1)`)\cr the total observations across all columns. Defaults to `nrow(df)`.
+#' @param ... ignored.
 #'
 #' @details
-#' When \code{alt_counts_df} is specified, column counts are calculated by
-#' applying the exact column subsetting expressions determined when applying
-#' column splitting to the main data (\code{df}) to \code{alt_counts_df} and
+#' When `alt_counts_df` is specified, column counts are calculated by applying the exact column subsetting
+#' expressions determined when applying column splitting to the main data (`df`) to `alt_counts_df` and
 #' counting the observations in each resulting subset.
 #'
-#' In particular, this means that in the case of splitting based on cuts of the
-#' data, any dynamic cuts will have been calculated based on \code{df} and
-#' simply re-used for the count calculation.
+#' In particular, this means that in the case of splitting based on cuts of the data, any dynamic cuts will have
+#' been calculated based on `df` and simply re-used for the count calculation.
 #'
-#' @note When overriding the column counts or totals care must be taken that,
-#'   e.g., `length()` or `nrow()` are not called within tabulation functions,
-#'   because those will NOT give the overridden counts. Writing/using tabulation
-#'   functions which accept \code{.N_col} and \code{.N_total} or do not rely on
-#'   column counts at all (even implicitly) is the only way to ensure overridden
-#'   counts are fully respected.
+#' @note
+#' When overriding the column counts or totals care must be taken that, e.g., `length()` or `nrow()` are not called
+#' within tabulation functions, because those will NOT give the overridden counts. Writing/using tabulation
+#' functions which accept `.N_col` and `.N_total` or do not rely on column counts at all (even implicitly) is the
+#' only way to ensure overridden counts are fully respected.
 #'
-#' @return A \code{TableTree} or \code{ElementaryTable} object representing the
-#'   table created by performing the tabulations declared in \code{lyt} to the
-#'   data \code{df}.
-#' @author Gabriel Becker
+#' @return A `TableTree` or `ElementaryTable` object representing the table created by performing the tabulations
+#'   declared in `lyt` to the data `df`.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -1189,7 +1164,6 @@ recursive_applysplit <- function(df,
 #'       "range" = diff(range(x))
 #'     )
 #'   })
-#'
 #' lyt
 #'
 #' tbl <- build_table(lyt, iris)
@@ -1232,6 +1206,7 @@ recursive_applysplit <- function(df,
 #' tbl6 <- build_table(lyt3, DM, col_counts = 1:3)
 #' tbl6
 #'
+#' @author Gabriel Becker
 #' @export
 build_table <- function(lyt, df,
                         alt_counts_df = NULL,
@@ -1366,11 +1341,9 @@ build_table <- function(lyt, df,
     )
   }
 
-
   ## This seems to be unneeded, not clear what 'top_left' check it refers to
   ## but both top_left taller than column headers and very long topleft are now
   ## allowed, so this is just wasted computation.
-
 
   ## ## this is where the top_left check lives right now. refactor later maybe
   ## ## but now just call it so the error gets thrown when I want it to
@@ -1576,7 +1549,6 @@ setMethod(
   }
 )
 
-
 splitvec_to_coltree <- function(df, splvec, pos = NULL,
                                 lvl = 1L, label = "",
                                 spl_context = context_df_row(cinfo = NULL)) {
@@ -1648,6 +1620,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
 ## labelrows should be visible for ElementaryTables
 ## generatead from analyzing a single variable
 setGeneric("fix_analyze_vis", function(lyt) standardGeneric("fix_analyze_vis"))
+
 setMethod(
   "fix_analyze_vis", "PreDataTableLayouts",
   function(lyt) {
@@ -1655,6 +1628,7 @@ setMethod(
     lyt
   }
 )
+
 setMethod(
   "fix_analyze_vis", "PreDataRowLayout",
   function(lyt) {
@@ -1700,6 +1674,7 @@ setMethod(
 )
 
 # check_afun_cfun_params ----
+
 # This checks if the input params are used anywhere in cfun/afun
 setGeneric("check_afun_cfun_params", function(lyt, params) {
   standardGeneric("check_afun_cfun_params")
@@ -1759,7 +1734,8 @@ setMethod(
   }
 )
 
-# Helper fnc ----
+# Helper functions ----
+
 count <- function(df, ...) NROW(df)
 
 guess_format <- function(val) {
@@ -1842,58 +1818,49 @@ n_cells_res <- function(res) {
   ans
 }
 
-#' Generalized Frequency Table
+#' Generalized frequency table
 #'
-#' @description This function provides a convenience interface for
-#' generating generalizations of a 2-way frequency table. Row and column
-#' space can be facetted by variables, and an analysis function can be specified.
+#' This function provides a convenience interface for generating generalizations of a 2-way frequency table. Row and
+#' column space can be facetted by variables, and an analysis function can be specified. The function then builds a
+#' layout with the specified layout and applies it to the data provided.
 #'
-#' The function then builds a layout with the specified layout and applies it to
-#' the data provided.
-#'
-#' @param row_vars character. The names of variables to be used in row facetting.
-#' @param col_vars character. The names of variables to be used in column facetting.
-#' @param data data.frame. The data to tabulate.
-#' @param avar character(1). The variable to be analyzed. Defaults to the first variable in `data`.
-#' @param row_labels character or NULL. Row label(s) which should be applied to the analysis rows. length must match
-#'   the number of rows generated by `afun`. See details.
-#' @param afun function. The function to generate the analysis row cell values. This can be a proper analysis
-#'   function, or a function which returns a vector or list. Vectors are taken as multi-valued single cells, whereas
-#'   lists are interpreted as multiple cells.
-#' @param drop_levels logical(1). Should unobserved factor levels be dropped during facetting. Defaults to `TRUE`.
-#' @param summarize_groups logical(1). Should each level of nesting include marginal summary rows. Defaults to `FALSE`
-#' @param ... passed to `afun`, if specified. Otherwise ignored.
-#' @param .default_rlabel character(1). This is an implementation detail that should not be set by end users.
 #' @inheritParams constr_args
 #' @inheritParams basic_table
+#' @param row_vars (`character`)\cr the names of variables to be used in row facetting.
+#' @param col_vars (`character`)\cr the names of variables to be used in column facetting.
+#' @param data (`data.frame`)\cr the data to tabulate.
+#' @param avar (`string`)\cr the variable to be analyzed. Defaults to the first variable in `data`.
+#' @param row_labels (`character` or `NULL`)\cr row label(s) which should be applied to the analysis rows. Length must
+#'   match the number of rows generated by `afun`.
+#' @param afun (`function`)\cr the function to generate the analysis row cell values. This can be a proper analysis
+#'   function, or a function which returns a vector or list. Vectors are taken as multi-valued single cells, whereas
+#'   lists are interpreted as multiple cells.
+#' @param drop_levels (`flag`)\cr whether unobserved factor levels should be dropped during facetting. Defaults to
+#'   `TRUE`.
+#' @param summarize_groups (`flag`)\cr whether each level of nesting should include marginal summary rows. Defaults to
+#'   `FALSE`.
+#' @param ... additional arguments passed to `afun`.
+#' @param .default_rlabel (`string`)\cr this is an implementation detail that should not be set by end users.
 #'
 #' @details
+#' This function creates a table with a single top-level structure in both row and column dimensions involving faceting
+#' by 0 or more variables in each dimension.
 #'
-#' This function creates a table  with a single top-level structure in
-#' both row and column dimensions  involving faceting by 0 or more
-#' variables in each.
+#' The display of the table depends on certain details of the tabulation. In the case of an `afun` which returns a
+#' single cell's contents (either a scalar or a vector of 2 or 3 elements), the label rows for the deepest-nested row
+#' facets will be hidden and the labels used there will be used as the analysis row labels. In the case of an `afun`
+#' which returns a list (corresponding to multiple cells), the names of the list will be used as the analysis row
+#' labels and the deepest-nested facet row labels will be visible.
 #'
-#' The display  of the table depends on certain
-#' details  of the  tabulation.   In  the case  of  an `afun` which
-#' returns a single  cell's contents (either a scalar  or a vector
-#' of 2 or 3 elements), the  label rows for the deepest-nested row
-#' facets will be hidden and the labels used there will be used as
-#' the analysis row labels. In the case of an `afun` which returns a
-#' list (corresponding to  multiple cells), the names  of the list
-#' will be used as the analysis  row labels and the deepest-nested
-#' facet row labels will be visible.
+#' The table will be annotated in the top-left area with an informative label displaying the analysis variable
+#' (`avar`), if set, and the function used (captured via substitute) where possible, or 'count' if not. One exception
+#' where the user may directly modify the top-left area (via `row_labels`) is the case of a table with row facets and
+#' an `afun` which returns a single row.
 #'
-#' The  table  will  be  annotated   in  the  top-left  area  with  an
-#' informative  label displaying  the analysis  variable (`avar`),  if
-#' set,  and  the  function   used  (captured  via  substitute)  where
-#' possible, or 'count' if not. One exception where the user may
-#' directly modify the top-left area (via `row_labels`) is the case of
-#' a table with row facets and an `afun` which returns a single row.
-#'
-#'
-#' @return for `qtable` a built TableTree object representing the desired table,
-#' for `qtable_layout`, a `PreDataTableLayouts` object declaring the structure of
-#' the desired table, suitable for passing to `build_table`.
+#' @return
+#' * `qtable` returns a built `TableTree` object representing the desired table
+#' * `qtable_layout` returns a `PreDataTableLayouts` object declaring the structure of the desired table, suitable for
+#'   passing to [build_table()].
 #'
 #' @examples
 #' qtable(ex_adsl)
@@ -1911,6 +1878,7 @@ n_cells_res <- function(res) {
 #'   row_vars = "SEX",
 #'   col_vars = "ARM", avar = "AGE", afun = range
 #' ))
+#'
 #' @export
 qtable_layout <- function(data,
                           row_vars = character(),
@@ -1977,7 +1945,6 @@ qtable_layout <- function(data,
   if (is.null(row_labels)) {
     row_labels <- dflt_row_lbl
   }
-
 
   lyt <- basic_table(
     title = title,

@@ -8,18 +8,14 @@ test_that("deprecated things are still there and work kinda", {
   expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
 })
 
-test_that("deprecated insert_rrow and summarize_rows still currently work", {
+test_that("deprecated insert_rrow still currently works", {
   tbl <- basic_table() %>%
     split_cols_by("Species") %>%
     analyze("Sepal.Length") %>%
     build_table(iris)
 
   expect_warning(res1 <- insert_rrow(tbl, rrow("Hello World")), "Deprecated")
-  expect_warning(resdf <- summarize_rows(tbl), "Deprecated")
-  row.names(resdf) <- NULL
   realdf <- make_row_df(tbl)
-  cololaps <- intersect(names(resdf), names(realdf))
-  expect_true(all.equal(resdf[, cololaps], realdf[, cololaps]))
   o <- options(warn = -1)
   mf1 <- matrix_form(res1)
   expect_identical(mf1$strings[2, , drop = TRUE], c("Hello World", "", "", ""))
@@ -34,7 +30,6 @@ test_that("deprecated insert_rrow and summarize_rows still currently work", {
     analyze("Sepal.Length") %>%
     build_table(iris)
   ## for coverage
-  expect_warning(resdf2 <- summarize_rows(tbl2), "Deprecated")
   res3 <- insert_rrow(tbl2, rrow("Hello World"))
   mf3 <- matrix_form(res3)
   expect_identical(mf3$strings[2, , drop = TRUE], c("Hello World", "", "", ""))
