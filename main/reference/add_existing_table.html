@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -108,18 +93,16 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>lyt</dt>
-<dd><p>layout object pre-data used for tabulation</p></dd>
+<dd><p>(<code>PreDataTableLayouts</code>)<br> layout object pre-data used for tabulation.</p></dd>
 
 
 <dt>tt</dt>
-<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
-populated table.</p></dd>
+<dd><p>(<code>TableTree</code> or related class)<br> a <code>TableTree</code> object representing a populated table.</p></dd>
 
 
 <dt>indent_mod</dt>
-<dd><p>numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-<em>and all of that structure's children</em>. Defaults to 0, which
+<dd><p>(<code>numeric</code>)<br> modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) <em>and all of that structure's children</em>. Defaults to 0, which
 corresponds to the unmodified default behavior.</p></dd>
 
 </dl></div>
@@ -127,8 +110,7 @@ corresponds to the unmodified default behavior.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>PreDataTableLayouts</code> object suitable for passing to further
-layouting functions, and to <code>build_table</code>.</p>
+<p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code><a href="build_table.html">build_table()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

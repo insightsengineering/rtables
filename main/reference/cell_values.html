@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -113,45 +98,36 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>tt</dt>
-<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
-populated table.</p></dd>
+<dd><p>(<code>TableTree</code> or related class)<br> a <code>TableTree</code> object representing a populated table.</p></dd>
 
 
 <dt>rowpath</dt>
-<dd><p>character. Path in row-split space to the desired row(s). Can
-include <code>"@content"</code>.</p></dd>
+<dd><p>(<code>character</code>)<br> path in row-split space to the desired row(s). Can include <code>"@content"</code>.</p></dd>
 
 
 <dt>colpath</dt>
-<dd><p>character. Path in column-split space to the desired
-column(s). Can include <code>"*"</code>.</p></dd>
+<dd><p>(<code>character</code>)<br> path in column-split space to the desired column(s). Can include <code>"*"</code>.</p></dd>
 
 
 <dt>omit_labrows</dt>
-<dd><p>logical(1). Should label rows underneath <code>rowpath</code>
-be omitted (<code>TRUE</code>, the default), or return empty lists of cell
-"values" (<code>FALSE</code>).</p></dd>
+<dd><p>(<code>flag</code>)<br> whether label rows underneath <code>rowpath</code> should be omitted (<code>TRUE</code>, the default),
+or return empty lists of cell "values" (<code>FALSE</code>).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>for <code>cell_values</code>, a <em>list</em> (regardless of the type of
-value the cells hold). if <code>rowpath</code> defines a path to a single row,
-<code>cell_values</code> returns the list of cell values for that row, otherwise
-a list of such lists, one for each row captured underneath <code>rowpath</code>.
-This occurs after subsetting to <code>colpath</code> has occurred.</p>
-
-
-<p>For <code>value_at</code> the "unwrapped" value of a single cell, or an error, if
-the combination of <code>rowpath</code> and <code>colpath</code> do not define the
-location of a single cell in <code>tt</code>.</p>
-    </div>
+<ul><li><p><code>cell_values</code> returns a <code>list</code> (regardless of the type of value the cells hold). If <code>rowpath</code> defines a path to
+a single row, <code>cell_values</code> returns the list of cell values for that row, otherwise a list of such lists, one for
+each row captured underneath <code>rowpath</code>. This occurs after subsetting to <code>colpath</code> has occurred.</p></li>
+<li><p><code>value_at</code> returns the "unwrapped" value of a single cell, or an error, if the combination of <code>rowpath</code> and
+<code>colpath</code> do not define the location of a single cell in <code>tt</code>.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p><code>cell_values</code> will return a single cell's value wrapped in a list.
-Use <code>value_at</code> to receive the "bare" cell value.</p>
+    <p><code>cell_values</code> will return a single cell's value wrapped in a list. Use <code>value_at</code> to receive the "bare" cell
+value.</p>
     </div>
 
     <div class="section level2">
@@ -255,7 +231,6 @@ Use <code>value_at</code> to receive the "bare" cell value.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## any arm, male columns from the ASIAN content (i.e. summary) row</span></span></span>
 <span class="r-in"><span><span class="fu">cell_values</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"@content"</span><span class="op">)</span>,</span></span>
@@ -320,6 +295,7 @@ Use <code>value_at</code> to receive the "bare" cell value.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"B: Placebo"</span>, <span class="st">"SEX"</span>, <span class="st">"M"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">cvlist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="va">cvnolist</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

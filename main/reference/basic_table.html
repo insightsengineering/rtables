@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -118,86 +103,74 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>title</dt>
-<dd><p>character(1). Main title (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">main_title()</a></code>) is a single string.
-Ignored for subtables.</p></dd>
+<dd><p>(<code>string</code>)<br> single string to use as main title (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">main_title()</a></code>). Ignored for subtables.</p></dd>
 
 
 <dt>subtitles</dt>
-<dd><p>character. Subtitles (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">subtitles()</a></code>) can be vector of strings, where
-every element is printed in a separate line. Ignored for subtables.</p></dd>
+<dd><p>(<code>character</code>)<br> a vector of strings to use as subtitles (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">subtitles()</a></code>), where every element is
+printed on a separate line. Ignored for subtables.</p></dd>
 
 
 <dt>main_footer</dt>
-<dd><p>character. Main global (non-referential) footer materials
-(<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">main_footer()</a></code>). If it is a vector of strings, they will be printed on separate
-lines.</p></dd>
+<dd><p>(<code>character</code>)<br> a vector of strings to use as main global (non-referential) footer materials
+(<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">main_footer()</a></code>), where every element is printed on a separate line.</p></dd>
 
 
 <dt>prov_footer</dt>
-<dd><p>character. Provenance-related global footer materials
-(<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">prov_footer()</a></code>). It can be also a vector of strings, printed on different lines.
-Generally should not be modified by hand.</p></dd>
+<dd><p>(<code>character</code>)<br> a vector of strings to use as provenance-related global footer materials
+(<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">prov_footer()</a></code>), where every element is printed on a separate line.</p></dd>
 
 
 <dt>show_colcounts</dt>
-<dd><p>logical(1). Should column counts be displayed in the
-resulting table when this layout is applied to data</p></dd>
+<dd><p>(<code>flag</code>)<br> whether column counts should be displayed in the resulting table when this
+layout is applied to data.</p></dd>
 
 
 <dt>colcount_format</dt>
-<dd><p>character(1). Format for use when displaying the
-column counts. Must be 1d, or 2d where one component is a percent. See
-details.</p></dd>
+<dd><p>(<code>string</code>)<br> format for use when displaying the column counts. Must be 1d, or 2d
+where one component is a percent. See Details below.</p></dd>
 
 
 <dt>header_section_div</dt>
-<dd><p>character(1). String which will be used to divide the header
-from the table. See <code><a href="section_div.html">header_section_div()</a></code> for getter and setter of these.
-Please consider changing last element of <code><a href="section_div.html">section_div()</a></code> when concatenating
-tables that need a divider between them.</p></dd>
+<dd><p>(<code>string</code>)<br> string which will be used to divide the header from the table. See
+<code><a href="section_div.html">header_section_div()</a></code> for the associated getter and setter. Please consider changing last element of
+<code><a href="section_div.html">section_div()</a></code> when concatenating tables that require a divider between them.</p></dd>
 
 
 <dt>top_level_section_div</dt>
-<dd><p>character(1). If assigned to a single character,
-the first (top level) split or division of the table will be highlighted by a line made of that character.
-See <a href="section_div.html">section_div</a> for more information.</p></dd>
+<dd><p>(<code>character(1)</code>)<br> if assigned a single character, the first (top level) split
+or division of the table will be highlighted by a line made of that character. See <a href="section_div.html">section_div</a> for more
+information.</p></dd>
 
 
 <dt>inset</dt>
-<dd><p>numeric(1). Number of spaces to inset the table header, table
-body, referential footnotes, and main_footer, as compared to alignment
-of title, subtitle, and provenance footer. Defaults to 0 (no inset).</p></dd>
+<dd><p>(<code>numeric(1)</code>)<br> number of spaces to inset the table header, table body, referential footnotes, and
+main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>PreDataTableLayouts</code> object suitable for passing to further
-layouting functions, and to <code>build_table</code>.</p>
+<p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code><a href="build_table.html">build_table()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>colcount_format</code> is ignored if <code>show_colcounts</code> is <code>FALSE</code> (the default).
-When <code>show_colcounts</code> is <code>TRUE</code>, and <code>colcount_format</code> is 2-dimensional with
-a percent component, the value component for the percent is always populated
-with <code>1</code> (i.e. 100%). 1d formats are used to render the counts exactly as they
-normally would be, while 2d formats which don't include a percent, and all 3d
-formats result in an error. Formats in the form of functions are not supported for
-<code>colcount</code> format. See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code> for
-the list of valid format labels to select from.</p>
+    <p><code>colcount_format</code> is ignored if <code>show_colcounts</code> is <code>FALSE</code> (the default). When <code>show_colcounts</code> is <code>TRUE</code>,
+and <code>colcount_format</code> is 2-dimensional with a percent component, the value component for the percent is always
+populated with <code>1</code> (i.e. 100%). 1d formats are used to render the counts exactly as they normally would be,
+while 2d formats which don't include a percent, and all 3d formats result in an error. Formats in the form of
+functions are not supported for <code>colcount</code> format. See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code> for the list
+of valid format labels to select from.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
     
-<ul><li><p>Because percent components in <code>colcount_format</code> are <em>always</em>
-populated with the value 1, we can get arguably strange results, such as
-that individual arm columns and a combined "all patients" column all
-list "100%" as their percentage, even though the individual arm columns
-represent strict subsets of the all patients column.</p></li>
-<li><p>Note that subtitles (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">subtitles()</a></code>) and footers (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">main_footer()</a></code> and <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">prov_footer()</a></code>)
-that spans more than one line can be supplied as a character vector to maintain
-indentation on multiple lines.</p></li>
+<ul><li><p>Because percent components in <code>colcount_format</code> are <em>always</em> populated with the value 1, we can get arguably
+strange results, such as that individual arm columns and a combined "all patients" column all list "100%" as
+their percentage, even though the individual arm columns represent strict subsets of the "all patients" column.</p></li>
+<li><p>Note that subtitles (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">subtitles()</a></code>) and footers (<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">main_footer()</a></code> and <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html" class="external-link">prov_footer()</a></code>) that span more than one
+line can be supplied as a character vector to maintain indentation on multiple lines.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -237,7 +210,7 @@ indentation on multiple lines.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> test footer</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> test.R program, executed at 2024-03-15 14:49:10.877079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> test.R program, executed at 2024-04-08 15:05:06.37715</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt3</span> <span class="op">&lt;-</span> <span class="fu">basic_table</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  show_colcounts <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>

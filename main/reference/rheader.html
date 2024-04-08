@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -108,29 +93,25 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
-<dd><p>row specifications (either as character vectors or the output
-from <code><a href="rrow.html">rrow</a></code> or <code><a href="rowclasses.html">DataRow</a></code>, <code><a href="rowclasses.html">LabelRow</a></code>,
-etc.</p></dd>
+<dd><p>row specifications, either as character vectors or the output from <code><a href="rrow.html">rrow()</a></code>, <code><a href="rowclasses.html">DataRow()</a></code>,
+<code><a href="rowclasses.html">LabelRow()</a></code>, etc.</p></dd>
 
 
 <dt>format</dt>
-<dd><p>character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via <code>...</code>. See
-<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">list_valid_format_labels</a></code> for currently supported
-format labels.</p></dd>
+<dd><p>(<code>string</code>, <code>function</code>, or <code>list</code>)<br> the format label (string) or formatter function to apply to the
+cell values passed via <code>...</code>. See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code> for currently supported format labels.</p></dd>
 
 
 <dt>.lst</dt>
-<dd><p>list. An already-collected list of arguments to be used instead
-of the elements of <code>...</code>. Arguments passed via <code>...</code> will be
-ignored if this is specified.</p></dd>
+<dd><p>(<code>list</code>)<br> an already-collected list of arguments to be used instead of the elements of <code>...</code>.
+Arguments passed via <code>...</code> will be ignored if this is specified.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a <code>InstantiatedColumnInfo</code> object.</p>
+<p>A <code>InstantiatedColumnInfo</code> object.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -143,12 +124,6 @@ ignored if this is specified.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">rheader</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">rheader</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="rrow.html">rrow</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="fu"><a href="rcell.html">rcell</a></span><span class="op">(</span><span class="st">"group 1"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="rcell.html">rcell</a></span><span class="op">(</span><span class="st">"group 2"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  <span class="fu"><a href="rrow.html">rrow</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">h1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An InstantiatedColumnInfo object</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Columns:</span>
@@ -157,6 +132,10 @@ ignored if this is specified.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> C (mnl)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">h2</span> <span class="op">&lt;-</span> <span class="fu">rheader</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="rrow.html">rrow</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="fu"><a href="rcell.html">rcell</a></span><span class="op">(</span><span class="st">"group 1"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="rcell.html">rcell</a></span><span class="op">(</span><span class="st">"group 2"</span>, colspan <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="fu"><a href="rrow.html">rrow</a></span><span class="op">(</span><span class="cn">NULL</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">h2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An InstantiatedColumnInfo object</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Columns:</span>

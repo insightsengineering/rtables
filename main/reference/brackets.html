@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -112,77 +97,73 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p><code>TableTree</code></p></dd>
+<dd><p>(<code>TableTree</code>)<br> a <code>TableTree</code> object.</p></dd>
 
 
 <dt>i</dt>
-<dd><p>index</p></dd>
+<dd><p>(<code>numeric(1)</code>)<br> index.</p></dd>
 
 
 <dt>j</dt>
-<dd><p>index</p></dd>
+<dd><p>(<code>numeric(1)</code>)<br> index.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Includes</p><dl><dt><em>keep_topleft</em></dt>
-<dd><p>logical(1) (<code>[</code> only) Should the <code>top-left</code>
-material for the table be retained after subsetting. Defaults to <code>TRUE</code> if
-all rows are included (i.e. subsetting was by column), and drops it otherwise.</p></dd>
+<dd><p>additional arguments. Includes:</p><dl><dt><code>keep_topleft</code></dt>
+<dd><p>(<code>flag</code>) (<code>[</code> only) whether the top-left material for the table should be retained after
+subsetting. Defaults to <code>TRUE</code> if all rows are included (i.e. subsetting was by column), and drops it
+otherwise.</p></dd>
 
-<dt><em>keep_titles</em></dt>
-<dd><p>logical(1) Should title information be retained. Defaults to <code>FALSE</code>.</p></dd>
+<dt><code>keep_titles</code></dt>
+<dd><p>(<code>flag</code>) whether title information should be retained. Defaults to <code>FALSE</code>.</p></dd>
 
-<dt><em>keep_footers</em></dt>
-<dd><p>logical(1) Should non-referential footer
-information be retained. Defaults to <code>keep_titles</code>.</p></dd>
+<dt><code>keep_footers</code></dt>
+<dd><p>(<code>flag</code>) whether non-referential footer information should be retained. Defaults to
+<code>keep_titles</code>.</p></dd>
 
-<dt><em>reindex_refs</em></dt>
-<dd><p>logical(1). Should referential footnotes be
-re-indexed as if the resulting subset is the entire table. Defaults to
-<code>TRUE</code>.</p></dd>
+<dt><code>reindex_refs</code></dt>
+<dd><p>(<code>flag</code>) whether referential footnotes should be re-indexed as if the resulting subset is
+the entire table. Defaults to <code>TRUE</code>.</p></dd>
 
 
 </dl></dd>
 
 
 <dt>value</dt>
-<dd><p>Replacement value (list, <code>TableRow</code>, or <code>TableTree</code>)</p></dd>
+<dd><p>(<code>list</code>, <code>TableRow</code>, or <code>TableTree</code>)<br> replacement value.</p></dd>
 
 
 <dt>drop</dt>
-<dd><p>logical(1). Should the value in the cell be returned if one
-cell is selected by the combination of <code>i</code> and <code>j</code>. It is not possible
-to return a vector of values. To do so please consider using <code><a href="cell_values.html">cell_values()</a></code>.
-Defaults to <code>FALSE</code>.</p></dd>
+<dd><p>(<code>flag</code>)<br> whether the value in the cell should be returned if one cell is selected by the
+combination of <code>i</code> and <code>j</code>. It is not possible to return a vector of values. To do so please consider using
+<code><a href="cell_values.html">cell_values()</a></code>. Defaults to <code>FALSE</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a <code>TableTree</code> (or <code>ElementaryTable</code>) object, unless a
-single cell was selected with <code>drop=TRUE</code>, in which case the (possibly
-multi-valued) fully stripped raw value of the selected cell.</p>
+<p>A <code>TableTree</code> (or <code>ElementaryTable</code>) object, unless a single cell was selected with <code>drop = TRUE</code>, in which
+case the (possibly multi-valued) fully stripped raw value of the selected cell.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>by default, subsetting drops the information about title, subtitle,
-main footer, provenance footer, and <code>topleft</code>. If only a column is selected
-and all rows are kept, the <code>topleft</code> information remains as default. Any
-referential footnote is kept whenever the subset table contains the
-referenced element.</p>
+    <p>By default, subsetting drops the information about title, subtitle, main footer, provenance footer, and <code>topleft</code>.
+If only a column is selected and all rows are kept, the <code>topleft</code> information remains as default. Any referential
+footnote is kept whenever the subset table contains the referenced element.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>subsetting always preserve the original order, even if provided
-indexes do not preserve it. If sorting is needed, please consider
-using <code><a href="sort_at_path.html">sort_at_path()</a></code>. Also note that <code>character</code> indices are treated as paths,
-not vectors of names in both <code>[</code> and <code>[&lt;-</code>.</p>
+    <p>Subsetting always preserve the original order, even if provided indexes do not preserve it. If sorting is needed,
+please consider using <code><a href="sort_at_path.html">sort_at_path()</a></code>. Also note that <code>character</code> indices are treated as paths, not vectors of
+names in both <code>[</code> and <code>[&lt;-</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p>Regarding sorting: <code><a href="sort_at_path.html">sort_at_path()</a></code> and how to understand path
-structure: <code><a href="summarize_row_groups.html">summarize_row_groups()</a></code>, and <code>summarize_col_groups()</code>.</p></div>
+    <div class="dont-index">
+<ul><li><p><code><a href="sort_at_path.html">sort_at_path()</a></code> to understand sorting.</p></li>
+<li><p><code><a href="summarize_row_groups.html">summarize_row_groups()</a></code> to understand path structure.</p></li>
+</ul></div>
     </div>
 
     <div class="section level2">

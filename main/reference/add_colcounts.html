@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -108,30 +93,27 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>lyt</dt>
-<dd><p>layout object pre-data used for tabulation</p></dd>
+<dd><p>(<code>PreDataTableLayouts</code>)<br> layout object pre-data used for tabulation.</p></dd>
 
 
 <dt>format</dt>
-<dd><p><code>FormatSpec</code>. Format associated with this split. Formats can be
-declared via strings (<code>"xx.x"</code>) or function. In cases such as
-<code>analyze</code> calls, they can character vectors or lists of functions.</p></dd>
+<dd><p>(<code>string</code>, <code>function</code>, or <code>list</code>)<br> format associated with this split. Formats can be declared via
+strings (<code>"xx.x"</code>) or function. In cases such as <code>analyze</code> calls, they can be character vectors or lists of
+functions. See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code> for a list of all available format strings.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>PreDataTableLayouts</code> object suitable for passing to further
-layouting functions, and to <code>build_table</code>.</p>
+<p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code><a href="build_table.html">build_table()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>It is often the case that the the column counts derived from the
-input data to <code>build_table</code> is not representative of the population counts.
+input data to <code><a href="build_table.html">build_table()</a></code> is not representative of the population counts.
 For example, if events are counted in the table and the header should
-display the number of subjects and not the total number of events. In that
-case use the <code>col_count</code> argument in <code>build_table</code> to control the counts
-displayed in the table header.</p>
+display the number of subjects and not the total number of events.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>

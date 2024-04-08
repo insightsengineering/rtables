@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -201,28 +186,28 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>obj</dt>
-<dd><p>ANY. The object for the accessor to access or modify</p></dd>
+<dd><p>(<code>ANY</code>)<br> the object for the accessor to access or modify.</p></dd>
 
 
 <dt>object</dt>
-<dd><p>The object to modify in-place</p></dd>
+<dd><p>(<code>ANY</code>)<br> the object to modify in place.</p></dd>
 
 
 <dt>value</dt>
-<dd><p>The new value</p></dd>
+<dd><p>(<code>ANY</code>)<br> the new value.</p></dd>
 
 
 <dt>df</dt>
-<dd><p>data.frame/NULL. Data to use if the column information is being
-generated from a  Pre-Data layout object</p></dd>
+<dd><p>(<code>data.frame</code> or <code>NULL</code>)<br> data to use if the column information is being
+generated from a pre-data layout object.</p></dd>
 
 
 <dt>rtpos</dt>
-<dd><p><code>TreePos</code>. Root position.</p></dd>
+<dd><p>(<code>TreePos</code>)<br> root position.</p></dd>
 
 
 <dt>path</dt>
-<dd><p>character or NULL. <code>col_counts</code> getter and setter only.
+<dd><p>(<code>character</code> or <code>NULL</code>)<br><code>col_counts</code> accessor and setter only.
 Path (in column structure).</p></dd>
 
 </dl></div>
@@ -233,7 +218,7 @@ Path (in column structure).</p></dd>
 <p>A <code>LayoutColTree</code> object.</p>
 
 
-<p>Various column information, depending on the accessor used.</p>
+<p>Returns various information about columns, depending on the accessor used.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -53,21 +53,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -117,49 +102,44 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>lyt</dt>
-<dd><p>layout object pre-data used for tabulation</p></dd>
+<dd><p>(<code>PreDataTableLayouts</code>)<br> layout object pre-data used for tabulation.</p></dd>
 
 
 <dt>var</dt>
-<dd><p>string, variable name</p></dd>
+<dd><p>(<code>string</code>)<br> variable name.</p></dd>
 
 
 <dt>label_fstr</dt>
-<dd><p>string. An <code>sprintf</code> style format string containing. For
-non-comparison splits, it can contain  up to one <code>"%s"</code> which takes
-the current split value and generates the row/column label.
-Comparison-based splits it can contain up to two <code>"%s"</code>.</p></dd>
+<dd><p>(<code>string</code>)<br> a <code>sprintf</code> style format string. For non-comparison splits, it can contain up to
+one <code>"\%s"</code> which takes the current split value and generates the row/column label. For comparison-based splits
+it can contain up to two <code>"\%s"</code>.</p></dd>
 
 
 <dt>format</dt>
-<dd><p><code>FormatSpec</code>. Format associated with this split. Formats can be
-declared via strings (<code>"xx.x"</code>) or function. In cases such as
-<code>analyze</code> calls, they can character vectors or lists of functions.</p></dd>
+<dd><p>(<code>string</code>, <code>function</code>, or <code>list</code>)<br> format associated with this split. Formats can be declared via
+strings (<code>"xx.x"</code>) or function. In cases such as <code>analyze</code> calls, they can be character vectors or lists of
+functions. See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code> for a list of all available format strings.</p></dd>
 
 
 <dt>na_str</dt>
-<dd><p>character(1). String that should be displayed when the value of <code>x</code> is missing.
-Defaults to <code>"NA"</code>.</p></dd>
+<dd><p>(<code>string</code>)<br> string that should be displayed when the value of <code>x</code> is missing. Defaults to <code>"NA"</code>.</p></dd>
 
 
 <dt>cfun</dt>
-<dd><p>list/function/NULL. tabulation function(s) for creating content
-rows. Must accept <code>x</code> or <code>df</code> as first parameter. Must accept
-<code>labelstr</code> as the second argument. Can optionally accept all optional
-arguments accepted by analysis functions. See <code><a href="analyze.html">analyze</a></code>.</p></dd>
+<dd><p>(<code>list</code>, <code>function</code>, or <code>NULL</code>)<br> tabulation function(s) for creating content rows. Must accept <code>x</code>
+or <code>df</code> as first parameter. Must accept <code>labelstr</code> as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See <code><a href="analyze.html">analyze()</a></code>.</p></dd>
 
 
 <dt>indent_mod</dt>
-<dd><p>numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-<em>and all of that structure's children</em>. Defaults to 0, which
+<dd><p>(<code>numeric</code>)<br> modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) <em>and all of that structure's children</em>. Defaults to 0, which
 corresponds to the unmodified default behavior.</p></dd>
 
 
 <dt>extra_args</dt>
-<dd><p>list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+<dd><p>(<code>list</code>)<br> extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.</p></dd>
 
 </dl></div>
@@ -167,24 +147,20 @@ not match a formal argument of the tabulation function.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A <code>PreDataTableLayouts</code> object suitable for passing to further
-layouting functions, and to <code>build_table</code>.</p>
+<p>A <code>PreDataTableLayouts</code> object suitable for passing to further layouting functions, and to <code><a href="build_table.html">build_table()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>If <code>format</code> expects 1 value (i.e. it is specified as a format string
-and <code>xx</code> appears for two values (i.e. <code>xx</code> appears twice in the
-format string) or is specified as a function, then both raw and percent of
-column total counts are calculated. If <code>format</code> is a format string where
-<code>xx</code> appears only one time, only raw counts are used.</p>
-<p><code>cfun</code> must accept <code>x</code> or <code>df</code> as its first argument. For the <code>df</code> argument
-<code>cfun</code> will receive the subset <code>data.frame</code> corresponding with the row-
-and column-splitting for the cell being calculated. Must accept <code>labelstr</code> as
-the second parameter, which accepts the <code>label</code> of the level of the parent
-split currently being summarized. Can additionally take any optional argument
-supported by analysis functions. (see <code><a href="analyze.html">analyze</a></code>).</p>
-<p>In addition, if complex custom functions are needed, we suggest checking the
-available <a href="additional_fun_params.html">additional_fun_params</a> that apply here as for <code>afun</code>.</p>
+    <p>If <code>format</code> expects 1 value (i.e. it is specified as a format string and <code>xx</code> appears for two values
+(i.e. <code>xx</code> appears twice in the format string) or is specified as a function, then both raw and percent of
+column total counts are calculated. If <code>format</code> is a format string where <code>xx</code> appears only one time, only
+raw counts are used.</p>
+<p><code>cfun</code> must accept <code>x</code> or <code>df</code> as its first argument. For the <code>df</code> argument <code>cfun</code> will receive the subset
+<code>data.frame</code> corresponding with the row- and column-splitting for the cell being calculated. Must accept
+<code>labelstr</code> as the second parameter, which accepts the <code>label</code> of the level of the parent split currently
+being summarized. Can additionally take any optional argument supported by analysis functions. (see <code><a href="analyze.html">analyze()</a></code>).</p>
+<p>In addition, if complex custom functions are needed, we suggest checking the available <a href="additional_fun_params.html">additional_fun_params</a>
+that can be used in <code>cfun</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -260,7 +236,6 @@ available <a href="additional_fun_params.html">additional_fun_params</a> that ap
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Mean       DataRow       COUNTRY, CAN, AGE, Mean        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   3rd Qu.    DataRow       COUNTRY, CAN, AGE, 3rd Qu.     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Max.       DataRow       COUNTRY, CAN, AGE, Max.        </span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## use a cfun and extra_args to customize summarization</span></span></span>
 <span class="r-in"><span><span class="co">## behavior</span></span></span>
