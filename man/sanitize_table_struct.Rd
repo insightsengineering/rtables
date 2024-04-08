@@ -38,3 +38,9 @@ badtab <- build_table(lyt, DM)
 sanitize_table_struct(badtab)
 
 }
+\seealso{
+Other table structure validation functions: 
+\code{\link{find_degen_struct}()},
+\code{\link{validate_table_struct}()}
+}
+\concept{table structure validation functions}

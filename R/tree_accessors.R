@@ -158,7 +158,7 @@ setMethod(
 #'
 #' Returns the content table of `obj` if it is a `TableTree` object, or `NULL` otherwise.
 #'
-#' @param obj (`TableTree`)\cr the `TableTree`.
+#' @param obj (`TableTree`)\cr the table object.
 #'
 #' @return the `ElementaryTable` containing the (top level) *content rows* of `obj` (or `NULL` if `obj` is not
 #'   a formal table object).
@@ -2584,7 +2584,7 @@ setMethod(
   }
 )
 
-#' Top left material (experimental)
+#' Top left material
 #'
 #' A `TableTree` object can have *top left material* which is a sequence of strings which are printed in the
 #' area of the table between the column header display and the label of the first row. These functions access
@@ -3290,7 +3290,7 @@ setMethod("page_titles<-", "VTableTree", function(obj, value) {
 #' @param value (`string`)\cr string to use as new header/body separator.
 #'
 #' @return
-#' * `horizontal_sep` returns the string acting as the header separator
+#' * `horizontal_sep` returns the string acting as the header separator.
 #' * `horizontal_sep<-` returns `obj`, with the new header separator applied recursively to it and all its
 #'   subtables.
 #'

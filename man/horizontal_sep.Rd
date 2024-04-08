@@ -25,7 +25,7 @@ horizontal_sep(obj) <- value
 }
 \value{
 \itemize{
-\item \code{horizontal_sep} returns the string acting as the header separator
+\item \code{horizontal_sep} returns the string acting as the header separator.
 \item \verb{horizontal_sep<-} returns \code{obj}, with the new header separator applied recursively to it and all its
 subtables.
 }

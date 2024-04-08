@@ -10,7 +10,7 @@ content_table(obj)
 content_table(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{TableTree})\cr the \code{TableTree}.}
+\item{obj}{(\code{TableTree})\cr the table object.}
 
 \item{value}{(\code{ElementaryTable})\cr the new content table for \code{obj}.}
 }

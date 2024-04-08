@@ -8,10 +8,11 @@
 #' @param tt (`TableTree`)\cr a `TableTree` object.
 #'
 #' @return A list of character vectors representing the row paths, if any, to degenerate substructures within the table.
-#'
+#' 
 #' @examples
 #' find_degen_struct(rtable("hi"))
 #'
+#' @family table structure validation functions
 #' @export
 find_degen_struct <- function(tt) {
   degen <- list()
@@ -62,6 +63,7 @@ find_degen_struct <- function(tt) {
 #' assert_valid_table(rtable("oops"))
 #' }
 #'
+#' @family table structure validation functions
 #' @export
 validate_table_struct <- function(tt) {
   degen_pths <- find_degen_struct(tt)
@@ -177,6 +179,7 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
 #' badtab <- build_table(lyt, DM)
 #' sanitize_table_struct(badtab)
 #'
+#' @family table structure validation functions
 #' @export
 sanitize_table_struct <- function(tt, empty_msg = "-- This Section Contains No Data --") {
   rdf <- make_row_df(tt)

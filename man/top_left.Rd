@@ -9,7 +9,7 @@
 \alias{top_left<-,VTableTree-method}
 \alias{top_left<-,InstantiatedColumnInfo-method}
 \alias{top_left<-,PreDataTableLayouts-method}
-\title{Top left material (experimental)}
+\title{Top left material}
 \usage{
 top_left(obj)
 
