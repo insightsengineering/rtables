@@ -8,7 +8,7 @@
 #' @param tt (`TableTree`)\cr a `TableTree` object.
 #'
 #' @return A list of character vectors representing the row paths, if any, to degenerate substructures within the table.
-#' 
+#'
 #' @examples
 #' find_degen_struct(rtable("hi"))
 #'
