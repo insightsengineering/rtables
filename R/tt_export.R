@@ -752,9 +752,6 @@ margins_landscape <- function() {
 #' @param footers_as_text (`flag`)\cr defaults to `FALSE` for [tt_to_flextable()], so the table is self-contained with
 #'   the `flextable` definition of footnotes. `TRUE` is used for [export_as_docx()] to add the footers as a new
 #'   paragraph after the table. The same style is applied, but with a smaller font.
-#' @param counts_in_newline (`flag`)\cr defaults to `FALSE`. In `rtables` text printing ([formatters::toString()]),
-#'   the column counts, i.e. `(N=xx)`, are always on a new line. For `docx` exports it could be necessary to print it
-#'   on the same line.
 #' @param paginate (`flag`)\cr when exporting `.docx` documents using `export_as_docx`, we suggest relying on the
 #'   Microsoft Word pagination system. If `TRUE`, this option splits `tt` into different "pages" as multiple
 #'   `flextables`. Cooperation between the two mechanisms is not guaranteed. Defaults to `FALSE`.

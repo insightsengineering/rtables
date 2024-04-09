@@ -89,10 +89,6 @@ The second and third option use \code{\link[=make_row_df]{make_row_df()}} to ren
 
 \item{bold_manual}{(named \code{list} or \code{NULL})\cr list of index lists. See example for needed structure. Accepted
 groupings/names are \code{c("header", "body")}.}
-
-\item{counts_in_newline}{(\code{flag})\cr defaults to \code{FALSE}. In \code{rtables} text printing (\code{\link[formatters:tostring]{formatters::toString()}}),
-the column counts, i.e. \code{(N=xx)}, are always on a new line. For \code{docx} exports it could be necessary to print it
-on the same line.}
 }
 \value{
 A \code{flextable} object.
