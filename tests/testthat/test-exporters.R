@@ -445,7 +445,7 @@ test_that("tt_to_flextable works with add_counts_to_same_line", {
   expect_equal(flextable::nrow_part(flx, part = "header"), 2)
   expect_silent(flx <- tt_to_flextable(tbl, add_counts_to_same_line = TRUE))
   expect_equal(flextable::nrow_part(flx, part = "header"), 1)
-  
+
   lyt <- basic_table(show_colcounts = FALSE) %>%
     split_cols_by("ARM") %>%
     analyze("BMRKR1")
