@@ -47,8 +47,8 @@ fundamental splitting procedure, and are only necessary in rare cases. These mus
 \code{labels}, and can optionally accept \code{.spl_context}. They must return a split result object constructed via
 \code{make_split_result()}.
 
-In particular, if the custom split function will be used in column space, subsetting expressions (e.g., as returned by
-\code{quote()} or \code{bquote()} must be provided, while they are optional (and largely ignored, currently) in row space.
+In particular, if the custom split function will be used in column space, subsetting expressions (e.g., as returned
+by \code{quote()} or \code{bquote()} must be provided, while they are optional (and largely ignored, currently) in row space.
 
 Post-processing functions (3) must accept the result of the core split as their first argument (which can be
 anything), in addition to \code{spl}, and \code{fulldf}, and can optionally accept \code{.spl_context}. They must each return a
