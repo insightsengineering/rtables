@@ -375,14 +375,14 @@ test_that("Can create flextable object that works with different styles", {
   topleft_t1 <- topleft_t1 %>%
     analyze("BMRKR1") %>%
     build_table(DM)
-  topleft_t1a <- tt_to_flextable(topleft_t1, counts_in_newline = FALSE)
-  topleft_t1b <- tt_to_flextable(topleft_t1, counts_in_newline = TRUE)
+  topleft_t1a <- tt_to_flextable(topleft_t1, add_counts_to_same_line = TRUE)
+  topleft_t1b <- tt_to_flextable(topleft_t1, add_counts_to_same_line = FALSE)
 
   topleft_t2 <- topleft_t2 %>%
     split_rows_by("SEX", label_pos = "topleft") %>%
     analyze("BMRKR1") %>%
     build_table(DM) %>%
-    tt_to_flextable(counts_in_newline = FALSE)
+    tt_to_flextable(add_counts_to_same_line = TRUE)
 
   expect_equal(flextable::nrow_part(topleft_t2, part = "header"), 2L)
   expect_equal(flextable::nrow_part(topleft_t1a, part = "header"), 1L)
