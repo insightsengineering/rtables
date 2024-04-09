@@ -53,7 +53,7 @@ The same style is applied.}
 the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
 paragraph after the table. The same style is applied, but with a smaller font.}
 
-\item{add_counts_to_same_line}{logical(1). Defaults to \code{TRUE} for printing the counts
+\item{add_counts_to_same_line}{(\code{flag})\cr defaults to \code{TRUE} for printing the counts
 on the same line of column names. If \code{FALSE}, the counts are printed on a new line.}
 
 \item{paginate}{(\code{flag})\cr when exporting \code{.docx} documents using \code{export_as_docx}, we suggest relying on the
@@ -89,6 +89,10 @@ The second and third option use \code{\link[=make_row_df]{make_row_df()}} to ren
 
 \item{bold_manual}{(named \code{list} or \code{NULL})\cr list of index lists. See example for needed structure. Accepted
 groupings/names are \code{c("header", "body")}.}
+
+\item{counts_in_newline}{(\code{flag})\cr defaults to \code{FALSE}. In \code{rtables} text printing (\code{\link[formatters:tostring]{formatters::toString()}}),
+the column counts, i.e. \code{(N=xx)}, are always on a new line. For \code{docx} exports it could be necessary to print it
+on the same line.}
 }
 \value{
 A \code{flextable} object.
