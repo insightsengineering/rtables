@@ -10,9 +10,10 @@
  * Fixed edge case bug in `as_result_df` where rows of the table have only `"root"` as path index.
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
+ * Fixed mismatch between indentation declared in row info (`mf_rinfo(mf)`) and actual selected indentation from `matrix_form(mf, indent_rownames = FALSE)`.
 
 ### Miscellaneous
-* Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
+ * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
 
 ## rtables 0.6.6
 ### New Features
