@@ -3,41 +3,34 @@
 \name{label_at_path}
 \alias{label_at_path}
 \alias{label_at_path<-}
-\title{Label at Path}
+\title{Label at path}
 \usage{
 label_at_path(tt, path)
 
 label_at_path(tt, path) <- value
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
-\item{value}{The new value}
+\item{value}{(\code{ANY})\cr the new value.}
 }
 \description{
-Gets or sets the label at a path
+Accesses or sets the label at a path.
 }
 \details{
-If \code{path} resolves to a single row, the label for that row
-is retrieved or set. If, instead, \code{path} resolves to a subtable,
-the text for the row-label associated with that path is retrieved
-or set. In the subtable case, if the label text is set to a non-NA
-value, the \code{labelrow} will be set to visible, even if it was not before.
-Similarly, if the label row text for a subtable is set to NA,
-the label row will bet set to non-visible, so the row will not
+If \code{path} resolves to a single row, the label for that row is retrieved or set. If, instead, \code{path} resolves to a
+subtable, the text for the row-label associated with that path is retrieved or set. In the subtable case, if the
+label text is set to a non-\code{NA} value, the \code{labelrow} will be set to visible, even if it was not before. Similarly,
+if the label row text for a subtable is set to \code{NA}, the label row will bet set to non-visible, so the row will not
 appear at all when the table is printed.
 }
 \note{
-When changing the row labels for content rows, it is important to
-path all the way to the \emph{row}. Paths ending in \code{"@content"} will
-not exhibit the behavior you want, and are thus an error. See
-\code{\link{row_paths}} for help determining the full paths to content
-rows.
+When changing the row labels for content rows, it is important to path all the way to the \emph{row}. Paths
+ending in \code{"@content"} will not exhibit the behavior you want, and are thus an error. See \code{\link[=row_paths]{row_paths()}} for help
+determining the full paths to content rows.
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -50,4 +43,5 @@ label_at_path(tbl, c("COUNTRY", "CHN"))
 
 label_at_path(tbl, c("COUNTRY", "USA")) <- "United States"
 tbl
+
 }

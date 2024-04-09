@@ -14,6 +14,9 @@
 ### Miscellaneous
  * Added `add_counts_to_same_line` to `tt_to_flextable()` to be able to set the position of the column counts.
 
+### Miscellaneous
+* Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
+
 ## rtables 0.6.6
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.

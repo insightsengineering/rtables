@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_afun_utils.R
 \name{make_afun}
 \alias{make_afun}
-\title{Create custom analysis function wrapping existing function}
+\title{Create a custom analysis function wrapping an existing function}
 \usage{
 make_afun(
   fun,
@@ -17,51 +17,40 @@ make_afun(
 )
 }
 \arguments{
-\item{fun}{function. The function to be wrapped in a new customized analysis
-fun. Should return named list.}
+\item{fun}{(\code{function})\cr the function to be wrapped in a new customized analysis function.
+\code{fun} should return a named \code{list}.}
 
-\item{.stats}{character. Names of elements to keep from \code{fun}'s full
-output.}
+\item{.stats}{(\code{character})\cr names of elements to keep from \code{fun}'s full output.}
 
-\item{.formats}{ANY. vector/list of formats to override any defaults applied
-by \code{fun}.}
+\item{.formats}{(\code{ANY})\cr vector or list of formats to override any defaults applied by \code{fun}.}
 
-\item{.labels}{character. Vector of labels to override defaults returned by
-\code{fun}}
+\item{.labels}{(\code{character})\cr vector of labels to override defaults returned by \code{fun}.}
 
-\item{.indent_mods}{integer. Named vector of indent modifiers for the
-generated rows.}
+\item{.indent_mods}{(\code{integer})\cr named vector of indent modifiers for the generated rows.}
 
-\item{.ungroup_stats}{character. Vector of names, which must match elements
-of \code{.stats}}
+\item{.ungroup_stats}{(\code{character})\cr vector of names, which must match elements of \code{.stats}.}
 
-\item{.format_na_strs}{ANY. vector/list of \code{na} strings to override any
-defaults applied by \code{fun}.}
+\item{.format_na_strs}{(\code{ANY})\cr vector/list of \code{NA} strings to override any defaults applied by \code{fun}.}
 
-\item{...}{dots. Additional arguments to \code{fun} which effectively become
-new defaults. These can still be overridden by \code{extra_args} within a split.}
+\item{...}{additional arguments to \code{fun} which effectively become new defaults. These can still be
+overridden by \code{extra_args} within a split.}
 
-\item{.null_ref_cells}{logical(1). Should cells for the reference column be
-NULL-ed by the returned analysis function. Defaults to \code{TRUE} if
-\code{fun} accepts \code{.in_ref_col} as a formal argument. Note this
-argument occurs after \code{...} so it must be \emph{fully} specified  by
-name when set.}
+\item{.null_ref_cells}{(\code{flag})\cr whether cells for the reference column should be \code{NULL}-ed by the
+returned analysis function. Defaults to \code{TRUE} if \code{fun} accepts \code{.in_ref_col} as a formal argument. Note
+this argument occurs after \code{...} so it must be \emph{fully} specified by name when set.}
 }
 \value{
-A function suitable for use in \code{\link{analyze}} with element
-selection, reformatting, and relabeling performed automatically.
+A function suitable for use in \code{\link[=analyze]{analyze()}} with element selection, reformatting, and relabeling
+performed automatically.
 }
 \description{
-Create custom analysis function wrapping existing function
+Create a custom analysis function wrapping an existing function
 }
 \note{
-setting \code{.ungroup_stats} to non-null changes the \emph{structure}
-of the  value(s) returned by \code{fun}, rather than just labeling
-(\code{.labels}), formatting (\code{.formats}), and selecting amongst
-(\code{.stats}) them. This means that subsequent \code{make_afun} calls to
-customize the output further both can and must operate on the new
-structure, \emph{NOT} the original structure returned by \code{fun}. See
-the final pair of examples below.
+Setting \code{.ungroup_stats} to non-\code{NULL} changes the \emph{structure} of the value(s) returned by \code{fun}, rather than
+just labeling (\code{.labels}), formatting (\code{.formats}), and selecting amongst (\code{.stats}) them. This means that
+subsequent \code{make_afun} calls to customize the output further both can and must operate on the new structure,
+\emph{not} the original structure returned by \code{fun}. See the final pair of examples below.
 }
 \examples{
 s_summary <- function(x) {
@@ -89,8 +78,6 @@ a_summary2 <- make_afun(a_summary, .stats = c("n", "mean_sd"))
 a_summary2(x = iris$Sepal.Length)
 
 a_summary3 <- make_afun(a_summary, .formats = c(mean_sd = "(xx.xxx, xx.xxx)"))
-
-
 
 s_foo <- function(df, .N_col, a = 1, b = 2) {
   list(

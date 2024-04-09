@@ -1,21 +1,18 @@
-#' Format `rcell`
+#' Format `rcell` objects
 #'
-#' This is a wrapper around
-#' \code{\link[formatters:format_value]{formatters::format_value}} for use with
-#' \code{CellValue} objects
+#' This is a wrapper for [formatters::format_value()] for use with `CellValue` objects
 #'
-#' @param x an object of class \code{\link{CellValue}}, or a raw value.
-#' @param format character(1) or function. The format label (string) or
-#'   formatter function to apply to \code{x}.
-#' @param output character(1). Output type.
-#' @param na_str character(1). String that should be displayed when the value of
-#'   \code{x} is missing. Defaults to \code{"NA"}.
-#' @param pr_row_format list of default format coming from the general row.
-#' @param pr_row_na_str list of default \code{"NA"} string coming from the general row.
-#' @param shell logical(1). Should the formats themselves be returned instead of the
-#' values with formats applied. Defaults to \code{FALSE}.
+#' @inheritParams lyt_args
+#' @param x (`CellValue` or `ANY`)\cr an object of class `CellValue`, or a raw value.
+#' @param format (`string` or `function`)\cr the format label or formatter function to
+#'   apply to `x`.
+#' @param output (`string`)\cr output type.
+#' @param pr_row_format (`list`)\cr list of default formats coming from the general row.
+#' @param pr_row_na_str (`list`)\cr list of default `"NA"` strings coming from the general row.
+#' @param shell (`flag`)\cr whether the formats themselves should be returned instead of the
+#'   values with formats applied. Defaults to `FALSE`.
 #'
-#' @return formatted text representing the cell
+#' @return Formatted text.
 #'
 #' @examples
 #' cll <- CellValue(pi, format = "xx.xxx")

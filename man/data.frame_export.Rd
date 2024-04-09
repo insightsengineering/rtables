@@ -5,7 +5,7 @@
 \alias{as_result_df}
 \alias{result_df_specs}
 \alias{path_enriched_df}
-\title{Generate a Result Data Frame}
+\title{Generate a result data frame}
 \usage{
 as_result_df(tt, spec = "v0_experimental", simplify = FALSE, ...)
 
@@ -14,17 +14,14 @@ result_df_specs()
 path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{spec}{character(1). The specification to use to
-extract the result data frame. See details}
+\item{spec}{(\code{string})\cr the specification to use to extract the result data frame. See Details below.}
 
-\item{simplify}{logical(1). If \code{TRUE}, the result data frame will have only visible
-labels and result columns.}
+\item{simplify}{(\code{flag})\cr whether the result data frame should only have labels and result columns visible.}
 
-\item{...}{Passed to spec-specific result data frame conversion function. Currently it can be
-one or more of the following parameters (valid only for \code{v0_experimental} spec for now):
+\item{...}{additional arguments passed to spec-specific result data frame conversion function. Currently it can be
+one or more of the following parameters (valid only for \code{v0_experimental} spec. for now):
 \itemize{
 \item \code{expand_colnames}: when \code{TRUE}, the result data frame will have expanded column names above the usual
 output. This is useful when the result data frame is used for further processing.
@@ -41,23 +38,28 @@ but without information about the row structure. Row labels will be assigned to 
 with \code{\link[=df_to_tt]{df_to_tt()}}.
 }}
 
-\item{path_fun}{function. Function to transform paths into single-string
-row/column names.}
+\item{path_fun}{(\code{function})\cr function to transform paths into single-string row/column names.}
 
-\item{value_fun}{function. Function to transform cell values into cells of
-the data.frame. Defaults to \code{collapse_values} which creates strings
-where multi-valued cells are collapsed together, separated by \code{|}.}
+\item{value_fun}{(\code{function})\cr function to transform cell values into cells of a \code{data.frame}. Defaults to
+\code{collapse_values}, which creates strings where multi-valued cells are collapsed together, separated by \code{|}.}
 }
 \value{
-\code{result_df_specs()}: returns a named list of result data frame extraction functions by "specification".
+\itemize{
+\item \code{as_result_df} returns a result \code{data.frame}.
+}
 
-\code{path_enriched_df()}: returns a data frame of \code{tt}'s cell values (processed by
-\code{value_fun}, with columns named by the full column paths (processed by
-\code{path_fun} and an additional \code{row_path} column with the row paths
-(processed by by \code{path_fun}).
+\itemize{
+\item \code{result_df_specs()} returns a named list of result data frame extraction functions by "specification".
+}
+
+\itemize{
+\item \code{path_enriched_df()} returns a \code{data.frame} of \code{tt}'s cell values (processed by \code{value_fun}, with columns named by
+the full column paths (processed by \code{path_fun} and an additional \code{row_path} column with the row paths (processed
+by \code{path_fun}).
+}
 }
 \description{
-Collection of utilities to extract \code{data.frame} from \code{TableTree} objects.
+Collection of utilities to extract \code{data.frame} objects from \code{TableTree} objects.
 }
 \details{
 \code{as_result_df()}: Result data frame specifications may differ in the exact information
@@ -67,9 +69,9 @@ suffix will remain available \emph{including any bugs in their construction} ind
 }
 \section{Functions}{
 \itemize{
-\item \code{result_df_specs()}: list of functions that extract result data frames from \code{TableTree}s.
+\item \code{result_df_specs()}: A list of functions that extract result data frames from \code{TableTree}s.
 
-\item \code{path_enriched_df()}: transform \code{TableTree} object to Path-Enriched \code{data.frame}.
+\item \code{path_enriched_df()}: Transform a \code{TableTree} object to a path-enriched \code{data.frame}.
 
 }}
 \examples{

@@ -133,41 +133,7 @@ test_that("sort_at_path just returns an empty input table", {
   expect_identical(emptytable, result)
 })
 
-
-test_that("trim_zero_rows, trim_rows, prune do the same thing in normal cases", {
-  tbl <- basic_table() %>%
-    split_rows_by("RACE") %>%
-    analyze("COUNTRY") %>%
-    build_table(ex_adsl)
-
-  expect_warning(tzr_tbl1 <- trim_zero_rows(tbl), "deprecated")
-  tr_tbl1 <- trim_rows(tbl)
-
-  expect_true(all(unclass(compare_rtables(tzr_tbl1, tr_tbl1)) == "."))
-
-  tbl2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE") %>%
-    analyze("COUNTRY") %>%
-    build_table(ex_adsl)
-
-  expect_warning(tzr_tbl2 <- trim_zero_rows(tbl2), "deprecated")
-  tr_tbl2 <- trim_rows(tbl2)
-
-  expect_true(all(unclass(compare_rtables(tzr_tbl2, tr_tbl2)) == "."))
-
-  tbl3 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX") %>%
-    split_rows_by("RACE") %>%
-    analyze("COUNTRY") %>%
-    build_table(ex_adsl)
-
-  expect_warning(tzr_tbl3 <- trim_zero_rows(tbl3), "deprecated")
-  tr_tbl3 <- trim_rows(tbl3)
-
-  expect_true(all(unclass(compare_rtables(tzr_tbl3, tr_tbl3)) == "."))
-
+test_that("trim_rows and prune_table do the same thing in normal cases", {
   bigtbl <- basic_table() %>%
     split_rows_by("RACE") %>%
     split_rows_by("COUNTRY") %>%

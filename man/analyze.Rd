@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{analyze}
 \alias{analyze}
-\title{Generate Rows Analyzing Variables Across Columns}
+\title{Generate rows analyzing variables across columns}
 \usage{
 analyze(
   lyt,
@@ -21,102 +21,75 @@ analyze(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{vars}{character vector. Multiple variable names.}
+\item{vars}{(\code{character})\cr vector of variable names.}
 
-\item{afun}{function. Analysis function, must take \code{x} or \code{df} as
-its first parameter. Can optionally take other parameters which will be
-populated by the tabulation framework. See Details in
-\code{\link{analyze}}.}
+\item{afun}{(\code{function})\cr analysis function. Must accept \code{x} or \code{df} as its first parameter. Can optionally take
+other parameters which will be populated by the tabulation framework. See Details in \code{\link[=analyze]{analyze()}}.}
 
-\item{var_labels}{character. Variable labels for 1 or more variables}
+\item{var_labels}{(\code{character})\cr vector of labels for one or more variables.}
 
-\item{table_names}{character. Names for the tables representing each atomic
-analysis. Defaults to \code{var}.}
+\item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the
-existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
-new top-level element (`FALSE). Ignored if it would nest a split underneath
-analyses, which is not allowed.}
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
 
-\item{inclNAs}{boolean. Should observations with NA in the \code{var}
-variable(s) be included when performing this analysis. Defaults to
-\code{FALSE}}
+\item{inclNAs}{(\code{logical})\cr whether NA observations in the \code{var} variable(s) should be included when performing
+the analysis. Defaults to \code{FALSE}.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{show_labels}{character(1). Should the variable labels for corresponding
-to the variable(s) in \code{vars} be visible in the resulting table.}
+\item{show_labels}{(\code{string})\cr whether the variable labels corresponding to the variable(s) in \code{vars}
+should be visible in the resulting table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{section_div}{character(1). String which should be repeated as a section
-divider after each group defined by this split instruction, or
-\code{NA_character_} (the default) for no section divider.}
+\item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
+by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-Adding \emph{analyzed variables} to our table layout defines the primary
-tabulation to be performed. We do this by adding calls to \code{analyze}
-and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
-further splitting, the tabulation will occur at the current/next level of
-nesting by default.
+Adding \emph{analyzed variables} to our table layout defines the primary tabulation to be performed. We do this by
+adding calls to \code{analyze} and/or \code{\link[=analyze_colvars]{analyze_colvars()}} into our layout pipeline. As with adding further splitting,
+the tabulation will occur at the current/next level of nesting by default.
 }
 \details{
-When non-NULL \code{format} is used to specify formats for all generated
-rows, and can be a character vector, a function, or a list of functions. It
-will be repped out to the number of rows once this is known during the
-tabulation process, but will be overridden by formats specified within
-\code{rcell} calls in \code{afun}.
+When non-\code{NULL}, \code{format} is used to specify formats for all generated rows, and can be a character vector, a
+function, or a list of functions. It will be repped out to the number of rows once this is calculated during the
+tabulation process, but will be overridden by formats specified within \code{rcell} calls in \code{afun}.
 
-The analysis function (\code{afun}) should take as its first parameter either
-\code{x} or \code{df}. Which of these the function accepts changes the
-behavior when tabulation is performed.
-
+The analysis function (\code{afun}) should take as its first parameter either \code{x} or \code{df}. Whichever of these the
+function accepts will change the behavior when tabulation is performed as follows:
 \itemize{
-\item{
-If \code{afun}'s first parameter is x, it will receive the corresponding
-subset \emph{vector} of data from the relevant column (from \code{var}
-here) of the raw data being used to build the table.
+\item If \code{afun}'s first parameter is \code{x}, it will receive the corresponding subset \emph{vector} of data from the relevant
+column (from \code{var} here) of the raw data being used to build the table.
+\item If \code{afun}'s first parameter is \code{df}, it will receive the corresponding subset \emph{data frame} (i.e. all columns) of
+the raw data being tabulated.
 }
 
-\item{
-If \code{afun}'s first parameter is \code{df}, it will receive the
-corresponding subset \emph{data.frame} (i.e. all columns) of the raw data
-being tabulated
-}
-}
-
-In addition to differentiation on the first argument, the analysis function
-can optionally accept a number of other parameters which, \emph{if and only
-if} present in the formals will be passed to the function by the tabulation
-machinery. These are listed and described in \code{\link{additional_fun_params}}.
+In addition to differentiation on the first argument, the analysis function can optionally accept a number of
+other parameters which, \emph{if and only if} present in the formals, will be passed to the function by the tabulation
+machinery. These are listed and described in \link{additional_fun_params}.
 }
 \note{
-None of the arguments described in the Details section
-can be overridden via \code{extra_args} or when calling
-\code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
-be overridden via the \code{col_counts} argument to
-\code{\link{build_table}}. Alternative values for the others
-must be calculated within \code{afun} based on a combination
-of extra arguments and the unmodified values provided by the
-tabulation framework.
+None of the arguments described in the Details section can be overridden via \code{extra_args} or when calling
+\code{\link[=make_afun]{make_afun()}}. \code{.N_col} and \code{.N_total} can be overridden via the \code{col_counts} argument to \code{\link[=build_table]{build_table()}}.
+Alternative values for the others must be calculated within \code{afun} based on a combination of extra arguments and
+the unmodified values provided by the tabulation framework.
 }
 \examples{
 lyt <- basic_table() \%>\%

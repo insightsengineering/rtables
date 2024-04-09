@@ -2,21 +2,21 @@
 % Please edit documentation in R/tt_toString.R
 \name{indent_string}
 \alias{indent_string}
-\title{Indent Strings}
+\title{Indent strings}
 \usage{
 indent_string(x, indent = 0, incr = 2, including_newline = TRUE)
 }
 \arguments{
-\item{x}{a character vector}
+\item{x}{(\code{character})\cr a character vector.}
 
-\item{indent}{a vector of length \code{length(x)} with non-negative integers}
+\item{indent}{(\code{numeric})\cr a vector of non-negative integers of length \code{length(x)}.}
 
-\item{incr}{non-negative integer: number of spaces per indent level}
+\item{incr}{(\code{integer(1)})\cr a non-negative number of spaces per indent level.}
 
-\item{including_newline}{boolean: should newlines also be indented}
+\item{including_newline}{(\code{flag})\cr whether newlines should also be indented.}
 }
 \value{
-\code{x} indented by left-padding with \code{indent*incr} white-spaces.
+\code{x}, indented with left-padding with \code{indent * incr} white-spaces.
 }
 \description{
 Used in rtables to indent row names for the ASCII output.

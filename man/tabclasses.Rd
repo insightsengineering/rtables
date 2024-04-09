@@ -59,80 +59,68 @@ TableTree(
 )
 }
 \arguments{
-\item{kids}{list. List of direct children.}
+\item{kids}{(\code{list})\cr list of direct children.}
 
-\item{name}{character(1). Name of the split/table/row being created. Defaults
-to same as the corresponding label, but is not required to be.}
+\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
+corresponding label, but is not required to be.}
 
-\item{lev}{integer. Nesting level (roughly, indentation level in practical
-terms).}
+\item{lev}{(\code{integer(1)})\cr nesting level (roughly, indentation level in practical terms).}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{labelrow}{\code{LabelRow}. The \code{LabelRow} object to assign to this Table.
-Constructed from \code{label} by default if not specified.}
+\item{labelrow}{(\code{LabelRow})\cr the \code{LabelRow} object to assign to the table. Constructed from \code{label} by default
+if not specified.}
 
-\item{rspans}{data.frame. Currently stored but otherwise ignored.}
+\item{rspans}{(\code{data.frame})\cr currently stored but otherwise ignored.}
 
-\item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
-object being created.}
+\item{cinfo}{(\code{InstantiatedColumnInfo} or \code{NULL})\cr column structure for the object being created.}
 
-\item{iscontent}{logical. Is the \code{TableTree}/\code{ElementaryTable} being constructed
-the content table for another \code{TableTree}.}
+\item{iscontent}{(\code{flag})\cr whether the \code{TableTree}/\code{ElementaryTable} is being constructed as the content
+table for another \code{TableTree}.}
 
-\item{var}{string, variable name}
+\item{var}{(\code{string})\cr variable name.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{title}{character(1). Main title (\code{\link[=main_title]{main_title()}}) is a single string.
-Ignored for subtables.}
+\item{title}{(\code{string})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{character. Subtitles (\code{\link[=subtitles]{subtitles()}}) can be vector of strings, where
-every element is printed in a separate line. Ignored for subtables.}
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
+printed on a separate line. Ignored for subtables.}
 
-\item{main_footer}{character. Main global (non-referential) footer materials
-(\code{\link[=main_footer]{main_footer()}}). If it is a vector of strings, they will be printed on separate
-lines.}
+\item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
+(\code{\link[=main_footer]{main_footer()}}), where every element is printed on a separate line.}
 
-\item{prov_footer}{character. Provenance-related global footer materials
-(\code{\link[=prov_footer]{prov_footer()}}). It can be also a vector of strings, printed on different lines.
-Generally should not be modified by hand.}
+\item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
+(\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
-\item{header_section_div}{character(1). String which will be used to divide the header
-from the table. See \code{\link[=header_section_div]{header_section_div()}} for getter and setter of these.
-Please consider changing last element of \code{\link[=section_div]{section_div()}} when concatenating
-tables that need a divider between them.}
+\item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
+\code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of
+\code{\link[=section_div]{section_div()}} when concatenating tables that require a divider between them.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning). See
-\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
+the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
+information.}
 
-\item{trailing_section_div}{character(1). String which will be used as a section
-divider after the printing of the last row contained in this (sub)-table,
-unless that row is also the last table row to be printed overall, or
-\code{NA_character_} for none (the default). When generated via layouting, this
-would correspond to the \code{section_div} of the split under which this table
-represents a single facet.}
+\item{trailing_section_div}{(\code{string})\cr string which will be used as a section divider after the printing
+of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
+or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
+\code{section_div} of the split under which this table represents a single facet.}
 
-\item{inset}{numeric(1). Number of spaces to inset the table header, table
-body, referential footnotes, and main_footer, as compared to alignment
-of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+\item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
+main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
 
-\item{cont}{\code{ElementaryTable}. Content table.}
+\item{cont}{(\code{ElementaryTable})\cr content table.}
 
-\item{page_title}{character. Page specific title(s).}
+\item{page_title}{(\code{character})\cr page-specific title(s).}
 }
 \value{
 A formal object representing a populated table.
@@ -140,7 +128,7 @@ A formal object representing a populated table.
 \description{
 \code{TableTree} classes
 
-Table Constructors and Classes
+Table constructors and classes
 }
 \author{
 Gabriel Becker
