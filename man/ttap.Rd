@@ -3,29 +3,27 @@
 \name{tt_at_path}
 \alias{tt_at_path}
 \alias{tt_at_path<-}
-\title{Get or set table elements at specified path}
+\title{Access or set table elements at specified path}
 \usage{
 tt_at_path(tt, path, ...)
 
 tt_at_path(tt, path, ...) <- value
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
-\item{\dots}{unused.}
+\item{...}{unused.}
 
-\item{value}{The new value}
+\item{value}{(\code{ANY})\cr the new value.}
 }
 \description{
-Get or set table elements at specified path
+Access or set table elements at specified path
 }
 \note{
-Setting \code{NULL} at a defined path removes the corresponding sub table.
+Setting \code{NULL} at a defined path removes the corresponding sub-table.
 }
 \examples{
 # Accessing sub table.

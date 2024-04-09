@@ -18,38 +18,33 @@ in_rows(
 )
 }
 \arguments{
-\item{...}{single row defining expressions}
+\item{...}{single row defining expressions.}
 
-\item{.list}{list. list cell content, usually \code{rcells}, the \code{.list} is
-concatenated to \code{...}}
+\item{.list}{(\code{list})\cr list cell content (usually \code{rcells}). The \code{.list} is concatenated to \code{...}.}
 
-\item{.names}{character or NULL. Names of the returned list/structure.}
+\item{.names}{(\code{character} or \code{NULL})\cr names of the returned list/structure.}
 
-\item{.labels}{character or NULL. labels for the defined rows}
+\item{.labels}{(\code{character} or \code{NULL})\cr labels for the defined rows.}
 
-\item{.formats}{character or NULL. Formats for the values}
+\item{.formats}{(\code{character} or \code{NULL})\cr formats for the values.}
 
-\item{.indent_mods}{integer or NULL. Indent modifications for the defined
-rows.}
+\item{.indent_mods}{(\code{integer} or \code{NULL})\cr indent modifications for the defined rows.}
 
-\item{.cell_footnotes}{list. Referential footnote messages to be associated
-by name with \emph{cells}.}
+\item{.cell_footnotes}{(\code{list})\cr referential footnote messages to be associated by name with \emph{cells}.}
 
-\item{.row_footnotes}{list. Referential footnotes messages to be associated
-by name with \emph{rows}.}
+\item{.row_footnotes}{(\code{list})\cr referential footnotes messages to be associated by name with \emph{rows}.}
 
-\item{.aligns}{character or NULL. Alignments for the cells. Standard for \code{NULL}
-is \code{"center"}. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for currently supported
-alignments.}
+\item{.aligns}{(\code{character} or \code{NULL})\cr alignments for the cells. Standard for \code{NULL} is \code{"center"}.
+See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for currently supported alignments.}
 
-\item{.format_na_strs}{character or NULL. NA strings for the cells}
+\item{.format_na_strs}{(\code{character} or \code{NULL})\cr NA strings for the cells.}
 }
 \value{
-an \code{RowsVerticalSection} object (or \code{NULL}). The details of
-this object should be considered an internal implementation detail.
+A \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an
+internal implementation detail.
 }
 \description{
-define the cells that get placed into multiple rows in \code{afun}
+Define the cells that get placed into multiple rows in \code{afun}.
 }
 \note{
 In post-processing, referential footnotes can also be added using row and column

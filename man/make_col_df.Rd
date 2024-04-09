@@ -2,22 +2,19 @@
 % Please edit documentation in R/tt_paginate.R
 \name{make_col_df}
 \alias{make_col_df}
-\title{Column Layout Summary}
+\title{Column layout summary}
 \usage{
 make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 }
 \arguments{
-\item{tt}{ANY. Object representing the table-like object to be summarized.}
+\item{tt}{(\code{ANY})\cr object representing the table-like object to be summarized.}
 
-\item{colwidths}{numeric. Internal detail do not set manually.}
+\item{colwidths}{(\code{numeric})\cr internal detail, do not set manually.}
 
-\item{visible_only}{logical(1). Should only visible aspects of the table structure be reflected in this summary.
-Defaults to \code{TRUE}. May not be supported by all methods.}
+\item{visible_only}{(\code{flag})\cr should only visible aspects of the table structure be reflected
+in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 }
 \description{
-Generate a structural summary of the columns of an
-rtables table and return it as a data.frame.
-}
-\details{
-Used for Pagination
+Used for pagination. Generate a structural summary of the columns of an \code{rtables} table and return it as a
+\code{data.frame}.
 }

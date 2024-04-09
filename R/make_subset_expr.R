@@ -3,6 +3,7 @@
 ## we (sometimes) run into
 ## factor()[TRUE] giving <NA> (i.e. length 1)
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
+
 setMethod(
   "make_subset_expr", "VarLevelSplit",
   function(spl, val) {
@@ -59,7 +60,6 @@ setMethod(
   }
 )
 
-
 ## XXX these are going to be ridiculously slow
 ## FIXME
 
@@ -106,7 +106,6 @@ setMethod(
   }
 )
 
-
 ## I think this one is unnecessary,
 ## build_table collapses DynCutSplits into
 ## static ones.
@@ -126,8 +125,6 @@ setMethod(
   "make_subset_expr", "AllSplit",
   function(spl, val) expression(TRUE)
 )
-
-
 
 ## probably don't need this
 
@@ -159,7 +156,6 @@ setMethod(
   as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
 
-
 make_pos_subset <- function(spls = pos_splits(pos),
                             svals = pos_splvals(pos),
                             pos) {
@@ -170,7 +166,6 @@ make_pos_subset <- function(spls = pos_splits(pos),
   }
   expr
 }
-
 
 get_pos_extra <- function(svals = pos_splvals(pos),
                           pos) {
@@ -212,8 +207,6 @@ setMethod(
     make_pos_subset(pos = tree_pos(lyt))
   }
 )
-
-
 
 create_colinfo <- function(lyt, df, rtpos = TreePos(),
                            counts = NULL,

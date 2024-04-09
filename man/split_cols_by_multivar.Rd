@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{split_cols_by_multivar}
 \alias{split_cols_by_multivar}
-\title{Associate Multiple Variables with Columns}
+\title{Associate multiple variables with columns}
 \usage{
 split_cols_by_multivar(
   lyt,
@@ -15,42 +15,37 @@ split_cols_by_multivar(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{vars}{character vector. Multiple variable names.}
+\item{vars}{(\code{character})\cr vector of variable names.}
 
-\item{split_fun}{function/NULL. custom splitting function See
-\code{\link{custom_split_funs}}}
+\item{split_fun}{(\code{function} or \code{NULL})\cr custom splitting function. See \link{custom_split_funs}.}
 
-\item{varlabels}{character vector. Labels for \code{vars}}
+\item{varlabels}{(\code{character})\cr vector of labels for \code{vars}.}
 
-\item{varnames}{character vector. Names for \code{vars} which will appear in
-pathing. When \code{vars} are all unique this will be the variable names.
-If not, these will be variable names with suffixes as necessary to enforce
+\item{varnames}{(\code{character})\cr vector of names for \code{vars} which will appear in pathing. When \code{vars} are all
+unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce
 uniqueness.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the
-existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
-new top-level element (`FALSE). Ignored if it would nest a split underneath
-analyses, which is not allowed.}
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-In some cases, the variable to be ultimately analyzed is most naturally
-defined on a column, not a row basis. When we need columns to reflect
-different variables entirely, rather than different levels of a single
-variable, we use \code{split_cols_by_multivar}
+In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row, basis.
+When we need columns to reflect different variables entirely, rather than different levels of a single
+variable, we use \code{split_cols_by_multivar}.
 }
 \examples{
 library(dplyr)
+
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the

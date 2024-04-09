@@ -2,26 +2,29 @@
 % Please edit documentation in R/validate_table_struct.R
 \name{find_degen_struct}
 \alias{find_degen_struct}
-\title{Find degenerate (sub)structures within a table (Experimental)}
+\title{Find degenerate (sub)structures within a table}
 \usage{
 find_degen_struct(tt)
 }
 \arguments{
-\item{tt}{\code{TableTree}
-
-This function returns a list with the row-paths to all
-structural subtables which contain no data rows (
-even if they have associated content rows).}
+\item{tt}{(\code{TableTree})\cr a \code{TableTree} object.}
 }
 \value{
-a list of character vectors representing the
-row paths, if any, to degenerate substructures within
-the table.
+A list of character vectors representing the row paths, if any, to degenerate substructures within the table.
 }
 \description{
-Find degenerate (sub)structures within a table (Experimental)
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+This function returns a list with the row-paths to all structural subtables which contain no data rows (even if
+they have associated content rows).
 }
 \examples{
 find_degen_struct(rtable("hi"))
 
 }
+\seealso{
+Other table structure validation functions: 
+\code{\link{sanitize_table_struct}()},
+\code{\link{validate_table_struct}()}
+}
+\concept{table structure validation functions}

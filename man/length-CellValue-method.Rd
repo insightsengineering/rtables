@@ -7,10 +7,10 @@
 \S4method{length}{CellValue}(x)
 }
 \arguments{
-\item{x}{x.}
+\item{x}{(\code{CellValue})\cr a \code{CellValue} object.}
 }
 \value{
-Always returns \code{1L}
+Always returns \code{1L}.
 }
 \description{
 Length of a Cell value

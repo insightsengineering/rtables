@@ -2,12 +2,12 @@
 #'
 #' Change indentation of all `rrows` in an `rtable`
 #'
-#' @param x \code{\link{rtable}} object
-#' @param by integer to increase indentation of rows. Can be negative. If final indentation is smaller than 0 then the
-#'   indentation is set to 0.
+#' @param x (`VTableTree`)\cr an `rtable` object.
+#' @param by (`integer`)\cr number to increase indentation of rows by. Can be negative. If final indentation is
+#'   less than 0, the indentation is set to 0.
 #'
-#' @export
-#' @return \code{x} with its indent modifier incremented by \code{by}.
+#' @return `x` with its indent modifier incremented by `by`.
+#'
 #' @examples
 #' is_setosa <- iris$Species == "setosa"
 #' m_tbl <- rtable(
@@ -31,6 +31,7 @@
 #' indent(m_tbl)
 #' indent(m_tbl, 2)
 #'
+#' @export
 indent <- function(x, by = 1) {
   if (nrow(x) == 0 || by == 0) {
     return(x)
@@ -40,9 +41,12 @@ indent <- function(x, by = 1) {
   x
 }
 
-#' Clear All Indent Mods from a Table
+#' Clear all indent modifiers from a table
+#'
 #' @inheritParams gen_args
-#' @return The same class as \code{tt}, with all indent mods set to zero.
+#'
+#' @return The same class as `tt`, with all indent modifiers set to zero.
+#'
 #' @examples
 #' lyt1 <- basic_table() %>%
 #'   summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
@@ -53,9 +57,11 @@ indent <- function(x, by = 1) {
 #' tbl1 <- build_table(lyt1, ex_adae)
 #' tbl1
 #' clear_indent_mods(tbl1)
+#'
 #' @export
 #' @rdname clear_imods
 setGeneric("clear_indent_mods", function(tt) standardGeneric("clear_indent_mods"))
+
 #' @export
 #' @rdname clear_imods
 setMethod(
@@ -70,6 +76,7 @@ setMethod(
     tt
   }
 )
+
 #' @export
 #' @rdname clear_imods
 setMethod(

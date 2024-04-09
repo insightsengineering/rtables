@@ -16,59 +16,49 @@ build_table(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{df}{dataset (\code{data.frame} or \code{tibble})}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{alt_counts_df}{dataset (\code{data.frame} or \code{tibble}). Alternative full data
-the rtables framework will use (\emph{only}) when calculating column
-counts.}
+\item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
+\emph{only} when calculating column counts.}
 
-\item{col_counts}{numeric (or \code{NULL}). Deprecated. If non-null, column counts
-which override those calculated automatically during tabulation. Must
-specify "counts" for \emph{all} resulting columns if non-NULL. \code{NA}
-elements will be replaced with the automatically calculated counts.}
+\item{col_counts}{(\code{numeric} or \code{NULL})\cr \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} if non-\code{NULL}, column counts
+which override those calculated automatically during tabulation. Must specify "counts" for \emph{all}
+resulting columns if non-\code{NULL}. \code{NA} elements will be replaced with the automatically calculated counts.}
 
-\item{col_total}{integer(1). The total observations across all columns.
-Defaults to \code{nrow(df)}.}
+\item{col_total}{(\code{integer(1)})\cr the total observations across all columns. Defaults to \code{nrow(df)}.}
 
-\item{topleft}{character. Override values for the "top left" material to be
-displayed during printing.}
+\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning). See
-\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
+the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
+information.}
 
-\item{\dots}{currently ignored.}
+\item{...}{ignored.}
 }
 \value{
-A \code{TableTree} or \code{ElementaryTable} object representing the
-table created by performing the tabulations declared in \code{lyt} to the
-data \code{df}.
+A \code{TableTree} or \code{ElementaryTable} object representing the table created by performing the tabulations
+declared in \code{lyt} to the data \code{df}.
 }
 \description{
-Layouts are used to describe a table pre-data. \code{build_table} is used to
-create a table using a layout and a dataset.
+Layouts are used to describe a table pre-data. \code{build_table} is used to create a table
+using a layout and a dataset.
 }
 \details{
-When \code{alt_counts_df} is specified, column counts are calculated by
-applying the exact column subsetting expressions determined when applying
-column splitting to the main data (\code{df}) to \code{alt_counts_df} and
+When \code{alt_counts_df} is specified, column counts are calculated by applying the exact column subsetting
+expressions determined when applying column splitting to the main data (\code{df}) to \code{alt_counts_df} and
 counting the observations in each resulting subset.
 
-In particular, this means that in the case of splitting based on cuts of the
-data, any dynamic cuts will have been calculated based on \code{df} and
-simply re-used for the count calculation.
+In particular, this means that in the case of splitting based on cuts of the data, any dynamic cuts will have
+been calculated based on \code{df} and simply re-used for the count calculation.
 }
 \note{
-When overriding the column counts or totals care must be taken that,
-e.g., \code{length()} or \code{nrow()} are not called within tabulation functions,
-because those will NOT give the overridden counts. Writing/using tabulation
-functions which accept \code{.N_col} and \code{.N_total} or do not rely on
-column counts at all (even implicitly) is the only way to ensure overridden
-counts are fully respected.
+When overriding the column counts or totals care must be taken that, e.g., \code{length()} or \code{nrow()} are not called
+within tabulation functions, because those will NOT give the overridden counts. Writing/using tabulation
+functions which accept \code{.N_col} and \code{.N_total} or do not rely on column counts at all (even implicitly) is the
+only way to ensure overridden counts are fully respected.
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -79,7 +69,6 @@ lyt <- basic_table() \%>\%
       "range" = diff(range(x))
     )
   })
-
 lyt
 
 tbl <- build_table(lyt, iris)

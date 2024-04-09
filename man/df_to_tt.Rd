@@ -2,25 +2,20 @@
 % Please edit documentation in R/tt_from_df.R
 \name{df_to_tt}
 \alias{df_to_tt}
-\title{Create \code{ElementaryTable} from data.frame}
+\title{Create an \code{ElementaryTable} from a \code{data.frame}}
 \usage{
 df_to_tt(df)
 }
 \arguments{
-\item{df}{data.frame.}
-}
-\value{
-an \code{ElementaryTable} object with unnested columns corresponding to
-\code{names(df)} and row labels corresponding to \code{row.names(df)}.
+\item{df}{(\code{data.frame})\cr a data frame.}
 }
 \description{
-Create \code{ElementaryTable} from data.frame
+Create an \code{ElementaryTable} from a \code{data.frame}
 }
 \details{
-If row names are not defined in \code{df} (or they are simple numbers), then the
-row names are taken from the column \code{label_name}, if exists. If \code{label_name} exists,
-then it is also removed from the original data. Remember that this behavior is
-compatible with \code{\link[=as_result_df]{as_result_df()}}, when \code{as_is = TRUE} and the row names are not unique.
+If row names are not defined in \code{df} (or they are simple numbers), then the row names are taken from the column
+\code{label_name}, if it exists. If \code{label_name} exists, then it is also removed from the original data. This behavior
+is compatible with \code{\link[=as_result_df]{as_result_df()}}, when \code{as_is = TRUE} and the row names are not unique.
 }
 \examples{
 df_to_tt(mtcars)

@@ -11,52 +11,46 @@
 \S4method{[}{VTableTree,logical,logical}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
-\item{x}{\code{TableTree}}
+\item{x}{(\code{TableTree})\cr a \code{TableTree} object.}
 
-\item{i}{index}
+\item{i}{(\code{numeric(1)})\cr index.}
 
-\item{j}{index}
+\item{j}{(\code{numeric(1)})\cr index.}
 
-\item{\dots}{Includes
+\item{...}{additional arguments. Includes:
 \describe{
-\item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the \code{top-left}
-material for the table be retained after subsetting. Defaults to \code{TRUE} if
-all rows are included (i.e. subsetting was by column), and drops it otherwise.}
-\item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}.}
-\item{\emph{keep_footers}}{logical(1) Should non-referential footer
-information be retained. Defaults to \code{keep_titles}.}
-\item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
-re-indexed as if the resulting subset is the entire table. Defaults to
-\code{TRUE}.}
+\item{\code{keep_topleft}}{(\code{flag}) (\code{[} only) whether the top-left material for the table should be retained after
+subsetting. Defaults to \code{TRUE} if all rows are included (i.e. subsetting was by column), and drops it
+otherwise.}
+\item{\code{keep_titles}}{(\code{flag}) whether title information should be retained. Defaults to \code{FALSE}.}
+\item{\code{keep_footers}}{(\code{flag}) whether non-referential footer information should be retained. Defaults to
+\code{keep_titles}.}
+\item{\code{reindex_refs}}{(\code{flag}) whether referential footnotes should be re-indexed as if the resulting subset is
+the entire table. Defaults to \code{TRUE}.}
 }}
 
-\item{value}{Replacement value (list, \code{TableRow}, or \code{TableTree})}
+\item{value}{(\code{list}, \code{TableRow}, or \code{TableTree})\cr replacement value.}
 
-\item{drop}{logical(1). Should the value in the cell be returned if one
-cell is selected by the combination of \code{i} and \code{j}. It is not possible
-to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
-Defaults to \code{FALSE}.}
+\item{drop}{(\code{flag})\cr whether the value in the cell should be returned if one cell is selected by the
+combination of \code{i} and \code{j}. It is not possible to return a vector of values. To do so please consider using
+\code{\link[=cell_values]{cell_values()}}. Defaults to \code{FALSE}.}
 }
 \value{
-a \code{TableTree} (or \code{ElementaryTable}) object, unless a
-single cell was selected with \code{drop=TRUE}, in which case the (possibly
-multi-valued) fully stripped raw value of the selected cell.
+A \code{TableTree} (or \code{ElementaryTable}) object, unless a single cell was selected with \code{drop = TRUE}, in which
+case the (possibly multi-valued) fully stripped raw value of the selected cell.
 }
 \description{
 Retrieve and assign elements of a \code{TableTree}
 }
 \details{
-by default, subsetting drops the information about title, subtitle,
-main footer, provenance footer, and \code{topleft}. If only a column is selected
-and all rows are kept, the \code{topleft} information remains as default. Any
-referential footnote is kept whenever the subset table contains the
-referenced element.
+By default, subsetting drops the information about title, subtitle, main footer, provenance footer, and \code{topleft}.
+If only a column is selected and all rows are kept, the \code{topleft} information remains as default. Any referential
+footnote is kept whenever the subset table contains the referenced element.
 }
 \note{
-subsetting always preserve the original order, even if provided
-indexes do not preserve it. If sorting is needed, please consider
-using \code{sort_at_path()}. Also note that \code{character} indices are treated as paths,
-not vectors of names in both \code{[} and \verb{[<-}.
+Subsetting always preserve the original order, even if provided indexes do not preserve it. If sorting is needed,
+please consider using \code{sort_at_path()}. Also note that \code{character} indices are treated as paths, not vectors of
+names in both \code{[} and \verb{[<-}.
 }
 \examples{
 lyt <- basic_table(
@@ -129,6 +123,8 @@ tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
 
 }
 \seealso{
-Regarding sorting: \code{sort_at_path()} and how to understand path
-structure: \code{summarize_row_groups()}, and \code{summarize_col_groups()}.
+\itemize{
+\item \code{\link[=sort_at_path]{sort_at_path()}} to understand sorting.
+\item \code{\link[=summarize_row_groups]{summarize_row_groups()}} to understand path structure.
+}
 }

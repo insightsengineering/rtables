@@ -14,28 +14,30 @@ insert_brs <- function(vec) {
   ret
 }
 
-
 div_helper <- function(lst, class) {
   do.call(tags$div, c(list(class = paste(class, "rtables-container"), lst)))
 }
 
-#' Convert an `rtable` object to a `shiny.tag` html object
+#' Convert an `rtable` object to a `shiny.tag` HTML object
 #'
-#' The returned `html` object can be immediately used in `shiny` and `rmarkdown`.
+#' The returned HTML object can be immediately used in `shiny` and `rmarkdown`.
 #'
-#' @param x `rtable` object
-#' @param class_table class for `table` tag
-#' @param class_tr class for `tr` tag
-#' @param class_th class for `th` tag
-#' @param width a string to indicate the desired width of the table. Common input formats include a
-#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`).
-#'   Defaults to `NULL`.
-#' @param link_label link anchor label (not including `tab:` prefix) for the table.
-#' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`,
-#'   `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows).
-#'   Defaults to `"header"`.
-#' @param header_sep_line whether a black line should be printed to under the table header. Defaults to `TRUE`.
-#' @param no_spaces_between_cells whether spaces between table cells should be collapsed. Defaults to `FALSE`.
+#' @param x (`VTableTree`)\cr a `TableTree` object.
+#' @param class_table (`character`)\cr class for `table` tag.
+#' @param class_tr (`character`)\cr class for `tr` tag.
+#' @param class_th (`character`)\cr class for `th` tag.
+#' @param width (`character`)\cr a string to indicate the desired width of the table. Common input formats include a
+#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`). Defaults to `NULL`.
+#' @param link_label (`character`)\cr link anchor label (not including `tab:` prefix) for the table.
+#' @param bold (`character`)\cr elements in table output that should be bold. Options are `"main_title"`,
+#'   `"subtitles"`, `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label
+#'   rows). Defaults to `"header"`.
+#' @param header_sep_line (`flag`)\cr whether a black line should be printed to under the table header. Defaults
+#'   to `TRUE`.
+#' @param no_spaces_between_cells (`flag`)\cr whether spaces between table cells should be collapsed. Defaults
+#'   to `FALSE`.
+#'
+#' @importFrom htmltools tags
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.
 #'
@@ -58,7 +60,6 @@ div_helper <- function(lst, class) {
 #' Viewer(tbl)
 #' }
 #'
-#' @importFrom htmltools tags
 #' @export
 as_html <- function(x,
                     width = NULL,
@@ -198,7 +199,6 @@ as_html <- function(x,
       )
     )
   )
-
 
   tabletag <- do.call(
     tags$table,

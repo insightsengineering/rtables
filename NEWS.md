@@ -11,6 +11,9 @@
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
 
+### Miscellaneous
+* Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
+
 ## rtables 0.6.6
 ### New Features
  * Removed `ref_group` reordering in column splits so not to change the order.

@@ -16,60 +16,51 @@ summarize_row_groups(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{var}{string, variable name}
+\item{var}{(\code{string})\cr variable name.}
 
-\item{label_fstr}{string. An \code{sprintf} style format string containing. For
-non-comparison splits, it can contain  up to one \code{"\%s"} which takes
-the current split value and generates the row/column label.
-Comparison-based splits it can contain up to two \code{"\%s"}.}
+\item{label_fstr}{(\code{string})\cr a \code{sprintf} style format string. For non-comparison splits, it can contain up to
+one \code{"\\\%s"} which takes the current split value and generates the row/column label. For comparison-based splits
+it can contain up to two \code{"\\\%s"}.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{na_str}{character(1). String that should be displayed when the value of \code{x} is missing.
-Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{cfun}{list/function/NULL. tabulation function(s) for creating content
-rows. Must accept \code{x} or \code{df} as first parameter. Must accept
-\code{labelstr} as the second argument. Can optionally accept all optional
-arguments accepted by analysis functions. See \code{\link{analyze}}.}
+\item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
+or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 Add a content row of summary counts
 }
 \details{
-If \code{format} expects 1 value (i.e. it is specified as a format string
-and \code{xx} appears for two values (i.e. \code{xx} appears twice in the
-format string) or is specified as a function, then both raw and percent of
-column total counts are calculated. If \code{format} is a format string where
-\code{xx} appears only one time, only raw counts are used.
+If \code{format} expects 1 value (i.e. it is specified as a format string and \code{xx} appears for two values
+(i.e. \code{xx} appears twice in the format string) or is specified as a function, then both raw and percent of
+column total counts are calculated. If \code{format} is a format string where \code{xx} appears only one time, only
+raw counts are used.
 
-\code{cfun} must accept \code{x} or \code{df} as its first argument. For the \code{df} argument
-\code{cfun} will receive the subset \code{data.frame} corresponding with the row-
-and column-splitting for the cell being calculated. Must accept \code{labelstr} as
-the second parameter, which accepts the \code{label} of the level of the parent
-split currently being summarized. Can additionally take any optional argument
-supported by analysis functions. (see \code{\link{analyze}}).
+\code{cfun} must accept \code{x} or \code{df} as its first argument. For the \code{df} argument \code{cfun} will receive the subset
+\code{data.frame} corresponding with the row- and column-splitting for the cell being calculated. Must accept
+\code{labelstr} as the second parameter, which accepts the \code{label} of the level of the parent split currently
+being summarized. Can additionally take any optional argument supported by analysis functions. (see \code{\link[=analyze]{analyze()}}).
 
-In addition, if complex custom functions are needed, we suggest checking the
-available \link{additional_fun_params} that apply here as for \code{afun}.
+In addition, if complex custom functions are needed, we suggest checking the available \link{additional_fun_params}
+that can be used in \code{cfun}.
 }
 \examples{
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
@@ -85,7 +76,6 @@ tbl <- build_table(lyt, DM2)
 tbl
 
 row_paths_summary(tbl) # summary count is a content table
-
 
 ## use a cfun and extra_args to customize summarization
 ## behavior
