@@ -78,21 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -128,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker,
 Adrian Waddell and Davide Garolini</h4>
             
-            <h4 data-toc-skip class="date">2024-04-08</h4>
+            <h4 data-toc-skip class="date">2024-04-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/sorting_pruning.Rmd" class="external-link"><code>vignettes/sorting_pruning.Rmd</code></a></small>
       <div class="d-none name"><code>sorting_pruning.Rmd</code></div>
@@ -540,7 +525,7 @@ definition, below:</p>
 <span><span class="co">#     }</span></span>
 <span><span class="co">#     sum(sapply(row_values(tree_children(ctab)[[1]]), function(cv) cv[1]))</span></span>
 <span><span class="co"># }</span></span>
-<span><span class="co"># &lt;bytecode: 0x56374f2002b0&gt;</span></span>
+<span><span class="co"># &lt;bytecode: 0x56050338fb50&gt;</span></span>
 <span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre>
 <p>Therefore, a fundamental difference between pruning and sorting is
 that sorting occurs at particular places in the table, as defined by a
@@ -931,7 +916,7 @@ proceed.</p>
 <span><span class="co">#         row_values(tree_children(ctab)[[1]])[[j]][1]</span></span>
 <span><span class="co">#     }</span></span>
 <span><span class="co"># }</span></span>
-<span><span class="co"># &lt;bytecode: 0x56374f35bc28&gt;</span></span>
+<span><span class="co"># &lt;bytecode: 0x5605034e07e0&gt;</span></span>
 <span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre>
 <p>We see that a similar function to <code><a href="../reference/score_funs.html">cont_n_allcols()</a></code> is
 wrapped by one that allows a parameter <code>j</code> to be used to
