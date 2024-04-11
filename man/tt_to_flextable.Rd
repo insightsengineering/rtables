@@ -12,7 +12,7 @@ tt_to_flextable(
   indent_size = NULL,
   titles_as_header = TRUE,
   footers_as_text = FALSE,
-  add_counts_to_same_line = FALSE,
+  counts_in_newline = FALSE,
   paginate = FALSE,
   lpp = NULL,
   cpp = NULL,
@@ -53,8 +53,8 @@ The same style is applied.}
 the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
 paragraph after the table. The same style is applied, but with a smaller font.}
 
-\item{add_counts_to_same_line}{(\code{flag})\cr defaults to \code{TRUE} for printing the counts
-on the same line of column names. If \code{FALSE}, the counts are printed on a new line.}
+\item{counts_in_newline}{(\code{flag})\cr defaults to \code{TRUE} for printing the counts on a new line. Otherwise,
+\code{FALSE} will print the counts in the same line as the column name (see \code{\link[=add_colcounts]{add_colcounts()}}).}
 
 \item{paginate}{(\code{flag})\cr when exporting \code{.docx} documents using \code{export_as_docx}, we suggest relying on the
 Microsoft Word pagination system. If \code{TRUE}, this option splits \code{tt} into different "pages" as multiple

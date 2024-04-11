@@ -741,8 +741,8 @@ margins_landscape <- function() {
 #'   object to change its layout and style. If `NULL`, it will produce a table similar to `rtables` default. Defaults
 #'   to `theme_docx_default(tt)`.
 #' @param border (`officer` border object)\cr defaults to `officer::fp_border(width = 0.5)`.
-#' @param add_counts_to_same_line (`flag`)\cr defaults to `TRUE` for printing the counts
-#'   on the same line of column names. If `FALSE`, the counts are printed on a new line.
+#' @param counts_in_newline (`flag`)\cr defaults to `TRUE` for printing the counts on a new line. Otherwise,
+#'   `FALSE` will print the counts in the same line as the column name (see [add_colcounts()]).
 #' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [matrix_form()]
 #'   `indent_size`) is used. To work with `docx`, any size is multiplied by 2 mm (5.67 pt) by default.
 #' @param titles_as_header (`flag`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
@@ -791,7 +791,7 @@ tt_to_flextable <- function(tt,
                             indent_size = NULL,
                             titles_as_header = TRUE,
                             footers_as_text = FALSE,
-                            add_counts_to_same_line = FALSE,
+                            counts_in_newline = FALSE,
                             paginate = FALSE,
                             lpp = NULL,
                             cpp = NULL,
@@ -806,7 +806,7 @@ tt_to_flextable <- function(tt,
   }
   checkmate::assert_flag(titles_as_header)
   checkmate::assert_flag(footers_as_text)
-  checkmate::assert_flag(add_counts_to_same_line)
+  checkmate::assert_flag(counts_in_newline)
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
@@ -858,7 +858,7 @@ tt_to_flextable <- function(tt,
   if (hnum > 1) { # otherwise nothing to do (it is one line header already)
     det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
     has_nclab <- apply(det_nclab, 1, any)
-    if (add_counts_to_same_line && any(has_nclab)) {
+    if (!counts_in_newline && any(has_nclab)) {
       whsnc <- which(has_nclab) # which rows have it
       what_is_nclab <- det_nclab[whsnc, ]
 
@@ -879,8 +879,6 @@ tt_to_flextable <- function(tt,
         hnum <- hnum - 1
       }
     }
-  } else if (!add_counts_to_same_line) {
-    warning("Header is only one line, add_counts_to_same_line is ignored.")
   }
 
   flx <- flx %>%
