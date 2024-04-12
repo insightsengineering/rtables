@@ -3,6 +3,7 @@
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
  * `sort_at_path` now gives informative error messages when the given path does not exist.
+ * Added Support for displaying column counts for higher-level facets in the column structure, PR from @gmbecker
 
 ### Bug Fixes
  * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.

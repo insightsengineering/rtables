@@ -263,6 +263,7 @@ reference:
     - formatters::main_title
     - top_left
     - formatters::obj_name
+    - matches("colcount")
 
   - title: TableTree Framework Constructors and S4 Classes
     desc: S4 classes and constructors

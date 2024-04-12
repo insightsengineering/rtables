@@ -206,7 +206,10 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   if (is.null(topleft)) {
     topleft <- top_left(lyt)
   }
-  ctree <- coltree(clayout, df = df, rtpos = rtpos)
+  ## do it this way for full backwards compatibility
+  if (is.null(alt_counts_df))
+    alt_counts_df <- df
+  ctree <- coltree(clayout, df = df, rtpos = rtpos, alt_counts_df = alt_counts_df)
 
   cexprs <- make_col_subsets(ctree, df)
   colextras <- col_extra_args(ctree)
@@ -230,7 +233,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   }
 
   counts_df_name <- "alt_counts_df"
-  if (is.null(alt_counts_df)) {
+  if (identical(alt_counts_df, df)) { #is.null(alt_counts_df)) {
     alt_counts_df <- df
     counts_df_name <- "df"
   }
@@ -243,6 +246,9 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
       0
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
+      ## likely unneeded now because it happens in splitvec_to_coltree
+      ## which is called during coltree construction above
+      ## TODO remove me
       if (is(vec, "try-error")) {
         stop(sprintf(
           paste(

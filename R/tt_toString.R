@@ -191,6 +191,7 @@ setMethod(
            expand_newlines = TRUE,
            indent_size = 2) {
     stopifnot(is(obj, "VTableTree"))
+    check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
     sr <- make_row_df(obj)
@@ -313,6 +314,33 @@ setMethod(
   }
 )
 
+
+check_ccount_vis_ok <- function(tt) {
+  ctree <- coltree(tt)
+  tlkids <- tree_children(ctree)
+  lapply(tlkids, ccvis_check_subtree)
+  invisible(NULL)
+}
+
+ccvis_check_subtree <- function(ctree) {
+  kids <- tree_children(ctree)
+  if (is.null(kids))
+    return(invisible(NULL))
+  vals <- vapply(kids, disp_ccounts, TRUE)
+  if (length(unique(vals)) > 1) {
+    unmatch <- which(!duplicated(vals))[1:2]
+    stop("Detected different colcount visibility among sibling facets (those ",
+         "arising from the same split_cols_by* layout instruction). This is ",
+         "not supported.\n",
+         "Set count values to NA if you want a blank space to appear as the ",
+         "displayed count for particular facets.\n",
+         "First disagreement occured at paths:\n",
+         .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[1]]]))), "\n",
+         .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[2]]]))))
+  }
+  lapply(kids, ccvis_check_subtree)
+  invisible(NULL)
+}
 .quick_handle_nl <- function(str_v) {
   if (any(grepl("\n", str_v))) {
     return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
@@ -427,7 +455,7 @@ get_formatted_fnotes <- function(tt) {
   remain <- seq_len(nrow(coldf))
   chunks <- list()
   cur <- 1
-
+  na_str <- colcount_na_str(tt)
   ## each iteration of this loop identifies
   ## all rows corresponding to one top-level column
   ## label and its children, then processes those
@@ -438,7 +466,9 @@ get_formatted_fnotes <- function(tt) {
     endblock <- which(coldf$abs_pos == max(inds))
 
     stopifnot(endblock >= rw)
-    chunks[[cur]] <- .do_header_chunk(coldf[rw:endblock, ])
+    chunk_res <- .do_header_chunk(coldf[rw:endblock, ], na_str = na_str)
+    chunk_res <- unlist(chunk_res, recursive = FALSE)
+    chunks[[cur]] <- chunk_res
     remain <- remain[remain > endblock]
     cur <- cur + 1
   }
@@ -473,18 +503,19 @@ get_formatted_fnotes <- function(tt) {
     function(chk) {
       span <- sum(vapply(chk[[length(chk)]], cell_cspan, 1L))
       needed <- padto - length(chk)
-      c(
-        replicate(rcell("", colspan = span),
+      unlist(c(
+        list(replicate(list(rcell("", colspan = span)),
           n = needed
-        ),
+        )),
         chk
-      )
+      ))
     }
   )
   chunks
 }
 
-.do_header_chunk <- function(coldf) {
+.do_header_chunk <- function(coldf, na_str) {
+
   ## hard assumption that coldf is a section
   ## of a column dataframe summary that was
   ## created with visible_only=FALSE
@@ -495,32 +526,51 @@ get_formatted_fnotes <- function(tt) {
     seq_along(spldfs),
     function(i) {
       rws <- spldfs[[i]]
-
-      thisbit <- lapply(
+      thisbit_vals <- lapply(
         seq_len(nrow(rws)),
         function(ri) {
-          rcell(rws[ri, "label", drop = TRUE],
+          cellii <- rcell(rws[ri, "label", drop = TRUE],
             colspan = rws$total_span[ri],
             footnotes = rws[ri, "col_fnotes", drop = TRUE][[1]]
           )
+          cellii
         }
       )
-      .pad_end(thisbit, nleafcols)
+      ret <- list(.pad_end(thisbit_vals, padto = nleafcols))
+      anycounts <- any(rws$ccount_visible)
+      if (anycounts) {
+        thisbit_ns <- lapply(
+          seq_len(nrow(rws)),
+          function(ri) {
+            vis_ri <- rws$ccount_visible[ri]
+            val <- if (vis_ri) rws$col_count[ri] else NULL
+            cellii <- rcell(
+              val,
+              colspan = rws$total_span[ri],
+              format = "(N=xx)",
+              format_na_str = na_str
+            )
+            cellii
+          }
+        )
+        ret <- c(ret, list(.pad_end(thisbit_ns, padto = nleafcols)))
+      }
+      ret
     }
   )
-
   toret
 }
 
 .tbl_header_mat <- function(tt) {
+
   rows <- .do_tbl_h_piece2(tt) ## (clyt)
   cinfo <- col_info(tt)
 
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
     cs <- row_cspans(x)
-    if (is.null(cs)) cs <- rep(1, ncol(x))
-    rep(row_values(x), cs)
+    strs <- get_formatted_cells(x)
+    strs
   }), ncol = nc, byrow = TRUE)
 
   span <- matrix(rapply(rows, function(x) {

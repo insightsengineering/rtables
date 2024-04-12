@@ -785,3 +785,69 @@ test_that("horizontal separator is propagated from table to print and export", {
   export_txt_tbl <- strsplit(export_as_txt(tbl), "\n")[[1]]
   expect_identical(tostring_tbl, export_txt_tbl)
 })
+
+## higher-level showing ncols works:
+
+test_that("showing higher-level ncols works", {
+  mydat <- subset(ex_adsl,  SEX %in% c("M", "F"))
+  mydat$SEX2 <- factor(
+    ifelse(
+      mydat$SEX == "M",
+      "males",
+      "super long sentence that involves females"
+    )
+  )
+
+  lyt <- basic_table() %>%
+    split_cols_by("ARM", show_colcounts = TRUE) %>%
+    split_cols_by("SEX2", show_colcounts = TRUE) %>%
+    split_cols_by("STRATA1") %>%
+    analyze("AGE")
+
+  tbl <- build_table(lyt, mydat)
+  cwds <- rep(8, ncol(tbl) + 1)
+  expect_equal(nlines(col_info(tbl), colwidths = cwds), 7)
+  mpf <- matrix_form(tbl, TRUE)
+  mpf <- formatters:::do_cell_fnotes_wrap(mpf, cwds, NULL, FALSE)
+  strs <- mf_strings(mpf)
+  ## wrapping some cells and not others still works
+  expect_equal(strs[3:4, 2], c("", "males"))
+
+  expect_equal(strs[2, 2], "(N=130)")
+  ## N= cells all across rows 2 (for ARM) and 5 (for SEX2), except rowlabels
+  expect_true(all(grepl("(N=", strs[c(2, 5), -1], fixed = TRUE)))
+  ## No N= cells elsewhere
+  expect_true(all(!grepl("(N=", strs[-c(2, 5), -1], fixed = TRUE)))
+
+  broken_tbl <- tbl
+  colcount_visible(broken_tbl, c("ARM", "A: Drug X", "SEX2", "males")) <- FALSE
+  expect_error(print(broken_tbl), "different colcount visibility among sibling facets")
+
+  ## does the old accessor still work ok
+
+  lyt2 <- basic_table() %>%
+    split_cols_by("ARM", show_colcounts = TRUE) %>%
+    split_cols_by("SEX2", show_colcounts = TRUE) %>%
+    split_cols_by("STRATA1", show_colcounts = TRUE) %>%
+    analyze("AGE")
+
+  tbl2 <- build_table(lyt2, mydat)
+  nc <- ncol(tbl2)
+  new_ccs <- seq_len(nc)
+
+  col_counts(tbl2) <- new_ccs
+
+  mpf2 <- matrix_form(tbl2, TRUE)
+  expect_equal(mf_strings(mpf2)[mf_nlheader(mpf2), -1, drop = TRUE],
+               sprintf("(N=%d)", new_ccs))
+  ## NA counts (to display blank) work correctly for higher level facets
+
+  tbl3 <- tbl
+  facet_colcount(tbl3, c("ARM", "C: Combination")) <- NA_integer_
+  mpf3 <- matrix_form(tbl3, TRUE)
+  ## starting at "column" 2 because topleft/row labels
+  expect_equal(mf_strings(mpf3)[2, 2:13],
+               mf_strings(mpf)[2, 2:13])
+  expect_equal(mf_strings(mpf3)[2, 14:19],
+               rep("", 6))
+})

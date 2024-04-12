@@ -139,7 +139,9 @@ setClass("Split",
     content_indent_modifier = "integer",
     content_extra_args = "list",
     page_title_prefix = "character",
-    child_section_div = "character"
+    child_section_div = "character",
+    child_show_colcounts = "logical",
+    child_colcount_format = "character"
   )
 )
 
@@ -185,7 +187,9 @@ VarLevelSplit <- function(var,
                           cvar = "",
                           cextra_args = list(),
                           page_prefix = NA_character_,
-                          section_div = NA_character_) {
+                          section_div = NA_character_,
+                          show_colcounts = FALSE,
+                          colcount_format = "(N=xx)") {
   child_labels <- match.arg(child_labels)
   if (is.null(labels_var)) {
     labels_var <- var
@@ -211,7 +215,9 @@ VarLevelSplit <- function(var,
     split_label_position = label_pos,
     content_extra_args = cextra_args,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -229,6 +235,8 @@ AllSplit <- function(split_label = "",
                      cindent_mod = 0L,
                      cvar = "",
                      cextra_args = list(),
+                     show_colcounts = FALSE,
+                     colcount_format = "(N=xx)",
                      ...) {
   if (is.null(split_name)) {
     if (nzchar(split_label)) {
@@ -254,7 +262,9 @@ AllSplit <- function(split_label = "",
     split_label_position = "hidden",
     content_extra_args = cextra_args,
     page_title_prefix = NA_character_,
-    child_section_div = NA_character_
+    child_section_div = NA_character_,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -277,7 +287,9 @@ RootSplit <- function(split_label = "", cfun = NULL, cformat = NULL, cna_str = N
     content_var = cvar,
     split_label_position = "hidden",
     content_extra_args = cextra_args,
-    child_section_div = NA_character_
+    child_section_div = NA_character_,
+    child_show_colcounts = FALSE,
+    child_colcount_format = "(N=xx)"
   )
 }
 
@@ -321,7 +333,9 @@ ManualSplit <- function(levels, label, name = "manual",
     split_na_str = NA_character_,
     split_label_position = label_pos,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = FALSE,
+    child_colcount_format = "(N=xx)"
   )
 }
 
@@ -394,7 +408,9 @@ MultiVarSplit <- function(vars,
                           label_pos = "visible",
                           split_fun = NULL,
                           page_prefix = NA_character_,
-                          section_div = NA_character_) {
+                          section_div = NA_character_,
+                          show_colcounts = FALSE,
+                          colcount_format = "(N=xx)") {
   check_ok_label(split_label)
   ## no topleft allowed
   label_pos <- match.arg(label_pos, label_pos_values[-3])
@@ -427,7 +443,9 @@ MultiVarSplit <- function(vars,
     content_extra_args = cextra_args,
     split_fun = split_fun,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -480,7 +498,9 @@ make_static_cut_split <- function(var,
                                   label_pos = "visible",
                                   cumulative = FALSE,
                                   page_prefix = NA_character_,
-                                  section_div = NA_character_) {
+                                  section_div = NA_character_,
+                                  show_colcounts = FALSE,
+                                  colcount_format = "(N=xx)") {
   cls <- if (cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
   check_ok_label(split_label)
 
@@ -517,7 +537,9 @@ make_static_cut_split <- function(var,
     split_label_position = label_pos,
     content_extra_args = cextra_args,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -564,7 +586,9 @@ VarDynCutSplit <- function(var,
                            cextra_args = list(),
                            label_pos = "visible",
                            page_prefix = NA_character_,
-                           section_div = NA_character_) {
+                           section_div = NA_character_,
+                           show_colcounts = FALSE,
+                           colcount_format = "(N=xx)") {
   check_ok_label(split_label)
   label_pos <- match.arg(label_pos, label_pos_values)
   child_labels <- match.arg(child_labels)
@@ -588,7 +612,9 @@ VarDynCutSplit <- function(var,
     split_label_position = label_pos,
     content_extra_args = cextra_args,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -664,7 +690,9 @@ AnalyzeVarSplit <- function(var,
     var_label_position = label_pos,
     content_var = cvar,
     page_title_prefix = NA_character_,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = FALSE,
+    child_colcount_format = NA_character_
   ) ## no content_extra_args
 }
 
@@ -708,7 +736,9 @@ AnalyzeColVarSplit <- function(afun,
     var_label_position = label_pos,
     content_var = cvar,
     page_title_prefix = NA_character_,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = FALSE,
+    child_colcount_format = NA_character_
   ) ## no content_extra_args
 }
 
@@ -902,7 +932,9 @@ VarLevWBaselineSplit <- function(var,
                                  split_na_str = NA_character_,
                                  valorder = NULL,
                                  split_name = var,
-                                 extra_args = list()) {
+                                 extra_args = list(),
+                                 show_colcounts = FALSE,
+                                 colcount_format = "(N=xx)") {
   check_ok_label(split_label)
   new("VarLevWBaselineSplit",
     payload = var,
@@ -928,7 +960,9 @@ VarLevWBaselineSplit <- function(var,
     content_var = cvar,
     ## so long as this is columnspace only
     page_title_prefix = NA_character_,
-    child_section_div = NA_character_
+    child_section_div = NA_character_,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -1057,11 +1091,15 @@ setClass("LayoutAxisTree",
   }
 )
 
+## this is only used for columns!!!!
 setClass("LayoutAxisLeaf",
   contains = "VLayoutLeaf", ## "VNodeInfo",
   representation(
     func = "function",
-    col_footnotes = "list"
+    display_columncounts = "logical",
+    columncount_format = "character",
+    col_footnotes = "list",
+    column_count = "integer"
   )
 )
 
@@ -1070,7 +1108,8 @@ setClass("LayoutColTree",
   representation(
     display_columncounts = "logical",
     columncount_format = "character",
-    col_footnotes = "list"
+    col_footnotes = "list",
+    column_count = "integer"
   )
 )
 
@@ -1082,9 +1121,10 @@ LayoutColTree <- function(lev = 0L,
                           spl = EmptyAllSplit,
                           tpos = TreePos(),
                           summary_function = NULL,
-                          disp_colcounts = FALSE,
+                          disp_ccounts = FALSE,
                           colcount_format = "(N=xx)",
-                          footnotes = list()) { ## ,
+                          footnotes = list(),
+                          colcount) { ## ,
   ## sub = expression(TRUE),
   ## svar = NA_character_,
   ## slab = NA_character_) {
@@ -1105,23 +1145,27 @@ LayoutColTree <- function(lev = 0L,
     ## subset = sub,
     ## splitvar = svar,
     label = label,
-    display_columncounts = disp_colcounts,
+    display_columncounts = disp_ccounts,
     columncount_format = colcount_format,
-    col_footnotes = footnotes
+    col_footnotes = footnotes,
+    column_count = colcount
   )
 }
 
 LayoutColLeaf <- function(lev = 0L,
                           name = label,
                           label = "",
-                          tpos = TreePos()) {
+                          tpos = TreePos(),
+                          colcount,
+                          disp_ccounts = FALSE,
+                          colcount_format = "(N=xx)") {
   check_ok_label(label)
   new("LayoutColLeaf",
     level = lev, name = .chkname(name), label = label,
-    pos_in_tree = tpos ## ,
-    ## subset = sub#,
-    ## N_count = n,
-    ## splitvar = svar
+    pos_in_tree = tpos,
+    column_count = colcount,
+    display_columncounts = disp_ccounts,
+    columncount_format = colcount_format
   )
 }
 
@@ -1168,7 +1212,7 @@ setClass(
 #'
 #' @export
 #' @rdname cinfo
-InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
+InstantiatedColumnInfo <- function(treelyt = LayoutColTree(colcount = total_cnt),
                                    csubs = list(expression(TRUE)),
                                    extras = list(list()),
                                    cnts = NA_integer_,

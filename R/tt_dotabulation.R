@@ -1240,7 +1240,7 @@ build_table <- function(lyt, df,
   if (any(alt_params) && is.null(alt_counts_df)) {
     stop(
       "Layout contains afun/cfun functions that have optional parameters ",
-      ".alt_df and/or .alt_df_row, but no alt_count_df was provided in ",
+      ".alt_df and/or .alt_df_row, but no alt_counts_df was provided in ",
       "build_table()."
     )
   }
@@ -1352,6 +1352,12 @@ build_table <- function(lyt, df,
   horizontal_sep(tab) <- hsep
   if (table_inset(lyt) > 0) {
     table_inset(tab) <- table_inset(lyt)
+  }
+  if (!is.null(col_counts)) {
+    toreplace <- !is.na(col_counts)
+    newccs <- col_counts(tab) ## old actual counts
+    newccs[toreplace] <- col_counts[toreplace]
+    col_counts(tab) <- newccs
   }
   tab
 }
@@ -1551,7 +1557,8 @@ setMethod(
 
 splitvec_to_coltree <- function(df, splvec, pos = NULL,
                                 lvl = 1L, label = "",
-                                spl_context = context_df_row(cinfo = NULL)) {
+                                spl_context = context_df_row(cinfo = NULL),
+                                alt_counts_df = df) {
   stopifnot(
     lvl <= length(splvec) + 1L,
     is(splvec, "SplitVector")
@@ -1561,15 +1568,19 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
   if (lvl == length(splvec) + 1L) {
     ## XXX this should be a LayoutColree I Think.
     nm <- unlist(tail(value_names(pos), 1)) %||% ""
+    spl <- tail(pos_splits(pos), 1)[[1]]
     LayoutColLeaf(
       lev = lvl - 1L,
       label = label,
       tpos = pos,
-      name = nm
+      name = nm,
+      colcount = NROW(alt_counts_df),
+      disp_ccounts = disp_ccounts(spl),
+      colcount_format = colcount_format(spl)
     )
   } else {
     spl <- splvec[[lvl]]
-    nm <- if (is.null(pos)) {
+    nm <- if (is.null(pos) || length(pos_splits(pos)) == 0) {
       obj_name(spl)
     } else {
       unlist(tail(
@@ -1585,7 +1596,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
     vals <- rawpart[["values"]]
     labs <- rawpart[["labels"]]
 
-
+    force(alt_counts_df)
     kids <- mapply(
       function(dfpart, value, partlab) {
         newprev <- context_df_row(
@@ -1595,21 +1606,47 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
           cinfo = NULL
         )
         newpos <- make_child_pos(pos, spl, value, partlab)
+        acdf_subset_expr <- make_subset_expr(spl, value)
+        new_acdf_subset <- try(eval(acdf_subset_expr, alt_counts_df), silent = TRUE)
+        if (is(new_acdf_subset, "try-error")) {
+          stop(sprintf(
+            paste(
+              ifelse(identical(df, alt_counts_df), "df", "alt_counts_df"),
+              "appears incompatible with column-split",
+              "structure. Offending column subset",
+              "expression: %s\nOriginal error",
+              "message: %s"
+            ), deparse(acdf_subset_expr[[1]]),
+            conditionMessage(attr(new_acdf_subset, "condition"))
+          ))
+        }
+
         splitvec_to_coltree(dfpart, splvec, newpos,
           lvl + 1L, partlab,
-          spl_context = rbind(spl_context, newprev)
+          spl_context = rbind(spl_context, newprev),
+          alt_counts_df = alt_counts_df[new_acdf_subset, , drop = FALSE]
         )
       },
       dfpart = datparts, value = vals,
       partlab = labs, SIMPLIFY = FALSE
     )
+    disp_cc <- FALSE
+    cc_format <- "(N=xx)"
+    if (lvl > 1) {
+      disp_cc <- disp_ccounts(splvec[[lvl - 1]])
+      cc_format <- colcount_format(splvec[[lvl - 1]])
+    }
+
     names(kids) <- value_names(vals)
     LayoutColTree(
       lev = lvl, label = label,
       spl = spl,
       kids = kids, tpos = pos,
       name = nm,
-      summary_function = content_fun(spl)
+      summary_function = content_fun(spl),
+      colcount = NROW(alt_counts_df),
+      disp_ccounts = disp_cc,
+      colcount_format = cc_format
     )
   }
 }

@@ -124,7 +124,9 @@ col_dfrow <- function(col,
                       nsibs = NA_integer_,
                       leaf_indices = cnum,
                       span = length(leaf_indices),
-                      col_fnotes = list()) {
+                      col_fnotes = list(),
+                      col_count = facet_colcount(col, NULL),
+                      ccount_visible = disp_ccounts(col)) {
   if (is.null(pth)) {
     pth <- pos_to_path(tree_pos(col))
   }
@@ -139,7 +141,9 @@ col_dfrow <- function(col,
     leaf_indices = I(list(leaf_indices)),
     total_span = span,
     col_fnotes = I(list(col_fnotes)),
-    n_col_fnotes = length(col_fnotes)
+    n_col_fnotes = length(col_fnotes),
+    col_count = col_count,
+    ccount_visible = ccount_visible
   )
 }
 

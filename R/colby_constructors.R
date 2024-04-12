@@ -357,7 +357,9 @@ split_cols_by <- function(lyt,
                           nested = TRUE,
                           child_labels = c("default", "visible", "hidden"),
                           extra_args = list(),
-                          ref_group = NULL) { ## ,
+                          ref_group = NULL,
+                          show_colcounts = FALSE,
+                          colcount_format = "(N=xx)") { ## ,
   if (is.null(ref_group)) {
     spl <- VarLevelSplit(
       var = var,
@@ -366,7 +368,9 @@ split_cols_by <- function(lyt,
       split_format = format,
       child_labels = child_labels,
       split_fun = split_fun,
-      extra_args = extra_args
+      extra_args = extra_args,
+      show_colcounts = show_colcounts,
+      colcount_format = colcount_format
     )
   } else {
     spl <- VarLevWBaselineSplit(
@@ -375,7 +379,9 @@ split_cols_by <- function(lyt,
       split_label = split_label,
       split_fun = split_fun,
       labels_var = labels_var,
-      split_format = format
+      split_format = format,
+      show_colcounts = show_colcounts,
+      colcount_format = colcount_format
     )
   }
   pos <- next_cpos(lyt, nested)
@@ -569,13 +575,18 @@ split_cols_by_multivar <- function(lyt,
                                    varlabels = vars,
                                    varnames = NULL,
                                    nested = TRUE,
-                                   extra_args = list()) {
+                                   extra_args = list(),
+                                   ## for completeness even though it doesn't make sense
+                                   show_colcounts = FALSE,
+                                   colcount_format = "(N=xx)") {
   spl <- MultiVarSplit(
     vars = vars, split_label = "",
     varlabels = varlabels,
     varnames = varnames,
     split_fun = split_fun,
-    extra_args = extra_args
+    extra_args = extra_args,
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   pos <- next_cpos(lyt, nested)
   split_cols(lyt, spl, pos)
@@ -731,13 +742,17 @@ split_cols_by_cuts <- function(lyt, var, cuts,
                                cutlabels = NULL,
                                split_label = var,
                                nested = TRUE,
-                               cumulative = FALSE) {
+                               cumulative = FALSE,
+                               show_colcounts = FALSE,
+                               colcount_format = "(N=xx)") {
   spl <- make_static_cut_split(
     var = var,
     split_label = split_label,
     cuts = cuts,
     cutlabels = cutlabels,
-    cumulative = cumulative
+    cumulative = cumulative,
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   ## if(cumulative)
   ##     spl = as(spl, "CumulativeCutSplit")
@@ -781,13 +796,17 @@ split_cols_by_cutfun <- function(lyt, var,
                                  split_label = var,
                                  nested = TRUE,
                                  extra_args = list(),
-                                 cumulative = FALSE) {
+                                 cumulative = FALSE,
+                                 show_colcounts = FALSE,
+                                 colcount_format = "(N=xx)") {
   spl <- VarDynCutSplit(var, split_label,
     cutfun = cutfun,
     cutlabelfun = cutlabelfun,
     extra_args = extra_args,
     cumulative = cumulative,
-    label_pos = "hidden"
+    label_pos = "hidden",
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   pos <- next_cpos(lyt, nested)
   split_cols(lyt, spl, pos)
@@ -798,7 +817,9 @@ split_cols_by_cutfun <- function(lyt, var,
 split_cols_by_quartiles <- function(lyt, var, split_label = var,
                                     nested = TRUE,
                                     extra_args = list(),
-                                    cumulative = FALSE) {
+                                    cumulative = FALSE,
+                                    show_colcounts = FALSE,
+                                    colcount_format = "(N=xx)") {
   split_cols_by_cutfun(
     lyt = lyt,
     var = var,
@@ -814,7 +835,9 @@ split_cols_by_quartiles <- function(lyt, var, split_label = var,
     },
     nested = nested,
     extra_args = extra_args,
-    cumulative = cumulative
+    cumulative = cumulative,
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   ## spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
   ##                      cutlabelfun = function(x) c("[min, Q1]",
@@ -1834,8 +1857,75 @@ manual_cols <- function(..., .lst = list(...)) {
     label = names(.lst)
   ))
   ctree <- splitvec_to_coltree(data.frame(), splvec = splvec, pos = TreePos())
-  InstantiatedColumnInfo(treelyt = ctree)
+  ret <- InstantiatedColumnInfo(treelyt = ctree)
+  rm_all_colcounts(ret)
 }
+
+
+#' Set all column counts at all levels of nesting to NA
+#'
+#' @inheritParams gen_args
+#'
+#' @return `obj` with all column counts reset to missing
+#'
+#' @export
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
+#'   analyze("AGE")
+#' tbl <- build_table(lyt, ex_adsl)
+#'
+#' # before
+#' col_counts(tbl)
+#' tbl <- rm_all_colcounts(tbl)
+#' col_counts(tbl)
+setGeneric("rm_all_colcounts", function(obj) standardGeneric("rm_all_colcounts"))
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "VTableTree",
+  function(obj) {
+    cinfo <- col_info(obj)
+    cinfo <- rm_all_colcounts(cinfo)
+    col_info(obj) <- cinfo
+    obj
+  }
+)
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "InstantiatedColumnInfo",
+  function(obj) {
+    ctree <- coltree(obj)
+    ctree <- rm_all_colcounts(ctree)
+    coltree(obj) <- ctree
+    obj
+  }
+)
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "LayoutColTree",
+  function(obj) {
+    obj@column_count <- NA_integer_
+    tree_children(obj) <- lapply(tree_children(obj), rm_all_colcounts)
+    obj
+  }
+)
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "LayoutColLeaf",
+  function(obj) {
+    obj@column_count <- NA_integer_
+    obj
+  }
+)
 
 #' Returns a function that coerces the return values of a function to a list
 #'

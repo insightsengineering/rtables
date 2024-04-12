@@ -542,7 +542,7 @@ combine_cinfo <- function(..., new_total = NULL) {
 
   ctrees <- lapply(cinfs, coltree)
 
-  newctree <- LayoutColTree(kids = ctrees)
+  newctree <- LayoutColTree(kids = ctrees, colcount = NA_integer_)
   newcounts <- unlist(lapply(cinfs, col_counts))
   if (is.null(new_total)) {
     new_total <- sum(newcounts)
