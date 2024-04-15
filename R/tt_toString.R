@@ -254,9 +254,12 @@ setMethod(
       body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent),
         incr = indent_size
       )
+      # why also formats?
       formats[, 1] <- indent_string(formats[, 1], c(rep(0, nr_header), sr$indent),
         incr = indent_size
       )
+    } else if (NROW(sr) > 0) {
+      sr$indent <- rep(0, NROW(sr))
     }
 
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
