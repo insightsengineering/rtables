@@ -233,3 +233,8 @@ The technically present root tree node is excluded from the summary returned by
 both \code{make_row_df} and \code{make_col_df} (see \code{\link[rtables:make_col_df]{rtables::make_col_df()}}), as it is simply the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }
+\examples{
+# Expected error with matrix_form. For real case examples consult {rtables} documentation
+mf <- basic_matrix_form(iris)
+# make_row_df(mf) # Use table obj instead
+}
