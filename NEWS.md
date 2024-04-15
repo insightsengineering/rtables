@@ -1,4 +1,4 @@
-## rtables 0.6.6.9011
+## rtables 0.6.7
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
