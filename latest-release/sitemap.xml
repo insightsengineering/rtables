@@ -340,6 +340,9 @@
     <loc>https://insightsengineering.github.io/rtables/reference/rtable.html</loc>
   </url>
   <url>
+    <loc>https://insightsengineering.github.io/rtables/reference/rtables-package.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/rtinner.html</loc>
   </url>
   <url>
@@ -385,9 +388,6 @@
     <loc>https://insightsengineering.github.io/rtables/reference/summarize_row_groups.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/summarize_rows.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/rtables/reference/tabclasses.html</loc>
   </url>
   <url>
@@ -416,9 +416,6 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/trim_rows.html</loc>
-  </url>
-  <url>
-    <loc>https://insightsengineering.github.io/rtables/reference/trim_zero_rows.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/rtables/reference/tsv_io.html</loc>

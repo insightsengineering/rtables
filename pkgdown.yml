@@ -23,8 +23,8 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2023-12-08T11:18Z
+last_built: 2024-04-16T05:49Z
 urls:
-  reference: https://insightsengineering.github.io/rtables/latest-tag/reference
-  article: https://insightsengineering.github.io/rtables/latest-tag/articles
+  reference: https://insightsengineering.github.io/rtables/latest-release/reference
+  article: https://insightsengineering.github.io/rtables/latest-release/articles
 
