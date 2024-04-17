@@ -7,26 +7,23 @@
 add_colcounts(lyt, format = "(N=xx)")
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
 Add the data derived column counts.
 }
 \details{
 It is often the case that the the column counts derived from the
-input data to \code{build_table} is not representative of the population counts.
+input data to \code{\link[=build_table]{build_table()}} is not representative of the population counts.
 For example, if events are counted in the table and the header should
-display the number of subjects and not the total number of events. In that
-case use the \code{col_count} argument in \code{build_table} to control the counts
-displayed in the table header.
+display the number of subjects and not the total number of events.
 }
 \examples{
 lyt <- basic_table() \%>\%

@@ -1,4 +1,4 @@
-## rtables 0.6.6.9011
+## rtables 0.6.7
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
@@ -10,6 +10,10 @@
  * Fixed edge case bug in `as_result_df` where rows of the table have only `"root"` as path index.
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
+ * Fixed mismatch between indentation declared in row info (`mf_rinfo(mf)`) and actual selected indentation from `matrix_form(mf, indent_rownames = FALSE)`.
+
+### Miscellaneous
+ * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
 
 ## rtables 0.6.6
 ### New Features

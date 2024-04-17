@@ -1,73 +1,51 @@
 # nocov start
-## package imports
-#' @importFrom utils head head.matrix tail tail.matrix
-#' @importFrom stats setNames na.omit prop.test binom.test relevel quantile
-#' @importFrom htmltools tags tagList
-#' @importFrom magrittr %>%
-#' @import methods
-NULL
 
-
-#' General Argument Conventions
-#' @name gen_args
-#' @inheritParams formatters::format_value
+#' General argument conventions
+#'
+#' @param ... additional parameters passed to methods or tabulation functions.
+#' @param alt_counts_df (`data.frame` or `tibble`)\cr alternative full dataset the rtables framework will use
+#'   *only* when calculating column counts.
+#' @param colwidths (`numeric`)\cr a vector of column widths for use in vertical pagination.
+#' @param cvar (`string`)\cr the variable, if any, that the content function should accept. Defaults to `NA`.
+#' @param df (`data.frame` or `tibble`)\cr dataset.
+#' @param hsep (`string`)\cr set of characters to be repeated as the separator between the header and body of
+#'   the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+#'   charset, and to `-` elsewhere (with a once per session warning). See [formatters::set_default_hsep()] for further
+#'   information.
+#' @param indent_size (`numeric(1)`)\cr number of spaces to use per indent level. Defaults to 2.
+#' @param inset (`numeric(1)`)\cr number of spaces to inset the table header, table body, referential footnotes, and
+#'   main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).
+#' @param label (`string`)\cr a label (not to be confused with the name) for the object/structure.
+#' @param label_pos (`string`)\cr location where the variable label should be displayed. Accepts `"hidden"`
+#'   (default for non-analyze row splits), `"visible"`, `"topleft"`, and `"default"` (for analyze splits only). For
+#'   `analyze` calls, `"default"` indicates that the variable should be visible if and only if multiple variables are
+#'   analyzed at the same level of nesting.
+#' @param na_str (`string`)\cr string that should be displayed when the value of `x` is missing. Defaults to `"NA"`.
+#' @param obj (`ANY`)\cr the object for the accessor to access or modify.
+#' @param object (`ANY`)\cr the object to modify in place.
+#' @param page_prefix (`string`)\cr prefix to be appended with the split value when forcing pagination between
+#'   the children of a split/table.
+#' @param path (`character`)\cr a vector path for a position within the structure of a `TableTree`. Each element
+#'   represents a subsequent choice amongst the children of the previous choice.
+#' @param pos (`numeric`)\cr which top-level set of nested splits should the new layout feature be added to. Defaults
+#'   to the current split.
+#' @param section_div (`string`)\cr string which should be repeated as a section divider after each group defined
+#'   by this split instruction, or `NA_character_` (the default) for no section divider.
+#' @param spl (`Split`)\cr a `Split` object defining a partitioning or analysis/tabulation of the data.
+#' @param table_inset (`numeric(1)`)\cr number of spaces to inset the table header, table body, referential footnotes,
+#'   and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).
+#' @param topleft (`character`)\cr override values for the "top left" material to be displayed during printing.
+#' @param tr (`TableRow` or related class)\cr a `TableRow` object representing a single row within a populated table.
+#' @param tt (`TableTree` or related class)\cr a `TableTree` object representing a populated table.
+#' @param value (`ANY`)\cr the new value.
+#' @param verbose (`flag`)\cr whether additional information should be displayed to the user. Defaults to `FALSE`.
+#' @param x (`ANY`)\cr an object.
+#'
+#' @return No return value.
+#'
 #' @family conventions
-#' @param df dataset (`data.frame` or `tibble`)
-#' @param alt_counts_df dataset (`data.frame` or `tibble`). Alternative full data
-#'   the rtables framework will use (\emph{only}) when calculating column
-#'   counts.
-#' @param spl A Split object defining a partitioning or analysis/tabulation of
-#'   the data.
-#' @param pos numeric.  Which top-level set of nested splits should the new
-#'   layout feature be added to. Defaults to the current
-#' @param tt `TableTree` (or related class). A `TableTree` object representing a
-#'   populated table.
-#' @param tr `TableRow` (or related class). A `TableRow` object representing a
-#'   single row within a populated table.
-#' @param verbose logical. Should additional information be displayed to the
-#'   user. Defaults to FALSE.
-#' @param colwidths numeric vector. Column widths for use with vertical pagination.
-#' @param obj ANY. The object for the accessor to access or modify
-#' @param x An object
-#' @param \dots Passed on to methods or tabulation functions.
-#' @param value The new value
-#' @param object The object to modify in-place
-#' @param verbose logical(1). Should extra debugging messages be shown. Defaults
-#'   to \code{FALSE}.
-#' @param path character. A vector path for a position within the structure of a
-#'   `tabletree`. Each element represents a subsequent choice amongst the children
-#'   of the previous choice.
-#' @param label character(1). A label (not to be confused with the name) for the
-#'   object/structure.
-#' @param label_pos character(1). Location the variable label should be
-#'   displayed, Accepts `"hidden"` (default for non-analyze row splits), `"visible"`,
-#'   `"topleft"`, and - for analyze splits only - `"default"`.  For analyze calls,
-#'   `"default"` indicates that the variable should be visible if and only if
-#'   multiple variables are analyzed at the same level of nesting.
-#' @param cvar character(1). The variable, if any, which the content function
-#'   should accept. Defaults to NA.
-#' @param topleft character. Override values for the "top left" material to be
-#'   displayed during printing.
-#' @param page_prefix character(1). Prefix, to be appended with the split value,
-#'   when forcing pagination between the children of this split/table
-#' @param hsep character(1). Set of character(s) to be repeated as the separator
-#'   between the header and body of the table when rendered as text. Defaults to
-#'   a connected horizontal line (unicode 2014) in locals that use a UTF
-#'   charset, and to `-` elsewhere (with a once per session warning). See
-#'   [formatters::set_default_hsep()] for further information.
-#' @param indent_size numeric(1). Number of spaces to use per indent level.
-#'   Defaults to 2
-#' @param section_div character(1). String which should be repeated as a section
-#'   divider after each group defined by this split instruction, or
-#'   `NA_character_` (the default) for no section divider.
-#' @param inset numeric(1). Number of spaces to inset the table header, table
-#' body, referential footnotes, and main_footer, as compared to alignment
-#' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
-#' @param table_inset numeric(1). Number of spaces to inset the table header, table
-#' body, referential footnotes, and main_footer, as compared to alignment
-#' of title, subtitle, and provenance footer. Defaults to 0 (no inset).
-#' @return NULL (this is an argument template dummy function)
-#' @rdname gen_args
+#' @name gen_args
+#' @keywords internal
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
@@ -76,100 +54,80 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
   NULL
 }
 
-#' Layouting Function Arg Conventions
-#' @name lyt_args
-#' @rdname lyt_args
+#' Layouting function argument conventions
+#'
 #' @inheritParams gen_args
-#' @param lyt layout object pre-data used for tabulation
-#' @param var string, variable name
-#' @param vars character vector. Multiple variable names.
-#' @param var_labels character. Variable labels for 1 or more variables
-#' @param labels_var string, name of variable containing labels to be displayed
-#'   for the values of \code{var}
-#' @param varlabels character vector. Labels for \code{vars}
-#' @param varnames character vector. Names for \code{vars} which will appear in
-#'   pathing. When \code{vars} are all unique this will be the variable names.
-#'   If not, these will be variable names with suffixes as necessary to enforce
-#'   uniqueness.
-#' @param split_format `FormatSpec`. Default format associated with the split
-#'   being created.
-#' @param split_na_str character. NA string vector for use with \code{split_format}.
-#' @param split_label string. Label string to be associated with the table
-#'   generated by the split. Not to be confused with labels assigned to each
-#'   child (which are based on the data and type of split during tabulation).
-#' @param nested boolean. Should this layout instruction be applied within the
-#'   existing layout structure \emph{if possible} (`TRUE`, the default) or as a
-#'   new top-level element (`FALSE). Ignored if it would nest a split underneath
-#'   analyses, which is not allowed.
-#' @param format `FormatSpec`. Format associated with this split. Formats can be
-#'   declared via strings (\code{"xx.x"}) or function. In cases such as
-#'   \code{analyze} calls, they can character vectors or lists of functions.
-#' @param align character(1) or `NULL`. Alignment the value should be rendered with.
-#'   It defaults to `"center"` if `NULL` is used. See [formatters::list_valid_aligns()]
-#'   for currently supported alignments.
-#' @param cfun list/function/NULL. tabulation function(s) for creating content
-#'   rows. Must accept \code{x} or \code{df} as first parameter. Must accept
-#'   \code{labelstr} as the second argument. Can optionally accept all optional
-#'   arguments accepted by analysis functions. See \code{\link{analyze}}.
-#' @param cformat format spec. Format for content rows
-#' @param cna_str character. NA string for use with \code{cformat} for content
-#'   table.
-#' @param split_fun function/NULL. custom splitting function See
-#'   \code{\link{custom_split_funs}}
-#' @param split_name string. Name associated with this split (for pathing, etc)
-#' @param afun function. Analysis function, must take \code{x} or \code{df} as
-#'   its first parameter. Can optionally take other parameters which will be
-#'   populated by the tabulation framework. See Details in
-#'   \code{\link{analyze}}.
-#' @param inclNAs boolean. Should observations with NA in the \code{var}
-#'   variable(s) be included when performing this analysis. Defaults to
-#'   \code{FALSE}
-#' @param valorder character vector. Order that the split children should appear
-#'   in resulting table.
-#' @param ref_group character. Value of \code{var} to be taken as the
-#'   ref_group/control to be compared against.
-#' @param compfun function/string. The comparison function which accepts the
-#'   analysis function outputs for two different partitions and returns a single
-#'   value. Defaults to subtraction. If a string, taken as the name of a
+#' @param afun (`function`)\cr analysis function. Must accept `x` or `df` as its first parameter. Can optionally take
+#'   other parameters which will be populated by the tabulation framework. See Details in [analyze()].
+#' @param align (`string` or `NULL`)\cr alignment the value should be rendered with. Defaults to `"center"` if
+#'   `NULL` is used. See [formatters::list_valid_aligns()] for all currently supported alignments.
+#' @param cformat (`string`, `function`, or `list`)\cr format for content rows.
+#' @param cfun (`list`, `function`, or `NULL`)\cr tabulation function(s) for creating content rows. Must accept `x`
+#'   or `df` as first parameter. Must accept `labelstr` as the second argument. Can optionally accept all optional
+#'   arguments accepted by analysis functions. See [analyze()].
+#' @param child_labels (`string`)\cr the display behavior for the labels (i.e. label rows) of the children of this
+#'   split. Accepts `"default"`, `"visible"`, and `"hidden"`. Defaults to `"default"` which flags the label row as
+#'   visible only if the child has 0 content rows.
+#' @param cna_str (`character`)\cr NA string for use with `cformat` for content table.
+#' @param compfun (`function` or `string`)\cr the comparison function which accepts the analysis function outputs for
+#'   two different partitions and returns a single value. Defaults to subtraction. If a string, taken as the name of a
 #'   function.
-#' @param label_fstr string. An `sprintf` style format string containing. For
-#'   non-comparison splits, it can contain  up to one \code{"\%s"} which takes
-#'   the current split value and generates the row/column label.
-#'   Comparison-based splits it can contain up to two \code{"\%s"}.
-#' @param child_labels string. One of \code{"default"}, \code{"visible"},
-#'   \code{"hidden"}. What should the display behavior be for the  labels (i.e.
-#'   label rows) of the children of this split. Defaults to \code{"default"}
-#'   which flags the label row as visible only if the child has 0 content rows.
-#' @param extra_args list. Extra arguments to be passed to the tabulation
-#'   function. Element position in the list corresponds to the children of this
-#'   split. Named elements in the child-specific lists are ignored if they do
+#' @param cumulative (`flag`)\cr whether the cuts should be treated as cumulative. Defaults to `FALSE`.
+#' @param cutfun (`function`)\cr function which accepts the *full vector* of `var` values and returns cut points to be
+#'   used (via `cut`) when splitting data during tabulation.
+#' @param cutlabels (`character` or `NULL`)\cr labels for the cuts.
+#' @param cutlabelfun (`function`)\cr function which returns either labels for the cuts or `NULL` when passed the
+#'   return value of `cutfun`.
+#' @param cuts (`numeric`)\cr cuts to use.
+#' @param extra_args (`list`)\cr extra arguments to be passed to the tabulation function. Element position in the list
+#'   corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 #'   not match a formal argument of the tabulation function.
-#' @param name character(1). Name of the split/table/row being created. Defaults
-#'   to same as the corresponding label, but is not required to be.
-#' @param cuts numeric. Cuts to use
-#' @param cutlabels character (or NULL). Labels for the cuts
-#' @param cutlabelfun function. Function which returns either labels for the
-#'   cuts or NULL when passed the return value of \code{cutfun}
-#' @param cumulative logical. Should the cuts be treated as cumulative. Defaults
-#'   to \code{FALSE}
-#' @param cutfun function. Function which accepts the \emph{full vector} of
-#'   \code{var} values and returns cut points to be used (via \code{cut}) when
-#'   splitting data during tabulation
-#' @param indent_mod numeric. Modifier for the default indent position for the
-#'   structure created by this function(subtable, content table, or row)
-#'   \emph{and all of that structure's children}. Defaults to 0, which
+#' @param format (`string`, `function`, or `list`)\cr format associated with this split. Formats can be declared via
+#'   strings (`"xx.x"`) or function. In cases such as `analyze` calls, they can be character vectors or lists of
+#'   functions. See [formatters::list_valid_format_labels()] for a list of all available format strings.
+#' @param format_na_str (`string`)\cr string which should be displayed when formatted if this cell's value(s)
+#'   are all `NA`.
+#' @param indent_mod (`numeric`)\cr modifier for the default indent position for the structure created by this
+#'   function (subtable, content table, or row) *and all of that structure's children*. Defaults to 0, which
 #'   corresponds to the unmodified default behavior.
-#' @param show_labels character(1). Should the variable labels for corresponding
-#'   to the variable(s) in \code{vars} be visible in the resulting table.
-#' @param table_names character. Names for the tables representing each atomic
-#'   analysis. Defaults to \code{var}.
-#' @param page_by logical(1). Should pagination be forced between different
-#'   children resulting form this split. An error will rise if the selected split
-#'   does not contain at least one value that is not `NA`.
-#' @param format_na_str character(1). String which should be displayed when
-#'   formatted if this cell's value(s) are all NA.
+#' @param inclNAs (`logical`)\cr whether NA observations in the `var` variable(s) should be included when performing
+#'   the analysis. Defaults to `FALSE`.
+#' @param label_fstr (`string`)\cr a `sprintf` style format string. For non-comparison splits, it can contain up to
+#'   one `"\%s"` which takes the current split value and generates the row/column label. For comparison-based splits
+#'   it can contain up to two `"\%s"`.
+#' @param labels_var (`string`)\cr name of variable containing labels to be displayed for the values of `var`.
+#' @param lyt (`PreDataTableLayouts`)\cr layout object pre-data used for tabulation.
+#' @param name (`string`)\cr name of the split/table/row being created. Defaults to the value of the
+#'   corresponding label, but is not required to be.
+#' @param nested (`logical`)\cr whether this layout instruction should be applied within the existing layout structure
+#'   *if possible* (`TRUE`, the default) or as a new top-level element (`FALSE`). Ignored if it would nest a split
+#'   underneath analyses, which is not allowed.
+#' @param page_by (`flag`)\cr whether pagination should be forced between different children resulting from this
+#'   split. An error will occur if the selected split does not contain at least one value that is not `NA`.
+#' @param ref_group (`character`)\cr value of `var` to be taken as the `ref_group`/control to be compared against.
+#' @param show_labels (`string`)\cr whether the variable labels corresponding to the variable(s) in `vars`
+#'   should be visible in the resulting table.
+#' @param split_format (`string`, `function`, or `list`)\cr default format associated with the split being created.
+#' @param split_fun (`function` or `NULL`)\cr custom splitting function. See [custom_split_funs].
+#' @param split_label (`string`)\cr label to be associated with the table generated by the split. Not to be confused
+#'   with labels assigned to each child (which are based on the data and type of split during tabulation).
+#' @param split_name (`string`)\cr name associated with the split (for pathing, etc.).
+#' @param split_na_str (`character`)\cr NA string vector for use with `split_format`.
+#' @param table_names (`character`)\cr names for the tables representing each atomic analysis. Defaults to `var`.
+#' @param valorder (`character`)\cr the order that the split children should appear in resulting table.
+#' @param var (`string`)\cr variable name.
+#' @param varlabels (`character`)\cr vector of labels for `vars`.
+#' @param varnames (`character`)\cr vector of names for `vars` which will appear in pathing. When `vars` are all
+#'   unique this will be the variable names. If not, these will be variable names with suffixes as necessary to enforce
+#'   uniqueness.
+#' @param vars (`character`)\cr vector of variable names.
+#' @param var_labels (`character`)\cr vector of labels for one or more variables.
+#'
 #' @inherit gen_args return
+#'
 #' @family conventions
+#' @name lyt_args
+#' @keywords internal
 lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, split_format,
                      split_na_str, nested, format, cfun, cformat, cna_str, split_fun,
                      split_name, split_label, afun, inclNAs, valorder,
@@ -182,56 +140,48 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
   NULL
 }
 
-
-#' Constructor Arg Conventions
-#' @name constr_args
-#' @family conventions
-#' @inherit gen_args return
+#' Constructor argument conventions
 #'
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param kids list. List of direct children.
-#' @param cont `ElementaryTable`. Content table.
-#' @param lev integer. Nesting level (roughly, indentation level in practical
-#'   terms).
-#' @param iscontent logical. Is the `TableTree`/`ElementaryTable` being constructed
-#'   the content table for another `TableTree`.
-#' @param cinfo `InstantiatedColumnInfo` (or NULL). Column structure for the
-#'   object being created.
-#' @param labelrow `LabelRow`. The `LabelRow` object to assign to this Table.
-#'   Constructed from \code{label} by default if not specified.
-#' @param vals list. cell values for the row
-#' @param cspan integer. Column span. \code{1} indicates no spanning.
-#' @param cindent_mod numeric(1). The indent modifier for the content tables
-#'   generated by this split.
-#' @param cextra_args list. Extra arguments to be passed to the content function
-#'   when tabulating row group summaries.
-#' @param child_names character. Names to be given to the sub splits contained
-#'   by a compound split (typically a `AnalyzeMultiVars` split object).
-#' @param title character(1). Main title ([main_title()]) is a single string.
-#'   Ignored for subtables.
-#' @param subtitles character. Subtitles ([subtitles()]) can be vector of strings, where
-#'   every element is printed in a separate line. Ignored for subtables.
-#' @param main_footer character. Main global (non-referential) footer materials
-#'   ([main_footer()]). If it is a vector of strings, they will be printed on separate
-#'   lines.
-#' @param prov_footer character. Provenance-related global footer materials
-#'   ([prov_footer()]). It can be also a vector of strings, printed on different lines.
-#'   Generally should not be modified by hand.
-#' @param footnotes list or NULL. Referential footnotes to be applied at current
-#'   level. In post-processing, this can be achieved with [`fnotes_at_path<-`].
-#' @param trailing_section_div character(1). String which will be used as a section
-#'   divider after the printing of the last row contained in this (sub)-table,
-#'   unless that row is also the last table row to be printed overall, or
-#'   `NA_character_` for none (the default). When generated via layouting, this
-#'   would correspond to the `section_div` of the split under which this table
-#'   represents a single facet.
-#' @param header_section_div character(1). String which will be used to divide the header
-#'   from the table. See [header_section_div()] for getter and setter of these.
-#'   Please consider changing last element of [section_div()] when concatenating
-#'   tables that need a divider between them.
-#' @param page_title character. Page specific title(s).
-#' @rdname constr_args
+#' @param cextra_args (`list`)\cr extra arguments to be passed to the content function when tabulating row group
+#'   summaries.
+#' @param child_names (`character`)\cr names to be given to the subsplits contained by a compound split (typically
+#'   an `AnalyzeMultiVars` split object).
+#' @param cindent_mod (`numeric(1)`)\cr the indent modifier for the content tables generated by this split.
+#' @param cinfo (`InstantiatedColumnInfo` or `NULL`)\cr column structure for the object being created.
+#' @param cont (`ElementaryTable`)\cr content table.
+#' @param cspan (`integer`)\cr column span. `1` indicates no spanning.
+#' @param footnotes (`list` or `NULL`)\cr referential footnotes to be applied at current level. In post-processing,
+#'   this can be achieved with [`fnotes_at_path<-`].
+#' @param header_section_div (`string`)\cr string which will be used to divide the header from the table. See
+#'   [header_section_div()] for the associated getter and setter. Please consider changing last element of
+#'   [section_div()] when concatenating tables that require a divider between them.
+#' @param iscontent (`flag`)\cr whether the `TableTree`/`ElementaryTable` is being constructed as the content
+#'   table for another `TableTree`.
+#' @param kids (`list`)\cr list of direct children.
+#' @param labelrow (`LabelRow`)\cr the `LabelRow` object to assign to the table. Constructed from `label` by default
+#'   if not specified.
+#' @param lev (`integer(1)`)\cr nesting level (roughly, indentation level in practical terms).
+#' @param main_footer (`character`)\cr a vector of strings to use as main global (non-referential) footer materials
+#'   ([main_footer()]), where every element is printed on a separate line.
+#' @param page_title (`character`)\cr page-specific title(s).
+#' @param prov_footer (`character`)\cr a vector of strings to use as provenance-related global footer materials
+#'   ([prov_footer()]), where every element is printed on a separate line.
+#' @param subtitles (`character`)\cr a vector of strings to use as subtitles ([subtitles()]), where every element is
+#'   printed on a separate line. Ignored for subtables.
+#' @param title (`string`)\cr single string to use as main title ([main_title()]). Ignored for subtables.
+#' @param trailing_section_div (`string`)\cr string which will be used as a section divider after the printing
+#'   of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
+#'   or `NA_character_` for none (the default). When generated via layouting, this would correspond to the
+#'   `section_div` of the split under which this table represents a single facet.
+#' @param vals (`list`)\cr cell values for the row.
+#'
+#' @inherit gen_args return
+#'
+#' @family conventions
+#' @name constr_args
+#' @keywords internal
 constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
                         cspan, label_pos, cindent_mod, cvar, label, cextra_args,
                         child_names, title, subtitles, main_footer, prov_footer,
@@ -241,39 +191,36 @@ constr_args <- function(kids, cont, lev, iscontent, cinfo, labelrow, vals,
   NULL
 }
 
-#' Compatibility Arg Conventions
-#' @name compat_args
-#' @family conventions
-#' @inherit gen_args return
+#' Compatibility argument conventions
+#'
 #' @inheritParams gen_args
-#' @param .lst list. An already-collected list of arguments to be used instead
-#'   of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
-#'   ignored if this is specified.
-#' @param row.name if \code{NULL} then an empty string is used as
-#'   \code{row.name} of the \code{\link{rrow}}.
-#' @param format character(1) or function. The format label (string) or
-#'   formatter function to apply to the cell values passed via `...`. See
-#'   \code{\link[formatters]{list_valid_format_labels}} for currently supported
-#'   format labels.
-#' @param indent deprecated.
-#' @param inset integer(1). The table inset for the row or table being
-#'   constructed. See \code{\link[formatters]{table_inset}}.
-#' @rdname compat_args
+#' @param .lst (`list`)\cr an already-collected list of arguments to be used instead of the elements of `...`.
+#'   Arguments passed via `...` will be ignored if this is specified.
+#' @param format (`string`, `function`, or `list`)\cr the format label (string) or formatter function to apply to the
+#'   cell values passed via `...`. See [formatters::list_valid_format_labels()] for currently supported format labels.
+#' @param indent `r lifecycle::badge("deprecated")`
+#' @param inset (`integer(1)`)\cr the table inset for the row or table being constructed. See
+#'   [formatters::table_inset()] for details.
+#' @param row.name (`string` or `NULL`)\cr row name. If `NULL`, an empty string is used as `row.name` of the
+#'   [rrow()].
+#'
+#' @inherit gen_args return
+#'
+#' @family conventions
+#' @name compat_args
 compat_args <- function(.lst, row.name, format, indent, label, inset) NULL
 
-
-
-#' Split Function Arg Conventions
-#' @name sf_args
-#' @family conventions
-#' @inherit gen_args return
+#' Split function argument conventions
 #'
 #' @inheritParams gen_args
-#' @param trim logical(1). Should splits corresponding with 0 observations be
-#'   kept when tabulating.
-#' @param first logical(1). Should the created split level be placed first in
-#'   the levels (\code{TRUE}) or last (\code{FALSE}, the default).
+#' @param first (`flag`)\cr whether the created split level should be placed first in the levels (`TRUE`) or
+#'   last (`FALSE`, the default).
+#' @param trim (`flag`)\cr whether splits corresponding with 0 observations should be kept when tabulating.
 #'
+#' @inherit gen_args return
+#'
+#' @family conventions
+#' @name sf_args
 sf_args <- function(trim, label, first) NULL
 
 # nocov end

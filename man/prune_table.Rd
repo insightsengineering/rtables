@@ -12,18 +12,15 @@ prune_table(
 )
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{prune_func}{function. A Function to be called on each subtree which
-returns TRUE if the entire subtree should be removed.}
+\item{prune_func}{(\code{function})\cr a function to be called on each subtree which returns \code{TRUE} if the
+entire subtree should be removed.}
 
-\item{stop_depth}{numeric(1). The depth after which subtrees should not be
-checked for pruning. Defaults to \code{NA} which indicates pruning should
-happen at all levels}
+\item{stop_depth}{(\code{numeric(1)})\cr the depth after which subtrees should not be checked for pruning.
+Defaults to \code{NA} which indicates pruning should happen at all levels.}
 
-\item{depth}{numeric(1). Used internally, not intended to be set by the end
-user.}
+\item{depth}{(\code{numeric(1)})\cr used internally, not intended to be set by the end user.}
 }
 \value{
 A \code{TableTree} pruned via recursive application of \code{prune_func}.
@@ -48,6 +45,6 @@ tbl_to_prune \%>\% prune_table()
 
 }
 \seealso{
-\code{\link[=prune_empty_level]{prune_empty_level()}} for details on this and several other basic
-pruning functions included in the \code{rtables} package.
+\code{\link[=prune_empty_level]{prune_empty_level()}} for details on this and several other basic pruning functions included
+in the \code{rtables} package.
 }

@@ -7,14 +7,15 @@
 is_rtable(x)
 }
 \arguments{
-\item{x}{an object}
+\item{x}{(\code{ANY})\cr an object.}
 }
 \value{
-\code{TRUE} if \code{x} is a formal Table object, \code{FALSE} otherwise.
+\code{TRUE} if \code{x} is a formal \code{TableTree} object, \code{FALSE} otherwise.
 }
 \description{
 Check if an object is a valid \code{rtable}
 }
 \examples{
 is_rtable(build_table(basic_table(), iris))
+
 }

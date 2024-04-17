@@ -2,24 +2,21 @@
 % Please edit documentation in R/index_footnotes.R
 \name{update_ref_indexing}
 \alias{update_ref_indexing}
-\title{Update footnote indexes on a built table}
+\title{Update footnote indices on a built table}
 \usage{
 update_ref_indexing(tt)
 }
 \arguments{
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 }
 \description{
-Re-indexes footnotes within a built table
+Re-indexes footnotes within a built table.
 }
 \details{
-After adding or removing  referential footnotes manually,
-or  after subsetting  a table,  the reference  indexes (i.e.  the
-number associated  with specific  footnotes) may  be incorrect.
-This function recalculates these based on the full table.
+After adding or removing referential footnotes manually, or after subsetting a table, the reference indexes
+(i.e. the number associated with specific footnotes) may be incorrect. This function recalculates these based
+on the full table.
 }
 \note{
-In the future this should not generally need to be called
-manually.
+In the future this should not generally need to be called manually.
 }
