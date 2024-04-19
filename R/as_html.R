@@ -76,7 +76,7 @@ as_html <- function(x,
 
   stopifnot(is(x, "VTableTree"))
 
-  mat <- matrix_form(x)
+  mat <- matrix_form(x, indent_rownames = TRUE)
 
   nlh <- mf_nlheader(mat)
   nc <- ncol(x) + 1
