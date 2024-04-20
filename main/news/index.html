@@ -53,22 +53,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -113,6 +97,7 @@
 <li>Fixed <code>sort_at_path</code> pathing to ignore leading <code>"root"</code> element (regardless of actual root element name) to match current <code>tt_at_path</code> behavior.</li>
 <li>Fixed <code>section_div</code> for analysis of multiple variables (<code>AnalyzeMultiVars</code>).</li>
 <li>Fixed mismatch between indentation declared in row info (<code>mf_rinfo(mf)</code>) and actual selected indentation from <code>matrix_form(mf, indent_rownames = FALSE)</code>.</li>
+<li>Fixed bug in <code>as_html</code> preventing indentation from being applied in <code>Viewer</code> output.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="miscellaneous-0-6-7">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-7"></a></h3>
@@ -472,7 +457,7 @@
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.3" id="rtables-033">rtables 0.3.3<a class="anchor" aria-label="anchor" href="#rtables-033"></a></h2>
-<p>This version completely refactors the <code>rtables</code> package. We do provide a backwards compatibility layer with the <code>rtable</code>, <code>rcell</code>, <code>rrow</code>, <code>rheader</code>, and <code>rtabulate</code> family of functions. However the table data structure and main tabulation framework have changed. We provide extensive documentation in the manuals <code><a href="https://insightsengineering.github.io/rtables/latest-tag/reference">help(package = "rtables")</a></code> and vignettes <code>vignette(package = "rtables")</code> of the package.</p>
+<p>This version completely refactors the <code>rtables</code> package. We do provide a backwards compatibility layer with the <code>rtable</code>, <code>rcell</code>, <code>rrow</code>, <code>rheader</code>, and <code>rtabulate</code> family of functions. However the table data structure and main tabulation framework have changed. We provide extensive documentation in the manuals <code><a href="https://insightsengineering.github.io/rtables/latest-release/reference">help(package = "rtables")</a></code> and vignettes <code>vignette(package = "rtables")</code> of the package.</p>
 <p>The changes to <code>rtables</code> have been undertaken to better meet the requirements of creating and analyzing &amp; reporting tables in the context of clinical trials.</p>
 </div>
     <div class="section level2">
