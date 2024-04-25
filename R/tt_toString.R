@@ -150,6 +150,9 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   has indented row names (strings pre-fixed).
 #' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain
 #'   newlines into multiple 'physical' rows (as they will appear when rendered into ASCII). Defaults to `TRUE`.
+#' @param fontspec (`font_spec` or `NULL`)\cr Font specification that should be assumed during wrapping, as returned by [formatters::font_spec()].
+#' @param col_gap (`numeric(1)`)\cr The column gap to assume between columns, in number of spaces assuming `fontspec` (this
+#'   reduces to number of characters for monospace fonts).
 #'
 #' @details
 #' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
