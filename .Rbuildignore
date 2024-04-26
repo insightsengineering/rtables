@@ -32,6 +32,6 @@ pkgdown
 ^inst/extdata$
 ^inst/cheatsheet$
 ^pkgdown$
-^revdeprefs\.yaml$
+^.revdeprefs\.yaml$
 ^revdep$
 ^\.covrignore$
