@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.7.9000
-Date: 2024-04-29
+Version: 0.6.7.9001
+Date: 2024-05-02
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -29,10 +29,10 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
+    R (>= 2.10),
     formatters (>= 0.5.6),
     magrittr (>= 1.5),
-    methods,
-    R (>= 2.10)
+    methods
 Imports:
     checkmate (>= 2.1.0),
     htmltools (>= 0.5.4),
