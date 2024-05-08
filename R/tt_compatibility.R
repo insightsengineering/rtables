@@ -383,9 +383,18 @@ only_first_annot <- function(all_annots) {
 #' @rdname rbind
 #' @aliases rbind
 #' @export
-rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
-  if (!check_headers) {
-    warning("check_headers = FALSE is no longer supported, ignoring.")
+rbindl_rtables <- function(x, gap = lifecycle::deprecated(), check_headers = lifecycle::deprecated()) {
+  if (lifecycle::is_present(gap)) {
+    lifecycle::deprecate_warn(
+      when = "0.3.2",
+      what = "rbindl_rtables(gap)"
+    )
+  }
+  if (lifecycle::is_present(check_headers)) {
+    lifecycle::deprecate_warn(
+      when = "0.3.2",
+      what = "rbindl_rtables(check_headers)"
+    )
   }
 
   firstcols <- col_info(x[[1]])
@@ -507,7 +516,7 @@ rbindl_rtables <- function(x, gap = 0, check_headers = TRUE) {
 setMethod(
   "rbind", "VTableNodeInfo",
   function(..., deparse.level = 1) {
-    rbindl_rtables(list(...), check_headers = TRUE)
+    rbindl_rtables(list(...))
   }
 )
 
@@ -530,7 +539,7 @@ setMethod(
 setMethod(
   "rbind2", "VTableNodeInfo",
   function(x, y) {
-    rbindl_rtables(list(x, y), check_headers = TRUE)
+    rbindl_rtables(list(x, y))
   }
 )
 
@@ -926,7 +935,9 @@ chk_compat_cinfos <- function(tt1, tt2) {
 }
 
 
-#' **Deprecated:** Insert `rrow`s at (before) a specific location
+#' Insert `rrow`s at (before) a specific location
+#' 
+#' `r lifecycle::badge("deprecated")`
 #'
 #' This function is deprecated and will be removed in a future release of `rtables`. Please use
 #' [insert_row_at_path()] or [label_at_path()] instead.
@@ -973,7 +984,11 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' @export
 insert_rrow <- function(tbl, rrow, at = 1,
                         ascontent = FALSE) {
-  .Deprecated("insert_row_at_path or label_at_path(tab)<-", old = "insert_rrow")
+  lifecycle::deprecate_warn(
+    when = "0.4.0",
+    what = "insert_rrow()",
+    with = I("insert_row_at_path() or label_at_path()")
+  )
   stopifnot(
     is(tbl, "VTableTree"),
     is(rrow, "TableRow"),
@@ -985,9 +1000,7 @@ insert_rrow <- function(tbl, rrow, at = 1,
   }
 
   if (at == 1) {
-    return(rbindl_rtables(list(rrow, tbl),
-      check_headers = TRUE
-    ))
+    return(rbindl_rtables(list(rrow, tbl)))
   } else if (at == nrow(tbl) + 1) {
     return(rbind2(tbl, rrow))
   }

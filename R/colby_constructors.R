@@ -46,7 +46,12 @@ setGeneric(
 
 #' @rdname int_methods
 setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
-  .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
+  lifecycle::deprecate_warn(
+    when = "0.3.8",
+    what = I("split_rows(NULL)"),
+    with = "basic_table()",
+    details = "Initializing layouts via `NULL` is no longer supported."
+  )
   rl <- PreDataRowLayout(SplitVector(spl))
   cl <- PreDataColLayout()
   PreDataTableLayouts(rlayout = rl, clayout = cl)
@@ -208,10 +213,12 @@ setGeneric(
 
 #' @rdname int_methods
 setMethod("split_cols", "NULL", function(lyt, spl, pos) {
-  .Deprecated(msg = paste(
-    "Initializing layouts via NULL is deprecated,",
-    "please use basic_table() instead"
-  ))
+  lifecycle::deprecate_warn(
+    when = "0.3.8",
+    what = I("split_cols(NULL)"),
+    with = "basic_table()",
+    details = "Initializing layouts via `NULL` is no longer supported."
+  )
   cl <- PreDataColLayout(SplitVector(spl))
   rl <- PreDataRowLayout()
   PreDataTableLayouts(rlayout = rl, clayout = cl)

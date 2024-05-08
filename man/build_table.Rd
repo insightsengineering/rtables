@@ -23,7 +23,7 @@ build_table(
 \item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
 \emph{only} when calculating column counts.}
 
-\item{col_counts}{(\code{numeric} or \code{NULL})\cr \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} if non-\code{NULL}, column counts
+\item{col_counts}{(\code{numeric} or \code{NULL})\cr if non-\code{NULL}, column counts
 which override those calculated automatically during tabulation. Must specify "counts" for \emph{all}
 resulting columns if non-\code{NULL}. \code{NA} elements will be replaced with the automatically calculated counts.}
 

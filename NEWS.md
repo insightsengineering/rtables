@@ -15,6 +15,8 @@
 
 ### Miscellaneous
  * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
+ * Added `lifecycle` badge files for documentation.
+ * Deprecated the `gap` and `check_headers` arguments to `rbindl_rtables` using `lifecycle`.
 
 ## rtables 0.6.6
 ### New Features
