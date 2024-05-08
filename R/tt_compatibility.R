@@ -936,7 +936,7 @@ chk_compat_cinfos <- function(tt1, tt2) {
 
 
 #' Insert `rrow`s at (before) a specific location
-#' 
+#'
 #' `r lifecycle::badge("deprecated")`
 #'
 #' This function is deprecated and will be removed in a future release of `rtables`. Please use
