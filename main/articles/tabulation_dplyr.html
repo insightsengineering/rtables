@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,22 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -129,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2024-05-02</h4>
+            <h4 data-toc-skip class="date">2024-05-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/tabulation_dplyr.Rmd" class="external-link"><code>vignettes/tabulation_dplyr.Rmd</code></a></small>
       <div class="d-none name"><code>tabulation_dplyr.Rmd</code></div>
@@ -198,7 +182,7 @@ vignette:</p>
 <pre><code><span><span class="co">#                     Arm A                     Arm B         </span></span>
 <span><span class="co">#              Female        Male        Female        Male   </span></span>
 <span><span class="co">#              (N=96)      (N=105)       (N=92)      (N=107)  </span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------------------</span></span>
 <span><span class="co"># CAN        45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   Left     32 (33.3%)   42 (40.0%)   26 (28.3%)   37 (34.6%)</span></span>
 <span><span class="co">#     mean      38.9         40.4         40.3         37.7   </span></span>
@@ -225,7 +209,7 @@ Canadians in “Arm A”:</p>
 <code class="sourceCode R"><span><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span>, <span class="va">arm</span> <span class="op">==</span> <span class="st">"Arm A"</span>, <span class="va">gender</span> <span class="op">==</span> <span class="st">"Female"</span>, <span class="va">handed</span> <span class="op">==</span> <span class="st">"Left"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 1 × 1</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 1 x 1</span></span></span>
 <span><span class="co">#   mean_age</span></span>
 <span><span class="co">#      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">1</span>     38.9</span></span></code></pre>
@@ -239,7 +223,7 @@ columns:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># `summarise()` has grouped output by 'arm'. You can override using the `.groups`</span></span>
 <span><span class="co"># argument.</span></span></code></pre>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 4 x 3</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm [2]</span></span></span>
 <span><span class="co">#   arm   gender mean_age</span></span>
 <span><span class="co">#   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -256,7 +240,7 @@ columns:</p>
 <span><span class="co"># override using the `.groups` argument.</span></span></code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">average_age</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 16 × 5</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 16 x 5</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm, gender, country [8]</span></span></span>
 <span><span class="co">#    arm   gender country handed mean_age</span></span>
 <span><span class="co">#    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -290,7 +274,7 @@ the same content:</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                Arm A           Arm B    </span></span>
 <span><span class="co">#            Female   Male   Female   Male</span></span>
-<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------</span></span>
 <span><span class="co"># CAN                                     </span></span>
 <span><span class="co">#   Left                                  </span></span>
 <span><span class="co">#     mean    38.9    40.4    40.3    37.7</span></span>
@@ -330,7 +314,7 @@ row mean values:</p>
 <span><span class="co"># override using the `.groups` argument.</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c_h_df</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 16 × 8</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 16 x 8</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm, gender [4]</span></span></span>
 <span><span class="co">#    arm   gender country handed  mean c_h_count n_col c_h_percent</span></span>
 <span><span class="co">#    <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -363,7 +347,7 @@ countries:</p>
 <span><span class="co"># `.groups` argument.</span></span></code></pre>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c_df</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 8 × 6</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 8 x 6</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm, gender [4]</span></span></span>
 <span><span class="co">#   arm   gender country c_count n_col c_percent</span></span>
 <span><span class="co">#   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -405,7 +389,7 @@ computations.</p>
 <pre><code><span><span class="co">#                     Arm A                     Arm B         </span></span>
 <span><span class="co">#              Female        Male        Female        Male   </span></span>
 <span><span class="co">#              (N=96)      (N=105)       (N=92)      (N=107)  </span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------------------</span></span>
 <span><span class="co"># CAN        45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   Left     32 (33.3%)   42 (40.0%)   26 (28.3%)   37 (34.6%)</span></span>
 <span><span class="co">#     mean      38.9         40.4         40.3         37.7   </span></span>
@@ -431,7 +415,7 @@ computations.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">c_h_count</span>, <span class="va">c_h_percent</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">frm_dplyr_h</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 1 × 2</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 1 x 2</span></span></span>
 <span><span class="co">#   c_h_count c_h_percent</span></span>
 <span><span class="co">#       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">1</span>        20       0.217</span></span></code></pre>
@@ -450,7 +434,7 @@ computations.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">c_count</span>, <span class="va">c_percent</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">frm_dplyr_c</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 2 x 2</span></span></span>
 <span><span class="co">#   c_count c_percent</span></span>
 <span><span class="co">#     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">1</span>      64     0.610</span></span>

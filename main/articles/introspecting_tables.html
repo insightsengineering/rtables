@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,22 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -129,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2024-05-02</h4>
+            <h4 data-toc-skip class="date">2024-05-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/introspecting_tables.Rmd" class="external-link"><code>vignettes/introspecting_tables.Rmd</code></a></small>
       <div class="d-none name"><code>introspecting_tables.Rmd</code></div>
@@ -160,7 +144,7 @@ and Adrian Waddell</h4>
 <pre><code><span><span class="co">#                  ARM A                     ARM B                     ARM C                       </span></span>
 <span><span class="co">#             S1           S2           S1           S2           S1           S2           All    </span></span>
 <span><span class="co">#           (N=73)       (N=61)       (N=67)       (N=67)       (N=56)       (N=76)       (N=400)  </span></span>
-<span><span class="co"># —————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># A       18 (24.7%)   20 (32.8%)   22 (32.8%)   22 (32.8%)   14 (25.0%)   26 (34.2%)   122 (30.5%)</span></span>
 <span><span class="co">#   max      40.0         46.0         62.0         50.0         47.0         45.0         62.0    </span></span>
 <span><span class="co"># B       28 (38.4%)   19 (31.1%)   19 (28.4%)   26 (38.8%)   18 (32.1%)   25 (32.9%)   135 (33.8%)</span></span>
@@ -366,7 +350,7 @@ the column case), indented to illustrate table structure:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># rowname    node_class    path                   </span></span>
-<span><span class="co"># ————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------</span></span>
 <span><span class="co"># A          ContentRow    STRATA1, A, @content, A</span></span>
 <span><span class="co">#   max      DataRow       STRATA1, A, AGE, max   </span></span>
 <span><span class="co"># B          ContentRow    STRATA1, B, @content, B</span></span>
@@ -376,7 +360,7 @@ the column case), indented to illustrate table structure:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">col_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># label    path                     </span></span>
-<span><span class="co"># ——————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------</span></span>
 <span><span class="co"># ARM A    ARMCD, ARM A             </span></span>
 <span><span class="co">#   S1     ARMCD, ARM A, STRATA2, S1</span></span>
 <span><span class="co">#   S2     ARMCD, ARM A, STRATA2, S2</span></span>
@@ -406,7 +390,7 @@ value in the table.</p>
 <pre><code><span><span class="co">#                  ARM A                     ARM B                     ARM C                      </span></span>
 <span><span class="co">#             S1           S2           S1           S2           S1           S2          All    </span></span>
 <span><span class="co">#           (N=73)       (N=61)       (N=67)       (N=67)       (N=56)       (N=76)      (N=400)  </span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># A       xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)</span></span>
 <span><span class="co">#   max      xx.x         xx.x         xx.x         xx.x         xx.x         xx.x         xx.x   </span></span>
 <span><span class="co"># B       xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)</span></span>

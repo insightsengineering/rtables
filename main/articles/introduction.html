@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,22 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -129,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2024-05-02</h4>
+            <h4 data-toc-skip class="date">2024-05-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/introduction.Rmd" class="external-link"><code>vignettes/introduction.Rmd</code></a></small>
       <div class="d-none name"><code>introduction.Rmd</code></div>
@@ -200,7 +184,7 @@ gender, handedness, age, and weight.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 6 x 6</span></span></span>
 <span><span class="co">#   arm   country gender handed   age weight</span></span>
 <span><span class="co">#   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co"># <span style="color: #BCBCBC;">1</span> Arm A USA     Female Left    31.3   139.</span></span>
@@ -221,7 +205,7 @@ step:</p>
 <pre><code><span><span class="co">#                     Arm A                     Arm B         </span></span>
 <span><span class="co">#              Female        Male        Female        Male   </span></span>
 <span><span class="co">#              (N=96)      (N=105)       (N=92)      (N=107)  </span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------------------</span></span>
 <span><span class="co"># CAN        45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   Left     32 (33.3%)   42 (40.0%)   26 (28.3%)   37 (34.6%)</span></span>
 <span><span class="co">#     mean     38.87        40.43        40.33        37.68   </span></span>
@@ -256,7 +240,7 @@ vignette for more details.</p>
 <pre><code><span><span class="co">#                       Arm A                     Arm B         </span></span>
 <span><span class="co">#                Female        Male        Female        Male   </span></span>
 <span><span class="co"># age - mean     (N=96)      (N=105)       (N=92)      (N=107)  </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------------------------------</span></span>
 <span><span class="co"># CAN          45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   Left       32 (33.3%)   42 (40.0%)   26 (28.3%)   37 (34.6%)</span></span>
 <span><span class="co">#     mean       38.87        40.43        40.33        37.68   </span></span>
@@ -296,7 +280,7 @@ adding a row:</p>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">df</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#        all obs</span></span>
-<span><span class="co"># ——————————————</span></span>
+<span><span class="co"># --------------</span></span>
 <span><span class="co"># mean    39.4</span></span></code></pre>
 <p>In the code above we first described the table and assigned that
 description to a variable <code>lyt</code>. We then built the table
@@ -359,7 +343,7 @@ split based on the factor variable <code>arm</code>:</p>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">df</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#        Arm A   Arm B</span></span>
-<span><span class="co"># ————————————————————</span></span>
+<span><span class="co"># --------------------</span></span>
 <span><span class="co"># mean   39.5    39.4</span></span></code></pre>
 <p>The resulting table has one column per factor level of
 <code>arm</code>. So the data represented by the first column is
@@ -380,7 +364,7 @@ by the gender:</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#            Arm A           Arm B    </span></span>
 <span><span class="co">#        Female   Male   Female   Male</span></span>
-<span><span class="co"># ————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------</span></span>
 <span><span class="co"># mean    38.8    40.1    39.6    39.2</span></span></code></pre>
 <p>The first column represents the data in <code>df</code> where
 <code>df$arm == "A" &amp; df$gender == "Female"</code> and the second
@@ -407,7 +391,7 @@ row space):</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#              Arm A           Arm B    </span></span>
 <span><span class="co">#          Female   Male   Female   Male</span></span>
-<span><span class="co"># ——————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------</span></span>
 <span><span class="co"># CAN                                   </span></span>
 <span><span class="co">#   mean    38.2    40.3    40.3    38.9</span></span>
 <span><span class="co"># USA                                   </span></span>
@@ -436,10 +420,10 @@ declared via <code>page_by = TRUE</code> within a call to
 <pre><code><span><span class="co"># </span></span>
 <span><span class="co"># country: CAN</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------</span></span>
 <span><span class="co">#                Arm A           Arm B    </span></span>
 <span><span class="co">#            Female   Male   Female   Male</span></span>
-<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------</span></span>
 <span><span class="co"># Left                                    </span></span>
 <span><span class="co">#   mean      38.9    40.4    40.3    37.7</span></span>
 <span><span class="co"># Right                                   </span></span>
@@ -451,10 +435,10 @@ declared via <code>page_by = TRUE</code> within a call to
 <span><span class="co"># </span></span>
 <span><span class="co"># country: USA</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------</span></span>
 <span><span class="co">#                Arm A           Arm B    </span></span>
 <span><span class="co">#            Female   Male   Female   Male</span></span>
-<span><span class="co"># ————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------</span></span>
 <span><span class="co"># Left                                    </span></span>
 <span><span class="co">#   mean      40.4    39.7    39.2    40.1</span></span>
 <span><span class="co"># Right                                   </span></span>
@@ -493,7 +477,7 @@ data relative to the column associated data is calculated:</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   Arm A                     Arm B         </span></span>
 <span><span class="co">#            Female        Male        Female        Male   </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------------------------</span></span>
 <span><span class="co"># CAN      45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   mean      38.2         40.3         40.3         38.9   </span></span>
 <span><span class="co"># USA      51 (53.1%)   41 (39.0%)   46 (50.0%)   45 (42.1%)</span></span>
@@ -524,7 +508,7 @@ handedness:</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                     Arm A                     Arm B         </span></span>
 <span><span class="co">#              Female        Male        Female        Male   </span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------------------</span></span>
 <span><span class="co"># CAN        45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   Left                                                      </span></span>
 <span><span class="co">#     mean      38.9         40.4         40.3         37.7   </span></span>
@@ -551,7 +535,7 @@ within each country:</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                     Arm A                     Arm B         </span></span>
 <span><span class="co">#              Female        Male        Female        Male   </span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ------------------------------------------------------------</span></span>
 <span><span class="co"># CAN        45 (46.9%)   64 (61.0%)   46 (50.0%)   62 (57.9%)</span></span>
 <span><span class="co">#   Left     32 (33.3%)   42 (40.0%)   26 (28.3%)   37 (34.6%)</span></span>
 <span><span class="co">#     mean      38.9         40.4         40.3         37.7   </span></span>

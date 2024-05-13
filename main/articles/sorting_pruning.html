@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,22 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -129,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker,
 Adrian Waddell and Davide Garolini</h4>
             
-            <h4 data-toc-skip class="date">2024-05-02</h4>
+            <h4 data-toc-skip class="date">2024-05-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/sorting_pruning.Rmd" class="external-link"><code>vignettes/sorting_pruning.Rmd</code></a></small>
       <div class="d-none name"><code>sorting_pruning.Rmd</code></div>
@@ -175,7 +159,7 @@ other filtering contain 0 rows.</li>
 <span><span class="va">raw_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                                       44 (62.9%)   35 (68.6%)   0 (NA%)       0 (NA%)        37 (66.1%)   31 (62.0%)   0 (NA%)       0 (NA%)        40 (65.6%)   44 (64.7%)   0 (NA%)       0 (NA%)     </span></span>
 <span><span class="co">#   A                                         15 (21.4%)   12 (23.5%)   0 (NA%)       0 (NA%)        14 (25.0%)   6 (12.0%)    0 (NA%)       0 (NA%)        15 (24.6%)   16 (23.5%)   0 (NA%)       0 (NA%)     </span></span>
 <span><span class="co">#     Mean                                      30.40        34.42        NA             NA            35.43        30.33        NA             NA            37.40        36.25        NA             NA       </span></span>
@@ -258,7 +242,7 @@ no values in them, i.e. that have all <code>NA</code> values or all
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   0 (NA%)       0 (NA%)        37 (66.1%)   31 (62.0%)   0 (NA%)       0 (NA%)        40 (65.6%)   44 (64.7%)   0 (NA%)       0 (NA%)     </span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   0 (NA%)       0 (NA%)        14 (25.0%)   6 (12.0%)    0 (NA%)       0 (NA%)        15 (24.6%)   16 (23.5%)   0 (NA%)       0 (NA%)     </span></span>
 <span><span class="co">#     Mean                      30.40        34.42        NA             NA            35.43        30.33        NA             NA            37.40        36.25        NA             NA       </span></span>
@@ -297,7 +281,7 @@ subsetting using the <code><a href="../reference/col_accessors.html">col_counts(
 <span><span class="va">h_coltrimmed</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -363,7 +347,7 @@ following:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">h_coltrimmed</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># rowname                      node_class    path                                                                </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ---------------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                        ContentRow    RACE, ASIAN, @content, ASIAN                                        </span></span>
 <span><span class="co">#   A                          ContentRow    RACE, ASIAN, STRATA1, A, @content, A                                </span></span>
 <span><span class="co">#     Mean                     DataRow       RACE, ASIAN, STRATA1, A, AGE, Mean                                  </span></span>
@@ -402,7 +386,7 @@ contains all zeros or all <code>NA</code>s</li>
 <span><span class="va">pruned</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -434,7 +418,7 @@ column is the count).</p>
 <span><span class="va">pruned2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                F            M            F            M            F            M     </span></span>
-<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN      44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A        15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean     30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -452,7 +436,7 @@ setting the <code>stop_depth</code> for pruning to <code>1</code>.</p>
 <span><span class="va">pruned3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -483,7 +467,7 @@ some but not all of the strata from our third race
 <span><span class="va">pruned4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -541,7 +525,7 @@ definition, below:</p>
 <span><span class="co">#     }</span></span>
 <span><span class="co">#     sum(sapply(row_values(tree_children(ctab)[[1]]), function(cv) cv[1]))</span></span>
 <span><span class="co"># }</span></span>
-<span><span class="co"># &lt;bytecode: 0x563d2f091fa0&gt;</span></span>
+<span><span class="co"># &lt;bytecode: 0x562db64f75c0&gt;</span></span>
 <span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre>
 <p>Therefore, a fundamental difference between pruning and sorting is
 that sorting occurs at particular places in the table, as defined by a
@@ -552,7 +536,7 @@ by observation counts within just the <code>ASIAN</code> subtable:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -592,7 +576,7 @@ wildcard:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -624,7 +608,7 @@ wildcard:</p>
 <span><span class="va">tmptbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -680,7 +664,7 @@ and the node names:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">pruned</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># rowname                      node_class    path                                                                </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ---------------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                        ContentRow    RACE, ASIAN, @content, ASIAN                                        </span></span>
 <span><span class="co">#   A                          ContentRow    RACE, ASIAN, STRATA1, A, @content, A                                </span></span>
 <span><span class="co">#     Mean                     DataRow       RACE, ASIAN, STRATA1, A, AGE, Mean                                  </span></span>
@@ -714,7 +698,7 @@ order:</p>
 <span><span class="va">ethsort</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># WHITE                       8 (11.4%)    6 (11.8%)    7 (12.5%)    7 (14.0%)    8 (13.1%)    10 (14.7%)</span></span>
 <span><span class="co">#   A                          2 (2.9%)     1 (2.0%)     3 (5.4%)     3 (6.0%)     1 (1.6%)     5 (7.4%) </span></span>
 <span><span class="co">#     Mean                      34.00        45.00        29.33        33.33        35.00        32.80   </span></span>
@@ -742,7 +726,7 @@ females in arm C (i.e. column position <code>5</code>):</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="fu"><a href="../reference/score_funs.html">cont_n_onecol</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -802,7 +786,7 @@ table as before:</p>
 <span>  <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span></span>
 <span><span class="co">#   A                         27 (22.3%)   20 (18.9%)     31 (24.0%)  </span></span>
 <span><span class="co">#     median                     30.0         33.0           36.0     </span></span>
@@ -875,7 +859,7 @@ single numeric value as output.</p>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span>, <span class="st">"*"</span>, <span class="st">"AGE"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span></span>
 <span><span class="co">#   A                         27 (22.3%)   20 (18.9%)     31 (24.0%)  </span></span>
 <span><span class="co">#     mean                       32.2         33.9           36.8     </span></span>
@@ -932,7 +916,7 @@ proceed.</p>
 <span><span class="co">#         row_values(tree_children(ctab)[[1]])[[j]][1]</span></span>
 <span><span class="co">#     }</span></span>
 <span><span class="co"># }</span></span>
-<span><span class="co"># &lt;bytecode: 0x563d2f6914d0&gt;</span></span>
+<span><span class="co"># &lt;bytecode: 0x562db498cc80&gt;</span></span>
 <span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre>
 <p>We see that a similar function to <code><a href="../reference/score_funs.html">cont_n_allcols()</a></code> is
 wrapped by one that allows a parameter <code>j</code> to be used to
@@ -947,7 +931,7 @@ column we want to sort.</p>
 <span><span class="op">}</span></span>
 <span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span>, <span class="st">"*"</span>, <span class="st">"AGE"</span><span class="op">)</span>, <span class="fu">scorefun_onecol</span><span class="op">(</span>colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
-<span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># --------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span></span>
 <span><span class="co">#   A                         27 (22.3%)   20 (18.9%)     31 (24.0%)  </span></span>
 <span><span class="co">#     mean                       32.2         33.9           36.8     </span></span>
@@ -986,14 +970,14 @@ nested within larger splits:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#           A: Drug X      B: Placebo      C: Combination  </span></span>
 <span><span class="co">#            F      M       F       M        F         M   </span></span>
-<span><span class="co"># —————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ---------------------------------------------------------</span></span>
 <span><span class="co"># median   32.0    35.0   33.0    31.0     35.0      32.0  </span></span>
 <span><span class="co"># mean     33.7    36.5   33.8    32.1     34.9      34.3</span></span></code></pre>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span>, <span class="fu">scorefun_onecol</span><span class="op">(</span>colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"B: Placebo"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#           A: Drug X      B: Placebo      C: Combination  </span></span>
 <span><span class="co">#            F      M       F       M        F         M   </span></span>
-<span><span class="co"># —————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># ---------------------------------------------------------</span></span>
 <span><span class="co"># mean     33.7    36.5   33.8    32.1     34.9      34.3  </span></span>
 <span><span class="co"># median   32.0    35.0   33.0    31.0     35.0      32.0</span></span></code></pre>
 </div>
@@ -1062,7 +1046,7 @@ previous sorting by ethnicity above).</p>
 <span><span class="co"># [1] "ASIAN"</span></span></code></pre>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   A                         15 (21.4%)   12 (23.5%)   14 (25.0%)   6 (12.0%)    15 (24.6%)   16 (23.5%)</span></span>
 <span><span class="co">#     Mean                      30.40        34.42        35.43        30.33        37.40        36.25   </span></span>
@@ -1124,7 +1108,7 @@ do inside custom sorting functions.</p>
 <span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="va">silly_gender_diffcount</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
-<span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co"># -------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
 <span><span class="co">#   B                         16 (22.9%)   8 (15.7%)    13 (23.2%)   16 (32.0%)   10 (16.4%)   12 (17.6%)</span></span>
 <span><span class="co">#     Mean                      33.75        34.88        32.46        30.94        33.30        35.92   </span></span>
