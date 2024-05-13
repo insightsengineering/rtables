@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{insert_rrow}
 \alias{insert_rrow}
-\title{\strong{Deprecated:} Insert \code{rrow}s at (before) a specific location}
+\title{Insert \code{rrow}s at (before) a specific location}
 \usage{
 insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 }
@@ -19,6 +19,9 @@ insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 A \code{TableTree} of the same specific class as \code{tbl}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+}
+\details{
 This function is deprecated and will be removed in a future release of \code{rtables}. Please use
 \code{\link[=insert_row_at_path]{insert_row_at_path()}} or \code{\link[=label_at_path]{label_at_path()}} instead.
 }

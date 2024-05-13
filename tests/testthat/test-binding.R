@@ -166,9 +166,9 @@ test_that("insert_rrow works", {
     build_table(ex_adsl)
 
   ## column numbers don't match
-  expect_error(suppressWarnings(insert_rrow(tbl, rrow("Total xx", ""), at = 1)))
+  expect_error(lifecycle::expect_deprecated(insert_rrow(tbl, rrow("Total xx", ""), at = 1)))
   ## this is ok cause its a LabelRow not a DataRow
-  expect_silent(suppressWarnings(insert_rrow(tbl, rrow("Total xx"), at = 1)))
+  expect_silent(lifecycle::expect_deprecated(insert_rrow(tbl, rrow("Total xx"), at = 1)))
 })
 
 ## regression test for #340

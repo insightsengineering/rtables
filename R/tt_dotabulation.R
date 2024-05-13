@@ -1132,7 +1132,7 @@ recursive_applysplit <- function(df,
 #'
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param col_counts (`numeric` or `NULL`)\cr `r lifecycle::badge("deprecated")` if non-`NULL`, column counts
+#' @param col_counts (`numeric` or `NULL`)\cr if non-`NULL`, column counts
 #'   which override those calculated automatically during tabulation. Must specify "counts" for *all*
 #'   resulting columns if non-`NULL`. `NA` elements will be replaced with the automatically calculated counts.
 #' @param col_total (`integer(1)`)\cr the total observations across all columns. Defaults to `nrow(df)`.
