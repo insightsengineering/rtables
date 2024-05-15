@@ -47,7 +47,7 @@ Suggests:
     knitr (>= 1.42),
     officer (>= 0.5.0),
     r2rtf (>= 0.3.2),
-    rmarkdown (>= 2.19),
+    rmarkdown (>= 2.23),
     survival (>= 3.3-1),
     testthat (>= 3.0.4),
     tibble (>= 3.2.1),
