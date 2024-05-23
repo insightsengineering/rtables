@@ -1,4 +1,4 @@
-## rtables 0.6.7.9001
+## rtables 0.6.7.9002
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
@@ -15,6 +15,8 @@
 
 ### Miscellaneous
  * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
+ * Added `lifecycle` badge files for documentation.
+ * Deprecated the `gap` and `check_headers` arguments to `rbindl_rtables` using `lifecycle`.
 
 ## rtables 0.6.6
 ### New Features

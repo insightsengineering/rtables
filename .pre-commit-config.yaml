@@ -15,6 +15,7 @@ repos:
           - methods
           - checkmate
           - htmltools
+          - lifecycle
           - stats
           - stringi
       - id: use-tidy-description

@@ -7,7 +7,11 @@
 \alias{rbind2,VTableNodeInfo,ANY-method}
 \title{Row-bind \code{TableTree} and related objects}
 \usage{
-rbindl_rtables(x, gap = 0, check_headers = TRUE)
+rbindl_rtables(
+  x,
+  gap = lifecycle::deprecated(),
+  check_headers = lifecycle::deprecated()
+)
 
 \S4method{rbind}{VTableNodeInfo}(..., deparse.level = 1)
 

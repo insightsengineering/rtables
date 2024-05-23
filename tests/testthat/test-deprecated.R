@@ -2,9 +2,9 @@ context("deprecated functionality")
 
 
 test_that("deprecated things are still there and work kinda", {
-  expect_warning(lyt11 <- split_cols_by(lyt = NULL, "ARM"), "deprecated")
+  lifecycle::expect_deprecated(lyt11 <- split_cols_by(lyt = NULL, "ARM"))
   expect_identical(lyt11, basic_table() %>% split_cols_by("ARM"))
-  expect_warning(lyt22 <- split_rows_by(lyt = NULL, "ARM"), "deprecated")
+  lifecycle::expect_deprecated(lyt22 <- split_rows_by(lyt = NULL, "ARM"))
   expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
 })
 
@@ -14,7 +14,7 @@ test_that("deprecated insert_rrow still currently works", {
     analyze("Sepal.Length") %>%
     build_table(iris)
 
-  expect_warning(res1 <- insert_rrow(tbl, rrow("Hello World")), "Deprecated")
+  lifecycle::expect_deprecated(res1 <- insert_rrow(tbl, rrow("Hello World")))
   realdf <- make_row_df(tbl)
   o <- options(warn = -1)
   mf1 <- matrix_form(res1)

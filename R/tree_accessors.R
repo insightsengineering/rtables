@@ -3012,10 +3012,10 @@ setGeneric("col_fnotes_here", function(obj) standardGeneric("col_fnotes_here"))
 #' @export
 #' @rdname ref_fnotes
 setMethod("col_fnotes_here", "ANY", function(obj) {
-  .Deprecated(
-    new = "col_footnotes",
-    old = "col_fnotes_here",
-    msg = "col_fnotes_here was deprecated in {rtables} version 0.6.5.9011. Please use col_footnotes instead."
+  lifecycle::deprecate_warn(
+    when = "0.6.6",
+    what = "col_fnotes_here()",
+    with = "col_footnotes()"
   )
   col_footnotes(obj)
 })
@@ -3027,10 +3027,10 @@ setGeneric("col_fnotes_here<-", function(obj, value) standardGeneric("col_fnotes
 #' @export
 #' @rdname int_methods
 setMethod("col_fnotes_here<-", "ANY", function(obj, value) {
-  .Deprecated(
-    new = "col_footnotes<-",
-    old = "col_fnotes_here<-",
-    msg = "col_fnotes_here<- was deprecated in {rtables} version 0.6.5.9011. Please use col_footnotes<- instead."
+  lifecycle::deprecate_warn(
+    when = "0.6.6",
+    what = I("col_fnotes_here()<-"),
+    with = I("col_footnotes()<-")
   )
   col_footnotes(obj) <- value
 })
