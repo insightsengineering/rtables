@@ -82,7 +82,7 @@ as_html <- function(x,
   nc <- ncol(x) + 1
 
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
-  cells <- matrix(rep(list(list()), (nlh + nrow(x)) * (nc)), ncol = nc)
+  cells <- matrix(rep(list(list()), (nlh + nrow(mat$strings)) * (nc)), ncol = nc)
 
   for (i in seq_len(nrow(mat$strings))) {
     for (j in seq_len(ncol(mat$strings))) {
