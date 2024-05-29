@@ -339,7 +339,10 @@ test_that("make_split_fun works", {
   very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
     make_split_result(
       c("stupid", "silly"),
-      datasplit = list(df[1:10, ], df[11:30, ]), labels = c("first 10", "second 20")
+      datasplit = list(df[1:10, ], df[11:30, ]),
+      labels = c("first 10", "second 20"),
+      subset_exprs  = list(quote(seq_along(AGE) <= 10),
+                           quote(seq_along(AGE) %in% 11:30))
     )
   }
 
@@ -350,12 +353,14 @@ test_that("make_split_fun works", {
       levels = c("stupid", "silly")
     ))
   )
-  lyt4a <- basic_table() %>%
+  lyt4a <- basic_table(show_colcounts = TRUE) %>%
     split_cols_by("ARM", split_fun = nonsense_splfun) %>%
     analyze("AGE")
 
-  ## not supported in column space, currently
-  expect_error(build_table(lyt4a, DM), "override core splitting")
+  tbl4a <- build_table(lyt4a, DM)
+  expect_equal(col_counts(tbl4a),
+               c(10L, 20L, 30L))
+
 
   lyt4b <- basic_table() %>%
     split_rows_by("ARM", split_fun = nonsense_splfun) %>%
@@ -379,6 +384,20 @@ test_that("make_split_fun works", {
     30,
     cell_values(tbl4b, pths[[5]])[[1]][[1]]
   )
+
+  ## add_comb_facet within make_split_fun in column space, regression test
+
+  combofun <- add_combo_facet("combo", "Drug X or Combo", c("A: Drug X", "C: Combination"))
+  mysplfun <- make_split_fun(post = list(combofun))
+
+  lyt5 <- basic_table() %>%
+    split_cols_by("ARM", split_fun = mysplfun) %>%
+    analyze("STRATA1")
+
+  tbl5 <- build_table(lyt5, ex_adsl)
+  ## each combo value is A count + C count
+  vals <- cell_values(tbl5)
+  expect_true(all(sapply(vals, function(vi) vi$combo == vi[[1]] + vi[[3]])))
 })
 
 test_that("spl_variable works", {
@@ -412,3 +431,5 @@ test_that("spl_variable works", {
     "Split class MultiVarSplit not associated with a single variable"
   )
 })
+
+## combo levels

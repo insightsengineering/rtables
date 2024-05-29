@@ -64,10 +64,12 @@ setClassUnion("functionOrNULL", c("NULL", "function"))
 setClassUnion("listOrNULL", c("NULL", "list"))
 ## TODO (?) make "list" more specific, e.g FormatList, or FunctionList?
 setClassUnion("FormatSpec", c("NULL", "character", "function", "list"))
+setClassUnion("ExprOrNULL", c("NULL", "expression"))
 
 setClass("ValueWrapper", representation(
   value = "ANY",
-  label = "characterOrNULL"
+  label = "characterOrNULL",
+  subset_expression = "ExprOrNULL"
 ),
 contains = "VIRTUAL"
 )
@@ -80,7 +82,7 @@ setClass("SplitValue",
   representation(extra = "list")
 )
 
-SplitValue <- function(val, extr = list(), label = val) {
+SplitValue <- function(val, extr = list(), label = val, sub_expr = NULL) {
   if (is(val, "SplitValue")) {
     if (length(splv_extra(val)) > 0) {
       extr <- c(splv_extra(val), extr)
@@ -94,10 +96,15 @@ SplitValue <- function(val, extr = list(), label = val) {
   if (!is(label, "character")) {
     label <- as.character(label)
   }
+
+  if (!is.null(sub_expr) && !is.expression(sub_expr))
+    sub_expr <- as.expression(sub_expr) ## sometimes they will be "call" objects, etc
   check_ok_label(label)
   new("SplitValue",
     value = val,
-    extra = extr, label = label
+    extra = extr,
+    label = label,
+    subset_expression = sub_expr
   )
 }
 
@@ -107,13 +114,14 @@ setClass("LevelComboSplitValue",
 )
 
 ## wrapped in user-facing `add_combo_facet`
-LevelComboSplitValue <- function(val, extr, combolevels, label = val) {
+LevelComboSplitValue <- function(val, extr, combolevels, label = val, sub_expr = NULL) {
   check_ok_label(label)
   new("LevelComboSplitValue",
     value = val,
     extra = extr,
     combolevels = combolevels,
-    label = label
+    label = label,
+    subset_expression = sub_expr
   )
 }
 
@@ -955,7 +963,7 @@ TreePos <- function(spls = list(),
                     svlabels = character(),
                     sub = NULL) {
   check_ok_label(svlabels, multi_ok = TRUE)
-  svals <- make_splvalue_vec(vals = svals)
+  svals <- make_splvalue_vec(vals = svals, subset_exprs = lapply(svals, value_expr))
   if (is.null(sub)) {
     if (length(spls) > 0) {
       sub <- make_pos_subset(
@@ -992,6 +1000,7 @@ make_child_pos <- function(parpos,
     svlabels = c(pos_splval_labels(parpos), newlab),
     sub = .combine_subset_exprs(
       pos_subset(parpos),
+      ## this will grab the value's custom subset expression if present
       make_subset_expr(newspl, nsplitval)
     )
   )
