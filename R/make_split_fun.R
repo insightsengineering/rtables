@@ -381,8 +381,7 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
     return(ex2)
   } else if (identical(ex2, expression(FALSE))) {
     return(ex1)
-  } else if (identical(ex1, expression(TRUE)) ||
-    identical(ex2, expression(TRUE))) {
+  } else if (identical(ex1, expression(TRUE)) || identical(ex2, expression(TRUE))) {
     return(TRUE)
   }
   as.expression(bquote((.(a)) | .(b), list(a = ex1[[1]], b = ex2[[1]])))
