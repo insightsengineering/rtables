@@ -352,11 +352,14 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
       datpart <- list(do.call(rbind, ret$datasplit[levels]))
     }
 
-    val <- LevelComboSplitValue(val = name, extr = extra, combolevels = levels, label = label,
-                                sub_expr = subexpr)
+    val <- LevelComboSplitValue(
+      val = name, extr = extra, combolevels = levels, label = label,
+      sub_expr = subexpr
+    )
     add_to_split_result(ret,
-                        values = list(val), labels = label,
-                        datasplit = datpart)
+      values = list(val), labels = label,
+      datasplit = datpart
+    )
   }
 }
 
@@ -364,7 +367,7 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
   exprs <- lapply(val_lst, value_expr)
   nulls <- vapply(exprs, is.null, TRUE)
   if (all(nulls)) {
-    return(NULL) #default behavior all the way down the line, no need to do anything.
+    return(NULL) # default behavior all the way down the line, no need to do anything.
   } else if (any(nulls)) {
     exprs[nulls] <- lapply(val_lst[nulls], function(vali) make_subset_expr(spl, vali))
   }
@@ -374,13 +377,14 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
 ## no NULLS coming in here, everything has been populated
 ## by either custom subsetting expressions or the result of make_subset_expr(spl, val)
 .or_combine_exprs <- function(ex1, ex2) {
-  if (identical(ex1, expression(FALSE)))
+  if (identical(ex1, expression(FALSE))) {
     return(ex2)
-  else if (identical(ex2, expression(FALSE)))
+  } else if (identical(ex2, expression(FALSE))) {
     return(ex1)
-  else if (identical(ex1, expression(TRUE)) ||
-             identical(ex2, expression(TRUE)))
+  } else if (identical(ex1, expression(TRUE)) ||
+    identical(ex2, expression(TRUE))) {
     return(TRUE)
+  }
   as.expression(bquote((.(a)) | .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
 

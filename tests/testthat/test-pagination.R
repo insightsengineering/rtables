@@ -575,7 +575,6 @@ test_that("Pagination works with referential footnotes", {
 
 
 test_that("setting colgap during pagination works", {
-
   tt <- tt_to_export()
   ## row labels take up 12, all other columns 10 + 3 (default colgap)
   ## so 2 cols per page, 3 pages total

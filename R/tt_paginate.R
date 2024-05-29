@@ -97,12 +97,14 @@ setMethod(
       function(i) {
         max(
           nlines(h_rows[[i]],
-                 colwidths = colwidths,
-                 fontspec = fontspec,
-                 col_gap = col_gap),
+            colwidths = colwidths,
+            fontspec = fontspec,
+            col_gap = col_gap
+          ),
           nlines(tl[i],
-                 colwidths = colwidths[1],
-                 fontspec = fontspec)
+            colwidths = colwidths[1],
+            fontspec = fontspec
+          )
         )
       },
       1L
@@ -706,11 +708,12 @@ pag_tt_indices <- function(tt,
   ##     flines <- flines + dl_contrib + 1L
   ## }
   flines <- .footer_rep_nlines(tt,
-                               colwidths = colwidths,
-                               max_width = max_width,
-                               have_cfnotes = have_cfnotes,
-                               fontspec = fontspec,
-                               verbose = verbose)
+    colwidths = colwidths,
+    max_width = max_width,
+    have_cfnotes = have_cfnotes,
+    fontspec = fontspec,
+    verbose = verbose
+  )
   ## row lines per page
   rlpp <- lpp - hlines - flines
   if (verbose) {
@@ -826,8 +829,9 @@ paginate_table <- function(tt,
                            col_gap = 3,
                            verbose = FALSE) {
   new_dev <- open_font_dev(fontspec)
-  if (new_dev)
+  if (new_dev) {
     on.exit(close_font_dev())
+  }
 
   if ((non_null_na(lpp) || non_null_na(cpp)) &&
     (!is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height)))) { # nolint

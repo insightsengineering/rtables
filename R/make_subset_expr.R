@@ -9,8 +9,9 @@ setMethod(
   function(spl, val) {
     ## this is how custom split functions will communicate the correct expression
     ## to the column modeling code
-    if (length(value_expr(val)) > 0)
+    if (length(value_expr(val)) > 0) {
       return(value_expr(val))
+    }
 
     v <- unlist(rawvalues(val))
     ## XXX if we're including all levels should even missing be included?
@@ -30,8 +31,9 @@ setMethod(
   function(spl, val) {
     ## this is how custom split functions will communicate the correct expression
     ## to the column modeling code
-    if (length(value_expr(val)) > 0)
+    if (length(value_expr(val)) > 0) {
       return(value_expr(val))
+    }
 
     ## v = rawvalues(val)
     ## as.expression(bquote(!is.na(.(a)), list(a = v)))
@@ -150,8 +152,9 @@ setMethod(
     }
   }
 
-  if (is.null(ex2))
+  if (is.null(ex2)) {
     ex2 <- expression(TRUE)
+  }
   stopifnot(is.expression(ex1), is.expression(ex2))
   as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }

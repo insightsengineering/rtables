@@ -341,8 +341,10 @@ test_that("make_split_fun works", {
       c("stupid", "silly"),
       datasplit = list(df[1:10, ], df[11:30, ]),
       labels = c("first 10", "second 20"),
-      subset_exprs  = list(quote(seq_along(AGE) <= 10),
-                           quote(seq_along(AGE) %in% 11:30))
+      subset_exprs = list(
+        quote(seq_along(AGE) <= 10),
+        quote(seq_along(AGE) %in% 11:30)
+      )
     )
   }
 
@@ -358,8 +360,10 @@ test_that("make_split_fun works", {
     analyze("AGE")
 
   tbl4a <- build_table(lyt4a, DM)
-  expect_equal(col_counts(tbl4a),
-               c(10L, 20L, 30L))
+  expect_equal(
+    col_counts(tbl4a),
+    c(10L, 20L, 30L)
+  )
 
 
   lyt4b <- basic_table() %>%

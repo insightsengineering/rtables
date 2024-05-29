@@ -97,8 +97,9 @@ SplitValue <- function(val, extr = list(), label = val, sub_expr = NULL) {
     label <- as.character(label)
   }
 
-  if (!is.null(sub_expr) && !is.expression(sub_expr))
-    sub_expr <- as.expression(sub_expr) ## sometimes they will be "call" objects, etc
+  if (!is.null(sub_expr) && !is.expression(sub_expr)) {
+    sub_expr <- as.expression(sub_expr)
+  } ## sometimes they will be "call" objects, etc
   check_ok_label(label)
   new("SplitValue",
     value = val,
