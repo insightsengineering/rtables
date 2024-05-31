@@ -248,7 +248,7 @@ Most arguments beyond \code{tt} and \code{visible_only} are present so that \cod
 }
 \note{
 The technically present root tree node is excluded from the summary returned by
-both \code{make_row_df} and \code{make_col_df} (see \code{\link[rtables:make_col_df]{rtables::make_col_df()}}), as it is simply the
+both \code{make_row_df} and \code{make_col_df} (see relevant functions in\code{rtables}), as it is the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
 }
 \examples{
