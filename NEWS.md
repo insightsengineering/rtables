@@ -3,7 +3,7 @@
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
  * `sort_at_path` now gives informative error messages when the given path does not exist.
- * Add support for truetype fonts based on formatters `>= 0.5.6.9007`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly. By @gmbecker
+ * Add support for truetype fonts based on formatters `>= 0.5.6.9007`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly, by @gmbecker.
  * Core splitting machinery can now be overridden in column space via `make_split_fun` provided that `core_split` associates the generated facets with subsetting expressions. Subsetting expressions remain unnecessary for splits in row space. By @gmbecker.
  * ValueWrapper objects now carry around subsetting expressions for use during tabulation, by @gmbecker.
  * `make_split_res`, `add_to_split_result` now accept a list of subsetting expressions which will be attached to the values, by @gmbecker.
@@ -25,7 +25,8 @@
 
 ### Miscellaneous
  * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
- * Updated versioned dependency on `formatters`to `0.5.6.9007`
+ * Added `lifecycle` badge files for deprecated documentation.
+ * Deprecated the `gap` and `check_headers` arguments to `rbindl_rtables` using `lifecycle`.
 
 ## rtables 0.6.6
 ### New Features
