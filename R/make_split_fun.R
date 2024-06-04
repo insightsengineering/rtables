@@ -91,13 +91,6 @@ validate_split_result <- function(pinfo, component = NULL) {
 #' These functions performs various housekeeping tasks to ensure that the split result list is as the rtables
 #' internals expect it, most of which are not relevant to end users.
 #'
-#' @note Column splitting will not work correctly if a split function
-#' calls `make_split_result` without specifying subset expressions;
-#' row splitting will work as normal. This is due to the fact that
-#' subsetting expressions are used during column splitting to
-#' represent the data associated with facets, while actual data
-#' subsets are used during row splitting.
-#'
 #' @examples
 #' splres <- make_split_result(
 #'   values = c("hi", "lo"),
@@ -348,14 +341,13 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
       subexpr <- expression(TRUE)
       datpart <- list(fulldf)
     } else {
-      subexpr <- .combine_value_exprs(ret$value[levels])
+      subexpr <- .combine_value_exprs(ret$values[levels])
       datpart <- list(do.call(rbind, ret$datasplit[levels]))
     }
 
-    val <- LevelComboSplitValue(
-      val = name, extr = extra, combolevels = levels, label = label,
-      sub_expr = subexpr
-    )
+
+    val <- LevelComboSplitValue(val = name, extr = extra, combolevels = levels, label = label,
+                                sub_expr = subexpr)
     add_to_split_result(ret,
       values = list(val), labels = label,
       datasplit = datpart

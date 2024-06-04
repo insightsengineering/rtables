@@ -4,13 +4,15 @@
 \alias{manual_cols}
 \title{Manual column declaration}
 \usage{
-manual_cols(..., .lst = list(...))
+manual_cols(..., .lst = list(...), ccount_format = NULL)
 }
 \arguments{
 \item{...}{one or more vectors of levels to appear in the column space. If more than one set of levels is given,
 the values of the second are nested within each value of the first, and so on.}
 
 \item{.lst}{(\code{list})\cr a list of sets of levels, by default populated via \code{list(...)}.}
+
+\item{ccount_format}{(\code{FormatSpec})\cr The format to use when counts are displayed.}
 }
 \value{
 An \code{InstantiatedColumnInfo} object, suitable for declaring the column structure for a manually constructed

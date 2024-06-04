@@ -9,7 +9,7 @@ basic_table(
   subtitles = character(),
   main_footer = character(),
   prov_footer = character(),
-  show_colcounts = FALSE,
+  show_colcounts = NA,
   colcount_format = "(N=xx)",
   header_section_div = NA_character_,
   top_level_section_div = NA_character_,
@@ -28,11 +28,16 @@ printed on a separate line. Ignored for subtables.}
 \item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
 (\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
 
-\item{show_colcounts}{(\code{flag})\cr whether column counts should be displayed in the resulting table when this
-layout is applied to data.}
+\item{show_colcounts}{(\code{logical(1)})\cr Indicates whether the lowest level of
+applied to data. \code{NA}, the default, indicates that the \code{show_colcounts}
+argument(s) passed to the relevant calls to \verb{split_cols_by*}
+functions. Non-missing values will override the behavior specified in
+column splitting layout instructions which create the lowest level, or
+leaf, columns.}
 
 \item{colcount_format}{(\code{string})\cr format for use when displaying the column counts. Must be 1d, or 2d
-where one component is a percent. See Details below.}
+where one component is a percent. This will also apply to any displayed higher
+level column counts where an explicit format was not specified. Defaults to \code{"(N=xx"}. See Details below.}
 
 \item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
 \code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of

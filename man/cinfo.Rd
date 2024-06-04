@@ -7,7 +7,7 @@
 \title{Instantiated column info}
 \usage{
 InstantiatedColumnInfo(
-  treelyt = LayoutColTree(),
+  treelyt = LayoutColTree(colcount = total_cnt),
   csubs = list(expression(TRUE)),
   extras = list(list()),
   cnts = NA_integer_,

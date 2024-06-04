@@ -10,7 +10,7 @@ repos:
     hooks:
       - id: roxygenize
         additional_dependencies:
-          - formatters
+          - insightsengineering/formatters
           - magrittr
           - methods
           - checkmate

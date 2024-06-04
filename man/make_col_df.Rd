@@ -4,7 +4,13 @@
 \alias{make_col_df}
 \title{Column layout summary}
 \usage{
-make_col_df(tt, colwidths = NULL, visible_only = TRUE)
+make_col_df(
+  tt,
+  colwidths = NULL,
+  visible_only = TRUE,
+  na_str = "",
+  ccount_format = colcount_format(tt) \%||\% "(N=xx)"
+)
 }
 \arguments{
 \item{tt}{(\code{ANY})\cr object representing the table-like object to be summarized.}
@@ -13,6 +19,11 @@ make_col_df(tt, colwidths = NULL, visible_only = TRUE)
 
 \item{visible_only}{(\code{flag})\cr should only visible aspects of the table structure be reflected
 in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
+
+\item{na_str}{(\code{character(1)})\cr The string to display when a column count is NA. Users should not need to set this.}
+
+\item{ccount_format}{(\code{FormatSpec})\cr The format to be used by default for
+column counts if one is not specified for an individual column count.}
 }
 \description{
 Used for pagination. Generate a structural summary of the columns of an \code{rtables} table and return it as a

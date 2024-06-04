@@ -152,9 +152,8 @@ setMethod(
     }
   }
 
-  if (is.null(ex2)) {
-    ex2 <- expression(TRUE)
-  }
+  ## if(is.null(ex2))
+  ##     ex2 <- expression(TRUE)
   stopifnot(is.expression(ex1), is.expression(ex2))
   as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
@@ -222,7 +221,18 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   if (is.null(topleft)) {
     topleft <- top_left(lyt)
   }
-  ctree <- coltree(clayout, df = df, rtpos = rtpos)
+  cc_format <- colcount_format(lyt) %||% "(N=xx)"
+
+  ## do it this way for full backwards compatibility
+  if (is.null(alt_counts_df))
+    alt_counts_df <- df
+  ctree <- coltree(clayout, df = df, rtpos = rtpos, alt_counts_df = alt_counts_df, ccount_format = cc_format)
+  if (!is.na(disp_ccounts(lyt))) {
+    leaf_pths <- make_col_df(ctree, visible_only = TRUE, na_str = "", ccount_format = cc_format)$path
+    for (path in leaf_pths) {
+      colcount_visible(ctree, path) <- disp_ccounts(lyt)
+    }
+  }
 
   cexprs <- make_col_subsets(ctree, df)
   colextras <- col_extra_args(ctree)
@@ -233,20 +243,17 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   ## the counts will obviously be wrong.
   if (is.null(counts)) {
     counts <- rep(NA_integer_, length(cexprs))
-  } else {
-    if (length(counts) != length(cexprs)) {
-      stop(
-        "Length of overriding counts must equal number of columns. Got ",
-        length(counts), " values for ", length(cexprs), " columns. ",
-        "Use NAs to specify that the default counting machinery should be ",
-        "used for that position."
-      )
-    }
-    counts <- as.integer(counts)
+  } else if (length(counts) != length(cexprs)) {
+    stop(
+      "Length of overriding counts must equal number of columns. Got ",
+      length(counts), " values for ", length(cexprs), " columns. ",
+      "Use NAs to specify that the default counting machinery should be ",
+      "used for that position."
+    )
   }
 
   counts_df_name <- "alt_counts_df"
-  if (is.null(alt_counts_df)) {
+  if (identical(alt_counts_df, df)) { #is.null(alt_counts_df)) {
     alt_counts_df <- df
     counts_df_name <- "df"
   }
@@ -259,6 +266,9 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
       0L
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
+      ## likely unneeded now because it happens in splitvec_to_coltree
+      ## which is called during coltree construction above
+      ## TODO remove me
       if (is(vec, "try-error")) {
         stop(sprintf(
           paste(
@@ -283,14 +293,14 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   if (is.null(total)) {
     total <- sum(counts)
   }
-  format <- colcount_format(lyt)
+
   InstantiatedColumnInfo(
     treelyt = ctree,
     csubs = cexprs,
     extras = colextras,
     cnts = counts,
     dispcounts = disp_ccounts(lyt),
-    countformat = format,
+    countformat = cc_format,
     total_cnt = total,
     topleft = topleft
   )

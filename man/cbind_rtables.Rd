@@ -4,12 +4,17 @@
 \alias{cbind_rtables}
 \title{Column-bind two \code{TableTree} objects}
 \usage{
-cbind_rtables(x, ...)
+cbind_rtables(x, ..., sync_count_vis = TRUE)
 }
 \arguments{
 \item{x}{(\code{TableTree} or \code{TableRow})\cr a table or row object.}
 
 \item{...}{one or more further objects of the same class as \code{x}.}
+
+\item{sync_count_vis}{(\code{logical(1)})\cr should column count
+visibility be synced across the new and existing columns.
+Currently defaults to \code{TRUE} for backwards compatibility but
+this may change in future releases.}
 }
 \value{
 A formal table object.

@@ -30,7 +30,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Daniel Sabanés Bové \email{daniel.sabanes_bove@roche.com} [contributor]
+  \item Daniel Saban<U+00E9>s Bov<U+00E9> \email{daniel.sabanes_bove@roche.com} [contributor]
   \item Maximilian Mordig \email{maximilian_oliver.mordig@roche.com} [contributor]
   \item Davide Garolini \email{davide.garolini@roche.com} [contributor]
   \item Emily de la Rua \email{emily.de_la_rua@contractors.roche.com} [contributor]

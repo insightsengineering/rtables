@@ -345,6 +345,18 @@ setMethod(
   function(obj) obj@subset
 )
 
+#' @rdname int_methods
+setGeneric("tree_pos<-", function(obj, value) standardGeneric("tree_pos<-"))
+
+#' @rdname int_methods
+setMethod(
+  "tree_pos<-", "VLayoutNode",
+  function(obj, value) {
+    obj@pos_in_tree <- value
+    obj
+  }
+)
+
 ## setMethod("pos_subset", "VNodeInfo",
 ##           function(obj) pos_subset(tree_pos(obj)))
 
@@ -373,6 +385,33 @@ setMethod(
 )
 
 #' @rdname int_methods
+setGeneric("pos_splits<-", function(obj, value) standardGeneric("pos_splits<-"))
+
+#' @rdname int_methods
+setMethod(
+  "pos_splits<-", "TreePos",
+  function(obj, value) {
+    obj@splits <- value
+    obj
+  }
+)
+
+#' @rdname int_methods
+setMethod(
+  "pos_splits<-", "VLayoutNode",
+  function(obj, value) {
+    pos <- tree_pos(obj)
+    pos_splits(pos) <- value
+    tree_pos(obj) <- pos
+    obj
+    obj
+  }
+)
+
+
+
+
+#' @rdname int_methods
 setGeneric("pos_splvals", function(obj) standardGeneric("pos_splvals"))
 
 #' @rdname int_methods
@@ -389,6 +428,33 @@ setMethod(
   "pos_splvals", "VLayoutNode",
   function(obj) pos_splvals(tree_pos(obj))
 )
+
+#' @rdname int_methods
+setGeneric("pos_splvals<-", function(obj, value) standardGeneric("pos_splvals<-"))
+
+#' @rdname int_methods
+setMethod(
+  "pos_splvals<-", "TreePos",
+  function(obj, value) {
+    obj@s_values <- value
+    obj
+  }
+)
+
+## setMethod("pos_splvals", "VNodeInfo",
+##           function(obj) pos_splvals(tree_pos(obj)))
+
+#' @rdname int_methods
+setMethod(
+  "pos_splvals<-", "VLayoutNode",
+  function(obj, value) {
+    pos <- tree_pos(obj)
+    pos_splvals(pos) <- value
+    tree_pos(obj) <- pos
+    obj
+  }
+)
+
 
 #' @rdname int_methods
 setGeneric("pos_splval_labels", function(obj) standardGeneric("pos_splval_labels"))
@@ -1769,7 +1835,6 @@ setMethod("value_expr", "ValueWrapper", function(obj) obj@subset_expression)
 setMethod("value_expr", "ANY", function(obj) NULL)
 ## no setters for now, we'll see about that.
 
-
 #' @rdname int_methods
 setGeneric("spl_varlabels", function(obj) standardGeneric("spl_varlabels"))
 
@@ -1966,17 +2031,20 @@ setMethod(
 )
 
 #' @rdname col_accessors
+#' @param ccount_format (`FormatSpec`)\cr The format to be used by default for column
+#' counts throughout this column tree (ie if not overridden by a more specific format
+#' specification).
 #' @export
 setGeneric(
   "coltree",
-  function(obj, df = NULL, rtpos = TreePos()) standardGeneric("coltree")
+  function(obj, df = NULL, rtpos = TreePos(), alt_counts_df = df, ccount_format = "(N=xx)") standardGeneric("coltree")
 )
 
 #' @rdname col_accessors
 #' @exportMethod coltree
 setMethod(
   "coltree", "InstantiatedColumnInfo",
-  function(obj, df = NULL, rtpos = TreePos()) {
+  function(obj, df = NULL, rtpos = TreePos(), alt_counts_df = df, ccount_format) {
     if (!is.null(df)) {
       warning("Ignoring df argument and retrieving already-computed LayoutColTree")
     }
@@ -1988,14 +2056,16 @@ setMethod(
 #' @export coltree
 setMethod(
   "coltree", "PreDataTableLayouts",
-  function(obj, df, rtpos) coltree(clayout(obj), df, rtpos)
+  function(obj, df, rtpos, alt_counts_df = df, ccount_format) {
+    coltree(clayout(obj), df, rtpos, alt_counts_df = alt_counts_df, ccount_format = ccount_format)
+  }
 )
 
 #' @rdname col_accessors
 #' @export coltree
 setMethod(
   "coltree", "PreDataColLayout",
-  function(obj, df, rtpos) {
+  function(obj, df, rtpos, alt_counts_df = df, ccount_format) {
     obj <- set_def_child_ord(obj, df)
     kids <- lapply(
       obj,
@@ -2003,7 +2073,9 @@ setMethod(
         splitvec_to_coltree(
           df = df,
           splvec = x,
-          pos = rtpos
+          pos = rtpos,
+          alt_counts_df = alt_counts_df,
+          global_cc_format = ccount_format
         )
       }
     )
@@ -2014,7 +2086,9 @@ setMethod(
         lev = 0L,
         kids = kids,
         tpos = rtpos,
-        spl = RootSplit()
+        spl = RootSplit(),
+        colcount = NROW(alt_counts_df),
+        colcount_format = ccount_format
       )
     }
     disp_ccounts(res) <- disp_ccounts(obj)
@@ -2026,21 +2100,21 @@ setMethod(
 #' @export coltree
 setMethod(
   "coltree", "LayoutColTree",
-  function(obj, df, rtpos) obj
+  function(obj, df, rtpos, alt_counts_df, ccount_format) obj
 )
 
 #' @rdname col_accessors
 #' @export coltree
 setMethod(
   "coltree", "VTableTree",
-  function(obj, df, rtpos) coltree(col_info(obj))
+  function(obj, df, rtpos, alt_counts_df, ccount_format) coltree(col_info(obj))
 )
 
 #' @rdname col_accessors
 #' @export coltree
 setMethod(
   "coltree", "TableRow",
-  function(obj, df, rtpos) coltree(col_info(obj))
+  function(obj, df, rtpos, alt_counts_df, ccount_format) coltree(col_info(obj))
 )
 
 setGeneric("coltree<-", function(obj, value) standardGeneric("coltree<-"))
@@ -2157,7 +2231,17 @@ setGeneric("col_counts", function(obj, path = NULL) standardGeneric("col_counts"
 #' @rdname col_accessors
 setMethod(
   "col_counts", "InstantiatedColumnInfo",
-  function(obj, path = NULL) obj@counts[.path_to_pos(path, obj, cols = TRUE)]
+  function(obj, path = NULL) {
+    if (is.null(path)) {
+      lfs <- collect_leaves(coltree(obj))
+      ret <- vapply(lfs, facet_colcount, 1L, path = NULL)
+    } else {
+      ret <- facet_colcount(obj, path)
+    }
+    ## required for strict backwards compatibility,
+    ## even though its undesirable behavior.
+    unname(ret)
+  }
 )
 
 #' @export
@@ -2176,8 +2260,25 @@ setGeneric("col_counts<-", function(obj, path = NULL, value) standardGeneric("co
 setMethod(
   "col_counts<-", "InstantiatedColumnInfo",
   function(obj, path = NULL, value) {
-    ## all methods funnel to this one so ensure integer-ness here.
-    obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- as.integer(value)
+    ## obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- value
+    ## obj
+    if (!is.null(path)) {
+      all_paths <- list(path)
+    } else {
+      all_paths <- make_col_df(obj, visible_only = TRUE)$path
+    }
+    if (length(value) != length(all_paths)) {
+      stop("Got ", length(value), "values for ",
+        length(all_paths), " column paths",
+        if (is.null(path)) " (from path = NULL)",
+        "."
+      )
+    }
+    ctree <- coltree(obj)
+    for (i in seq_along(all_paths)) {
+      facet_colcount(ctree, all_paths[[i]]) <- value[i]
+    }
+    coltree(obj) <- ctree
     obj
   }
 )
@@ -2267,6 +2368,24 @@ setMethod(
 )
 
 #' @rdname int_methods
+setMethod(
+  "disp_ccounts", "LayoutColTree",
+  function(obj) obj@display_columncounts
+)
+
+#' @rdname int_methods
+setMethod(
+  "disp_ccounts", "LayoutColLeaf",
+  function(obj) obj@display_columncounts
+)
+
+#' @rdname int_methods
+setMethod(
+  "disp_ccounts", "Split",
+  function(obj) obj@child_show_colcounts
+)
+
+#' @rdname int_methods
 setGeneric("disp_ccounts<-", function(obj, value) standardGeneric("disp_ccounts<-"))
 
 #' @rdname int_methods
@@ -2309,11 +2428,378 @@ setMethod(
 
 #' @rdname int_methods
 setMethod(
+  "disp_ccounts<-", "LayoutColLeaf",
+  function(obj, value) {
+    obj@display_columncounts <- value
+    obj
+  }
+)
+
+#' @rdname int_methods
+setMethod(
   "disp_ccounts<-", "PreDataTableLayouts",
   function(obj, value) {
     clyt <- clayout(obj)
     disp_ccounts(clyt) <- value
     clayout(obj) <- clyt
+    obj
+  }
+)
+
+match_path_by_pos <- function(kidlst, path) {
+  ret <- -1
+  nmval_pairs <- lapply(
+    kidlst,
+    function(kd) {
+      pos <- tree_pos(kd)
+      c(obj_name(tail(pos_splits(pos), 1)[[1]]),
+        value_names(tail(pos_splvals(pos), 1))[[1]])
+    }
+  )
+
+  matches <- vapply(
+    nmval_pairs,
+    function(pair) {
+      (pair[1] == path[1]) && (is.na(pair[2]) || (path[2] %in% c(pair[2], "*")))
+    },
+    TRUE
+  )
+  if (any(matches))
+    ret <- which(matches)
+  ret
+
+}
+
+## this is a horrible hack but when we have non-nested siblings at the top level
+## the beginning of the "path <-> position" relationship breaks down.
+## we probably *should* have e.g., c("root", "top_level_splname_1",
+##"top_level_splname_1, "top_level_splname_1_value", ...)
+## but its pretty clear why no one will be happy with that, I think
+## so we punt on the problem for now with an explicit workaround
+##
+## those first non-nested siblings currently have (incorrect)
+## empty tree_pos elements so we just look at the obj_name
+root_match_finder <- function(kidlst, path) {
+  matches <- vapply(kidlst, function(kid) {
+    obj_name(kid) == path[1]
+  }, TRUE)
+  if (sum(matches) == 0)
+    stop("unable to find first-step match in path: ", path[1])
+  else if (sum(matches) > 1)
+    stop("multiple matches for first-step in path: ", path[1])
+  else
+    which(matches)
+}
+
+
+is_all_split <- function(ct) {
+  splvals <- pos_splvals(ct)
+  length(splvals) > 0 && rawvalues(tail(pos_splvals(ct), 1))[[1]] == tail(value_names(pos_splvals(ct)), 1)
+}
+
+pos_singleton_path <- function(obj) {
+  pos <- tree_pos(obj)
+  splvals <- pos_splvals(pos)
+  length(splvals) == 0 ||
+    (length(splvals) == 1 && is.na(unlist(value_names(splvals))))
+}
+
+## close to a duplicate of tt_at_path, but... not quite :(
+#' @rdname int_methods
+coltree_at_path <- function(obj, path, ...) {
+  if (length(path) == 0)
+    return(obj)
+  stopifnot(
+    is(path, "character"),
+    length(path) > 0
+  )
+  if (any(grepl("@content", path, fixed = TRUE)))
+    stop("@content token is not valid for column paths.")
+
+
+  ## if(obj_name(obj) == path[1]) {
+  ##   path <- path[-1]
+  ## }
+  cur <- obj
+  curpath <- pos_to_path(tree_pos(obj)) #path
+  num_consume_path <- 2
+  while (!identical(curpath, path) && !is(cur, "LayoutColLeaf")) { #length(curpath) > 0) {
+    kids <- tree_children(cur)
+    kidmatch <- find_kid_path_match(kids, path)
+    if (length(kidmatch) == 0) {
+      stop("unable to match full path: ", paste(path, sep = "->"),
+           "\n path of last match: ", paste(curpath, sep = "->"))
+    }
+    cur <- kids[[kidmatch]]
+    curpath <- pos_to_path(tree_pos(cur))
+  }
+  cur
+}
+
+find_kid_path_match <- function(kids, path) {
+  if (length(kids) == 0)
+    return(integer())
+  kidpaths <- lapply(kids, function(k) pos_to_path(tree_pos(k)))
+
+  matches <- vapply(kidpaths, function(kpth) identical(path[seq_along(kpth)], kpth), NA)
+  firstkidpos <- tree_pos(kids[[1]])
+  if (all(matches) && pos_singleton_path(kids[[1]])) {
+    kidpaths <- lapply(seq_along(kidpaths), function(i) c(kidpaths[[i]], obj_name(kids[[i]])))
+    matches <- vapply(kidpaths, function(kpth) identical(path[seq_along(kpth)], kpth), NA)
+  }
+  which(matches)
+}
+
+ct_recursive_replace <- function(ctree, path, value, pos = 1) {
+  pos <- tree_pos(ctree)
+  curpth <- pos_to_path(pos)
+  if (identical(path, curpth)) {
+    return(value)
+  } else if (is(ctree, "LayoutColLeaf")) {
+    stop("unable to match full path: ", paste(path, sep = "->"),
+         "\n path at leaf: ", paste(curpth, sep = "->"))
+  }
+  kids <- tree_children(ctree)
+  kids_singl <- pos_singleton_path(kids[[1]])
+  kidind <- find_kid_path_match(kids, path)
+
+  if (length(kidind) == 0) {
+    stop("Path appears invalid for this tree at step ", path[1])
+  } else if (length(kidind) > 1) {
+    stop("singleton step (root, cbind_root, etc) in path appears to have matched multiple children. ",
+         "This shouldn't happen, please contact the maintainers.")
+  }
+
+  kids[[kidind]] <- ct_recursive_replace(kids[[kidind]],
+                                         path, value)
+  tree_children(ctree) <- kids
+  ctree
+}
+
+`coltree_at_path<-` <- function(obj, path, value) {
+  obj <- ct_recursive_replace(obj, path, value)
+  obj
+}
+
+#' Set visibility of column counts for a group of sibling facets
+#'
+#' @inheritParams gen_args
+#' @param path character. The path *to the parent of the
+#' desired siblings*. The last element in the path should
+#' be a split name.
+#' @return obj, modified with the desired columncount
+#' display behavior
+#' @export
+`facet_colcounts_visible<-` <- function(obj, path, value) {
+  coldf <- make_col_df(obj, visible_only = FALSE)
+  allpaths <- coldf$path
+  lenpath <- length(path)
+  match_paths <- vapply(allpaths, function(path_i) {
+    (length(path_i) == lenpath + 1) &&
+      (all(head(path_i, -1) == path))
+  }, TRUE)
+  for (curpath in allpaths[match_paths]) {
+    colcount_visible(obj, curpath) <- value
+  }
+  obj
+}
+
+#' Get or set column count for a facet in column space
+#'
+#' @inheritParams gen_args
+#' @param path character. This path must end on a
+#' split value, e.g., the level of a categorical variable
+#' that was split on in column space, but it need not
+#' be the path to an individual column.
+#'
+#' @return for `facet_colcount` the current count associated
+#' with that facet in column space, for `facet_colcount<-`,
+#' `obj` modified with the new column count for the specified
+#' facet.
+#'
+#' @note Updating a lower-level (more specific)
+#' column count manually **will not** update the
+#' counts for its parent facets. This cannot be made
+#' automatic because the rtables framework does not
+#' require sibling facets to be mutually exclusive
+#' (e.g., total "arm", faceting into cumulative
+#' quantiles, etc) and thus the count of a parent facet
+#' will not always be simply the sum of the counts for
+#' all of its children.
+#'
+#' @export
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM", show_colcounts = TRUE) %>%
+#'   split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M")),
+#'     show_colcounts = TRUE) %>%
+#'   split_cols_by("STRATA1", show_colcounts = TRUE) %>%
+#'   analyze("AGE")
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#'
+#' facet_colcount(tbl, c("ARM", "A: Drug X"))
+#' facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F"))
+#' facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "A"))
+#'
+#' ## modify specific count after table creation
+#' facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "A")) <- 25
+#'
+#' ## show black space for certain counts by assign NA
+#'
+#' facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "C")) <- NA
+setGeneric("facet_colcount",
+           function(obj, path) standardGeneric("facet_colcount"))
+
+#' @rdname facet_colcount
+#' @export
+setMethod("facet_colcount", "LayoutColTree",
+  function(obj, path = NULL) {
+    ## if(length(path) == 0L)
+    ##   stop("face_colcount requires a non-null path") #nocov
+    subtree <- coltree_at_path(obj, path)
+    subtree@column_count
+  }
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod("facet_colcount", "LayoutColLeaf",
+  function(obj, path = NULL) {
+    ## not sure if we should check for null here as above
+    obj@column_count
+  }
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod(
+  "facet_colcount", "VTableTree",
+  function(obj, path) facet_colcount(coltree(obj), path = path)
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod(
+  "facet_colcount", "InstantiatedColumnInfo",
+  function(obj, path) facet_colcount(coltree(obj), path = path)
+)
+
+#' @rdname facet_colcount
+#' @export
+setGeneric(
+  "facet_colcount<-",
+  function(obj, path, value) standardGeneric("facet_colcount<-")
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod(
+  "facet_colcount<-", "LayoutColTree",
+  function(obj, path, value) {
+    ct <- coltree_at_path(obj, path)
+    ct@column_count <- as.integer(value)
+    coltree_at_path(obj, path) <- ct
+    obj
+  }
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod(
+  "facet_colcount<-", "LayoutColLeaf",
+  function(obj, path, value) {
+    obj@column_count <- as.integer(value)
+    obj
+  }
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod(
+  "facet_colcount<-", "VTableTree",
+  function(obj, path, value) {
+    cinfo <- col_info(obj)
+    facet_colcount(cinfo, path) <- value
+    col_info(obj) <- cinfo
+    obj
+  }
+)
+
+#' @rdname facet_colcount
+#' @export
+setMethod(
+  "facet_colcount<-", "InstantiatedColumnInfo",
+  function(obj, path, value) {
+    ct <- coltree(obj)
+    facet_colcount(ct, path) <- value
+    coltree(obj) <- ct
+    obj
+  }
+)
+
+#' Value and Visibility of specific column counts by path
+#'
+#' @inheritParams gen_args
+#'
+#' @return for `colcount_visible` a logical scalar
+#' indicating whether the specified position in
+#' the column hierarchy is set to display its column count;
+#' for `colcount_visible<-`, `obj` updated with
+#' the specified count displaying behavior set.
+#'
+#' @note Users generally should not call `colcount_visible`
+#' directly, as setting sibling facets to have differing
+#' column count visibility will result in an error when
+#' printing or paginating the table.
+#'
+#' @export
+setGeneric("colcount_visible", function(obj, path) standardGeneric("colcount_visible"))
+
+#' @rdname colcount_visible
+#' @export
+setMethod("colcount_visible", "VTableTree",
+          function(obj, path) colcount_visible(coltree(obj), path))
+
+#' @rdname colcount_visible
+#' @export
+setMethod("colcount_visible", "InstantiatedColumnInfo",
+          function(obj, path) colcount_visible(coltree(obj), path))
+
+#' @rdname colcount_visible
+#' @export
+setMethod(
+  "colcount_visible", "LayoutColTree",
+  function(obj, path) {
+    subtree <- coltree_at_path(obj, path)
+    disp_ccounts(subtree)
+  }
+)
+
+#' @rdname colcount_visible
+#' @export
+setGeneric("colcount_visible<-", function(obj, path, value) standardGeneric("colcount_visible<-"))
+
+#' @rdname colcount_visible
+#' @export
+setMethod(
+  "colcount_visible<-", "VTableTree",
+  function(obj, path, value) {
+    ctree <- coltree(obj)
+    colcount_visible(ctree, path) <- value
+    coltree(obj) <- ctree
+    obj
+  }
+)
+
+#' @rdname colcount_visible
+#' @export
+setMethod(
+  "colcount_visible<-", "LayoutColTree",
+  function(obj, path, value) {
+    subtree <- coltree_at_path(obj, path)
+    disp_ccounts(subtree) <- value
+    coltree_at_path(obj, path) <- subtree
     obj
   }
 )
@@ -2349,6 +2835,29 @@ setMethod(
   "colcount_format", "PreDataTableLayouts",
   function(obj) colcount_format(clayout(obj))
 )
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "colcount_format", "Split",
+  function(obj) obj@child_colcount_format
+)
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "colcount_format", "LayoutColTree",
+  function(obj) obj@columncount_format
+)
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "colcount_format", "LayoutColLeaf",
+  function(obj) obj@columncount_format
+)
+
+
 
 #' @rdname int_methods
 #' @export
@@ -2397,6 +2906,56 @@ setMethod(
     clyt <- clayout(obj)
     colcount_format(clyt) <- value
     clayout(obj) <- clyt
+    obj
+  }
+)
+
+## It'd probably be better if this had the full set of methods as above
+## but its not currently modelled in the class and probably isn't needed
+## super much
+#' @rdname int_methods
+#' @export
+setGeneric("colcount_na_str", function(obj) standardGeneric("colcount_na_str"))
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "colcount_na_str", "InstantiatedColumnInfo",
+  function(obj) obj@columncount_na_str
+)
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "colcount_na_str", "VTableNodeInfo",
+  function(obj) colcount_na_str(col_info(obj))
+)
+
+#' @rdname int_methods
+#' @export
+setGeneric(
+  "colcount_na_str<-",
+  function(obj, value) standardGeneric("colcount_na_str<-")
+)
+
+#' @export
+#' @rdname int_methods
+setMethod(
+  "colcount_na_str<-", "InstantiatedColumnInfo",
+  function(obj, value) {
+    obj@columncount_na_str <- value
+    obj
+  }
+)
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "colcount_na_str<-", "VTableNodeInfo",
+  function(obj, value) {
+    cinfo <- col_info(obj)
+    colcount_na_str(cinfo) <- value
+    col_info(obj) <- cinfo
     obj
   }
 )

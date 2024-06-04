@@ -27,6 +27,13 @@ test_that("cbind_rtables works with 3 tables", {
   newtab <- cbind_rtables(tab1, tab2, tab3)
   expect_equal(ncol(newtab), 3)
   expect_equal(c(1, 2, 3), unlist(cell_values(newtab)))
+  ## all paths reachable, unique and work
+  ## this was not previously the case which broke higher-level ns display machinery
+  cpaths <- col_paths(newtab)
+  for (i in seq_along(cpaths)) {
+    expect_equal(newtab[, i],
+                 newtab[, cpaths[[i]]])
+  }
 })
 
 
@@ -170,6 +177,33 @@ test_that("insert_rrow works", {
   ## this is ok cause its a LabelRow not a DataRow
   expect_silent(lifecycle::expect_deprecated(insert_rrow(tbl, rrow("Total xx"), at = 1)))
 })
+
+test_that("count visibility syncing works when cbinding", {
+  lyt1 <- basic_table(show_colcounts = TRUE) %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>%
+    analyze("AGE")
+
+  tab1 <- build_table(lyt1, ex_adsl)
+
+  lyt2 <- basic_table() %>%
+    split_cols_by("ARM", show_colcounts = TRUE) %>%
+    split_cols_by("STRATA1") %>%
+    analyze("AGE")
+
+  tab2 <- build_table(lyt2, ex_adsl)
+
+  bigtab <- cbind_rtables(tab1, tab2)
+  bigmpf <- matrix_form(bigtab)
+  bigstrs <- mf_strings(bigmpf)
+  expect_true(all(grepl("N=", bigstrs[mf_nlheader(bigmpf), -1])))
+
+  bigtab2 <- cbind_rtables(tab1, tab2, sync_count_vis = FALSE)
+  bigmpf2 <- matrix_form(bigtab2)
+  bigstrs2 <- mf_strings(bigmpf2)
+  expect_equal(sum(grepl("N=", bigstrs2[mf_nlheader(bigmpf2), -1])), ncol(tab1))
+})
+
 
 ## regression test for #340
 ## ensure split functions that are fully equivalent but

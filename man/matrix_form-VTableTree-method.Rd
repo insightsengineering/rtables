@@ -24,11 +24,13 @@ newlines into multiple 'physical' rows (as they will appear when rendered into A
 
 \item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
 
-\item{fontspec}{(\code{font_spec} or \code{NULL})\cr Font specification that should be
-assumed during wrapping, as returned by \code{\link[formatters:font_spec]{formatters::font_spec()}}.}
+\item{fontspec}{(\code{font_spec})\cr The font that should be used by default when
+rendering this \code{MatrixPrintForm} object, or NULL (the default).}
 
-\item{col_gap}{(\code{numeric(1)})\cr The column gap to assume between columns, in
-number of spaces assuming \code{fontspec} (this reduces to number of characters for monospace fonts).}
+\item{col_gap}{(\code{numeric(1)})]\cr The number of spaces (in the font specified
+by \code{fontspec}) that should be placed between columns when the table
+is rendered directly to text (e.g., by \code{toString} or \code{export_as_txt}). Defaults
+to \code{3}.}
 }
 \value{
 A list with the following elements:

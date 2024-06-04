@@ -49,14 +49,6 @@ post-processing within a custom split function.
 These functions performs various housekeeping tasks to ensure that the split result list is as the rtables
 internals expect it, most of which are not relevant to end users.
 }
-\note{
-Column splitting will not work correctly if a split function
-calls \code{make_split_result} without specifying subset expressions;
-row splitting will work as normal. This is due to the fact that
-subsetting expressions are used during column splitting to
-represent the data associated with facets, while actual data
-subsets are used during row splitting.
-}
 \examples{
 splres <- make_split_result(
   values = c("hi", "lo"),
