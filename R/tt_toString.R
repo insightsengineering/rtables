@@ -341,19 +341,22 @@ check_ccount_vis_ok <- function(tt) {
 
 ccvis_check_subtree <- function(ctree) {
   kids <- tree_children(ctree)
-  if (is.null(kids))
+  if (is.null(kids)) {
     return(invisible(NULL))
+  }
   vals <- vapply(kids, disp_ccounts, TRUE)
   if (length(unique(vals)) > 1) {
     unmatch <- which(!duplicated(vals))[1:2]
-    stop("Detected different colcount visibility among sibling facets (those ",
-         "arising from the same split_cols_by* layout instruction). This is ",
-         "not supported.\n",
-         "Set count values to NA if you want a blank space to appear as the ",
-         "displayed count for particular facets.\n",
-         "First disagreement occured at paths:\n",
-         .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[1]]]))), "\n",
-         .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[2]]]))))
+    stop(
+      "Detected different colcount visibility among sibling facets (those ",
+      "arising from the same split_cols_by* layout instruction). This is ",
+      "not supported.\n",
+      "Set count values to NA if you want a blank space to appear as the ",
+      "displayed count for particular facets.\n",
+      "First disagreement occured at paths:\n",
+      .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[1]]]))), "\n",
+      .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[2]]])))
+    )
   }
   lapply(kids, ccvis_check_subtree)
   invisible(NULL)
@@ -524,9 +527,12 @@ get_formatted_fnotes <- function(tt) {
     if (lens[i] < padto) {
       chk <- chunks[[i]]
       span <- sum(vapply(chk[[length(chk)]], cell_cspan, 1L))
-      chunks[[i]] <- c(replicate(list(list(rcell("", colspan  = span))),
-                                 n = padto - lens[i]),
-                       chk)
+      chunks[[i]] <- c(
+        replicate(list(list(rcell("", colspan = span))),
+          n = padto - lens[i]
+        ),
+        chk
+      )
     }
   }
   chunks
@@ -578,7 +584,7 @@ get_formatted_fnotes <- function(tt) {
             cellii <- rcell(
               val,
               colspan = rws$total_span[ri],
-              format = rws$ccount_format[ri], #cc_format,
+              format = rws$ccount_format[ri], # cc_format,
               format_na_str = na_str
             )
             cellii

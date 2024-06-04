@@ -31,8 +31,10 @@ test_that("cbind_rtables works with 3 tables", {
   ## this was not previously the case which broke higher-level ns display machinery
   cpaths <- col_paths(newtab)
   for (i in seq_along(cpaths)) {
-    expect_equal(newtab[, i],
-                 newtab[, cpaths[[i]]])
+    expect_equal(
+      newtab[, i],
+      newtab[, cpaths[[i]]]
+    )
   }
 })
 

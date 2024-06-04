@@ -2268,7 +2268,8 @@ setMethod(
       all_paths <- make_col_df(obj, visible_only = TRUE)$path
     }
     if (length(value) != length(all_paths)) {
-      stop("Got ", length(value), "values for ",
+      stop(
+        "Got ", length(value), "values for ",
         length(all_paths), " column paths",
         if (is.null(path)) " (from path = NULL)",
         "."
@@ -2452,8 +2453,10 @@ match_path_by_pos <- function(kidlst, path) {
     kidlst,
     function(kd) {
       pos <- tree_pos(kd)
-      c(obj_name(tail(pos_splits(pos), 1)[[1]]),
-        value_names(tail(pos_splvals(pos), 1))[[1]])
+      c(
+        obj_name(tail(pos_splits(pos), 1)[[1]]),
+        value_names(tail(pos_splvals(pos), 1))[[1]]
+      )
     }
   )
 
@@ -2464,16 +2467,16 @@ match_path_by_pos <- function(kidlst, path) {
     },
     TRUE
   )
-  if (any(matches))
+  if (any(matches)) {
     ret <- which(matches)
+  }
   ret
-
 }
 
 ## this is a horrible hack but when we have non-nested siblings at the top level
 ## the beginning of the "path <-> position" relationship breaks down.
 ## we probably *should* have e.g., c("root", "top_level_splname_1",
-##"top_level_splname_1, "top_level_splname_1_value", ...)
+## "top_level_splname_1, "top_level_splname_1_value", ...)
 ## but its pretty clear why no one will be happy with that, I think
 ## so we punt on the problem for now with an explicit workaround
 ##
@@ -2483,12 +2486,13 @@ root_match_finder <- function(kidlst, path) {
   matches <- vapply(kidlst, function(kid) {
     obj_name(kid) == path[1]
   }, TRUE)
-  if (sum(matches) == 0)
+  if (sum(matches) == 0) {
     stop("unable to find first-step match in path: ", path[1])
-  else if (sum(matches) > 1)
+  } else if (sum(matches) > 1) {
     stop("multiple matches for first-step in path: ", path[1])
-  else
+  } else {
     which(matches)
+  }
 }
 
 
@@ -2507,28 +2511,32 @@ pos_singleton_path <- function(obj) {
 ## close to a duplicate of tt_at_path, but... not quite :(
 #' @rdname int_methods
 coltree_at_path <- function(obj, path, ...) {
-  if (length(path) == 0)
+  if (length(path) == 0) {
     return(obj)
+  }
   stopifnot(
     is(path, "character"),
     length(path) > 0
   )
-  if (any(grepl("@content", path, fixed = TRUE)))
+  if (any(grepl("@content", path, fixed = TRUE))) {
     stop("@content token is not valid for column paths.")
+  }
 
 
   ## if(obj_name(obj) == path[1]) {
   ##   path <- path[-1]
   ## }
   cur <- obj
-  curpath <- pos_to_path(tree_pos(obj)) #path
+  curpath <- pos_to_path(tree_pos(obj)) # path
   num_consume_path <- 2
-  while (!identical(curpath, path) && !is(cur, "LayoutColLeaf")) { #length(curpath) > 0) {
+  while (!identical(curpath, path) && !is(cur, "LayoutColLeaf")) { # length(curpath) > 0) {
     kids <- tree_children(cur)
     kidmatch <- find_kid_path_match(kids, path)
     if (length(kidmatch) == 0) {
-      stop("unable to match full path: ", paste(path, sep = "->"),
-           "\n path of last match: ", paste(curpath, sep = "->"))
+      stop(
+        "unable to match full path: ", paste(path, sep = "->"),
+        "\n path of last match: ", paste(curpath, sep = "->")
+      )
     }
     cur <- kids[[kidmatch]]
     curpath <- pos_to_path(tree_pos(cur))
@@ -2537,8 +2545,9 @@ coltree_at_path <- function(obj, path, ...) {
 }
 
 find_kid_path_match <- function(kids, path) {
-  if (length(kids) == 0)
+  if (length(kids) == 0) {
     return(integer())
+  }
   kidpaths <- lapply(kids, function(k) pos_to_path(tree_pos(k)))
 
   matches <- vapply(kidpaths, function(kpth) identical(path[seq_along(kpth)], kpth), NA)
@@ -2556,8 +2565,10 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
   if (identical(path, curpth)) {
     return(value)
   } else if (is(ctree, "LayoutColLeaf")) {
-    stop("unable to match full path: ", paste(path, sep = "->"),
-         "\n path at leaf: ", paste(curpth, sep = "->"))
+    stop(
+      "unable to match full path: ", paste(path, sep = "->"),
+      "\n path at leaf: ", paste(curpth, sep = "->")
+    )
   }
   kids <- tree_children(ctree)
   kids_singl <- pos_singleton_path(kids[[1]])
@@ -2566,12 +2577,16 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
   if (length(kidind) == 0) {
     stop("Path appears invalid for this tree at step ", path[1])
   } else if (length(kidind) > 1) {
-    stop("singleton step (root, cbind_root, etc) in path appears to have matched multiple children. ",
-         "This shouldn't happen, please contact the maintainers.")
+    stop(
+      "singleton step (root, cbind_root, etc) in path appears to have matched multiple children. ",
+      "This shouldn't happen, please contact the maintainers."
+    )
   }
 
-  kids[[kidind]] <- ct_recursive_replace(kids[[kidind]],
-                                         path, value)
+  kids[[kidind]] <- ct_recursive_replace(
+    kids[[kidind]],
+    path, value
+  )
   tree_children(ctree) <- kids
   ctree
 }
@@ -2631,8 +2646,10 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM", show_colcounts = TRUE) %>%
-#'   split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M")),
-#'     show_colcounts = TRUE) %>%
+#'   split_cols_by("SEX",
+#'     split_fun = keep_split_levels(c("F", "M")),
+#'     show_colcounts = TRUE
+#'   ) %>%
 #'   split_cols_by("STRATA1", show_colcounts = TRUE) %>%
 #'   analyze("AGE")
 #'
@@ -2648,12 +2665,15 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' ## show black space for certain counts by assign NA
 #'
 #' facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "C")) <- NA
-setGeneric("facet_colcount",
-           function(obj, path) standardGeneric("facet_colcount"))
+setGeneric(
+  "facet_colcount",
+  function(obj, path) standardGeneric("facet_colcount")
+)
 
 #' @rdname facet_colcount
 #' @export
-setMethod("facet_colcount", "LayoutColTree",
+setMethod(
+  "facet_colcount", "LayoutColTree",
   function(obj, path = NULL) {
     ## if(length(path) == 0L)
     ##   stop("face_colcount requires a non-null path") #nocov
@@ -2664,7 +2684,8 @@ setMethod("facet_colcount", "LayoutColTree",
 
 #' @rdname facet_colcount
 #' @export
-setMethod("facet_colcount", "LayoutColLeaf",
+setMethod(
+  "facet_colcount", "LayoutColLeaf",
   function(obj, path = NULL) {
     ## not sure if we should check for null here as above
     obj@column_count
@@ -2758,13 +2779,17 @@ setGeneric("colcount_visible", function(obj, path) standardGeneric("colcount_vis
 
 #' @rdname colcount_visible
 #' @export
-setMethod("colcount_visible", "VTableTree",
-          function(obj, path) colcount_visible(coltree(obj), path))
+setMethod(
+  "colcount_visible", "VTableTree",
+  function(obj, path) colcount_visible(coltree(obj), path)
+)
 
 #' @rdname colcount_visible
 #' @export
-setMethod("colcount_visible", "InstantiatedColumnInfo",
-          function(obj, path) colcount_visible(coltree(obj), path))
+setMethod(
+  "colcount_visible", "InstantiatedColumnInfo",
+  function(obj, path) colcount_visible(coltree(obj), path)
+)
 
 #' @rdname colcount_visible
 #' @export

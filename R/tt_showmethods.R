@@ -186,9 +186,10 @@ lastposmsg <- function(pos) {
   spls <- pos_splits(pos)
   splvals <- value_names(pos_splvals(pos))
   indiv_msgs <- unlist(mapply(function(spl, valnm) paste(obj_name(spl), valnm, sep = ": "),
-                              spl = spls,
-                              valnm = splvals,
-                              SIMPLIFY = FALSE))
+    spl = spls,
+    valnm = splvals,
+    SIMPLIFY = FALSE
+  ))
   paste(indiv_msgs, collapse = " -> ")
 }
 

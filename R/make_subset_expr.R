@@ -224,8 +224,9 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   cc_format <- colcount_format(lyt) %||% "(N=xx)"
 
   ## do it this way for full backwards compatibility
-  if (is.null(alt_counts_df))
+  if (is.null(alt_counts_df)) {
     alt_counts_df <- df
+  }
   ctree <- coltree(clayout, df = df, rtpos = rtpos, alt_counts_df = alt_counts_df, ccount_format = cc_format)
   if (!is.na(disp_ccounts(lyt))) {
     leaf_pths <- make_col_df(ctree, visible_only = TRUE, na_str = "", ccount_format = cc_format)$path
@@ -253,7 +254,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   }
 
   counts_df_name <- "alt_counts_df"
-  if (identical(alt_counts_df, df)) { #is.null(alt_counts_df)) {
+  if (identical(alt_counts_df, df)) { # is.null(alt_counts_df)) {
     alt_counts_df <- df
     counts_df_name <- "df"
   }
