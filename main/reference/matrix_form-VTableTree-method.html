@@ -12,7 +12,7 @@ it is useful to map the rtable to an in-between state with the formatted cells i
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,22 +55,6 @@ it is useful to map the rtable to an in-between state with the formatted cells i
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -111,7 +95,9 @@ it is useful to map the <code>rtable</code> to an in-between state with the form
 <span>  <span class="va">obj</span>,</span>
 <span>  indent_rownames <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  expand_newlines <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  indent_size <span class="op">=</span> <span class="fl">2</span></span>
+<span>  indent_size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  fontspec <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col_gap <span class="op">=</span> <span class="fl">3L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -133,6 +119,16 @@ newlines into multiple 'physical' rows (as they will appear when rendered into A
 
 <dt>indent_size</dt>
 <dd><p>(<code>numeric(1)</code>)<br> number of spaces to use per indent level. Defaults to 2.</p></dd>
+
+
+<dt>fontspec</dt>
+<dd><p>(<code>font_spec</code> or <code>NULL</code>)<br> Font specification that should be
+assumed during wrapping, as returned by <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/font_spec.html" class="external-link">formatters::font_spec()</a></code>.</p></dd>
+
+
+<dt>col_gap</dt>
+<dd><p>(<code>numeric(1)</code>)<br> The column gap to assume between columns, in
+number of spaces assuming <code>fontspec</code> (this reduces to number of characters for monospace fonts).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -395,7 +391,7 @@ function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $horizontal_sep</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "-"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "—"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $col_gap</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
@@ -415,10 +411,39 @@ function.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $col_widths</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 12  4  4  5  5  5  4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $fontspec</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $num_rep_cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ref_fnote_df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] row_path  col_path  row       col       symbol    ref_index msg      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [8] nlines   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;0 rows&gt; (or 0-length row.names)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $col_info</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   label name abs_rownumber         path pos_in_siblings n_siblings self_extent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     1    1             1 Species,....               0          0           4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     2    2             2 Species,....               0          0           4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3     3    3             3 Species,....               0          0           5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4     4    4             4 Species,....               0          0           5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5     5    5             5 Species,....               0          0           5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6     6    6             6 Species,....               0          0           4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   par_extent reprint_inds node_class indent nrowrefs ncellrefs nreflines</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          0                   stuff      0        0         0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          0                   stuff      0        0         0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          0                   stuff      0        0         0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          0                   stuff      0        0         0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          0                   stuff      0        0         0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          0                   stuff      0        0         0         0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   force_page page_title trailing_sep ref_info_df</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      FALSE       &lt;NA&gt;         &lt;NA&gt;            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      FALSE       &lt;NA&gt;         &lt;NA&gt;            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      FALSE       &lt;NA&gt;         &lt;NA&gt;            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      FALSE       &lt;NA&gt;         &lt;NA&gt;            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      FALSE       &lt;NA&gt;         &lt;NA&gt;            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      FALSE       &lt;NA&gt;         &lt;NA&gt;            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"nrow_header")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2</span>

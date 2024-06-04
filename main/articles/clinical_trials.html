@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,22 +78,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -129,7 +113,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2024-05-13</h4>
+            <h4 data-toc-skip class="date">2024-06-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/clinical_trials.Rmd" class="external-link"><code>vignettes/clinical_trials.Rmd</code></a></small>
       <div class="d-none name"><code>clinical_trials.Rmd</code></div>
@@ -190,7 +174,7 @@ can specify multiple rows with the <code><a href="../reference/in_rows.html">in_
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#               A: Drug X      B: Placebo     C: Combination</span></span>
-<span><span class="co"># ----------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Mean (sd)   33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
 <span><span class="co"># Range       21.00 - 50.00   21.00 - 62.00   20.00 - 69.00</span></span></code></pre>
 <p>Multiple variables can be analyzed in one <code><a href="../reference/analyze.html">analyze()</a></code>
@@ -208,7 +192,7 @@ call:</p>
 <span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">ADSL</span><span class="op">)</span></span>
 <span><span class="va">tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                         </span></span>
 <span><span class="co">#   Mean (sd)   33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
 <span><span class="co">#   Range       21.00 - 50.00   21.00 - 62.00   20.00 - 69.00 </span></span>
@@ -268,7 +252,7 @@ table:</p>
 <span><span class="va">summary_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">summary_lyt</span>, <span class="va">ADSL</span><span class="op">)</span></span>
 <span><span class="va">summary_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
-<span><span class="co"># -------------------------------------------------------------------</span></span>
+<span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                                </span></span>
 <span><span class="co">#   n                       134             134             132      </span></span>
 <span><span class="co">#   Mean (sd)          33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
@@ -290,7 +274,7 @@ sequence:</p>
 <span><span class="va">summary_tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">summary_lyt2</span>, <span class="va">ADSL</span><span class="op">)</span></span>
 <span><span class="va">summary_tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
-<span><span class="co"># -------------------------------------------------------------------</span></span>
+<span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                                </span></span>
 <span><span class="co">#   n                       134             134             132      </span></span>
 <span><span class="co">#   Mean (sd)          33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
@@ -320,7 +304,7 @@ which outside of clinical trials is commonly referred to as
 <span><span class="va">summary_tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                          ARM A           ARM B           ARM C    </span></span>
 <span><span class="co">#                         (N=134)         (N=134)         (N=132)   </span></span>
-<span><span class="co"># ------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                               </span></span>
 <span><span class="co">#   n                       134             134             132     </span></span>
 <span><span class="co">#   Mean (sd)          33.77 (6.55)    35.43 (7.90)    35.43 (7.72) </span></span>
@@ -349,7 +333,7 @@ analysis, hence they don’t require a modification to the
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=134)         (N=134)         (N=132)    </span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                         </span></span>
 <span><span class="co">#   n                134             134             132      </span></span>
 <span><span class="co">#   Mean (sd)   33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
@@ -371,7 +355,7 @@ encoded in the row space:</p>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                      A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                       (N=134)         (N=134)         (N=132)    </span></span>
-<span><span class="co"># -----------------------------------------------------------------</span></span>
+<span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                                </span></span>
 <span><span class="co">#   AGE                                                            </span></span>
 <span><span class="co">#     n                   79              77               66      </span></span>
@@ -427,7 +411,7 @@ table:</p>
 <span><span class="va">tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                      A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                       (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># -----------------------------------------------------------------</span></span>
+<span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                                </span></span>
 <span><span class="co">#   AGE                                                            </span></span>
 <span><span class="co">#     n                   79              77               66      </span></span>
@@ -488,7 +472,7 @@ addressed in a specific package vignette.</p>
 <span><span class="va">tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                    (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># --------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                             </span></span>
 <span><span class="co">#   AGE                                                         </span></span>
 <span><span class="co">#     n                79              77               66      </span></span>
@@ -529,7 +513,7 @@ not very descriptive. You can add the full labels as follows:</p>
 <span><span class="va">tbl4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                    (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># --------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female                                                        </span></span>
 <span><span class="co">#   AGE                                                         </span></span>
 <span><span class="co">#     n                79              77               66      </span></span>
@@ -564,7 +548,7 @@ has to be set to <code>FALSE</code> in <code><a href="../reference/analyze.html"
 <span><span class="va">tbl5</span></span></code></pre></div>
 <pre><code><span><span class="co">#                   A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                    (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># --------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female                                                        </span></span>
 <span><span class="co">#   AGE                                                         </span></span>
 <span><span class="co">#     n                79              77               66      </span></span>
@@ -611,7 +595,7 @@ missing data to the <code>AGE</code> variable:</p>
 <span><span class="va">tbl6</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female                                                      </span></span>
 <span><span class="co">#   n                65              61               54      </span></span>
 <span><span class="co">#   Mean (sd)   32.71 (6.07)    34.33 (7.31)     34.61 (6.78) </span></span>
@@ -643,7 +627,7 @@ for example:</p>
 <span><span class="va">tbl7</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female         79 (60.8%)      77 (58.3%)       66 (52.4%)  </span></span>
 <span><span class="co">#   n                65              61               54      </span></span>
 <span><span class="co">#   Mean (sd)   32.71 (6.07)    34.33 (7.31)     34.61 (6.78) </span></span>
@@ -689,7 +673,7 @@ same table as above:</p>
 <span><span class="va">tbl8</span></span></code></pre></div>
 <pre><code><span><span class="co">#                 A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                  (N=130)         (N=132)         (N=126)    </span></span>
-<span><span class="co"># ------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female         79 (60.77%)     77 (58.33%)     66 (52.38%)  </span></span>
 <span><span class="co">#   n                65              61               54      </span></span>
 <span><span class="co">#   Mean (sd)   32.71 (6.07)    34.33 (7.31)     34.61 (6.78) </span></span>
@@ -727,7 +711,7 @@ from splitting) and hence it could be modified:</p>
 <span><span class="va">tbl9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt9</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ADSL_NA</span>, <span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">tbl9</span></span></code></pre></div>
 <pre><code><span><span class="co">#                           A: Drug X      B: Placebo     C: Combination</span></span>
-<span><span class="co"># ----------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Female: count (perc.)    79 (60.77%)     77 (58.33%)     66 (52.38%)  </span></span>
 <span><span class="co">#   n                          65              61               54      </span></span>
 <span><span class="co">#   Mean (sd)             32.71 (6.07)    34.33 (7.31)     34.61 (6.78) </span></span>
@@ -780,7 +764,7 @@ a shortcoming)</li>
 <span><span class="va">adsl_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                        A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                         (N=134)         (N=134)         (N=132)    </span></span>
-<span><span class="co"># -------------------------------------------------------------------</span></span>
+<span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># AGE                                                                </span></span>
 <span><span class="co">#   n                       134             134             132      </span></span>
 <span><span class="co">#   Mean (sd)          33.77 (6.55)    35.43 (7.90)     35.43 (7.72) </span></span>
@@ -800,7 +784,7 @@ a shortcoming)</li>
 <code class="sourceCode R"><span><span class="va">adsl_f_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                      A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                       (N=134)         (N=134)         (N=132)    </span></span>
-<span><span class="co"># -----------------------------------------------------------------</span></span>
+<span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                                </span></span>
 <span><span class="co">#   AGE                                                            </span></span>
 <span><span class="co">#     n                   79              77               66      </span></span>
@@ -910,20 +894,20 @@ but rather generate a dataset on the fly (see <a href="https://github.com/waddel
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">ARM</span>, <span class="va">AGE</span>, <span class="va">SEX</span>, <span class="va">AESEQ</span>, <span class="va">AEDECOD</span>, <span class="va">AEBODSYS</span>, <span class="va">AETOXGR</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ADAE2</span></span></code></pre></div>
-<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 3,118 x 8</span></span></span>
+<pre><code><span><span class="co"># <span style="color: #949494;"># A tibble: 3,118 × 8</span></span></span>
 <span><span class="co">#    USUBJID ARM     AGE SEX   AESEQ AEDECOD               AEBODSYS        AETOXGR</span></span>
 <span><span class="co">#      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>                 <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 1</span>       1 ARM A    45 F         1 NAUSEA (INTERMITTENT) GASTROINTESTIN~ 2      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 2</span>       1 ARM A    45 F         2 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 3</span>       1 ARM A    45 F         3 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 4</span>       1 ARM A    45 F         4 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 5</span>       1 ARM A    45 F         5 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 6</span>       1 ARM A    45 F         6 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 7</span>       1 ARM A    45 F         7 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 8</span>       1 ARM A    45 F         8 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;"> 9</span>       1 ARM A    45 F         9 HEADACHE              NERVOUS SYSTEM~ 5      </span></span>
-<span><span class="co"># <span style="color: #BCBCBC;">10</span>       1 ARM A    45 F        10 FAECES SOFT           GASTROINTESTIN~ 2      </span></span>
-<span><span class="co"># <span style="color: #949494;"># i 3,108 more rows</span></span></span></code></pre>
+<span><span class="co"># <span style="color: #BCBCBC;"> 1</span>       1 ARM A    45 F         1 NAUSEA (INTERMITTENT) GASTROINTESTIN… 2      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 2</span>       1 ARM A    45 F         2 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 3</span>       1 ARM A    45 F         3 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 4</span>       1 ARM A    45 F         4 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 5</span>       1 ARM A    45 F         5 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 6</span>       1 ARM A    45 F         6 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 7</span>       1 ARM A    45 F         7 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 8</span>       1 ARM A    45 F         8 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;"> 9</span>       1 ARM A    45 F         9 HEADACHE              NERVOUS SYSTEM… 5      </span></span>
+<span><span class="co"># <span style="color: #BCBCBC;">10</span>       1 ARM A    45 F        10 FAECES SOFT           GASTROINTESTIN… 2      </span></span>
+<span><span class="co"># <span style="color: #949494;"># ℹ 3,108 more rows</span></span></span></code></pre>
 <div class="section level3">
 <h3 id="adverse-events-by-id">Adverse Events By ID<a class="anchor" aria-label="anchor" href="#adverse-events-by-id"></a>
 </h3>
@@ -970,7 +954,7 @@ tabulation:</p>
 <span><span class="va">adae_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                       ARM A         ARM B    </span></span>
 <span><span class="co">#                                                     (N=2060)       (N=1058)  </span></span>
-<span><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span><span class="co"># —————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Total number of patients with at least one event   114 (5.53%)   150 (14.18%)</span></span>
 <span><span class="co"># Total number of events                                2060           1058</span></span></code></pre>
 <p>Note that the column <code>N</code>s are wrong as by default they are
@@ -989,7 +973,7 @@ tabulation:</p>
 <span><span class="va">adae_adsl_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                       ARM A          ARM B    </span></span>
 <span><span class="co">#                                                      (N=146)        (N=154)   </span></span>
-<span><span class="co"># ------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Total number of patients with at least one event   114 (78.08%)   150 (97.40%)</span></span>
 <span><span class="co"># Total number of events                                 2060           1058</span></span></code></pre>
 <p>Alternatively, if the desired column counts are already calculated,
@@ -1008,7 +992,7 @@ to <code><a href="../reference/build_table.html">build_table()</a></code>, thoug
 <span><span class="va">adae_soc_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                         ARM A          ARM B    </span></span>
 <span><span class="co">#                                                        (N=146)        (N=154)   </span></span>
-<span><span class="co"># --------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Total number of patients with at least one event     114 (78.08%)   150 (97.40%)</span></span>
 <span><span class="co"># Total number of events                                   2060           1058    </span></span>
 <span><span class="co"># GASTROINTESTINAL DISORDERS                                                      </span></span>
@@ -1038,7 +1022,7 @@ factor is to create the count table per level (using
 <span><span class="va">adae_soc_tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co">#   GASTROINTESTINAL DISORDERS                                                      </span></span>
 <span><span class="co">#     Total number of patients with at least one event   114 (78.08%)   130 (84.42%)</span></span>
 <span><span class="co">#     Total number of events                                 760            374     </span></span>
@@ -1154,7 +1138,7 @@ to write a custom analysis function:</p>
 <span><span class="va">adae_soc_tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co">#   GASTROINTESTINAL DISORDERS                                                      </span></span>
 <span><span class="co">#     Total number of patients with at least one event   114 (78.08%)   130 (84.42%)</span></span>
 <span><span class="co">#     Total number of events                                 760            374     </span></span>
@@ -1225,7 +1209,7 @@ This can be added with an initial <code><a href="../reference/analyze.html">anal
 <span><span class="va">adae_soc_tbl4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Total number of patients with at least one event       114 (78.08%)   150 (97.40%)</span></span>
 <span><span class="co"># Total number of events                                     2060           1058    </span></span>
 <span><span class="co">#   GASTROINTESTINAL DISORDERS                                                      </span></span>
@@ -1293,7 +1277,7 @@ the <code><a href="../reference/trim_rows.html">trim_rows()</a></code> function:
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">adae_soc_tbl4</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                           ARM A          ARM B    </span></span>
 <span><span class="co">#                                                          (N=146)        (N=154)   </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Total number of patients with at least one event       114 (78.08%)   150 (97.40%)</span></span>
 <span><span class="co"># Total number of events                                     2060           1058    </span></span>
 <span><span class="co">#   GASTROINTESTINAL DISORDERS                                                      </span></span>
@@ -1391,7 +1375,7 @@ already been introduced so far:</p>
 <span><span class="va">adae_grade_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                                      ARM A     ARM B </span></span>
 <span><span class="co">#                                                     (N=146)   (N=154)</span></span>
-<span><span class="co"># ---------------------------------------------------------------------</span></span>
+<span><span class="co"># —————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># - Any adverse events -                                               </span></span>
 <span><span class="co">#   --Any Grade--                                       114       150  </span></span>
 <span><span class="co">#   1                                                   32        34   </span></span>
@@ -1773,7 +1757,7 @@ parts:</p>
 <span><span class="va">rsp_tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                       ARM A            ARM B             ARM C     </span></span>
 <span><span class="co">#                      (N=134)          (N=134)           (N=132)    </span></span>
-<span><span class="co"># -------------------------------------------------------------------</span></span>
+<span><span class="co"># ———————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Responders       114.00 (85.07%)   90.00 (67.16%)   120.00 (90.91%)</span></span>
 <span><span class="co"># Non-Responders   20.00 (14.93%)    44.00 (32.84%)    12.00 (9.09%)</span></span></code></pre>
 <p>Note that we did set the <code>ref_group</code> argument in
@@ -1869,7 +1853,7 @@ function:</p>
 <span><span class="va">rsp_tbl2</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                           ARM A              ARM B                ARM C       </span></span>
 <span><span class="co">#                                          (N=134)            (N=134)              (N=132)      </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Responders                           114.00 (85.07%)     90.00 (67.16%)      120.00 (90.91%)  </span></span>
 <span><span class="co"># Non-Responders                       20.00 (14.93%)      44.00 (32.84%)       12.00 (9.09%)   </span></span>
 <span><span class="co"># Unstratified Response Analysis                                                                </span></span>
@@ -1918,7 +1902,7 @@ as we did for the binary response table above.</p>
 <span><span class="va">rsp_tbl3</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                           ARM A              ARM B                ARM C       </span></span>
 <span><span class="co">#                                          (N=134)            (N=134)              (N=132)      </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Responders                           114.00 (85.07%)     90.00 (67.16%)      120.00 (90.91%)  </span></span>
 <span><span class="co"># Non-Responders                       20.00 (14.93%)      44.00 (32.84%)       12.00 (9.09%)   </span></span>
 <span><span class="co"># Unstratified Response Analysis                                                                </span></span>
@@ -1975,7 +1959,7 @@ and remove the CI for <code>NE</code> we could do that as follows:</p>
 <span><span class="va">rsp_tbl4</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                           ARM A              ARM B                ARM C       </span></span>
 <span><span class="co">#                                          (N=134)            (N=134)              (N=132)      </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Responders                           114.00 (85.07%)     90.00 (67.16%)      120.00 (90.91%)  </span></span>
 <span><span class="co"># Non-Responders                       20.00 (14.93%)      44.00 (32.84%)       12.00 (9.09%)   </span></span>
 <span><span class="co"># Unstratified Response Analysis                                                                </span></span>
@@ -2170,7 +2154,7 @@ created earlier in the time-to-event analysis function
 <span><span class="va">tbl_tte</span></span></code></pre></div>
 <pre><code><span><span class="co">#                                             A: Drug X      B: Placebo     C: Combination</span></span>
 <span><span class="co">#                                              (N=134)         (N=134)         (N=132)    </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Subjects with Adverse Events n (%)        134 (100.00%)   134 (100.00%)   132 (100.00%) </span></span>
 <span><span class="co"># Censored Subjects                                                                       </span></span>
 <span><span class="co">#   Clinical Cut Off                          6 (4.48%)       3 (2.24%)      14 (10.61%)  </span></span>
@@ -2184,11 +2168,11 @@ created earlier in the time-to-event analysis function
 <span><span class="co">#   Median                                      0.23            0.39             0.29     </span></span>
 <span><span class="co">#   95% confidence interval                  0.18 - 0.33     0.29 - 0.49     0.22 - 0.35  </span></span>
 <span><span class="co">#   Min Max {2}                               0.0, 1.0*       0.0, 1.0*       0.0, 1.0*   </span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------------</span></span>
+<span><span class="co"># ————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># {1} - Product-limit (Kaplan-Meier) estimates.</span></span>
 <span><span class="co"># {2} - * indicates censoring</span></span>
-<span><span class="co"># ----------------------------------------------------------------------------------------</span></span></code></pre>
+<span><span class="co"># ————————————————————————————————————————————————————————————————————————————————————————</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

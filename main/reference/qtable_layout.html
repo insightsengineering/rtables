@@ -14,7 +14,7 @@ layout with the specified layout and applies it to the data provided."><meta pro
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,22 +57,6 @@ layout with the specified layout and applies it to the data provided."><meta pro
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -244,24 +228,24 @@ an <code>afun</code> which returns a single row.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">qtable</span><span class="op">(</span><span class="va">ex_adsl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         all obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         (N=400)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> count     400  </span>
 <span class="r-in"><span><span class="fu">qtable</span><span class="op">(</span><span class="va">ex_adsl</span>, row_vars <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  all obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> count            (N=400)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A: Drug X          134  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> B: Placebo         134  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> C: Combination     132  </span>
 <span class="r-in"><span><span class="fu">qtable</span><span class="op">(</span><span class="va">ex_adsl</span>, col_vars <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         A: Drug X   B: Placebo   C: Combination</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          (N=134)     (N=134)        (N=132)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> count      134         134            132      </span>
 <span class="r-in"><span><span class="fu">qtable</span><span class="op">(</span><span class="va">ex_adsl</span>, row_vars <span class="op">=</span> <span class="st">"SEX"</span>, col_vars <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                    A: Drug X   B: Placebo   C: Combination</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> count               (N=134)     (N=134)        (N=132)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> F                     79           77             66      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> M                     51           55             60      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> U                      3           2              4       </span>
@@ -270,7 +254,7 @@ an <code>afun</code> which returns a single row.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             A: Drug X                  B: Placebo               C: Combination     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                        A        B        C        A        B        C        A        B        C   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> count                (N=38)   (N=47)   (N=49)   (N=44)   (N=45)   (N=45)   (N=40)   (N=43)   (N=49)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CHN                                                                                                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   F                    11       15       18       12       15       18       8        9        12  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   M                    9        7        11       8        12       15       10       10       10  </span>
@@ -310,7 +294,7 @@ an <code>afun</code> which returns a single row.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             A: Drug X                  B: Placebo               C: Combination     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                        A        B        C        A        B        C        A        B        C   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AGE - mean           (N=38)   (N=47)   (N=49)   (N=44)   (N=45)   (N=45)   (N=40)   (N=43)   (N=49)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CHN                                                                                                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   F                  31.09    30.67    32.56    33.08    35.73    35.28    35.25    33.89    35.75 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   M                  34.44    36.43    35.73    38.38    35.25    37.60    30.80    35.20    38.60 </span>
@@ -347,7 +331,7 @@ an <code>afun</code> which returns a single row.</p>
 <span class="r-in"><span><span class="fu">qtable</span><span class="op">(</span><span class="va">ex_adsl</span>, row_vars <span class="op">=</span> <span class="st">"SEX"</span>, col_vars <span class="op">=</span> <span class="st">"ARM"</span>, avar <span class="op">=</span> <span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="va">summary_list</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                      A: Drug X   B: Placebo   C: Combination</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AGE - summary_list    (N=134)     (N=134)        (N=132)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> F                                                           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Min.                 21.00       23.00          21.00     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1st Qu.              28.00       29.00          31.25     </span>
@@ -382,7 +366,7 @@ an <code>afun</code> which returns a single row.</p>
 <span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                     A: Drug X    B: Placebo    C: Combination</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AGE - range          (N=134)       (N=134)        (N=132)    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> —————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> F                  21.0 / 47.0   23.0 / 58.0    21.0 / 64.0  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> M                  23.0 / 50.0   21.0 / 62.0    20.0 / 69.0  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> U                  28.0 / 34.0   27.0 / 35.0    31.0 / 38.0  </span>

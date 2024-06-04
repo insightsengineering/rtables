@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,22 +53,6 @@
 <li class="active nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -97,16 +81,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.7.9001" id="rtables-0679001">rtables 0.6.7.9001<a class="anchor" aria-label="anchor" href="#rtables-0679001"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.6.7.9002" id="rtables-0679002">rtables 0.6.7.9002<a class="anchor" aria-label="anchor" href="#rtables-0679002"></a></h2>
 <div class="section level3">
-<h3 id="new-features-0-6-7-9001">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-7-9001"></a></h3>
+<h3 id="new-features-0-6-7-9002">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-7-9002"></a></h3>
 <ul><li>Added <code>top_level_section_div</code> for <code>basic_table</code> to set section dividers for top level rows.</li>
 <li>Added <code>keep_label_rows</code> to <code>as_result_df</code> to have these lines visible.</li>
 <li>
 <code>sort_at_path</code> now gives informative error messages when the given path does not exist.</li>
+<li>Add support for truetype fonts based on formatters <code>&gt;= 0.5.6.9007</code>. Nearly all functions related to pagination or export now accept <code>fontspec</code> argument and pass it around accordingly, by <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
+<li>Core splitting machinery can now be overridden in column space via <code>make_split_fun</code> provided that <code>core_split</code> associates the generated facets with subsetting expressions. Subsetting expressions remain unnecessary for splits in row space. By <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
+<li>ValueWrapper objects now carry around subsetting expressions for use during tabulation, by <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
+<li>
+<code>make_split_res</code>, <code>add_to_split_result</code> now accept a list of subsetting expressions which will be attached to the values, by <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
+<li>New <code>value_expr</code> internal getter and setter methods, by <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="bug-fixes-0-6-7-9001">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-7-9001"></a></h3>
+<h3 id="bug-fixes-0-6-7-9002">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-7-9002"></a></h3>
 <ul><li>Fixed <code>rlistings</code> decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from <code>rtables</code>’ <code>matrix_form</code> function to <code>formatters</code>’ dedicated <code>mform_handle_newlines</code> function.</li>
 <li>Fixed issue with <code>rtables_root</code> not being removed when using <code>as_result_df</code>.</li>
 <li>Fixed edge case bug in <code>as_result_df</code> where rows of the table have only <code>"root"</code> as path index.</li>
@@ -114,11 +104,15 @@
 <li>Fixed <code>section_div</code> for analysis of multiple variables (<code>AnalyzeMultiVars</code>).</li>
 <li>Fixed mismatch between indentation declared in row info (<code>mf_rinfo(mf)</code>) and actual selected indentation from <code>matrix_form(mf, indent_rownames = FALSE)</code>.</li>
 <li>Fixed bug in <code>as_html</code> preventing indentation from being applied in <code>Viewer</code> output.</li>
+<li>
+<code>col_counts&lt;-</code> and <code>col_total&lt;-</code> methods now explicitly convert <code>value</code> to integer, by <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
+<li>
+<code>col_gap</code> is now respected in <code>nlines</code> row methods, and thus by <code>make_row_df</code>, by <a href="https://github.com/gmbecker" class="external-link">@gmbecker</a>.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="miscellaneous-0-6-7-9001">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-7-9001"></a></h3>
+<h3 id="miscellaneous-0-6-7-9002">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-7-9002"></a></h3>
 <ul><li>Removed deprecated functions <code>add_analyzed_var</code> and <code>trim_zero_rows</code>.</li>
-<li>Added <code>lifecycle</code> badge files for documentation.</li>
+<li>Added <code>lifecycle</code> badge files for deprecated documentation.</li>
 <li>Deprecated the <code>gap</code> and <code>check_headers</code> arguments to <code>rbindl_rtables</code> using <code>lifecycle</code>.</li>
 </ul></div>
 </div>
