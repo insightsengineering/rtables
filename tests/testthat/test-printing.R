@@ -899,8 +899,10 @@ test_that("showing higher-level ncols works", {
   ## arms
   facet_colcounts_visible(tbl5, c("rr_header", "Risk Difference % CI", "ARM")) <- FALSE
   mpf5b <- matrix_form(tbl5, TRUE)
-  expect_equal(mf_strings(mpf5b)[3, 7:8],
-               c("A: Drug X", "C: Combination"))
+  expect_equal(
+    mf_strings(mpf5b)[3, 7:8],
+    c("A: Drug X", "C: Combination")
+  )
   lyt6 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
     split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) %>%
     split_cols_by("ARM", split_fun = add_combo_levels(combodf), show_colcounts = TRUE, colcount_format = "(N=xx)") %>%
