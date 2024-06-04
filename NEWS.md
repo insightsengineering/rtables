@@ -1,3 +1,14 @@
+## rtables 0.6.7.9004
+### New Features
+ * all tables are now guaranteed to have fully path-traversable column structures (all facets in column space uniquely reachable via pathing) @gmbecker
+ * display of higher order (non-leaf) column counts is now supported (#135) @gmbecker
+ * column count visibility can be set independently for each block of sibling facets (#752) @gmbecker
+ * `split_cols_by*` functions now accept `show_colcounts` and `colcount_format` arguments
+ * new (column-) path based `colcount_visible` getter and setter for changing column count visibility in an already built table @gmbecker
+ * new (column-) path based `facet_colcount` getter and setter column count value at arbitrary point in column structure of built table @gmbecker
+ * new `facet_colcounts_visible` setter to conveniently set the column count visibility of a set of sibling facets in column space
+ * new `rm_all_colcounts` convenience function for turning off visibility all column counts throughout the column structure @gmbecker
+
 ## rtables 0.6.7.9003
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
