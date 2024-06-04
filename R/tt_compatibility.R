@@ -384,6 +384,7 @@ only_first_annot <- function(all_annots) {
 #' @aliases rbind
 #' @export
 rbindl_rtables <- function(x, gap = lifecycle::deprecated(), check_headers = lifecycle::deprecated()) {
+  ## nocov start
   if (lifecycle::is_present(gap)) {
     lifecycle::deprecate_warn(
       when = "0.3.2",
@@ -396,6 +397,7 @@ rbindl_rtables <- function(x, gap = lifecycle::deprecated(), check_headers = lif
       what = "rbindl_rtables(check_headers)"
     )
   }
+  ## nocov end
 
   firstcols <- col_info(x[[1]])
   i <- 1

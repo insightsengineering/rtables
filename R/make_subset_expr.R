@@ -267,21 +267,6 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
       0L
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
-      ## likely unneeded now because it happens in splitvec_to_coltree
-      ## which is called during coltree construction above
-      ## TODO remove me
-      if (is(vec, "try-error")) {
-        stop(sprintf(
-          paste(
-            counts_df_name, "appears",
-            "incompatible with column-split",
-            "structure. Offending column subset",
-            "expression: %s\nOriginal error",
-            "message: %s"
-          ), deparse(ex[[1]]),
-          conditionMessage(attr(vec, "condition"))
-        ))
-      }
       if (is(vec, "numeric")) {
         length(vec)
       } else if (is(vec, "logical")) { ## sum(is.na(.)) ????

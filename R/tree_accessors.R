@@ -2447,31 +2447,6 @@ setMethod(
   }
 )
 
-match_path_by_pos <- function(kidlst, path) {
-  ret <- -1
-  nmval_pairs <- lapply(
-    kidlst,
-    function(kd) {
-      pos <- tree_pos(kd)
-      c(
-        obj_name(tail(pos_splits(pos), 1)[[1]]),
-        value_names(tail(pos_splvals(pos), 1))[[1]]
-      )
-    }
-  )
-
-  matches <- vapply(
-    nmval_pairs,
-    function(pair) {
-      (pair[1] == path[1]) && (is.na(pair[2]) || (path[2] %in% c(pair[2], "*")))
-    },
-    TRUE
-  )
-  if (any(matches)) {
-    ret <- which(matches)
-  }
-  ret
-}
 
 ## this is a horrible hack but when we have non-nested siblings at the top level
 ## the beginning of the "path <-> position" relationship breaks down.
@@ -2482,24 +2457,6 @@ match_path_by_pos <- function(kidlst, path) {
 ##
 ## those first non-nested siblings currently have (incorrect)
 ## empty tree_pos elements so we just look at the obj_name
-root_match_finder <- function(kidlst, path) {
-  matches <- vapply(kidlst, function(kid) {
-    obj_name(kid) == path[1]
-  }, TRUE)
-  if (sum(matches) == 0) {
-    stop("unable to find first-step match in path: ", path[1])
-  } else if (sum(matches) > 1) {
-    stop("multiple matches for first-step in path: ", path[1])
-  } else {
-    which(matches)
-  }
-}
-
-
-is_all_split <- function(ct) {
-  splvals <- pos_splvals(ct)
-  length(splvals) > 0 && rawvalues(tail(pos_splvals(ct), 1))[[1]] == tail(value_names(pos_splvals(ct)), 1)
-}
 
 pos_singleton_path <- function(obj) {
   pos <- tree_pos(obj)
@@ -2522,10 +2479,6 @@ coltree_at_path <- function(obj, path, ...) {
     stop("@content token is not valid for column paths.")
   }
 
-
-  ## if(obj_name(obj) == path[1]) {
-  ##   path <- path[-1]
-  ## }
   cur <- obj
   curpath <- pos_to_path(tree_pos(obj)) # path
   num_consume_path <- 2
@@ -2558,6 +2511,12 @@ find_kid_path_match <- function(kids, path) {
   }
   which(matches)
 }
+
+
+## almost a duplicate of recursive_replace, but I spent a bunch
+## of time ramming my head against the different way pathing happens
+## in column space (unfortunately) before giving up building
+## coltree_at_path around recursive_replace, so here we are.
 
 ct_recursive_replace <- function(ctree, path, value, pos = 1) {
   pos <- tree_pos(ctree)

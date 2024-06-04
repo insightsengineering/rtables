@@ -340,6 +340,7 @@ test_that("Various Printing things work", {
 
   table_structure(tab, detail = "subtable") ## treestruct(tab)
   table_structure(tab, detail = "row") ## treestruct(tab)
+  coltree_structure(tab)
 
   ## this is not intended to be a valid layout, it just
   ## tries to hit every type of split for the print machinery
@@ -805,6 +806,10 @@ test_that("showing higher-level ncols works", {
     analyze("AGE")
 
   tbl <- build_table(lyt, mydat)
+  expect_equal(colcount_na_str(tbl), "")
+  colcount_na_str(tbl) <- "wut"
+  expect_equal(colcount_na_str(tbl), "wut")
+  colcount_na_str(tbl) <- ""
   cwds <- rep(8, ncol(tbl) + 1)
   expect_equal(nlines(col_info(tbl), colwidths = cwds, fontspec = NULL), 7)
   mpf <- matrix_form(tbl, TRUE)
@@ -822,6 +827,7 @@ test_that("showing higher-level ncols works", {
   expect_true(all(!grepl("(N=", strs[-c(2, 5), -1], fixed = TRUE)))
 
   broken_tbl <- tbl
+  expect_true(colcount_visible(broken_tbl, c("ARM", "A: Drug X", "SEX2", "males")))
   colcount_visible(broken_tbl, c("ARM", "A: Drug X", "SEX2", "males")) <- FALSE
   expect_error(print(broken_tbl), "different colcount visibility among sibling facets")
 
@@ -888,6 +894,13 @@ test_that("showing higher-level ncols works", {
     c("", "", "")
   )
 
+  ## turning counts for a facet's children off is different than setting
+  ## the visible counts to NA, note alignment here, no spaces under risk diff
+  ## arms
+  facet_colcounts_visible(tbl5, c("rr_header", "Risk Difference % CI", "ARM")) <- FALSE
+  mpf5b <- matrix_form(tbl5, TRUE)
+  expect_equal(mf_strings(mpf5b)[3, 7:8],
+               c("A: Drug X", "C: Combination"))
   lyt6 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
     split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) %>%
     split_cols_by("ARM", split_fun = add_combo_levels(combodf), show_colcounts = TRUE, colcount_format = "(N=xx)") %>%
