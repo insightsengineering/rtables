@@ -1,3 +1,4 @@
+Bové
 CRAN's
 Carreras
 Cheatsheet
@@ -21,12 +22,14 @@ RStudio
 Resync
 Rua
 STUDYID
+Sabanés
 Saibah
 Stoilova
 Subtable
 Subtables
 Tadeusz
 Unstratified
+ValueWrapper
 Yung
 amongst
 charset
@@ -41,6 +44,7 @@ facetted
 facetting
 flextable
 formatter
+formatters
 funder
 getter
 getters
@@ -50,6 +54,7 @@ iteratively
 labelled
 layouting
 mandatorily
+monospace
 multivariable
 orderable
 pathing
@@ -58,6 +63,7 @@ postprocessing
 pre
 priori
 programmatically
+quartiles
 reindexed
 repo
 repped
@@ -73,6 +79,7 @@ subtables
 summarization
 tableone
 todo
+truetype
 unaggregated
 unicode
 univariable

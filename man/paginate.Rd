@@ -12,6 +12,8 @@ pag_tt_indices(
   nosplitin = character(),
   colwidths = NULL,
   max_width = NULL,
+  fontspec = NULL,
+  col_gap = 3,
   verbose = FALSE
 )
 
@@ -32,6 +34,8 @@ paginate_table(
   colwidths = NULL,
   tf_wrap = FALSE,
   max_width = NULL,
+  fontspec = font_spec(font_family, font_size, lineheight),
+  col_gap = 3,
   verbose = FALSE
 )
 }
@@ -52,6 +56,11 @@ considerations. Defaults to none.}
 footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
+
+\item{fontspec}{(\code{font_spec})\cr a font_spec object specifying the font information to use for
+calculating string widths and heights, as returned by \code{\link[formatters:font_spec]{font_spec()}}.}
+
+\item{col_gap}{(\code{numeric(1)})\cr space (in characters) between columns.}
 
 \item{verbose}{(\code{flag})\cr whether additional information should be displayed to the user. Defaults to \code{FALSE}.}
 

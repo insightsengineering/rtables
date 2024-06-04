@@ -12,7 +12,9 @@
   hsep = horizontal_sep(x),
   indent_size = 2,
   tf_wrap = FALSE,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = font_spec(),
+  ttype_ok = FALSE
 )
 }
 \arguments{
@@ -36,6 +38,13 @@ must also be considered.}
 footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the current print width of the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
+
+\item{fontspec}{(\code{font_spec})\cr a font_spec object specifying the font information to use for
+calculating string widths and heights, as returned by \code{\link[formatters:font_spec]{font_spec()}}.}
+
+\item{ttype_ok}{(\code{logical(1)})\cr should truetype (non-monospace) fonts be
+allowed via \code{fontspec}. Defaults to \code{FALSE}. This parameter is primarily
+for internal testing and generally should not be set by end users.}
 }
 \value{
 A string representation of \code{x} as it appears when printed.

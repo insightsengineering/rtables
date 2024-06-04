@@ -29,10 +29,10 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
-    formatters (>= 0.5.6),
+    R (>= 2.10),
+    formatters (>= 0.5.7.9000),
     magrittr (>= 1.5),
-    methods,
-    R (>= 2.10)
+    methods
 Imports:
     checkmate (>= 2.1.0),
     htmltools (>= 0.5.4),
