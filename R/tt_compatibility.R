@@ -551,15 +551,17 @@ EmptyTreePos <- TreePos()
 ## must be pathable, which they aren't if siblings have
 ## identical names
 fix_col_nm_recursive <- function(ct, newname, rename_obj = TRUE, oldnm) {
-  if (rename_obj)
+  if (rename_obj) {
     obj_name(ct) <- newname
+  }
   if (is(ct, "LayoutColTree")) {
     kids <- tree_children(ct)
     kidnms <- names(kids)
     newkids <- lapply(kids, fix_col_nm_recursive,
-                      newname = newname,
-                      rename_obj = FALSE,
-                      oldnm = oldnm)
+      newname = newname,
+      rename_obj = FALSE,
+      oldnm = oldnm
+    )
     names(newkids) <- kidnms
     tree_children(ct) <- newkids
   }
@@ -577,19 +579,25 @@ fix_col_nm_recursive <- function(ct, newname, rename_obj = TRUE, oldnm) {
   if (!rename_obj) {
     spls <- pos_splits(mypos)
     splvals <- pos_splvals(mypos)
-    pos_splits(mypos) <- c(list(AllSplit(split_name = newname)),
-                           spls)
-    pos_splvals(mypos) <- c(list(SplitValue(NA_character_,
-                                            sub_expr = quote(TRUE))),
-                            splvals)
+    pos_splits(mypos) <- c(
+      list(AllSplit(split_name = newname)),
+      spls
+    )
+    pos_splvals(mypos) <- c(
+      list(SplitValue(NA_character_,
+        sub_expr = quote(TRUE)
+      )),
+      splvals
+    )
     tree_pos(ct) <- mypos
   }
   ct
 }
 
 fix_nms <- function(ct) {
-  if (is(ct, "LayoutColLeaf"))
+  if (is(ct, "LayoutColLeaf")) {
     return(ct)
+  }
   kids <- lapply(tree_children(ct), fix_nms)
   names(kids) <- vapply(kids, obj_name, "")
   tree_children(ct) <- kids
@@ -619,7 +627,7 @@ combine_cinfo <- function(..., new_total = NULL, sync_count_vis) {
   nms <- make_cbind_names(num = length(oldnms), tokens = path_els)
 
   ctrees <- mapply(function(ct, nm, oldnm) {
-    ct <- fix_col_nm_recursive(ct, nm, rename_obj = TRUE, oldnm = "")#oldnm)
+    ct <- fix_col_nm_recursive(ct, nm, rename_obj = TRUE, oldnm = "") # oldnm)
     ct
   }, ct = ctrees, nm = nms, oldnm = oldnms, SIMPLIFY = FALSE)
   names(ctrees) <- nms
@@ -632,10 +640,11 @@ combine_cinfo <- function(..., new_total = NULL, sync_count_vis) {
   }
   newexprs <- unlist(lapply(cinfs, col_exprs), recursive = FALSE)
   newexargs <- unlist(lapply(cinfs, col_extra_args), recursive = FALSE) %||% vector("list", length(newcounts))
-  if (!sync_count_vis)
+  if (!sync_count_vis) {
     newdisp <- NA
-  else
+  } else {
     newdisp <- any(vapply(cinfs, disp_ccounts, NA))
+  }
   alltls <- lapply(cinfs, top_left)
   newtl <- character()
   if (!are(tabs, "TableRow")) {

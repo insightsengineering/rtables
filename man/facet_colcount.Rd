@@ -66,8 +66,10 @@ all of its children.
 \examples{
 lyt <- basic_table() \%>\%
   split_cols_by("ARM", show_colcounts = TRUE) \%>\%
-  split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M")),
-    show_colcounts = TRUE) \%>\%
+  split_cols_by("SEX",
+    split_fun = keep_split_levels(c("F", "M")),
+    show_colcounts = TRUE
+  ) \%>\%
   split_cols_by("STRATA1", show_colcounts = TRUE) \%>\%
   analyze("AGE")
 

@@ -1107,7 +1107,7 @@ setClass("LayoutAxisLeaf",
   representation(
     func = "function",
     display_columncounts = "logical",
-    columncount_format = "FormatSpec", #character",
+    columncount_format = "FormatSpec", # character",
     col_footnotes = "list",
     column_count = "integer"
   )
@@ -1117,7 +1117,7 @@ setClass("LayoutColTree",
   contains = "LayoutAxisTree",
   representation(
     display_columncounts = "logical",
-    columncount_format = "FormatSpec", #"character",
+    columncount_format = "FormatSpec", # "character",
     col_footnotes = "list",
     column_count = "integer"
   )
@@ -1803,7 +1803,7 @@ setClass("PreDataColLayout",
   contains = "PreDataAxisLayout",
   representation(
     display_columncounts = "logical",
-    columncount_format = "FormatSpec" #"character"
+    columncount_format = "FormatSpec" # "character"
   )
 )
 

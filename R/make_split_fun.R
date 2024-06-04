@@ -346,8 +346,10 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
     }
 
 
-    val <- LevelComboSplitValue(val = name, extr = extra, combolevels = levels, label = label,
-                                sub_expr = subexpr)
+    val <- LevelComboSplitValue(
+      val = name, extr = extra, combolevels = levels, label = label,
+      sub_expr = subexpr
+    )
     add_to_split_result(ret,
       values = list(val), labels = label,
       datasplit = datpart

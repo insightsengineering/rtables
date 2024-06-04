@@ -789,7 +789,7 @@ test_that("horizontal separator is propagated from table to print and export", {
 ## higher-level showing ncols works:
 
 test_that("showing higher-level ncols works", {
-  mydat <- subset(ex_adsl,  SEX %in% c("M", "F"))
+  mydat <- subset(ex_adsl, SEX %in% c("M", "F"))
   mydat$SEX2 <- factor(
     ifelse(
       mydat$SEX == "M",
@@ -840,18 +840,24 @@ test_that("showing higher-level ncols works", {
   col_counts(tbl2) <- new_ccs
 
   mpf2 <- matrix_form(tbl2, TRUE)
-  expect_equal(mf_strings(mpf2)[mf_nlheader(mpf2), -1, drop = TRUE],
-               sprintf("(N=%d)", new_ccs))
+  expect_equal(
+    mf_strings(mpf2)[mf_nlheader(mpf2), -1, drop = TRUE],
+    sprintf("(N=%d)", new_ccs)
+  )
   ## NA counts (to display blank) work correctly for higher level facets
 
   tbl3 <- tbl
   facet_colcount(tbl3, c("ARM", "C: Combination")) <- NA_integer_
   mpf3 <- matrix_form(tbl3, TRUE)
   ## starting at "column" 2 because topleft/row labels
-  expect_equal(mf_strings(mpf3)[2, 2:13],
-               mf_strings(mpf)[2, 2:13])
-  expect_equal(mf_strings(mpf3)[2, 14:19],
-               rep("", 6))
+  expect_equal(
+    mf_strings(mpf3)[2, 2:13],
+    mf_strings(mpf)[2, 2:13]
+  )
+  expect_equal(
+    mf_strings(mpf3)[2, 14:19],
+    rep("", 6)
+  )
 
   tbl4 <- tbl2
   col_counts(tbl4)[rep(c(FALSE, TRUE), times = c(14, 4))] <- NA_integer_
@@ -877,8 +883,10 @@ test_that("showing higher-level ncols works", {
   expect_silent(toString(tbl5))
   col_counts(tbl5)[c(FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE)] <- NA_integer_
   mpf5 <- matrix_form(tbl5, TRUE)
-  expect_equal(mf_strings(mpf5)[3, c(3, 7, 8)], # cols 2, 6 and 7, remember row labels!
-               c("", "", ""))
+  expect_equal(
+    mf_strings(mpf5)[3, c(3, 7, 8)], # cols 2, 6 and 7, remember row labels!
+    c("", "", "")
+  )
 
   lyt6 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
     split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) %>%
