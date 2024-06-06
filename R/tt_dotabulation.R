@@ -1132,7 +1132,7 @@ recursive_applysplit <- function(df,
 #'
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param col_counts (`numeric` or `NULL`)\cr if non-`NULL`, column counts
+#' @param col_counts (`numeric` or `NULL`)\cr `r lifecycle::badge("deprecated")` if non-`NULL`, column counts
 #'   which override those calculated automatically during tabulation. Must specify "counts" for *all*
 #'   resulting columns if non-`NULL`. `NA` elements will be replaced with the automatically calculated counts.
 #' @param col_total (`integer(1)`)\cr the total observations across all columns. Defaults to `nrow(df)`.
@@ -1588,12 +1588,16 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
 
     kids <- mapply(
       function(dfpart, value, partlab) {
+        ## we could pass subset expression in here but the spec
+        ## currently doesn't call for it in column space
         newprev <- context_df_row(
           split = obj_name(spl),
           value = value_names(value),
           full_parent_df = list(dfpart),
           cinfo = NULL
         )
+        ## subset expressions handled inside make_child_pos,
+        ## value is (optionally, for the moment) carrying it around
         newpos <- make_child_pos(pos, spl, value, partlab)
         splitvec_to_coltree(dfpart, splvec, newpos,
           lvl + 1L, partlab,

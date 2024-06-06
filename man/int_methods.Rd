@@ -247,6 +247,9 @@
 \alias{value_labels,ValueWrapper-method}
 \alias{value_labels,LevelComboSplitValue-method}
 \alias{value_labels,MultiVarSplit-method}
+\alias{value_expr}
+\alias{value_expr,ValueWrapper-method}
+\alias{value_expr,ANY-method}
 \alias{spl_varlabels}
 \alias{spl_varlabels,MultiVarSplit-method}
 \alias{spl_varlabels<-}
@@ -884,6 +887,12 @@ value_labels(obj)
 \S4method{value_labels}{LevelComboSplitValue}(obj)
 
 \S4method{value_labels}{MultiVarSplit}(obj)
+
+value_expr(obj)
+
+\S4method{value_expr}{ValueWrapper}(obj)
+
+\S4method{value_expr}{ANY}(obj)
 
 spl_varlabels(obj)
 
