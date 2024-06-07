@@ -71,6 +71,7 @@ articles:
     - custom_appearance
     - title_footer
     - sorting_pruning
+    - col_counts
 
   - title: \{rtables\} Concepts
     contents:

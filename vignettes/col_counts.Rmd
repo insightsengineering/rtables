@@ -50,7 +50,30 @@ facet_colcount(tbl, coldf$path[[1]][c(1, 2)]) # visible
 colcount_visible(tbl, coldf$path[[1]][c(1, 2)]) # TRUE
 ```
 
-It is possible also to change (for now uniformly) the output string in case of missing values in the column counts. The default value is `""`, that will show nothing. We can change it with the following function:
+Formats can differ as we have shown in the example above. We can change the format of the column counts with the following function:
+
+```{r, eval=FALSE}
+colcount_format(tbl) <- "[N<=xx]" # Works only with the default format (last line)
+colcount_visible(tbl, coldf$path[[1]]) <- TRUE
+tbl
+# Error in h(simpleError(msg, call)) : 
+#   error in evaluating the argument 'x' in selecting a method for function 'toString': Detected different colcount visibility among sibling facets (those arising from the same split_cols_by* layout instruction). This is not supported.
+# Set count values to NA if you want a blank space to appear as the displayed count for particular facets.
+# First disagreement occured at paths:
+# ARMCD[ARM A]->STRATA2[S1]->STRATA1[A]
+# ARMCD[ARM A]->STRATA2[S1]->STRATA1[B]
+```
+
+For removing the column counts from a specific column, we can do it in two ways:
+
+```{r}
+ccnts <- col_counts(tbl)
+ccnts[1] <- NA_integer_
+col_counts(tbl) <- ccnts
+tbl
+```
+
+It is possible also to change (for now uniformly only) the output string in case of missing values in the column counts. The default value is `""`, that will show nothing. We can change it with the following function:
 
 ```{r}
 colcount_na_str(tbl) <- "NaN"
