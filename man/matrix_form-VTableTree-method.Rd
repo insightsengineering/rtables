@@ -8,7 +8,9 @@
   obj,
   indent_rownames = FALSE,
   expand_newlines = TRUE,
-  indent_size = 2
+  indent_size = 2,
+  fontspec = NULL,
+  col_gap = 3L
 )
 }
 \arguments{
@@ -21,6 +23,12 @@ has indented row names (strings pre-fixed).}
 newlines into multiple 'physical' rows (as they will appear when rendered into ASCII). Defaults to \code{TRUE}.}
 
 \item{indent_size}{(\code{numeric(1)})\cr number of spaces to use per indent level. Defaults to 2.}
+
+\item{fontspec}{(\code{font_spec} or \code{NULL})\cr Font specification that should be
+assumed during wrapping, as returned by \code{\link[formatters:font_spec]{formatters::font_spec()}}.}
+
+\item{col_gap}{(\code{numeric(1)})\cr The column gap to assume between columns, in
+number of spaces assuming \code{fontspec} (this reduces to number of characters for monospace fonts).}
 }
 \value{
 A list with the following elements:

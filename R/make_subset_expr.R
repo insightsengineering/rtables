@@ -7,6 +7,12 @@ setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_e
 setMethod(
   "make_subset_expr", "VarLevelSplit",
   function(spl, val) {
+    ## this is how custom split functions will communicate the correct expression
+    ## to the column modeling code
+    if (length(value_expr(val)) > 0) {
+      return(value_expr(val))
+    }
+
     v <- unlist(rawvalues(val))
     ## XXX if we're including all levels should even missing be included?
     if (is(v, "AllLevelsSentinel")) {
@@ -23,6 +29,12 @@ setMethod(
 setMethod(
   "make_subset_expr", "MultiVarSplit",
   function(spl, val) {
+    ## this is how custom split functions will communicate the correct expression
+    ## to the column modeling code
+    if (length(value_expr(val)) > 0) {
+      return(value_expr(val))
+    }
+
     ## v = rawvalues(val)
     ## as.expression(bquote(!is.na(.(a)), list(a = v)))
     expression(TRUE)
@@ -139,6 +151,10 @@ setMethod(
       return(expression(TRUE))
     }
   }
+
+  if (is.null(ex2)) {
+    ex2 <- expression(TRUE)
+  }
   stopifnot(is.expression(ex1), is.expression(ex2))
   as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
@@ -240,7 +256,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     if (identical(ex, expression(TRUE))) {
       nrow(alt_counts_df)
     } else if (identical(ex, expression(FALSE))) {
-      0
+      0L
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
       if (is(vec, "try-error")) {
@@ -263,6 +279,7 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     }
   })
   counts[calcpos] <- calccounts[calcpos]
+  counts <- as.integer(counts)
   if (is.null(total)) {
     total <- sum(counts)
   }

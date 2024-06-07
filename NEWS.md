@@ -1,8 +1,15 @@
-## rtables 0.6.7.9002
+## rtables 0.6.7.9003
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
  * `sort_at_path` now gives informative error messages when the given path does not exist.
+ * Add support for truetype fonts based on formatters `>= 0.5.6.9007`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly, by @gmbecker.
+ * Core splitting machinery can now be overridden in column space via `make_split_fun` provided that `core_split` associates the generated facets with subsetting expressions. Subsetting expressions remain unnecessary for splits in row space. By @gmbecker.
+ * ValueWrapper objects now carry around subsetting expressions for use during tabulation, by @gmbecker.
+ * `make_split_res`, `add_to_split_result` now accept a list of subsetting expressions which will be attached to the values, by @gmbecker.
+ * New `value_expr` internal getter and setter methods, by @gmbecker.
+ 
+ 
 
 ### Bug Fixes
  * Fixed `rlistings` decoration (e.g. titles and footers) expansion when there are new lines. Moved relevant handling from `rtables`' `matrix_form` function to `formatters`' dedicated `mform_handle_newlines` function.
@@ -12,10 +19,13 @@
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
  * Fixed mismatch between indentation declared in row info (`mf_rinfo(mf)`) and actual selected indentation from `matrix_form(mf, indent_rownames = FALSE)`.
  * Fixed bug in `as_html` preventing indentation from being applied in `Viewer` output.
+ * `col_counts<-` and `col_total<-` methods now explicitly convert `value` to integer, by @gmbecker.
+ * `col_gap` is now respected in `nlines` row methods, and thus by `make_row_df`, by @gmbecker.
+ 
 
 ### Miscellaneous
  * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
- * Added `lifecycle` badge files for documentation.
+ * Added `lifecycle` badge files for deprecated documentation.
  * Deprecated the `gap` and `check_headers` arguments to `rbindl_rtables` using `lifecycle`.
 
 ## rtables 0.6.6

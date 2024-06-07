@@ -17,12 +17,9 @@
 #' @exportMethod nlines
 setMethod(
   "nlines", "TableRow",
-  function(x, colwidths, max_width) {
-    ## XXX this is wrong and needs to be fixed
-    ## should not be hardcoded here
-    col_gap <- 3L
-    fns <- sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width))) +
-      sum(unlist(lapply(cell_footnotes(x), nlines, max_width = max_width)))
+  function(x, colwidths, max_width, fontspec, col_gap = 3) {
+    fns <- sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width, fontspec = fontspec))) +
+      sum(unlist(lapply(cell_footnotes(x), nlines, max_width = max_width, fontspec = fontspec)))
     fcells <- as.vector(get_formatted_cells(x))
     spans <- row_cspans(x)
     have_cw <- !is.null(colwidths)
@@ -48,9 +45,18 @@ setMethod(
     ## rowext <- max(vapply(strsplit(c(obj_label(x), fcells), "\n", fixed = TRUE),
     ##                      length,
     ##                      1L))
-    rowext <- max(unlist(mapply(function(s, w) {
-      nlines(strsplit(s, "\n", fixed = TRUE), max_width = w)
-    }, s = c(obj_label(x), fcells), w = (colwidths %||% max_width) %||% 1000L, SIMPLIFY = FALSE)))
+    rowext <- max(
+      unlist(
+        mapply(
+          function(s, w) {
+            nlines(strsplit(s, "\n", fixed = TRUE), max_width = w, fontspec = fontspec)
+          },
+          s = c(obj_label(x), fcells),
+          w = (colwidths %||% max_width) %||% vector("list", length(c(obj_label(x), fcells))),
+          SIMPLIFY = FALSE
+        )
+      )
+    )
 
     rowext + fns
   }
@@ -60,10 +66,10 @@ setMethod(
 #' @rdname formatters_methods
 setMethod(
   "nlines", "LabelRow",
-  function(x, colwidths, max_width) {
+  function(x, colwidths, max_width, fontspec = fontspec, col_gap = NULL) {
     if (labelrow_visible(x)) {
-      nlines(strsplit(obj_label(x), "\n", fixed = TRUE)[[1]], max_width = colwidths[1]) +
-        sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width)))
+      nlines(strsplit(obj_label(x), "\n", fixed = TRUE)[[1]], max_width = colwidths[1], fontspec = fontspec) +
+        sum(unlist(lapply(row_footnotes(x), nlines, max_width = max_width, fontspec = fontspec)))
     } else {
       0L
     }
@@ -74,8 +80,8 @@ setMethod(
 #' @rdname formatters_methods
 setMethod(
   "nlines", "RefFootnote",
-  function(x, colwidths, max_width) {
-    nlines(format_fnote_note(x), colwidths = colwidths, max_width = max_width)
+  function(x, colwidths, max_width, fontspec, col_gap = NULL) {
+    nlines(format_fnote_note(x), colwidths = colwidths, max_width = max_width, fontspec = fontspec)
   }
 )
 
@@ -83,12 +89,24 @@ setMethod(
 #' @rdname formatters_methods
 setMethod(
   "nlines", "InstantiatedColumnInfo",
-  function(x, colwidths, max_width) {
+  function(x, colwidths, max_width, fontspec, col_gap = 3) {
     h_rows <- .do_tbl_h_piece2(x)
     tl <- top_left(x) %||% rep("", length(h_rows))
     main_nls <- vapply(
       seq_along(h_rows),
-      function(i) max(nlines(h_rows[[i]], colwidths = colwidths), nlines(tl[i], colwidths = colwidths[1])),
+      function(i) {
+        max(
+          nlines(h_rows[[i]],
+            colwidths = colwidths,
+            fontspec = fontspec,
+            col_gap = col_gap
+          ),
+          nlines(tl[i],
+            colwidths = colwidths[1],
+            fontspec = fontspec
+          )
+        )
+      },
       1L
     )
 
@@ -106,7 +124,8 @@ setMethod(
         vapply(unlist(coldf$col_fnotes),
           nlines,
           1,
-          max_width = max_width
+          max_width = max_width,
+          fontspec = fontspec
         ),
         2 * divider_height(x)
       )
@@ -187,7 +206,9 @@ setMethod(
            repr_inds = integer(),
            sibpos = NA_integer_,
            nsibs = NA_integer_,
-           max_width = NULL) {
+           max_width = NULL,
+           fontspec = NULL,
+           col_gap = 3) {
     indent <- indent + indent_mod(tt)
     ## retained for debugging info
     orig_rownum <- rownum # nolint
@@ -217,7 +238,8 @@ setMethod(
           nsibs = nsibs,
           nrowrefs = 0L,
           ncellrefs = 0L,
-          nreflines = 0L
+          nreflines = 0L,
+          fontspec = fontspec
         ))
       )
     }
@@ -232,7 +254,8 @@ setMethod(
         incontent = TRUE,
         repr_ext = repr_ext,
         repr_inds = repr_inds,
-        max_width = max_width
+        max_width = max_width,
+        fontspec = fontspec
       )
       rownum <- max(newdf$abs_rownumber, na.rm = TRUE)
 
@@ -258,7 +281,8 @@ setMethod(
         incontent = TRUE,
         repr_ext = repr_ext,
         repr_inds = repr_inds,
-        max_width = max_width
+        max_width = max_width,
+        fontspec = fontspec
       )
       crnums <- contdf$abs_rownumber
       crnums <- crnums[!is.na(crnums)]
@@ -288,7 +312,8 @@ setMethod(
         repr_inds = repr_inds,
         nsibs = newnsibs,
         sibpos = i,
-        max_width = max_width
+        max_width = max_width,
+        fontspec = fontspec
       )
 
       #       print(kiddfs$abs_rownumber)
@@ -322,12 +347,23 @@ setMethod(
            repr_inds = integer(),
            sibpos = NA_integer_,
            nsibs = NA_integer_,
-           max_width = NULL) {
+           max_width = NULL,
+           fontspec,
+           col_gap = 3) {
     indent <- indent + indent_mod(tt)
     rownum <- rownum + 1
     rrefs <- row_footnotes(tt)
     crefs <- cell_footnotes(tt)
-    reflines <- sum(sapply(c(rrefs, crefs), nlines, colwidths = colwidths, max_width = max_width))
+    reflines <- sum(
+      sapply(
+        c(rrefs, crefs),
+        nlines,
+        colwidths = colwidths,
+        max_width = max_width,
+        fontspec = fontspec,
+        col_gap = col_gap
+      )
+    ) ## col_gap not strictly necessary as these aren't rows, but why not
     ret <- pagdfrow(
       row = tt,
       rnum = rownum,
@@ -338,12 +374,13 @@ setMethod(
       repext = repr_ext,
       repind = repr_inds,
       indent = indent,
-      extent = nlines(tt, colwidths = colwidths, max_width = max_width),
+      extent = nlines(tt, colwidths = colwidths, max_width = max_width, fontspec = fontspec, col_gap = col_gap),
       ## these two are unlist calls cause they come in lists even with no footnotes
       nrowrefs = length(rrefs),
       ncellrefs = length(unlist(crefs)),
       nreflines = reflines,
-      trailing_sep = trailing_section_div(tt)
+      trailing_sep = trailing_section_div(tt),
+      fontspec = fontspec
     )
     ret
   }
@@ -363,11 +400,13 @@ setMethod(
            repr_inds = integer(),
            sibpos = NA_integer_,
            nsibs = NA_integer_,
-           max_width = NULL) {
+           max_width = NULL,
+           fontspec,
+           col_gap = 3) {
     rownum <- rownum + 1
     indent <- indent + indent_mod(tt)
     ret <- pagdfrow(tt,
-      extent = nlines(tt, colwidths = colwidths, max_width = max_width),
+      extent = nlines(tt, colwidths = colwidths, max_width = max_width, fontspec = fontspec, col_gap = col_gap),
       rnum = rownum,
       colwidths = colwidths,
       sibpos = sibpos,
@@ -380,9 +419,12 @@ setMethod(
       ncellrefs = 0L,
       nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
         colwidths = colwidths,
-        max_width = max_width
+        max_width = max_width,
+        fontspec = fontspec,
+        col_gap = col_gap
       )),
-      trailing_sep = trailing_section_div(tt)
+      trailing_sep = trailing_section_div(tt),
+      fontspec = fontspec
     )
     if (!labelrow_visible(tt)) {
       ret <- ret[0, , drop = FALSE]
@@ -488,13 +530,14 @@ setMethod(
 
 ## THIS INCLUDES BOTH "table stub" (i.e. column label and top_left) AND
 ## title/subtitle!!!!!
-.header_rep_nlines <- function(tt, colwidths, max_width, verbose = FALSE) {
-  cinfo_lines <- nlines(col_info(tt), colwidths = colwidths, max_width = max_width)
+.header_rep_nlines <- function(tt, colwidths, max_width, fontspec, verbose = FALSE) {
+  cinfo_lines <- nlines(col_info(tt), colwidths = colwidths, max_width = max_width, fontspec = fontspec)
   if (any(nzchar(all_titles(tt)))) {
     ## +1 is for blank line between subtitles and divider
     tlines <- sum(nlines(all_titles(tt),
       colwidths = colwidths,
-      max_width = max_width
+      max_width = max_width,
+      fontspec = fontspec
     )) + divider_height(tt) + 1L
   } else {
     tlines <- 0
@@ -512,12 +555,13 @@ setMethod(
 ## this is ***only*** lines that are expected to be repeated on  multiple pages:
 ## main footer, prov footer, and referential footnotes on **columns**
 
-.footer_rep_nlines <- function(tt, colwidths, max_width, have_cfnotes, verbose = FALSE) {
+.footer_rep_nlines <- function(tt, colwidths, max_width, have_cfnotes, fontspec, verbose = FALSE) {
   flines <- nlines(main_footer(tt),
     colwidths = colwidths,
-    max_width = max_width - table_inset(tt)
+    max_width = max_width - table_inset(tt),
+    fontspec = fontspec
   ) +
-    nlines(prov_footer(tt), colwidths = colwidths, max_width = max_width)
+    nlines(prov_footer(tt), colwidths = colwidths, max_width = max_width, fontspec = fontspec)
   if (flines > 0) {
     dl_contrib <- if (have_cfnotes) 0 else divider_height(tt)
     flines <- flines + dl_contrib + 1L
@@ -635,6 +679,8 @@ pag_tt_indices <- function(tt,
                            nosplitin = character(),
                            colwidths = NULL,
                            max_width = NULL,
+                           fontspec = NULL,
+                           col_gap = 3,
                            verbose = FALSE) {
   dheight <- divider_height(tt)
 
@@ -644,7 +690,8 @@ pag_tt_indices <- function(tt,
 
   hlines <- .header_rep_nlines(tt,
     colwidths = colwidths, max_width = max_width,
-    verbose = verbose
+    verbose = verbose,
+    fontspec = fontspec
   )
   ## if(any(nzchar(all_titles(tt)))) {
   ##     tlines <- sum(nlines(all_titles(tt), colwidths = colwidths, max_width = max_width)) +
@@ -661,8 +708,11 @@ pag_tt_indices <- function(tt,
   ##     flines <- flines + dl_contrib + 1L
   ## }
   flines <- .footer_rep_nlines(tt,
-    colwidths = colwidths, max_width = max_width,
-    have_cfnotes = have_cfnotes, verbose = verbose
+    colwidths = colwidths,
+    max_width = max_width,
+    have_cfnotes = have_cfnotes,
+    fontspec = fontspec,
+    verbose = verbose
   )
   ## row lines per page
   rlpp <- lpp - hlines - flines
@@ -679,7 +729,9 @@ pag_tt_indices <- function(tt,
     nosplitin = nosplitin,
     verbose = verbose,
     have_col_fnotes = have_cfnotes,
-    div_height = dheight
+    div_height = dheight,
+    col_gap = col_gap,
+    has_rowlabels = TRUE
   )
 }
 
@@ -773,7 +825,14 @@ paginate_table <- function(tt,
                            colwidths = NULL,
                            tf_wrap = FALSE,
                            max_width = NULL,
+                           fontspec = font_spec(font_family, font_size, lineheight),
+                           col_gap = 3,
                            verbose = FALSE) {
+  new_dev <- open_font_dev(fontspec)
+  if (new_dev) {
+    on.exit(close_font_dev())
+  }
+
   if ((non_null_na(lpp) || non_null_na(cpp)) &&
     (!is.null(page_type) || (!is.null(pg_width) && !is.null(pg_height)))) { # nolint
     pg_lcpp <- page_lcpp(
@@ -784,7 +843,8 @@ paginate_table <- function(tt,
       pg_width = pg_width,
       pg_height = pg_height,
       margins = margins,
-      landscape = landscape
+      landscape = landscape,
+      fontspec = fontspec
     )
 
     if (non_null_na(lpp)) {
@@ -803,7 +863,15 @@ paginate_table <- function(tt,
   }
 
   if (is.null(colwidths)) {
-    colwidths <- propose_column_widths(matrix_form(tt, indent_rownames = TRUE))
+    colwidths <- propose_column_widths(
+      matrix_form(
+        tt,
+        indent_rownames = TRUE,
+        fontspec = fontspec,
+        col_gap = col_gap
+      ),
+      fontspec = fontspec
+    )
   }
 
   if (!tf_wrap) {
@@ -815,7 +883,7 @@ paginate_table <- function(tt,
     max_width <- cpp
   } else if (identical(max_width, "auto")) {
     ## XXX this 3 is column sep width!!!!!!!
-    max_width <- sum(colwidths) + 3 * (length(colwidths) - 1)
+    max_width <- sum(colwidths) + col_gap * (length(colwidths) - 1)
   }
   if (!is.null(cpp) && !is.null(max_width) && max_width > cpp) {
     warning("max_width specified is wider than characters per page width (cpp).")
@@ -837,16 +905,19 @@ paginate_table <- function(tt,
       colwidths = colwidths,
       tf_wrap = tf_wrap,
       max_width = max_width,
-      verbose = verbose
+      fontspec = fontspec,
+      verbose = verbose,
+      col_gap = col_gap
     )
     return(unlist(ret, recursive = TRUE))
   }
 
   inds <- paginate_indices(tt,
     page_type = page_type,
-    font_family = font_family,
-    font_size = font_size,
-    lineheight = lineheight,
+    fontspec = fontspec,
+    ## font_family = font_family,
+    ## font_size = font_size,
+    ## lineheight = lineheight,
     landscape = landscape,
     pg_width = pg_width,
     pg_height = pg_height,
@@ -858,6 +929,7 @@ paginate_table <- function(tt,
     colwidths = colwidths,
     tf_wrap = tf_wrap,
     max_width = max_width,
+    col_gap = col_gap,
     verbose = verbose
   ) ## paginate_table apparently doesn't accept indent_size
 

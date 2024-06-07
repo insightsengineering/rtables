@@ -146,20 +146,28 @@ test_that("export_as_pdf works", {
   tmpf <- tempfile(fileext = ".pdf")
 
   expect_warning(
-    export_as_pdf(tbl, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
+    export_as_pdf(tbl, file = tmpf, landscape = TRUE, height = 1000, width = 3, paginate = FALSE),
     "width of page 1 exceeds the available space"
   )
   expect_true(file.exists(tmpf))
   file.remove(tmpf)
   expect_warning(
-    export_as_pdf(tbl, file = tmpf, height = 3, paginate = FALSE),
+    export_as_pdf(tbl, file = tmpf, height = 3, width = 1000, paginate = FALSE),
     "height of page 1 exceeds the available space"
   )
 
   res <- export_as_pdf(tbl, file = tmpf)
-
   expect_equal(res$npages, 3)
+
+  ## non-monospace fonts work
+  ## this tests the actual pagination behavior...
+  fspec <- font_spec("Times", 20, 1.2)
+  file.remove(tmpf)
+  expect_error(export_as_pdf(tbl, file = tmpf, fontspec = fspec), "non-monospace")
+  file.remove(tmpf) ## blank file created (currently, this could be better)
+  res <- export_as_pdf(tbl, file = tmpf, fontspec = fspec, ttype_ok = TRUE)
 })
+
 
 # test_that("exporting pdfs gives the correct values", {
 #     if (check_pdf) {
@@ -198,7 +206,7 @@ test_that("exporting pdf does the inset", {
   table_inset(tbl) <- 100
   tmpf <- tempfile(fileext = ".pdf")
 
-  expect_error(export_as_pdf(tbl, file = tmpf))
+  expect_error(export_as_pdf(tbl, file = tmpf), "Width of row labels equal to or larger than")
 })
 
 

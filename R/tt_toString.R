@@ -47,16 +47,22 @@ setMethod("toString", "VTableTree", function(x,
                                              hsep = horizontal_sep(x),
                                              indent_size = 2,
                                              tf_wrap = FALSE,
-                                             max_width = NULL) {
+                                             max_width = NULL,
+                                             fontspec = font_spec(),
+                                             ttype_ok = FALSE) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
-      indent_size = indent_size
+      indent_size = indent_size,
+      fontspec = fontspec,
+      col_gap = col_gap
     ),
     widths = widths, col_gap = col_gap,
     hsep = hsep,
     tf_wrap = tf_wrap,
-    max_width = max_width
+    max_width = max_width,
+    fontspec = fontspec,
+    ttype_ok = ttype_ok
   )
 })
 
@@ -144,6 +150,10 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   has indented row names (strings pre-fixed).
 #' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain
 #'   newlines into multiple 'physical' rows (as they will appear when rendered into ASCII). Defaults to `TRUE`.
+#' @param fontspec (`font_spec` or `NULL`)\cr Font specification that should be
+#'   assumed during wrapping, as returned by [formatters::font_spec()].
+#' @param col_gap (`numeric(1)`)\cr The column gap to assume between columns, in
+#'   number of spaces assuming `fontspec` (this reduces to number of characters for monospace fonts).
 #'
 #' @details
 #' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
@@ -189,11 +199,13 @@ setMethod(
   function(obj,
            indent_rownames = FALSE,
            expand_newlines = TRUE,
-           indent_size = 2) {
+           indent_size = 2,
+           fontspec = NULL,
+           col_gap = 3L) {
     stopifnot(is(obj, "VTableTree"))
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
-    sr <- make_row_df(obj)
+    sr <- make_row_df(obj, fontspec = fontspec)
 
     body_content_strings <- if (NROW(sr) == 0) {
       character()
@@ -293,6 +305,7 @@ setMethod(
       formats = formats,
       ## display = display, purely a function of spans, handled in constructor now
       row_info = sr,
+      colpaths = make_col_df(obj)[["path"]],
       ## line_grouping handled internally now line_grouping = 1:nrow(body),
       ref_fnotes = ref_fnotes,
       nlines_header = nr_header, ## this is fixed internally
@@ -308,7 +321,9 @@ setMethod(
       table_inset = table_inset(obj),
       header_section_div = header_section_div(obj),
       horizontal_sep = horizontal_sep(obj),
-      indent_size = indent_size
+      indent_size = indent_size,
+      fontspec = fontspec,
+      col_gap = col_gap
     )
   }
 )

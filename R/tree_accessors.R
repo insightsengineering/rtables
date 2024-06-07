@@ -1762,6 +1762,15 @@ setMethod(
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
 #' @rdname int_methods
+setGeneric("value_expr", function(obj) standardGeneric("value_expr"))
+#' @rdname int_methods
+setMethod("value_expr", "ValueWrapper", function(obj) obj@subset_expression)
+#' @rdname int_methods
+setMethod("value_expr", "ANY", function(obj) NULL)
+## no setters for now, we'll see about that.
+
+
+#' @rdname int_methods
 setGeneric("spl_varlabels", function(obj) standardGeneric("spl_varlabels"))
 
 #' @rdname int_methods
@@ -2167,7 +2176,8 @@ setGeneric("col_counts<-", function(obj, path = NULL, value) standardGeneric("co
 setMethod(
   "col_counts<-", "InstantiatedColumnInfo",
   function(obj, path = NULL, value) {
-    obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- value
+    ## all methods funnel to this one so ensure integer-ness here.
+    obj@counts[.path_to_pos(path, obj, cols = TRUE)] <- as.integer(value)
     obj
   }
 )
@@ -2211,7 +2221,8 @@ setGeneric("col_total<-", function(obj, value) standardGeneric("col_total<-"))
 setMethod(
   "col_total<-", "InstantiatedColumnInfo",
   function(obj, value) {
-    obj@total_count <- value
+    ## all methods funnel to this one so ensure integer-ness here.
+    obj@total_count <- as.integer(value)
     obj
   }
 )

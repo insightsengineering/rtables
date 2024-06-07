@@ -28,9 +28,10 @@ tabulating a table.
 
 The content in this vignette is based on the following two resources:
 
-* [rtables useR 2020 presentation](https://www.youtube.com/watch?v=CBQzZ8ZhXLA) by Gabriel Becker
-* [rtables - A Framework For Creating Complex Structured Reporting Tables Via 
-Multi-Level Faceted Computations](http://arxiv.org/pdf/2306.16610) by Gabriel Becker and Adrian Waddell
+* The [`rtables` useR 2020 presentation](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)
+by Gabriel Becker
+* [`rtables` - A Framework For Creating Complex Structured Reporting Tables Via
+Multi-Level Faceted Computations](https://arxiv.org/pdf/2306.16610).
 
 The packages used in this vignette are `rtables` and `dplyr`:
 
