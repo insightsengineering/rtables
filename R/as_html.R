@@ -111,6 +111,16 @@ as_html <- function(x,
     )
   }
 
+  # row labels style
+  for (i in seq_len((nr - nlh))) {
+    if ("row_names" %in% bold) { # font weight
+      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i + nlh, 1][[1]],
+        style = paste0("font-weight: bold;")
+      )
+    }
+  }
+
   # label rows style
   if ("label_rows" %in% bold) {
     which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
