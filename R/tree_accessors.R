@@ -2563,7 +2563,7 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #'   be a split name.
 #' @return obj, modified with the desired column count.
 #'   display behavior
-#' 
+#'
 #' @export
 `facet_colcounts_visible<-` <- function(obj, path, value) {
   coldf <- make_col_df(obj, visible_only = FALSE)
