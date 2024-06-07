@@ -73,24 +73,23 @@ as_html <- function(x,
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
-  
   stopifnot(is(x, "VTableTree"))
-  
+
   mat <- matrix_form(x, indent_rownames = TRUE)
-  
+
   nlh <- mf_nlheader(mat)
   nc <- ncol(x) + 1
   nr <- length(mf_lgrouping(mat))
-  
+
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
   cells <- matrix(rep(list(list()), (nr) * (nc)), ncol = nc)
-  
+
   for (i in seq_len(nr)) {
     for (j in seq_len(nc)) {
       curstrs <- mf_strings(mat)[i, j]
       curspn <- mf_spans(mat)[i, j]
       algn <- mf_aligns(mat)[i, j]
-      
+
       inhdr <- i <= nlh
       tagfun <- if (inhdr) tags$th else tags$td
       cells[i, j][[1]] <- tagfun(
@@ -103,14 +102,14 @@ as_html <- function(x,
       )
     }
   }
-  
+
   if (header_sep_line) {
     cells[nlh][[1]] <- htmltools::tagAppendAttributes(
       cells[nlh, 1][[1]],
       style = "border-bottom: 1px solid black;"
     )
   }
-  
+
   # label rows style
   if ("label_rows" %in% bold) {
     which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
@@ -120,7 +119,7 @@ as_html <- function(x,
       style = "font-weight: bold;"
     )
   }
-  
+
   # content rows style
   if ("content_rows" %in% bold) {
     which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))
@@ -130,7 +129,7 @@ as_html <- function(x,
       style = "font-weight: bold;"
     )
   }
-  
+
   if (any(!mat$display)) {
     # Check that expansion kept the same display info
     check_expansion <- c()
@@ -141,7 +140,7 @@ as_html <- function(x,
         apply(mat$display[rows, , drop = FALSE], 2, function(x) all(x) || all(!x))
       )
     }
-    
+
     if (!all(check_expansion)) {
       stop(
         "Found that a group of rows have different display options even if ",
@@ -149,14 +148,14 @@ as_html <- function(x,
         "file an issue or report to the maintainers."
       ) # nocov
     }
-    
+
     for (ii in unique(mat$line_grouping)) {
       rows <- which(mat$line_grouping == ii)
       should_display_col <- apply(mat$display[rows, , drop = FALSE], 2, any)
       cells[ii, !should_display_col] <- NA_integer_
     }
   }
-  
+
   rows <- apply(cells, 1, function(row) {
     tags$tr(
       class = class_tr,
@@ -164,27 +163,27 @@ as_html <- function(x,
       Filter(function(x) !identical(x, NA_integer_), row)
     )
   })
-  
+
   hsep_line <- tags$hr(class = "solid")
-  
+
   hdrtag <- div_helper(
     class = "rtables-titles-block",
     list(
       div_helper(
         class = "rtables-main-titles-block",
         lapply(main_title(x), if ("main_title" %in% bold) tags$b else tags$p,
-               class = "rtables-main-title"
+          class = "rtables-main-title"
         )
       ),
       div_helper(
         class = "rtables-subtitles-block",
         lapply(subtitles(x), if ("subtitles" %in% bold) tags$b else tags$p,
-               class = "rtables-subtitle"
+          class = "rtables-subtitle"
         )
       )
     )
   )
-  
+
   tabletag <- do.call(
     tags$table,
     c(
@@ -196,34 +195,34 @@ as_html <- function(x,
           if (!is.null(width)) paste("width:", width)
         ),
         tags$caption(sprintf("(\\#tag:%s)", link_label),
-                     style = "caption-side: top;",
-                     .noWS = "after-begin"
+          style = "caption-side: top;",
+          .noWS = "after-begin"
         )
       )
     )
   )
-  
+
   rfnotes <- div_helper(
     class = "rtables-ref-footnotes-block",
     lapply(mat$ref_footnotes, tags$p,
-           class = "rtables-referential-footnote"
+      class = "rtables-referential-footnote"
     )
   )
-  
+
   mftr <- div_helper(
     class = "rtables-main-footers-block",
     lapply(main_footer(x), tags$p,
-           class = "rtables-main-footer"
+      class = "rtables-main-footer"
     )
   )
-  
+
   pftr <- div_helper(
     class = "rtables-prov-footers-block",
     lapply(prov_footer(x), tags$p,
-           class = "rtables-prov-footer"
+      class = "rtables-prov-footer"
     )
   )
-  
+
   ## XXX this omits the divs entirely if they are empty. Do we want that or do
   ## we want them to be there but empty??
   ftrlst <- list(
@@ -233,15 +232,15 @@ as_html <- function(x,
     if (length(main_footer(x)) > 0 && length(prov_footer(x)) > 0) tags$br(), # line break
     if (length(prov_footer(x)) > 0) pftr
   )
-  
+
   if (!is.null(unlist(ftrlst))) ftrlst <- c(list(hsep_line), ftrlst)
   ftrlst <- ftrlst[!vapply(ftrlst, is.null, TRUE)]
-  
+
   ftrtag <- div_helper(
     class = "rtables-footers-block",
     ftrlst
   )
-  
+
   div_helper(
     class = "rtables-all-parts-block",
     list(
