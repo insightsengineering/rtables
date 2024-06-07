@@ -9,14 +9,14 @@ facet_colcounts_visible(obj, path) <- value
 \arguments{
 \item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{path}{character. The path \emph{to the parent of the
+\item{path}{(\code{character})\cr the path \emph{to the parent of the
 desired siblings}. The last element in the path should
 be a split name.}
 
 \item{value}{(\code{ANY})\cr the new value.}
 }
 \value{
-obj, modified with the desired columncount
+obj, modified with the desired column count.
 display behavior
 }
 \description{

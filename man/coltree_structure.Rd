@@ -2,7 +2,7 @@
 % Please edit documentation in R/tt_showmethods.R
 \name{coltree_structure}
 \alias{coltree_structure}
-\title{Display columntree structure}
+\title{Display column tree structure}
 \usage{
 coltree_structure(obj)
 }

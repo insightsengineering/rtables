@@ -157,7 +157,7 @@ setMethod(
 )
 
 
-#' Display columntree structure
+#' Display column tree structure
 #'
 #' Displays the tree structure of the columns of a
 #' table or column structure object.

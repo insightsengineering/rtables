@@ -166,7 +166,7 @@ generated from a pre-data layout object.}
 \emph{only} when calculating column counts.}
 
 \item{ccount_format}{(\code{FormatSpec})\cr The format to be used by default for column
-counts throughout this column tree (ie if not overridden by a more specific format
+counts throughout this column tree (i.e. if not overridden by a more specific format
 specification).}
 
 \item{path}{(\code{character} or \code{NULL})\cr \code{col_counts} accessor and setter only.

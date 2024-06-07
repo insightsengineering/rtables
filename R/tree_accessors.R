@@ -2032,7 +2032,7 @@ setMethod(
 
 #' @rdname col_accessors
 #' @param ccount_format (`FormatSpec`)\cr The format to be used by default for column
-#' counts throughout this column tree (ie if not overridden by a more specific format
+#' counts throughout this column tree (i.e. if not overridden by a more specific format
 #' specification).
 #' @export
 setGeneric(
@@ -2558,11 +2558,12 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' Set visibility of column counts for a group of sibling facets
 #'
 #' @inheritParams gen_args
-#' @param path character. The path *to the parent of the
-#' desired siblings*. The last element in the path should
-#' be a split name.
-#' @return obj, modified with the desired columncount
-#' display behavior
+#' @param path (`character`)\cr the path *to the parent of the
+#'   desired siblings*. The last element in the path should
+#'   be a split name.
+#' @return obj, modified with the desired column count.
+#'   display behavior
+#' 
 #' @export
 `facet_colcounts_visible<-` <- function(obj, path, value) {
   coldf <- make_col_df(obj, visible_only = FALSE)
