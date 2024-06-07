@@ -83,10 +83,10 @@ as_html <- function(x,
   nr <- length(mf_lgrouping(mat))
   
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
-  cells <- matrix(rep(list(list()), (nlh + nr) * nc), ncol = nc)
+  cells <- matrix(rep(list(list()), (nr) * (nc)), ncol = nc)
   
   for (i in seq_len(nr)) {
-    for (j in seq_len(ncol(mf_strings(mat)))) {
+    for (j in seq_len(nc)) {
       curstrs <- mf_strings(mat)[i, j]
       curspn <- mf_spans(mat)[i, j]
       algn <- mf_aligns(mat)[i, j]
@@ -111,29 +111,9 @@ as_html <- function(x,
     )
   }
   
-  # row labels style
-  for (i in 1:nr) {
-    if (i > nlh) {
-      # Adjust the index for accessing the indent matrix to account for the header values
-      indentIndex <- i - nlh
-      indent <- mat$row_info[mat$line_grouping[indentIndex], "indent"]
-      if (!is.na(indent) && indent > 0) { # Check for NA and indentation
-        cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nlh, 1][[1]],
-                                                                 style = paste0("padding-left: ", indent * 3, "ch;")
-        )
-      }
-    }
-    if ("row_names" %in% bold) { # font weight
-      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(
-        cells[i + nlh, 1][[1]],
-        style = paste0("font-weight: bold;")
-      )
-    }
-  }
-  
   # label rows style
   if ("label_rows" %in% bold) {
-    which_lbl_rows <- which(mf_rinfo(mat)$node_class == "LabelRow")
+    which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
     cells[which_lbl_rows + nlh, ] <- lapply(
       cells[which_lbl_rows + nlh, ],
       htmltools::tagAppendAttributes,
@@ -143,7 +123,7 @@ as_html <- function(x,
   
   # content rows style
   if ("content_rows" %in% bold) {
-    which_cntnt_rows <- which(mf_rinfo(mat)$node_class %in% c("ContentRow", "DataRow"))
+    which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))
     cells[which_cntnt_rows + nlh, ] <- lapply(
       cells[which_cntnt_rows + nlh, ],
       htmltools::tagAppendAttributes,
@@ -151,14 +131,14 @@ as_html <- function(x,
     )
   }
   
-  if (any(!mf_display(mat))) {
+  if (any(!mat$display)) {
     # Check that expansion kept the same display info
     check_expansion <- c()
-    for (ii in unique(mf_lgrouping(mat))) {
-      rows <- which(mf_lgrouping(mat) == ii)
+    for (ii in unique(mat$line_grouping)) {
+      rows <- which(mat$line_grouping == ii)
       check_expansion <- c(
         check_expansion,
-        apply(mf_display(mat)[rows, , drop = FALSE], 2, function(x) all(x) || all(!x))
+        apply(mat$display[rows, , drop = FALSE], 2, function(x) all(x) || all(!x))
       )
     }
     
@@ -170,9 +150,9 @@ as_html <- function(x,
       ) # nocov
     }
     
-    for (ii in unique(mf_lgrouping(mat))) {
-      rows <- which(mf_lgrouping(mat) == ii)
-      should_display_col <- apply(mf_display(mat)[rows, , drop = FALSE], 2, any)
+    for (ii in unique(mat$line_grouping)) {
+      rows <- which(mat$line_grouping == ii)
+      should_display_col <- apply(mat$display[rows, , drop = FALSE], 2, any)
       cells[ii, !should_display_col] <- NA_integer_
     }
   }
@@ -225,7 +205,7 @@ as_html <- function(x,
   
   rfnotes <- div_helper(
     class = "rtables-ref-footnotes-block",
-    lapply(mf_rfnotes(mat), tags$p,
+    lapply(mat$ref_footnotes, tags$p,
            class = "rtables-referential-footnote"
     )
   )
@@ -247,8 +227,8 @@ as_html <- function(x,
   ## XXX this omits the divs entirely if they are empty. Do we want that or do
   ## we want them to be there but empty??
   ftrlst <- list(
-    if (length(mf_rfnotes(mat)) > 0) rfnotes,
-    if (length(mf_rfnotes(mat)) > 0) hsep_line,
+    if (length(mat$ref_footnotes) > 0) rfnotes,
+    if (length(mat$ref_footnotes) > 0) hsep_line,
     if (length(main_footer(x)) > 0) mftr,
     if (length(main_footer(x)) > 0 && length(prov_footer(x)) > 0) tags$br(), # line break
     if (length(prov_footer(x)) > 0) pftr
