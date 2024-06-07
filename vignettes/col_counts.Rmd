@@ -1,0 +1,65 @@
+---
+  title: "Column Counts and Formats"
+author: "Davide Garolini"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introspecting Tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+# Column Counts and Formats
+
+Main drivers of column counts are parameters `show_colcounts` and `colcount_format` in `split_cols_by()`. The former is a boolean that determines whether to show the column counts in the table, while the latter is a string that specifies the format of the column counts. The default value for `show_colcounts` is `FALSE`, while the default value for `colcount_format` is `"(N=xx)"`.
+
+```{r}
+lyt <- basic_table() %>%
+  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") %>%
+  split_cols_by("STRATA2", show_colcounts = TRUE) %>%
+  split_cols_by("STRATA1") %>%
+  add_overall_col("All") %>%
+  analyze("AGE", afun = max, format = "xx.x")
+
+tbl <- build_table(lyt, ex_adsl)
+tbl
+```
+
+We can control the column counts with the following functions:
+
+```{r}
+col_counts(tbl) # vector of all of them (visible and not visible) -> difficult to read/use for nested structures
+coldf <- make_col_df(tbl) # to check the structure of the columns as a data.frame
+coltree_structure(tbl) # Prints the structure of the columns as a tree
+```
+
+`make_col_df` is a fundamental function that is used also internally to keep track of the tree structure of the columns. It returns a `data.frame` very similar to `make_row_df`, but for columns. The `coltree_structure` function is a wrapper around `make_col_df` that prints the structure of the columns as a tree.
+
+To retrieve the column counts for a specific column, use pathing! Also visibility can be accessed and modified with the following functions:
+
+```{r}
+facet_colcount(tbl, coldf$path[[1]]) # To get the column counts for a specific column at a specific level
+colcount_visible(tbl, coldf$path[[1]]) # not visible!!! # FALSE
+facet_colcount(tbl, coldf$path[[1]][c(1, 2)]) # visible
+colcount_visible(tbl, coldf$path[[1]][c(1, 2)]) # TRUE
+```
+
+It is possible also to change (for now uniformly) the output string in case of missing values in the column counts. The default value is `""`, that will show nothing. We can change it with the following function:
+
+```{r}
+colcount_na_str(tbl) <- "NaN"
+facet_colcount(tbl, coldf$path[[1]][c(1, 2)]) <- NA_integer_
+tbl
+```
+
+Finally, we can remove all column counts from a table with the following function:
+
+```{r}
+rm_all_colcounts(tbl) # returns the table without column counts
+```

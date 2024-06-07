@@ -27,9 +27,9 @@ library(dplyr)
 First, let's set up a simple table.
 
 ```{r}
-lyt <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARMCD") %>%
-  split_cols_by("STRATA2") %>%
+lyt <- basic_table() %>%
+  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") %>%
+  split_cols_by("STRATA2", show_colcounts = TRUE) %>%
   split_rows_by("STRATA1") %>%
   add_overall_col("All") %>%
   summarize_row_groups() %>%
@@ -65,8 +65,16 @@ how we might normally use the `str()` function to interrogate compound
 nested lists.
 
 ```{r}
-table_structure(tbl, detail = "row")
+table_structure(tbl, detail = "row") # or "subtable"
 ```
+
+Similarly, for columns we can see how the tree is structured with the following call:
+
+```{r}
+coltree_structure(tbl)
+```
+
+Further information about the column structure can be found in the vignette on [`col_counts`](https://insightsengineering.github.io/rtables/main/articles/col_counts.html).
 
 The `make_row_df()` and `make_col_df()` functions each create a `data.frame` with a variety of information about 
 the table's structure. Most useful for introspection purposes are the `label`, `name`, `abs_rownumber`, `path` and 

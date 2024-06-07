@@ -561,7 +561,7 @@ adae_adsl_tbl
 Alternatively, if the desired column counts are already calculated,
 they can be specified directly via the `col_counts` argument to
 `build_table()`, though specifying an `alt_counts_df` is the preferred
-mechanism.
+mechanism (the number of rows will be used, but no duplicate checking!!!).
 
 
 We next calculate this information per system organ class:

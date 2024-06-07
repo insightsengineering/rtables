@@ -477,7 +477,7 @@ get_formatted_fnotes <- function(tt) {
   cur <- 1
   na_str <- colcount_na_str(tt)
 
-  ## XXX this would be better as the facet-ascociated
+  ## XXX this would be better as the facet-associated
   ## format but I don't know that we need to
   ## support that level of differentiation anyway...
   cc_format <- colcount_format(tt)
