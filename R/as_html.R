@@ -73,6 +73,7 @@ as_html <- function(x,
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
+
   stopifnot(is(x, "VTableTree"))
 
   mat <- matrix_form(x, indent_rownames = TRUE)
