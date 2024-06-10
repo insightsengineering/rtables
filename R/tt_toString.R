@@ -568,23 +568,26 @@ get_formatted_fnotes <- function(tt) {
             vis_ri <- rws$ccount_visible[ri]
             val <- if (vis_ri) rws$col_count[ri] else NULL
             fmt <- rws$ccount_format[ri]
-            cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == fmt))))
-            if (cfmt_dim == "2d") {
-              if (grepl("%", fmt)) {
-                val <- c(val, 1) ## XXX This is the old behavior but it doesn't take into account parent counts...
-              } else {
-                stop(
-                  "This 2d format is not supported for column counts. ",
-                  "Please choose a 1d format or a 2d format that includes a % value."
-                )
+            if (is.character(fmt)) {
+              
+              cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == fmt))))
+              if (cfmt_dim == "2d") {
+                if (grepl("%", fmt)) {
+                  val <- c(val, 1) ## XXX This is the old behavior but it doesn't take into account parent counts...
+                } else {
+                  stop(
+                    "This 2d format is not supported for column counts. ",
+                    "Please choose a 1d format or a 2d format that includes a % value."
+                  )
+                }
+              } else if (cfmt_dim == "3d") {
+                stop("3d formats are not supported for column counts.")
               }
-            } else if (cfmt_dim == "3d") {
-              stop("3d formats are not supported for column counts.")
             }
             cellii <- rcell(
               val,
               colspan = rws$total_span[ri],
-              format = rws$ccount_format[ri], # cc_format,
+              format = fmt, # cc_format,
               format_na_str = na_str
             )
             cellii

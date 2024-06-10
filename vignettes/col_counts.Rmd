@@ -106,6 +106,16 @@ visibility    colcount_visible  | facet_colcounts_visible
 ```
 *: There is no general "set multiple counts simultaneously" function, though we do support `col_counts<-` for setting all the leaf counts at the same time for backwards compatibility.
 
+Formats can be chosen from `formatters::list_valid_format_labels()` for one dimension or two with `%` (at the moment is only heritage, it will always be `100%`). It is also possible to use a function for formats.
+
+```{r}
+basic_table() %>% 
+  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx (xx%)") %>%
+  split_cols_by("STRATA2", show_colcounts = TRUE, colcount_format = function(x, ...) {browser()}) %>%
+  analyze("AGE") %>% 
+  build_table(example_data)
+```
+
 For removing the column counts from a specific column, we can do it in two ways:
 
 ```{r}
