@@ -1,5 +1,5 @@
 ---
-  title: "Column Counts and Formats"
+title: "Column Counts and Formats"
 author: "Davide Garolini"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -7,7 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Introspecting Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
