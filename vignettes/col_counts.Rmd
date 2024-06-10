@@ -21,6 +21,8 @@ Main drivers of column counts are parameters `show_colcounts` and `colcount_form
 
 ```{r}
 library(dplyr)
+library(rtables)
+
 example_data <- data.frame(
   ARMCD = c("ARM A", "ARM A", "ARM A", "ARM A", "ARM B", "ARM B"),
   STRATA2 = c("S1", "S2", "S1", "S2",  "S2", "S2"),
@@ -108,12 +110,13 @@ visibility    colcount_visible  | facet_colcounts_visible
 
 Formats can be chosen from `formatters::list_valid_format_labels()` for one dimension or two with `%` (at the moment is only heritage, it will always be `100%`). It is also possible to use a function for formats.
 
-```{r}
-basic_table() %>% 
+```{r, eval = FALSE}
+tbl2 <- basic_table() %>%
   split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx (xx%)") %>%
   split_cols_by("STRATA2", show_colcounts = TRUE, colcount_format = function(x, ...) {browser()}) %>%
-  analyze("AGE") %>% 
+  analyze("AGE") %>%
   build_table(example_data)
+tbl2
 ```
 
 For removing the column counts from a specific column, we can do it in two ways:

@@ -569,7 +569,6 @@ get_formatted_fnotes <- function(tt) {
             val <- if (vis_ri) rws$col_count[ri] else NULL
             fmt <- rws$ccount_format[ri]
             if (is.character(fmt)) {
-              
               cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == fmt))))
               if (cfmt_dim == "2d") {
                 if (grepl("%", fmt)) {
