@@ -1830,7 +1830,7 @@ setMethod(
 #' @param ... one or more vectors of levels to appear in the column space. If more than one set of levels is given,
 #'   the values of the second are nested within each value of the first, and so on.
 #' @param .lst (`list`)\cr a list of sets of levels, by default populated via `list(...)`.
-#' @param ccount_format (`FormatSpec`)\cr The format to use when counts are displayed.
+#' @param ccount_format (`FormatSpec`)\cr the format to use when counts are displayed.
 #'
 #' @return An `InstantiatedColumnInfo` object, suitable for declaring the column structure for a manually constructed
 #'   table.
@@ -2005,7 +2005,7 @@ list_wrap_df <- function(f) {
 #'   leaf, columns.
 #' @param colcount_format (`string`)\cr format for use when displaying the column counts. Must be 1d, or 2d
 #'   where one component is a percent. This will also apply to any displayed higher
-#'   level column counts where an explicit format was not specified. Defaults to `"(N=xx"`. See Details below.
+#'   level column counts where an explicit format was not specified. Defaults to `"(N=xx)"`. See Details below.
 #' @param top_level_section_div (`character(1)`)\cr if assigned a single character, the first (top level) split
 #'   or division of the table will be highlighted by a line made of that character. See [section_div] for more
 #'   information.
