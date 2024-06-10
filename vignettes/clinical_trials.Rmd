@@ -652,7 +652,7 @@ trim_rows(adae_soc_tbl4)
 ```
 
 Pruning is a larger topic with a [separate `rtables` package
-vignette](https://insightsengineering.github.io/rtables/main/articles/sorting_pruning.html).
+vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/sorting_pruning.html).
 
 ### Adverse Events By ID and By Grade
 

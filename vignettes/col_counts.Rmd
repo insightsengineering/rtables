@@ -20,6 +20,7 @@ knitr::opts_chunk$set(comment = "#")
 Main drivers of column counts are parameters `show_colcounts` and `colcount_format` in `split_cols_by()`. The former is a boolean that determines whether to show the column counts in the table, while the latter is a string that specifies the format of the column counts. The default value for `show_colcounts` is `FALSE`, while the default value for `colcount_format` is `"(N=xx)"`.
 
 ```{r}
+library(dplyr)
 example_data <- data.frame(
   ARMCD = c("ARM A", "ARM A", "ARM A", "ARM A", "ARM B", "ARM B"),
   STRATA2 = c("S1", "S2", "S1", "S2",  "S2", "S2"),
