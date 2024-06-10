@@ -2269,7 +2269,7 @@ setMethod(
     }
     if (length(value) != length(all_paths)) {
       stop(
-        "Got ", length(value), "values for ",
+        "Got ", length(value), " values for ",
         length(all_paths), " column paths",
         if (is.null(path)) " (from path = NULL)",
         "."
