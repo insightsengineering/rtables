@@ -80,7 +80,7 @@ cont_n_onecol <- function(j) {
 #' [table_structure()].
 #'
 #' Note that sorting needs a deeper understanding of table structure in `rtables`. Please consider reading the related
-#' vignette 
+#' vignette
 #' ([Sorting and Pruning](https://insightsengineering.github.io/rtables/latest-tag/articles/sorting_pruning.html))
 #' and explore table structure with useful functions like [table_structure()] and [row_paths_summary()]. It is also
 #' very important to understand the difference between "content" rows and "data" rows. The first one analyzes and
