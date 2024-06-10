@@ -20,6 +20,13 @@ knitr::opts_chunk$set(comment = "#")
 Main drivers of column counts are parameters `show_colcounts` and `colcount_format` in `split_cols_by()`. The former is a boolean that determines whether to show the column counts in the table, while the latter is a string that specifies the format of the column counts. The default value for `show_colcounts` is `FALSE`, while the default value for `colcount_format` is `"(N=xx)"`.
 
 ```{r}
+example_data <- data.frame(
+  ARMCD = c("ARM A", "ARM A", "ARM A", "ARM A", "ARM B", "ARM B"),
+  STRATA2 = c("S1", "S2", "S1", "S2",  "S2", "S2"),
+  STRATA1 = c("A", "A", "B", "B", "A", "B"),
+  AGE = c(20, 30, 40, 50, 21, 24)
+)
+
 lyt <- basic_table() %>%
   split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") %>%
   split_cols_by("STRATA2", show_colcounts = TRUE) %>%
@@ -27,7 +34,7 @@ lyt <- basic_table() %>%
   add_overall_col("All") %>%
   analyze("AGE", afun = max, format = "xx.x")
 
-tbl <- build_table(lyt, ex_adsl)
+tbl <- build_table(lyt, example_data)
 tbl
 ```
 
@@ -52,10 +59,11 @@ colcount_visible(tbl, coldf$path[[1]][c(1, 2)]) # TRUE
 
 Formats can differ as we have shown in the example above. We can change the format of the column counts with the following function:
 
-```{r, eval=FALSE}
-colcount_format(tbl) <- "[N<=xx]" # Works only with the default format (last line)
-colcount_visible(tbl, coldf$path[[1]]) <- TRUE
-tbl
+```{r, eval = FALSE}
+# Modifying last level!?
+colcount_format(tbl) <- "[N<=xx]" # Does not work
+colcount_visible(tbl, coldf$path[[1]]) <- TRUE # not the right way!!
+# > tbl # ERROR! we need to set the other values too
 # Error in h(simpleError(msg, call)) :
 #   error in evaluating the argument 'x' in selecting a method for function 'toString':
 #   Detected different colcount visibility among sibling facets (those arising from the
@@ -64,7 +72,38 @@ tbl
 # First disagreement occured at paths:
 # ARMCD[ARM A]->STRATA2[S1]->STRATA1[A]
 # ARMCD[ARM A]->STRATA2[S1]->STRATA1[B]
+# colcount_visible(tbl, coldf$path[[1]]) <- FALSE
+
+# Trying with col_counts
+col_counts(tbl) <- c(1, rep(NA_integer_, length(col_counts(tbl)) - 1)
+# colcount_visible(tbl, coldf$path[[1]]) <- TRUE # same error as above we need facets!!
+facet_colcounts_visible(tbl, c("ARMCD", "*", "STRATA2", "*", "STRATA1")) <- TRUE # does not work
+print(tbl)
 ```
+
+It is also possible to set the column counts and visibility for a specific column level with pathing and the following function:
+
+```{r}
+# Modifying another level/column
+facet_colcount(tbl, c("ARMCD", "ARM A")) <- NA_integer_ # To remove the column counts for a specific column
+# facet_colcount(tbl, "ARMCD") # not working
+print(tbl)
+
+# colcount_visible(tbl, c("*")) <- TRUE # it does not work!! We need facet_colcount_visible
+facet_colcounts_visible(tbl, c("ARMCD")) <- FALSE  # function needs examples and connection to colcounts_visible
+print(tbl)
+```
+
+A general rule is that we can set the column counts for a single facet or for multiple facets. The following table summarizes the functions that can be used for this purpose:
+
+```
+               single facet     | multiple facets
+_______________________________________________________
+count         facet_colcount    | *
+visibility    colcount_visible  | facet_colcounts_visible          
+
+```
+*: There is no general "set multiple counts simultaneously" function, though we do support `col_counts<-` for setting all the leaf counts at the same time for backwards compatibility.
 
 For removing the column counts from a specific column, we can do it in two ways:
 
