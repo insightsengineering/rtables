@@ -111,24 +111,34 @@ as_html <- function(x,
     )
   }
 
-  # row labels style
-  for (i in seq_len((nr - nlh))) {
-    if ("row_names" %in% bold) { # font weight
-      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(
-        cells[i + nlh, 1][[1]],
-        style = paste0("font-weight: bold;")
+  # Create a map between line numbers and line groupings, adjusting abs_rownumber with nlh
+  map <- data.frame(lines = seq_len(nr), abs_rownumber = mat$line_grouping)
+  row_info_df <- data.frame(indent = mat$row_info$indent, abs_rownumber = mat$row_info$abs_rownumber + nlh)
+  map <- merge(map, row_info_df, by = "abs_rownumber")
+
+  # add indent values for headerlines
+  map <- rbind(data.frame(abs_rownumber = 1:nlh, indent = 0, lines = 0), map)
+
+
+  # Row labels style
+  for (i in seq_len(nr)) {
+    indent <- ifelse(any(map$lines == i), map$indent[map$lines == i][1], -1)
+
+    # Apply indentation
+    if (indent > 0) {
+      cells[i, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i, 1][[1]],
+        style = paste0("padding-left: ", indent * 3, "ch;")
       )
     }
-  }
 
-  # label rows style
-  if ("label_rows" %in% bold) {
-    which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
-    cells[which_lbl_rows + nlh, ] <- lapply(
-      cells[which_lbl_rows + nlh, ],
-      htmltools::tagAppendAttributes,
-      style = "font-weight: bold;"
-    )
+    # Apply bold font weight if "row_names" is in 'bold'
+    if ("row_names" %in% bold) {
+      cells[i, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i, 1][[1]],
+        style = "font-weight: bold;"
+      )
+    }
   }
 
   # content rows style
