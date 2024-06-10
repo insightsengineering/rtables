@@ -12,7 +12,7 @@ the values of the second are nested within each value of the first, and so on.}
 
 \item{.lst}{(\code{list})\cr a list of sets of levels, by default populated via \code{list(...)}.}
 
-\item{ccount_format}{(\code{FormatSpec})\cr The format to use when counts are displayed.}
+\item{ccount_format}{(\code{FormatSpec})\cr the format to use when counts are displayed.}
 }
 \value{
 An \code{InstantiatedColumnInfo} object, suitable for declaring the column structure for a manually constructed

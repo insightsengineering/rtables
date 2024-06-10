@@ -37,7 +37,7 @@ leaf, columns.}
 
 \item{colcount_format}{(\code{string})\cr format for use when displaying the column counts. Must be 1d, or 2d
 where one component is a percent. This will also apply to any displayed higher
-level column counts where an explicit format was not specified. Defaults to \code{"(N=xx"}. See Details below.}
+level column counts where an explicit format was not specified. Defaults to \code{"(N=xx)"}. See Details below.}
 
 \item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
 \code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of
