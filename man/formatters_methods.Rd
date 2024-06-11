@@ -119,7 +119,7 @@
 
 \S4method{table_inset}{InstantiatedColumnInfo}(obj) <- value
 
-\S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
+\S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL, fontspec = NULL, col_gap = 3)
 
 \S4method{nlines}{LabelRow}(
   x,
@@ -129,9 +129,9 @@
   col_gap = NULL
 )
 
-\S4method{nlines}{RefFootnote}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = NULL)
+\S4method{nlines}{RefFootnote}(x, colwidths = NULL, max_width = NULL, fontspec = NULL, col_gap = NULL)
 
-\S4method{nlines}{InstantiatedColumnInfo}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
+\S4method{nlines}{InstantiatedColumnInfo}(x, colwidths = NULL, max_width = NULL, fontspec = NULL, col_gap = 3)
 
 \S4method{make_row_df}{VTableTree}(
   tt,
