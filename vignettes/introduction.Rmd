@@ -222,7 +222,7 @@ df$gender == "Female"` and the second column the data in `df` where
 `df$arm == "A" & df$gender == "Male"`, and so on.
 
 More information on column structure can be found in the
-[`col_counts`](https://insightsengineering.github.io/rtables/latest-tag/articles/col_counts.html) vignette.
+`col_counts` vignette.
 
 ## Adding Row Structure
 
