@@ -862,7 +862,7 @@ tt_to_flextable <- function(tt,
     has_nclab <- apply(det_nclab, 1, any)
     whsnc <- which(has_nclab) # which rows have it -> more than one is not supported
     if (isFALSE(counts_in_newline) && any(has_nclab) && length(whsnc) == 1L) {
-      what_is_nclab <- det_nclab[whsnc_i, ]
+      what_is_nclab <- det_nclab[whsnc, ]
 
       # condition for popping the interested row by merging the upper one
       hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
