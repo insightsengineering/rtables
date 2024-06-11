@@ -180,3 +180,6 @@ Returns various information about columns, depending on the accessor used.
 \description{
 Column information/structure accessors
 }
+\seealso{
+\code{\link[=facet_colcount]{facet_colcount()}}
+}

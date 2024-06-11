@@ -85,4 +85,8 @@ facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "A")) <- 25
 ## show black space for certain counts by assign NA
 
 facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "C")) <- NA
+
+}
+\seealso{
+\code{\link[=col_counts]{col_counts()}}
 }

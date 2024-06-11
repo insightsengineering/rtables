@@ -22,3 +22,6 @@ display behavior
 \description{
 Set visibility of column counts for a group of sibling facets
 }
+\seealso{
+\code{\link[=colcount_visible]{colcount_visible()}}
+}

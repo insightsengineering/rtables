@@ -853,15 +853,16 @@ tt_to_flextable <- function(tt,
   # Header addition -> NB: here we have a problem with (N=xx)
   hdr <- body[seq_len(hnum), , drop = FALSE]
 
-  # IMPORTANT: Fix of (N=xx) which is by default on a new line but we usually do not
-  # want this, and it depends on the size of the table, it is not another
-  # row with different columns -> All of this should be fixed at source (in toString)
+  # XXX NOT NECESSARY change of (N=xx) which is by default on a new line but we do not
+  # want this in docx, and it depends on the size of the table, it is not another
+  # row with different columns -> All of this should be fixed at source (in matrix_form)
+  # See .tbl_header_mat for this change
   if (hnum > 1) { # otherwise nothing to do
     det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
     has_nclab <- apply(det_nclab, 1, any)
-    if (isFALSE(counts_in_newline) && any(has_nclab)) {
-      whsnc <- which(has_nclab) # which rows have it
-      what_is_nclab <- det_nclab[whsnc, ]
+    whsnc <- which(has_nclab) # which rows have it -> more than one is not supported
+    if (isFALSE(counts_in_newline) && any(has_nclab) && length(whsnc) == 1L) {
+      what_is_nclab <- det_nclab[whsnc_i, ]
 
       # condition for popping the interested row by merging the upper one
       hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],

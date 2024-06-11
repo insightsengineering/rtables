@@ -195,3 +195,15 @@ renders should be considered undefined behavior when it contains
 a group of sibling column facets arising from the same
 layout instruction whose column count visiblities disagree. That may
 become an error in future versions without warning.
+
+### Advanced Settings (WIP)
+
+By using `make_col_df()` we can see the full path to any column count. One example application is to add a `NA` value that would print to the default value is `""`, that will show nothing. To change (for now uniformly only) the output string in case of missing values in the column counts you can use `colcount_na_str`:
+
+```{r}
+coldf <- make_col_df(tbl3)
+facet_colcount(tbl3, coldf$path[[1]][c(1, 2)]) <- NA_integer_
+print(tbl3) # Keeps the missing space
+colcount_na_str(tbl3) <- "NaN"
+tbl3 # Shows NaN
+```
