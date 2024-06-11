@@ -196,7 +196,7 @@ a group of sibling column facets arising from the same
 layout instruction whose column count visiblities disagree. That may
 become an error in future versions without warning.
 
-### Advanced Settings (WIP)
+### Advanced Settings
 
 By using `make_col_df()` we can see the full path to any column count. One example application is to add a `NA` value that would print to the default value is `""`, that will show nothing. To change (for now uniformly only) the output string in case of missing values in the column counts you can use `colcount_na_str`:
 
