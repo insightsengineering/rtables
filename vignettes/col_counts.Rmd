@@ -34,7 +34,7 @@ library(rtables)
 lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-  analyze("AGE")  
+  analyze("AGE")
 
 tbl <- build_table(lyt, ex_adsl)
 tbl
@@ -66,7 +66,6 @@ particular counts by setting them to `NA`:
 ```{r}
 col_counts(tbl) <- c(17, 18, NA, 17, 18, 19)
 tbl
-
 ```
 
 These mechanisms will all continue to work for the forseeable future, though new code is advised use the new API discussed below.
@@ -82,7 +81,7 @@ label (spanning the same number of rows) when set to be visible.
 
 ## Setting Column Counts to Visible at Layout Time
 
-The primary way for users to create tables which displaysthese "high-level" 
+The primary way for users to create tables which displays these "high-level" 
 column counts is to create a layout that specifies they should be visible.
 
 We do this with the new `show_colcounts` argument now accepted by all
@@ -92,9 +91,11 @@ We do this with the new `show_colcounts` argument now accepted by all
 ```{r}
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
-  split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M")),
-                show_colcounts = TRUE) %>%
-  analyze("AGE")  
+  split_cols_by("SEX",
+    split_fun = keep_split_levels(c("F", "M")),
+    show_colcounts = TRUE
+  ) %>%
+  analyze("AGE")
 
 tbl2 <- build_table(lyt2, ex_adsl)
 tbl2
@@ -102,15 +103,13 @@ tbl2
 
 
 ```{r}
-
 lyt3 <- basic_table() %>%
   split_cols_by("ARM", show_colcounts = TRUE) %>%
   split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-  analyze("AGE")  
+  analyze("AGE")
 
 tbl3 <- build_table(lyt3, ex_adsl)
 tbl3
-
 ```
 
 As before, these column counts are calculated at table creation time, using 
@@ -135,10 +134,9 @@ facets.
 
 ### Setting individual column counts
 
-The `facet_colcount` getter and setter queries and sets the column count for an facet in column space (note it need not be a leaf facet). E.g., 
+The `facet_colcount` getter and setter queries and sets the column count for a facet in column space (note it needs not be a leaf facet). E.g., 
 
 ```{r}
-
 facet_colcount(tbl3, c("ARM", "C: Combination"))
 ```
 
@@ -169,10 +167,7 @@ path*.
 ```{r}
 facet_colcounts_visible(tbl3, c("ARM", "A: Drug X", "SEX")) <- TRUE
 tbl3
-
-
 ```
-
 
 **NOTE** as we can see here, the visibility of column counts can have an
 "unbalanced design", provided the direct-siblings agreeing constraint is met. This
@@ -187,10 +182,8 @@ in future releases.
 individual column counts' visiblities, but these are largely an internal detail
 and in virtually all cases end users should avoid calling them directly.
 
-```{r, error =TRUE}
+```{r, error=TRUE}
 ## BEWARE
-
-
 tbl4 <- tbl3
 colcount_visible(tbl4, c("ARM", "A: Drug X", "SEX", "F")) <- FALSE
 tbl4
@@ -202,138 +195,3 @@ renders should be considered undefined behavior when it contains
 a group of sibling column facets arising from the same
 layout instruction whose column count visiblities disagree. That may
 become an error in future versions without warning.
-
-
-
-# For Removal if the above is sufficient
-
-Everything below this entry
-
-
-
-# Column Counts and Formats
-
-Main drivers of column counts are parameters `show_colcounts` and `colcount_format` in `split_cols_by()`. The former is a boolean that determines whether to show the column counts in the table, while the latter is a string that specifies the format of the column counts. The default value for `show_colcounts` is `FALSE`, while the default value for `colcount_format` is `"(N=xx)"`.
-
-```{r}
-library(dplyr)
-library(rtables)
-
-example_data <- data.frame(
-  ARMCD = c("ARM A", "ARM A", "ARM A", "ARM A", "ARM B", "ARM B"),
-  STRATA2 = c("S1", "S2", "S1", "S2",  "S2", "S2"),
-  STRATA1 = c("A", "A", "B", "B", "A", "B"),
-  AGE = c(20, 30, 40, 50, 21, 24)
-)
-
-lyt <- basic_table() %>%
-  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") %>%
-  split_cols_by("STRATA2", show_colcounts = TRUE) %>%
-  split_cols_by("STRATA1") %>%
-  add_overall_col("All") %>%
-  analyze("AGE", afun = max, format = "xx.x")
-
-tbl <- build_table(lyt, example_data)
-tbl
-```
-
-We can control the column counts with the following functions:
-
-```{r}
-col_counts(tbl) # vector of all of them (visible and not visible) -> difficult to read/use for nested structures
-coldf <- make_col_df(tbl) # to check the structure of the columns as a data.frame
-coltree_structure(tbl) # Prints the structure of the columns as a tree
-```
-
-`make_col_df` is a fundamental function that is used also internally to keep track of the tree structure of the columns. It returns a `data.frame` very similar to `make_row_df`, but for columns. The `coltree_structure` function is a wrapper around `make_col_df` that prints the structure of the columns as a tree.
-
-To retrieve the column counts for a specific column, use pathing! Also visibility can be accessed and modified with the following functions:
-
-```{r}
-facet_colcount(tbl, coldf$path[[1]]) # To get the column counts for a specific column at a specific level
-colcount_visible(tbl, coldf$path[[1]]) # not visible!!! # FALSE
-facet_colcount(tbl, coldf$path[[1]][c(1, 2)]) # visible
-colcount_visible(tbl, coldf$path[[1]][c(1, 2)]) # TRUE
-```
-
-Formats can differ as we have shown in the example above. We can change the format of the column counts with the following function:
-
-```{r, eval = FALSE}
-# Modifying last level!?
-colcount_format(tbl) <- "[N<=xx]" # Does not work
-colcount_visible(tbl, coldf$path[[1]]) <- TRUE # not the right way!!
-# > tbl # ERROR! we need to set the other values too
-# Error in h(simpleError(msg, call)) :
-#   error in evaluating the argument 'x' in selecting a method for function 'toString':
-#   Detected different colcount visibility among sibling facets (those arising from the
-#   same split_cols_by* layout instruction). This is not supported.
-# Set count values to NA if you want a blank space to appear as the displayed count for particular facets.
-# First disagreement occured at paths:
-# ARMCD[ARM A]->STRATA2[S1]->STRATA1[A]
-# ARMCD[ARM A]->STRATA2[S1]->STRATA1[B]
-# colcount_visible(tbl, coldf$path[[1]]) <- FALSE
-
-# Trying with col_counts
-col_counts(tbl) <- c(1, rep(NA_integer_, length(col_counts(tbl)) - 1)
-# colcount_visible(tbl, coldf$path[[1]]) <- TRUE # same error as above we need facets!!
-facet_colcounts_visible(tbl, c("ARMCD", "*", "STRATA2", "*", "STRATA1")) <- TRUE # does not work
-print(tbl)
-```
-
-It is also possible to set the column counts and visibility for a specific column level with pathing and the following function:
-
-```{r}
-# Modifying another level/column
-facet_colcount(tbl, c("ARMCD", "ARM A")) <- NA_integer_ # To remove the column counts for a specific column
-# facet_colcount(tbl, "ARMCD") # not working
-print(tbl)
-
-# colcount_visible(tbl, c("*")) <- TRUE # it does not work!! We need facet_colcount_visible
-facet_colcounts_visible(tbl, c("ARMCD")) <- FALSE  # function needs examples and connection to colcounts_visible
-print(tbl)
-```
-
-A general rule is that we can set the column counts for a single facet or for multiple facets. The following table summarizes the functions that can be used for this purpose:
-
-```
-               single facet     | multiple facets
-_______________________________________________________
-count         facet_colcount    | *
-visibility    colcount_visible  | facet_colcounts_visible          
-
-```
-*: There is no general "set multiple counts simultaneously" function, though we do support `col_counts<-` for setting all the leaf counts at the same time for backwards compatibility.
-
-Formats can be chosen from `formatters::list_valid_format_labels()` for one dimension or two with `%` (at the moment is only heritage, it will always be `100%`). It is also possible to use a function for formats.
-
-```{r, eval = FALSE}
-tbl2 <- basic_table() %>%
-  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx (xx%)") %>%
-  split_cols_by("STRATA2", show_colcounts = TRUE, colcount_format = function(x, ...) {browser()}) %>%
-  analyze("AGE") %>%
-  build_table(example_data)
-tbl2
-```
-
-For removing the column counts from a specific column, we can do it in two ways:
-
-```{r}
-ccnts <- col_counts(tbl)
-ccnts[1] <- NA_integer_
-col_counts(tbl) <- ccnts
-tbl
-```
-
-It is possible also to change (for now uniformly only) the output string in case of missing values in the column counts. The default value is `""`, that will show nothing. We can change it with the following function:
-
-```{r}
-colcount_na_str(tbl) <- "NaN"
-facet_colcount(tbl, coldf$path[[1]][c(1, 2)]) <- NA_integer_
-tbl
-```
-
-Finally, we can remove all column counts from a table with the following function:
-
-```{r}
-rm_all_colcounts(tbl) # returns the table without column counts
-```
