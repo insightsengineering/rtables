@@ -2564,7 +2564,7 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #'   be a split name.
 #' @return obj, modified with the desired column count.
 #'   display behavior
-#'   
+#'
 #' @seealso [colcount_visible()]
 #'
 #' @export
@@ -2604,7 +2604,7 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' quantiles, etc) and thus the count of a parent facet
 #' will not always be simply the sum of the counts for
 #' all of its children.
-#' 
+#'
 #' @seealso [col_counts()]
 #'
 #' @examples
@@ -2629,7 +2629,7 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' ## show black space for certain counts by assign NA
 #'
 #' facet_colcount(tbl, c("ARM", "A: Drug X", "SEX", "F", "STRATA1", "C")) <- NA
-#' 
+#'
 #' @export
 setGeneric(
   "facet_colcount",
@@ -2739,7 +2739,7 @@ setMethod(
 #' directly, as setting sibling facets to have differing
 #' column count visibility will result in an error when
 #' printing or paginating the table.
-#' 
+#'
 #' @seealso [`facet_colcounts_visible()<-`]
 #'
 #' @export
