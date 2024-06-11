@@ -140,7 +140,7 @@ as_html <- function(x,
       )
     }
   }
-  
+
   # label rows style
   if ("label_rows" %in% bold) {
     which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
@@ -150,7 +150,7 @@ as_html <- function(x,
       style = "font-weight: bold;"
     )
   }
-  
+
   # content rows style
   if ("content_rows" %in% bold) {
     which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))
