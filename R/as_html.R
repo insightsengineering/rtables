@@ -83,7 +83,7 @@ as_html <- function(x,
   nr <- length(mf_lgrouping(mat))
 
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
-  cells <- matrix(rep(list(list()), (nr) * (nc)), ncol = nc)
+  cells <- matrix(rep(list(list()), (nr * nc)), ncol = nc)
 
   for (i in seq_len(nr)) {
     for (j in seq_len(nc)) {
@@ -140,7 +140,17 @@ as_html <- function(x,
       )
     }
   }
-
+  
+  # label rows style
+  if ("label_rows" %in% bold) {
+    which_lbl_rows <- which(mat$row_info$node_class == "LabelRow")
+    cells[which_lbl_rows + nlh, ] <- lapply(
+      cells[which_lbl_rows + nlh, ],
+      htmltools::tagAppendAttributes,
+      style = "font-weight: bold;"
+    )
+  }
+  
   # content rows style
   if ("content_rows" %in% bold) {
     which_cntnt_rows <- which(mat$row_info$node_class %in% c("ContentRow", "DataRow"))

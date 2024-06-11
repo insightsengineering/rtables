@@ -21,7 +21,7 @@
  * Fixed bug in `as_html` preventing indentation from being applied in `Viewer` output.
  * `col_counts<-` and `col_total<-` methods now explicitly convert `value` to integer, by @gmbecker.
  * `col_gap` is now respected in `nlines` row methods, and thus by `make_row_df`, by @gmbecker.
- * update `as_html` to accommodate `\n` characters.
+ * Updated `as_html` to accommodate `\n` characters.
  
 
 ### Miscellaneous
