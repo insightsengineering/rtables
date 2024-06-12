@@ -2740,8 +2740,6 @@ setMethod(
 #' column count visibility will result in an error when
 #' printing or paginating the table.
 #'
-#' @seealso [`facet_colcounts_visible()<-`]
-#'
 #' @export
 setGeneric("colcount_visible", function(obj, path) standardGeneric("colcount_visible"))
 

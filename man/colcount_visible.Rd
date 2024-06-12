@@ -48,6 +48,3 @@ directly, as setting sibling facets to have differing
 column count visibility will result in an error when
 printing or paginating the table.
 }
-\seealso{
-\code{\link{facet_colcounts_visible()<-}}
-}
