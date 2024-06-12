@@ -293,6 +293,36 @@ test_that("as_html header line works", {
   expect_true(all(sapply(1:4, function(x) "border-bottom: 1px solid black;" %in% html_parts[[x]]$attribs)))
 })
 
+# https://github.com/insightsengineering/rtables/issues/872
+test_that("as_html indentation is translated to rows with linebreaks", {
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX") %>%
+    analyze("AGE", afun = function(x) {
+      mn <- round(mean(x), 2)
+      if (!is.nan(mn) && mn > mean(DM$AGE)) {
+        val <- paste(mn, "  ^  ", sep = "\n")
+      } else {
+        val <- paste(mn)
+      }
+      in_rows(my_row_label = rcell(val,
+        format = "xx"
+      ))
+    })
+  tbl <- build_table(lyt, DM)
+
+  # Resolves correctly \n
+  expect_silent(res <- as_html(tbl))
+  expect_equal(
+    as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[1]]),
+    '<td style="text-align: left; padding-left: 3ch;"></td>'
+  )
+  expect_equal(
+    as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[2]]),
+    '<td style="text-align: center;">  ^  </td>'
+  )
+})
+
 ## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
   my_table <- basic_table() %>%

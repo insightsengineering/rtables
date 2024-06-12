@@ -1,4 +1,4 @@
-## rtables 0.6.7.9005
+## rtables 0.6.7.9006
 ### New Features
  * Add support for truetype fonts based on `formatters` version `>= 0.5.6.9007`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly, by @gmbecker.
  * Core splitting machinery can now be overridden in column space via `make_split_fun` provided that `core_split` associates the generated facets with subsetting expressions. Subsetting expressions remain unnecessary for splits in row space. By @gmbecker.
@@ -36,6 +36,10 @@
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
  * Fixed mismatch between indentation declared in row info (`mf_rinfo(mf)`) and actual selected indentation from `matrix_form(mf, indent_rownames = FALSE)`.
+ * Fixed bug in `as_html` preventing indentation from being applied in `Viewer` output.
+ * `col_counts<-` and `col_total<-` methods now explicitly convert `value` to integer, by @gmbecker.
+ * `col_gap` is now respected in `nlines` row methods, and thus by `make_row_df`, by @gmbecker.
+ * Updated `as_html` to accommodate `\n` characters.
 
 ### Miscellaneous
  * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
