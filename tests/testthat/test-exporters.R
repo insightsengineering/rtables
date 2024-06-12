@@ -306,27 +306,26 @@ test_that("as_html indentation is translated to rows with linebreaks", {
         val <- paste(mn)
       }
       in_rows(my_row_label = rcell(val,
-                                   format = "xx"
+        format = "xx"
       ))
     })
   tbl <- build_table(lyt, DM)
-  
+
   mat <- matrix_form(tbl, indent_rownames = TRUE)
   nr <- length(mf_lgrouping(mat))
   nlh <- mf_nlheader(mat)
-  
+
   # as_html mapping internals
   map <- data.frame(lines = seq_len(nr), abs_rownumber = mat$line_grouping)
   row_info_df <- data.frame(indent = mat$row_info$indent, abs_rownumber = mat$row_info$abs_rownumber + nlh)
   map <- merge(map, row_info_df, by = "abs_rownumber")
-  
+
   # add indent values for headerlines
   map <- rbind(data.frame(abs_rownumber = 1:nlh, indent = 0, lines = 0), map)
-  
+
   expect_equal(length(map$indent), length(map$lines))
   suppressWarnings(expect_true(all(map$indent[map$abs_rownumber == "3"], 1)))
-  
- })
+})
 
 ## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
