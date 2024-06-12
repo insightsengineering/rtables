@@ -46,6 +46,7 @@ flextable
 formatter
 formatters
 funder
+funs
 getter
 getters
 ing
@@ -57,12 +58,14 @@ mandatorily
 monospace
 multivariable
 orderable
+params
 pathing
 postfix
 postprocessing
 pre
 priori
 programmatically
+quartiles
 reindexed
 repo
 repped

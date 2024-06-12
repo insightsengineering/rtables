@@ -348,7 +348,7 @@ add_combo_facet <- function(name, label = name, levels, extra = list()) {
       subexpr <- expression(TRUE)
       datpart <- list(fulldf)
     } else {
-      subexpr <- .combine_value_exprs(ret$value[levels])
+      subexpr <- .combine_value_exprs(ret$values[levels])
       datpart <- list(do.call(rbind, ret$datasplit[levels]))
     }
 
