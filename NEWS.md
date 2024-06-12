@@ -1,4 +1,4 @@
-## rtables 0.6.7.9004
+## rtables 0.6.7.9005
 ### New Features
  * Add support for truetype fonts based on `formatters` version `>= 0.5.6.9007`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly, by @gmbecker.
  * Core splitting machinery can now be overridden in column space via `make_split_fun` provided that `core_split` associates the generated facets with subsetting expressions. Subsetting expressions remain unnecessary for splits in row space. By @gmbecker.
