@@ -667,6 +667,16 @@ test_that("Colcounts work correctly", {
     build_table(DM)
   mf_tbl4_colcounts <- matrix_form(tbl4)$strings[2, ]
   expect_identical(mf_tbl4_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
+
+  ## setting col_counts in build_table turns on visibility for leaf col counts
+  lyt5 <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>%
+    analyze("AGE")
+
+  tbl5 <- build_table(lyt5, ex_adsl, col_counts = 1:9)
+  mpf5 <- matrix_form(tbl5)
+  expect_identical(mf_strings(mpf5)[3, 2], "(N=1)")
 })
 
 first_cont_rowvals <- function(tt) {

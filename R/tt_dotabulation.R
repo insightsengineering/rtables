@@ -1133,8 +1133,9 @@ recursive_applysplit <- function(df,
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
 #' @param col_counts (`numeric` or `NULL`)\cr `r lifecycle::badge("deprecated")` if non-`NULL`, column counts
-#'   which override those calculated automatically during tabulation. Must specify "counts" for *all*
-#'   resulting columns if non-`NULL`. `NA` elements will be replaced with the automatically calculated counts.
+#'   *for leaf-columns only* which override those calculated automatically during tabulation. Must specify
+#'   "counts" for *all* leaf-columns if non-`NULL`. `NA` elements will be replaced with the automatically
+#'   calculated counts. Turns on display of leaf-column counts when non-`NULL`.
 #' @param col_total (`integer(1)`)\cr the total observations across all columns. Defaults to `nrow(df)`.
 #' @param ... ignored.
 #'
@@ -1358,6 +1359,10 @@ build_table <- function(lyt, df,
     newccs <- col_counts(tab) ## old actual counts
     newccs[toreplace] <- col_counts[toreplace]
     col_counts(tab) <- newccs
+    leaf_paths <- col_paths(tab)
+    for (pth in leaf_paths) {
+      colcount_visible(tab, pth) <- TRUE
+    }
   }
   tab
 }
