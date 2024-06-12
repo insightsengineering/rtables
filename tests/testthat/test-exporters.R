@@ -293,6 +293,41 @@ test_that("as_html header line works", {
   expect_true(all(sapply(1:4, function(x) "border-bottom: 1px solid black;" %in% html_parts[[x]]$attribs)))
 })
 
+# https://github.com/insightsengineering/rtables/issues/872
+test_that("as_html indentation is translated to rows with linebreaks", {
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX") %>%
+    analyze("AGE", afun = function(x) {
+      mn <- round(mean(x), 2)
+      if (!is.nan(mn) && mn > mean(DM$AGE)) {
+        val <- paste(mn, "  ^  ", sep = "\n")
+      } else {
+        val <- paste(mn)
+      }
+      in_rows(my_row_label = rcell(val,
+                                   format = "xx"
+      ))
+    })
+  tbl <- build_table(lyt, DM)
+  
+  mat <- matrix_form(tbl, indent_rownames = TRUE)
+  nr <- length(mf_lgrouping(mat))
+  nlh <- mf_nlheader(mat)
+  
+  # as_html mapping internals
+  map <- data.frame(lines = seq_len(nr), abs_rownumber = mat$line_grouping)
+  row_info_df <- data.frame(indent = mat$row_info$indent, abs_rownumber = mat$row_info$abs_rownumber + nlh)
+  map <- merge(map, row_info_df, by = "abs_rownumber")
+  
+  # add indent values for headerlines
+  map <- rbind(data.frame(abs_rownumber = 1:nlh, indent = 0, lines = 0), map)
+  
+  expect_equal(length(map$indent), length(map$lines))
+  suppressWarnings(expect_true(all(map$indent[map$abs_rownumber == "3"], 1)))
+  
+ })
+
 ## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
   my_table <- basic_table() %>%
