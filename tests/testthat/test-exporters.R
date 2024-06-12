@@ -310,7 +310,7 @@ test_that("as_html indentation is translated to rows with linebreaks", {
       ))
     })
   tbl <- build_table(lyt, DM)
-  
+
   # Resolves correctly \n
   expect_silent(res <- as_html(tbl))
   expect_equal(
