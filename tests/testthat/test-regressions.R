@@ -648,6 +648,8 @@ test_that("overridden colcounts via build_table are used during tabulation corre
   tbl <- build_table(lyt, ex_adsl, col_counts = 1:9)
   mpf <- matrix_form(tbl)
   strs <- mf_strings(mpf)
-  expect_identical(strs[3, -1],
-                   paste0("(N=", strs[4, -1], ")")) 
+  expect_identical(
+    strs[3, -1],
+    paste0("(N=", strs[4, -1], ")")
+  )
 })
