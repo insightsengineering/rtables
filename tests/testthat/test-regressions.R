@@ -631,3 +631,23 @@ test_that("export_as_txt works when there are newlines in column labels (natural
 
   expect_silent(tmp <- export_as_txt(tbl, lpp = 20))
 })
+
+## overridden colcounts via build_table are used correctly
+## during tabulation
+
+test_that("overridden colcounts via build_table are used during tabulation correctly", {
+  afun <- function(x, .N_col) {
+    .N_col
+  }
+
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>%
+    analyze("AGE", afun = afun)
+
+  tbl <- build_table(lyt, ex_adsl, col_counts = 1:9)
+  mpf <- matrix_form(tbl)
+  strs <- mf_strings(mpf)
+  expect_identical(strs[3, -1],
+                   paste0("(N=", strs[4, -1], ")")) 
+})

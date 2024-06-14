@@ -1254,7 +1254,14 @@ build_table <- function(lyt, df,
     topleft
   )
   if (!is.null(col_counts)) {
-    disp_ccounts(cinfo) <- TRUE
+    toreplace <- !is.na(col_counts)
+    newccs <- col_counts(cinfo) ## old actual counts
+    newccs[toreplace] <- col_counts[toreplace]
+    col_counts(cinfo) <- newccs
+    leaf_paths <- col_paths(cinfo)
+    for (pth in leaf_paths) {
+      colcount_visible(cinfo, pth) <- TRUE
+    }
   }
   rlyt <- rlayout(lyt)
   rtspl <- root_spl(rlyt)
@@ -1353,16 +1360,6 @@ build_table <- function(lyt, df,
   horizontal_sep(tab) <- hsep
   if (table_inset(lyt) > 0) {
     table_inset(tab) <- table_inset(lyt)
-  }
-  if (!is.null(col_counts)) {
-    toreplace <- !is.na(col_counts)
-    newccs <- col_counts(tab) ## old actual counts
-    newccs[toreplace] <- col_counts[toreplace]
-    col_counts(tab) <- newccs
-    leaf_paths <- col_paths(tab)
-    for (pth in leaf_paths) {
-      colcount_visible(tab, pth) <- TRUE
-    }
   }
   tab
 }

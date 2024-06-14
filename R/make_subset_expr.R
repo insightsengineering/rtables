@@ -280,6 +280,10 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     total <- sum(counts)
   }
 
+  cpths <- col_paths(ctree)
+  for (i in seq_along(cpths)) {
+    facet_colcount(ctree, cpths[[i]]) <- counts[i]
+  }
   InstantiatedColumnInfo(
     treelyt = ctree,
     csubs = cexprs,

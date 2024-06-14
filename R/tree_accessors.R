@@ -2786,6 +2786,19 @@ setMethod(
 #' @rdname colcount_visible
 #' @export
 setMethod(
+  "colcount_visible<-", "InstantiatedColumnInfo",
+  function(obj, path, value) {
+    ctree <- coltree(obj)
+    colcount_visible(ctree, path) <- value
+    coltree(obj) <- ctree
+    obj
+  }
+)
+
+
+#' @rdname colcount_visible
+#' @export
+setMethod(
   "colcount_visible<-", "LayoutColTree",
   function(obj, path, value) {
     subtree <- coltree_at_path(obj, path)

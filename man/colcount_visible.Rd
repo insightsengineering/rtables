@@ -7,6 +7,7 @@
 \alias{colcount_visible,LayoutColTree-method}
 \alias{colcount_visible<-}
 \alias{colcount_visible<-,VTableTree-method}
+\alias{colcount_visible<-,InstantiatedColumnInfo-method}
 \alias{colcount_visible<-,LayoutColTree-method}
 \title{Value and Visibility of specific column counts by path}
 \usage{
@@ -21,6 +22,8 @@ colcount_visible(obj, path)
 colcount_visible(obj, path) <- value
 
 \S4method{colcount_visible}{VTableTree}(obj, path) <- value
+
+\S4method{colcount_visible}{InstantiatedColumnInfo}(obj, path) <- value
 
 \S4method{colcount_visible}{LayoutColTree}(obj, path) <- value
 }
