@@ -12,7 +12,7 @@ attention to this documentation."><meta property="og:image" content="https://ins
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,7 @@ attention to this documentation."><meta property="og:image" content="https://ins
     <a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a>
     <a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a>
     <a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
+    <a class="dropdown-item" href="../articles/col_counts.html">Column Counts and Formats</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -55,22 +56,6 @@ attention to this documentation."><meta property="og:image" content="https://ins
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -366,6 +351,11 @@ pos_subset(obj)
 # S4 method for TreePos
 pos_subset(obj)
 
+tree_pos(obj) &lt;- value
+
+# S4 method for VLayoutNode
+tree_pos(obj) &lt;- value
+
 # S4 method for VLayoutNode
 pos_subset(obj)
 
@@ -377,6 +367,14 @@ pos_splits(obj)
 # S4 method for VLayoutNode
 pos_splits(obj)
 
+pos_splits(obj) &lt;- value
+
+# S4 method for TreePos
+pos_splits(obj) &lt;- value
+
+# S4 method for VLayoutNode
+pos_splits(obj) &lt;- value
+
 pos_splvals(obj)
 
 # S4 method for TreePos
@@ -384,6 +382,14 @@ pos_splvals(obj)
 
 # S4 method for VLayoutNode
 pos_splvals(obj)
+
+pos_splvals(obj) &lt;- value
+
+# S4 method for TreePos
+pos_splvals(obj) &lt;- value
+
+# S4 method for VLayoutNode
+pos_splvals(obj) &lt;- value
 
 pos_splval_labels(obj)
 
@@ -882,6 +888,15 @@ disp_ccounts(obj)
 # S4 method for PreDataColLayout
 disp_ccounts(obj)
 
+# S4 method for LayoutColTree
+disp_ccounts(obj)
+
+# S4 method for LayoutColLeaf
+disp_ccounts(obj)
+
+# S4 method for Split
+disp_ccounts(obj)
+
 disp_ccounts(obj) &lt;- value
 
 # S4 method for VTableTree
@@ -896,9 +911,14 @@ disp_ccounts(obj) &lt;- value
 # S4 method for LayoutColTree
 disp_ccounts(obj) &lt;- value
 
+# S4 method for LayoutColLeaf
+disp_ccounts(obj) &lt;- value
+
 # S4 method for PreDataTableLayouts
 disp_ccounts(obj) &lt;- value
 
+coltree_at_path(obj, path, ...)
+
 colcount_format(obj)
 
 # S4 method for InstantiatedColumnInfo
@@ -913,6 +933,15 @@ colcount_format(obj)
 # S4 method for PreDataTableLayouts
 colcount_format(obj)
 
+# S4 method for Split
+colcount_format(obj)
+
+# S4 method for LayoutColTree
+colcount_format(obj)
+
+# S4 method for LayoutColLeaf
+colcount_format(obj)
+
 colcount_format(obj) &lt;- value
 
 # S4 method for InstantiatedColumnInfo
@@ -926,6 +955,22 @@ colcount_format(obj) &lt;- value
 
 # S4 method for PreDataTableLayouts
 colcount_format(obj) &lt;- value
+
+colcount_na_str(obj)
+
+# S4 method for InstantiatedColumnInfo
+colcount_na_str(obj)
+
+# S4 method for VTableNodeInfo
+colcount_na_str(obj)
+
+colcount_na_str(obj) &lt;- value
+
+# S4 method for InstantiatedColumnInfo
+colcount_na_str(obj) &lt;- value
+
+# S4 method for VTableNodeInfo
+colcount_na_str(obj) &lt;- value
 
 # S4 method for TableRow
 as.vector(x, mode = "any")
@@ -1249,6 +1294,11 @@ functions. See <code><a href="https://insightsengineering.github.io/formatters/l
 <dd><p>(<code>flag</code>)<br> whether to include label rows. Defaults to <code>FALSE</code>.</p></dd>
 
 
+<dt>path</dt>
+<dd><p>(<code>character</code>)<br> a vector path for a position within the structure of a <code>TableTree</code>. Each element
+represents a subsequent choice amongst the children of the previous choice.</p></dd>
+
+
 <dt>mode</dt>
 <dd><p>(<code>string</code>)<br> passed on to <code><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector()</a></code>.</p></dd>
 
@@ -1270,11 +1320,6 @@ recalculated. Defaults to <code>TRUE</code>.</p></dd>
 
 <dt>y</dt>
 <dd><p>(<code>ANY</code>)<br> second element to be row-bound via <code>rbind2</code>.</p></dd>
-
-
-<dt>path</dt>
-<dd><p>(<code>character</code>)<br> a vector path for a position within the structure of a <code>TableTree</code>. Each element
-represents a subsequent choice amongst the children of the previous choice.</p></dd>
 
 
 <dt>i</dt>

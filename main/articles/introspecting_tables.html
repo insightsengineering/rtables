@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9005</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9006</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,6 +61,7 @@
     <a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a>
     <a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a>
     <a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
+    <a class="dropdown-item" href="../articles/col_counts.html">Column Counts and Formats</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
   </div>
@@ -78,22 +79,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -129,7 +114,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2024-06-12</h4>
+            <h4 data-toc-skip class="date">2024-06-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/introspecting_tables.Rmd" class="external-link"><code>vignettes/introspecting_tables.Rmd</code></a></small>
       <div class="d-none name"><code>introspecting_tables.Rmd</code></div>
@@ -147,9 +132,9 @@ and Adrian Waddell</h4>
 </h2>
 <p>First, let’s set up a simple table.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"STRATA2"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARMCD"</span>, show_colcounts <span class="op">=</span> <span class="cn">TRUE</span>, colcount_format <span class="op">=</span> <span class="st">"N=xx"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"STRATA2"</span>, show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_overall_col.html">add_overall_col</a></span><span class="op">(</span><span class="st">"All"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/summarize_row_groups.html">summarize_row_groups</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -158,8 +143,9 @@ and Adrian Waddell</h4>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ex_adsl</span><span class="op">)</span></span>
 <span><span class="va">tbl</span></span></code></pre></div>
 <pre><code><span><span class="co">#                  ARM A                     ARM B                     ARM C                       </span></span>
-<span><span class="co">#             S1           S2           S1           S2           S1           S2           All    </span></span>
-<span><span class="co">#           (N=73)       (N=61)       (N=67)       (N=67)       (N=56)       (N=76)       (N=400)  </span></span>
+<span><span class="co">#                  N=134                     N=134                     N=132                       </span></span>
+<span><span class="co">#             S1           S2           S1           S2           S1           S2                  </span></span>
+<span><span class="co">#           (N=73)       (N=61)       (N=67)       (N=67)       (N=56)       (N=76)         All    </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># A       18 (24.7%)   20 (32.8%)   22 (32.8%)   22 (32.8%)   14 (25.0%)   26 (34.2%)   122 (30.5%)</span></span>
 <span><span class="co">#   max      40.0         46.0         62.0         50.0         47.0         45.0         62.0    </span></span>
@@ -203,7 +189,7 @@ however, it provides a more detailed row-level summary which acts as a
 useful alternative to how we might normally use the <code><a href="../reference/int_methods.html">str()</a></code>
 function to interrogate compound nested lists.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span>, detail <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span>, detail <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span> <span class="co"># or "subtable"</span></span></code></pre></div>
 <pre><code><span><span class="co"># TableTree: [STRATA1] (STRATA1)</span></span>
 <span><span class="co">#   labelrow: [STRATA1] (STRATA1) - &lt;not visible&gt;</span></span>
 <span><span class="co">#   children: </span></span>
@@ -243,6 +229,25 @@ function to interrogate compound nested lists.</p>
 <span><span class="co">#           labelrow: [AGE] (AGE) - &lt;not visible&gt;</span></span>
 <span><span class="co">#           children: </span></span>
 <span><span class="co">#             DataRow: [max] (max)</span></span></code></pre>
+<p>Similarly, for columns we can see how the tree is structured with the
+following call:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/coltree_structure.html">coltree_structure</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co"># [root] (no pos)</span></span>
+<span><span class="co">#    [ARMCD] (no pos)</span></span>
+<span><span class="co">#      [ARM A] (ARMCD: ARM A)</span></span>
+<span><span class="co">#        [S1] (ARMCD: ARM A -&gt; STRATA2: S1)</span></span>
+<span><span class="co">#        [S2] (ARMCD: ARM A -&gt; STRATA2: S2)</span></span>
+<span><span class="co">#      [ARM B] (ARMCD: ARM B)</span></span>
+<span><span class="co">#        [S1] (ARMCD: ARM B -&gt; STRATA2: S1)</span></span>
+<span><span class="co">#        [S2] (ARMCD: ARM B -&gt; STRATA2: S2)</span></span>
+<span><span class="co">#      [ARM C] (ARMCD: ARM C)</span></span>
+<span><span class="co">#        [S1] (ARMCD: ARM C -&gt; STRATA2: S1)</span></span>
+<span><span class="co">#        [S2] (ARMCD: ARM C -&gt; STRATA2: S2)</span></span>
+<span><span class="co">#    [All] (no pos)</span></span>
+<span><span class="co">#      [All] (All: All)</span></span></code></pre>
+<p>Further information about the column structure can be found in the
+vignette on <code>col_counts</code>.</p>
 <p>The <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df()</a></code> and <code><a href="../reference/make_col_df.html">make_col_df()</a></code>
 functions each create a <code>data.frame</code> with a variety of
 information about the table’s structure. Most useful for introspection
@@ -250,7 +255,7 @@ purposes are the <code>label</code>, <code>name</code>,
 <code>abs_rownumber</code>, <code>path</code> and
 <code>node_class</code> columns (the remainder of the information in the
 returned <code>data.frame</code> is used for pagination)</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#   label name abs_rownumber         path node_class</span></span>
 <span><span class="co"># 1     A    A             1 STRATA1,.... ContentRow</span></span>
@@ -261,7 +266,7 @@ returned <code>data.frame</code> is used for pagination)</p>
 <span><span class="co"># 6   max  max             6 STRATA1,....    DataRow</span></span></code></pre>
 <p>There is also a wrapper function, <code><a href="../reference/make_col_row_df.html">row_paths()</a></code> available
 for <code>make_row_df</code> to display only the row path structure:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_col_row_df.html">row_paths</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [[1]]</span></span>
 <span><span class="co"># [1] "STRATA1"  "A"        "@content" "A"       </span></span>
@@ -285,7 +290,7 @@ but setting <code>visible_only</code> to <code>FALSE</code> gives us a
 structural summary of the table with the full hierarchy of subtables,
 including those that are not represented directly by any visible
 rows:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df</a></span><span class="op">(</span><span class="va">tbl</span>, visible_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_rownumber"</span>, <span class="st">"path"</span>, <span class="st">"node_class"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#    label      name abs_rownumber         path      node_class</span></span>
 <span><span class="co"># 1          STRATA1            NA      STRATA1       TableTree</span></span>
@@ -310,7 +315,7 @@ different, indicating whether only <em>leaf</em> columns should be
 summarized (defaults to <code>TRUE</code>) or whether higher level
 groups of columns - analogous to subtables in row space - should be
 summarized as well.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_col_df.html">make_col_df</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_pos"</span>, <span class="st">"path"</span>, <span class="st">"leaf_indices"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#   label name abs_pos         path leaf_indices</span></span>
 <span><span class="co"># 1    S1   S1       1 ARMCD, A....            1</span></span>
@@ -320,7 +325,7 @@ summarized as well.</p>
 <span><span class="co"># 5    S1   S1       5 ARMCD, A....            5</span></span>
 <span><span class="co"># 6    S2   S2       6 ARMCD, A....            6</span></span>
 <span><span class="co"># 7   All  All       7     All, All            7</span></span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_col_df.html">make_col_df</a></span><span class="op">(</span><span class="va">tbl</span>, visible_only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"label"</span>, <span class="st">"name"</span>, <span class="st">"abs_pos"</span>, <span class="st">"path"</span>, <span class="st">"leaf_indices"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">#    label  name abs_pos         path leaf_indices</span></span>
 <span><span class="co"># 1  ARM A ARM A      NA ARMCD, ARM A         1, 2</span></span>
@@ -335,7 +340,7 @@ summarized as well.</p>
 <span><span class="co"># 10   All   All       7     All, All            7</span></span></code></pre>
 <p>Similarly, there is wrapper function <code><a href="../reference/make_col_row_df.html">col_paths()</a></code>
 available, which displays only the column structure:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_col_row_df.html">col_paths</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># [[1]]</span></span>
 <span><span class="co"># [1] "ARMCD"   "ARM A"   "STRATA2" "S1"     </span></span>
@@ -363,7 +368,7 @@ available, which displays only the column structure:</p>
 <code>node_class</code>, and <code>path</code> information (in the row
 case), or the <code>label</code> and <code>path</code> information (in
 the column case), indented to illustrate table structure:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># rowname    node_class    path                   </span></span>
 <span><span class="co"># ————————————————————————————————————————————————</span></span>
@@ -373,7 +378,7 @@ the column case), indented to illustrate table structure:</p>
 <span><span class="co">#   max      DataRow       STRATA1, B, AGE, max   </span></span>
 <span><span class="co"># C          ContentRow    STRATA1, C, @content, C</span></span>
 <span><span class="co">#   max      DataRow       STRATA1, C, AGE, max</span></span></code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">col_paths_summary</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co"># label    path                     </span></span>
 <span><span class="co"># ——————————————————————————————————</span></span>
@@ -401,11 +406,12 @@ Another useful tool is the <code><a href="../reference/value_formats.html">value
 instead of a table returns a matrix of the format strings for each cell
 value in the table.</p>
 <p>See below the printout for the above examples:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/table_shell.html">table_shell</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#                  ARM A                     ARM B                     ARM C                      </span></span>
-<span><span class="co">#             S1           S2           S1           S2           S1           S2          All    </span></span>
-<span><span class="co">#           (N=73)       (N=61)       (N=67)       (N=67)       (N=56)       (N=76)      (N=400)  </span></span>
+<span><span class="co">#                  N=134                     N=134                     N=132                      </span></span>
+<span><span class="co">#             S1           S2           S1           S2           S1           S2                 </span></span>
+<span><span class="co">#           (N=73)       (N=61)       (N=67)       (N=67)       (N=56)       (N=76)        All    </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># A       xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)</span></span>
 <span><span class="co">#   max      xx.x         xx.x         xx.x         xx.x         xx.x         xx.x         xx.x   </span></span>
@@ -413,7 +419,7 @@ value in the table.</p>
 <span><span class="co">#   max      xx.x         xx.x         xx.x         xx.x         xx.x         xx.x         xx.x   </span></span>
 <span><span class="co"># C       xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)   xx (xx.x%)</span></span>
 <span><span class="co">#   max      xx.x         xx.x         xx.x         xx.x         xx.x         xx.x         xx.x</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/value_formats.html">value_formats</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">#     ARM A.S1     ARM A.S2     ARM B.S1     ARM B.S2     ARM C.S1    </span></span>
 <span><span class="co"># A   "xx (xx.x%)" "xx (xx.x%)" "xx (xx.x%)" "xx (xx.x%)" "xx (xx.x%)"</span></span>
