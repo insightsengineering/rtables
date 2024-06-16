@@ -80,13 +80,21 @@
 \alias{tree_pos,VLayoutNode-method}
 \alias{pos_subset}
 \alias{pos_subset,TreePos-method}
+\alias{tree_pos<-}
+\alias{tree_pos<-,VLayoutNode-method}
 \alias{pos_subset,VLayoutNode-method}
 \alias{pos_splits}
 \alias{pos_splits,TreePos-method}
 \alias{pos_splits,VLayoutNode-method}
+\alias{pos_splits<-}
+\alias{pos_splits<-,TreePos-method}
+\alias{pos_splits<-,VLayoutNode-method}
 \alias{pos_splvals}
 \alias{pos_splvals,TreePos-method}
 \alias{pos_splvals,VLayoutNode-method}
+\alias{pos_splvals<-}
+\alias{pos_splvals<-,TreePos-method}
+\alias{pos_splvals<-,VLayoutNode-method}
 \alias{pos_splval_labels}
 \alias{pos_splval_labels,TreePos-method}
 \alias{spl_payload}
@@ -273,22 +281,36 @@
 \alias{disp_ccounts,InstantiatedColumnInfo-method}
 \alias{disp_ccounts,PreDataTableLayouts-method}
 \alias{disp_ccounts,PreDataColLayout-method}
+\alias{disp_ccounts,LayoutColTree-method}
+\alias{disp_ccounts,LayoutColLeaf-method}
+\alias{disp_ccounts,Split-method}
 \alias{disp_ccounts<-}
 \alias{disp_ccounts<-,VTableTree-method}
 \alias{disp_ccounts<-,InstantiatedColumnInfo-method}
 \alias{disp_ccounts<-,PreDataColLayout-method}
 \alias{disp_ccounts<-,LayoutColTree-method}
+\alias{disp_ccounts<-,LayoutColLeaf-method}
 \alias{disp_ccounts<-,PreDataTableLayouts-method}
+\alias{coltree_at_path}
 \alias{colcount_format}
 \alias{colcount_format,InstantiatedColumnInfo-method}
 \alias{colcount_format,VTableNodeInfo-method}
 \alias{colcount_format,PreDataColLayout-method}
 \alias{colcount_format,PreDataTableLayouts-method}
+\alias{colcount_format,Split-method}
+\alias{colcount_format,LayoutColTree-method}
+\alias{colcount_format,LayoutColLeaf-method}
 \alias{colcount_format<-}
 \alias{colcount_format<-,InstantiatedColumnInfo-method}
 \alias{colcount_format<-,VTableNodeInfo-method}
 \alias{colcount_format<-,PreDataColLayout-method}
 \alias{colcount_format<-,PreDataTableLayouts-method}
+\alias{colcount_na_str}
+\alias{colcount_na_str,InstantiatedColumnInfo-method}
+\alias{colcount_na_str,VTableNodeInfo-method}
+\alias{colcount_na_str<-}
+\alias{colcount_na_str<-,InstantiatedColumnInfo-method}
+\alias{colcount_na_str<-,VTableNodeInfo-method}
 \alias{as.vector,TableRow-method}
 \alias{as.vector,ElementaryTable-method}
 \alias{spl_cuts}
@@ -554,6 +576,10 @@ pos_subset(obj)
 
 \S4method{pos_subset}{TreePos}(obj)
 
+tree_pos(obj) <- value
+
+\S4method{tree_pos}{VLayoutNode}(obj) <- value
+
 \S4method{pos_subset}{VLayoutNode}(obj)
 
 pos_splits(obj)
@@ -562,11 +588,23 @@ pos_splits(obj)
 
 \S4method{pos_splits}{VLayoutNode}(obj)
 
+pos_splits(obj) <- value
+
+\S4method{pos_splits}{TreePos}(obj) <- value
+
+\S4method{pos_splits}{VLayoutNode}(obj) <- value
+
 pos_splvals(obj)
 
 \S4method{pos_splvals}{TreePos}(obj)
 
 \S4method{pos_splvals}{VLayoutNode}(obj)
+
+pos_splvals(obj) <- value
+
+\S4method{pos_splvals}{TreePos}(obj) <- value
+
+\S4method{pos_splvals}{VLayoutNode}(obj) <- value
 
 pos_splval_labels(obj)
 
@@ -940,6 +978,12 @@ disp_ccounts(obj)
 
 \S4method{disp_ccounts}{PreDataColLayout}(obj)
 
+\S4method{disp_ccounts}{LayoutColTree}(obj)
+
+\S4method{disp_ccounts}{LayoutColLeaf}(obj)
+
+\S4method{disp_ccounts}{Split}(obj)
+
 disp_ccounts(obj) <- value
 
 \S4method{disp_ccounts}{VTableTree}(obj) <- value
@@ -950,7 +994,11 @@ disp_ccounts(obj) <- value
 
 \S4method{disp_ccounts}{LayoutColTree}(obj) <- value
 
+\S4method{disp_ccounts}{LayoutColLeaf}(obj) <- value
+
 \S4method{disp_ccounts}{PreDataTableLayouts}(obj) <- value
+
+coltree_at_path(obj, path, ...)
 
 colcount_format(obj)
 
@@ -962,6 +1010,12 @@ colcount_format(obj)
 
 \S4method{colcount_format}{PreDataTableLayouts}(obj)
 
+\S4method{colcount_format}{Split}(obj)
+
+\S4method{colcount_format}{LayoutColTree}(obj)
+
+\S4method{colcount_format}{LayoutColLeaf}(obj)
+
 colcount_format(obj) <- value
 
 \S4method{colcount_format}{InstantiatedColumnInfo}(obj) <- value
@@ -971,6 +1025,18 @@ colcount_format(obj) <- value
 \S4method{colcount_format}{PreDataColLayout}(obj) <- value
 
 \S4method{colcount_format}{PreDataTableLayouts}(obj) <- value
+
+colcount_na_str(obj)
+
+\S4method{colcount_na_str}{InstantiatedColumnInfo}(obj)
+
+\S4method{colcount_na_str}{VTableNodeInfo}(obj)
+
+colcount_na_str(obj) <- value
+
+\S4method{colcount_na_str}{InstantiatedColumnInfo}(obj) <- value
+
+\S4method{colcount_na_str}{VTableNodeInfo}(obj) <- value
 
 \S4method{as.vector}{TableRow}(x, mode = "any")
 
@@ -1174,6 +1240,9 @@ functions. See \code{\link[formatters:list_formats]{formatters::list_valid_forma
 
 \item{add.labrows}{(\code{flag})\cr whether to include label rows. Defaults to \code{FALSE}.}
 
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
+
 \item{mode}{(\code{string})\cr passed on to \code{\link[=as.vector]{as.vector()}}.}
 
 \item{rowpath}{(\code{character} or \code{NULL})\cr path within row structure. \code{NULL} indicates the footnote should
@@ -1186,9 +1255,6 @@ on the row rather than cell.}
 recalculated. Defaults to \code{TRUE}.}
 
 \item{y}{(\code{ANY})\cr second element to be row-bound via \code{rbind2}.}
-
-\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
-represents a subsequent choice amongst the children of the previous choice.}
 
 \item{i}{(\code{numeric(1)})\cr index.}
 

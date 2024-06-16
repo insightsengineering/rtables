@@ -71,6 +71,7 @@ articles:
     - custom_appearance
     - title_footer
     - sorting_pruning
+    - col_counts
 
   - title: \{rtables\} Concepts
     contents:
@@ -184,6 +185,7 @@ reference:
   - title: Layout Structure Information
     contents:
     - vars_in_layout
+    - coltree_structure
 
   - title: Access and Modify
     contents:
@@ -196,6 +198,10 @@ reference:
     - clear_indent_mods
     - head
     - section_div
+    - colcount_visible
+    - facet_colcount
+    - facet_colcounts_visible<-
+    - rm_all_colcounts
 
   - title: Validating and Fixing Table Structure
     contents:

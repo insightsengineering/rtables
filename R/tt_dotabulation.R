@@ -1133,8 +1133,9 @@ recursive_applysplit <- function(df,
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
 #' @param col_counts (`numeric` or `NULL`)\cr `r lifecycle::badge("deprecated")` if non-`NULL`, column counts
-#'   which override those calculated automatically during tabulation. Must specify "counts" for *all*
-#'   resulting columns if non-`NULL`. `NA` elements will be replaced with the automatically calculated counts.
+#'   *for leaf-columns only* which override those calculated automatically during tabulation. Must specify
+#'   "counts" for *all* leaf-columns if non-`NULL`. `NA` elements will be replaced with the automatically
+#'   calculated counts. Turns on display of leaf-column counts when non-`NULL`.
 #' @param col_total (`integer(1)`)\cr the total observations across all columns. Defaults to `nrow(df)`.
 #' @param ... ignored.
 #'
@@ -1240,7 +1241,7 @@ build_table <- function(lyt, df,
   if (any(alt_params) && is.null(alt_counts_df)) {
     stop(
       "Layout contains afun/cfun functions that have optional parameters ",
-      ".alt_df and/or .alt_df_row, but no alt_count_df was provided in ",
+      ".alt_df and/or .alt_df_row, but no alt_counts_df was provided in ",
       "build_table()."
     )
   }
@@ -1253,7 +1254,14 @@ build_table <- function(lyt, df,
     topleft
   )
   if (!is.null(col_counts)) {
-    disp_ccounts(cinfo) <- TRUE
+    toreplace <- !is.na(col_counts)
+    newccs <- col_counts(cinfo) ## old actual counts
+    newccs[toreplace] <- col_counts[toreplace]
+    col_counts(cinfo) <- newccs
+    leaf_paths <- col_paths(cinfo)
+    for (pth in leaf_paths) {
+      colcount_visible(cinfo, pth) <- TRUE
+    }
   }
   rlyt <- rlayout(lyt)
   rtspl <- root_spl(rlyt)
@@ -1551,7 +1559,9 @@ setMethod(
 
 splitvec_to_coltree <- function(df, splvec, pos = NULL,
                                 lvl = 1L, label = "",
-                                spl_context = context_df_row(cinfo = NULL)) {
+                                spl_context = context_df_row(cinfo = NULL),
+                                alt_counts_df = df,
+                                global_cc_format) {
   stopifnot(
     lvl <= length(splvec) + 1L,
     is(splvec, "SplitVector")
@@ -1561,15 +1571,20 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
   if (lvl == length(splvec) + 1L) {
     ## XXX this should be a LayoutColree I Think.
     nm <- unlist(tail(value_names(pos), 1)) %||% ""
+    spl <- tail(pos_splits(pos), 1)[[1]]
+    fmt <- colcount_format(spl) %||% global_cc_format
     LayoutColLeaf(
       lev = lvl - 1L,
       label = label,
       tpos = pos,
-      name = nm
+      name = nm,
+      colcount = NROW(alt_counts_df),
+      disp_ccounts = disp_ccounts(spl),
+      colcount_format = fmt
     )
   } else {
     spl <- splvec[[lvl]]
-    nm <- if (is.null(pos)) {
+    nm <- if (is.null(pos) || length(pos_splits(pos)) == 0) {
       obj_name(spl)
     } else {
       unlist(tail(
@@ -1585,7 +1600,7 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
     vals <- rawpart[["values"]]
     labs <- rawpart[["labels"]]
 
-
+    force(alt_counts_df)
     kids <- mapply(
       function(dfpart, value, partlab) {
         ## we could pass subset expression in here but the spec
@@ -1599,21 +1614,48 @@ splitvec_to_coltree <- function(df, splvec, pos = NULL,
         ## subset expressions handled inside make_child_pos,
         ## value is (optionally, for the moment) carrying it around
         newpos <- make_child_pos(pos, spl, value, partlab)
+        acdf_subset_expr <- make_subset_expr(spl, value)
+        new_acdf_subset <- try(eval(acdf_subset_expr, alt_counts_df), silent = TRUE)
+        if (is(new_acdf_subset, "try-error")) {
+          stop(sprintf(
+            paste(
+              ifelse(identical(df, alt_counts_df), "df", "alt_counts_df"),
+              "appears incompatible with column-split",
+              "structure. Offending column subset",
+              "expression: %s\nOriginal error",
+              "message: %s"
+            ), deparse(acdf_subset_expr[[1]]),
+            conditionMessage(attr(new_acdf_subset, "condition"))
+          ))
+        }
+
         splitvec_to_coltree(dfpart, splvec, newpos,
           lvl + 1L, partlab,
-          spl_context = rbind(spl_context, newprev)
+          spl_context = rbind(spl_context, newprev),
+          alt_counts_df = alt_counts_df[new_acdf_subset, , drop = FALSE],
+          global_cc_format = global_cc_format
         )
       },
       dfpart = datparts, value = vals,
       partlab = labs, SIMPLIFY = FALSE
     )
+    disp_cc <- FALSE
+    cc_format <- global_cc_format # this doesn't matter probably, but its technically more correct
+    if (lvl > 1) {
+      disp_cc <- disp_ccounts(splvec[[lvl - 1]])
+      cc_format <- colcount_format(splvec[[lvl - 1]]) %||% global_cc_format
+    }
+
     names(kids) <- value_names(vals)
     LayoutColTree(
       lev = lvl, label = label,
       spl = spl,
       kids = kids, tpos = pos,
       name = nm,
-      summary_function = content_fun(spl)
+      summary_function = content_fun(spl),
+      colcount = NROW(alt_counts_df),
+      disp_ccounts = disp_cc,
+      colcount_format = cc_format
     )
   }
 }

@@ -150,10 +150,12 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'   has indented row names (strings pre-fixed).
 #' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain
 #'   newlines into multiple 'physical' rows (as they will appear when rendered into ASCII). Defaults to `TRUE`.
-#' @param fontspec (`font_spec` or `NULL`)\cr Font specification that should be
-#'   assumed during wrapping, as returned by [formatters::font_spec()].
-#' @param col_gap (`numeric(1)`)\cr The column gap to assume between columns, in
-#'   number of spaces assuming `fontspec` (this reduces to number of characters for monospace fonts).
+#' @param fontspec (`font_spec`)\cr The font that should be used by default when
+#'   rendering this `MatrixPrintForm` object, or NULL (the default).
+#' @param col_gap (`numeric(1)`)]\cr The number of spaces (in the font specified
+#'  by `fontspec`) that should be placed between columns when the table
+#'  is rendered directly to text (e.g., by `toString` or `export_as_txt`). Defaults
+#'  to `3`.
 #'
 #' @details
 #' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
@@ -203,6 +205,7 @@ setMethod(
            fontspec = NULL,
            col_gap = 3L) {
     stopifnot(is(obj, "VTableTree"))
+    check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
     sr <- make_row_df(obj, fontspec = fontspec)
@@ -328,6 +331,36 @@ setMethod(
   }
 )
 
+
+check_ccount_vis_ok <- function(tt) {
+  ctree <- coltree(tt)
+  tlkids <- tree_children(ctree)
+  lapply(tlkids, ccvis_check_subtree)
+  invisible(NULL)
+}
+
+ccvis_check_subtree <- function(ctree) {
+  kids <- tree_children(ctree)
+  if (is.null(kids)) {
+    return(invisible(NULL))
+  }
+  vals <- vapply(kids, disp_ccounts, TRUE)
+  if (length(unique(vals)) > 1) {
+    unmatch <- which(!duplicated(vals))[1:2]
+    stop(
+      "Detected different colcount visibility among sibling facets (those ",
+      "arising from the same split_cols_by* layout instruction). This is ",
+      "not supported.\n",
+      "Set count values to NA if you want a blank space to appear as the ",
+      "displayed count for particular facets.\n",
+      "First disagreement occured at paths:\n",
+      .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[1]]]))), "\n",
+      .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[2]]])))
+    )
+  }
+  lapply(kids, ccvis_check_subtree)
+  invisible(NULL)
+}
 .quick_handle_nl <- function(str_v) {
   if (any(grepl("\n", str_v))) {
     return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
@@ -442,7 +475,12 @@ get_formatted_fnotes <- function(tt) {
   remain <- seq_len(nrow(coldf))
   chunks <- list()
   cur <- 1
+  na_str <- colcount_na_str(tt)
 
+  ## XXX this would be better as the facet-associated
+  ## format but I don't know that we need to
+  ## support that level of differentiation anyway...
+  cc_format <- colcount_format(tt)
   ## each iteration of this loop identifies
   ## all rows corresponding to one top-level column
   ## label and its children, then processes those
@@ -453,7 +491,9 @@ get_formatted_fnotes <- function(tt) {
     endblock <- which(coldf$abs_pos == max(inds))
 
     stopifnot(endblock >= rw)
-    chunks[[cur]] <- .do_header_chunk(coldf[rw:endblock, ])
+    chunk_res <- .do_header_chunk(coldf[rw:endblock, ], cc_format, na_str = na_str)
+    chunk_res <- unlist(chunk_res, recursive = FALSE)
+    chunks[[cur]] <- chunk_res
     remain <- remain[remain > endblock]
     cur <- cur + 1
   }
@@ -483,23 +523,22 @@ get_formatted_fnotes <- function(tt) {
     return(chunks)
   }
 
-  chunks[needpad] <- lapply(
-    chunks[needpad],
-    function(chk) {
+  for (i in seq_along(lens)) {
+    if (lens[i] < padto) {
+      chk <- chunks[[i]]
       span <- sum(vapply(chk[[length(chk)]], cell_cspan, 1L))
-      needed <- padto - length(chk)
-      c(
-        replicate(rcell("", colspan = span),
-          n = needed
+      chunks[[i]] <- c(
+        replicate(list(list(rcell("", colspan = span))),
+          n = padto - lens[i]
         ),
         chk
       )
     }
-  )
+  }
   chunks
 }
 
-.do_header_chunk <- function(coldf) {
+.do_header_chunk <- function(coldf, cc_format, na_str) {
   ## hard assumption that coldf is a section
   ## of a column dataframe summary that was
   ## created with visible_only=FALSE
@@ -510,20 +549,54 @@ get_formatted_fnotes <- function(tt) {
     seq_along(spldfs),
     function(i) {
       rws <- spldfs[[i]]
-
-      thisbit <- lapply(
+      thisbit_vals <- lapply(
         seq_len(nrow(rws)),
         function(ri) {
-          rcell(rws[ri, "label", drop = TRUE],
+          cellii <- rcell(rws[ri, "label", drop = TRUE],
             colspan = rws$total_span[ri],
             footnotes = rws[ri, "col_fnotes", drop = TRUE][[1]]
           )
+          cellii
         }
       )
-      .pad_end(thisbit, nleafcols)
+      ret <- list(.pad_end(thisbit_vals, padto = nleafcols))
+      anycounts <- any(rws$ccount_visible)
+      if (anycounts) {
+        thisbit_ns <- lapply(
+          seq_len(nrow(rws)),
+          function(ri) {
+            vis_ri <- rws$ccount_visible[ri]
+            val <- if (vis_ri) rws$col_count[ri] else NULL
+            fmt <- rws$ccount_format[ri]
+            if (is.character(fmt)) {
+              cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == fmt))))
+              if (cfmt_dim == "2d") {
+                if (grepl("%", fmt)) {
+                  val <- c(val, 1) ## XXX This is the old behavior but it doesn't take into account parent counts...
+                } else {
+                  stop(
+                    "This 2d format is not supported for column counts. ",
+                    "Please choose a 1d format or a 2d format that includes a % value."
+                  )
+                }
+              } else if (cfmt_dim == "3d") {
+                stop("3d formats are not supported for column counts.")
+              }
+            }
+            cellii <- rcell(
+              val,
+              colspan = rws$total_span[ri],
+              format = fmt, # cc_format,
+              format_na_str = na_str
+            )
+            cellii
+          }
+        )
+        ret <- c(ret, list(.pad_end(thisbit_ns, padto = nleafcols)))
+      }
+      ret
     }
   )
-
   toret
 }
 
@@ -534,8 +607,8 @@ get_formatted_fnotes <- function(tt) {
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
     cs <- row_cspans(x)
-    if (is.null(cs)) cs <- rep(1, ncol(x))
-    rep(row_values(x), cs)
+    strs <- get_formatted_cells(x)
+    strs
   }), ncol = nc, byrow = TRUE)
 
   span <- matrix(rapply(rows, function(x) {
@@ -550,34 +623,6 @@ get_formatted_fnotes <- function(tt) {
       cell_footnotes(x)
     })
   )
-
-  if (disp_ccounts(cinfo)) {
-    counts <- col_counts(cinfo)
-    cformat <- colcount_format(cinfo)
-
-    # allow 2d column count formats (count (%) only)
-    cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == cformat))))
-    if (cfmt_dim == "2d") {
-      if (grepl("%", cformat)) {
-        counts <- lapply(counts, function(x) c(x, 1))
-      } else {
-        stop(
-          "This 2d format is not supported for column counts. ",
-          "Please choose a 1d format or a 2d format that includes a % value."
-        )
-      }
-    } else if (cfmt_dim == "3d") {
-      stop("3d formats are not supported for column counts.")
-    }
-
-    body <- rbind(body, vapply(counts, format_rcell,
-      character(1),
-      format = cformat,
-      na_str = ""
-    ))
-    span <- rbind(span, rep(1, nc))
-    fnote <- rbind(fnote, rep(list(list()), nc))
-  }
 
   tl <- top_left(cinfo)
   lentl <- length(tl)

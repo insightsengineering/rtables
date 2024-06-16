@@ -62,19 +62,61 @@ col_info(obj) <- value
 
 \S4method{col_info}{TableTree}(obj) <- value
 
-coltree(obj, df = NULL, rtpos = TreePos())
+coltree(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
-\S4method{coltree}{InstantiatedColumnInfo}(obj, df = NULL, rtpos = TreePos())
+\S4method{coltree}{InstantiatedColumnInfo}(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
-\S4method{coltree}{PreDataTableLayouts}(obj, df = NULL, rtpos = TreePos())
+\S4method{coltree}{PreDataTableLayouts}(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
-\S4method{coltree}{PreDataColLayout}(obj, df = NULL, rtpos = TreePos())
+\S4method{coltree}{PreDataColLayout}(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
-\S4method{coltree}{LayoutColTree}(obj, df = NULL, rtpos = TreePos())
+\S4method{coltree}{LayoutColTree}(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
-\S4method{coltree}{VTableTree}(obj, df = NULL, rtpos = TreePos())
+\S4method{coltree}{VTableTree}(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
-\S4method{coltree}{TableRow}(obj, df = NULL, rtpos = TreePos())
+\S4method{coltree}{TableRow}(
+  obj,
+  df = NULL,
+  rtpos = TreePos(),
+  alt_counts_df = df,
+  ccount_format = "(N=xx)"
+)
 
 col_exprs(obj, df = NULL)
 
@@ -120,6 +162,13 @@ generated from a pre-data layout object.}
 
 \item{rtpos}{(\code{TreePos})\cr root position.}
 
+\item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
+\emph{only} when calculating column counts.}
+
+\item{ccount_format}{(\code{FormatSpec})\cr The format to be used by default for column
+counts throughout this column tree (i.e. if not overridden by a more specific format
+specification).}
+
 \item{path}{(\code{character} or \code{NULL})\cr \code{col_counts} accessor and setter only.
 Path (in column structure).}
 }
@@ -130,4 +179,7 @@ Returns various information about columns, depending on the accessor used.
 }
 \description{
 Column information/structure accessors
+}
+\seealso{
+\code{\link[=facet_colcount]{facet_colcount()}}
 }

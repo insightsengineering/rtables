@@ -143,7 +143,12 @@ col_dfrow <- function(col,
                       nsibs = NA_integer_,
                       leaf_indices = cnum,
                       span = length(leaf_indices),
-                      col_fnotes = list()) {
+                      col_fnotes = list(),
+                      col_count = facet_colcount(col, NULL),
+                      ccount_visible = disp_ccounts(col),
+                      ccount_format = colcount_format(col),
+                      ccount_na_str,
+                      global_cc_format) {
   if (is.null(pth)) {
     pth <- pos_to_path(tree_pos(col))
   }
@@ -158,7 +163,11 @@ col_dfrow <- function(col,
     leaf_indices = I(list(leaf_indices)),
     total_span = span,
     col_fnotes = I(list(col_fnotes)),
-    n_col_fnotes = length(col_fnotes)
+    n_col_fnotes = length(col_fnotes),
+    col_count = col_count,
+    ccount_visible = ccount_visible,
+    ccount_format = ccount_format %||% global_cc_format,
+    ccount_na_str = ccount_na_str
   )
 }
 
@@ -168,11 +177,13 @@ pos_to_path <- function(pos) {
 
   path <- character()
   for (i in seq_along(spls)) {
+    nm <- obj_name(spls[[i]])
+    val_i <- value_names(vals[[i]])
     path <- c(
       path,
       obj_name(spls[[i]]),
       ## rawvalues(vals[[i]]))
-      value_names(vals[[i]])
+      if (!is.na(val_i)) val_i
     )
   }
   path
@@ -439,7 +450,9 @@ setGeneric("inner_col_df", function(ct,
                                     colnum = 0L,
                                     sibpos = NA_integer_,
                                     nsibs = NA_integer_,
-                                    ncolref = 0L) {
+                                    ncolref = 0L,
+                                    na_str,
+                                    global_cc_format) {
   standardGeneric("inner_col_df")
 })
 
@@ -449,19 +462,25 @@ setGeneric("inner_col_df", function(ct,
 #' `data.frame`.
 #'
 #' @inheritParams formatters::make_row_df
-#'
+#' @param ccount_format (`FormatSpec`)\cr The format to be used by default for
+#'   column counts if one is not specified for an individual column count.
+#' @param na_str (`character(1)`)\cr The string to display when a column count is NA. Users should not need to set this.
 #' @export
 make_col_df <- function(tt,
                         colwidths = NULL,
-                        visible_only = TRUE) {
-  ctree <- coltree(tt) ## this is a null op if its already a coltree object
+                        visible_only = TRUE,
+                        na_str = "",
+                        ccount_format = colcount_format(tt) %||% "(N=xx)") {
+  ctree <- coltree(tt, ccount_format = colcount_format(tt)) ## this is a null op if its already a coltree object
   rows <- inner_col_df(ctree,
     ## colwidths is currently unused anyway...  propose_column_widths(matrix_form(tt, indent_rownames=TRUE)),
     colwidths = colwidths,
     visible_only = visible_only,
     colnum = 1L,
     sibpos = 1L,
-    nsibs = 1L
+    nsibs = 1L,
+    na_str = na_str,
+    global_cc_format = ccount_format
   ) ## nsiblings includes current so 1 means "only child"
 
   do.call(rbind, rows)
@@ -472,14 +491,18 @@ setMethod(
   function(ct, colwidths, visible_only,
            colnum,
            sibpos,
-           nsibs) {
+           nsibs,
+           na_str,
+           global_cc_format) {
     list(col_dfrow(
       col = ct,
       cnum = colnum,
       sibpos = sibpos,
       nsibs = nsibs,
       leaf_indices = colnum,
-      col_fnotes = col_footnotes(ct)
+      col_fnotes = col_footnotes(ct),
+      ccount_na_str = na_str,
+      global_cc_format = global_cc_format
     ))
   }
 )
@@ -489,7 +512,9 @@ setMethod(
   function(ct, colwidths, visible_only,
            colnum,
            sibpos,
-           nsibs) {
+           nsibs,
+           na_str,
+           global_cc_format) {
     kids <- tree_children(ct)
     ret <- vector("list", length(kids))
     for (i in seq_along(kids)) {
@@ -500,7 +525,9 @@ setMethod(
           colnum = colnum,
           sibpos = i,
           nsibs = length(kids),
-          visible_only = visible_only
+          visible_only = visible_only,
+          na_str = na_str,
+          global_cc_format = global_cc_format
         )
       )
       colnum <- max(newrows$abs_pos, colnum, na.rm = TRUE) + 1
@@ -518,7 +545,9 @@ setMethod(
           sibpos = sibpos,
           nsibs = nsibs,
           pth = thispth,
-          col_fnotes = col_footnotes(ct)
+          col_fnotes = col_footnotes(ct),
+          ccount_na_str = na_str,
+          global_cc_format = global_cc_format
         ))
         ret <- c(thisone, ret)
       }
