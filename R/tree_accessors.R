@@ -1,6 +1,3 @@
-## XXX Do we want add.labrows here or no?
-## we have to choose one and stick to it.
-
 #' Internal generics and methods
 #'
 #' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no

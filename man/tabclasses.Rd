@@ -90,16 +90,16 @@ functions. See \code{\link[formatters:list_formats]{formatters::list_valid_forma
 function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{title}{(\code{string})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
+\item{title}{(\code{string})\cr single string to use as main title (\code{\link[formatters:title_footer]{formatters::main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}), where every element is
 printed on a separate line. Ignored for subtables.}
 
 \item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
-(\code{\link[=main_footer]{main_footer()}}), where every element is printed on a separate line.}
+(\code{\link[formatters:title_footer]{formatters::main_footer()}}), where every element is printed on a separate line.}
 
 \item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
-(\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
+(\code{\link[formatters:title_footer]{formatters::prov_footer()}}), where every element is printed on a separate line.}
 
 \item{header_section_div}{(\code{string})\cr string which will be used to divide the header from the table. See
 \code{\link[=header_section_div]{header_section_div()}} for the associated getter and setter. Please consider changing last element of

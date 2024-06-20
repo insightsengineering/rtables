@@ -75,7 +75,7 @@ cont_n_onecol <- function(j) {
 #' that each child at that step will be *separately* sorted based on `scorefun` and the remaining `path` entries. This
 #' can occur multiple times in a path.
 #'
-#' A list of valid (non-wildcard) paths can be seen in the `path` column of the `data.frame` created by [make_row_df()]
+#' A list of valid (non-wildcard) paths can be seen in the `path` column of the `data.frame` created by [formatters::make_row_df()]
 #' with the `visible_only` argument set to `FALSE`. It can also be inferred from the summary given by
 #' [table_structure()].
 #'
@@ -91,9 +91,9 @@ cont_n_onecol <- function(j) {
 #' (coming from [summarize_row_groups()]) while a custom score function needs to be used on `DataRow`s. Here, some
 #' useful descriptor and accessor functions (coming from related vignette):
 #'  - [cell_values()] - Retrieves a named list of a `TableRow` or `TableTree` object's values.
-#'  - [obj_name()] - Retrieves the name of an object. Note this can differ from the label that is displayed (if any is)
+#'  - [formatters::obj_name()] - Retrieves the name of an object. Note this can differ from the label that is displayed (if any is)
 #'    when printing.
-#'  - [obj_label()] - Retrieves the display label of an object. Note this can differ from the name that appears in the
+#'  - [formatters::obj_label()] - Retrieves the display label of an object. Note this can differ from the name that appears in the
 #'    path.
 #'  - [content_table()] - Retrieves a `TableTree` object's content table (which contains its summary rows).
 #'  - [tree_children()] - Retrieves a `TableTree` object's direct children (either subtables, rows or possibly a mix
@@ -101,7 +101,7 @@ cont_n_onecol <- function(j) {
 #'
 #' @seealso
 #' * Score functions [cont_n_allcols()] and [cont_n_onecol()].
-#' * [make_row_df()] and [table_structure()] for pathing information.
+#' * [formatters::make_row_df()] and [table_structure()] for pathing information.
 #' * [tt_at_path()] to select a table's (sub)structure at a given path.
 #'
 #' @examples

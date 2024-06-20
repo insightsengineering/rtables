@@ -71,16 +71,16 @@ summaries.}
 \item{child_names}{(\code{character})\cr names to be given to the subsplits contained by a compound split (typically
 an \code{AnalyzeMultiVars} split object).}
 
-\item{title}{(\code{string})\cr single string to use as main title (\code{\link[=main_title]{main_title()}}). Ignored for subtables.}
+\item{title}{(\code{string})\cr single string to use as main title (\code{\link[formatters:title_footer]{formatters::main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[=subtitles]{subtitles()}}), where every element is
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}), where every element is
 printed on a separate line. Ignored for subtables.}
 
 \item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
-(\code{\link[=main_footer]{main_footer()}}), where every element is printed on a separate line.}
+(\code{\link[formatters:title_footer]{formatters::main_footer()}}), where every element is printed on a separate line.}
 
 \item{prov_footer}{(\code{character})\cr a vector of strings to use as provenance-related global footer materials
-(\code{\link[=prov_footer]{prov_footer()}}), where every element is printed on a separate line.}
+(\code{\link[formatters:title_footer]{formatters::prov_footer()}}), where every element is printed on a separate line.}
 
 \item{footnotes}{(\code{list} or \code{NULL})\cr referential footnotes to be applied at current level. In post-processing,
 this can be achieved with \code{\link{fnotes_at_path<-}}.}
