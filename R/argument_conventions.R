@@ -170,13 +170,13 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #'   if not specified.
 #' @param lev (`integer(1)`)\cr nesting level (roughly, indentation level in practical terms).
 #' @param main_footer (`character`)\cr a vector of strings to use as main global (non-referential) footer materials
-#'   ([main_footer()]), where every element is printed on a separate line.
+#'   ([formatters::main_footer()]), where every element is printed on a separate line.
 #' @param page_title (`character`)\cr page-specific title(s).
 #' @param prov_footer (`character`)\cr a vector of strings to use as provenance-related global footer materials
-#'   ([prov_footer()]), where every element is printed on a separate line.
-#' @param subtitles (`character`)\cr a vector of strings to use as subtitles ([subtitles()]), where every element is
-#'   printed on a separate line. Ignored for subtables.
-#' @param title (`string`)\cr single string to use as main title ([main_title()]). Ignored for subtables.
+#'   ([formatters::prov_footer()]), where every element is printed on a separate line.
+#' @param subtitles (`character`)\cr a vector of strings to use as subtitles ([formatters::subtitles()]), where every
+#' element is printed on a separate line. Ignored for subtables.
+#' @param title (`string`)\cr single string to use as main title ([formatters::main_title()]). Ignored for subtables.
 #' @param trailing_section_div (`string`)\cr string which will be used as a section divider after the printing
 #'   of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
 #'   or `NA_character_` for none (the default). When generated via layouting, this would correspond to the

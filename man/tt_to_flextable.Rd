@@ -41,13 +41,13 @@ to \code{theme_docx_default(tt)}.}
 
 \item{border}{(\code{officer} border object)\cr defaults to \code{officer::fp_border(width = 0.5)}.}
 
-\item{indent_size}{(\code{integer(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[=matrix_form]{matrix_form()}}
+\item{indent_size}{(\code{integer(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[formatters:matrix_form]{formatters::matrix_form()}}
 \code{indent_size}) is used. To work with \code{docx}, any size is multiplied by 2 mm (5.67 pt) by default.}
 
 \item{titles_as_header}{(\code{flag})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
-as it makes additional header rows for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element).
-\code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above the table.
-The same style is applied.}
+as it makes additional header rows for \code{\link[formatters:title_footer]{formatters::main_title()}} string and \code{\link[formatters:title_footer]{formatters::subtitles()}} character
+vector (one per element). \code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text
+paragraph above the table. The same style is applied.}
 
 \item{footers_as_text}{(\code{flag})\cr defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained with
 the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
@@ -86,7 +86,7 @@ used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{bold}{(\code{character})\cr parts of the table text that should be in bold. Can be any combination of
 \code{c("header", "content_rows", "label_rows")}. The first one renders all column names bold (not \code{topleft} content).
-The second and third option use \code{\link[=make_row_df]{make_row_df()}} to render content or/and label rows as bold.}
+The second and third option use \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to render content or/and label rows as bold.}
 
 \item{bold_manual}{(named \code{list} or \code{NULL})\cr list of index lists. See example for needed structure. Accepted
 groupings/names are \code{c("header", "body")}.}

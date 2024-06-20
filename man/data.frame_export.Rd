@@ -94,6 +94,6 @@ path_enriched_df(tbl)
 
 }
 \seealso{
-\code{\link[=df_to_tt]{df_to_tt()}} when using \code{as_is = TRUE} and \code{\link[=make_row_df]{make_row_df()}} to have a comprehensive view of the
+\code{\link[=df_to_tt]{df_to_tt()}} when using \code{as_is = TRUE} and \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to have a comprehensive view of the
 hierarchical structure of the rows.
 }

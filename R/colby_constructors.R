@@ -2025,8 +2025,9 @@ list_wrap_df <- function(f) {
 #'   strange results, such as that individual arm columns and a combined "all patients" column all list "100%" as
 #'   their percentage, even though the individual arm columns represent strict subsets of the "all patients" column.
 #'
-#' - Note that subtitles ([subtitles()]) and footers ([main_footer()] and [prov_footer()]) that span more than one
-#'   line can be supplied as a character vector to maintain indentation on multiple lines.
+#' - Note that subtitles ([formatters::subtitles()]) and footers ([formatters::main_footer()] and
+#' [formatters::prov_footer()]) that span more than one line can be supplied as a character vector to maintain
+#' indentation on multiple lines.
 #'
 #' @examples
 #' lyt <- basic_table() %>%

@@ -36,9 +36,9 @@ margins_landscape()
 while \code{created} is a date object.}
 
 \item{titles_as_header}{(\code{flag})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
-as it makes additional header rows for \code{\link[=main_title]{main_title()}} string and \code{\link[=subtitles]{subtitles()}} character vector (one per element).
-\code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text paragraph above the table.
-The same style is applied.}
+as it makes additional header rows for \code{\link[formatters:title_footer]{formatters::main_title()}} string and \code{\link[formatters:title_footer]{formatters::subtitles()}} character
+vector (one per element). \code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text
+paragraph above the table. The same style is applied.}
 
 \item{footers_as_text}{(\code{flag})\cr defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained with
 the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
