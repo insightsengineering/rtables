@@ -1,3 +1,5 @@
+## rtables 0.6.8.9000
+
 ## rtables 0.6.8
 ### New Features
  * Add support for `truetype` fonts based on `formatters` version `>= 0.5.8`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly, by @gmbecker.
