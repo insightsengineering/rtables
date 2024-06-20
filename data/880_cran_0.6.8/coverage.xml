@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.905858729033782" branch-rate="0" lines-covered="7669" lines-valid="8466" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-06-20 15:07:42.64661">
+<coverage line-rate="0.905858729033782" branch-rate="0" lines-covered="7669" lines-valid="8466" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-06-20 16:02:39.058681">
   <sources>
     <source>/__w/rtables/rtables/rtables</source>
   </sources>
@@ -5002,12 +5002,11 @@
             </method>
             <method name="basic_table" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="2069" hits="311" branch="false"/>
                 <line number="2070" hits="311" branch="false"/>
-                <line number="2071" hits="2" branch="false"/>
-                <line number="2073" hits="309" branch="false"/>
+                <line number="2071" hits="311" branch="false"/>
+                <line number="2072" hits="2" branch="false"/>
                 <line number="2074" hits="309" branch="false"/>
-                <line number="2076" hits="309" branch="false"/>
+                <line number="2075" hits="309" branch="false"/>
                 <line number="2077" hits="309" branch="false"/>
                 <line number="2078" hits="309" branch="false"/>
                 <line number="2079" hits="309" branch="false"/>
@@ -5016,19 +5015,20 @@
                 <line number="2082" hits="309" branch="false"/>
                 <line number="2083" hits="309" branch="false"/>
                 <line number="2084" hits="309" branch="false"/>
-                <line number="2087" hits="309" branch="false"/>
+                <line number="2085" hits="309" branch="false"/>
                 <line number="2088" hits="309" branch="false"/>
-                <line number="2092" hits="309" branch="false"/>
+                <line number="2089" hits="309" branch="false"/>
+                <line number="2093" hits="309" branch="false"/>
               </lines>
             </method>
             <method name="append_topleft" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="2137" hits="53" branch="false"/>
                 <line number="2138" hits="53" branch="false"/>
                 <line number="2139" hits="53" branch="false"/>
                 <line number="2140" hits="53" branch="false"/>
                 <line number="2141" hits="53" branch="false"/>
                 <line number="2142" hits="53" branch="false"/>
+                <line number="2143" hits="53" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -5604,12 +5604,11 @@
             <line number="1990" hits="1" branch="false"/>
             <line number="1991" hits="1" branch="false"/>
             <line number="1992" hits="1" branch="false"/>
-            <line number="2069" hits="311" branch="false"/>
             <line number="2070" hits="311" branch="false"/>
-            <line number="2071" hits="2" branch="false"/>
-            <line number="2073" hits="309" branch="false"/>
+            <line number="2071" hits="311" branch="false"/>
+            <line number="2072" hits="2" branch="false"/>
             <line number="2074" hits="309" branch="false"/>
-            <line number="2076" hits="309" branch="false"/>
+            <line number="2075" hits="309" branch="false"/>
             <line number="2077" hits="309" branch="false"/>
             <line number="2078" hits="309" branch="false"/>
             <line number="2079" hits="309" branch="false"/>
@@ -5618,15 +5617,16 @@
             <line number="2082" hits="309" branch="false"/>
             <line number="2083" hits="309" branch="false"/>
             <line number="2084" hits="309" branch="false"/>
-            <line number="2087" hits="309" branch="false"/>
+            <line number="2085" hits="309" branch="false"/>
             <line number="2088" hits="309" branch="false"/>
-            <line number="2092" hits="309" branch="false"/>
-            <line number="2137" hits="53" branch="false"/>
+            <line number="2089" hits="309" branch="false"/>
+            <line number="2093" hits="309" branch="false"/>
             <line number="2138" hits="53" branch="false"/>
             <line number="2139" hits="53" branch="false"/>
             <line number="2140" hits="53" branch="false"/>
             <line number="2141" hits="53" branch="false"/>
             <line number="2142" hits="53" branch="false"/>
+            <line number="2143" hits="53" branch="false"/>
           </lines>
         </class>
         <class name="compare_rtables.R" filename="R/compare_rtables.R" line-rate="0.795180722891566" branch-rate="0" complexity="0">
