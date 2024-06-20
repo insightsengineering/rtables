@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.7.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.8</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,22 +54,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -167,9 +151,9 @@ it, which we encourage users to avoid.</p>
 <p><code>path</code> can include the "wildcard" <code>"*"</code> as a step, which translates roughly to <em>any</em> node/branching element and means
 that each child at that step will be <em>separately</em> sorted based on <code>scorefun</code> and the remaining <code>path</code> entries. This
 can occur multiple times in a path.</p>
-<p>A list of valid (non-wildcard) paths can be seen in the <code>path</code> column of the <code>data.frame</code> created by <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df()</a></code>
-with the <code>visible_only</code> argument set to <code>FALSE</code>. It can also be inferred from the summary given by
-<code><a href="table_structure.html">table_structure()</a></code>.</p>
+<p>A list of valid (non-wildcard) paths can be seen in the <code>path</code> column of the <code>data.frame</code> created by
+<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">formatters::make_row_df()</a></code> with the <code>visible_only</code> argument set to <code>FALSE</code>. It can also be inferred from the
+summary given by <code><a href="table_structure.html">table_structure()</a></code>.</p>
 <p>Note that sorting needs a deeper understanding of table structure in <code>rtables</code>. Please consider reading the related
 vignette
 (<a href="https://insightsengineering.github.io/rtables/latest-tag/articles/sorting_pruning.html">Sorting and Pruning</a>)
@@ -180,10 +164,10 @@ commonly produced by calling one of the various <code><a href="analyze.html">ana
 <p>Built-in score functions are <code><a href="score_funs.html">cont_n_allcols()</a></code> and <code><a href="score_funs.html">cont_n_onecol()</a></code>. They are both working with content rows
 (coming from <code><a href="summarize_row_groups.html">summarize_row_groups()</a></code>) while a custom score function needs to be used on <code>DataRow</code>s. Here, some
 useful descriptor and accessor functions (coming from related vignette):</p><ul><li><p><code><a href="cell_values.html">cell_values()</a></code> - Retrieves a named list of a <code>TableRow</code> or <code>TableTree</code> object's values.</p></li>
-<li><p><code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_name()</a></code> - Retrieves the name of an object. Note this can differ from the label that is displayed (if any is)
-when printing.</p></li>
-<li><p><code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_label()</a></code> - Retrieves the display label of an object. Note this can differ from the name that appears in the
-path.</p></li>
+<li><p><code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">formatters::obj_name()</a></code> - Retrieves the name of an object. Note this can differ from the label that is
+displayed (if any is)  when printing.</p></li>
+<li><p><code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">formatters::obj_label()</a></code> - Retrieves the display label of an object. Note this can differ from the name that
+appears in the path.</p></li>
 <li><p><code><a href="content_table.html">content_table()</a></code> - Retrieves a <code>TableTree</code> object's content table (which contains its summary rows).</p></li>
 <li><p><code><a href="tree_children.html">tree_children()</a></code> - Retrieves a <code>TableTree</code> object's direct children (either subtables, rows or possibly a mix
 thereof, though that should not happen in practice).</p></li>
@@ -192,7 +176,7 @@ thereof, though that should not happen in practice).</p></li>
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index">
 <ul><li><p>Score functions <code><a href="score_funs.html">cont_n_allcols()</a></code> and <code><a href="score_funs.html">cont_n_onecol()</a></code>.</p></li>
-<li><p><code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">make_row_df()</a></code> and <code><a href="table_structure.html">table_structure()</a></code> for pathing information.</p></li>
+<li><p><code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html" class="external-link">formatters::make_row_df()</a></code> and <code><a href="table_structure.html">table_structure()</a></code> for pathing information.</p></li>
 <li><p><code><a href="ttap.html">tt_at_path()</a></code> to select a table's (sub)structure at a given path.</p></li>
 </ul></div>
     </div>
