@@ -744,8 +744,8 @@ margins_landscape <- function() {
 #' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [formatters::matrix_form()]
 #'   `indent_size`) is used. To work with `docx`, any size is multiplied by 2 mm (5.67 pt) by default.
 #' @param titles_as_header (`flag`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
-#'   as it makes additional header rows for [formatters::main_title()] string and [formatters::subtitles()] character 
-#'   vector (one per element). `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text 
+#'   as it makes additional header rows for [formatters::main_title()] string and [formatters::subtitles()] character
+#'   vector (one per element). `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text
 #'   paragraph above the table. The same style is applied.
 #' @param footers_as_text (`flag`)\cr defaults to `FALSE` for [tt_to_flextable()], so the table is self-contained with
 #'   the `flextable` definition of footnotes. `TRUE` is used for [export_as_docx()] to add the footers as a new

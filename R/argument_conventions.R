@@ -174,7 +174,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
 #' @param page_title (`character`)\cr page-specific title(s).
 #' @param prov_footer (`character`)\cr a vector of strings to use as provenance-related global footer materials
 #'   ([formatters::prov_footer()]), where every element is printed on a separate line.
-#' @param subtitles (`character`)\cr a vector of strings to use as subtitles ([formatters::subtitles()]), where every 
+#' @param subtitles (`character`)\cr a vector of strings to use as subtitles ([formatters::subtitles()]), where every
 #' element is printed on a separate line. Ignored for subtables.
 #' @param title (`string`)\cr single string to use as main title ([formatters::main_title()]). Ignored for subtables.
 #' @param trailing_section_div (`string`)\cr string which will be used as a section divider after the printing

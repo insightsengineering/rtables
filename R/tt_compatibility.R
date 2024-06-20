@@ -479,7 +479,7 @@ rbindl_rtables <- function(x, gap = lifecycle::deprecated(), check_headers = lif
 #' @note
 #' When objects are row-bound, titles and footer information is retained from the first object (if any exists) if all
 #' other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed
-#' and must be set for the bound table via the [formatters::main_title()], [formatters::subtitles()], 
+#' and must be set for the bound table via the [formatters::main_title()], [formatters::subtitles()],
 #' [formatters::main_footer()], and [formatters::prov_footer()] functions.
 #'
 #' @examples
