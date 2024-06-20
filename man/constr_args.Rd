@@ -73,8 +73,8 @@ an \code{AnalyzeMultiVars} split object).}
 
 \item{title}{(\code{string})\cr single string to use as main title (\code{\link[formatters:title_footer]{formatters::main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}), where every element is
-printed on a separate line. Ignored for subtables.}
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}), where every
+element is printed on a separate line. Ignored for subtables.}
 
 \item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
 (\code{\link[formatters:title_footer]{formatters::main_footer()}}), where every element is printed on a separate line.}

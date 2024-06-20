@@ -19,8 +19,8 @@ basic_table(
 \arguments{
 \item{title}{(\code{string})\cr single string to use as main title (\code{\link[formatters:title_footer]{formatters::main_title()}}). Ignored for subtables.}
 
-\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}), where every element is
-printed on a separate line. Ignored for subtables.}
+\item{subtitles}{(\code{character})\cr a vector of strings to use as subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}), where every
+element is printed on a separate line. Ignored for subtables.}
 
 \item{main_footer}{(\code{character})\cr a vector of strings to use as main global (non-referential) footer materials
 (\code{\link[formatters:title_footer]{formatters::main_footer()}}), where every element is printed on a separate line.}
@@ -69,8 +69,9 @@ of valid format labels to select from.
 \item Because percent components in \code{colcount_format} are \emph{always} populated with the value 1, we can get arguably
 strange results, such as that individual arm columns and a combined "all patients" column all list "100\%" as
 their percentage, even though the individual arm columns represent strict subsets of the "all patients" column.
-\item Note that subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}) and footers (\code{\link[formatters:title_footer]{formatters::main_footer()}} and \code{\link[formatters:title_footer]{formatters::prov_footer()}}) that span more than one
-line can be supplied as a character vector to maintain indentation on multiple lines.
+\item Note that subtitles (\code{\link[formatters:title_footer]{formatters::subtitles()}}) and footers (\code{\link[formatters:title_footer]{formatters::main_footer()}} and
+\code{\link[formatters:title_footer]{formatters::prov_footer()}}) that span more than one line can be supplied as a character vector to maintain
+indentation on multiple lines.
 }
 }
 \examples{

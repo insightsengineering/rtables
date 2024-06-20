@@ -55,9 +55,9 @@ it, which we encourage users to avoid.
 that each child at that step will be \emph{separately} sorted based on \code{scorefun} and the remaining \code{path} entries. This
 can occur multiple times in a path.
 
-A list of valid (non-wildcard) paths can be seen in the \code{path} column of the \code{data.frame} created by \code{\link[formatters:make_row_df]{formatters::make_row_df()}}
-with the \code{visible_only} argument set to \code{FALSE}. It can also be inferred from the summary given by
-\code{\link[=table_structure]{table_structure()}}.
+A list of valid (non-wildcard) paths can be seen in the \code{path} column of the \code{data.frame} created by
+\code{\link[formatters:make_row_df]{formatters::make_row_df()}} with the \code{visible_only} argument set to \code{FALSE}. It can also be inferred from the
+summary given by \code{\link[=table_structure]{table_structure()}}.
 
 Note that sorting needs a deeper understanding of table structure in \code{rtables}. Please consider reading the related
 vignette
@@ -72,10 +72,10 @@ Built-in score functions are \code{\link[=cont_n_allcols]{cont_n_allcols()}} and
 useful descriptor and accessor functions (coming from related vignette):
 \itemize{
 \item \code{\link[=cell_values]{cell_values()}} - Retrieves a named list of a \code{TableRow} or \code{TableTree} object's values.
-\item \code{\link[formatters:lab_name]{formatters::obj_name()}} - Retrieves the name of an object. Note this can differ from the label that is displayed (if any is)
-when printing.
-\item \code{\link[formatters:lab_name]{formatters::obj_label()}} - Retrieves the display label of an object. Note this can differ from the name that appears in the
-path.
+\item \code{\link[formatters:lab_name]{formatters::obj_name()}} - Retrieves the name of an object. Note this can differ from the label that is
+displayed (if any is)  when printing.
+\item \code{\link[formatters:lab_name]{formatters::obj_label()}} - Retrieves the display label of an object. Note this can differ from the name that
+appears in the path.
 \item \code{\link[=content_table]{content_table()}} - Retrieves a \code{TableTree} object's content table (which contains its summary rows).
 \item \code{\link[=tree_children]{tree_children()}} - Retrieves a \code{TableTree} object's direct children (either subtables, rows or possibly a mix
 thereof, though that should not happen in practice).
