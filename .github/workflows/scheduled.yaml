@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         test-strategy: ["min_cohort", "min_isolated", "release", "max"]
-    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@main
+    uses: insightsengineering/r.pkg.template/.github/workflows/verdepcheck.yaml@add_extra
     name: Dependency Test - ${{ matrix.test-strategy }} 🔢
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
@@ -21,6 +21,8 @@ jobs:
       strategy: ${{ matrix.test-strategy }}
       additional-env-vars: |
         PKG_SYSREQS_DRY_RUN=true
+      extra-deps: |
+        gdtools (>= 0.3.5)
   branch-cleanup:
     name: Branch Cleanup 🧹
     uses: insightsengineering/r.pkg.template/.github/workflows/branch-cleanup.yaml@main
