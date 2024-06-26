@@ -40,10 +40,10 @@ Imports:
     stats,
     stringi (>= 1.6)
 Suggests:
-    broom (>= 1.0.4),
+    broom (>= 1.0.6),
     car (>= 3.0-13),
     dplyr (>= 1.0.5),
-    flextable (>= 0.9.0),
+    flextable (>= 0.9.5),
     knitr (>= 1.42),
     officer (>= 0.5.0),
     r2rtf (>= 0.3.2),
