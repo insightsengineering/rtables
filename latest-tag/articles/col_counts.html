@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.9</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,9 +84,10 @@
           data-bs-toggle="dropdown" role="button"
           aria-expanded="false" aria-haspopup="true"
           id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.9">v0.6.9</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.8">v0.6.8</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
@@ -131,7 +132,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini</h4>
             
-            <h4 data-toc-skip class="date">2024-06-20</h4>
+            <h4 data-toc-skip class="date">2024-06-27</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/col_counts.Rmd" class="external-link"><code>vignettes/col_counts.Rmd</code></a></small>
       <div class="d-none name"><code>col_counts.Rmd</code></div>
@@ -352,15 +353,18 @@ retrieve and set individual column counts’ visiblities, but these are
 largely an internal detail and in virtually all cases end users should
 avoid calling them directly.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## BEWARE</span></span>
+<code class="sourceCode R"><span><span class="co">## BEWARE, the following is expected to show error</span></span>
 <span><span class="va">tbl4</span> <span class="op">&lt;-</span> <span class="va">tbl3</span></span>
 <span><span class="fu"><a href="../reference/colcount_visible.html">colcount_visible</a></span><span class="op">(</span><span class="va">tbl4</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
-<span><span class="va">tbl4</span></span></code></pre></div>
-<pre><code><span><span class="co"># Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'toString': Detected different colcount visibility among sibling facets (those arising from the same split_cols_by* layout instruction). This is not supported.</span></span>
+<span><span class="va">tbl4</span></span>
+<span></span>
+<span><span class="co"># Expected Error message</span></span>
+<span><span class="co"># Error in h(simpleError(msg, call)) :</span></span>
+<span><span class="co">#  error in evaluating the argument 'x' in selecting a method for function 'toString': Detected different colcount visibility among sibling facets (those arising from the same split_cols_by* layout instruction). This is not supported.</span></span>
 <span><span class="co"># Set count values to NA if you want a blank space to appear as the displayed count for particular facets.</span></span>
 <span><span class="co"># First disagreement occured at paths:</span></span>
 <span><span class="co"># ARM[A: Drug X]-&gt;SEX[F]</span></span>
-<span><span class="co"># ARM[A: Drug X]-&gt;SEX[M]</span></span></code></pre>
+<span><span class="co"># ARM[A: Drug X]-&gt;SEX[M]</span></span></code></pre></div>
 <p>Note currently this restriction is currently only enforced for leaf
 columns due to technical implementation details but how a table renders
 should be considered undefined behavior when it contains a group of
@@ -377,7 +381,7 @@ that would print to the default value is <code>""</code>, that will show
 nothing. To change (for now uniformly only) the output string in case of
 missing values in the column counts you can use
 <code>colcount_na_str</code>:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">coldf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_col_df.html">make_col_df</a></span><span class="op">(</span><span class="va">tbl3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/facet_colcount.html">facet_colcount</a></span><span class="op">(</span><span class="va">tbl3</span>, <span class="va">coldf</span><span class="op">$</span><span class="va">path</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NA_integer_</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tbl3</span><span class="op">)</span> <span class="co"># Keeps the missing space</span></span></code></pre></div>
@@ -387,7 +391,7 @@ missing values in the column counts you can use
 <span><span class="co">#        (N=79)   (N=51)     F       M        F         M   </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Mean   32.76    35.57    34.12   37.44    35.20     35.38</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/int_methods.html">colcount_na_str</a></span><span class="op">(</span><span class="va">tbl3</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"NaN"</span></span>
 <span><span class="va">tbl3</span> <span class="co"># Shows NaN</span></span></code></pre></div>
 <pre><code><span><span class="co">#           A: Drug X                                       </span></span>
