@@ -1,4 +1,6 @@
 ## rtables 0.6.8.9000
+### Miscellaneous
+ * Update `col_counts` vignette wording, as CRAN macOS check failed. Raised the issue with the R-core team already. 
 
 ## rtables 0.6.8
 ### New Features
