@@ -74,7 +74,7 @@ Similarly, for columns we can see how the tree is structured with the following 
 coltree_structure(tbl)
 ```
 
-Further information about the column structure can be found in the vignette on `col_counts`.
+Further information about the column structure can be found in the vignette on [`col_counts`](https://insightsengineering.github.io/rtables/latest-tag/articles/col_counts.html).
 
 The `make_row_df()` and `make_col_df()` functions each create a `data.frame` with a variety of information about 
 the table's structure. Most useful for introspection purposes are the `label`, `name`, `abs_rownumber`, `path` and 
