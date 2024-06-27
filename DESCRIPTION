@@ -1,6 +1,6 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.8.9001
+Version: 0.6.9
 Date: 2024-06-27
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
