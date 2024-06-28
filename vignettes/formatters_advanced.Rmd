@@ -27,30 +27,127 @@ knitr::opts_chunk$set(comment = "#")
 library(rtables)
 library(dplyr)
 ADSL <- ex_adsl %>%
-    mutate(ARM = factor(ARM), SEX = factor(SEX))
+  mutate(ARM = factor(ARM), SEX = factor(SEX))
 ```
 
 ### Introduction
 
 The  section will showcase how to extend the standard examples of `list_valid_format_labels()` to create your own format functions.  It is recommended that before this tutorial, the reader will familiarise themselves with the basic functionality of `formatters` package in the following [getting started page](https://insightsengineering.github.io/formatters/latest-tag/articles/formatters.html) for `formatters` package and the [introduction](https://insightsengineering.github.io/rtables/main/articles/introduction.html) to `rtables`. The next step is to understand the basics of the [format precedence](https://insightsengineering.github.io/rtables/main/articles/format_precedence.html#parent-table-format-and-inheritance).
 
-We will use the following `ADSL` data frame to demo the different approaches. 
+We will use the following layout to demo the different approaches. The layout is missing the `analyze` step so the output does not have generate table with any analysed variables, but we will add it later.
 
 ```{r adsl_analyzed, echo=FALSE}
-lyt_no_format <- basic_table() %>%
+basic_layout <- basic_table() %>%
   split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
-  analyze(vars = "AGE", afun = mean)
+  split_rows_by("SEX")
 
-adsl_analyzed <- build_table(lyt_no_format, ADSL)
-
-adsl_analyzed
+build_table(basic_layout, ADSL)
 ```
 
+If we need to apply any standard formatting, we can simply look for one of the pre-defined formats from `list_valid_format_labels()`.
 
-### Creating your own static format functions
+```{r, echo=FALSE}
+list_valid_format_labels()
+```
 
-When you run `list_valid_format_labels()`, you will see several pre-defined valid format labels for 1d, 2d, and 3d tables. 
+There are standard formats for 1d, 2d, and 3d tables. Applying standard formatting is done as part of adding analysed variables with `analyze` function. Specifically, it is part of the `format` argument. Let's add `"xx.xxx"` to format the mean of AGE.
+
+```{r, echo=FALSE}
+basic_layout %>%
+  analyze(vars = "AGE", afun = mean, format = "xx.xxx") %>%
+  build_table(ADSL)
+```
+
+Let's assume we want to create new format, however, that format is not part of the `list_valid_format_labels()`. The following sections cover various situation.
+
+### Creating custom formats
+
+Let's suppose we want to create a new format that will display three decimal places and also says "years" after the number. One way to do this is to tell the analyse function to paste a character vector containing a formatted combination of text and variable value. This is essentially what `sprintf` does which is a base R function.
+
+For example, if you wish to format the value of `pi` to three decimal places, you can use `sprintf` as follows:
+```{r, echo=FALSE}
+sprintf("%0.3f", pi)
+```
+
+The `sprintf` is quite powerful and fast function, so it is quite helpful to read the documentation. In general, we could create many different formats using `sprintf`. Let's get creative and do some formatting below.
+
+```{r, echo=FALSE}
+# ... with 2 decimal places
+sprintf("%.2f", pi)
+# ... use width of 5 and leading zero
+sprintf("%05.2f", pi)
+# ... use width of 5 and leading space
+sprintf("%5.2f", pi)
+# ... scientific notation with 2 decimal places
+sprintf("%e", pi)
+# ... hexadecimal floating-point notation
+sprintf("%a", pi)
+# ... percentage with 2 decimal places
+sprintf("%.2f%%", pi * 100)
+# ... use width of 8, 3 decimal places, and leading zeros
+sprintf("%08.3f", pi)
+# ... with custom text
+sprintf("The value of pi is approximately %.3f", pi)
+```
+
+How to use sprintf in `analyze` function? We would need to create a function that will use `sprintf` and then use this function in the `analyze` function. However, when we will pass this into the `analyze` function, we need to ensure that it will apply to all of the values in the our table. Notice that the examples above are for a single value. There are various ways to do this, one way is to use `lapply` function. Let's create a function that will use `sprintf` and `lapply` to format the values.
+
+```{r, echo=FALSE}
+sprintf_age_years <- function(x, ...) {
+  lapply(x, function(item) sprintf("%0.3f years", item))
+}
+
+basic_layout %>%
+  analyze(vars = "AGE", afun = mean, format = sprintf_age_years) %>%
+  build_table(ADSL)
+```
+
+This is important for understanding the basis of customised formats; however, the `formatters` package provides an easier way to do this.
+
+#### Using `sprintf_format` function
+
+The function `sprintf_format` from `formatters` works as a wrapper around `sprintf`. This means that we do not need to implement `sprintf` inside the `lapply` function ourselves. The `sprintf_format` function will do something like this for us. Let's see how to use it.
+
+```{r, echo=FALSE}
+format_age_years <- sprintf_format("%0.3f years")
+```
+
+```{r, echo=FALSE}
+basic_layout %>%
+  analyze(vars = "AGE", afun = mean, format = format_age_years) %>%
+  build_table(ADSL)
+```
+
+We can also use all of the `sprintf` formats shown in the previous section in the `sprintf_format` function. This is because the ineternals use `sprintf` function. For example, scientific notation with 2 decimal places:
+
+```{r, echo=FALSE}
+format_age_years_scipen <- sprintf_format("%e years")
+```
+
+```{r, echo=FALSE}
+basic_layout %>%
+  analyze(vars = "AGE", afun = mean, format = format_age_years_scipen) %>%
+  build_table(ADSL)
+```
+
+#### Using `sprintf_format` on 2d and 3d tables
+Let's continue with more complex examples. We will use the `sprintf_format` function on 2d and 3d tables. 
+
+```{r, echo=FALSE}
+basic_layout %>%
+  analyze(vars = "AGE", afun = function(x) {
+    list(
+      "Age: mean, median, sd" = rcell(c(mean(x), median(x) ,sd(x))),
+      "Age: max, min" = rcell(c(max(x), min(x))),
+      "Age: range" = rcell(max(x) - min(x))
+    )
+    }) %>%
+  build_table(ADSL)
+```
+
+#### Using conditional custom formatting
+
+
 
 ```{r, echo=FALSE}
 list_valid_format_labels()
