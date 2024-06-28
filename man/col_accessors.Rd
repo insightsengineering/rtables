@@ -62,61 +62,19 @@ col_info(obj) <- value
 
 \S4method{col_info}{TableTree}(obj) <- value
 
-coltree(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+coltree(obj, df = NULL, rtpos = TreePos())
 
-\S4method{coltree}{InstantiatedColumnInfo}(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+\S4method{coltree}{InstantiatedColumnInfo}(obj, df = NULL, rtpos = TreePos())
 
-\S4method{coltree}{PreDataTableLayouts}(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+\S4method{coltree}{PreDataTableLayouts}(obj, df = NULL, rtpos = TreePos())
 
-\S4method{coltree}{PreDataColLayout}(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+\S4method{coltree}{PreDataColLayout}(obj, df = NULL, rtpos = TreePos())
 
-\S4method{coltree}{LayoutColTree}(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+\S4method{coltree}{LayoutColTree}(obj, df = NULL, rtpos = TreePos())
 
-\S4method{coltree}{VTableTree}(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+\S4method{coltree}{VTableTree}(obj, df = NULL, rtpos = TreePos())
 
-\S4method{coltree}{TableRow}(
-  obj,
-  df = NULL,
-  rtpos = TreePos(),
-  alt_counts_df = df,
-  ccount_format = "(N=xx)"
-)
+\S4method{coltree}{TableRow}(obj, df = NULL, rtpos = TreePos())
 
 col_exprs(obj, df = NULL)
 
@@ -151,35 +109,25 @@ col_total(obj) <- value
 \S4method{col_total}{VTableNodeInfo}(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
+\item{obj}{ANY. The object for the accessor to access or modify}
 
-\item{object}{(\code{ANY})\cr the object to modify in place.}
+\item{object}{The object to modify in-place}
 
-\item{value}{(\code{ANY})\cr the new value.}
+\item{value}{The new value}
 
-\item{df}{(\code{data.frame} or \code{NULL})\cr data to use if the column information is being
-generated from a pre-data layout object.}
+\item{df}{data.frame/NULL. Data to use if the column information is being
+generated from a  Pre-Data layout object}
 
-\item{rtpos}{(\code{TreePos})\cr root position.}
+\item{rtpos}{\code{TreePos}. Root position.}
 
-\item{alt_counts_df}{(\code{data.frame} or \code{tibble})\cr alternative full dataset the rtables framework will use
-\emph{only} when calculating column counts.}
-
-\item{ccount_format}{(\code{FormatSpec})\cr The format to be used by default for column
-counts throughout this column tree (i.e. if not overridden by a more specific format
-specification).}
-
-\item{path}{(\code{character} or \code{NULL})\cr \code{col_counts} accessor and setter only.
+\item{path}{character or NULL. \code{col_counts} getter and setter only.
 Path (in column structure).}
 }
 \value{
 A \code{LayoutColTree} object.
 
-Returns various information about columns, depending on the accessor used.
+Various column information, depending on the accessor used.
 }
 \description{
 Column information/structure accessors
-}
-\seealso{
-\code{\link[=facet_colcount]{facet_colcount()}}
 }

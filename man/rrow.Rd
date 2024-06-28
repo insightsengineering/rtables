@@ -2,29 +2,31 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{rrow}
 \alias{rrow}
-\title{Create an \code{rtable} row}
+\title{row}
 \usage{
 rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
 }
 \arguments{
-\item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
-\code{\link[=rrow]{rrow()}}.}
+\item{row.name}{if \code{NULL} then an empty string is used as
+\code{row.name} of the \code{\link{rrow}}.}
 
-\item{...}{cell values.}
+\item{\dots}{cell values}
 
-\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
-cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
+\item{format}{character(1) or function. The format label (string) or
+formatter function to apply to the cell values passed via \code{...}. See
+\code{\link[formatters]{list_valid_format_labels}} for currently supported
+format labels.}
 
-\item{indent}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
+\item{indent}{deprecated.}
 
-\item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
-\code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
+\item{inset}{integer(1). The table inset for the row or table being
+constructed. See \code{\link[formatters]{table_inset}}.}
 }
 \value{
-A row object of the context-appropriate type (label or data).
+A row object of the context-appropriate type (label or data)
 }
 \description{
-Create an \code{rtable} row
+row
 }
 \examples{
 rrow("ABC", c(1, 2), c(3, 2), format = "xx (xx.\%)")

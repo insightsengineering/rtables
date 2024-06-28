@@ -2,23 +2,24 @@
 % Please edit documentation in R/make_split_fun.R
 \name{drop_facet_levels}
 \alias{drop_facet_levels}
-\title{Pre-processing function for use in \code{make_split_fun}}
+\title{Preprocessing Functions for use in make_split_fun}
 \usage{
 drop_facet_levels(df, spl, ...)
 }
 \arguments{
-\item{df}{(\code{data.frame})\cr the incoming data corresponding with the parent facet.}
+\item{df}{data.frame. The incoming data corresponding with the parent facet}
 
-\item{spl}{(\code{VarLevelSplit})\cr the split.}
+\item{spl}{Split.}
 
-\item{...}{additional parameters passed internally.}
+\item{...}{dots. This is used internally to pass parameters.}
 }
 \description{
-This function is intended for use as a pre-processing component in \code{make_split_fun}, and should not be called
+This function is intended for use as a preprocessing
+component in \code{make_split_fun}, and should not be called
 directly by end users.
 }
 \seealso{
-\code{\link[=make_split_fun]{make_split_fun()}}
+make_split_fun
 
 Other make_custom_split: 
 \code{\link{add_combo_facet}()},

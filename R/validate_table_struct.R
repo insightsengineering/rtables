@@ -1,19 +1,18 @@
-#' Find degenerate (sub)structures within a table
+#' Find degenerate (sub)structures within a table (Experimental)
+#' @param tt `TableTree`
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' This function returns a list with the row-paths to all
+#' structural subtables which contain no data rows (
+#' even if they have associated content rows).
 #'
-#' This function returns a list with the row-paths to all structural subtables which contain no data rows (even if
-#' they have associated content rows).
+#' @return a list of character vectors representing the
+#' row paths, if any, to degenerate substructures within
+#' the table.
 #'
-#' @param tt (`TableTree`)\cr a `TableTree` object.
-#'
-#' @return A list of character vectors representing the row paths, if any, to degenerate substructures within the table.
-#'
+#' @export
 #' @examples
 #' find_degen_struct(rtable("hi"))
 #'
-#' @family table structure validation functions
-#' @export
 find_degen_struct <- function(tt) {
   degen <- list()
 
@@ -33,38 +32,38 @@ find_degen_struct <- function(tt) {
   degen
 }
 
-#' Validate and assert valid table structure
+#' Validate and Assert valid table structure (Experimental).
 #'
-#' @description `r lifecycle::badge("experimental")`
+#' @param tt `TableTree`
 #'
-#' A `TableTree` (`rtables`-built table) is considered degenerate if:
+#' A `TableTree` (`rtables`-built table) is considered degenerate if
 #' \enumerate{
-#'   \item{It contains no subtables or data rows (content rows do not count).}
-#'   \item{It contains a subtable which is degenerate by the criterion above.}
+#' \item{it contains no subtables or data rows (content rows do not count)}
+#' \item{it contains a subtable which is degenerate by the criterion above}
 #' }
 #'
-#' `validate_table_struct` assesses whether `tt` has a valid (non-degenerate) structure.
+#' `validate_table_struct` assesses whether `tt` has a valid (non-degenerate)
+#' structure.
 #'
-#' `assert_valid_table` asserts a table must have a valid structure, and throws an informative error (the default) or
-#' warning (if `warn_only` is `TRUE`) if the table is degenerate (has invalid structure or contains one or more
-#' invalid substructures.
+#' `assert_valid_table` asserts a table must have a valid structure,
+#' and throws an informative error (the default) or warning (if `warn_only`
+#' is `TRUE`) if the table is degenerate (has invalid structure or
+#' contains one or more invalid substructures
 #'
-#' @param tt (`TableTree`)\cr a `TableTree` object.
+#' @return for `validate_table_struct` a logical value indicating valid structure;
+#' `assert_valid_table` is called for its side-effect of throwing an error
+#' or warning for degenerate tables.
 #'
-#' @return
-#' * `validate_table_struct` returns a logical value indicating valid structure.
-#' * `assert_valid_table` is called for its side-effect of throwing an error or warning for degenerate tables.
+#' @note This function is experimental and the exact text of the warning/error
+#' is subject to change in future releases.
 #'
-#' @note This function is experimental and the exact text of the warning/error is subject to change in future releases.
+#' @export
 #'
 #' @examples
 #' validate_table_struct(rtable("hahaha"))
 #' \dontrun{
 #' assert_valid_table(rtable("oops"))
 #' }
-#'
-#' @family table structure validation functions
-#' @export
 validate_table_struct <- function(tt) {
   degen_pths <- find_degen_struct(tt)
   length(degen_pths) == 0
@@ -130,10 +129,11 @@ make_degen_message <- function(degen_pths, tt) {
   msg
 }
 
-#' @param warn_only (`flag`)\cr whether a warning should be thrown instead of an error. Defaults to `FALSE`.
-#'
+
 #' @rdname validate_table_struct
 #' @export
+#' @param warn_only logical(1). Should a warning be thrown instead of an error?
+#' Defaults to `FALSE`
 assert_valid_table <- function(tt, warn_only = FALSE) {
   degen_pths <- find_degen_struct(tt)
   if (length(degen_pths) == 0) {
@@ -141,6 +141,7 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
   }
 
   ## we failed, now we build an informative error/warning message
+
   msg <- make_degen_message(degen_pths, tt)
 
   if (!warn_only) {
@@ -150,23 +151,29 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
   return(FALSE)
 }
 
-#' Sanitize degenerate table structures
+
+#' Sanitize degenerate table structures (Experimental)
 #'
-#' @description `r lifecycle::badge("experimental")`
 #'
-#' Experimental function to correct structure of degenerate tables by adding messaging rows to empty sub-structures.
+#' @description Experimental function to correct structure
+#' of degenerate tables by adding messaging rows to empty
+#' sub-structures.
 #'
-#' @param tt (`TableTree`)\cr a `TableTree` object.
-#' @param empty_msg (`string`)\cr the string which should be spanned across the inserted empty rows.
+#' @param tt `TableTree`
+#' @param empty_msg character(1). The string which should be spanned across
+#' the inserted empty rows.
 #'
 #' @details
-#' This function locates degenerate portions of the table (including the table overall in the case of a table with no
-#' data rows) and inserts a row which spans all columns with the message `empty_msg` at each one, generating a table
-#' guaranteed to be non-degenerate.
 #'
-#' @return If `tt` is already valid, it is returned unmodified. If `tt` is degenerate, a modified, non-degenerate
-#' version of the table is returned.
+#' This function locates degenerate portions of the table (including the table
+#' overall in the case of a table with no data rows) and inserts a row
+#' which spans all columns with the message `empty_msg` at each one,
+#' generating a table guaranteed to be non-degenerate.
 #'
+#' @return If `tt` is already valid, it is returned unmodified. If `tt` is
+#' degenerate, a modified, non-degenerate version of the table is returned.
+#'
+#' @export
 #' @examples
 #' sanitize_table_struct(rtable("cool beans"))
 #'
@@ -178,9 +185,6 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
 #' ## Degenerate because it doesn't have any analyze calls -> no data rows
 #' badtab <- build_table(lyt, DM)
 #' sanitize_table_struct(badtab)
-#'
-#' @family table structure validation functions
-#' @export
 sanitize_table_struct <- function(tt, empty_msg = "-- This Section Contains No Data --") {
   rdf <- make_row_df(tt)
 

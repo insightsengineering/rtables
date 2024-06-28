@@ -2,29 +2,33 @@
 % Please edit documentation in R/split_funs.R
 \name{do_base_split}
 \alias{do_base_split}
-\title{Apply basic split (for use in custom split functions)}
+\title{Apply Basic Split (For Use In Custom Split Functions)}
 \usage{
 do_base_split(spl, df, vals = NULL, labels = NULL, trim = FALSE)
 }
 \arguments{
-\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
+\item{spl}{A Split object defining a partitioning or analysis/tabulation of
+the data.}
 
-\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
+\item{df}{dataset (\code{data.frame} or \code{tibble})}
 
-\item{vals}{(\code{ANY})\cr already calculated/known values of the split. Generally should be left as \code{NULL}.}
+\item{vals}{ANY. Already calculated/known values of the split. Generally
+should be left as \code{NULL}.}
 
-\item{labels}{(\code{character})\cr labels associated with \code{vals}. Should be \code{NULL} whenever \code{vals} is, which should
-almost always be the case.}
+\item{labels}{character. Labels associated with \code{vals}. Should be
+\code{NULL} when \code{vals} is, which should almost always be the case.}
 
-\item{trim}{(\code{flag})\cr whether groups corresponding to empty data subsets should be removed. Defaults to
-\code{FALSE}.}
+\item{trim}{logical(1). Should groups corresponding to empty data subsets be
+removed. Defaults to \code{FALSE}.}
 }
 \value{
-The result of the split being applied as if it had no custom split function. See \link{custom_split_funs}.
+the result of the split being applied as if it had no custom split
+function, see \code{\link{custom_split_funs}}
 }
 \description{
-This function is intended for use inside custom split functions. It applies the current split \emph{as if it had no
-custom splitting function} so that those default splits can be further manipulated.
+This function is intended for use inside custom split functions. It applies
+the current split \emph{as if it had no custom splitting function} so that
+those default splits can be further manipulated.
 }
 \examples{
 uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
@@ -49,5 +53,4 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, subset(ex_adae, as.numeric(ARM) <= 2))
 tbl
-
 }

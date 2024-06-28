@@ -2,32 +2,31 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{insert_rrow}
 \alias{insert_rrow}
-\title{Insert \code{rrow}s at (before) a specific location}
+\title{[DEPRECATED] insert \code{rrows} at (before) a specific location}
 \usage{
 insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 }
 \arguments{
-\item{tbl}{(\code{VTableTree})\cr a \code{rtable} object.}
+\item{tbl}{\code{rtable}}
 
-\item{rrow}{(\code{TableRow})\cr an \code{rrow} to append to \code{tbl}.}
+\item{rrow}{\code{rrow} to append to \code{rtable}}
 
-\item{at}{(\code{integer(1)})\cr position into which to put the \code{rrow}, defaults to beginning (i.e. row 1).}
+\item{at}{position into which to put the \code{rrow}, defaults to beginning (i.e. 1)}
 
-\item{ascontent}{(\code{flag})\cr currently ignored.}
+\item{ascontent}{logical. Currently ignored.}
 }
 \value{
-A \code{TableTree} of the same specific class as \code{tbl}.
+A \code{TableTree} of the same specific class as \code{tbl}
 }
 \description{
-\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
-}
-\details{
-This function is deprecated and will be removed in a future release of \code{rtables}. Please use
-\code{\link[=insert_row_at_path]{insert_row_at_path()}} or \code{\link[=label_at_path]{label_at_path()}} instead.
+This function is deprecated and will be removed in a future release of
+\code{rtables}. Please use \code{\link{insert_row_at_path}} or
+\code{\link{label_at_path}} instead.
 }
 \note{
-Label rows (i.e. a row with no data values, only a \code{row.name}) can only be inserted at positions which do
-not already contain a label row when there is a non-trivial nested row structure in \code{tbl}.
+Label rows (i.e. a row with no data values, only a \code{row.name}) can only be
+inserted at positions which do not already contain a label row when there
+is a non-trivial nested row structure in \code{tbl}
 }
 \examples{
 o <- options(warn = 0)
@@ -56,5 +55,4 @@ insert_rrow(tbl2, rrow("new row", 5, 6, 7))
 insert_rrow(tbl2, rrow("new row", 5, 6, 7), at = 3)
 
 options(o)
-
 }

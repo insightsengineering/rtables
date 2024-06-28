@@ -11,6 +11,7 @@ do_recursive_replace <- function(tab, path, incontent = FALSE, value) { ## rows 
   recursive_replace(tab, path, value) ## incontent, rows, cols,value)
 }
 
+
 ## different cases we want to support:
 ## 1. Replace entire children for a particular node/position in the tree
 ## 2. Replace entire rows at a particular (ElementaryTable) position within the
@@ -118,17 +119,16 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
   ctree
 }
 
-#' Insert row at path
+#' Insert Row at Path
 #'
-#' Insert a row into an existing table directly before or directly after an existing data (i.e., non-content and
-#' non-label) row, specified by its path.
+#' Insert a row into an existing table directly before or directly after an existing
+#' data (i.e., non-content and non-label) row, specified by its path.
 #'
 #' @inheritParams gen_args
-#' @param after (`flag`)\cr whether `value` should be added as a row directly before (`FALSE`, the default) or after
-#'   (`TRUE`) the row specified by `path`.
+#' @param after logical(1). Should `value` be added as a row directly before (`FALSE`,
+#' the default) or after (`TRUE`) the row specified by `path`.
 #'
-#' @seealso [DataRow()], [rrow()]
-#'
+#' @export
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
@@ -147,15 +147,14 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #'   after = TRUE
 #' )
 #' tbl3
-#'
-#' @export
+#' @seealso [DataRow()] [rrow()]
+
 setGeneric("insert_row_at_path",
   signature = c("tt", "value"),
   function(tt, path, value, after = FALSE) {
     standardGeneric("insert_row_at_path")
   }
 )
-
 #' @rdname insert_row_at_path
 setMethod(
   "insert_row_at_path", c("VTableTree", "DataRow"),
@@ -217,22 +216,27 @@ setMethod(
   }
 )
 
-#' Label at path
+
+#' Label at Path
 #'
-#' Accesses or sets the label at a path.
-#'
+#' Gets or sets the label at a path
 #' @inheritParams gen_args
-#'
 #' @details
-#' If `path` resolves to a single row, the label for that row is retrieved or set. If, instead, `path` resolves to a
-#' subtable, the text for the row-label associated with that path is retrieved or set. In the subtable case, if the
-#' label text is set to a non-`NA` value, the `labelrow` will be set to visible, even if it was not before. Similarly,
-#' if the label row text for a subtable is set to `NA`, the label row will bet set to non-visible, so the row will not
+#'
+#' If `path` resolves to a single row, the label for that row
+#' is retrieved or set. If, instead, `path` resolves to a subtable,
+#' the text for the row-label associated with that path is retrieved
+#' or set. In the subtable case, if the label text is set to a non-NA
+#' value, the `labelrow` will be set to visible, even if it was not before.
+#' Similarly, if the label row text for a subtable is set to NA,
+#' the label row will bet set to non-visible, so the row will not
 #' appear at all when the table is printed.
 #'
-#' @note When changing the row labels for content rows, it is important to path all the way to the *row*. Paths
-#' ending in `"@content"` will not exhibit the behavior you want, and are thus an error. See [row_paths()] for help
-#' determining the full paths to content rows.
+#' @note When changing the row labels for content rows, it is important to
+#' path all the way to the \emph{row}. Paths ending in `"@content"` will
+#' not exhibit the behavior you want, and are thus an error. See
+#' \code{\link{row_paths}} for help determining the full paths to content
+#' rows.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -245,12 +249,10 @@ setMethod(
 #'
 #' label_at_path(tbl, c("COUNTRY", "USA")) <- "United States"
 #' tbl
-#'
 #' @export
 label_at_path <- function(tt, path) {
   obj_label(tt_at_path(tt, path))
 }
-
 #' @export
 #' @rdname label_at_path
 `label_at_path<-` <- function(tt, path, value) {
@@ -266,18 +268,16 @@ label_at_path <- function(tt, path) {
   tt
 }
 
-#' Access or set table elements at specified path
-#'
+
+
+#' Get or set table elements at specified path
 #' @inheritParams gen_args
-#' @param ... unused.
-#'
+#' @param \dots unused.
 #' @export
 #' @rdname ttap
 setGeneric("tt_at_path", function(tt, path, ...) standardGeneric("tt_at_path"))
-
-#' @inheritParams tt_at_path
-#'
 #' @export
+#' @inheritParams tt_at_path
 #' @rdname int_methods
 setMethod(
   "tt_at_path", "VTableTree",
@@ -313,7 +313,10 @@ setMethod(
   }
 )
 
-#' @note Setting `NULL` at a defined path removes the corresponding sub-table.
+#' @export
+#' @rdname ttap
+#'
+#' @note Setting `NULL` at a defined path removes the corresponding sub table.
 #'
 #' @examples
 #' # Accessing sub table.
@@ -342,16 +345,13 @@ setMethod(
 #' tt_at_path(tbl3, path = c("SEX", "F", "BMRKR2")) <- sub_tbl
 #' tbl3
 #'
-#' @export
-#' @rdname ttap
 setGeneric(
   "tt_at_path<-",
   function(tt, path, ..., value) standardGeneric("tt_at_path<-")
 )
-
 #' @export
-#' @keywords internal
 #' @rdname int_methods
+#' @keywords internal
 setMethod(
   "tt_at_path<-", c(tt = "VTableTree", value = "VTableTree"),
   function(tt, path, ..., value) {
@@ -362,8 +362,8 @@ setMethod(
 ## this one removes the child at path from the parents list of children,
 ## because that is how lists behave.
 #' @export
-#' @keywords internal
 #' @rdname int_methods
+#' @keywords internal
 setMethod(
   "tt_at_path<-", c(tt = "VTableTree", value = "NULL"),
   function(tt, path, ..., value) {
@@ -371,9 +371,10 @@ setMethod(
   }
 )
 
+
 #' @export
-#' @keywords internal
 #' @rdname int_methods
+#' @keywords internal
 setMethod(
   "tt_at_path<-", c(tt = "VTableTree", value = "TableRow"),
   function(tt, path, ..., value) {
@@ -387,43 +388,49 @@ setMethod(
   }
 )
 
-#' Retrieve and assign elements of a `TableTree`
+
+#' @name brackets
 #'
-#' @param x (`TableTree`)\cr a `TableTree` object.
-#' @param i (`numeric(1)`)\cr index.
-#' @param j (`numeric(1)`)\cr index.
-#' @param drop (`flag`)\cr whether the value in the cell should be returned if one cell is selected by the
-#'   combination of `i` and `j`. It is not possible to return a vector of values. To do so please consider using
-#'   [cell_values()]. Defaults to `FALSE`.
-#' @param ... additional arguments. Includes:
-#'   \describe{
-#'     \item{`keep_topleft`}{(`flag`) (`[` only) whether the top-left material for the table should be retained after
-#'       subsetting. Defaults to `TRUE` if all rows are included (i.e. subsetting was by column), and drops it
-#'       otherwise.}
-#'     \item{`keep_titles`}{(`flag`) whether title information should be retained. Defaults to `FALSE`.}
-#'     \item{`keep_footers`}{(`flag`) whether non-referential footer information should be retained. Defaults to
-#'       `keep_titles`.}
-#'     \item{`reindex_refs`}{(`flag`) whether referential footnotes should be re-indexed as if the resulting subset is
-#'       the entire table. Defaults to `TRUE`.}
-#'   }
-#' @param value (`list`, `TableRow`, or `TableTree`)\cr replacement value.
+#' @title Retrieve and assign elements of a `TableTree`
 #'
-#' @details
-#' By default, subsetting drops the information about title, subtitle, main footer, provenance footer, and `topleft`.
-#' If only a column is selected and all rows are kept, the `topleft` information remains as default. Any referential
-#' footnote is kept whenever the subset table contains the referenced element.
+#' @param x `TableTree`
+#' @param i index
+#' @param j index
+#' @param drop logical(1). Should the value in the cell be returned if one
+#'   cell is selected by the combination of \code{i} and \code{j}. It is not possible
+#'   to return a vector of values. To do so please consider using [cell_values()].
+#'   Defaults to \code{FALSE}.
+#' @param \dots Includes
+#' \describe{
+#' \item{\emph{keep_topleft}}{logical(1) (\code{[} only) Should the `top-left`
+#' material for the table be retained after subsetting. Defaults to `TRUE` if
+#' all rows are included (i.e. subsetting was by column), and drops it otherwise.}
+#' \item{\emph{keep_titles}}{logical(1) Should title information be retained. Defaults to \code{FALSE}.}
+#' \item{\emph{keep_footers}}{logical(1) Should non-referential footer
+#' information be retained. Defaults to \code{keep_titles}.}
+#' \item{\emph{reindex_refs}}{logical(1). Should referential footnotes be
+#' re-indexed as if the resulting subset is the entire table. Defaults to
+#' \code{TRUE}.}
+#' }
+#' @param value Replacement value (list, `TableRow`, or `TableTree`)
 #'
-#' @return A `TableTree` (or `ElementaryTable`) object, unless a single cell was selected with `drop = TRUE`, in which
-#'   case the (possibly multi-valued) fully stripped raw value of the selected cell.
+#' @return a \code{TableTree} (or \code{ElementaryTable}) object, unless a
+#'   single cell was selected with \code{drop=TRUE}, in which case the (possibly
+#'   multi-valued) fully stripped raw value of the selected cell.
 #'
-#' @note
-#' Subsetting always preserve the original order, even if provided indexes do not preserve it. If sorting is needed,
-#' please consider using `sort_at_path()`. Also note that `character` indices are treated as paths, not vectors of
-#' names in both `[` and `[<-`.
+#' @details by default, subsetting drops the information about title, subtitle,
+#' main footer, provenance footer, and `topleft`. If only a column is selected
+#' and all rows are kept, the `topleft` information remains as default. Any
+#' referential footnote is kept whenever the subset table contains the
+#' referenced element.
 #'
-#' @seealso
-#' * [sort_at_path()] to understand sorting.
-#' * [summarize_row_groups()] to understand path structure.
+#' @note subsetting always preserve the original order, even if provided
+#' indexes do not preserve it. If sorting is needed, please consider
+#' using `sort_at_path()`. Also note that `character` indices are treated as paths,
+#' not vectors of names in both `[` and `[<-`.
+#'
+#' @seealso Regarding sorting: `sort_at_path()` and how to understand path
+#' structure: `summarize_row_groups()`, and `summarize_col_groups()`.
 #'
 #' @examples
 #' lyt <- basic_table(
@@ -494,7 +501,6 @@ setMethod(
 #' # Note that order can not be changed with subsetting
 #' tbl[c(4, 3, 1), c(3, 1)] # It preserves order and wanted selection
 #'
-#' @name brackets
 NULL
 
 #' @exportMethod [<-
@@ -602,7 +608,6 @@ setMethod(
 )
 
 #' @inheritParams brackets
-#'
 #' @exportMethod [<-
 #' @rdname int_methods
 #' @keywords internal
@@ -696,6 +701,7 @@ setMethod(
   }
 )
 
+
 ## small utility to transform any negative
 ## indices into positive ones, given j
 ## and total length
@@ -705,6 +711,7 @@ setMethod(
   j <- seq_len(n)[j]
   j
 }
+
 
 path_collapse_sep <- "`"
 escape_name_padding <- function(x) {
@@ -721,6 +728,7 @@ path_to_regex <- function(path) {
     }
   }, ""), collapse = path_collapse_sep)
 }
+
 
 .path_to_pos <- function(path, tt, distinct_ok = TRUE, cols = FALSE) {
   path <- path[!grepl("^(|root)$", path)]
@@ -838,6 +846,7 @@ setMethod(
   }
 )
 
+
 setMethod(
   "subset_cols", c("InstantiatedColumnInfo", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
@@ -896,6 +905,9 @@ setMethod(
     prune_children(tt, j)
   }
 )
+
+
+
 
 ## label rows ARE included in the count
 subset_by_rownum <- function(tt,
@@ -987,6 +999,7 @@ subset_by_rownum <- function(tt,
   ret
 }
 
+
 #' @exportMethod [
 #' @rdname brackets
 setMethod(
@@ -1054,6 +1067,8 @@ setMethod(
   }
 )
 
+
+
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
@@ -1093,6 +1108,7 @@ setMethod(
   }
 )
 
+
 #' @exportMethod [
 #' @rdname int_methods
 #' @keywords internal
@@ -1103,6 +1119,7 @@ setMethod(
     x[i, j, ..., drop = drop]
   }
 )
+
 
 #' @exportMethod [
 #' @rdname int_methods
@@ -1180,7 +1197,6 @@ setMethod(
 #' @importFrom utils compareVersion
 
 setGeneric("tail", tail)
-
 setMethod(
   "tail", "VTableTree",
   function(x, n = 6L, ...) {
@@ -1193,7 +1209,6 @@ setMethod(
 )
 
 setGeneric("head", head)
-
 setMethod(
   "head", "VTableTree",
   function(x, n = 6L, ...) {
@@ -1203,21 +1218,31 @@ setMethod(
 
 #' Retrieve cell values by row and column path
 #'
+#' @rdname cell_values
+#'
 #' @inheritParams gen_args
-#' @param rowpath (`character`)\cr path in row-split space to the desired row(s). Can include `"@content"`.
-#' @param colpath (`character`)\cr path in column-split space to the desired column(s). Can include `"*"`.
-#' @param omit_labrows (`flag`)\cr whether label rows underneath `rowpath` should be omitted (`TRUE`, the default),
-#'   or return empty lists of cell "values" (`FALSE`).
+#' @param rowpath character. Path in row-split space to the desired row(s). Can
+#'   include \code{"@content"}.
+#' @param colpath character. Path in column-split space to the desired
+#'   column(s). Can include \code{"*"}.
+#' @param omit_labrows logical(1). Should label rows underneath \code{rowpath}
+#'   be omitted (\code{TRUE}, the default), or return empty lists of cell
+#'   "values" (\code{FALSE}).
 #'
-#' @return
-#' * `cell_values` returns a `list` (regardless of the type of value the cells hold). If `rowpath` defines a path to
-#'   a single row, `cell_values` returns the list of cell values for that row, otherwise a list of such lists, one for
-#'   each row captured underneath `rowpath`. This occurs after subsetting to `colpath` has occurred.
-#' * `value_at` returns the "unwrapped" value of a single cell, or an error, if the combination of `rowpath` and
-#'   `colpath` do not define the location of a single cell in `tt`.
+#' @return for \code{cell_values}, a \emph{list} (regardless of the type of
+#'   value the cells hold). if \code{rowpath} defines a path to a single row,
+#'   \code{cell_values} returns the list of cell values for that row, otherwise
+#'   a list of such lists, one for each row captured underneath \code{rowpath}.
+#'   This occurs after subsetting to \code{colpath} has occurred.
 #'
-#' @note `cell_values` will return a single cell's value wrapped in a list. Use `value_at` to receive the "bare" cell
-#'   value.
+#'   For \code{value_at} the "unwrapped" value of a single cell, or an error, if
+#'   the combination of \code{rowpath} and \code{colpath} do not define the
+#'   location of a single cell in \code{tt}.
+#'
+#' @note \code{cell_values} will return a single cell's value wrapped in a list.
+#'   Use \code{value_at} to receive the "bare" cell value.
+#'
+#' @export
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -1247,6 +1272,7 @@ setMethod(
 #' )
 #' cell_values(tbl, c("RACE", "ASIAN"), c("ARM", "A: Drug X", "SEX", "M"))
 #'
+#'
 #' ## any arm, male columns from the ASIAN content (i.e. summary) row
 #' cell_values(
 #'   tbl, c("RACE", "ASIAN", "@content"),
@@ -1275,9 +1301,6 @@ setMethod(
 #'   c("ARM", "B: Placebo", "SEX", "M")
 #' )
 #' stopifnot(identical(cvlist[[1]], cvnolist))
-#'
-#' @rdname cell_values
-#' @export
 setGeneric("cell_values", function(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE) {
   standardGeneric("cell_values")
 })
@@ -1321,6 +1344,8 @@ setMethod(
   }
 )
 
+
+
 #' @rdname cell_values
 #' @export
 setGeneric("value_at", function(tt, rowpath = NULL, colpath = NULL) {
@@ -1352,6 +1377,7 @@ setMethod(
   }
 )
 
+
 #' @rdname int_methods
 #' @keywords internal
 #' @exportMethod value_at
@@ -1361,6 +1387,8 @@ setMethod(
     stop("calling value_at for LabelRow objects is not meaningful")
   }
 )
+
+
 
 .inner_cell_value <- function(tt,
                               rowpath,
@@ -1440,22 +1468,21 @@ setMethod(
 }
 
 #' Head and tail methods
-#'
 #' @inheritParams utils::head
-#' @param keep_topleft (`flag`)\cr if `TRUE` (the default), top_left material for the table will be carried over to the
-#'   subset.
-#' @param keep_titles (`flag`)\cr if `TRUE` (the default), all title material for the table will be carried over to the
-#'   subset.
-#' @param keep_footers (`flag`)\cr if `TRUE`, all footer material for the table will be carried over to the subset. It
-#'   defaults to `keep_titles`.
-#' @param reindex_refs (`flag`)\cr defaults to `FALSE`. If `TRUE`, referential footnotes will be reindexed for the
-#'   subset.
-#'
+#' @param keep_topleft logical(1). If `TRUE` (the default),
+#' top_left material for the table will be carried over to the
+#' subset.
+#' @param keep_titles logical(1).  If `TRUE` (the default),
+#' all title material for the table will be carried over to the
+#' subset.
+#' @param keep_footers logical(1). If `TRUE`, all footer material for the table
+#' will be carried over to the subset. It defaults to `keep_titles`.
+#' @param reindex_refs logical(1). Defaults to `FALSE`. If `TRUE`,
+#' referential footnotes will be reindexed for the subset.
 #' @docType methods
 #' @export
 #' @rdname head_tail
 setGeneric("head")
-
 #' @docType methods
 #' @export
 #' @rdname head_tail
@@ -1484,7 +1511,6 @@ setMethod(
 #' @export
 #' @rdname head_tail
 setGeneric("tail")
-
 #' @docType methods
 #' @export
 #' @rdname head_tail

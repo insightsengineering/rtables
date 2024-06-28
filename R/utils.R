@@ -1,13 +1,12 @@
 #' Check if an object is a valid `rtable`
 #'
-#' @param x (`ANY`)\cr an object.
+#' @param x an object
 #'
-#' @return `TRUE` if `x` is a formal `TableTree` object, `FALSE` otherwise.
-#'
-#' @examples
-#' is_rtable(build_table(basic_table(), iris))
 #'
 #' @export
+#' @return \code{TRUE} if \code{x} is a formal Table object, \code{FALSE} otherwise.
+#' @examples
+#' is_rtable(build_table(basic_table(), iris))
 is_rtable <- function(x) {
   is(x, "VTableTree")
 }
@@ -75,11 +74,12 @@ func_takes <- function(func, params, is_first = FALSE) {
   }
 }
 
-#' Translate spl_context to a path to display in error messages
+#' Translate spl_context to Path for display in error messages
 #'
-#' @param ctx (`data.frame`)\cr the `spl_context` data frame where the error occurred.
+#' @param ctx data.frame. The `spl_context` data.frame where the error occurred
 #'
-#' @return A character string containing a description of the row path corresponding to `ctx`.
+#' @return A character string containing a description of the row path corresponding
+#' to the `ctx`
 #'
 #' @export
 spl_context_to_disp_path <- function(ctx) {

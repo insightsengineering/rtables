@@ -40,12 +40,12 @@ row_values(obj) <- value
 \S4method{row_values}{LabelRow}(obj) <- value
 }
 \arguments{
-\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
+\item{obj}{ANY. The object for the accessor to access or modify}
 
-\item{value}{(\code{ANY})\cr the new value.}
+\item{value}{The new value}
 }
 \value{
-Various return values depending on the accessor called.
+various, depending on the accessor called.
 }
 \description{
 Row attribute accessors

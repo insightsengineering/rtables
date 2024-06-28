@@ -14,30 +14,28 @@ insert_brs <- function(vec) {
   ret
 }
 
+
 div_helper <- function(lst, class) {
   do.call(tags$div, c(list(class = paste(class, "rtables-container"), lst)))
 }
 
-#' Convert an `rtable` object to a `shiny.tag` HTML object
+#' Convert an `rtable` object to a `shiny.tag` html object
 #'
-#' The returned HTML object can be immediately used in `shiny` and `rmarkdown`.
+#' The returned `html` object can be immediately used in `shiny` and `rmarkdown`.
 #'
-#' @param x (`VTableTree`)\cr a `TableTree` object.
-#' @param class_table (`character`)\cr class for `table` tag.
-#' @param class_tr (`character`)\cr class for `tr` tag.
-#' @param class_th (`character`)\cr class for `th` tag.
-#' @param width (`character`)\cr a string to indicate the desired width of the table. Common input formats include a
-#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`). Defaults to `NULL`.
-#' @param link_label (`character`)\cr link anchor label (not including `tab:` prefix) for the table.
-#' @param bold (`character`)\cr elements in table output that should be bold. Options are `"main_title"`,
-#'   `"subtitles"`, `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label
-#'   rows). Defaults to `"header"`.
-#' @param header_sep_line (`flag`)\cr whether a black line should be printed to under the table header. Defaults
-#'   to `TRUE`.
-#' @param no_spaces_between_cells (`flag`)\cr whether spaces between table cells should be collapsed. Defaults
-#'   to `FALSE`.
-#'
-#' @importFrom htmltools tags
+#' @param x `rtable` object
+#' @param class_table class for `table` tag
+#' @param class_tr class for `tr` tag
+#' @param class_th class for `th` tag
+#' @param width a string to indicate the desired width of the table. Common input formats include a
+#'   percentage of the viewer window width (e.g. `"100%"`) or a distance value (e.g. `"300px"`).
+#'   Defaults to `NULL`.
+#' @param link_label link anchor label (not including `tab:` prefix) for the table.
+#' @param bold elements in table output that should be bold. Options are `"main_title"`, `"subtitles"`,
+#'   `"header"`, `"row_names"`, `"label_rows"`, and `"content_rows"` (which includes any non-label rows).
+#'   Defaults to `"header"`.
+#' @param header_sep_line whether a black line should be printed to under the table header. Defaults to `TRUE`.
+#' @param no_spaces_between_cells whether spaces between table cells should be collapsed. Defaults to `FALSE`.
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.
 #'
@@ -60,6 +58,7 @@ div_helper <- function(lst, class) {
 #' Viewer(tbl)
 #' }
 #'
+#' @importFrom htmltools tags
 #' @export
 as_html <- function(x,
                     width = NULL,
@@ -76,20 +75,19 @@ as_html <- function(x,
 
   stopifnot(is(x, "VTableTree"))
 
-  mat <- matrix_form(x, indent_rownames = TRUE)
+  mat <- matrix_form(x)
 
   nlh <- mf_nlheader(mat)
   nc <- ncol(x) + 1
-  nr <- length(mf_lgrouping(mat))
 
   # Structure is a list of lists with rows (one for each line grouping) and cols as dimensions
-  cells <- matrix(rep(list(list()), (nr * nc)), ncol = nc)
+  cells <- matrix(rep(list(list()), (nlh + nrow(x)) * (nc)), ncol = nc)
 
-  for (i in seq_len(nr)) {
-    for (j in seq_len(nc)) {
-      curstrs <- mf_strings(mat)[i, j]
-      curspn <- mf_spans(mat)[i, j]
-      algn <- mf_aligns(mat)[i, j]
+  for (i in seq_len(nrow(mat$strings))) {
+    for (j in seq_len(ncol(mat$strings))) {
+      curstrs <- mat$strings[i, j]
+      curspn <- mat$spans[i, j]
+      algn <- mat$aligns[i, j]
 
       inhdr <- i <= nlh
       tagfun <- if (inhdr) tags$th else tags$td
@@ -111,32 +109,18 @@ as_html <- function(x,
     )
   }
 
-  # Create a map between line numbers and line groupings, adjusting abs_rownumber with nlh
-  map <- data.frame(lines = seq_len(nr), abs_rownumber = mat$line_grouping)
-  row_info_df <- data.frame(indent = mat$row_info$indent, abs_rownumber = mat$row_info$abs_rownumber + nlh)
-  map <- merge(map, row_info_df, by = "abs_rownumber")
-
-  # add indent values for headerlines
-  map <- rbind(data.frame(abs_rownumber = 1:nlh, indent = 0, lines = 0), map)
-
-
-  # Row labels style
-  for (i in seq_len(nr)) {
-    indent <- ifelse(any(map$lines == i), map$indent[map$lines == i][1], -1)
-
-    # Apply indentation
-    if (indent > 0) {
-      cells[i, 1][[1]] <- htmltools::tagAppendAttributes(
-        cells[i, 1][[1]],
+  # row labels style
+  for (i in seq_len(nrow(x))) {
+    indent <- mat$row_info$indent[i]
+    if (indent > 0) { # indentation
+      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(cells[i + nlh, 1][[1]],
         style = paste0("padding-left: ", indent * 3, "ch;")
       )
     }
-
-    # Apply bold font weight if "row_names" is in 'bold'
-    if ("row_names" %in% bold) {
-      cells[i, 1][[1]] <- htmltools::tagAppendAttributes(
-        cells[i, 1][[1]],
-        style = "font-weight: bold;"
+    if ("row_names" %in% bold) { # font weight
+      cells[i + nlh, 1][[1]] <- htmltools::tagAppendAttributes(
+        cells[i + nlh, 1][[1]],
+        style = paste0("font-weight: bold;")
       )
     }
   }
@@ -214,6 +198,7 @@ as_html <- function(x,
       )
     )
   )
+
 
   tabletag <- do.call(
     tags$table,

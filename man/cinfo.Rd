@@ -4,10 +4,10 @@
 \name{InstantiatedColumnInfo-class}
 \alias{InstantiatedColumnInfo-class}
 \alias{InstantiatedColumnInfo}
-\title{Instantiated column info}
+\title{\code{InstantiatedColumnInfo}}
 \usage{
 InstantiatedColumnInfo(
-  treelyt = LayoutColTree(colcount = total_cnt),
+  treelyt = LayoutColTree(),
   csubs = list(expression(TRUE)),
   extras = list(list()),
   cnts = NA_integer_,
@@ -19,29 +19,31 @@ InstantiatedColumnInfo(
 )
 }
 \arguments{
-\item{treelyt}{(\code{LayoutColTree})\cr a \code{LayoutColTree} object.}
+\item{treelyt}{\code{LayoutColTree}.}
 
-\item{csubs}{(\code{list})\cr a list of subsetting expressions.}
+\item{csubs}{list. List of subsetting expressions}
 
-\item{extras}{(\code{list})\cr extra arguments associated with the columns.}
+\item{extras}{list. Extra arguments associated with the columns}
 
-\item{cnts}{(\code{integer})\cr counts.}
+\item{cnts}{integer. Counts.}
 
-\item{total_cnt}{(\code{integer(1)})\cr total observations represented across all columns.}
+\item{total_cnt}{integer(1). Total observations represented across all
+columns.}
 
-\item{dispcounts}{(\code{flag})\cr whether the counts should be displayed as header info when the associated
-table is printed.}
+\item{dispcounts}{logical(1). Should the counts be displayed as header info when
+the associated table is printed.}
 
-\item{countformat}{(\code{string})\cr format for the counts if they are displayed.}
+\item{countformat}{character(1). Format for the counts if they are displayed}
 
-\item{count_na_str}{(\code{character})\cr string to use in place of missing values when formatting counts. Defaults
+\item{count_na_str}{character. NA string to be used when formatting counts. Defaults
 to \code{""}.}
 
-\item{topleft}{(\code{character})\cr override values for the "top left" material to be displayed during printing.}
+\item{topleft}{character. Override values for the "top left" material to be
+displayed during printing.}
 }
 \value{
-An \code{InstantiateadColumnInfo} object.
+an \code{InstantiateadColumnInfo} object.
 }
 \description{
-Instantiated column info
+\code{InstantiatedColumnInfo}
 }

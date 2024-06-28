@@ -1,12 +1,10 @@
 # paths summary ----
 
-#' Get a list of table row/column paths
+#' @rdname make_col_row_df
 #'
-#' @param x (`VTableTree`)\cr an `rtable` object.
+#' @title Return List with Table Row/Col Paths
 #'
-#' @return A list of paths to each row/column within `x`.
-#'
-#' @seealso [cell_values()], [`fnotes_at_path<-`], [row_paths_summary()], [col_paths_summary()]
+#' @param x an `rtable` object
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -21,12 +19,17 @@
 #'
 #' cell_values(tbl, c("AGE", "Mean"), c("ARM", "B: Placebo"))
 #'
-#' @rdname make_col_row_df
+#' @return a list of paths to each row/column within \code{x}
+#'
+#' @seealso [cell_values()], [`fnotes_at_path<-`],
+#'   [row_paths_summary()], [col_paths_summary()]
+#'
 #' @export
 row_paths <- function(x) {
   stopifnot(is_rtable(x))
   make_row_df(x, visible_only = TRUE)$path
 }
+
 
 #' @rdname make_col_row_df
 #' @export
@@ -37,14 +40,17 @@ col_paths <- function(x) {
   make_col_df(x, visible_only = TRUE)$path
 }
 
-#' Print row/column paths summary
+
+#' Print Row/Col Paths Summary
 #'
-#' @param x (`VTableTree`)\cr an `rtable` object.
+#' @param x an `rtable` object
 #'
-#' @return A data frame summarizing the row- or column-structure of `x`.
-#'
+#' @export
+#' @return A data.frame summarizing the row- or column-structure of \code{x}.
 #' @examples
-#' ex_adsl_MF <- ex_adsl %>% dplyr::filter(SEX %in% c("M", "F"))
+#' library(dplyr)
+#'
+#' ex_adsl_MF <- ex_adsl %>% filter(SEX %in% c("M", "F"))
 #'
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -71,8 +77,6 @@ col_paths <- function(x) {
 #'   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 #' )
 #' col_paths_summary(tbl2)
-#'
-#' @export
 row_paths_summary <- function(x) {
   stopifnot(is_rtable(x))
 
@@ -101,6 +105,7 @@ row_paths_summary <- function(x) {
   invisible(pagdf[, c("label", "indent", "node_class", "path")])
 }
 
+
 #' @rdname row_paths_summary
 #' @export
 col_paths_summary <- function(x) {
@@ -126,8 +131,11 @@ col_paths_summary <- function(x) {
   invisible(pagdf[, c("label", "path")])
 }
 
+
 # Rows ----
 # . Summarize Rows ----
+
+
 
 # summarize_row_df <-
 #     function(name,
@@ -149,11 +157,74 @@ col_paths_summary <- function(x) {
 #         )
 #     }
 
-#' Summarize rows
+summarize_row_df_unclassed <- function(name,
+                                       label,
+                                       indent,
+                                       depth,
+                                       rowtype,
+                                       indent_mod,
+                                       level,
+                                       ## footnotes = list()
+                                       num_row_refs = 0L,
+                                       num_cell_refs = 0L) {
+  list(
+    name = name,
+    label = label,
+    indent = indent,
+    depth = level,
+    rowtype = rowtype,
+    indent_mod = indent_mod,
+    level = level,
+    num_row_refs = num_row_refs,
+    num_cell_refs = num_cell_refs
+  )
+  ##  footnotes = footnotes)##,
+  ## stringsAsFactors = FALSE)
+}
+
+srow_df_names <- names(summarize_row_df_unclassed("hi", "hi", 0L, 0L, "hi", 0L, 0L))
+
+summarize_row_df_empty <- NULL
+
+fast_rsummry_bind <- function(lst) {
+  if (length(lst) == 0) {
+    return(summarize_row_df_empty)
+  } else if (length(lst) == 1L) {
+    return(as.data.frame(lst[[1]]))
+  } else {
+    res <- lapply(
+      seq_along(srow_df_names),
+      function(i) {
+        do.call(c, lapply(lst, function(x) {
+          if (length(x) > 0) x[[i]] else x
+        }))
+      }
+    )
+    names(res) <- srow_df_names
+    res <- as.data.frame(res)
+  }
+  res
+}
+
+
+
+#' summarize_rows
+#'
+#' `summarize_rows` is deprecated in favor of `make_row_df`.
+#' @param obj `VTableTree`.
+#' @return A data.frame summarizing the rows in \code{obj}.
+#' @export
+summarize_rows <- function(obj) {
+  .Deprecated("make_row_df")
+  rows <- summarize_rows_inner(obj, 0, 0)
+  fast_rsummry_bind(rows)
+}
+
+#' Summarize Rows
 #'
 #' @inheritParams gen_args
-#' @param depth (`numeric(1)`)\cr depth.
-#' @param indent (`numeric(1)`)\cr indent.
+#' @param depth numeric(1). Depth.
+#' @param indent numeric(1). Indent.
 #'
 #' @examples
 #' library(dplyr)
@@ -224,16 +295,94 @@ setMethod(
     ## df
   }
 )
+#' @rdname int_methods
+setMethod(
+  "summarize_rows_inner", "ElementaryTable",
+  function(obj, depth = 0, indent = 0) {
+    indent <- max(0L, indent + indent_mod(obj))
+    lr <- summarize_rows_inner(tt_labelrow(obj), depth, indent)
+    if (!is.null(lr)) {
+      ret <- list(lr)
+      indent <- indent + 1
+    } else {
+      ret <- list()
+    }
+
+    els <- lapply(tree_children(obj), summarize_rows_inner,
+      depth = depth + 1,
+      indent = indent
+    )
+
+    c(ret, els)
+    ## df <- do.call(rbind, c(list(lr), els))
+    ## row.names(df) <- NULL
+    ## df
+  }
+)
+.num_cell_refs <- function(tr) {
+  sum(vapply(
+    cell_footnotes(tr),
+    function(cfn) length(cfn) > 0,
+    FALSE
+  ))
+}
+
+#' @rdname int_methods
+setMethod(
+  "summarize_rows_inner", "TableRow",
+  function(obj, depth = 0, indent = 0) {
+    indent <- max(0L, indent + indent_mod(obj))
+
+    summarize_row_df_unclassed(
+      name = obj_name(obj),
+      label = obj_label(obj),
+      indent = indent,
+      depth = depth,
+      rowtype = "TableRow",
+      indent_mod = indent_mod(obj),
+      level = tt_level(obj),
+      num_row_refs = length(row_footnotes(obj)),
+      num_cell_refs = .num_cell_refs(obj)
+    )
+  }
+)
+#' @rdname int_methods
+setMethod(
+  "summarize_rows_inner", "LabelRow",
+  function(obj, depth = 0, indent = 0) {
+    indent <- max(0L, indent + indent_mod(obj))
+
+    if (labelrow_visible(obj)) {
+      summarize_row_df_unclassed(
+        name = obj_name(obj),
+        label = obj_label(obj),
+        indent = indent,
+        depth = depth,
+        rowtype = "LabelRow",
+        indent_mod = indent_mod(obj),
+        level = tt_level(obj),
+        num_row_refs = length(row_footnotes(obj)),
+        num_cell_refs = 0
+      )
+    } else {
+      summarize_row_df_empty
+    }
+  }
+)
+
+
 
 # Print Table Structure ----
 
-#' Summarize table
+#' Summarize Table
 #'
-#' @param x (`VTableTree`)\cr a table object.
-#' @param detail (`string`)\cr either `row` or `subtable`.
+#' @param x a table object
+#' @param detail either `row` or `subtable`
 #'
-#' @return No return value. Called for the side-effect of printing a row- or subtable-structure summary of `x`.
+#' @export
 #'
+#' @return currently no return value. Called for the side-effect of printing a
+#'   row- or subtable-structure summary of \code{x}.
 #' @examples
 #' library(dplyr)
 #'
@@ -258,8 +407,6 @@ setMethod(
 #' table_structure(tbl)
 #'
 #' table_structure(tbl, detail = "row")
-#'
-#' @export
 table_structure <- function(x, detail = c("subtable", "row")) {
   detail <- match.arg(detail)
 
@@ -270,12 +417,13 @@ table_structure <- function(x, detail = c("subtable", "row")) {
   )
 }
 
-#' @param obj (`VTableTree`)\cr a table object.
-#' @param depth (`numeric(1)`)\cr depth in tree.
-#' @param indent (`numeric(1)`)\cr indent.
-#' @param print_indent (`numeric(1)`)\cr indent for printing.
-#'
+
 #' @rdname int_methods
+#'
+#' @param obj a table object
+#' @param depth depth in tree
+#' @param indent indent
+#' @param print_indent indent for print
 setGeneric(
   "table_structure_inner",
   function(obj,
@@ -285,6 +433,7 @@ setGeneric(
     standardGeneric("table_structure_inner")
   }
 )
+
 
 scat <- function(..., indent = 0, newline = TRUE) {
   txt <- paste(..., collapse = "", sep = "")
@@ -307,18 +456,17 @@ is_empty_ElementaryTable <- function(x) {
   length(tree_children(x)) == 0 && is_empty_labelrow(tt_labelrow(x))
 }
 
-#' @param object (`VTableTree`)\cr a table object.
-#'
 #' @rdname int_methods
+#' @param object a table object
 #' @export
 setGeneric("str", function(object, ...) {
   standardGeneric("str")
 })
 
-#' @param max.level (`numeric(1)`)\cr passed to `utils::str`. Defaults to 3 for the `VTableTree` method, unlike
-#'   the underlying default of `NA`. `NA` is *not* appropriate for `VTableTree` objects.
-#'
 #' @rdname int_methods
+#' @param max.level numeric(1). Passed to `utils::str`. Defaults to 3 for the
+#' `VTableTree` method, unlike the underlying default of `NA`. `NA` is *not*
+#' appropriate for `VTableTree` objects.
 #' @export
 setMethod(
   "str", "VTableTree",
@@ -332,8 +480,8 @@ setMethod(
   }
 )
 
-#' @inheritParams table_structure_inner
 #' @rdname int_methods
+#' @inheritParams table_structure_inner
 setMethod(
   "table_structure_inner", "TableTree",
   function(obj, depth = 0, indent = 0, print_indent = 0) {
@@ -386,12 +534,14 @@ setMethod(
       indent = print_indent
     )
 
+
     indent <- indent + indent_mod(obj)
 
     table_structure_inner(
       tt_labelrow(obj), depth,
       indent, print_indent + 1
     )
+
 
     if (length(tree_children(obj)) == 0) {
       scat("children: - ", indent = print_indent + 1)

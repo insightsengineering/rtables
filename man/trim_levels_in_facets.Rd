@@ -2,21 +2,23 @@
 % Please edit documentation in R/make_split_fun.R
 \name{trim_levels_in_facets}
 \alias{trim_levels_in_facets}
-\title{Trim levels of another variable from each facet (post-processing split step)}
+\title{Trim Levels of Another Variable From Each Facet (Postprocessing split step)}
 \usage{
 trim_levels_in_facets(innervar)
 }
 \arguments{
-\item{innervar}{(\code{character})\cr the variable(s) to trim (remove unobserved levels) independently within each facet.}
+\item{innervar}{character. The variable(s) to trim (remove
+unobserved levels) independently within each facet.}
 }
 \value{
-A function suitable for use in the \code{pre} (list) argument of \code{make_split_fun}.
+a function suitable for use in the \code{pre}
+(list) argument of \code{make_split_fun}
 }
 \description{
-Trim levels of another variable from each facet (post-processing split step)
+Trim Levels of Another Variable From Each Facet (Postprocessing split step)
 }
 \seealso{
-\code{\link[=make_split_fun]{make_split_fun()}}
+make_split_fun
 
 Other make_custom_split: 
 \code{\link{add_combo_facet}()},

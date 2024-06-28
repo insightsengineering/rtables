@@ -71,7 +71,6 @@ articles:
     - custom_appearance
     - title_footer
     - sorting_pruning
-    - col_counts
 
   - title: \{rtables\} Concepts
     contents:
@@ -178,6 +177,7 @@ reference:
     - row_paths
     - row_paths_summary
     - table_structure
+    - summarize_rows
     - table_shell
     - formatters::make_row_df
     - make_col_df
@@ -185,7 +185,6 @@ reference:
   - title: Layout Structure Information
     contents:
     - vars_in_layout
-    - coltree_structure
 
   - title: Access and Modify
     contents:
@@ -198,10 +197,6 @@ reference:
     - clear_indent_mods
     - head
     - section_div
-    - colcount_visible
-    - facet_colcount
-    - facet_colcounts_visible<-
-    - rm_all_colcounts
 
   - title: Validating and Fixing Table Structure
     contents:
@@ -213,6 +208,7 @@ reference:
     contents:
     - prune_table
     - all_zero_or_na
+    - trim_zero_rows
     - trim_rows
     - sort_at_path
     - cont_n_allcols
@@ -292,7 +288,7 @@ reference:
     - row_footnotes
     - update_ref_indexing
 
-  - title: Result Data Frame Functions
+  - title: Result Dataframe Functions
     desc: Functions for generating result data frames from rtables TableTree objects
     contents:
     - as_result_df

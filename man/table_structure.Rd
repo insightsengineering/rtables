@@ -2,20 +2,21 @@
 % Please edit documentation in R/summary.R
 \name{table_structure}
 \alias{table_structure}
-\title{Summarize table}
+\title{Summarize Table}
 \usage{
 table_structure(x, detail = c("subtable", "row"))
 }
 \arguments{
-\item{x}{(\code{VTableTree})\cr a table object.}
+\item{x}{a table object}
 
-\item{detail}{(\code{string})\cr either \code{row} or \code{subtable}.}
+\item{detail}{either \code{row} or \code{subtable}}
 }
 \value{
-No return value. Called for the side-effect of printing a row- or subtable-structure summary of \code{x}.
+currently no return value. Called for the side-effect of printing a
+row- or subtable-structure summary of \code{x}.
 }
 \description{
-Summarize table
+Summarize Table
 }
 \examples{
 library(dplyr)
@@ -41,5 +42,4 @@ row_paths(tbl)
 table_structure(tbl)
 
 table_structure(tbl, detail = "row")
-
 }

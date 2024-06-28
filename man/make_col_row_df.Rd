@@ -3,20 +3,20 @@
 \name{row_paths}
 \alias{row_paths}
 \alias{col_paths}
-\title{Get a list of table row/column paths}
+\title{Return List with Table Row/Col Paths}
 \usage{
 row_paths(x)
 
 col_paths(x)
 }
 \arguments{
-\item{x}{(\code{VTableTree})\cr an \code{rtable} object.}
+\item{x}{an \code{rtable} object}
 }
 \value{
-A list of paths to each row/column within \code{x}.
+a list of paths to each row/column within \code{x}
 }
 \description{
-Get a list of table row/column paths
+Return List with Table Row/Col Paths
 }
 \examples{
 lyt <- basic_table() \%>\%
@@ -33,5 +33,6 @@ cell_values(tbl, c("AGE", "Mean"), c("ARM", "B: Placebo"))
 
 }
 \seealso{
-\code{\link[=cell_values]{cell_values()}}, \code{\link{fnotes_at_path<-}}, \code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
+\code{\link[=cell_values]{cell_values()}}, \code{\link{fnotes_at_path<-}},
+\code{\link[=row_paths_summary]{row_paths_summary()}}, \code{\link[=col_paths_summary]{col_paths_summary()}}
 }
