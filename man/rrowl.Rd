@@ -2,31 +2,29 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{rrowl}
 \alias{rrowl}
-\title{\code{rrowl}}
+\title{Create an \code{rtable} row from a vector or list of values}
 \usage{
 rrowl(row.name, ..., format = NULL, indent = 0, inset = 0L)
 }
 \arguments{
-\item{row.name}{if \code{NULL} then an empty string is used as
-\code{row.name} of the \code{\link{rrow}}.}
+\item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
+\code{\link[=rrow]{rrow()}}.}
 
-\item{\dots}{values in vector/list form}
+\item{...}{values in vector/list form.}
 
-\item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
-format labels.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
+cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{indent}{deprecated.}
+\item{indent}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{inset}{integer(1). The table inset for the row or table being
-constructed. See \code{\link[formatters]{table_inset}}.}
+\item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
+\code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 }
 \value{
-A row object of the context-appropriate type (label or data)
+A row object of the context-appropriate type (label or data).
 }
 \description{
-\code{rrowl}
+Create an \code{rtable} row from a vector or list of values
 }
 \examples{
 rrowl("a", c(1, 2, 3), format = "xx")
@@ -43,6 +41,7 @@ rrow("ABC", 2, 3)
 
 rrowl(row.name = "row 1", c(1, 2), c(3, 4))
 rrow(row.name = "row 2", c(1, 2), c(3, 4))
+
 }
 \seealso{
 Other compatibility: 

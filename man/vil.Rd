@@ -8,7 +8,7 @@
 \alias{vars_in_layout,Split-method}
 \alias{vars_in_layout,CompoundSplit-method}
 \alias{vars_in_layout,ManualSplit-method}
-\title{List Variables required by a pre-data table layout}
+\title{List variables required by a pre-data table layout}
 \usage{
 vars_in_layout(lyt)
 
@@ -25,34 +25,30 @@ vars_in_layout(lyt)
 \S4method{vars_in_layout}{ManualSplit}(lyt)
 }
 \arguments{
-\item{lyt}{The Layout (or a component thereof)}
+\item{lyt}{(\code{PreDataTableLayouts})\cr the layout (or a component thereof).}
 }
 \value{
-A character vector containing the unique variables explicitly used in the layout (see Notes).
+A character vector containing the unique variables explicitly used in the layout (see the notes below).
 }
 \description{
-List Variables required by a pre-data table layout
+List variables required by a pre-data table layout
 }
 \details{
-This will walk the  layout declaration and return a vector
-of the  names of the unique  variables that are used  in any of
-the following ways:
-
+This will walk the layout declaration and return a vector of the names of the unique variables that are used
+in any of the following ways:
 \itemize{
-\item{Variable being split on (directly or via cuts)}
-\item{Element of a Multi-variable column split}
-\item{Content variable}
-\item{Value-label variable}
+\item Variable being split on (directly or via cuts)
+\item Element of a Multi-variable column split
+\item Content variable
+\item Value-label variable
 }
 }
 \note{
-This function will not detect dependencies implicit in
-analysis or summary functions which accept \code{x} or \code{df} and then
-rely on the existence of particular variables not being split on/
-analyzed.
-
-The order these variable names appear within the return vector
-is undefined and should not be relied upon.
+\itemize{
+\item This function will not detect dependencies implicit in analysis or summary functions which accept \code{x}
+or \code{df} and then rely on the existence of particular variables not being split on/analyzed.
+\item The order these variable names appear within the return vector is undefined and should not be relied upon.
+}
 }
 \examples{
 lyt <- basic_table() \%>\%

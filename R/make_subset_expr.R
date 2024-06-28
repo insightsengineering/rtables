@@ -3,9 +3,16 @@
 ## we (sometimes) run into
 ## factor()[TRUE] giving <NA> (i.e. length 1)
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
+
 setMethod(
   "make_subset_expr", "VarLevelSplit",
   function(spl, val) {
+    ## this is how custom split functions will communicate the correct expression
+    ## to the column modeling code
+    if (length(value_expr(val)) > 0) {
+      return(value_expr(val))
+    }
+
     v <- unlist(rawvalues(val))
     ## XXX if we're including all levels should even missing be included?
     if (is(v, "AllLevelsSentinel")) {
@@ -22,6 +29,12 @@ setMethod(
 setMethod(
   "make_subset_expr", "MultiVarSplit",
   function(spl, val) {
+    ## this is how custom split functions will communicate the correct expression
+    ## to the column modeling code
+    if (length(value_expr(val)) > 0) {
+      return(value_expr(val))
+    }
+
     ## v = rawvalues(val)
     ## as.expression(bquote(!is.na(.(a)), list(a = v)))
     expression(TRUE)
@@ -48,7 +61,6 @@ setMethod(
     expression(TRUE)
   }
 )
-
 
 ## XXX these are going to be ridiculously slow
 ## FIXME
@@ -96,7 +108,6 @@ setMethod(
   }
 )
 
-
 ## I think this one is unnecessary,
 ## build_table collapses DynCutSplits into
 ## static ones.
@@ -116,8 +127,6 @@ setMethod(
   "make_subset_expr", "AllSplit",
   function(spl, val) expression(TRUE)
 )
-
-
 
 ## probably don't need this
 
@@ -142,10 +151,12 @@ setMethod(
       return(expression(TRUE))
     }
   }
+
+  ## if(is.null(ex2))
+  ##     ex2 <- expression(TRUE)
   stopifnot(is.expression(ex1), is.expression(ex2))
   as.expression(bquote((.(a)) & .(b), list(a = ex1[[1]], b = ex2[[1]])))
 }
-
 
 make_pos_subset <- function(spls = pos_splits(pos),
                             svals = pos_splvals(pos),
@@ -157,7 +168,6 @@ make_pos_subset <- function(spls = pos_splits(pos),
   }
   expr
 }
-
 
 get_pos_extra <- function(svals = pos_splvals(pos),
                           pos) {
@@ -200,8 +210,6 @@ setMethod(
   }
 )
 
-
-
 create_colinfo <- function(lyt, df, rtpos = TreePos(),
                            counts = NULL,
                            alt_counts_df = NULL,
@@ -213,7 +221,19 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   if (is.null(topleft)) {
     topleft <- top_left(lyt)
   }
-  ctree <- coltree(clayout, df = df, rtpos = rtpos)
+  cc_format <- colcount_format(lyt) %||% "(N=xx)"
+
+  ## do it this way for full backwards compatibility
+  if (is.null(alt_counts_df)) {
+    alt_counts_df <- df
+  }
+  ctree <- coltree(clayout, df = df, rtpos = rtpos, alt_counts_df = alt_counts_df, ccount_format = cc_format)
+  if (!is.na(disp_ccounts(lyt))) {
+    leaf_pths <- make_col_df(ctree, visible_only = TRUE, na_str = "", ccount_format = cc_format)$path
+    for (path in leaf_pths) {
+      colcount_visible(ctree, path) <- disp_ccounts(lyt)
+    }
+  }
 
   cexprs <- make_col_subsets(ctree, df)
   colextras <- col_extra_args(ctree)
@@ -224,20 +244,17 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
   ## the counts will obviously be wrong.
   if (is.null(counts)) {
     counts <- rep(NA_integer_, length(cexprs))
-  } else {
-    if (length(counts) != length(cexprs)) {
-      stop(
-        "Length of overriding counts must equal number of columns. Got ",
-        length(counts), " values for ", length(cexprs), " columns. ",
-        "Use NAs to specify that the default counting machinery should be ",
-        "used for that position."
-      )
-    }
-    counts <- as.integer(counts)
+  } else if (length(counts) != length(cexprs)) {
+    stop(
+      "Length of overriding counts must equal number of columns. Got ",
+      length(counts), " values for ", length(cexprs), " columns. ",
+      "Use NAs to specify that the default counting machinery should be ",
+      "used for that position."
+    )
   }
 
   counts_df_name <- "alt_counts_df"
-  if (is.null(alt_counts_df)) {
+  if (identical(alt_counts_df, df)) { # is.null(alt_counts_df)) {
     alt_counts_df <- df
     counts_df_name <- "df"
   }
@@ -247,21 +264,9 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     if (identical(ex, expression(TRUE))) {
       nrow(alt_counts_df)
     } else if (identical(ex, expression(FALSE))) {
-      0
+      0L
     } else {
       vec <- try(eval(ex, envir = alt_counts_df), silent = TRUE)
-      if (is(vec, "try-error")) {
-        stop(sprintf(
-          paste(
-            counts_df_name, "appears",
-            "incompatible with column-split",
-            "structure. Offending column subset",
-            "expression: %s\nOriginal error",
-            "message: %s"
-          ), deparse(ex[[1]]),
-          conditionMessage(attr(vec, "condition"))
-        ))
-      }
       if (is(vec, "numeric")) {
         length(vec)
       } else if (is(vec, "logical")) { ## sum(is.na(.)) ????
@@ -270,17 +275,22 @@ create_colinfo <- function(lyt, df, rtpos = TreePos(),
     }
   })
   counts[calcpos] <- calccounts[calcpos]
+  counts <- as.integer(counts)
   if (is.null(total)) {
     total <- sum(counts)
   }
-  format <- colcount_format(lyt)
+
+  cpths <- col_paths(ctree)
+  for (i in seq_along(cpths)) {
+    facet_colcount(ctree, cpths[[i]]) <- counts[i]
+  }
   InstantiatedColumnInfo(
     treelyt = ctree,
     csubs = cexprs,
     extras = colextras,
     cnts = counts,
     dispcounts = disp_ccounts(lyt),
-    countformat = format,
+    countformat = cc_format,
     total_cnt = total,
     topleft = topleft
   )

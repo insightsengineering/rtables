@@ -38,9 +38,6 @@
 \alias{fix_dyncuts,PreDataTableLayouts-method}
 \alias{summarize_rows_inner}
 \alias{summarize_rows_inner,TableTree-method}
-\alias{summarize_rows_inner,ElementaryTable-method}
-\alias{summarize_rows_inner,TableRow-method}
-\alias{summarize_rows_inner,LabelRow-method}
 \alias{table_structure_inner}
 \alias{str}
 \alias{str,VTableTree-method}
@@ -48,6 +45,7 @@
 \alias{table_structure_inner,ElementaryTable-method}
 \alias{table_structure_inner,TableRow-method}
 \alias{table_structure_inner,LabelRow-method}
+\alias{int_methods}
 \alias{nrow,TableRow-method}
 \alias{ncol,TableRow-method}
 \alias{ncol,LabelRow-method}
@@ -82,13 +80,21 @@
 \alias{tree_pos,VLayoutNode-method}
 \alias{pos_subset}
 \alias{pos_subset,TreePos-method}
+\alias{tree_pos<-}
+\alias{tree_pos<-,VLayoutNode-method}
 \alias{pos_subset,VLayoutNode-method}
 \alias{pos_splits}
 \alias{pos_splits,TreePos-method}
 \alias{pos_splits,VLayoutNode-method}
+\alias{pos_splits<-}
+\alias{pos_splits<-,TreePos-method}
+\alias{pos_splits<-,VLayoutNode-method}
 \alias{pos_splvals}
 \alias{pos_splvals,TreePos-method}
 \alias{pos_splvals,VLayoutNode-method}
+\alias{pos_splvals<-}
+\alias{pos_splvals<-,TreePos-method}
+\alias{pos_splvals<-,VLayoutNode-method}
 \alias{pos_splval_labels}
 \alias{pos_splval_labels,TreePos-method}
 \alias{spl_payload}
@@ -249,6 +255,9 @@
 \alias{value_labels,ValueWrapper-method}
 \alias{value_labels,LevelComboSplitValue-method}
 \alias{value_labels,MultiVarSplit-method}
+\alias{value_expr}
+\alias{value_expr,ValueWrapper-method}
+\alias{value_expr,ANY-method}
 \alias{spl_varlabels}
 \alias{spl_varlabels,MultiVarSplit-method}
 \alias{spl_varlabels<-}
@@ -272,22 +281,36 @@
 \alias{disp_ccounts,InstantiatedColumnInfo-method}
 \alias{disp_ccounts,PreDataTableLayouts-method}
 \alias{disp_ccounts,PreDataColLayout-method}
+\alias{disp_ccounts,LayoutColTree-method}
+\alias{disp_ccounts,LayoutColLeaf-method}
+\alias{disp_ccounts,Split-method}
 \alias{disp_ccounts<-}
 \alias{disp_ccounts<-,VTableTree-method}
 \alias{disp_ccounts<-,InstantiatedColumnInfo-method}
 \alias{disp_ccounts<-,PreDataColLayout-method}
 \alias{disp_ccounts<-,LayoutColTree-method}
+\alias{disp_ccounts<-,LayoutColLeaf-method}
 \alias{disp_ccounts<-,PreDataTableLayouts-method}
+\alias{coltree_at_path}
 \alias{colcount_format}
 \alias{colcount_format,InstantiatedColumnInfo-method}
 \alias{colcount_format,VTableNodeInfo-method}
 \alias{colcount_format,PreDataColLayout-method}
 \alias{colcount_format,PreDataTableLayouts-method}
+\alias{colcount_format,Split-method}
+\alias{colcount_format,LayoutColTree-method}
+\alias{colcount_format,LayoutColLeaf-method}
 \alias{colcount_format<-}
 \alias{colcount_format<-,InstantiatedColumnInfo-method}
 \alias{colcount_format<-,VTableNodeInfo-method}
 \alias{colcount_format<-,PreDataColLayout-method}
 \alias{colcount_format<-,PreDataTableLayouts-method}
+\alias{colcount_na_str}
+\alias{colcount_na_str,InstantiatedColumnInfo-method}
+\alias{colcount_na_str,VTableNodeInfo-method}
+\alias{colcount_na_str<-}
+\alias{colcount_na_str<-,InstantiatedColumnInfo-method}
+\alias{colcount_na_str<-,VTableNodeInfo-method}
 \alias{as.vector,TableRow-method}
 \alias{as.vector,ElementaryTable-method}
 \alias{spl_cuts}
@@ -351,7 +374,7 @@
 \alias{value_at,LabelRow-method}
 \alias{print,VTableTree-method}
 \alias{show,VTableTree-method}
-\title{combine \code{SplitVector} objects}
+\title{Combine \code{SplitVector} objects}
 \usage{
 \S4method{c}{SplitVector}(x, ...)
 
@@ -471,12 +494,6 @@ summarize_rows_inner(obj, depth = 0, indent = 0)
 
 \S4method{summarize_rows_inner}{TableTree}(obj, depth = 0, indent = 0)
 
-\S4method{summarize_rows_inner}{ElementaryTable}(obj, depth = 0, indent = 0)
-
-\S4method{summarize_rows_inner}{TableRow}(obj, depth = 0, indent = 0)
-
-\S4method{summarize_rows_inner}{LabelRow}(obj, depth = 0, indent = 0)
-
 table_structure_inner(obj, depth = 0, indent = 0, print_indent = 0)
 
 str(object, ...)
@@ -559,6 +576,10 @@ pos_subset(obj)
 
 \S4method{pos_subset}{TreePos}(obj)
 
+tree_pos(obj) <- value
+
+\S4method{tree_pos}{VLayoutNode}(obj) <- value
+
 \S4method{pos_subset}{VLayoutNode}(obj)
 
 pos_splits(obj)
@@ -567,11 +588,23 @@ pos_splits(obj)
 
 \S4method{pos_splits}{VLayoutNode}(obj)
 
+pos_splits(obj) <- value
+
+\S4method{pos_splits}{TreePos}(obj) <- value
+
+\S4method{pos_splits}{VLayoutNode}(obj) <- value
+
 pos_splvals(obj)
 
 \S4method{pos_splvals}{TreePos}(obj)
 
 \S4method{pos_splvals}{VLayoutNode}(obj)
+
+pos_splvals(obj) <- value
+
+\S4method{pos_splvals}{TreePos}(obj) <- value
+
+\S4method{pos_splvals}{VLayoutNode}(obj) <- value
 
 pos_splval_labels(obj)
 
@@ -893,6 +926,12 @@ value_labels(obj)
 
 \S4method{value_labels}{MultiVarSplit}(obj)
 
+value_expr(obj)
+
+\S4method{value_expr}{ValueWrapper}(obj)
+
+\S4method{value_expr}{ANY}(obj)
+
 spl_varlabels(obj)
 
 \S4method{spl_varlabels}{MultiVarSplit}(obj)
@@ -939,6 +978,12 @@ disp_ccounts(obj)
 
 \S4method{disp_ccounts}{PreDataColLayout}(obj)
 
+\S4method{disp_ccounts}{LayoutColTree}(obj)
+
+\S4method{disp_ccounts}{LayoutColLeaf}(obj)
+
+\S4method{disp_ccounts}{Split}(obj)
+
 disp_ccounts(obj) <- value
 
 \S4method{disp_ccounts}{VTableTree}(obj) <- value
@@ -949,7 +994,11 @@ disp_ccounts(obj) <- value
 
 \S4method{disp_ccounts}{LayoutColTree}(obj) <- value
 
+\S4method{disp_ccounts}{LayoutColLeaf}(obj) <- value
+
 \S4method{disp_ccounts}{PreDataTableLayouts}(obj) <- value
+
+coltree_at_path(obj, path, ...)
 
 colcount_format(obj)
 
@@ -961,6 +1010,12 @@ colcount_format(obj)
 
 \S4method{colcount_format}{PreDataTableLayouts}(obj)
 
+\S4method{colcount_format}{Split}(obj)
+
+\S4method{colcount_format}{LayoutColTree}(obj)
+
+\S4method{colcount_format}{LayoutColLeaf}(obj)
+
 colcount_format(obj) <- value
 
 \S4method{colcount_format}{InstantiatedColumnInfo}(obj) <- value
@@ -970,6 +1025,18 @@ colcount_format(obj) <- value
 \S4method{colcount_format}{PreDataColLayout}(obj) <- value
 
 \S4method{colcount_format}{PreDataTableLayouts}(obj) <- value
+
+colcount_na_str(obj)
+
+\S4method{colcount_na_str}{InstantiatedColumnInfo}(obj)
+
+\S4method{colcount_na_str}{VTableNodeInfo}(obj)
+
+colcount_na_str(obj) <- value
+
+\S4method{colcount_na_str}{InstantiatedColumnInfo}(obj) <- value
+
+\S4method{colcount_na_str}{VTableNodeInfo}(obj) <- value
 
 \S4method{as.vector}{TableRow}(x, mode = "any")
 
@@ -1098,123 +1165,111 @@ spl_varnames(object) <- value
 \S4method{show}{VTableTree}(object)
 }
 \arguments{
-\item{x}{The object.}
+\item{x}{(\code{ANY})\cr the object.}
 
-\item{...}{Splits or \code{SplitVector} objects}
+\item{...}{splits or \code{SplitVector} objects.}
 
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{spl}{Split. The split.}
+\item{spl}{(\code{Split})\cr the split.}
 
-\item{pos}{numeric(1). Intended for internal use.}
+\item{pos}{(\code{numeric(1)})\cr intended for internal use.}
 
-\item{cmpnd_fun}{function. Intended for internal use.}
+\item{cmpnd_fun}{(\code{function})\cr intended for internal use.}
 
-\item{constructor}{function.}
+\item{constructor}{(\code{function})\cr constructor function.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{cfun}{list/function/NULL. tabulation function(s) for creating content
-rows. Must accept \code{x} or \code{df} as first parameter. Must accept
-\code{labelstr} as the second argument. Can optionally accept all optional
-arguments accepted by analysis functions. See \code{\link{analyze}}.}
+\item{cfun}{(\code{list}, \code{function}, or \code{NULL})\cr tabulation function(s) for creating content rows. Must accept \code{x}
+or \code{df} as first parameter. Must accept \code{labelstr} as the second argument. Can optionally accept all optional
+arguments accepted by analysis functions. See \code{\link[=analyze]{analyze()}}.}
 
-\item{child_labels}{string. One of \code{"default"}, \code{"visible"},
-\code{"hidden"}. What should the display behavior be for the  labels (i.e.
-label rows) of the children of this split. Defaults to \code{"default"}
-which flags the label row as visible only if the child has 0 content rows.}
+\item{child_labels}{(\code{string})\cr the display behavior for the labels (i.e. label rows) of the children of this
+split. Accepts \code{"default"}, \code{"visible"}, and \code{"hidden"}. Defaults to \code{"default"} which flags the label row as
+visible only if the child has 0 content rows.}
 
-\item{cformat}{format spec. Format for content rows}
+\item{cformat}{(\code{string}, \code{function}, or \code{list})\cr format for content rows.}
 
-\item{cna_str}{character. NA string for use with \code{cformat} for content
-table.}
+\item{cna_str}{(\code{character})\cr NA string for use with \code{cformat} for content table.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{cvar}{character(1). The variable, if any, which the content function
-should accept. Defaults to NA.}
+\item{cvar}{(\code{string})\cr the variable, if any, that the content function should accept. Defaults to \code{NA}.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{df}{dataset (\code{data.frame} or \code{tibble})}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{obj}{The object.}
+\item{obj}{(\code{ANY})\cr the object.}
 
-\item{depth}{depth in tree}
+\item{depth}{(\code{numeric(1)})\cr depth in tree.}
 
-\item{indent}{indent}
+\item{indent}{(\code{numeric(1)})\cr indent.}
 
-\item{print_indent}{indent for print}
+\item{print_indent}{(\code{numeric(1)})\cr indent for printing.}
 
-\item{object}{a table object}
+\item{object}{(\code{VTableTree})\cr a table object.}
 
-\item{max.level}{numeric(1). Passed to \code{utils::str}. Defaults to 3 for the
-\code{VTableTree} method, unlike the underlying default of \code{NA}. \code{NA} is \emph{not}
-appropriate for \code{VTableTree} objects.}
+\item{max.level}{(\code{numeric(1)})\cr passed to \code{utils::str}. Defaults to 3 for the \code{VTableTree} method, unlike
+the underlying default of \code{NA}. \code{NA} is \emph{not} appropriate for \code{VTableTree} objects.}
 
-\item{value}{The new value}
+\item{value}{(\code{ANY})\cr the new value.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the
-existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
-new top-level element (`FALSE). Ignored if it would nest a split underneath
-analyses, which is not allowed.}
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
 
-\item{for_analyze}{logical(1).}
+\item{for_analyze}{(\code{flag}) whether split is an analyze split.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{override}{logical(1).}
+\item{override}{(\code{flag})\cr whether to override attribute.}
 
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{incl.cont}{logical. Include rows from content tables within the tree. Defaults to \code{TRUE}}
+\item{incl.cont}{(\code{flag})\cr whether to include rows from content tables within the tree. Defaults to \code{TRUE}.}
 
-\item{add.labrows}{logical. Include label rows. Defaults to \code{FALSE}}
+\item{add.labrows}{(\code{flag})\cr whether to include label rows. Defaults to \code{FALSE}.}
 
-\item{mode}{character(1). Passed on to \code{\link[base]{as.vector}}}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
-\item{rowpath}{character or NULL. Path within row structure. \code{NULL}
-indicates the footnote should go on the column rather than cell.}
+\item{mode}{(\code{string})\cr passed on to \code{\link[=as.vector]{as.vector()}}.}
 
-\item{colpath}{character or NULL. Path within column structure. \code{NULL}
-indicates footnote should go on the row rather than cell}
+\item{rowpath}{(\code{character} or \code{NULL})\cr path within row structure. \code{NULL} indicates the footnote should
+go on the column rather than cell.}
 
-\item{reset_idx}{logical(1). Should the numbering for referential footnotes
-be immediately recalculated. Defaults to TRUE.}
+\item{colpath}{(\code{character} or \code{NULL})\cr path within column structure. \code{NULL} indicates footnote should go
+on the row rather than cell.}
 
-\item{y}{Second element to be \code{rbound} via \code{rbind2}}
+\item{reset_idx}{(\code{flag})\cr whether the numbering for referential footnotes should be immediately
+recalculated. Defaults to \code{TRUE}.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{y}{(\code{ANY})\cr second element to be row-bound via \code{rbind2}.}
 
-\item{i}{index}
+\item{i}{(\code{numeric(1)})\cr index.}
 
-\item{j}{index}
+\item{j}{(\code{numeric(1)})\cr index.}
 
-\item{drop}{logical(1). Should the value in the cell be returned if one
-cell is selected by the combination of \code{i} and \code{j}. It is not possible
-to return a vector of values. To do so please consider using \code{\link[=cell_values]{cell_values()}}.
-Defaults to \code{FALSE}.}
+\item{drop}{(\code{flag})\cr whether the value in the cell should be returned if one cell is selected by the
+combination of \code{i} and \code{j}. It is not possible to return a vector of values. To do so please consider using
+\code{\link[=cell_values]{cell_values()}}. Defaults to \code{FALSE}.}
 }
 \value{
 Various, but should be considered implementation details.
 }
 \description{
-These are internal methods that are documented only to satisfy
-\verb{R CMD check}. End users should pay no attention to this documentation.
+These are internal methods that are documented only to satisfy \verb{R CMD check}. End users should pay no
+attention to this documentation.
 }
 \examples{
 library(dplyr)
@@ -1237,5 +1292,6 @@ tbl <- build_table(lyt, iris2)
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
+
 }
 \keyword{internal}

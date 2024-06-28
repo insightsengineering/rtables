@@ -4,12 +4,15 @@ label_pos_values <- c("hidden", "visible", "topleft")
 #' @rdname int_methods
 NULL
 
-#' combine `SplitVector` objects
-#' @param x `SplitVecttor`
-#' @param ... Splits or `SplitVector` objects
-#' @exportMethod c
+#' Combine `SplitVector` objects
+#'
+#' @param x (`SplitVector`)\cr a `SplitVector` object.
+#' @param ... splits or `SplitVector` objects.
+#'
 #' @return Various, but should be considered implementation details.
+#'
 #' @rdname int_methods
+#' @exportMethod c
 setMethod("c", "SplitVector", function(x, ...) {
   arglst <- list(...)
   stopifnot(all(sapply(arglst, is, "Split")))
@@ -28,9 +31,10 @@ setMethod("c", "SplitVector", function(x, ...) {
 
 ## The cascading (by class) in this case is as follows for the row case:
 ## PreDataTableLayouts -> PreDataRowLayout -> SplitVector
-#' @param cmpnd_fun function. Intended for internal use.
-#' @param pos numeric(1). Intended for internal use.
-#' @param spl Split. The split.
+#' @param cmpnd_fun (`function`)\cr intended for internal use.
+#' @param pos (`numeric(1)`)\cr intended for internal use.
+#' @param spl (`Split`)\cr the split.
+#'
 #' @rdname int_methods
 setGeneric(
   "split_rows",
@@ -42,11 +46,17 @@ setGeneric(
 
 #' @rdname int_methods
 setMethod("split_rows", "NULL", function(lyt, spl, pos, cmpnd_fun = AnalyzeMultiVars) {
-  .Deprecated(msg = "Initializing layouts via NULL is deprecated, please use basic_table() instead")
+  lifecycle::deprecate_warn(
+    when = "0.3.8",
+    what = I("split_rows(NULL)"),
+    with = "basic_table()",
+    details = "Initializing layouts via `NULL` is no longer supported."
+  )
   rl <- PreDataRowLayout(SplitVector(spl))
   cl <- PreDataColLayout()
   PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
+
 #' @rdname int_methods
 setMethod(
   "split_rows", "PreDataRowLayout",
@@ -116,6 +126,7 @@ setMethod(
     lyt
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "split_rows", "ANY",
@@ -124,13 +135,18 @@ setMethod(
   }
 )
 
+## cmpnd_last_rowsplit =====
+
 #' @rdname int_methods
-#' @param constructor function.
+#'
+#' @param constructor (`function`)\cr constructor function.
 setGeneric("cmpnd_last_rowsplit", function(lyt, spl, constructor) standardGeneric("cmpnd_last_rowsplit"))
+
 #' @rdname int_methods
 setMethod("cmpnd_last_rowsplit", "NULL", function(lyt, spl, constructor) {
   stop("no existing splits to compound with. contact the maintainer") # nocov
 })
+
 #' @rdname int_methods
 setMethod(
   "cmpnd_last_rowsplit", "PreDataRowLayout",
@@ -185,6 +201,7 @@ setMethod(
   }
 )
 
+## split_cols ====
 
 #' @rdname int_methods
 setGeneric(
@@ -196,14 +213,17 @@ setGeneric(
 
 #' @rdname int_methods
 setMethod("split_cols", "NULL", function(lyt, spl, pos) {
-  .Deprecated(msg = paste(
-    "Initializing layouts via NULL is deprecated,",
-    "please use basic_table() instead"
-  ))
+  lifecycle::deprecate_warn(
+    when = "0.3.8",
+    what = I("split_cols(NULL)"),
+    with = "basic_table()",
+    details = "Initializing layouts via `NULL` is no longer supported."
+  )
   cl <- PreDataColLayout(SplitVector(spl))
   rl <- PreDataRowLayout()
   PreDataTableLayouts(rlayout = rl, clayout = cl)
 })
+
 #' @rdname int_methods
 setMethod(
   "split_cols", "PreDataColLayout",
@@ -219,6 +239,7 @@ setMethod(
     lyt
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "split_cols", "SplitVector",
@@ -227,6 +248,7 @@ setMethod(
     SplitVector(lst = tmp)
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "split_cols", "PreDataTableLayouts",
@@ -237,6 +259,7 @@ setMethod(
     lyt
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "split_cols", "ANY",
@@ -248,33 +271,23 @@ setMethod(
   }
 )
 
-
-# constructors ----
-
-
+# Constructors =====
 
 ## Pipe-able functions to add the various types of splits to the current layout
 ## for both row and column.  These all act as wrappers to the split_cols and
 ## split_rows method stacks.
 
-
 #' Declaring a column-split based on levels of a variable
 #'
-#' Will generate children for each subset of a categorical variable
+#' Will generate children for each subset of a categorical variable.
 #'
+#' @inheritParams lyt_args
+#' @param ref_group (`string` or `NULL`)\cr level of `var` that should be considered `ref_group`/reference.
+#'
+#' @return A `PreDataTableLayouts` object suitable for passing to further layouting functions, and to [build_table()].
 #'
 #' @inheritSection custom_split_funs Custom Splitting Function Details
 #'
-#' @inheritParams lyt_args
-#'
-#' @param ref_group character(1) or `NULL`. Level of `var` which should be
-#'   considered ref_group/reference
-#'
-#' @export
-#'
-#' @author Gabriel Becker
-#' @return A \code{PreDataTableLayouts} object suitable for passing to further
-#'   layouting functions, and to \code{build_table}.
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -301,6 +314,7 @@ setMethod(
 #'
 #' # By default sequentially adding layouts results in nesting
 #' library(dplyr)
+#'
 #' DM_MF <- DM %>%
 #'   filter(SEX %in% c("M", "F")) %>%
 #'   mutate(SEX = droplevels(SEX))
@@ -339,6 +353,8 @@ setMethod(
 #' tbl5 <- build_table(lyt5, DM)
 #' tbl5
 #'
+#' @author Gabriel Becker
+#' @export
 split_cols_by <- function(lyt,
                           var,
                           labels_var = var,
@@ -348,7 +364,9 @@ split_cols_by <- function(lyt,
                           nested = TRUE,
                           child_labels = c("default", "visible", "hidden"),
                           extra_args = list(),
-                          ref_group = NULL) { ## ,
+                          ref_group = NULL,
+                          show_colcounts = FALSE,
+                          colcount_format = NULL) { ## ,
   if (is.null(ref_group)) {
     spl <- VarLevelSplit(
       var = var,
@@ -357,7 +375,9 @@ split_cols_by <- function(lyt,
       split_format = format,
       child_labels = child_labels,
       split_fun = split_fun,
-      extra_args = extra_args
+      extra_args = extra_args,
+      show_colcounts = show_colcounts,
+      colcount_format = colcount_format
     )
   } else {
     spl <- VarLevWBaselineSplit(
@@ -366,15 +386,19 @@ split_cols_by <- function(lyt,
       split_label = split_label,
       split_fun = split_fun,
       labels_var = labels_var,
-      split_format = format
+      split_format = format,
+      show_colcounts = show_colcounts,
+      colcount_format = colcount_format
     )
   }
   pos <- next_cpos(lyt, nested)
   split_cols(lyt, spl, pos)
 }
 
+## .tl_indent ====
 
 setGeneric(".tl_indent_inner", function(lyt) standardGeneric(".tl_indent_inner"))
+
 setMethod(
   ".tl_indent_inner", "PreDataTableLayouts",
   function(lyt) .tl_indent_inner(rlayout(lyt))
@@ -397,7 +421,6 @@ setMethod(
   }
 ) ## length(lyt)  - 1L)
 
-
 .tl_indent <- function(lyt, nested = TRUE) {
   if (!nested) {
     0L
@@ -406,25 +429,19 @@ setMethod(
   }
 }
 
-
-#' Add Rows according to levels of a variable
-#'
-#'
-#' @inheritSection custom_split_funs Custom Splitting Function Details
-#'
+#' Add rows according to levels of a variable
 #'
 #' @inheritParams lyt_args
 #'
-#' @note
-#' If \code{var} is a factor with empty unobserved levels and
-#' \code{labels_var} is specified, it must also be a factor
-#' with the same number of levels as \code{var}. Currently the
-#' error that occurs when this is not the case is not very informative,
-#' but that will change in the future.
-#'
-#' @export
-#' @author Gabriel Becker
 #' @inherit split_cols_by return
+#'
+#' @inheritSection custom_split_funs Custom Splitting Function Details
+#'
+#' @note
+#' If `var` is a factor with empty unobserved levels and `labels_var` is specified, it must also be a factor
+#' with the same number of levels as `var`. Currently the error that occurs when this is not the case is not very
+#' informative, but that will change in the future.
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -456,6 +473,7 @@ setMethod(
 #' lyt3
 #'
 #' library(dplyr)
+#'
 #' DM2 <- DM %>%
 #'   filter(SEX %in% c("M", "F")) %>%
 #'   mutate(
@@ -480,6 +498,8 @@ setMethod(
 #' tbl3 <- build_table(lyt3, DM2)
 #' tbl3
 #'
+#' @author Gabriel Becker
+#' @export
 split_rows_by <- function(lyt,
                           var,
                           labels_var = var,
@@ -516,24 +536,21 @@ split_rows_by <- function(lyt,
   ret
 }
 
-
-#' Associate Multiple Variables with Columns
+#' Associate multiple variables with columns
 #'
-#' In some cases, the variable to be ultimately analyzed is most naturally
-#' defined on a column, not a row basis. When we need columns to reflect
-#' different variables entirely, rather than different levels of a single
-#' variable, we use `split_cols_by_multivar`
+#' In some cases, the variable to be ultimately analyzed is most naturally defined on a column, not a row, basis.
+#' When we need columns to reflect different variables entirely, rather than different levels of a single
+#' variable, we use `split_cols_by_multivar`.
 #'
 #' @inheritParams lyt_args
 #'
-#' @export
-#'
-#' @author Gabriel Becker
+#' @inherit split_cols_by return
 #'
 #' @seealso [analyze_colvars()]
-#' @inherit split_cols_by return
+#'
 #' @examples
 #' library(dplyr)
+#'
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
 #' ## toy example where we take the mean of the first variable and the
@@ -557,35 +574,42 @@ split_rows_by <- function(lyt,
 #' tbl <- build_table(lyt, ANL)
 #' tbl
 #'
+#' @author Gabriel Becker
+#' @export
 split_cols_by_multivar <- function(lyt,
                                    vars,
                                    split_fun = NULL,
                                    varlabels = vars,
                                    varnames = NULL,
                                    nested = TRUE,
-                                   extra_args = list()) {
+                                   extra_args = list(),
+                                   ## for completeness even though it doesn't make sense
+                                   show_colcounts = FALSE,
+                                   colcount_format = NULL) {
   spl <- MultiVarSplit(
     vars = vars, split_label = "",
     varlabels = varlabels,
     varnames = varnames,
     split_fun = split_fun,
-    extra_args = extra_args
+    extra_args = extra_args,
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   pos <- next_cpos(lyt, nested)
   split_cols(lyt, spl, pos)
 }
 
-#' Associate Multiple Variables with Rows
+#' Associate multiple variables with rows
 #'
 #' When we need rows to reflect different variables rather than different
 #' levels of a single variable, we use `split_rows_by_multivar`.
 #'
 #' @inheritParams lyt_args
+#'
 #' @inherit split_rows_by return
 #'
-#' @seealso [split_rows_by()] for typical row splitting, and
-#' [split_cols_by_multivar()] to perform the same type of split on a column basis.
-#' @export
+#' @seealso [split_rows_by()] for typical row splitting, and [split_cols_by_multivar()] to perform the same type of
+#'   split on a column basis.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -597,6 +621,7 @@ split_cols_by_multivar <- function(lyt,
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
+#' @export
 split_rows_by_multivar <- function(lyt,
                                    vars,
                                    split_fun = NULL,
@@ -626,29 +651,15 @@ split_rows_by_multivar <- function(lyt,
 
 #' Split on static or dynamic cuts of the data
 #'
-#' Create columns (or row splits) based on values (such as quartiles) of
-#' \code{var}.
+#' Create columns (or row splits) based on values (such as quartiles) of `var`.
 #'
 #' @inheritParams lyt_args
-#' @param cuts numeric. Cuts to use
-#' @param cutlabels character (or NULL). Labels for the cuts
-#' @param cumulative logical. Should the cuts be treated as cumulative. Defaults
-#'   to \code{FALSE}
-#' @param cutfun function. Function which accepts the full vector of \code{var}
-#'   values and returns cut points to be passed to \code{cut}.
 #'
+#' @details For dynamic cuts, the cut is transformed into a static cut by [build_table()] *based on the full dataset*,
+#' before proceeding. Thus even when nested within another split in column/row space, the resulting split will reflect
+#' the overall values (e.g., quartiles) in the dataset, NOT the values for subset it is nested under.
 #'
-#' @details For dynamic cuts, the cut is transformed into a static cut by
-#' \code{\link{build_table}} \emph{based on the full dataset}, before
-#' proceeding. Thus even when nested within another split in column/row space,
-#' the resulting split will reflect the overall values (e.g., quartiles) in the
-#' dataset, NOT the values for subset  it is nested under.
-#'
-#' @export
-#'
-#' @rdname varcuts
 #' @inherit split_cols_by return
-#' @author Gabriel Becker
 #'
 #' @examples
 #' library(dplyr)
@@ -731,17 +742,24 @@ split_rows_by_multivar <- function(lyt,
 #' tbl6 <- build_table(lyt6, ex_adsl)
 #' tbl6
 #'
+#' @author Gabriel Becker
+#' @export
+#' @rdname varcuts
 split_cols_by_cuts <- function(lyt, var, cuts,
                                cutlabels = NULL,
                                split_label = var,
                                nested = TRUE,
-                               cumulative = FALSE) {
+                               cumulative = FALSE,
+                               show_colcounts = FALSE,
+                               colcount_format = NULL) {
   spl <- make_static_cut_split(
     var = var,
     split_label = split_label,
     cuts = cuts,
     cutlabels = cutlabels,
-    cumulative = cumulative
+    cumulative = cumulative,
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   ## if(cumulative)
   ##     spl = as(spl, "CumulativeCutSplit")
@@ -785,13 +803,17 @@ split_cols_by_cutfun <- function(lyt, var,
                                  split_label = var,
                                  nested = TRUE,
                                  extra_args = list(),
-                                 cumulative = FALSE) {
+                                 cumulative = FALSE,
+                                 show_colcounts = FALSE,
+                                 colcount_format = NULL) {
   spl <- VarDynCutSplit(var, split_label,
     cutfun = cutfun,
     cutlabelfun = cutlabelfun,
     extra_args = extra_args,
     cumulative = cumulative,
-    label_pos = "hidden"
+    label_pos = "hidden",
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   pos <- next_cpos(lyt, nested)
   split_cols(lyt, spl, pos)
@@ -802,7 +824,9 @@ split_cols_by_cutfun <- function(lyt, var,
 split_cols_by_quartiles <- function(lyt, var, split_label = var,
                                     nested = TRUE,
                                     extra_args = list(),
-                                    cumulative = FALSE) {
+                                    cumulative = FALSE,
+                                    show_colcounts = FALSE,
+                                    colcount_format = NULL) {
   split_cols_by_cutfun(
     lyt = lyt,
     var = var,
@@ -818,7 +842,9 @@ split_cols_by_quartiles <- function(lyt, var, split_label = var,
     },
     nested = nested,
     extra_args = extra_args,
-    cumulative = cumulative
+    cumulative = cumulative,
+    show_colcounts = show_colcounts,
+    colcount_format = colcount_format
   )
   ## spl = VarDynCutSplit(var, split_label, cutfun = qtile_cuts,
   ##                      cutlabelfun = function(x) c("[min, Q1]",
@@ -832,7 +858,6 @@ split_cols_by_quartiles <- function(lyt, var, split_label = var,
   ## pos = next_cpos(lyt, nested)
   ## split_cols(lyt, spl, pos)
 }
-
 
 #' @export
 #' @rdname varcuts
@@ -883,8 +908,6 @@ split_rows_by_quartiles <- function(lyt, var, split_label = var,
   ## split_rows(lyt, spl, pos)
 }
 
-
-
 qtile_cuts <- function(x) {
   ret <- quantile(x)
   names(ret) <- c(
@@ -930,179 +953,123 @@ split_rows_by_cutfun <- function(lyt, var,
   split_rows(lyt, spl, pos)
 }
 
-
-#' @title .spl_context within analysis and split functions
+#' .spl_context within analysis and split functions
 #'
-#' @description
-#' `.spl_context` is an optional parameter for any of `rtables`' special
-#' functions, them being `afun` (analysis function in [analyze]),
-#' `cfun` (content or label function in [summarize_row_groups]),
-#' or `split_fun` (e.g. for [split_rows_by]).
-#'
+#' `.spl_context` is an optional parameter for any of rtables' special functions, i.e. `afun` (analysis function
+#' in [analyze()]), `cfun` (content or label function in [summarize_row_groups()]), or `split_fun` (e.g. for
+#' [split_rows_by()]).
 #'
 #' @details
-#' The `.spl_context` `data.frame` gives information about the subsets of data
-#' corresponding to the splits within-which the current `analyze` action is
-#' nested. Taken together, these correspond to the path that the resulting (set
-#' of) rows the analysis function is creating, although the information is in a
-#' slightly different form. Each split (which correspond to groups of rows in
-#' the resulting table), as well as the initial 'root' "split", is represented
+#' The `.spl_context` `data.frame` gives information about the subsets of data corresponding to the splits within
+#' which the current `analyze` action is nested. Taken together, these correspond to the path that the resulting (set
+#' of) rows the analysis function is creating, although the information is in a slightly different form. Each split
+#' (which correspond to groups of rows in the resulting table), as well as the initial 'root' "split", is represented
 #' via the following columns:
+#'
 #' \describe{
-#'   \item{split}{The name of the split (often the variable being split in the
-#'     simple case)}
-#'   \item{value}{The string representation of the value at that split}
-#'   \item{full_parent_df}{a dataframe containing the full data (i.e. across all
-#'     columns) corresponding to the path defined by the combination of `split`
-#'     and `value` of this row \emph{and all rows above this row}}
-#'   \item{all_cols_n}{the number of observations  corresponding to this row
-#'     grouping (union of all columns)}
-#'   \item{\emph{(row-split and analyze contexts only)} <1 column for each
-#'     column in the table structure}{ These list columns (named the same as
-#'     \code{names(col_exprs(tab))}) contain logical vectors corresponding to
-#'     the subset of this row's `full_parent_df` corresponding to that column}
-#'   \item{cur_col_id}{Identifier of the current column. This may be an internal
-#'     name, constructed by pasting the column path together}
-#'   \item{cur_col_subset}{List column containing logical vectors indicating the
-#'     subset of that row's `full_parent_df` for the column currently being
-#'     created by the analysis function}
-#'   \item{cur_col_expr}{List of current column expression. This may be used to
-#'     filter `.alt_df_row` or any external data by column. Filtering `.alt_df_row`
-#'     by columns produces `.alt_df`.}
-#'   \item{cur_col_n}{integer column containing the observation counts for that
-#'     split}
-#'   \item{cur_col_split}{Current column split names. This is recovered from the
-#'     current column path}
-#'   \item{cur_col_split_val}{Current column split values. This is recovered from the
-#'     current column path}
+#'   \item{split}{The name of the split (often the variable being split).}
+#'   \item{value}{The string representation of the value at that split (`split`).}
+#'   \item{full_parent_df}{A `data.frame` containing the full data (i.e. across all columns) corresponding to the path
+#'     defined by the combination of `split` and `value` of this row *and all rows above this row*.}
+#'   \item{all_cols_n}{The number of observations corresponding to the row grouping (union of all columns).}
+#'   \item{column for each column in the table structure (*row-split and analyze contexts only*)}{These list columns
+#'     (named the same as `names(col_exprs(tab))`) contain logical vectors corresponding to the subset of this row's
+#'     `full_parent_df` corresponding to the column.}
+#'   \item{cur_col_id}{Identifier of the current column. This may be an internal name, constructed by pasting the
+#'     column path together.}
+#'   \item{cur_col_subset}{List column containing logical vectors indicating the subset of this row's `full_parent_df`
+#'     for the column currently being created by the analysis function.}
+#'   \item{cur_col_expr}{List of current column expression. This may be used to filter `.alt_df_row`, or any external
+#'     data, by column. Filtering `.alt_df_row` by columns produces `.alt_df`.}
+#'   \item{cur_col_n}{Integer column containing the observation counts for that split.}
+#'   \item{cur_col_split}{Current column split names. This is recovered from the current column path.}
+#'   \item{cur_col_split_val}{Current column split values. This is recovered from the current column path.}
 #' }
 #'
-#' \emph{note Within analysis functions that accept `.spl_context`, the
-#' `all_cols_n` and `cur_col_n` columns of the dataframe will contain the 'true'
-#' observation counts corresponding to the row-group and row-group x column
-#' subsets of the data. These numbers will not, and currently cannot, reflect
-#' alternate column observation counts provided by the `alt_counts_df`,
-#' `col_counts` or `col_total` arguments to \code{\link{build_table}}}
+#' @note
+#' Within analysis functions that accept `.spl_context`, the `all_cols_n` and `cur_col_n` columns of the data frame
+#' will contain the 'true' observation counts corresponding to the row-group and row-group x column subsets of the
+#' data. These numbers will not, and currently cannot, reflect alternate column observation counts provided by the
+#' `alt_counts_df`, `col_counts` or `col_total` arguments to [build_table()].
 #'
 #' @name spl_context
 NULL
 
-#' @title Additional parameters within analysis and content functions
-#' (`afun/cfun`)
+#' Additional parameters within analysis and content functions (`afun`/`cfun`)
 #'
 #' @description
-#' It is possible to add specific parameters to `afun` and `cfun`, in [analyze]
-#' and [summarize_row_groups] respectively. These parameters grant access to
-#' relevant information like the row split structure (see [spl_context]) and the
-#' predefined baseline (`.ref_group`).
+#' It is possible to add specific parameters to `afun` and `cfun`, in [analyze()] and [summarize_row_groups()],
+#' respectively. These parameters grant access to relevant information like the row split structure (see
+#' [spl_context]) and the predefined baseline (`.ref_group`).
 #'
 #' @details
-#' We list and describe here all the parameters that can be added to a custom
-#' analysis function:
+#' We list and describe all the parameters that can be added to a custom analysis function below:
 #'
 #' \describe{
-#'   \item{.N_col}{column-wise N (column count) for the full column being
-#'     tabulated within}
-#'   \item{.N_total}{overall N (all observation count, defined as sum of column
-#'     counts) for the tabulation}
-#'   \item{.N_row}{row-wise N (row group count) for the group of observations
-#'     being analyzed (i.e. with no column-based subsetting)}
-#'   \item{.df_row}{data.frame for observations in the row group being analyzed
-#'     (i.e. with no column-based subsetting)}
-#'   \item{.var}{variable that is analyzed}
-#'   \item{.ref_group}{data.frame or vector of subset corresponding to the
-#'     `ref_group` column including subsetting defined by row-splitting.
-#'     Optional and only required/meaningful if a `ref_group` column has been
-#'     defined}
-#'   \item{.ref_full}{data.frame or vector of subset corresponding to the
-#'     `ref_group` column without subsetting defined by row-splitting. Optional
-#'     and only required/meaningful if a `ref_group` column has been defined}
-#'   \item{.in_ref_col}{boolean indicates if calculation is done for cells
-#'     within the reference column}
-#'   \item{.spl_context}{data.frame, each row gives information about a
-#'     previous/'ancestor' split state. See \code{\link{spl_context}}}
-#'   \item{.alt_df_row}{data.frame, i.e. the `alt_count_df` after
-#'     row splitting. It can be used with `.all_col_exprs` and `.spl_context`
-#'     information to retrieve current faceting, but for `alt_count_df`.
+#'   \item{.N_col}{Column-wise N (column count) for the full column being tabulated within.}
+#'   \item{.N_total}{Overall N (all observation count, defined as sum of column counts) for the tabulation.}
+#'   \item{.N_row}{Row-wise N (row group count) for the group of observations being analyzed (i.e. with no
+#'     column-based subsetting).}
+#'   \item{.df_row}{`data.frame` for observations in the row group being analyzed (i.e. with no column-based
+#'     subsetting).}
+#'   \item{.var}{Variable being analyzed.}
+#'   \item{.ref_group}{`data.frame` or vector of subset corresponding to the `ref_group` column including subsetting
+#'     defined by row-splitting. Only required/meaningful if a `ref_group` column has been defined.}
+#'   \item{.ref_full}{`data.frame` or vector of subset corresponding to the `ref_group` column without subsetting
+#'     defined by row-splitting. Only required/meaningful if a `ref_group` column has been defined.}
+#'   \item{.in_ref_col}{Boolean indicating if calculation is done for cells within the reference column.}
+#'   \item{.spl_context}{`data.frame` where each row gives information about a previous 'ancestor' split state.
+#'     See [spl_context].}
+#'   \item{.alt_df_row}{`data.frame`, i.e. the `alt_count_df` after row splitting. It can be used with
+#'     `.all_col_exprs` and `.spl_context` information to retrieve current faceting, but for `alt_count_df`.
 #'     It can be an empty table if all the entries are filtered out.}
-#'   \item{.alt_df}{data.frame, `.alt_df_row` but filtered by columns expression.
-#'     This data present the same faceting of main data `df`. This also filters
-#'     `NAs` out if related parameters are set to (e.g. `inclNAs` in [analyze]).
-#'     Similarly to `.alt_df_row`, it can be an empty table if all the entries
-#'     are filtered out.}
-#'   \item{.all_col_exprs}{list of expressions. Each of them represents a
-#'     different column splitting.}
-#'   \item{.all_col_counts}{vector of integers. Each of them represents the global
-#'     count for each column. It differs if `alt_counts_df` is used
-#'     (see [build_table]).}
+#'   \item{.alt_df}{`data.frame`, `.alt_df_row` but filtered by columns expression. This data present the same
+#'     faceting of main data `df`. This also filters `NA`s out if related parameters are set to do so (e.g. `inclNAs`
+#'     in [analyze()]). Similarly to `.alt_df_row`, it can be an empty table if all the entries are filtered out.}
+#'   \item{.all_col_exprs}{List of expressions. Each of them represents a different column splitting.}
+#'   \item{.all_col_counts}{Vector of integers. Each of them represents the global count for each column. It differs
+#'     if `alt_counts_df` is used (see [build_table()]).}
 #' }
 #'
-#' @note If any of these formals is specified incorrectly or not
-#'  present in the tabulation machinery, it will be as if missing. For
-#'  example`.ref_group` will be missing if no baseline is previously defined
-#'  during data splitting (via `ref_group` parameters in, e.g., [split_rows_by]).
-#'  Similarly, if no `alt_counts_df` is provided into [build_table],
-#'  `.alt_df_row` and `.alt_df` will not be present.
+#' @note If any of these formals is specified incorrectly or not present in the tabulation machinery, it will be
+#'   treated as if missing. For example, `.ref_group` will be missing if no baseline is previously defined during
+#'   data splitting (via `ref_group` parameters in, e.g., [split_rows_by()]). Similarly, if no `alt_counts_df` is
+#'   provided to [build_table()], `.alt_df_row` and `.alt_df` will not be present.
 #'
 #' @name additional_fun_params
 NULL
 
-#' Generate Rows Analyzing Variables Across Columns
+#' Generate rows analyzing variables across columns
 #'
-#' Adding *analyzed variables* to our table layout defines the primary
-#' tabulation to be performed. We do this by adding calls to \code{analyze}
-#' and/or \code{\link{analyze_colvars}} into our layout pipeline. As with adding
-#' further splitting, the tabulation will occur at the current/next level of
-#' nesting by default.
+#' Adding *analyzed variables* to our table layout defines the primary tabulation to be performed. We do this by
+#' adding calls to `analyze` and/or [analyze_colvars()] into our layout pipeline. As with adding further splitting,
+#' the tabulation will occur at the current/next level of nesting by default.
 #'
 #' @inheritParams lyt_args
 #'
 #' @inherit split_cols_by return
 #'
 #' @details
+#' When non-`NULL`, `format` is used to specify formats for all generated rows, and can be a character vector, a
+#' function, or a list of functions. It will be repped out to the number of rows once this is calculated during the
+#' tabulation process, but will be overridden by formats specified within `rcell` calls in `afun`.
 #'
-#' When non-NULL \code{format} is used to specify formats for all generated
-#' rows, and can be a character vector, a function, or a list of functions. It
-#' will be repped out to the number of rows once this is known during the
-#' tabulation process, but will be overridden by formats specified within
-#' \code{rcell} calls in \code{afun}.
+#' The analysis function (`afun`) should take as its first parameter either `x` or `df`. Whichever of these the
+#' function accepts will change the behavior when tabulation is performed as follows:
 #'
-#' The analysis function (\code{afun}) should take as its first parameter either
-#' \code{x} or \code{df}. Which of these the function accepts changes the
-#' behavior when tabulation is performed.
+#' - If `afun`'s first parameter is `x`, it will receive the corresponding subset *vector* of data from the relevant
+#'   column (from `var` here) of the raw data being used to build the table.
+#' - If `afun`'s first parameter is `df`, it will receive the corresponding subset *data frame* (i.e. all columns) of
+#'   the raw data being tabulated.
 #'
-#' \itemize{
-#'   \item{
-#'   If \code{afun}'s first parameter is x, it will receive the corresponding
-#'   subset \emph{vector} of data from the relevant column (from \code{var}
-#'   here) of the raw data being used to build the table.
-#'   }
+#' In addition to differentiation on the first argument, the analysis function can optionally accept a number of
+#' other parameters which, *if and only if* present in the formals, will be passed to the function by the tabulation
+#' machinery. These are listed and described in [additional_fun_params].
 #'
-#'   \item{
-#'   If \code{afun}'s first parameter is \code{df}, it will receive the
-#'   corresponding subset \emph{data.frame} (i.e. all columns) of the raw data
-#'   being tabulated
-#'   }
-#' }
-#'
-#' In addition to differentiation on the first argument, the analysis function
-#' can optionally accept a number of other parameters which, \emph{if and only
-#' if} present in the formals will be passed to the function by the tabulation
-#' machinery. These are listed and described in [`additional_fun_params`].
-#'
-#' @note None of the arguments described in the Details section
-#' can be overridden via \code{extra_args} or when calling
-#' \code{\link{make_afun}}. \code{.N_col} and \code{.N_total} can
-#' be overridden via the \code{col_counts} argument to
-#' \code{\link{build_table}}. Alternative values for the others
-#' must be calculated within \code{afun} based on a combination
-#' of extra arguments and the unmodified values provided by the
-#' tabulation framework.
-#'
-#' @export
-#'
-#' @author Gabriel Becker
-#'
+#' @note None of the arguments described in the Details section can be overridden via `extra_args` or when calling
+#'   [make_afun()]. `.N_col` and `.N_total` can be overridden via the `col_counts` argument to [build_table()].
+#'   Alternative values for the others must be calculated within `afun` based on a combination of extra arguments and
+#'   the unmodified values provided by the tabulation framework.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -1126,6 +1093,8 @@ NULL
 #' tbl2 <- build_table(lyt2, iris)
 #' tbl2
 #'
+#' @author Gabriel Becker
+#' @export
 analyze <- function(lyt,
                     vars,
                     afun = simple_analysis,
@@ -1134,7 +1103,7 @@ analyze <- function(lyt,
                     format = NULL,
                     na_str = NA_character_,
                     nested = TRUE,
-                    ## can't name this na_rmsymbol conflict with possible afuns!!
+                    ## can't name this na_rm symbol conflict with possible afuns!!
                     inclNAs = FALSE,
                     extra_args = list(),
                     show_labels = c("default", "visible", "hidden"),
@@ -1185,8 +1154,6 @@ analyze <- function(lyt,
   }
 }
 
-
-
 get_acolvar_name <- function(lyt) {
   ## clyt <- clayout(lyt)
   ## stopifnot(length(clyt) == 1L)
@@ -1195,7 +1162,6 @@ get_acolvar_name <- function(lyt) {
   ## pos = max(which(vcls ==  "MultiVarSplit"))
   paste(c("ac", get_acolvar_vars(lyt)), collapse = "_")
 }
-
 
 get_acolvar_vars <- function(lyt) {
   clyt <- clayout(lyt)
@@ -1210,27 +1176,21 @@ get_acolvar_vars <- function(lyt) {
   }
 }
 
-
-#' Generate Rows Analyzing Different Variables Across Columns
+#' Generate rows analyzing different variables across columns
 #'
-#' @inheritParams  lyt_args
-#'
-#' @param afun function or list. Function(s) to be used to calculate the values
-#'   in each column.  The list will be repped out as needed and matched by
-#'   position with the columns during tabulation. This functions accepts the same
-#'   parameters as [analyze] like `afun` and `format`. For further information see
-#'   [`additional_fun_params`].
-#'
-#' @export
+#' @inheritParams lyt_args
+#' @param afun (`function` or `list`)\cr function(s) to be used to calculate the values in each column. The list
+#'   will be repped out as needed and matched by position with the columns during tabulation. This functions
+#'   accepts the same parameters as [analyze()] like `afun` and `format`. For further information see
+#'   [additional_fun_params].
 #'
 #' @inherit split_cols_by return
 #'
 #' @seealso [split_cols_by_multivar()]
 #'
-#' @author Gabriel Becker
-#'
 #' @examples
 #' library(dplyr)
+#'
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
 #' ## toy example where we take the mean of the first variable and the
@@ -1269,6 +1229,8 @@ get_acolvar_vars <- function(lyt) {
 #' tbl2 <- build_table(lyt2, ANL)
 #' tbl2
 #'
+#' @author Gabriel Becker
+#' @export
 analyze_colvars <- function(lyt,
                             afun,
                             format = NULL,
@@ -1324,19 +1286,14 @@ analyze_colvars <- function(lyt,
 ## Add a total column at the next **top level** spot in
 ## the column layout.
 
-#' Add Overall Column
+#' Add overall column
 #'
-#' @description This function will \emph{only} add an overall
-#' column at the \emph{top} level of splitting, NOT within
-#' existing column splits.
-#' See \code{\link{add_overall_level}} for the recommended
-#' way to add overall columns more generally within existing splits.
+#' This function will *only* add an overall column at the *top* level of splitting, NOT within existing column splits.
+#' See [add_overall_level()] for the recommended way to add overall columns more generally within existing splits.
 #'
 #' @inheritParams lyt_args
 #'
 #' @inherit split_cols_by return
-#'
-#' @export
 #'
 #' @seealso [add_overall_level()]
 #'
@@ -1350,6 +1307,7 @@ analyze_colvars <- function(lyt,
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
+#' @export
 add_overall_col <- function(lyt, label) {
   spl <- AllSplit(label)
   split_cols(
@@ -1359,9 +1317,10 @@ add_overall_col <- function(lyt, label) {
   )
 }
 
+## add_row_summary ====
 
-#'
 #' @inheritParams lyt_args
+#'
 #' @export
 #'
 #' @rdname int_methods
@@ -1405,6 +1364,7 @@ setMethod(
     lyt
   }
 )
+
 #' @rdname int_methods
 setMethod(
   ".add_row_summary", "PreDataRowLayout",
@@ -1446,6 +1406,7 @@ setMethod(
     lyt
   }
 )
+
 #' @rdname int_methods
 setMethod(
   ".add_row_summary", "SplitVector",
@@ -1478,6 +1439,7 @@ setMethod(
     lyt
   }
 )
+
 #' @rdname int_methods
 setMethod(
   ".add_row_summary", "Split",
@@ -1573,13 +1535,15 @@ setMethod(
 
 #' Analysis function to count levels of a factor with percentage of the column total
 #'
-#' @param x factor. Vector of data, provided by rtables pagination machinery
-#' @param .N_col integer(1). Total count for the column, provided by rtables pagination machinery
+#' @param x (`factor`)\cr a vector of data, provided by rtables pagination machinery.
+#' @param .N_col (`integer(1)`)\cr total count for the column, provided by rtables pagination machinery.
 #'
-#' @return A `RowsVerticalSection` object with counts (and percents) for each level of the factor
-#' @export
+#' @return A `RowsVerticalSection` object with counts (and percents) for each level of the factor.
+#'
 #' @examples
 #' counts_wpcts(DM$SEX, 400)
+#'
+#' @export
 counts_wpcts <- function(x, .N_col) {
   if (!is.factor(x)) {
     stop(
@@ -1598,25 +1562,19 @@ counts_wpcts <- function(x, .N_col) {
 #'
 #' @inherit split_cols_by return
 #'
-#' @details If `format` expects 1 value (i.e. it is specified as a format string
-#'   and `xx` appears for two values (i.e. `xx` appears twice in the
-#'   format string) or is specified as a function, then both raw and percent of
-#'   column total counts are calculated. If `format` is a format string where
-#'   `xx` appears only one time, only raw counts are used.
+#' @details
+#' If `format` expects 1 value (i.e. it is specified as a format string and `xx` appears for two values
+#' (i.e. `xx` appears twice in the format string) or is specified as a function, then both raw and percent of
+#' column total counts are calculated. If `format` is a format string where `xx` appears only one time, only
+#' raw counts are used.
 #'
-#' `cfun` must accept `x` or `df` as its first argument. For the `df` argument
-#' `cfun` will receive the subset `data.frame` corresponding with the row-
-#' and column-splitting for the cell being calculated. Must accept `labelstr` as
-#' the second parameter, which accepts the `label` of the level of the parent
-#' split currently being summarized. Can additionally take any optional argument
-#' supported by analysis functions. (see \code{\link{analyze}}).
+#' `cfun` must accept `x` or `df` as its first argument. For the `df` argument `cfun` will receive the subset
+#' `data.frame` corresponding with the row- and column-splitting for the cell being calculated. Must accept
+#' `labelstr` as the second parameter, which accepts the `label` of the level of the parent split currently
+#' being summarized. Can additionally take any optional argument supported by analysis functions. (see [analyze()]).
 #'
-#' In addition, if complex custom functions are needed, we suggest checking the
-#' available [additional_fun_params] that apply here as for `afun`.
-#'
-#' @export
-#'
-#' @author Gabriel Becker
+#' In addition, if complex custom functions are needed, we suggest checking the available [additional_fun_params]
+#' that can be used in `cfun`.
 #'
 #' @examples
 #' DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
@@ -1632,7 +1590,6 @@ counts_wpcts <- function(x, .N_col) {
 #' tbl
 #'
 #' row_paths_summary(tbl) # summary count is a content table
-#'
 #'
 #' ## use a cfun and extra_args to customize summarization
 #' ## behavior
@@ -1660,6 +1617,8 @@ counts_wpcts <- function(x, .N_col) {
 #' tbl2 <- build_table(lyt2, DM2)
 #' tbl2
 #'
+#' @author Gabriel Becker
+#' @export
 summarize_row_groups <- function(lyt,
                                  var = "",
                                  label_fstr = "%s",
@@ -1686,25 +1645,18 @@ summarize_row_groups <- function(lyt,
   )
 }
 
-
 #' Add the column population counts to the header
 #'
 #' Add the data derived column counts.
 #'
 #' @details It is often the case that the the column counts derived from the
-#'   input data to `build_table` is not representative of the population counts.
+#'   input data to [build_table()] is not representative of the population counts.
 #'   For example, if events are counted in the table and the header should
-#'   display the number of subjects and not the total number of events. In that
-#'   case use the `col_count` argument in `build_table` to control the counts
-#'   displayed in the table header.
+#'   display the number of subjects and not the total number of events.
 #'
 #' @inheritParams lyt_args
 #'
 #' @inherit split_cols_by return
-#'
-#' @export
-#'
-#' @author Gabriel Becker
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -1717,6 +1669,8 @@ summarize_row_groups <- function(lyt,
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
+#' @author Gabriel Becker
+#' @export
 add_colcounts <- function(lyt, format = "(N=xx)") {
   if (is.null(lyt)) {
     lyt <- PreDataTableLayouts()
@@ -1726,16 +1680,13 @@ add_colcounts <- function(lyt, format = "(N=xx)") {
   lyt
 }
 
-## Currently existing tables can ONLY be added
-## as new entries at the top level, never at any
-## level of nesting.
+## Currently existing tables can ONLY be added as new entries at the top level, never at any level of nesting.
 #' Add an already calculated table to the layout
+#'
 #' @inheritParams lyt_args
 #' @inheritParams gen_args
 #'
 #' @inherit split_cols_by return
-#' @export
-#' @author Gabriel Becker
 #'
 #' @examples
 #' lyt1 <- basic_table() %>%
@@ -1756,6 +1707,8 @@ add_colcounts <- function(lyt, format = "(N=xx)") {
 #' table_structure(tbl2)
 #' row_paths_summary(tbl2)
 #'
+#' @author Gabriel Becker
+#' @export
 add_existing_table <- function(lyt, tt, indent_mod = 0) {
   indent_mod(tt) <- indent_mod
   lyt <- split_rows(
@@ -1765,7 +1718,6 @@ add_existing_table <- function(lyt, tt, indent_mod = 0) {
   )
   lyt
 }
-
 
 ## takes_coln = function(f) {
 ##     stopifnot(is(f, "function"))
@@ -1781,12 +1733,13 @@ add_existing_table <- function(lyt, tt, indent_mod = 0) {
 ##     res
 ## }
 
-
 ## use data to transform dynamic cuts to static cuts
 #' @rdname int_methods
 setGeneric("fix_dyncuts", function(spl, df) standardGeneric("fix_dyncuts"))
+
 #' @rdname int_methods
 setMethod("fix_dyncuts", "Split", function(spl, df) spl)
+
 #' @rdname int_methods
 setMethod(
   "fix_dyncuts", "VarDynCutSplit",
@@ -1816,18 +1769,19 @@ setMethod(
     ret
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "fix_dyncuts", "VTableTree",
   function(spl, df) spl
 )
 
-
 .fd_helper <- function(spl, df) {
   lst <- lapply(spl, fix_dyncuts, df = df)
   spl@.Data <- lst
   spl
 }
+
 #' @rdname int_methods
 setMethod(
   "fix_dyncuts", "PreDataRowLayout",
@@ -1838,6 +1792,7 @@ setMethod(
     ret
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "fix_dyncuts", "PreDataColLayout",
@@ -1850,6 +1805,7 @@ setMethod(
     ret
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "fix_dyncuts", "SplitVector",
@@ -1857,6 +1813,7 @@ setMethod(
     .fd_helper(spl, df)
   }
 )
+
 #' @rdname int_methods
 setMethod(
   "fix_dyncuts", "PreDataTableLayouts",
@@ -1867,22 +1824,16 @@ setMethod(
   }
 )
 
-
-
-
-## Manual column construction in a simple (seeming
-## to the user) way.
+## Manual column construction in a simple (seeming to the user) way.
 #' Manual column declaration
-#' @param \dots One or more vectors of levels to appear in the column space. If
-#'   more than one set of levels is given, the values of the second are nested
-#'   within each value of the first, and so on.
-#' @param .lst A list of sets of levels, by default populated via
-#'   \code{list(...)}.
-#' @return An `InstantiatedColumnInfo` object, suitable for use declaring the
-#'   column structure for a manually constructed table.
-#' @author Gabriel Becker
 #'
-#' @export
+#' @param ... one or more vectors of levels to appear in the column space. If more than one set of levels is given,
+#'   the values of the second are nested within each value of the first, and so on.
+#' @param .lst (`list`)\cr a list of sets of levels, by default populated via `list(...)`.
+#' @param ccount_format (`FormatSpec`)\cr the format to use when counts are displayed.
+#'
+#' @return An `InstantiatedColumnInfo` object, suitable for declaring the column structure for a manually constructed
+#'   table.
 #'
 #' @examples
 #' # simple one level column space
@@ -1902,7 +1853,9 @@ setMethod(
 #' )
 #' tbl2
 #'
-manual_cols <- function(..., .lst = list(...)) {
+#' @author Gabriel Becker
+#' @export
+manual_cols <- function(..., .lst = list(...), ccount_format = NULL) {
   if (is.null(names(.lst))) {
     names(.lst) <- paste("colsplit", seq_along(.lst))
   }
@@ -1911,30 +1864,92 @@ manual_cols <- function(..., .lst = list(...)) {
     levels = .lst,
     label = names(.lst)
   ))
-  ctree <- splitvec_to_coltree(data.frame(), splvec = splvec, pos = TreePos())
-  InstantiatedColumnInfo(treelyt = ctree)
+  ctree <- splitvec_to_coltree(data.frame(), splvec = splvec, pos = TreePos(), global_cc_format = ccount_format)
+
+  ret <- InstantiatedColumnInfo(treelyt = ctree)
+  rm_all_colcounts(ret)
 }
 
 
-#' Returns a function that coerces the return values of f to a list
+#' Set all column counts at all levels of nesting to NA
 #'
-#' @param f The function to wrap.
+#' @inheritParams gen_args
+#'
+#' @return `obj` with all column counts reset to missing
+#'
 #' @export
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
+#'   analyze("AGE")
+#' tbl <- build_table(lyt, ex_adsl)
 #'
-#' @details \code{list_wrap_x} generates a wrapper which takes \code{x} as its
-#'   first argument, while \code{list_wrap_df} generates an otherwise identical
-#'   wrapper function whose first argument is named \code{df}.
+#' # before
+#' col_counts(tbl)
+#' tbl <- rm_all_colcounts(tbl)
+#' col_counts(tbl)
+setGeneric("rm_all_colcounts", function(obj) standardGeneric("rm_all_colcounts"))
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "VTableTree",
+  function(obj) {
+    cinfo <- col_info(obj)
+    cinfo <- rm_all_colcounts(cinfo)
+    col_info(obj) <- cinfo
+    obj
+  }
+)
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "InstantiatedColumnInfo",
+  function(obj) {
+    ctree <- coltree(obj)
+    ctree <- rm_all_colcounts(ctree)
+    coltree(obj) <- ctree
+    obj
+  }
+)
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "LayoutColTree",
+  function(obj) {
+    obj@column_count <- NA_integer_
+    tree_children(obj) <- lapply(tree_children(obj), rm_all_colcounts)
+    obj
+  }
+)
+
+#' @rdname rm_all_colcounts
+#' @export
+setMethod(
+  "rm_all_colcounts", "LayoutColLeaf",
+  function(obj) {
+    obj@column_count <- NA_integer_
+    obj
+  }
+)
+
+#' Returns a function that coerces the return values of a function to a list
 #'
-#'   We provide both because when using the functions as tabulation in
-#'   \code{\link{analyze}}, functions which take \code{df} as their first
-#'   argument are passed the full subset dataframe, while those which accept
-#'   anything else notably including \code{x} are passed only the relevant
-#'   subset of the variable being analyzed.
+#' @param f (`function`)\cr the function to wrap.
 #'
-#' @rdname list_wrap
-#' @return A function which calls \code{f} and converts the result to a list of
-#'   \code{CellValue} objects.
-#' @author Gabriel Becker
+#' @details
+#' `list_wrap_x` generates a wrapper which takes `x` as its first argument, while `list_wrap_df` generates an
+#' otherwise identical wrapper function whose first argument is named `df`.
+#'
+#' We provide both because when using the functions as tabulation in [analyze()], functions which take `df` as
+#' their first argument are passed the full subset data frame, while those which accept anything else notably
+#' including `x` are passed only the relevant subset of the variable being analyzed.
+#'
+#' @return A function that returns a list of `CellValue` objects.
+#'
 #' @examples
 #' summary(iris$Sepal.Length)
 #'
@@ -1944,6 +1959,9 @@ manual_cols <- function(..., .lst = list(...)) {
 #' f2 <- list_wrap_df(summary)
 #' f2(df = iris$Sepal.Length)
 #'
+#' @author Gabriel Becker
+#' @rdname list_wrap
+#' @export
 list_wrap_x <- function(f) {
   function(x, ...) {
     vs <- as.list(f(x, ...))
@@ -1974,42 +1992,41 @@ list_wrap_df <- function(f) {
   }
 }
 
-
 #' Layout with 1 column and zero rows
 #'
 #' Every layout must start with a basic table.
 #'
 #' @inheritParams constr_args
-#' @param show_colcounts logical(1). Should column counts be displayed in the
-#'   resulting table when this layout is applied to data
-#' @param colcount_format character(1). Format for use when displaying the
-#'   column counts. Must be 1d, or 2d where one component is a percent. See
-#'   details.
-#' @param top_level_section_div character(1). If assigned to a single character,
-#'   the first (top level) split or division of the table will be highlighted by a line made of that character.
-#'   See [section_div] for more information.
+#' @param show_colcounts (`logical(1)`)\cr Indicates whether the lowest level of
+#'   applied to data. `NA`, the default, indicates that the `show_colcounts`
+#'   argument(s) passed to the relevant calls to `split_cols_by*`
+#'   functions. Non-missing values will override the behavior specified in
+#'   column splitting layout instructions which create the lowest level, or
+#'   leaf, columns.
+#' @param colcount_format (`string`)\cr format for use when displaying the column counts. Must be 1d, or 2d
+#'   where one component is a percent. This will also apply to any displayed higher
+#'   level column counts where an explicit format was not specified. Defaults to `"(N=xx)"`. See Details below.
+#' @param top_level_section_div (`character(1)`)\cr if assigned a single character, the first (top level) split
+#'   or division of the table will be highlighted by a line made of that character. See [section_div] for more
+#'   information.
 #'
 #' @details
-#' `colcount_format` is ignored if `show_colcounts` is `FALSE` (the default).
-#' When `show_colcounts` is `TRUE`, and `colcount_format` is 2-dimensional with
-#' a percent component, the value component for the percent is always populated
-#' with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they
-#' normally would be, while 2d formats which don't include a percent, and all 3d
-#' formats result in an error. Formats in the form of functions are not supported for
-#' `colcount` format. See [formatters::list_valid_format_labels()] for
-#' the list of valid format labels to select from.
+#' `colcount_format` is ignored if `show_colcounts` is `FALSE` (the default). When `show_colcounts` is `TRUE`,
+#' and `colcount_format` is 2-dimensional with a percent component, the value component for the percent is always
+#' populated with `1` (i.e. 100%). 1d formats are used to render the counts exactly as they normally would be,
+#' while 2d formats which don't include a percent, and all 3d formats result in an error. Formats in the form of
+#' functions are not supported for `colcount` format. See [formatters::list_valid_format_labels()] for the list
+#' of valid format labels to select from.
 #'
 #' @inherit split_cols_by return
 #'
 #' @note
-#' - Because percent components in `colcount_format` are *always*
-#' populated with the value 1, we can get arguably strange results, such as
-#' that individual arm columns and a combined "all patients" column all
-#' list "100%" as their percentage, even though the individual arm columns
-#' represent strict subsets of the all patients column.
+#' - Because percent components in `colcount_format` are *always* populated with the value 1, we can get arguably
+#'   strange results, such as that individual arm columns and a combined "all patients" column all list "100%" as
+#'   their percentage, even though the individual arm columns represent strict subsets of the "all patients" column.
 #'
-#' - Note that subtitles ([subtitles()]) and footers ([main_footer()] and [prov_footer()])
-#' that spans more than one line can be supplied as a character vector to maintain
+#' - Note that subtitles ([formatters::subtitles()]) and footers ([formatters::main_footer()] and
+#' [formatters::prov_footer()]) that span more than one line can be supplied as a character vector to maintain
 #' indentation on multiple lines.
 #'
 #' @examples
@@ -2045,7 +2062,7 @@ basic_table <- function(title = "",
                         subtitles = character(),
                         main_footer = character(),
                         prov_footer = character(),
-                        show_colcounts = FALSE,
+                        show_colcounts = NA, # FALSE,
                         colcount_format = "(N=xx)",
                         header_section_div = NA_character_,
                         top_level_section_div = NA_character_,
@@ -2066,38 +2083,38 @@ basic_table <- function(title = "",
     top_level_section_div = top_level_section_div,
     table_inset = as.integer(inset)
   )
-  if (show_colcounts) {
-    ret <- add_colcounts(ret, format = colcount_format)
-  }
+
+  ## unconditional now, NA case is handled in cinfo construction
+  disp_ccounts(ret) <- show_colcounts
+  colcount_format(ret) <- colcount_format
+  ## if (isTRUE(show_colcounts)) {
+  ##   ret <- add_colcounts(ret, format = colcount_format)
+  ## }
   ret
 }
 
-
 #' Append a description to the 'top-left' materials for the layout
 #'
-#' @description This function \emph{adds} \code{newlines} to the current
-#' set of "top-left materials".
+#' This function *adds* `newlines` to the current set of "top-left materials".
+#'
 #' @details
+#' Adds `newlines` to the set of strings representing the 'top-left' materials declared in the layout (the content
+#' displayed to the left of the column labels when the resulting tables are printed).
 #'
-#' Adds \code{newlines} to the set of strings representing the 'top-left'
-#' materials declared in the layout (the content displayed to the left of
-#' the column labels when the resulting tables are printed).
+#' Top-left material strings are stored and then displayed *exactly as is*, no structure or indenting is applied to
+#' them either when they are added or when they are displayed.
 #'
-#' Top-left material strings are stored and then displayed \emph{exactly as is},
-#' no structure or indenting is applied to them either when they are added
-#' or when they are displayed.
 #' @inheritParams lyt_args
+#' @param newlines (`character`)\cr the new line(s) to be added to the materials.
+#'
+#' @note
+#' Currently, where in the construction of the layout this is called makes no difference, as it is independent of
+#' the actual splitting keywords. This may change in the future.
+#'
+#' This function is experimental, its name and the details of its behavior are subject to change in future versions.
 #'
 #' @inherit split_cols_by return
 #'
-#' @param newlines character. The new line(s) to be added to the materials
-#' @note Currently, where in the construction of the layout this is called
-#' makes no difference, as it is independent of the actual splitting keywords.
-#' This may change in the future.
-#' @note This function is experimental, its name and the details of
-#' its behavior are subject to change in future versions.
-#'
-#' @export
 #' @seealso [top_left()]
 #'
 #' @examples
@@ -2116,6 +2133,7 @@ basic_table <- function(title = "",
 #' tbl <- build_table(lyt, DM2)
 #' tbl
 #'
+#' @export
 append_topleft <- function(lyt, newlines) {
   stopifnot(
     is(lyt, "PreDataTableLayouts"),

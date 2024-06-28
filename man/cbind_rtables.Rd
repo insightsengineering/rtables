@@ -2,26 +2,29 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{cbind_rtables}
 \alias{cbind_rtables}
-\title{\code{cbind} two \code{rtables}}
+\title{Column-bind two \code{TableTree} objects}
 \usage{
-cbind_rtables(x, ...)
+cbind_rtables(x, ..., sync_count_vis = TRUE)
 }
 \arguments{
-\item{x}{A table or row object}
+\item{x}{(\code{TableTree} or \code{TableRow})\cr a table or row object.}
 
-\item{\dots}{1 or more further objects of the same class as \code{x}}
+\item{...}{one or more further objects of the same class as \code{x}.}
+
+\item{sync_count_vis}{(\code{logical(1)})\cr should column count
+visibility be synced across the new and existing columns.
+Currently defaults to \code{TRUE} for backwards compatibility but
+this may change in future releases.}
 }
 \value{
 A formal table object.
 }
 \description{
-\code{cbind} two \code{rtables}
+Column-bind two \code{TableTree} objects
 }
 \examples{
 x <- rtable(c("A", "B"), rrow("row 1", 1, 2), rrow("row 2", 3, 4))
-
 y <- rtable("C", rrow("row 1", 5), rrow("row 2", 6))
-
 z <- rtable("D", rrow("row 1", 9), rrow("row 2", 10))
 
 t1 <- cbind_rtables(x, y)

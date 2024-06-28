@@ -3,25 +3,23 @@
 \name{row_paths_summary}
 \alias{row_paths_summary}
 \alias{col_paths_summary}
-\title{Print Row/Col Paths Summary}
+\title{Print row/column paths summary}
 \usage{
 row_paths_summary(x)
 
 col_paths_summary(x)
 }
 \arguments{
-\item{x}{an \code{rtable} object}
+\item{x}{(\code{VTableTree})\cr an \code{rtable} object.}
 }
 \value{
-A data.frame summarizing the row- or column-structure of \code{x}.
+A data frame summarizing the row- or column-structure of \code{x}.
 }
 \description{
-Print Row/Col Paths Summary
+Print row/column paths summary
 }
 \examples{
-library(dplyr)
-
-ex_adsl_MF <- ex_adsl \%>\% filter(SEX \%in\% c("M", "F"))
+ex_adsl_MF <- ex_adsl \%>\% dplyr::filter(SEX \%in\% c("M", "F"))
 
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
@@ -48,4 +46,5 @@ tbl2 <- rtable(
   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 )
 col_paths_summary(tbl2)
+
 }

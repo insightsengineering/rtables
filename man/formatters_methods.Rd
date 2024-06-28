@@ -2,6 +2,7 @@
 % Please edit documentation in R/tree_accessors.R, R/tt_paginate.R
 \name{obj_name,VNodeInfo-method}
 \alias{obj_name,VNodeInfo-method}
+\alias{formatters_methods}
 \alias{obj_name,Split-method}
 \alias{obj_name<-,VNodeInfo-method}
 \alias{obj_name<-,Split-method}
@@ -37,7 +38,6 @@
 \alias{table_inset<-,VTableNodeInfo-method}
 \alias{table_inset<-,PreDataTableLayouts-method}
 \alias{table_inset<-,InstantiatedColumnInfo-method}
-\alias{formatters_methods}
 \alias{nlines,TableRow-method}
 \alias{nlines,LabelRow-method}
 \alias{nlines,RefFootnote-method}
@@ -119,13 +119,19 @@
 
 \S4method{table_inset}{InstantiatedColumnInfo}(obj) <- value
 
-\S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
 
-\S4method{nlines}{LabelRow}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{LabelRow}(
+  x,
+  colwidths = NULL,
+  max_width = NULL,
+  fontspec = fontspec,
+  col_gap = NULL
+)
 
-\S4method{nlines}{RefFootnote}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{RefFootnote}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = NULL)
 
-\S4method{nlines}{InstantiatedColumnInfo}(x, colwidths = NULL, max_width = NULL)
+\S4method{nlines}{InstantiatedColumnInfo}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
 
 \S4method{make_row_df}{VTableTree}(
   tt,
@@ -139,7 +145,9 @@
   repr_inds = integer(),
   sibpos = NA_integer_,
   nsibs = NA_integer_,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = NULL,
+  col_gap = 3
 )
 
 \S4method{make_row_df}{TableRow}(
@@ -154,7 +162,9 @@
   repr_inds = integer(),
   sibpos = NA_integer_,
   nsibs = NA_integer_,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = font_spec(),
+  col_gap = 3
 )
 
 \S4method{make_row_df}{LabelRow}(
@@ -169,23 +179,30 @@
   repr_inds = integer(),
   sibpos = NA_integer_,
   nsibs = NA_integer_,
-  max_width = NULL
+  max_width = NULL,
+  fontspec = font_spec(),
+  col_gap = 3
 )
 }
 \arguments{
-\item{obj}{ANY. The object for the accessor to access or modify}
+\item{obj}{(\code{ANY})\cr the object for the accessor to access or modify.}
 
-\item{value}{The new value}
+\item{value}{(\code{ANY})\cr the new value.}
 
-\item{x}{An object}
+\item{x}{(\code{ANY})\cr an object.}
 
-\item{colwidths}{numeric vector. Column widths for use with vertical pagination.}
+\item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
 
 \item{max_width}{(\code{numeric(1)})\cr width that strings should be wrapped to when
 determining how many lines they require.}
 
-\item{tt}{\code{TableTree} (or related class). A \code{TableTree} object representing a
-populated table.}
+\item{fontspec}{(\code{font_spec})\cr a font_spec object specifying the font information to use for
+calculating string widths and heights, as returned by \code{\link[formatters:font_spec]{font_spec()}}.}
+
+\item{col_gap}{(\code{numeric(1)})\cr width of gap between columns in number of spaces.
+Only used by methods which must calculate span widths after wrapping.}
+
+\item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{visible_only}{(\code{flag})\cr should only visible aspects of the table structure be reflected
 in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
@@ -194,9 +211,8 @@ in this summary. Defaults to \code{TRUE}. May not be supported by all methods.}
 
 \item{indent}{(\code{integer(1)})\cr internal detail, do not set manually.}
 
-\item{path}{character. A vector path for a position within the structure of a
-\code{tabletree}. Each element represents a subsequent choice amongst the children
-of the previous choice.}
+\item{path}{(\code{character})\cr a vector path for a position within the structure of a \code{TableTree}. Each element
+represents a subsequent choice amongst the children of the previous choice.}
 
 \item{incontent}{(\code{flag})\cr internal detail, do not set manually.}
 
@@ -209,8 +225,10 @@ of the previous choice.}
 \item{nsibs}{(\code{integer(1)})\cr internal detail, do not set manually.}
 }
 \value{
-for getters, the current value of the component being accessed
-on \code{obj}, for setters, a modified copy of \code{obj} with the new value.
+\itemize{
+\item Accessor functions return the current value of the component being accessed of \code{obj}
+\item Setter functions return a modified copy of \code{obj} with the new value.
+}
 }
 \description{
 See the \code{formatters} documentation for descriptions of these generics.
@@ -230,6 +248,11 @@ Most arguments beyond \code{tt} and \code{visible_only} are present so that \cod
 }
 \note{
 The technically present root tree node is excluded from the summary returned by
-both \code{make_row_df} and \code{make_col_df} (see \code{\link[rtables:make_col_df]{rtables::make_col_df()}}), as it is simply the
+both \code{make_row_df} and \code{make_col_df} (see relevant functions in\code{rtables}), as it is the
 row/column structure of \code{tt} and thus not useful for pathing or pagination.
+}
+\examples{
+# Expected error with matrix_form. For real case examples consult {rtables} documentation
+mf <- basic_matrix_form(iris)
+# make_row_df(mf) # Use table obj instead
 }

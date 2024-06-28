@@ -29,54 +29,43 @@ non_ref_rcell(
 )
 }
 \arguments{
-\item{x}{ANY. Cell value.}
+\item{x}{(\code{ANY})\cr cell value.}
 
-\item{format}{character(1) or function. The format label (string) or
-\code{formatters} function to apply to \code{x}. See
-\code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported
-format labels.}
+\item{format}{(\code{string} or \code{function})\cr the format label (string) or \code{formatters} function to apply to \code{x}.
+See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{colspan}{integer(1). Column span value.}
+\item{colspan}{(\code{integer(1)})\cr column span value.}
 
-\item{label}{character(1). Label or \code{NULL}. If non-null, it will be looked at
-when determining row labels.}
+\item{label}{(\code{string} or \code{NULL})\cr label. If non-\code{NULL}, it will be looked at when determining row labels.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
+\item{footnotes}{(\code{list} or \code{NULL})\cr referential footnote messages for the cell.}
 
-\item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
-It defaults to \code{"center"} if \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}}
-for currently supported alignments.}
+\item{align}{(\code{string} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
+\code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
 
-\item{format_na_str}{character(1). String which should be displayed when
-formatted if this cell's value(s) are all NA.}
+\item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
+are all \code{NA}.}
 
-\item{is_ref}{logical(1).  Are  we  in  the reference  column  (i.e.
-.in_ref_col should be passed to this argument)}
+\item{is_ref}{(\code{flag})\cr whether function is being used in the reference column (i.e. \code{.in_ref_col} should be
+passed to this argument).}
 
-\item{refval}{ANY. Value to use when in the reference column. Defaults
-to \code{NULL}}
+\item{refval}{(\code{ANY})\cr value to use when in the reference column. Defaults to \code{NULL}.}
 }
 \value{
-An object representing the value within a single cell within a
-populated table. The underlying structure of this object is an
-implementation detail and should not be relied upon beyond calling
-accessors for the class.
+An object representing the value within a single cell within a populated table. The underlying structure
+of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.
 }
 \description{
-Construct a cell value and associate formatting, labeling,
-indenting, and column spanning information with it.
+Construct a cell value and associate formatting, labeling, indenting, and column spanning information with it.
 }
 \details{
-\code{non_ref_rcell} provides the common \emph{blank for cells in
-the reference column, this value otherwise}, and should be passed the value
-of \code{.in_ref_col} when it is used.
+\code{non_ref_rcell} provides the common \emph{blank for cells in the reference column, this value otherwise}, and should
+be passed the value of \code{.in_ref_col} when it is used.
 }
 \note{
-Currently column spanning is only supported for defining header
-structure.
+Currently column spanning is only supported for defining header structure.
 }

@@ -3,20 +3,20 @@
 \name{tree_children}
 \alias{tree_children}
 \alias{tree_children<-}
-\title{Retrieve or set the direct children of a Tree-style object}
+\title{Retrieve or set the direct children of a tree-style object}
 \usage{
 tree_children(x)
 
 tree_children(x) <- value
 }
 \arguments{
-\item{x}{An object with a Tree structure}
+\item{x}{(\code{TableTree} or \code{ElementaryTable})\cr an object with a tree structure.}
 
-\item{value}{New list of children.}
+\item{value}{(\code{list})\cr new list of children.}
 }
 \value{
-List of direct children of \code{x}
+A list of direct children of \code{x}.
 }
 \description{
-Retrieve or set the direct children of a Tree-style object
+Retrieve or set the direct children of a tree-style object
 }

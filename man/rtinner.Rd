@@ -19,33 +19,32 @@ simple_analysis(x, ...)
 \S4method{simple_analysis}{ANY}(x, ...)
 }
 \arguments{
-\item{x}{the \emph{already split} data being tabulated for a particular cell/set of cells}
+\item{x}{(\code{vector})\cr the \emph{already split} data being tabulated for a particular cell/set of cells.}
 
-\item{\dots}{passed on directly}
+\item{...}{additional parameters to pass on.}
 }
 \value{
-an \code{RowsVerticalSection} object (or \code{NULL}). The details of
-this object should be considered an internal implementation detail.
+A \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an
+internal implementation detail.
 }
 \description{
-This function is used when \code{\link{analyze}} is invoked
+This function is used when \code{\link[=analyze]{analyze()}} is invoked.
 }
 \details{
 This function has the following behavior given particular types of inputs:
 \describe{
-\item{numeric}{calls \code{\link{mean}} on \code{x}}
-\item{logical}{calls \code{\link{sum}} on \code{x}}
-\item{factor}{calls \code{\link{length}} on \code{x}}
+\item{numeric}{calls \code{\link[=mean]{mean()}} on \code{x}.}
+\item{logical}{calls \code{\link[=sum]{sum()}} on \code{x}.}
+\item{factor}{calls \code{\link[=length]{length()}} on \code{x}.}
 }
 
-\code{in_rows} is called on the resulting value(s).
-
-All other classes of input currently lead to an error.
+The \code{\link[=in_rows]{in_rows()}} function is called on the resulting value(s). All other classes of input currently lead to an error.
 }
 \examples{
 simple_analysis(1:3)
 simple_analysis(iris$Species)
 simple_analysis(iris$Species == "setosa")
+
 }
 \author{
 Gabriel Becker and Adrian Waddell

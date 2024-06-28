@@ -3,39 +3,35 @@
 \name{rtable}
 \alias{rtable}
 \alias{rtablel}
-\title{Create a Table}
+\title{Create a table}
 \usage{
 rtable(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 }
 \arguments{
-\item{header}{Information defining the header (column structure) of the table.
-This can be as row objects (legacy), character vectors or a
+\item{header}{(\code{TableRow}, \code{character}, or \code{InstantiatedColumnInfo})\cr information defining the header
+(column structure) of the table. This can be as row objects (legacy), character vectors, or an
 \code{InstantiatedColumnInfo} object.}
 
-\item{\dots}{Rows to place in the table.}
+\item{...}{rows to place in the table.}
 
-\item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
-format labels.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
+cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{hsep}{character(1). Set of character(s) to be repeated as the separator
-between the header and body of the table when rendered as text. Defaults to
-a connected horizontal line (unicode 2014) in locals that use a UTF
-charset, and to \code{-} elsewhere (with a once per session warning). See
-\code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further information.}
+\item{hsep}{(\code{string})\cr set of characters to be repeated as the separator between the header and body of
+the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
+charset, and to \code{-} elsewhere (with a once per session warning). See \code{\link[formatters:default_horizontal_sep]{formatters::set_default_hsep()}} for further
+information.}
 
-\item{inset}{integer(1). The table inset for the row or table being
-constructed. See \code{\link[formatters]{table_inset}}.}
+\item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
+\code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 }
 \value{
-a formal table object of the appropriate type (\code{ElementaryTable}
-or \code{TableTree})
+A formal table object of the appropriate type (\code{ElementaryTable} or \code{TableTree}).
 }
 \description{
-Create a Table
+Create a table
 }
 \examples{
 rtable(
@@ -44,8 +40,8 @@ rtable(
   rrow("more stuff", rcell(pi, format = "xx.xx"), "test", "and more")
 )
 
-
 # Table with multirow header
+
 sel <- iris$Species == "setosa"
 mtbl <- rtable(
   header = rheader(
@@ -89,8 +85,8 @@ tbl
 row.names(tbl)
 names(tbl)
 
-
 # Subsetting
+
 tbl[1, ]
 tbl[, 1]
 
@@ -101,12 +97,12 @@ tbl[3, 2]
 tbl[5, 1]
 tbl[5, 2]
 
-# # Data Structure methods
+# Data Structure methods
+
 dim(tbl)
 nrow(tbl)
 ncol(tbl)
 names(tbl)
-
 
 # Colspans
 
@@ -116,7 +112,6 @@ tbl2 <- rtable(
   rrow("r1", 1, 2, 3, 4, 5),
   rrow("r2", rcell("sp2", colspan = 2), "sp1", rcell("sp2-2", colspan = 2))
 )
-
 tbl2
 
 }

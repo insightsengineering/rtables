@@ -7,7 +7,6 @@
 ## multicolumn: each child analyzes a different column
 ## arbitrary: children are not related to each other in any systematic fashion.
 
-
 ## null is ok here.
 check_ok_label <- function(lbl, multi_ok = FALSE) {
   if (length(lbl) == 0) {
@@ -42,18 +41,11 @@ valid_lbl_pos <- c("default", "visible", "hidden", "topleft")
   ret
 }
 
-
 setOldClass("expression")
 setClassUnion("SubsetDef", c("expression", "logical", "integer", "numeric"))
 
-
-
 setClassUnion("integerOrNULL", c("NULL", "integer"))
 setClassUnion("characterOrNULL", c("NULL", "character"))
-
-
-
-
 
 ## should XXX [splits, s_values, sval_labels, subset(?)] be a data.frame?
 setClass("TreePos", representation(
@@ -68,16 +60,16 @@ validity = function(object) {
 }
 )
 
-
-
 setClassUnion("functionOrNULL", c("NULL", "function"))
 setClassUnion("listOrNULL", c("NULL", "list"))
 ## TODO (?) make "list" more specific, e.g FormatList, or FunctionList?
 setClassUnion("FormatSpec", c("NULL", "character", "function", "list"))
+setClassUnion("ExprOrNULL", c("NULL", "expression"))
 
 setClass("ValueWrapper", representation(
   value = "ANY",
-  label = "characterOrNULL"
+  label = "characterOrNULL",
+  subset_expression = "ExprOrNULL"
 ),
 contains = "VIRTUAL"
 )
@@ -90,7 +82,7 @@ setClass("SplitValue",
   representation(extra = "list")
 )
 
-SplitValue <- function(val, extr = list(), label = val) {
+SplitValue <- function(val, extr = list(), label = val, sub_expr = NULL) {
   if (is(val, "SplitValue")) {
     if (length(splv_extra(val)) > 0) {
       extr <- c(splv_extra(val), extr)
@@ -104,10 +96,16 @@ SplitValue <- function(val, extr = list(), label = val) {
   if (!is(label, "character")) {
     label <- as.character(label)
   }
+
+  if (!is.null(sub_expr) && !is.expression(sub_expr)) {
+    sub_expr <- as.expression(sub_expr)
+  } ## sometimes they will be "call" objects, etc
   check_ok_label(label)
   new("SplitValue",
     value = val,
-    extra = extr, label = label
+    extra = extr,
+    label = label,
+    subset_expression = sub_expr
   )
 }
 
@@ -117,16 +115,16 @@ setClass("LevelComboSplitValue",
 )
 
 ## wrapped in user-facing `add_combo_facet`
-LevelComboSplitValue <- function(val, extr, combolevels, label = val) {
+LevelComboSplitValue <- function(val, extr, combolevels, label = val, sub_expr = NULL) {
   check_ok_label(label)
   new("LevelComboSplitValue",
     value = val,
     extra = extr,
     combolevels = combolevels,
-    label = label
+    label = label,
+    subset_expression = sub_expr
   )
 }
-
 
 setClass("Split",
   contains = "VIRTUAL",
@@ -150,19 +148,20 @@ setClass("Split",
     content_indent_modifier = "integer",
     content_extra_args = "list",
     page_title_prefix = "character",
-    child_section_div = "character"
+    child_section_div = "character",
+    child_show_colcounts = "logical",
+    child_colcount_format = "FormatSpec"
   )
 )
-
 
 setClass("CustomizableSplit",
   contains = "Split",
   representation(split_fun = "functionOrNULL")
 )
 
+#' @author Gabriel Becker
 #' @exportClass VarLevelSplit
 #' @rdname VarLevelSplit
-#' @author Gabriel Becker
 setClass("VarLevelSplit",
   contains = "CustomizableSplit",
   representation(
@@ -173,8 +172,10 @@ setClass("VarLevelSplit",
 #' Split on levels within a variable
 #'
 #' @inheritParams lyt_args
-#' @return a \code{VarLevelSplit} object.
 #' @inheritParams constr_args
+#'
+#' @return a `VarLevelSplit` object.
+#'
 #' @export
 VarLevelSplit <- function(var,
                           split_label,
@@ -195,7 +196,9 @@ VarLevelSplit <- function(var,
                           cvar = "",
                           cextra_args = list(),
                           page_prefix = NA_character_,
-                          section_div = NA_character_) {
+                          section_div = NA_character_,
+                          show_colcounts = FALSE,
+                          colcount_format = NULL) {
   child_labels <- match.arg(child_labels)
   if (is.null(labels_var)) {
     labels_var <- var
@@ -221,10 +224,11 @@ VarLevelSplit <- function(var,
     split_label_position = label_pos,
     content_extra_args = cextra_args,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
-
 
 setClass("AllSplit", contains = "Split")
 
@@ -240,6 +244,8 @@ AllSplit <- function(split_label = "",
                      cindent_mod = 0L,
                      cvar = "",
                      cextra_args = list(),
+                     show_colcounts = FALSE,
+                     colcount_format = NULL,
                      ...) {
   if (is.null(split_name)) {
     if (nzchar(split_label)) {
@@ -265,7 +271,9 @@ AllSplit <- function(split_label = "",
     split_label_position = "hidden",
     content_extra_args = cextra_args,
     page_title_prefix = NA_character_,
-    child_section_div = NA_character_
+    child_section_div = NA_character_,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
@@ -288,7 +296,9 @@ RootSplit <- function(split_label = "", cfun = NULL, cformat = NULL, cna_str = N
     content_var = cvar,
     split_label_position = "hidden",
     content_extra_args = cextra_args,
-    child_section_div = NA_character_
+    child_section_div = NA_character_,
+    child_show_colcounts = FALSE,
+    child_colcount_format = "(N=xx)"
   )
 }
 
@@ -302,10 +312,11 @@ setClass("ManualSplit",
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
 #' @inheritParams gen_args
-#' @param levels character. Levels of the split (i.e. the children of the manual
-#'   split)
+#' @param levels (`character`)\cr levels of the split (i.e. the children of the manual split).
+#'
+#' @return A `ManualSplit` object.
+#'
 #' @author Gabriel Becker
-#' @return A \code{ManualSplit} object.
 #' @export
 ManualSplit <- function(levels, label, name = "manual",
                         extra_args = list(),
@@ -331,10 +342,11 @@ ManualSplit <- function(levels, label, name = "manual",
     split_na_str = NA_character_,
     split_label_position = label_pos,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = FALSE,
+    child_colcount_format = "(N=xx)"
   )
 }
-
 
 ## splits across which variables are being analynzed
 setClass("MultiVarSplit",
@@ -349,7 +361,6 @@ setClass("MultiVarSplit",
       (length(object@var_labels) == 0 || length(object@payload) == length(object@var_labels))
   }
 )
-
 
 .make_suffix_vec <- function(n) {
   c(
@@ -377,12 +388,15 @@ setClass("MultiVarSplit",
   }
   ret
 }
+
 #' Split between two or more different variables
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
+#'
+#' @return A `MultiVarSplit` object.
+#'
 #' @author Gabriel Becker
-#' @return A \code{MultiVarSplit} object.
 #' @export
 MultiVarSplit <- function(vars,
                           split_label = "",
@@ -403,7 +417,9 @@ MultiVarSplit <- function(vars,
                           label_pos = "visible",
                           split_fun = NULL,
                           page_prefix = NA_character_,
-                          section_div = NA_character_) {
+                          section_div = NA_character_,
+                          show_colcounts = FALSE,
+                          colcount_format = NULL) {
   check_ok_label(split_label)
   ## no topleft allowed
   label_pos <- match.arg(label_pos, label_pos_values[-3])
@@ -436,16 +452,19 @@ MultiVarSplit <- function(vars,
     content_extra_args = cextra_args,
     split_fun = split_fun,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
-
 #' Splits for cutting by values of a numeric variable
-#' @rdname cutsplits
+#'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
+#'
 #' @exportClass VarStaticCutSplit
+#' @rdname cutsplits
 setClass("VarStaticCutSplit",
   contains = "Split",
   representation(
@@ -461,12 +480,14 @@ setClass("VarStaticCutSplit",
 }
 
 #' Create static cut or static cumulative cut split
+#'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
+#'
+#' @return A `VarStaticCutSplit`, `CumulativeCutSplit` object for `make_static_cut_split`, or a `VarDynCutSplit`
+#'   object for [VarDynCutSplit()].
+#'
 #' @rdname cutsplits
-#' @return a \code{VarStaticCutSplit}, \code{CumulativeCutSplit} object for
-#'   \code{make_static_cut_split}, or a \code{VarDynCutSplit} object for
-#'   \code{VarDynCutSplit()}
 make_static_cut_split <- function(var,
                                   split_label,
                                   cuts,
@@ -486,7 +507,9 @@ make_static_cut_split <- function(var,
                                   label_pos = "visible",
                                   cumulative = FALSE,
                                   page_prefix = NA_character_,
-                                  section_div = NA_character_) {
+                                  section_div = NA_character_,
+                                  show_colcounts = FALSE,
+                                  colcount_format = NULL) {
   cls <- if (cumulative) "CumulativeCutSplit" else "VarStaticCutSplit"
   check_ok_label(split_label)
 
@@ -523,27 +546,25 @@ make_static_cut_split <- function(var,
     split_label_position = label_pos,
     content_extra_args = cextra_args,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
 
-
-
-#' @rdname cutsplits
 #' @exportClass CumulativeCutSplit
-
+#' @rdname cutsplits
 setClass("CumulativeCutSplit", contains = "VarStaticCutSplit")
 
 ## make_static_cut_split with cumulative=TRUE is the constructor
 ## for CumulativeCutSplit
 
-
 ## do we want this to be a CustomizableSplit instead of
 ## taking cut_fun?
 ## cut_funct must take avector and no other arguments
 ## and return a named vector of cut points
-#' @rdname cutsplits
 #' @exportClass VarDynCutSplit
+#' @rdname cutsplits
 setClass("VarDynCutSplit",
   contains = "Split",
   representation(
@@ -552,8 +573,9 @@ setClass("VarDynCutSplit",
     cumulative_cuts = "logical"
   )
 )
-#' @rdname cutsplits
+
 #' @export
+#' @rdname cutsplits
 VarDynCutSplit <- function(var,
                            split_label,
                            cutfun,
@@ -573,7 +595,9 @@ VarDynCutSplit <- function(var,
                            cextra_args = list(),
                            label_pos = "visible",
                            page_prefix = NA_character_,
-                           section_div = NA_character_) {
+                           section_div = NA_character_,
+                           show_colcounts = FALSE,
+                           colcount_format = NULL) {
   check_ok_label(split_label)
   label_pos <- match.arg(label_pos, label_pos_values)
   child_labels <- match.arg(child_labels)
@@ -597,11 +621,11 @@ VarDynCutSplit <- function(var,
     split_label_position = label_pos,
     content_extra_args = cextra_args,
     page_title_prefix = page_prefix,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
-
-
 
 ## NB analyze splits can't have content-related things
 setClass("VAnalyzeSplit",
@@ -627,12 +651,13 @@ setClass("AnalyzeColVarSplit",
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' @param defrowlab character. Default row labels if they are not specified by
-#'   the return value of \code{afun}
-#' @rdname avarspl
-#' @return An \code{AnalyzeVarSplit} object.
+#' @param defrowlab (`character`)\cr default row labels, if not specified by the return value of `afun`.
+#'
+#' @return An `AnalyzeVarSplit` object.
+#'
 #' @author Gabriel Becker
 #' @export
+#' @rdname avarspl
 AnalyzeVarSplit <- function(var,
                             split_label = var,
                             afun,
@@ -674,7 +699,9 @@ AnalyzeVarSplit <- function(var,
     var_label_position = label_pos,
     content_var = cvar,
     page_title_prefix = NA_character_,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = FALSE,
+    child_colcount_format = NA_character_
   ) ## no content_extra_args
 }
 
@@ -682,9 +709,10 @@ AnalyzeVarSplit <- function(var,
 #'
 #' @inheritParams lyt_args
 #' @inheritParams constr_args
-#' @rdname avarspl
+#'
 #' @author Gabriel Becker
 #' @export
+#' @rdname avarspl
 AnalyzeColVarSplit <- function(afun,
                                defrowlab = "",
                                cfun = NULL,
@@ -717,7 +745,9 @@ AnalyzeColVarSplit <- function(afun,
     var_label_position = label_pos,
     content_var = cvar,
     page_title_prefix = NA_character_,
-    child_section_div = section_div
+    child_section_div = section_div,
+    child_show_colcounts = FALSE,
+    child_colcount_format = NA_character_
   ) ## no content_extra_args
 }
 
@@ -725,7 +755,6 @@ setClass("CompoundSplit",
   contains = "Split",
   validity = function(object) are(object@payload, "Split")
 )
-
 
 setClass("AnalyzeMultiVars", contains = "CompoundSplit")
 
@@ -738,7 +767,6 @@ setClass("AnalyzeMultiVars", contains = "CompoundSplit")
   }
   rep(x, length.out = nv)
 }
-
 
 .uncompound <- function(csplit) {
   if (is(csplit, "list")) {
@@ -773,10 +801,12 @@ make_ma_name <- function(spl, pld = spl_payload(spl)) {
   )
 }
 
-#' @rdname avarspl
-#' @param .payload Used internally, not intended to be set by end users.
-#' @return An \code{AnalyzeMultiVars} split object.
+#' @param .payload (`list`)\cr used internally, not intended to be set by end users.
+#'
+#' @return An `AnalyzeMultiVars` split object.
+#'
 #' @export
+#' @rdname avarspl
 AnalyzeMultiVars <- function(var,
                              split_label = "",
                              afun,
@@ -790,10 +820,7 @@ AnalyzeMultiVars <- function(var,
                              split_name = NULL,
                              extra_args = list(),
                              indent_mod = 0L,
-                             child_labels = c(
-                               "default", "topleft", "visible",
-                               "hidden"
-                             ),
+                             child_labels = c("default", "topleft", "visible", "hidden"),
                              child_names = var,
                              cvar = "",
                              section_div = NA_character_) {
@@ -888,13 +915,14 @@ AnalyzeMultiVars <- function(var,
   }
   ret
 }
+
 setClass("VarLevWBaselineSplit",
   contains = "VarLevelSplit",
   representation(
     var = "character",
     ref_group_value = "character"
   )
-) # ,
+)
 
 #' @rdname VarLevelSplit
 #' @export
@@ -913,7 +941,9 @@ VarLevWBaselineSplit <- function(var,
                                  split_na_str = NA_character_,
                                  valorder = NULL,
                                  split_name = var,
-                                 extra_args = list()) {
+                                 extra_args = list(),
+                                 show_colcounts = FALSE,
+                                 colcount_format = NULL) {
   check_ok_label(split_label)
   new("VarLevWBaselineSplit",
     payload = var,
@@ -939,10 +969,11 @@ VarLevWBaselineSplit <- function(var,
     content_var = cvar,
     ## so long as this is columnspace only
     page_title_prefix = NA_character_,
-    child_section_div = NA_character_
+    child_section_div = NA_character_,
+    child_show_colcounts = show_colcounts,
+    child_colcount_format = colcount_format
   )
 }
-
 
 .chkname <- function(nm) {
   if (is.null(nm)) {
@@ -957,22 +988,17 @@ VarLevWBaselineSplit <- function(var,
   nm
 }
 
-
-
-
-###
 ### Tree Position Representation
 ###
 ### Class(es) that represent position with in a
 ### tree as parallel vectors of Split objects and
 ### values chosen at that split, plus labeling info
-
 TreePos <- function(spls = list(),
                     svals = list(),
                     svlabels = character(),
                     sub = NULL) {
   check_ok_label(svlabels, multi_ok = TRUE)
-  svals <- make_splvalue_vec(vals = svals)
+  svals <- make_splvalue_vec(vals = svals, subset_exprs = lapply(svals, value_expr))
   if (is.null(sub)) {
     if (length(spls) > 0) {
       sub <- make_pos_subset(
@@ -990,10 +1016,8 @@ TreePos <- function(spls = list(),
   )
 }
 
-##
 ## Tree position convenience functions
 ##
-
 make_child_pos <- function(parpos,
                            newspl,
                            newval,
@@ -1011,19 +1035,17 @@ make_child_pos <- function(parpos,
     svlabels = c(pos_splval_labels(parpos), newlab),
     sub = .combine_subset_exprs(
       pos_subset(parpos),
+      ## this will grab the value's custom subset expression if present
       make_subset_expr(newspl, nsplitval)
     )
   )
   newpos
 }
 
-
-# Virtual Classes for Tree Nodes and Layouts =================================
-###
-### Virtual class hiearchy for the various types of
-### trees in use in the S4 implementation of the TableTree
-### machinery
-###
+## Virtual Classes for Tree Nodes and Layouts =================================
+##
+## Virtual class hiearchy for the various types of trees in use in the S4
+## implementation of the TableTree machinery
 
 ## core basics
 setClass("VNodeInfo",
@@ -1034,15 +1056,18 @@ setClass("VNodeInfo",
     ## label = "character"
   )
 )
+
 setClass("VTree",
   contains = c("VIRTUAL", "VNodeInfo"),
   representation(children = "list")
 )
+
 setClass("VLeaf", contains = c("VIRTUAL", "VNodeInfo"))
 
+## Layout trees =================================
 
-## Layout trees
 # setClass("VLayoutNode", contains= c("VIRTUAL", "VNodeInfo"))
+
 setClass("VLayoutLeaf",
   contains = c("VIRTUAL", "VLeaf"),
   representation(
@@ -1050,6 +1075,7 @@ setClass("VLayoutLeaf",
     label = "character"
   )
 )
+
 setClass("VLayoutTree",
   contains = c("VIRTUAL", "VTree"),
   representation(
@@ -1058,14 +1084,10 @@ setClass("VLayoutTree",
     label = "character"
   )
 )
+
 setClassUnion("VLayoutNode", c("VLayoutLeaf", "VLayoutTree"))
 
-
-
-
-##
-## LayoutAxisTree classes
-##
+## LayoutAxisTree classes =================================
 
 setOldClass("function")
 setOldClass("NULL")
@@ -1079,21 +1101,25 @@ setClass("LayoutAxisTree",
   }
 )
 
+## this is only used for columns!!!!
 setClass("LayoutAxisLeaf",
   contains = "VLayoutLeaf", ## "VNodeInfo",
   representation(
     func = "function",
-    col_footnotes = "list"
+    display_columncounts = "logical",
+    columncount_format = "FormatSpec", # character",
+    col_footnotes = "list",
+    column_count = "integer"
   )
 )
-
 
 setClass("LayoutColTree",
   contains = "LayoutAxisTree",
   representation(
     display_columncounts = "logical",
-    columncount_format = "character",
-    col_footnotes = "list"
+    columncount_format = "FormatSpec", # "character",
+    col_footnotes = "list",
+    column_count = "integer"
   )
 )
 
@@ -1105,9 +1131,10 @@ LayoutColTree <- function(lev = 0L,
                           spl = EmptyAllSplit,
                           tpos = TreePos(),
                           summary_function = NULL,
-                          disp_colcounts = FALSE,
-                          colcount_format = "(N=xx)",
-                          footnotes = list()) { ## ,
+                          disp_ccounts = FALSE,
+                          colcount_format = NULL,
+                          footnotes = list(),
+                          colcount) { ## ,
   ## sub = expression(TRUE),
   ## svar = NA_character_,
   ## slab = NA_character_) {
@@ -1128,27 +1155,29 @@ LayoutColTree <- function(lev = 0L,
     ## subset = sub,
     ## splitvar = svar,
     label = label,
-    display_columncounts = disp_colcounts,
+    display_columncounts = disp_ccounts,
     columncount_format = colcount_format,
-    col_footnotes = footnotes
+    col_footnotes = footnotes,
+    column_count = colcount
   )
 }
 
 LayoutColLeaf <- function(lev = 0L,
                           name = label,
                           label = "",
-                          tpos = TreePos()) {
+                          tpos = TreePos(),
+                          colcount,
+                          disp_ccounts = FALSE,
+                          colcount_format = NULL) {
   check_ok_label(label)
   new("LayoutColLeaf",
     level = lev, name = .chkname(name), label = label,
-    pos_in_tree = tpos ## ,
-    ## subset = sub#,
-    ## N_count = n,
-    ## splitvar = svar
+    pos_in_tree = tpos,
+    column_count = colcount,
+    display_columncounts = disp_ccounts,
+    columncount_format = colcount_format
   )
 }
-
-
 
 ## Instantiated column info class ==============================================
 ##
@@ -1157,8 +1186,10 @@ LayoutColLeaf <- function(lev = 0L,
 ## various aspects of the column layout
 ## once its applied to the data.
 
-#' `InstantiatedColumnInfo`
+#' Instantiated column info
+#'
 #' @inheritParams gen_args
+#'
 #' @exportClass InstantiatedColumnInfo
 #' @rdname cinfo
 setClass(
@@ -1176,21 +1207,22 @@ setClass(
   )
 )
 
-#' @rdname cinfo
-#' @export
-#' @param treelyt `LayoutColTree`.
-#' @param csubs list. List of subsetting expressions
-#' @param extras list. Extra arguments associated with the columns
-#' @param cnts integer. Counts.
-#' @param total_cnt integer(1). Total observations represented across all
-#'   columns.
-#' @param dispcounts logical(1). Should the counts be displayed as header info when
-#'   the associated table is printed.
-#' @param countformat character(1). Format for the counts if they are displayed
-#' @param count_na_str character. NA string to be used when formatting counts. Defaults
+#' @param treelyt (`LayoutColTree`)\cr a `LayoutColTree` object.
+#' @param csubs (`list`)\cr a list of subsetting expressions.
+#' @param extras (`list`)\cr extra arguments associated with the columns.
+#' @param cnts (`integer`)\cr counts.
+#' @param total_cnt (`integer(1)`)\cr total observations represented across all columns.
+#' @param dispcounts (`flag`)\cr whether the counts should be displayed as header info when the associated
+#'   table is printed.
+#' @param countformat (`string`)\cr format for the counts if they are displayed.
+#' @param count_na_str (`character`)\cr string to use in place of missing values when formatting counts. Defaults
 #'   to `""`.
-#' @return an \code{InstantiateadColumnInfo} object.
-InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
+#'
+#' @return An `InstantiateadColumnInfo` object.
+#'
+#' @export
+#' @rdname cinfo
+InstantiatedColumnInfo <- function(treelyt = LayoutColTree(colcount = total_cnt),
                                    csubs = list(expression(TRUE)),
                                    extras = list(list()),
                                    cnts = NA_integer_,
@@ -1204,8 +1236,6 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
   extras <- rep(extras, length.out = nl)
   cnts <- rep(cnts, length.out = nl)
   csubs <- rep(csubs, length.out = nl)
-
-
 
   nleaves <- length(leaves)
   snas <- sum(is.na(cnts))
@@ -1224,6 +1254,15 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
     )
   }
 
+  if (!is.na(dispcounts)) {
+    pths <- col_paths(treelyt)
+    for (path in pths) {
+      colcount_visible(treelyt, path) <- dispcounts
+    }
+  } else { ## na leaves the children as they are and dispcols goes to whether any of them are displayed for the leaves
+    dispcounts <- any(vapply(leaves, disp_ccounts, NA))
+  }
+
   new("InstantiatedColumnInfo",
     tree_layout = treelyt,
     subset_exprs = csubs,
@@ -1236,7 +1275,6 @@ InstantiatedColumnInfo <- function(treelyt = LayoutColTree(),
     top_left = topleft
   )
 }
-
 
 ## TableTrees and row classes ==================================================
 ## XXX Rowspans as implemented dont really work
@@ -1268,18 +1306,19 @@ setClass("TableRow",
   )
 )
 
-
-
-
-### TableTree Core non-virtual Classes
+## TableTree Core Non-Virtual Classes ==============
+##
 #' Row classes and constructors
-#' @rdname rowclasses
+#'
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
-#' @param vis logical. Should the row be visible (\code{LabelRow} only).
-#' @author Gabriel Becker
+#' @param vis (`flag`)\cr whether the row should be visible (`LabelRow` only).
+#'
 #' @return A formal object representing a table row of the constructed type.
+#'
+#' @author Gabriel Becker
 #' @export
+#' @rdname rowclasses
 LabelRow <- function(lev = 1L,
                      label = "",
                      name = label,
@@ -1305,7 +1344,8 @@ LabelRow <- function(lev = 1L,
   )
 }
 
-#' Row constructors and Classes
+#' Row constructors and classes
+#'
 #' @rdname rowclasses
 #' @exportClass DataRow
 setClass("DataRow",
@@ -1337,12 +1377,10 @@ setClass("LabelRow",
   representation(visible = "logical")
 )
 
-
-
-#' @rdname rowclasses
-#' @param klass Internal detail.
+#' @param klass (`character`)\cr internal detail.
 #'
 #' @export
+#' @rdname rowclasses
 .tablerow <- function(vals = list(),
                       name = "",
                       lev = 1L,
@@ -1390,12 +1428,14 @@ setClass("LabelRow",
   rw
 }
 
-#' @rdname rowclasses
-#' @param \dots passed to shared constructor (\code{.tablerow}).
+#' @param ... additional parameters passed to shared constructor (`.tablerow`).
+#'
 #' @export
+#' @rdname rowclasses
 DataRow <- function(...) .tablerow(..., klass = "DataRow")
-#' @rdname rowclasses
+
 #' @export
+#' @rdname rowclasses
 ContentRow <- function(...) .tablerow(..., klass = "ContentRow")
 
 setClass("VTitleFooter",
@@ -1407,7 +1447,6 @@ setClass("VTitleFooter",
     provenance_footer = "character"
   )
 )
-
 
 setClass("VTableTree",
   contains = c("VIRTUAL", "VTableNodeInfo", "VTree", "VTitleFooter"),
@@ -1437,9 +1476,11 @@ etable_validity <- function(object) {
 ## nocov end
 
 #' `TableTree` classes
-#' @exportClass ElementaryTable
-#' @author Gabriel Becker
+#'
 #' @return A formal object representing a populated table.
+#'
+#' @author Gabriel Becker
+#' @exportClass ElementaryTable
 #' @rdname tabclasses
 setClass("ElementaryTable",
   contains = "VTableTree",
@@ -1491,14 +1532,16 @@ setClass("ElementaryTable",
   lst
 }
 
-#' Table Constructors and Classes
+#' Table constructors and classes
+#'
 #' @inheritParams constr_args
 #' @inheritParams gen_args
 #' @inheritParams lyt_args
-#' @param rspans data.frame. Currently stored but otherwise ignored.
-#' @rdname tabclasses
+#' @param rspans (`data.frame`)\cr currently stored but otherwise ignored.
+#'
 #' @author Gabriel Becker
 #' @export
+#' @rdname tabclasses
 ElementaryTable <- function(kids = list(),
                             name = "",
                             lev = 1L,
@@ -1583,10 +1626,11 @@ ttable_validity <- function(object) {
     EmptyColInfo
   }
 }
+
 ## under this model, non-leaf nodes can have a content table where rollup
 ## analyses live
-#' @rdname tabclasses
 #' @exportClass TableTree
+#' @rdname tabclasses
 setClass("TableTree",
   contains = c("VTableTree"),
   representation(
@@ -1596,8 +1640,8 @@ setClass("TableTree",
   validity = ttable_validity
 )
 
-#' @rdname tabclasses
 #' @export
+#' @rdname tabclasses
 TableTree <- function(kids = list(),
                       name = if (!is.na(var)) var else "",
                       cont = EmptyElTable,
@@ -1692,16 +1736,12 @@ TableTree <- function(kids = list(),
   }
 }
 
-
-###
 ### Pre-Data Layout Declaration Classes
 ###
 ### Notably these are NOT represented as trees
 ### because without data we cannot know what the
 ### children should be.
-###
 
-##
 ## Vector (ordered list) of splits.
 ##
 ## This is a vector (ordered list) of splits to be
@@ -1709,9 +1749,7 @@ TableTree <- function(kids = list(),
 ##
 ## For convenience, if this is length 1, it can contain
 ## a pre-existing TableTree/ElementaryTable.
-## This is used for add_existing_table in
-## colby_constructors.R
-##
+## This is used for add_existing_table in colby_constructors.R
 
 setClass("SplitVector",
   contains = "list",
@@ -1746,8 +1784,6 @@ avar_noneorlast <- function(vec) {
   (length(isavar) == 0) || (length(isavar) == 1 && isavar == length(vec))
 }
 
-
-
 setClass("PreDataAxisLayout",
   contains = "list",
   representation(root_split = "ANY"),
@@ -1763,13 +1799,11 @@ setClass("PreDataAxisLayout",
   }
 )
 
-
-
 setClass("PreDataColLayout",
   contains = "PreDataAxisLayout",
   representation(
     display_columncounts = "logical",
-    columncount_format = "character"
+    columncount_format = "FormatSpec" # "character"
   )
 )
 
@@ -1779,7 +1813,7 @@ PreDataColLayout <- function(x = SplitVector(),
                              rtsp = RootSplit(),
                              ...,
                              lst = list(x, ...),
-                             disp_colcounts = FALSE,
+                             disp_colcounts = NA,
                              colcount_format = "(N=xx)") {
   ret <- new("PreDataColLayout", lst,
     display_columncounts = disp_colcounts,
@@ -1789,16 +1823,12 @@ PreDataColLayout <- function(x = SplitVector(),
   ret
 }
 
-
 PreDataRowLayout <- function(x = SplitVector(),
                              root = RootSplit(),
                              ...,
                              lst = list(x, ...)) {
   new("PreDataRowLayout", lst, root_split = root)
 }
-
-
-
 
 setClass("PreDataTableLayouts",
   contains = "VTitleFooter",
@@ -1836,8 +1866,6 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
   )
 }
 
-
-
 ## setClass("CellValue", contains = "ValueWrapper",
 ##          representation(format = "FormatSpec",
 ##                         colspan = "integerOrNULL",
@@ -1848,9 +1876,11 @@ setOldClass("CellValue")
 
 #' Length of a Cell value
 #'
+#' @param x (`CellValue`)\cr a `CellValue` object.
+#'
+#' @return Always returns `1L`.
+#'
 #' @exportMethod length
-#' @return Always returns \code{1L}
-#' @param x x.
 setMethod(
   "length", "CellValue",
   function(x) 1L
@@ -1861,7 +1891,6 @@ setClass("RefFootnote", representation(
   index = "integer",
   symbol = "character"
 ))
-
 
 RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
   if (is(note, "RefFootnote")) {
@@ -1885,16 +1914,15 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
   new("RefFootnote", value = note, index = index, symbol = symbol)
 }
 
-#' Cell Value constructor
+#' Constructor for Cell Value
 #'
 #' @inheritParams lyt_args
 #' @inheritParams rcell
-#' @param val ANY. value in the cell exactly as it should be passed to a
-#'   formatter or returned when extracted
-#' @return An object representing the value within a single cell within a
-#'   populated table. The underlying structure of this object is an
-#'   implementation detail and should not be relied upon beyond calling
-#'   accessors for the class.
+#' @param val (`ANY`)\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.
+#'
+#' @return An object representing the value within a single cell within a populated table. The underlying structure
+#'   of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.
+#'
 #' @export
 
 ## Class definition
@@ -1934,8 +1962,8 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
   ret
 }
 
-
 #' @method print CellValue
+#'
 #' @export
 print.CellValue <- function(x, ...) {
   cat(paste("rcell:", format_rcell(x), "\n"))
@@ -1948,7 +1976,6 @@ print.CellValue <- function(x, ...) {
 #                                row_labels = "characterOrNULL",
 #                                row_formats = "ANY",
 #                                indent_mods = "integerOrNULL"))
-#
 
 setOldClass("RowsVerticalSection")
 RowsVerticalSection <- function(values,
@@ -1988,8 +2015,8 @@ RowsVerticalSection <- function(values,
   )
 }
 
-
 #' @method print RowsVerticalSection
+#'
 #' @export
 print.RowsVerticalSection <- function(x, ...) {
   cat("RowsVerticalSection (in_rows) object print method:\n-------------------",
@@ -2007,8 +2034,7 @@ print.RowsVerticalSection <- function(x, ...) {
   invisible(x)
 }
 
-
-## ## Empty default objects to avoid repeated calls
+#### Empty default objects to avoid repeated calls
 ## EmptyColInfo <- InstantiatedColumnInfo()
 ## EmptyElTable <- ElementaryTable()
 ## EmptyRootSplit <- RootSplit()

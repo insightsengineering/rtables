@@ -2,17 +2,16 @@
 % Please edit documentation in R/utils.R
 \name{spl_context_to_disp_path}
 \alias{spl_context_to_disp_path}
-\title{Translate spl_context to Path for display in error messages}
+\title{Translate spl_context to a path to display in error messages}
 \usage{
 spl_context_to_disp_path(ctx)
 }
 \arguments{
-\item{ctx}{data.frame. The \code{spl_context} data.frame where the error occurred}
+\item{ctx}{(\code{data.frame})\cr the \code{spl_context} data frame where the error occurred.}
 }
 \value{
-A character string containing a description of the row path corresponding
-to the \code{ctx}
+A character string containing a description of the row path corresponding to \code{ctx}.
 }
 \description{
-Translate spl_context to Path for display in error messages
+Translate spl_context to a path to display in error messages
 }

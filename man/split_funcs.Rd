@@ -23,45 +23,39 @@ reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 trim_levels_in_group(innervar, drop_outlevs = TRUE)
 }
 \arguments{
-\item{excl}{character. Levels to be excluded (they will not be reflected in
-the resulting table structure regardless of presence in the data).}
+\item{excl}{(\code{character})\cr levels to be excluded (they will not be reflected in the resulting table structure
+regardless of presence in the data).}
 
-\item{only}{character. Levels to retain (all others will be dropped).}
+\item{only}{(\code{character})\cr levels to retain (all others will be dropped).}
 
-\item{reorder}{logical(1). Should the order of \code{only} be used as the
-order of the children of the split. defaults to \code{TRUE}}
+\item{reorder}{(\code{flag})\cr whether the order of \code{only} should be used as the order of the children of the
+split. Defaults to \code{TRUE}.}
 
-\item{df}{dataset (\code{data.frame} or \code{tibble})}
+\item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
-\item{spl}{A Split object defining a partitioning or analysis/tabulation of
-the data.}
+\item{spl}{(\code{Split})\cr a \code{Split} object defining a partitioning or analysis/tabulation of the data.}
 
-\item{vals}{ANY. For internal use only.}
+\item{vals}{(\code{ANY})\cr for internal use only.}
 
-\item{labels}{character. Labels to use for the remaining levels instead of
-the existing ones.}
+\item{labels}{(\code{character})\cr labels to use for the remaining levels instead of the existing ones.}
 
-\item{trim}{logical(1). Should splits corresponding with 0 observations be
-kept when tabulating.}
+\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
-\item{neworder}{character. New order or factor levels.}
+\item{neworder}{(\code{character})\cr new order of factor levels.}
 
-\item{newlabels}{character. Labels for (new order of) factor levels}
+\item{newlabels}{(\code{character})\cr labels for (new order of) factor levels.}
 
-\item{drlevels}{logical(1). Should levels in the data which do not appear in
-\code{neworder} be dropped. Defaults to \code{TRUE}}
+\item{drlevels}{(\code{flag})\cr whether levels in the data which do not appear in \code{neworder} should be dropped.
+Defaults to \code{TRUE}.}
 
-\item{innervar}{character(1). Variable whose factor levels should be trimmed
-(e.g., empty levels dropped) \emph{separately within each grouping defined
-at this point in the structure}}
+\item{innervar}{(\code{string})\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
+\emph{separately within each grouping defined at this point in the structure}.}
 
-\item{drop_outlevs}{logical(1). Should empty levels in the variable being
-split on (i.e. the 'outer' variable, not \code{innervar}) be dropped?
-Defaults to \code{TRUE}}
+\item{drop_outlevs}{(\code{flag})\cr whether empty levels in the variable being split on (i.e. the "outer"
+variable, not \code{innervar}) should be dropped. Defaults to \code{TRUE}.}
 }
 \value{
-a closure suitable for use as a splitting function (\code{splfun})
-when creating a table layout
+A closure suitable for use as a splitting function (\code{splfun}) when creating a table layout.
 }
 \description{
 Split functions
@@ -69,46 +63,35 @@ Split functions
 \section{Custom Splitting Function Details}{
 
 
-User-defined custom split functions can perform any type of computation on
-the incoming data provided that they meet the contract for generating
-'splits' of the incoming data 'based on' the split object.
+User-defined custom split functions can perform any type of computation on the incoming data provided that they
+meet the requirements for generating "splits" of the incoming data based on the split object.
 
 Split functions are functions that accept:
 \describe{
-\item{df}{data.frame of incoming data to be split}
-\item{spl}{a Split object. this is largely an internal detail custom
-functions will not need to worry about, but  \code{obj_name(spl)}, for
-example, will give the name of the split as it will appear in paths in the
-resulting table}
-\item{vals}{Any pre-calculated values. If given non-null values, the values
-returned should match these. Should be NULL in most cases and can likely be
-ignored}
-\item{labels}{Any pre-calculated value labels. Same as above for
-\code{values}}
-\item{trim}{If \code{TRUE}, resulting splits that are empty should be
-removed}
-\item{(Optional) .spl_context}{a data.frame describing previously performed
-splits which collectively arrived at \code{df}}
+\item{df}{a \code{data.frame} of incoming data to be split.}
+\item{spl}{a Split object. This is largely an internal detail custom functions will not need to worry about,
+but \code{obj_name(spl)}, for example, will give the name of the split as it will appear in paths in the resulting
+table.}
+\item{vals}{any pre-calculated values. If given non-\code{NULL} values, the values returned should match these.
+Should be \code{NULL} in most cases and can usually be ignored.}
+\item{labels}{any pre-calculated value labels. Same as above for \code{values}.}
+\item{trim}{if \code{TRUE}, resulting splits that are empty are removed.}
+\item{(optional) .spl_context}{a \code{data.frame} describing previously performed splits which collectively
+arrived at \code{df}.}
 }
 
-The function must then output a \code{named list} with the following
-elements:
+The function must then output a named \code{list} with the following elements:
 
 \describe{
-\item{values}{The vector of all values corresponding to the splits of
-\code{df}}
-\item{datasplit}{a list of data.frames representing the groupings of the
-actual observations from \code{df}.}
-\item{labels}{a character vector giving a string label for each value listed
-in the \code{values} element above}
-\item{(Optional) extras}{If present, extra arguments are to be passed to summary
-and analysis functions whenever they are executed on the corresponding
-element of \code{datasplit} or a subset thereof}
+\item{values}{the vector of all values corresponding to the splits of \code{df}.}
+\item{datasplit}{a list of \code{data.frame}s representing the groupings of the actual observations from \code{df}.}
+\item{labels}{a character vector giving a string label for each value listed in the \code{values} element above.}
+\item{(optional) extras}{if present, extra arguments are to be passed to summary and analysis functions
+whenever they are executed on the corresponding element of \code{datasplit} or a subset thereof.}
 }
 
-One way to generate custom splitting functions is to wrap existing split
-functions and modify either the incoming data before they are called or
-their outputs.
+One way to generate custom splitting functions is to wrap existing split functions and modify either the incoming
+data before they are called or their outputs.
 }
 
 \examples{
@@ -134,6 +117,7 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, DM)
 tbl
+
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
@@ -141,6 +125,7 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, DM)
 tbl
+
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) \%>\%
@@ -148,4 +133,5 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, DM)
 tbl
+
 }

@@ -21,7 +21,7 @@
 \alias{top_level_section_div,PreDataTableLayouts-method}
 \alias{top_level_section_div<-}
 \alias{top_level_section_div<-,PreDataTableLayouts-method}
-\title{Section dividers getter and setter}
+\title{Section dividers accessor and setter}
 \usage{
 section_div(obj)
 
@@ -62,15 +62,15 @@ top_level_section_div(obj) <- value
 \S4method{top_level_section_div}{PreDataTableLayouts}(obj) <- value
 }
 \arguments{
-\item{obj}{Table object. This can be of any class that inherits from \code{VTableTree}
+\item{obj}{(\code{VTableTree})\cr table object. This can be of any class that inherits from \code{VTableTree}
 or \code{TableRow}/\code{LabelRow}.}
 
-\item{only_sep_sections}{logical(1). Defaults to \code{FALSE} for \verb{section_div<-}. Allows
+\item{only_sep_sections}{(\code{flag})\cr defaults to \code{FALSE} for \verb{section_div<-}. Allows
 you to set the section divider only for sections that are splits or analyses if the number of
 values is less than the number of rows in the table. If \code{TRUE}, the section divider will
 be set for all rows of the table.}
 
-\item{value}{character. Vector of single characters to use as section dividers. Each character
+\item{value}{(\code{character})\cr vector of single characters to use as section dividers. Each character
 is repeated such that all section dividers span the width of the table. Each character that is
 not \code{NA_character_} will produce a trailing separator for each row of the table. \code{value} length
 should reflect the number of rows, or be between 1 and the number of splits/levels.

@@ -2,36 +2,32 @@
 % Please edit documentation in R/argument_conventions.R
 \name{compat_args}
 \alias{compat_args}
-\title{Compatibility Arg Conventions}
+\title{Compatibility argument conventions}
 \usage{
 compat_args(.lst, row.name, format, indent, label, inset)
 }
 \arguments{
-\item{.lst}{list. An already-collected list of arguments to be used instead
-of the elements of \code{\dots}. Arguments passed via \code{\dots} will be
-ignored if this is specified.}
+\item{.lst}{(\code{list})\cr an already-collected list of arguments to be used instead of the elements of \code{...}.
+Arguments passed via \code{...} will be ignored if this is specified.}
 
-\item{row.name}{if \code{NULL} then an empty string is used as
-\code{row.name} of the \code{\link{rrow}}.}
+\item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
+\code{\link[=rrow]{rrow()}}.}
 
-\item{format}{character(1) or function. The format label (string) or
-formatter function to apply to the cell values passed via \code{...}. See
-\code{\link[formatters]{list_valid_format_labels}} for currently supported
-format labels.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr the format label (string) or formatter function to apply to the
+cell values passed via \code{...}. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for currently supported format labels.}
 
-\item{indent}{deprecated.}
+\item{indent}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{inset}{integer(1). The table inset for the row or table being
-constructed. See \code{\link[formatters]{table_inset}}.}
+\item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
+\code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 }
 \value{
-NULL (this is an argument template dummy function)
+No return value.
 }
 \description{
-Compatibility Arg Conventions
+Compatibility argument conventions
 }
 \seealso{
 Other conventions: 

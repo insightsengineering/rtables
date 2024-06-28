@@ -6,7 +6,7 @@
 \alias{spl_variable,VarDynCutSplit-method}
 \alias{spl_variable,VarStaticCutSplit-method}
 \alias{spl_variable,Split-method}
-\title{Variable Associated With a Split}
+\title{Variable associated with a split}
 \usage{
 spl_variable(spl)
 
@@ -19,20 +19,16 @@ spl_variable(spl)
 \S4method{spl_variable}{Split}(spl)
 }
 \arguments{
-\item{spl}{Split. The split object}
+\item{spl}{(\code{VarLevelSplit})\cr the split object.}
 }
 \value{
-for splits with a single variable associated with them, the split, for others, an error is raised.
+For splits with a single variable associated with them, returns the split. Otherwise, an error is raised.
 }
 \description{
-This function  is intended  for use  when writing  custom splitting
-logic.  In  cases where  the  split  is  associated with  a  single
-variable, the  name of that variable  will be returned. At  time of
-writing     this    includes     splits    generated     via    the
-\code{\link{split_rows_by}}, \code{\link{split_cols_by}},
-\code{\link{split_rows_by_cuts}}, \code{\link{split_cols_by_cuts}},
-\code{\link{split_rows_by_cutfun}}, and
-\code{\link{split_cols_by_cutfun}} layout directives.
+This function is intended for use when writing custom splitting logic. In cases where the split is associated with
+a single variable, the name of that variable will be returned. At time of writing this includes splits generated
+via the \code{\link[=split_rows_by]{split_rows_by()}}, \code{\link[=split_cols_by]{split_cols_by()}}, \code{\link[=split_rows_by_cuts]{split_rows_by_cuts()}}, \code{\link[=split_cols_by_cuts]{split_cols_by_cuts()}},
+\code{\link[=split_rows_by_cutfun]{split_rows_by_cutfun()}}, and \code{\link[=split_cols_by_cutfun]{split_cols_by_cutfun()}} layout directives.
 }
 \seealso{
 \code{\link{make_split_fun}}

@@ -37,3 +37,5 @@ tests/testthat/Rplots.pdf
 *.prof
 /doc/
 /Meta/
+tests/testthat/_snaps/**/*.new.md
+tests/testthat/_snaps/**/*.new.svg

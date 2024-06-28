@@ -2,41 +2,45 @@
 % Please edit documentation in R/tt_compatibility.R
 \name{rbindl_rtables}
 \alias{rbindl_rtables}
-\alias{rbind,VTableNodeInfo-method}
 \alias{rbind}
+\alias{rbind,VTableNodeInfo-method}
 \alias{rbind2,VTableNodeInfo,ANY-method}
-\title{\code{rbind} \code{TableTree} and related objects}
+\title{Row-bind \code{TableTree} and related objects}
 \usage{
-rbindl_rtables(x, gap = 0, check_headers = TRUE)
+rbindl_rtables(
+  x,
+  gap = lifecycle::deprecated(),
+  check_headers = lifecycle::deprecated()
+)
 
 \S4method{rbind}{VTableNodeInfo}(..., deparse.level = 1)
 
 \S4method{rbind2}{VTableNodeInfo,ANY}(x, y)
 }
 \arguments{
-\item{x}{\code{VTableNodeInfo}. \code{TableTree}, \code{ElementaryTable} or \code{TableRow} object.}
+\item{x}{(\code{VTableNodeInfo})\cr \code{TableTree}, \code{ElementaryTable}, or \code{TableRow} object.}
 
-\item{gap}{deprecated. Ignored.}
+\item{gap}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} ignored.}
 
-\item{check_headers}{deprecated. Ignored.}
+\item{check_headers}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} ignored.}
 
-\item{\dots}{ANY. Elements to be stacked.}
+\item{...}{(\code{ANY})\cr elements to be stacked.}
 
-\item{deparse.level}{numeric(1). Currently Ignored.}
+\item{deparse.level}{(\code{numeric(1)})\cr currently ignored.}
 
-\item{y}{\code{VTableNodeInfo}. \code{TableTree}, \code{ElementaryTable} or \code{TableRow} object.}
+\item{y}{(\code{VTableNodeInfo})\cr \code{TableTree}, \code{ElementaryTable}, or \code{TableRow} object.}
 }
 \value{
 A formal table object.
 }
 \description{
-\code{rbind} \code{TableTree} and related objects
+Row-bind \code{TableTree} and related objects
 }
 \note{
 When objects are row-bound, titles and footer information is retained from the first object (if any exists) if all
 other objects have no titles/footers or have identical titles/footers. Otherwise, all titles/footers are removed
-and must be set for the bound table via the \code{\link[=main_title]{main_title()}}, \code{\link[=subtitles]{subtitles()}}, \code{\link[=main_footer]{main_footer()}}, and \code{\link[=prov_footer]{prov_footer()}}
-functions.
+and must be set for the bound table via the \code{\link[formatters:title_footer]{formatters::main_title()}}, \code{\link[formatters:title_footer]{formatters::subtitles()}},
+\code{\link[formatters:title_footer]{formatters::main_footer()}}, and \code{\link[formatters:title_footer]{formatters::prov_footer()}} functions.
 }
 \examples{
 mtbl <- rtable(
@@ -68,4 +72,5 @@ mtbl2 <- with(subset(iris, Species == "setosa"), rtable(
 rbind(mtbl, mtbl2)
 rbind(mtbl, rrow(), mtbl2)
 rbind(mtbl, rrow("aaa"), indent(mtbl2))
+
 }

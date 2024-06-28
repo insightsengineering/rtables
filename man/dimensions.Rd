@@ -4,7 +4,7 @@
 \alias{nrow,VTableTree-method}
 \alias{ncol,VTableNodeInfo-method}
 \alias{dim,VTableNodeInfo-method}
-\title{Table Dimensions}
+\title{Table dimensions}
 \usage{
 \S4method{nrow}{VTableTree}(x)
 
@@ -13,13 +13,13 @@
 \S4method{dim}{VTableNodeInfo}(x)
 }
 \arguments{
-\item{x}{\code{TableTree} or \code{ElementaryTable} object}
+\item{x}{(\code{TableTree} or \code{ElementaryTable})\cr a table object.}
 }
 \value{
-the number of rows (\code{nrow}), columns (\code{ncol}) or both (\code{dim}) of the object.
+The number of rows (\code{nrow}), columns (\code{ncol}), or both (\code{dim}) of the object.
 }
 \description{
-Table Dimensions
+Table dimensions
 }
 \examples{
 lyt <- basic_table() \%>\%

@@ -48,19 +48,17 @@ tail(x, ...)
       length(dim(x))}) select all indices in that dimension. Must
     contain at least one non-missing value.}
 
-\item{keep_topleft}{logical(1). If \code{TRUE} (the default),
-top_left material for the table will be carried over to the
+\item{keep_topleft}{(\code{flag})\cr if \code{TRUE} (the default), top_left material for the table will be carried over to the
 subset.}
 
-\item{keep_titles}{logical(1).  If \code{TRUE} (the default),
-all title material for the table will be carried over to the
+\item{keep_titles}{(\code{flag})\cr if \code{TRUE} (the default), all title material for the table will be carried over to the
 subset.}
 
-\item{keep_footers}{logical(1). If \code{TRUE}, all footer material for the table
-will be carried over to the subset. It defaults to \code{keep_titles}.}
+\item{keep_footers}{(\code{flag})\cr if \code{TRUE}, all footer material for the table will be carried over to the subset. It
+defaults to \code{keep_titles}.}
 
-\item{reindex_refs}{logical(1). Defaults to \code{FALSE}. If \code{TRUE},
-referential footnotes will be reindexed for the subset.}
+\item{reindex_refs}{(\code{flag})\cr defaults to \code{FALSE}. If \code{TRUE}, referential footnotes will be reindexed for the
+subset.}
 }
 \description{
 Head and tail methods

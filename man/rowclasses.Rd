@@ -44,54 +44,47 @@ DataRow(...)
 ContentRow(...)
 }
 \arguments{
-\item{lev}{integer. Nesting level (roughly, indentation level in practical
-terms).}
+\item{lev}{(\code{integer(1)})\cr nesting level (roughly, indentation level in practical terms).}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{name}{character(1). Name of the split/table/row being created. Defaults
-to same as the corresponding label, but is not required to be.}
+\item{name}{(\code{string})\cr name of the split/table/row being created. Defaults to the value of the
+corresponding label, but is not required to be.}
 
-\item{vis}{logical. Should the row be visible (\code{LabelRow} only).}
+\item{vis}{(\code{flag})\cr whether the row should be visible (\code{LabelRow} only).}
 
-\item{cinfo}{\code{InstantiatedColumnInfo} (or NULL). Column structure for the
-object being created.}
+\item{cinfo}{(\code{InstantiatedColumnInfo} or \code{NULL})\cr column structure for the object being created.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{table_inset}{numeric(1). Number of spaces to inset the table header, table
-body, referential footnotes, and main_footer, as compared to alignment
-of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+\item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
+and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
 
-\item{trailing_section_div}{character(1). String which will be used as a section
-divider after the printing of the last row contained in this (sub)-table,
-unless that row is also the last table row to be printed overall, or
-\code{NA_character_} for none (the default). When generated via layouting, this
-would correspond to the \code{section_div} of the split under which this table
-represents a single facet.}
+\item{trailing_section_div}{(\code{string})\cr string which will be used as a section divider after the printing
+of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
+or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
+\code{section_div} of the split under which this table represents a single facet.}
 
-\item{vals}{list. cell values for the row}
+\item{vals}{(\code{list})\cr cell values for the row.}
 
-\item{cspan}{integer. Column span. \code{1} indicates no spanning.}
+\item{cspan}{(\code{integer})\cr column span. \code{1} indicates no spanning.}
 
-\item{var}{string, variable name}
+\item{var}{(\code{string})\cr variable name.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{klass}{Internal detail.}
+\item{klass}{(\code{character})\cr internal detail.}
 
-\item{footnotes}{list or NULL. Referential footnotes to be applied at current
-level. In post-processing, this can be achieved with \code{\link{fnotes_at_path<-}}.}
+\item{footnotes}{(\code{list} or \code{NULL})\cr referential footnotes to be applied at current level. In post-processing,
+this can be achieved with \code{\link{fnotes_at_path<-}}.}
 
-\item{\dots}{passed to shared constructor (\code{.tablerow}).}
+\item{...}{additional parameters passed to shared constructor (\code{.tablerow}).}
 }
 \value{
 A formal object representing a table row of the constructed type.
@@ -99,7 +92,7 @@ A formal object representing a table row of the constructed type.
 \description{
 Row classes and constructors
 
-Row constructors and Classes
+Row constructors and classes
 }
 \author{
 Gabriel Becker

@@ -2,7 +2,7 @@
 % Please edit documentation in R/split_funs.R
 \name{trim_levels_to_map}
 \alias{trim_levels_to_map}
-\title{Trim Levels to map}
+\title{Trim levels to map}
 \usage{
 trim_levels_to_map(map = NULL)
 }
@@ -14,26 +14,22 @@ those present in the data but not associated with this split or any parents
 of it.}
 }
 \value{
-a fun
+A function that can be used as a split function.
 }
 \description{
-This split function constructor creates a split function which trims
-levels of a variable to reflect restrictions on the possible
-combinations of two or more variables which are split by
-(along the same axis) within a layout.
+This split function constructor creates a split function which trims levels of a variable to reflect restrictions
+on the possible combinations of two or more variables which the data is split by (along the same axis) within a
+layout.
 }
 \details{
-When splitting occurs, the map is subset to the values of all
-previously performed splits. The levels of the variable being split are
-then pruned to only those still present within this subset of the map
-representing the current hierarchical splitting context.
+When splitting occurs, the map is subset to the values of all previously performed splits. The levels of the
+variable being split are then pruned to only those still present within this subset of the map representing the
+current hierarchical splitting context.
 
-Splitting is then performed via the \code{\link{keep_split_levels}} split
-function.
+Splitting is then performed via the \code{\link[=keep_split_levels]{keep_split_levels()}} split function.
 
-Each resulting element of the partition is then further trimmed by pruning
-values of any remaining variables specified in the map to those values
-allowed under the combination of the previous and current split.
+Each resulting element of the partition is then further trimmed by pruning values of any remaining variables
+specified in the map to those values allowed under the combination of the previous and current split.
 }
 \examples{
 map <- data.frame(
@@ -48,6 +44,7 @@ lyt <- basic_table() \%>\%
   split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) \%>\%
   analyze("ANRIND")
 tbl <- build_table(lyt, ex_adlb)
+
 }
 \seealso{
 \code{\link[=trim_levels_in_group]{trim_levels_in_group()}}

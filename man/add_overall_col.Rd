@@ -2,26 +2,21 @@
 % Please edit documentation in R/colby_constructors.R
 \name{add_overall_col}
 \alias{add_overall_col}
-\title{Add Overall Column}
+\title{Add overall column}
 \usage{
 add_overall_col(lyt, label)
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-This function will \emph{only} add an overall
-column at the \emph{top} level of splitting, NOT within
-existing column splits.
-See \code{\link{add_overall_level}} for the recommended
-way to add overall columns more generally within existing splits.
+This function will \emph{only} add an overall column at the \emph{top} level of splitting, NOT within existing column splits.
+See \code{\link[=add_overall_level]{add_overall_level()}} for the recommended way to add overall columns more generally within existing splits.
 }
 \examples{
 lyt <- basic_table() \%>\%

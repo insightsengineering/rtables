@@ -20,6 +20,7 @@ tf <- tempfile(fileext = ".txt")
 export_as_txt(tbl, file = tf)
 system2("cat", tf)
 }
+
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze(c("AGE", "BMRKR2", "COUNTRY"))
@@ -32,6 +33,7 @@ export_as_pdf(tbl, file = tf, pg_height = 4)
 tf <- tempfile(fileext = ".pdf")
 export_as_pdf(tbl, file = tf, lpp = 8)
 }
+
 }
 \keyword{internal}
 \description{

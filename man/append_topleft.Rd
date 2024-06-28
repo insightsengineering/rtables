@@ -7,34 +7,28 @@
 append_topleft(lyt, newlines)
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{newlines}{character. The new line(s) to be added to the materials}
+\item{newlines}{(\code{character})\cr the new line(s) to be added to the materials.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-This function \emph{adds} \code{newlines} to the current
-set of "top-left materials".
+This function \emph{adds} \code{newlines} to the current set of "top-left materials".
 }
 \details{
-Adds \code{newlines} to the set of strings representing the 'top-left'
-materials declared in the layout (the content displayed to the left of
-the column labels when the resulting tables are printed).
+Adds \code{newlines} to the set of strings representing the 'top-left' materials declared in the layout (the content
+displayed to the left of the column labels when the resulting tables are printed).
 
-Top-left material strings are stored and then displayed \emph{exactly as is},
-no structure or indenting is applied to them either when they are added
-or when they are displayed.
+Top-left material strings are stored and then displayed \emph{exactly as is}, no structure or indenting is applied to
+them either when they are added or when they are displayed.
 }
 \note{
-Currently, where in the construction of the layout this is called
-makes no difference, as it is independent of the actual splitting keywords.
-This may change in the future.
+Currently, where in the construction of the layout this is called makes no difference, as it is independent of
+the actual splitting keywords. This may change in the future.
 
-This function is experimental, its name and the details of
-its behavior are subject to change in future versions.
+This function is experimental, its name and the details of its behavior are subject to change in future versions.
 }
 \examples{
 library(dplyr)

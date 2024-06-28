@@ -16,7 +16,7 @@
 \S4method{row.names}{VTableTree}(x)
 }
 \arguments{
-\item{x}{the object.}
+\item{x}{(\code{TableTree})\cr the object.}
 }
 \value{
 The column names of \code{x}, as defined in the details above.
@@ -25,6 +25,6 @@ The column names of \code{x}, as defined in the details above.
 Names of a \code{TableTree}
 }
 \details{
-For \code{TableTrees} with more than one level of splitting in columns, the names are defined to be the top-level
+For \code{TableTree}s with more than one level of splitting in columns, the names are defined to be the top-level
 split values repped out across the columns that they span.
 }

@@ -146,20 +146,28 @@ test_that("export_as_pdf works", {
   tmpf <- tempfile(fileext = ".pdf")
 
   expect_warning(
-    export_as_pdf(tbl, file = tmpf, landscape = TRUE, width = 3, paginate = FALSE),
+    export_as_pdf(tbl, file = tmpf, landscape = TRUE, height = 1000, width = 3, paginate = FALSE),
     "width of page 1 exceeds the available space"
   )
   expect_true(file.exists(tmpf))
   file.remove(tmpf)
   expect_warning(
-    export_as_pdf(tbl, file = tmpf, height = 3, paginate = FALSE),
+    export_as_pdf(tbl, file = tmpf, height = 3, width = 1000, paginate = FALSE),
     "height of page 1 exceeds the available space"
   )
 
   res <- export_as_pdf(tbl, file = tmpf)
-
   expect_equal(res$npages, 3)
+
+  ## non-monospace fonts work
+  ## this tests the actual pagination behavior...
+  fspec <- font_spec("Times", 20, 1.2)
+  file.remove(tmpf)
+  expect_error(export_as_pdf(tbl, file = tmpf, fontspec = fspec), "non-monospace")
+  file.remove(tmpf) ## blank file created (currently, this could be better)
+  res <- export_as_pdf(tbl, file = tmpf, fontspec = fspec, ttype_ok = TRUE)
 })
+
 
 # test_that("exporting pdfs gives the correct values", {
 #     if (check_pdf) {
@@ -198,7 +206,7 @@ test_that("exporting pdf does the inset", {
   table_inset(tbl) <- 100
   tmpf <- tempfile(fileext = ".pdf")
 
-  expect_error(export_as_pdf(tbl, file = tmpf))
+  expect_error(export_as_pdf(tbl, file = tmpf), "Width of row labels equal to or larger than")
 })
 
 
@@ -283,6 +291,36 @@ test_that("as_html header line works", {
   html_tbl <- as_html(tbl, header_sep_line = TRUE)
   html_parts <- html_tbl$children[[1]][[2]]$children[[1]]$children[[1]]
   expect_true(all(sapply(1:4, function(x) "border-bottom: 1px solid black;" %in% html_parts[[x]]$attribs)))
+})
+
+# https://github.com/insightsengineering/rtables/issues/872
+test_that("as_html indentation is translated to rows with linebreaks", {
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by("SEX") %>%
+    analyze("AGE", afun = function(x) {
+      mn <- round(mean(x), 2)
+      if (!is.nan(mn) && mn > mean(DM$AGE)) {
+        val <- paste(mn, "  ^  ", sep = "\n")
+      } else {
+        val <- paste(mn)
+      }
+      in_rows(my_row_label = rcell(val,
+        format = "xx"
+      ))
+    })
+  tbl <- build_table(lyt, DM)
+
+  # Resolves correctly \n
+  expect_silent(res <- as_html(tbl))
+  expect_equal(
+    as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[1]]),
+    '<td style="text-align: left; padding-left: 3ch;"></td>'
+  )
+  expect_equal(
+    as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[2]]),
+    '<td style="text-align: center;">  ^  </td>'
+  )
 })
 
 ## https://github.com/insightsengineering/rtables/issues/308

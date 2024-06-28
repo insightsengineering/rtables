@@ -4,7 +4,7 @@
 \name{select_all_levels}
 \alias{select_all_levels}
 \alias{add_combo_levels}
-\title{Add Combination Levels to split}
+\title{Add combination levels to split}
 \format{
 An object of class \code{AllLevelsSentinel} of length 0.
 }
@@ -14,30 +14,26 @@ select_all_levels
 add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 }
 \arguments{
-\item{combosdf}{\code{data.frame}/\code{tbl_df}. Columns \code{valname}, \code{label}, \code{levelcombo},
-\code{exargs}. Of which \code{levelcombo} and \code{exargs} are list columns. Passing the
-\code{select_all_levels} object as a value in the \code{comblevels} column
-indicates that an overall/all-observations level should be created.}
+\item{combosdf}{(\code{data.frame} or \code{tbl_df})\cr a data frame with columns \code{valname}, \code{label}, \code{levelcombo}, and
+\code{exargs}. \code{levelcombo} and \code{exargs} should be list columns. Passing the \code{select_all_levels} object as a value in
+\code{comblevels} column indicates that an overall/all-observations level should be created.}
 
-\item{trim}{logical(1). Should splits corresponding with 0 observations be
-kept when tabulating.}
+\item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
-\item{first}{logical(1). Should the created split level be placed first in
-the levels (\code{TRUE}) or last (\code{FALSE}, the default).}
+\item{first}{(\code{flag})\cr whether the created split level should be placed first in the levels (\code{TRUE}) or
+last (\code{FALSE}, the default).}
 
-\item{keep_levels}{character or NULL. If non-NULL, the levels to retain
-across both combination and individual levels.}
+\item{keep_levels}{(\code{character} or \code{NULL})\cr if non-\code{NULL}, the levels to retain across both combination and
+individual levels.}
 }
 \value{
-a closure suitable for use as a splitting function (\code{splfun})
-when creating a table layout
+A closure suitable for use as a splitting function (\code{splfun}) when creating a table layout.
 }
 \description{
-Add Combination Levels to split
+Add combination levels to split
 }
 \note{
-Analysis or summary functions for which the order matters should never
-be used within the tabulation framework.
+Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 }
 \examples{
 library(tibble)
@@ -87,5 +83,6 @@ lyt3 <- basic_table(show_colcounts = TRUE) \%>\%
 
 tbl3 <- build_table(lyt3, smallerDM)
 tbl3
+
 }
 \keyword{datasets}

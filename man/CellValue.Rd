@@ -2,7 +2,7 @@
 % Please edit documentation in R/00tabletrees.R
 \name{CellValue}
 \alias{CellValue}
-\title{Cell Value constructor}
+\title{Constructor for Cell Value}
 \usage{
 CellValue(
   val,
@@ -16,38 +16,32 @@ CellValue(
 )
 }
 \arguments{
-\item{val}{ANY. value in the cell exactly as it should be passed to a
-formatter or returned when extracted}
+\item{val}{(\code{ANY})\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{colspan}{integer(1). Column span value.}
+\item{colspan}{(\code{integer(1)})\cr column span value.}
 
-\item{label}{character(1). A label (not to be confused with the name) for the
-object/structure.}
+\item{label}{(\code{string})\cr a label (not to be confused with the name) for the object/structure.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{footnotes}{list or \code{NULL}. Referential footnote messages for the cell.}
+\item{footnotes}{(\code{list} or \code{NULL})\cr referential footnote messages for the cell.}
 
-\item{align}{character(1) or \code{NULL}. Alignment the value should be rendered with.
-It defaults to \code{"center"} if \code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}}
-for currently supported alignments.}
+\item{align}{(\code{string} or \code{NULL})\cr alignment the value should be rendered with. Defaults to \code{"center"} if
+\code{NULL} is used. See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for all currently supported alignments.}
 
-\item{format_na_str}{character(1). String which should be displayed when
-formatted if this cell's value(s) are all NA.}
+\item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
+are all \code{NA}.}
 }
 \value{
-An object representing the value within a single cell within a
-populated table. The underlying structure of this object is an
-implementation detail and should not be relied upon beyond calling
-accessors for the class.
+An object representing the value within a single cell within a populated table. The underlying structure
+of this object is an implementation detail and should not be relied upon beyond calling accessors for the class.
 }
 \description{
-Cell Value constructor
+Constructor for Cell Value
 }

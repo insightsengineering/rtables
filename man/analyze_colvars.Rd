@@ -2,7 +2,7 @@
 % Please edit documentation in R/colby_constructors.R
 \name{analyze_colvars}
 \alias{analyze_colvars}
-\title{Generate Rows Analyzing Different Variables Across Columns}
+\title{Generate rows analyzing different variables across columns}
 \usage{
 analyze_colvars(
   lyt,
@@ -16,48 +16,43 @@ analyze_colvars(
 )
 }
 \arguments{
-\item{lyt}{layout object pre-data used for tabulation}
+\item{lyt}{(\code{PreDataTableLayouts})\cr layout object pre-data used for tabulation.}
 
-\item{afun}{function or list. Function(s) to be used to calculate the values
-in each column.  The list will be repped out as needed and matched by
-position with the columns during tabulation. This functions accepts the same
-parameters as \link{analyze} like \code{afun} and \code{format}. For further information see
-\code{\link{additional_fun_params}}.}
+\item{afun}{(\code{function} or \code{list})\cr function(s) to be used to calculate the values in each column. The list
+will be repped out as needed and matched by position with the columns during tabulation. This functions
+accepts the same parameters as \code{\link[=analyze]{analyze()}} like \code{afun} and \code{format}. For further information see
+\link{additional_fun_params}.}
 
-\item{format}{\code{FormatSpec}. Format associated with this split. Formats can be
-declared via strings (\code{"xx.x"}) or function. In cases such as
-\code{analyze} calls, they can character vectors or lists of functions.}
+\item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
+strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
-\item{na_str}{(\code{string})\cr string to display when the value of \code{x} is missing. Defaults to \code{"NA"}.}
+\item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
-\item{nested}{boolean. Should this layout instruction be applied within the
-existing layout structure \emph{if possible} (\code{TRUE}, the default) or as a
-new top-level element (`FALSE). Ignored if it would nest a split underneath
-analyses, which is not allowed.}
+\item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
+\emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
+underneath analyses, which is not allowed.}
 
-\item{extra_args}{list. Extra arguments to be passed to the tabulation
-function. Element position in the list corresponds to the children of this
-split. Named elements in the child-specific lists are ignored if they do
+\item{extra_args}{(\code{list})\cr extra arguments to be passed to the tabulation function. Element position in the list
+corresponds to the children of this split. Named elements in the child-specific lists are ignored if they do
 not match a formal argument of the tabulation function.}
 
-\item{indent_mod}{numeric. Modifier for the default indent position for the
-structure created by this function(subtable, content table, or row)
-\emph{and all of that structure's children}. Defaults to 0, which
+\item{indent_mod}{(\code{numeric})\cr modifier for the default indent position for the structure created by this
+function (subtable, content table, or row) \emph{and all of that structure's children}. Defaults to 0, which
 corresponds to the unmodified default behavior.}
 
-\item{inclNAs}{boolean. Should observations with NA in the \code{var}
-variable(s) be included when performing this analysis. Defaults to
-\code{FALSE}}
+\item{inclNAs}{(\code{logical})\cr whether NA observations in the \code{var} variable(s) should be included when performing
+the analysis. Defaults to \code{FALSE}.}
 }
 \value{
-A \code{PreDataTableLayouts} object suitable for passing to further
-layouting functions, and to \code{build_table}.
+A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
 }
 \description{
-Generate Rows Analyzing Different Variables Across Columns
+Generate rows analyzing different variables across columns
 }
 \examples{
 library(dplyr)
+
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the

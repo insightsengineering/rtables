@@ -2,9 +2,6 @@
 #' @importMethodsFrom formatters toString matrix_form nlines
 NULL
 
-
-
-
 # toString ----
 
 ## #' @export
@@ -16,15 +13,13 @@ NULL
 ## #' @export
 ## setMethod("print", "ANY", base::print)
 
-
 #' Convert an `rtable` object to a string
 #'
 #' @inheritParams formatters::toString
 #' @inheritParams gen_args
 #' @inherit formatters::toString
-#' @exportMethod toString
 #'
-#' @return a string representation of \code{x} as it appears when printed.
+#' @return A string representation of `x` as it appears when printed.
 #'
 #' @examples
 #' library(dplyr)
@@ -42,37 +37,46 @@ NULL
 #' tbl <- build_table(lyt, iris2)
 #'
 #' cat(toString(tbl, col_gap = 3))
+#'
 #' @rdname tostring
-#' @name tostring
-#' @aliases toString,VTableTree-method
+#' @aliases tostring toString,VTableTree-method
+#' @exportMethod toString
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,
                                              hsep = horizontal_sep(x),
                                              indent_size = 2,
                                              tf_wrap = FALSE,
-                                             max_width = NULL) {
+                                             max_width = NULL,
+                                             fontspec = font_spec(),
+                                             ttype_ok = FALSE) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
-      indent_size = indent_size
+      indent_size = indent_size,
+      fontspec = fontspec,
+      col_gap = col_gap
     ),
     widths = widths, col_gap = col_gap,
     hsep = hsep,
     tf_wrap = tf_wrap,
-    max_width = max_width
+    max_width = max_width,
+    fontspec = fontspec,
+    ttype_ok = ttype_ok
   )
 })
 
 #' Table shells
 #'
-#' A table shell is a rendering of the table which maintains the structure, but does not
-#' display the values, rather displaying the formatting instructions for each cell.
+#' A table shell is a rendering of the table which maintains the structure, but does not display the values, rather
+#' displaying the formatting instructions for each cell.
 #'
-#' @inheritParams tostring
+#' @inheritParams formatters::toString
 #' @inheritParams gen_args
-#' @return for `table_shell_str` the string representing the table shell, for `table_shell`,
-#' `NULL`, as the function is called for the side effect of printing the shell to the console.
+#'
+#' @return
+#' * `table_shell` returns `NULL`, as the function is called for the side effect of printing the shell to the console.
+#' * `table_shell_str` returns the string representing the table shell.
 #'
 #' @seealso [value_formats()] for a matrix of formats for each cell in a table.
 #'
@@ -136,43 +140,40 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
   )
 }
 
-
-#' Transform `rtable` to a list of matrices which can be used for outputting
+#' Transform an `rtable` to a list of matrices which can be used for outputting
 #'
 #' Although `rtables` are represented as a tree data structure when outputting the table to ASCII or HTML
-#' it is useful to map the `rtable` to an in between state with the formatted cells in a matrix form.
+#' it is useful to map the `rtable` to an in-between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
-#' @param indent_rownames logical(1), if TRUE the column with the row names in
-#'   the `strings` matrix of has indented row names (strings pre-fixed)
-#' @param expand_newlines logical(1). Should the matrix form generated
-#'     expand  rows  whose  values   contain  newlines  into  multiple
-#'     'physical'  rows  (as  they  will  appear  when  rendered  into
-#'     ASCII). Defaults to \code{TRUE}
-#'
-#' @export
+#' @param indent_rownames (`flag`)\cr if `TRUE`, the column with the row names in the `strings` matrix of the output
+#'   has indented row names (strings pre-fixed).
+#' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain
+#'   newlines into multiple 'physical' rows (as they will appear when rendered into ASCII). Defaults to `TRUE`.
+#' @param fontspec (`font_spec`)\cr The font that should be used by default when
+#'   rendering this `MatrixPrintForm` object, or NULL (the default).
+#' @param col_gap (`numeric(1)`)]\cr The number of spaces (in the font specified
+#'  by `fontspec`) that should be placed between columns when the table
+#'  is rendered directly to text (e.g., by `toString` or `export_as_txt`). Defaults
+#'  to `3`.
 #'
 #' @details
-#'
-#' The strings in the return object are defined as follows: row labels are those
-#' determined by \code{make_row_df} and cell values are determined using
-#' \code{get_formatted_cells}. (Column labels are calculated using a
-#' non-exported internal function.
+#' The strings in the return object are defined as follows: row labels are those determined by `make_row_df` and cell
+#' values are determined using `get_formatted_cells`. (Column labels are calculated using a non-exported internal
+#' function.
 #'
 #' @return A list with the following elements:
-#' \describe{
-#' \item{strings}{The content, as it should be printed, of the top-left
-#' material, column headers, row labels , and cell values of \code{tt}}
-#' \item{spans}{The column-span information for each print-string in the strings
-#' matrix}
-#' \item{aligns}{The text alignment for each print-string in the strings matrix}
-#' \item{display}{Whether each print-string in the strings matrix should be
-#' printed or not}.
-#' \item{row_info}{the data.frame generated by \code{make_row_df}}
-#' }
+#'   \describe{
+#'     \item{`strings`}{The content, as it should be printed, of the top-left material, column headers, row labels,
+#'       and cell values of `tt`.}
+#'     \item{`spans`}{The column-span information for each print-string in the `strings` matrix.}
+#'     \item{`aligns`}{The text alignment for each print-string in the `strings` matrix.}
+#'     \item{`display`}{Whether each print-string in the strings matrix should be printed.}
+#'     \item{`row_info`}{The `data.frame` generated by `make_row_df`.}
+#'   }
 #'
-#' With an additional \code{nrow_header} attribute indicating the number of
-#' pseudo "rows"  the column structure defines.
+#' With an additional `nrow_header` attribute indicating the number of pseudo "rows" that the column structure defines.
+#'
 #' @examples
 #' library(dplyr)
 #'
@@ -193,16 +194,21 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' tbl <- build_table(lyt, iris2)
 #'
 #' matrix_form(tbl)
+#'
+#' @export
 setMethod(
   "matrix_form", "VTableTree",
   function(obj,
            indent_rownames = FALSE,
            expand_newlines = TRUE,
-           indent_size = 2) {
+           indent_size = 2,
+           fontspec = NULL,
+           col_gap = 3L) {
     stopifnot(is(obj, "VTableTree"))
+    check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names
 
-    sr <- make_row_df(obj)
+    sr <- make_row_df(obj, fontspec = fontspec)
 
     body_content_strings <- if (NROW(sr) == 0) {
       character()
@@ -263,9 +269,12 @@ setMethod(
       body[, 1] <- indent_string(body[, 1], c(rep(0, nr_header), sr$indent),
         incr = indent_size
       )
+      # why also formats?
       formats[, 1] <- indent_string(formats[, 1], c(rep(0, nr_header), sr$indent),
         incr = indent_size
       )
+    } else if (NROW(sr) > 0) {
+      sr$indent <- rep(0, NROW(sr))
     }
 
     col_ref_strs <- matrix(vapply(header_content$footnotes, function(x) {
@@ -299,6 +308,7 @@ setMethod(
       formats = formats,
       ## display = display, purely a function of spans, handled in constructor now
       row_info = sr,
+      colpaths = make_col_df(obj)[["path"]],
       ## line_grouping handled internally now line_grouping = 1:nrow(body),
       ref_fnotes = ref_fnotes,
       nlines_header = nr_header, ## this is fixed internally
@@ -314,11 +324,43 @@ setMethod(
       table_inset = table_inset(obj),
       header_section_div = header_section_div(obj),
       horizontal_sep = horizontal_sep(obj),
-      indent_size = indent_size
+      indent_size = indent_size,
+      fontspec = fontspec,
+      col_gap = col_gap
     )
   }
 )
 
+
+check_ccount_vis_ok <- function(tt) {
+  ctree <- coltree(tt)
+  tlkids <- tree_children(ctree)
+  lapply(tlkids, ccvis_check_subtree)
+  invisible(NULL)
+}
+
+ccvis_check_subtree <- function(ctree) {
+  kids <- tree_children(ctree)
+  if (is.null(kids)) {
+    return(invisible(NULL))
+  }
+  vals <- vapply(kids, disp_ccounts, TRUE)
+  if (length(unique(vals)) > 1) {
+    unmatch <- which(!duplicated(vals))[1:2]
+    stop(
+      "Detected different colcount visibility among sibling facets (those ",
+      "arising from the same split_cols_by* layout instruction). This is ",
+      "not supported.\n",
+      "Set count values to NA if you want a blank space to appear as the ",
+      "displayed count for particular facets.\n",
+      "First disagreement occured at paths:\n",
+      .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[1]]]))), "\n",
+      .path_to_disp(pos_to_path(tree_pos(kids[[unmatch[2]]])))
+    )
+  }
+  lapply(kids, ccvis_check_subtree)
+  invisible(NULL)
+}
 .quick_handle_nl <- function(str_v) {
   if (any(grepl("\n", str_v))) {
     return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
@@ -338,8 +380,6 @@ setMethod(
   ret
 }
 
-
-
 format_fnote_ref <- function(fn) {
   if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE)))) {
     return("")
@@ -357,7 +397,6 @@ format_fnote_ref <- function(fn) {
     ""
   }
 }
-
 
 format_fnote_note <- function(fn) {
   if (length(fn) == 0 || (is.list(fn) && all(vapply(fn, function(x) length(x) == 0, TRUE)))) {
@@ -417,8 +456,6 @@ get_formatted_fnotes <- function(tt) {
   lst <- lst[keep]
   unique(vapply(lst, format_fnote_note, ""))
 
-
-
   ##                    , recursive = FALSE)
   ## rlst <- unlist(lapply(rows, row_footnotes))
   ## lst <-
@@ -433,13 +470,17 @@ get_formatted_fnotes <- function(tt) {
   ## allstrs[order(inds)]
 }
 
-
 .do_tbl_h_piece2 <- function(tt) {
   coldf <- make_col_df(tt, visible_only = FALSE)
   remain <- seq_len(nrow(coldf))
   chunks <- list()
   cur <- 1
+  na_str <- colcount_na_str(tt)
 
+  ## XXX this would be better as the facet-associated
+  ## format but I don't know that we need to
+  ## support that level of differentiation anyway...
+  cc_format <- colcount_format(tt)
   ## each iteration of this loop identifies
   ## all rows corresponding to one top-level column
   ## label and its children, then processes those
@@ -450,7 +491,9 @@ get_formatted_fnotes <- function(tt) {
     endblock <- which(coldf$abs_pos == max(inds))
 
     stopifnot(endblock >= rw)
-    chunks[[cur]] <- .do_header_chunk(coldf[rw:endblock, ])
+    chunk_res <- .do_header_chunk(coldf[rw:endblock, ], cc_format, na_str = na_str)
+    chunk_res <- unlist(chunk_res, recursive = FALSE)
+    chunks[[cur]] <- chunk_res
     remain <- remain[remain > endblock]
     cur <- cur + 1
   }
@@ -462,6 +505,7 @@ get_formatted_fnotes <- function(tt) {
     }
   )
 }
+
 .pad_end <- function(lst, padto, ncols) {
   curcov <- sum(vapply(lst, cell_cspan, 0L))
   if (curcov == padto) {
@@ -471,7 +515,6 @@ get_formatted_fnotes <- function(tt) {
   c(lst, list(rcell("", colspan = padto - curcov)))
 }
 
-
 .pad_tops <- function(chunks) {
   lens <- vapply(chunks, length, 1L)
   padto <- max(lens)
@@ -480,23 +523,22 @@ get_formatted_fnotes <- function(tt) {
     return(chunks)
   }
 
-  chunks[needpad] <- lapply(
-    chunks[needpad],
-    function(chk) {
+  for (i in seq_along(lens)) {
+    if (lens[i] < padto) {
+      chk <- chunks[[i]]
       span <- sum(vapply(chk[[length(chk)]], cell_cspan, 1L))
-      needed <- padto - length(chk)
-      c(
-        replicate(rcell("", colspan = span),
-          n = needed
+      chunks[[i]] <- c(
+        replicate(list(list(rcell("", colspan = span))),
+          n = padto - lens[i]
         ),
         chk
       )
     }
-  )
+  }
   chunks
 }
 
-.do_header_chunk <- function(coldf) {
+.do_header_chunk <- function(coldf, cc_format, na_str) {
   ## hard assumption that coldf is a section
   ## of a column dataframe summary that was
   ## created with visible_only=FALSE
@@ -507,24 +549,56 @@ get_formatted_fnotes <- function(tt) {
     seq_along(spldfs),
     function(i) {
       rws <- spldfs[[i]]
-
-      thisbit <- lapply(
+      thisbit_vals <- lapply(
         seq_len(nrow(rws)),
         function(ri) {
-          rcell(rws[ri, "label", drop = TRUE],
+          cellii <- rcell(rws[ri, "label", drop = TRUE],
             colspan = rws$total_span[ri],
             footnotes = rws[ri, "col_fnotes", drop = TRUE][[1]]
           )
+          cellii
         }
       )
-      .pad_end(thisbit, nleafcols)
+      ret <- list(.pad_end(thisbit_vals, padto = nleafcols))
+      anycounts <- any(rws$ccount_visible)
+      if (anycounts) {
+        thisbit_ns <- lapply(
+          seq_len(nrow(rws)),
+          function(ri) {
+            vis_ri <- rws$ccount_visible[ri]
+            val <- if (vis_ri) rws$col_count[ri] else NULL
+            fmt <- rws$ccount_format[ri]
+            if (is.character(fmt)) {
+              cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == fmt))))
+              if (cfmt_dim == "2d") {
+                if (grepl("%", fmt)) {
+                  val <- c(val, 1) ## XXX This is the old behavior but it doesn't take into account parent counts...
+                } else {
+                  stop(
+                    "This 2d format is not supported for column counts. ",
+                    "Please choose a 1d format or a 2d format that includes a % value."
+                  )
+                }
+              } else if (cfmt_dim == "3d") {
+                stop("3d formats are not supported for column counts.")
+              }
+            }
+            cellii <- rcell(
+              val,
+              colspan = rws$total_span[ri],
+              format = fmt, # cc_format,
+              format_na_str = na_str
+            )
+            cellii
+          }
+        )
+        ret <- c(ret, list(.pad_end(thisbit_ns, padto = nleafcols)))
+      }
+      ret
     }
   )
-
   toret
 }
-
-
 
 .tbl_header_mat <- function(tt) {
   rows <- .do_tbl_h_piece2(tt) ## (clyt)
@@ -533,8 +607,8 @@ get_formatted_fnotes <- function(tt) {
   nc <- ncol(tt)
   body <- matrix(rapply(rows, function(x) {
     cs <- row_cspans(x)
-    if (is.null(cs)) cs <- rep(1, ncol(x))
-    rep(row_values(x), cs)
+    strs <- get_formatted_cells(x)
+    strs
   }), ncol = nc, byrow = TRUE)
 
   span <- matrix(rapply(rows, function(x) {
@@ -549,36 +623,6 @@ get_formatted_fnotes <- function(tt) {
       cell_footnotes(x)
     })
   )
-
-
-
-  if (disp_ccounts(cinfo)) {
-    counts <- col_counts(cinfo)
-    cformat <- colcount_format(cinfo)
-
-    # allow 2d column count formats (count (%) only)
-    cfmt_dim <- names(which(sapply(formatters::list_valid_format_labels(), function(x) any(x == cformat))))
-    if (cfmt_dim == "2d") {
-      if (grepl("%", cformat)) {
-        counts <- lapply(counts, function(x) c(x, 1))
-      } else {
-        stop(
-          "This 2d format is not supported for column counts. ",
-          "Please choose a 1d format or a 2d format that includes a % value."
-        )
-      }
-    } else if (cfmt_dim == "3d") {
-      stop("3d formats are not supported for column counts.")
-    }
-
-    body <- rbind(body, vapply(counts, format_rcell,
-      character(1),
-      format = cformat,
-      na_str = ""
-    ))
-    span <- rbind(span, rep(1, nc))
-    fnote <- rbind(fnote, rep(list(list()), nc))
-  }
 
   tl <- top_left(cinfo)
   lentl <- length(tl)
@@ -599,17 +643,16 @@ get_formatted_fnotes <- function(tt) {
   )
 }
 
-
-
 # get formatted cells ----
 
-#' get formatted cells
+#' Get formatted cells
 #'
-#' @return the formatted print-strings for all (body) cells in \code{obj}.
-#' @export
 #' @inheritParams gen_args
-#' @param shell logical(1). Should the formats themselves be returned instead of the
-#' values with formats applied. Defaults to \code{FALSE}.
+#' @param shell (`flag`)\cr whether the formats themselves should be returned instead of the values with formats
+#'   applied. Defaults to `FALSE`.
+#'
+#' @return The formatted print-strings for all (body) cells in `obj`.
+#'
 #' @examples
 #' library(dplyr)
 #'
@@ -625,8 +668,11 @@ get_formatted_fnotes <- function(tt) {
 #'   build_table(iris2)
 #'
 #' get_formatted_cells(tbl)
+#'
+#' @export
 #' @rdname gfc
 setGeneric("get_formatted_cells", function(obj, shell = FALSE) standardGeneric("get_formatted_cells"))
+
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableTree",
@@ -698,9 +744,9 @@ setMethod(
   }
 )
 
-
 #' @rdname gfc
 setGeneric("get_cell_aligns", function(obj) standardGeneric("get_cell_aligns"))
+
 #' @rdname gfc
 setMethod(
   "get_cell_aligns", "TableTree",
@@ -756,21 +802,17 @@ setMethod(
   }
 )
 
-
-
 # utility functions ----
 
-#' from sequence remove numbers where diff == 1
-#'
-#' numbers need to be sorted
-#'
-#' @noRd
+#' From a sorted sequence of numbers, remove numbers where diff == 1
 #'
 #' @examples
 #' remove_consecutive_numbers(x = c(2, 4, 9))
 #' remove_consecutive_numbers(x = c(2, 4, 5, 9))
 #' remove_consecutive_numbers(x = c(2, 4, 5, 6, 9))
 #' remove_consecutive_numbers(x = 4:9)
+#'
+#' @noRd
 remove_consecutive_numbers <- function(x) {
   # actually should be integer
   stopifnot(is.wholenumber(x), is.numeric(x), !is.unsorted(x))
@@ -783,14 +825,13 @@ remove_consecutive_numbers <- function(x) {
   x[c(TRUE, diff(x) != 1)]
 }
 
-
-#' insert an empty string
-#'
-#' @noRd
+#' Insert an empty string
 #'
 #' @examples
 #' empty_string_after(letters[1:5], 2)
 #' empty_string_after(letters[1:5], c(2, 4))
+#'
+#' @noRd
 empty_string_after <- function(x, indices) {
   if (length(indices) > 0) {
     offset <- 0
@@ -802,23 +843,24 @@ empty_string_after <- function(x, indices) {
   x
 }
 
-#' Indent Strings
+#' Indent strings
 #'
 #' Used in rtables to indent row names for the ASCII output.
 #'
-#' @param x a character vector
-#' @param indent a vector of length \code{length(x)} with non-negative integers
-#' @param incr non-negative integer: number of spaces per indent level
-#' @param including_newline boolean: should newlines also be indented
+#' @param x (`character`)\cr a character vector.
+#' @param indent (`numeric`)\cr a vector of non-negative integers of length `length(x)`.
+#' @param incr (`integer(1)`)\cr a non-negative number of spaces per indent level.
+#' @param including_newline (`flag`)\cr whether newlines should also be indented.
 #'
-#' @export
-#' @return \code{x} indented by left-padding with \code{indent*incr} white-spaces.
+#' @return `x`, indented with left-padding with `indent * incr` white-spaces.
+#'
 #' @examples
 #' indent_string("a", 0)
 #' indent_string("a", 1)
 #' indent_string(letters[1:3], 0:2)
 #' indent_string(paste0(letters[1:3], "\n", LETTERS[1:3]), 0:2)
 #'
+#' @export
 indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
   if (length(x) > 0) {
     indent <- rep_len(indent, length.out = length(x))
@@ -839,7 +881,6 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 ## .paste_no_na <- function(x, ...) {
 ##   paste(na.omit(x), ...)
 ## }
-
 
 ## #' Pad a string and align within string
 ## #'
@@ -888,25 +929,23 @@ indent_string <- function(x, indent = 0, incr = 2, including_newline = TRUE) {
 ##   strrep(" ", n)
 ## }
 
-
-#' Convert Matrix of Strings into a String with Aligned Columns
+#' Convert matrix of strings into a string with aligned columns
 #'
-#' Note that this function is intended to print simple rectangular
-#' matrices and not rtables.
+#' Note that this function is intended to print simple rectangular matrices and not `rtable`s.
 #'
-#' @param mat a matrix of strings
-#' @param nheader number of header rows
-#' @param colsep string that separates the columns
-#' @param hsep character to build line separator
+#' @param mat (`matrix`)\cr a matrix of strings.
+#' @param nheader (`integer(1)`)\cr number of header rows.
+#' @param colsep (`string`)\cr a string that separates the columns.
+#' @param hsep (`character(1)`)\cr character to build line separator.
 #'
-#' @noRd
-#'
-#' @return a string
+#' @return A string.
 #'
 #' @examples
 #' mat <- matrix(c("A", "B", "C", "a", "b", "c"), nrow = 2, byrow = TRUE)
 #' cat(mat_as_string(mat))
 #' cat("\n")
+#'
+#' @noRd
 mat_as_string <- function(mat, nheader = 1, colsep = "    ", hsep = default_hsep()) {
   colwidths <- apply(apply(mat, c(1, 2), nchar), 2, max)
 

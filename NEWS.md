@@ -1,4 +1,35 @@
-## rtables 0.6.6.9011
+## rtables 0.6.9.9000
+
+## rtables 0.6.9
+### Miscellaneous
+ * Update `col_counts` vignette wording, as CRAN macOS check failed. Raised the issue with the R-core team already. 
+
+## rtables 0.6.8
+### New Features
+ * Add support for `truetype` fonts based on `formatters` version `>= 0.5.8`. Nearly all functions related to pagination or export now accept `fontspec` argument and pass it around accordingly, by @gmbecker.
+ * Core splitting machinery can now be overridden in column space via `make_split_fun` provided that `core_split` associates the generated facets with subsetting expressions. Subsetting expressions remain unnecessary for splits in row space. By @gmbecker.
+ * ValueWrapper objects now carry around subsetting expressions for use during tabulation, by @gmbecker.
+ * `make_split_res`, `add_to_split_result` now accept a list of subsetting expressions which will be attached to the values, by @gmbecker.
+ * New `value_expr` internal getter and setter methods, by @gmbecker.
+ * All tables are now guaranteed to have fully path-traversable column structures (all facets in column space uniquely reachable via pathing) @gmbecker.
+ * Display of higher order (non-leaf) column counts is now supported (#135) @gmbecker.
+ * Column count visibility and format can be set independently for each block of sibling facets (#752) @gmbecker.
+ * `split_cols_by*` functions now accept `show_colcounts` and `colcount_format` arguments.
+ * New (column-) path based `colcount_visible` getter and setter for changing column count visibility in an already built table @gmbecker.
+ * New (column-) path based `facet_colcount` getter and setter column count value at arbitrary point in column structure of built table @gmbecker.
+ * New `facet_colcounts_visible` setter to conveniently set the column count visibility of a set of sibling facets in column space
+ * New `rm_all_colcounts` convenience function for turning off visibility all column counts throughout the column structure @gmbecker.
+ 
+### Bug Fixes
+ * Fixed bug in `as_html` preventing indentation from being applied in `Viewer` output.
+ * `col_counts<-` and `col_total<-` methods now explicitly convert `value` to integer, by @gmbecker.
+ * `col_gap` is now respected in `nlines` row methods, and thus by `make_row_df`, by @gmbecker.
+
+### Miscellaneous
+ * Added `lifecycle` badge files for deprecated documentation.
+ * Deprecated the `gap` and `check_headers` arguments to `rbindl_rtables` using `lifecycle`.
+
+## rtables 0.6.7
 ### New Features
  * Added `top_level_section_div` for `basic_table` to set section dividers for top level rows.
  * Added `keep_label_rows` to `as_result_df` to have these lines visible.
@@ -10,6 +41,14 @@
  * Fixed edge case bug in `as_result_df` where rows of the table have only `"root"` as path index.
  * Fixed `sort_at_path` pathing to ignore leading `"root"` element (regardless of actual root element name) to match current `tt_at_path` behavior.
  * Fixed `section_div` for analysis of multiple variables (`AnalyzeMultiVars`).
+ * Fixed mismatch between indentation declared in row info (`mf_rinfo(mf)`) and actual selected indentation from `matrix_form(mf, indent_rownames = FALSE)`.
+ * Fixed bug in `as_html` preventing indentation from being applied in `Viewer` output.
+ * `col_counts<-` and `col_total<-` methods now explicitly convert `value` to integer, by @gmbecker.
+ * `col_gap` is now respected in `nlines` row methods, and thus by `make_row_df`, by @gmbecker.
+ * Updated `as_html` to accommodate `\n` characters.
+
+### Miscellaneous
+ * Removed deprecated functions `add_analyzed_var` and `trim_zero_rows`.
 
 ## rtables 0.6.6
 ### New Features

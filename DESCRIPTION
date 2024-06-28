@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.6.9011
-Date: 2024-02-23
+Version: 0.6.9.9000
+Date: 2024-06-27
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -29,24 +29,25 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
-    formatters (>= 0.5.5.9005),
+    formatters (>= 0.5.8),
     magrittr (>= 1.5),
     methods,
     R (>= 2.10)
 Imports:
     checkmate (>= 2.1.0),
     htmltools (>= 0.5.4),
+    lifecycle (>= 0.2.0),
     stats,
     stringi (>= 1.6)
 Suggests:
-    broom (>= 0.7.10),
+    broom (>= 1.0.6),
     car (>= 3.0-13),
     dplyr (>= 1.0.5),
-    flextable (>= 0.8.4),
+    flextable (>= 0.9.5),
     knitr (>= 1.42),
     officer (>= 0.5.0),
     r2rtf (>= 0.3.2),
-    rmarkdown (>= 2.19),
+    rmarkdown (>= 2.23),
     survival (>= 3.3-1),
     testthat (>= 3.0.4),
     tibble (>= 3.2.1),
@@ -58,9 +59,9 @@ VignetteBuilder:
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
-    davidgohel/flextable, yihui/knitr, davidgohel/officer, Merck/r2rtf,
-    rstudio/rmarkdown, r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
-    r-lib/xml2
+    davidgohel/flextable, yihui/knitr, r-lib/lifecycle,
+    davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, r-lib/testthat,
+    tidyverse/tibble, tidyverse/tidyr, r-lib/withr, r-lib/xml2
 Encoding: UTF-8
 Language: en-US
 LazyData: true
@@ -74,7 +75,6 @@ Collate:
     'utils.R'
     'colby_constructors.R'
     'compare_rtables.R'
-    'deprecated.R'
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
@@ -82,6 +82,7 @@ Collate:
     'split_funs.R'
     'make_split_fun.R'
     'summary.R'
+    'package.R'
     'tree_accessors.R'
     'tt_afun_utils.R'
     'tt_compare_tables.R'

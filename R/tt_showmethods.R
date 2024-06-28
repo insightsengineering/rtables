@@ -27,10 +27,6 @@ treestruct <- function(obj, ind = 0L) {
   invisible(NULL)
 }
 
-
-
-
-
 setGeneric(
   "ploads_to_str",
   function(x, collapse = ":") standardGeneric("ploads_to_str")
@@ -68,14 +64,12 @@ setMethod(
   }
 )
 
-
 setMethod(
   "ploads_to_str", "ANY",
   function(x, collapse = ":") {
     paste(x)
   }
 )
-
 
 setGeneric("payloadmsg", function(spl) standardGeneric("payloadmsg"))
 
@@ -112,7 +106,6 @@ setMethod(
   function(spl) "all"
 )
 
-
 setMethod(
   "payloadmsg", "ANY",
   function(spl) {
@@ -131,7 +124,6 @@ spldesc <- function(spl, value = "") {
     payloadmsg
   )
 }
-
 
 layoutmsg <- function(obj) {
   ## if(!is(obj, "VLayoutNode"))
@@ -165,6 +157,55 @@ setMethod(
 )
 
 
+#' Display column tree structure
+#'
+#' Displays the tree structure of the columns of a
+#' table or column structure object.
+#'
+#' @inheritParams gen_args
+#'
+#' @return Nothing, called for its side effect of displaying
+#' a summary to the terminal.
+#'
+#' @examples
+#' lyt <- basic_table() %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("STRATA1") %>%
+#'   split_cols_by("SEX", nested = FALSE) %>%
+#'   analyze("AGE")
+#'
+#' tbl <- build_table(lyt, ex_adsl)
+#' coltree_structure(tbl)
+#' @export
+coltree_structure <- function(obj) {
+  ctree <- coltree(obj)
+  cat(layoutmsg2(ctree))
+}
+
+lastposmsg <- function(pos) {
+  spls <- pos_splits(pos)
+  splvals <- value_names(pos_splvals(pos))
+  indiv_msgs <- unlist(mapply(function(spl, valnm) paste(obj_name(spl), valnm, sep = ": "),
+    spl = spls,
+    valnm = splvals,
+    SIMPLIFY = FALSE
+  ))
+  paste(indiv_msgs, collapse = " -> ")
+}
+
+layoutmsg2 <- function(obj, level = 1) {
+  nm <- obj_name(obj)
+  pos <- tree_pos(obj)
+  nopos <- identical(pos, EmptyTreePos)
+
+  msg <- paste0(strrep(" ", times = 2 * (level - 1)), "[", nm, "] (", if (nopos) "no pos" else lastposmsg(pos), ")\n")
+  if (is(obj, "LayoutAxisTree")) {
+    kids <- tree_children(obj)
+    msg <- c(msg, unlist(lapply(kids, layoutmsg2, level = level + 1)))
+  }
+  msg
+}
+
 setGeneric("spltype_abbrev", function(obj) standardGeneric("spltype_abbrev"))
 
 setMethod(
@@ -176,7 +217,6 @@ setMethod(
   "spltype_abbrev", "VarLevWBaselineSplit",
   function(obj) paste("ref_group", obj@ref_group_value)
 )
-
 
 setMethod(
   "spltype_abbrev", "MultiVarSplit",
@@ -218,9 +258,6 @@ setMethod(
   function(obj) "** col-var analysis **"
 )
 
-
-
-
 docat_splitvec <- function(object, indent = 0) {
   if (indent > 0) {
     cat(rep(" ", times = indent), sep = "")
@@ -253,7 +290,6 @@ setMethod(
   }
 )
 
-
 docat_predataxis <- function(object, indent = 0) {
   lapply(object, docat_splitvec)
 }
@@ -267,7 +303,6 @@ setMethod(
   }
 )
 
-
 setMethod(
   "show", "PreDataRowLayout",
   function(object) {
@@ -276,7 +311,6 @@ setMethod(
     invisible(object)
   }
 )
-
 
 setMethod(
   "show", "PreDataTableLayouts",
@@ -313,7 +347,6 @@ setMethod(
   }
 )
 
-
 #' @rdname int_methods
 setMethod("print", "VTableTree", function(x, ...) {
   msg <- toString(x, ...)
@@ -326,7 +359,6 @@ setMethod("show", "VTableTree", function(object) {
   cat(toString(object))
   invisible(object)
 })
-
 
 setMethod("show", "TableRow", function(object) {
   cat(sprintf(

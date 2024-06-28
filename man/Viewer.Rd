@@ -2,22 +2,22 @@
 % Please edit documentation in R/Viewer.R
 \name{Viewer}
 \alias{Viewer}
-\title{Display an \code{\link{rtable}} object in the Viewer pane in RStudio or in a browser}
+\title{Display an \code{rtable} object in the Viewer pane in RStudio or in a browser}
 \usage{
 Viewer(x, y = NULL, ...)
 }
 \arguments{
-\item{x}{object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools} package)}
+\item{x}{(\code{rtable} or \code{shiny.tag})\cr an object of class \code{rtable} or \code{shiny.tag} (defined in \code{htmltools} package).}
 
-\item{y}{optional second argument of same type as \code{x}}
+\item{y}{(\code{rtable} or \code{shiny.tag})\cr optional second argument of same type as \code{x}.}
 
-\item{...}{arguments passed to \code{\link{as_html}}}
+\item{...}{arguments passed to \code{\link[=as_html]{as_html()}}.}
 }
 \value{
-not meaningful. Called for the side effect of opening a browser or viewer pane.
+Not meaningful. Called for the side effect of opening a browser or viewer pane.
 }
 \description{
-The table will be displayed using the bootstrap styling for tables.
+The table will be displayed using bootstrap styling.
 }
 \examples{
 if (interactive()) {
