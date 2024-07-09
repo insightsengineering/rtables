@@ -146,7 +146,7 @@ Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Pasz
 ## Presentations
 
 - R in Pharma 2023
-  - Generating Tables, Listings, and Graphs using NEST / [falcon](https://pharmaverse.github.io/falcon/) [[Video](https://www.youtube.com/watch?v=YPmbLPSYFYM)]
+  - Generating Tables, Listings, and Graphs using NEST / [cardinal](https://pharmaverse.github.io/cardinal/) [[Video](https://www.youtube.com/watch?v=YPmbLPSYFYM)]
   - BBS Session on Regulatory Submissions of Clinical Trials [[Video](https://www.youtube.com/watch?v=yZS4OBuJe_Q)]
 - R Medicine Virtual Conference 2023 [[Video](https://www.youtube.com/watch?v=sxFsavKI7s4)]
 - Advanced rtables Training 2023 [[Part 1 Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)] [[Part 2 Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)]
