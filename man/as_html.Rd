@@ -13,7 +13,8 @@ as_html(
   link_label = NULL,
   bold = c("header"),
   header_sep_line = TRUE,
-  no_spaces_between_cells = FALSE
+  no_spaces_between_cells = FALSE,
+  expand_newlines = FALSE
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ to \code{TRUE}.}
 
 \item{no_spaces_between_cells}{(\code{flag})\cr whether spaces between table cells should be collapsed. Defaults
 to \code{FALSE}.}
+
+\item{expand_newlines}{(\code{flag})\cr Defaults to \code{FALSE}, relying on \code{html} output to solve newline characters (\verb{\\n}).
+Doing this keeps the structure of the cells but may depend on the output device.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.
