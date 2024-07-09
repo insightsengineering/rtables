@@ -36,6 +36,8 @@ div_helper <- function(lst, class) {
 #'   to `TRUE`.
 #' @param no_spaces_between_cells (`flag`)\cr whether spaces between table cells should be collapsed. Defaults
 #'   to `FALSE`.
+#' @param expand_newlines (`flag`)\cr Defaults to `FALSE`, relying on `html` output to solve newline characters (`\n`).
+#'   Doing this keeps the structure of the cells but may depend on the output device.
 #'
 #' @importFrom htmltools tags
 #'
@@ -69,14 +71,15 @@ as_html <- function(x,
                     link_label = NULL,
                     bold = c("header"),
                     header_sep_line = TRUE,
-                    no_spaces_between_cells = FALSE) {
+                    no_spaces_between_cells = FALSE,
+                    expand_newlines = FALSE) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
 
   stopifnot(is(x, "VTableTree"))
 
-  mat <- matrix_form(x, indent_rownames = TRUE)
+  mat <- matrix_form(x, indent_rownames = TRUE, expand_newlines = expand_newlines)
 
   nlh <- mf_nlheader(mat)
   nc <- ncol(x) + 1
