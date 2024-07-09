@@ -102,7 +102,7 @@ test_that("as_html indentation is translated to rows with linebreaks", {
   tbl <- build_table(lyt, DM)
   
   # Resolves correctly \n
-  expect_silent(res <- as_html(tbl))
+  expect_silent(res <- as_html(tbl, expand_newlines = TRUE))
   expect_equal(
     as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[1]]),
     '<td style="text-align: left; padding-left: 3ch;"></td>'
