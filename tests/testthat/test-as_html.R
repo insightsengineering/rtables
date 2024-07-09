@@ -2,7 +2,7 @@ context("Exporting to HTML")
 
 test_that("as_html smoke test", {
   tmpf <- tempfile(fileext = ".html")
-  
+
   tbl <- tt_to_export()
   oldo <- options(viewer = identity)
   expect_silent(fl <- Viewer(tbl))
@@ -13,19 +13,19 @@ test_that("as_html smoke test", {
 
 test_that("as_html Viewer with newline test", {
   tmpf <- tempfile(fileext = ".html")
-  
+
   colfuns <- list(
     function(x) rcell(mean(x), format = "xx.x"),
     function(x) rcell(sd(x), format = "xx.x")
   )
   varlabs <- c("Mean Age", "SD\nLine Break!!! \nAge")
-  
+
   lyt <- basic_table() %>%
     split_cols_by_multivar(c("AGE", "AGE"), varlabels = varlabs) %>%
     analyze_colvars(afun = colfuns)
-  
+
   tbl_wrapping <- build_table(lyt, DM)
-  
+
   tbl_normal <- rtable(
     header = c("Treatement\nN=100", "Comparison\nN=300"),
     format = "xx (xx.xx%)",
@@ -96,11 +96,11 @@ test_that("as_html indentation is translated to rows with linebreaks", {
         val <- paste(mn)
       }
       in_rows(my_row_label = rcell(val,
-                                   format = "xx"
+        format = "xx"
       ))
     })
   tbl <- build_table(lyt, DM)
-  
+
   # Resolves correctly \n
   expect_silent(res <- as_html(tbl, expand_newlines = TRUE))
   expect_equal(
@@ -116,24 +116,24 @@ test_that("as_html indentation is translated to rows with linebreaks", {
 test_that("as_html expands or not newlines depending on expand_newlines", {
   # Table with both col/row names with newlines
   iris_mod <- iris %>%
-    mutate(Species2 = as.factor(paste0("General", "\n ", as.character(Species)))) %>% 
+    mutate(Species2 = as.factor(paste0("General", "\n ", as.character(Species)))) %>%
     mutate(Species = as.factor(sample(paste0("Petal", "\n ", as.character(Species)))))
-  
+
   # Also the statistic has a newline
   lyt <- basic_table() %>%
     split_cols_by("Species") %>%
-    split_rows_by("Species2") %>% 
+    split_rows_by("Species2") %>%
     analyze("Sepal.Length", afun = function(x) {
       list(
         "mean \n (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
         "range" = diff(range(x))
       )
     })
-  
+
   tbl <- build_table(lyt, iris_mod)
   thtml <- as_html(tbl)
   thtml_expanded_newlines <- as_html(tbl, expand_newlines = TRUE)
-  
+
   expect_true(grepl(as.character(thtml), pattern = "General\\n setosa"))
   expect_false(grepl(as.character(thtml_expanded_newlines), pattern = "General\\n setosa")) # diff cells!
 })
