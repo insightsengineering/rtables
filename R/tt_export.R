@@ -16,6 +16,8 @@ NULL
 #' @inheritParams gen_args
 #' @inheritParams data.frame_export
 #' @param file (`string`)\cr the path of the file to written to or read from.
+#' @param sep (`string`)\cr defaults to `\t`. See [utils::write.table()] for more details.
+#' @param ... (`any`)\cr additional arguments to be passed to [utils::write.table()].
 #'
 #' @return
 #' * `export_as_tsv` returns `NULL` silently.
@@ -27,9 +29,9 @@ NULL
 #' @rdname tsv_io
 #' @export
 export_as_tsv <- function(tt, file = NULL, path_fun = collapse_path,
-                          value_fun = collapse_values) {
+                          value_fun = collapse_values, sep = "\t", ...) {
   df <- path_enriched_df(tt, path_fun = path_fun, value_fun = value_fun)
-  write.table(df, file, sep = "\t")
+  write.table(df, file, sep = sep, ...)
 }
 
 #' @rdname tsv_io

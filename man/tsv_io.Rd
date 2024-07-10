@@ -9,7 +9,9 @@ export_as_tsv(
   tt,
   file = NULL,
   path_fun = collapse_path,
-  value_fun = collapse_values
+  value_fun = collapse_values,
+  sep = "\\t",
+  ...
 )
 
 import_from_tsv(file)
@@ -23,6 +25,10 @@ import_from_tsv(file)
 
 \item{value_fun}{(\code{function})\cr function to transform cell values into cells of a \code{data.frame}. Defaults to
 \code{collapse_values}, which creates strings where multi-valued cells are collapsed together, separated by \code{|}.}
+
+\item{sep}{(\code{string})\cr defaults to \verb{\\t}. See \code{\link[utils:write.table]{utils::write.table()}} for more details.}
+
+\item{...}{(\code{any})\cr additional arguments to be passed to \code{\link[utils:write.table]{utils::write.table()}}.}
 }
 \value{
 \itemize{

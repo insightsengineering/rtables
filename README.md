@@ -207,7 +207,7 @@ Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
 
 - R in Pharma 2023
   - Generating Tables, Listings, and Graphs using NEST /
-    [falcon](https://pharmaverse.github.io/falcon/)
+    [cardinal](https://pharmaverse.github.io/cardinal/)
     \[[Video](https://www.youtube.com/watch?v=YPmbLPSYFYM)\]
   - BBS Session on Regulatory Submissions of Clinical Trials
     \[[Video](https://www.youtube.com/watch?v=yZS4OBuJe_Q)\]

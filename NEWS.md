@@ -1,4 +1,9 @@
 ## rtables 0.6.9.9000
+### Bug Fixes
+ * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
+
+### Miscellaneous
+ * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
 
 ## rtables 0.6.9
 ### Miscellaneous
