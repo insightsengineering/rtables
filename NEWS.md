@@ -1,4 +1,4 @@
-## rtables 0.6.9.9000
+## rtables 0.6.9.9001
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
 
