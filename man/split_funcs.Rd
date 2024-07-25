@@ -2,17 +2,17 @@
 % Please edit documentation in R/split_funs.R
 \name{split_funcs}
 \alias{split_funcs}
-\alias{remove_split_levels}
 \alias{keep_split_levels}
+\alias{remove_split_levels}
 \alias{drop_split_levels}
 \alias{drop_and_remove_levels}
 \alias{reorder_split_levels}
 \alias{trim_levels_in_group}
 \title{Split functions}
 \usage{
-remove_split_levels(excl)
-
 keep_split_levels(only, reorder = TRUE)
+
+remove_split_levels(excl)
 
 drop_split_levels(df, spl, vals = NULL, labels = NULL, trim = FALSE)
 
@@ -23,13 +23,14 @@ reorder_split_levels(neworder, newlabels = neworder, drlevels = TRUE)
 trim_levels_in_group(innervar, drop_outlevs = TRUE)
 }
 \arguments{
-\item{excl}{(\code{character})\cr levels to be excluded (they will not be reflected in the resulting table structure
-regardless of presence in the data).}
-
-\item{only}{(\code{character})\cr levels to retain (all others will be dropped).}
+\item{only}{(\code{character})\cr levels to retain (all others will be dropped). If none of the levels is present
+an empty table is returned.}
 
 \item{reorder}{(\code{flag})\cr whether the order of \code{only} should be used as the order of the children of the
 split. Defaults to \code{TRUE}.}
+
+\item{excl}{(\code{character})\cr levels to be excluded (they will not be reflected in the resulting table structure
+regardless of presence in the data).}
 
 \item{df}{(\code{data.frame} or \code{tibble})\cr dataset.}
 
@@ -55,48 +56,40 @@ Defaults to \code{TRUE}.}
 variable, not \code{innervar}) should be dropped. Defaults to \code{TRUE}.}
 }
 \value{
-A closure suitable for use as a splitting function (\code{splfun}) when creating a table layout.
+A function that can be used to split the data accordingly. The actual function signature
+is similar to the one you can define when creating a fully custom one. For more details see \link{custom_split_funs}.
 }
 \description{
 Split functions
 }
-\section{Custom Splitting Function Details}{
+\section{Functions}{
+\itemize{
+\item \code{keep_split_levels()}: keeps only specified levels (\code{only}) in the split variable. If any of the specified
+levels is not present, an error is returned. \code{reorder = TRUE} (the default) orders the split levels
+according to the order of \code{only}.
 
+\item \code{remove_split_levels()}: Removes specified levels (\code{excl}) from the split variable.
 
-User-defined custom split functions can perform any type of computation on the incoming data provided that they
-meet the requirements for generating "splits" of the incoming data based on the split object.
+\item \code{drop_split_levels()}: Drops levels that have no representation in the data.
 
-Split functions are functions that accept:
-\describe{
-\item{df}{a \code{data.frame} of incoming data to be split.}
-\item{spl}{a Split object. This is largely an internal detail custom functions will not need to worry about,
-but \code{obj_name(spl)}, for example, will give the name of the split as it will appear in paths in the resulting
-table.}
-\item{vals}{any pre-calculated values. If given non-\code{NULL} values, the values returned should match these.
-Should be \code{NULL} in most cases and can usually be ignored.}
-\item{labels}{any pre-calculated value labels. Same as above for \code{values}.}
-\item{trim}{if \code{TRUE}, resulting splits that are empty are removed.}
-\item{(optional) .spl_context}{a \code{data.frame} describing previously performed splits which collectively
-arrived at \code{df}.}
-}
+\item \code{drop_and_remove_levels()}: Removes specified levels \code{excl} and drops all levels that are
+not in the data.
 
-The function must then output a named \code{list} with the following elements:
+\item \code{reorder_split_levels()}: Reorders split levels following \code{neworder}, which needs to be of
+same size as the levels in data.
 
-\describe{
-\item{values}{the vector of all values corresponding to the splits of \code{df}.}
-\item{datasplit}{a list of \code{data.frame}s representing the groupings of the actual observations from \code{df}.}
-\item{labels}{a character vector giving a string label for each value listed in the \code{values} element above.}
-\item{(optional) extras}{if present, extra arguments are to be passed to summary and analysis functions
-whenever they are executed on the corresponding element of \code{datasplit} or a subset thereof.}
-}
-
-One way to generate custom splitting functions is to wrap existing split functions and modify either the incoming
-data before they are called or their outputs.
-}
-
+}}
 \examples{
 lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
+  split_rows_by("COUNTRY",
+    split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
+  ) \%>\%
+  analyze("AGE")
+
+tbl <- build_table(lyt, DM)
+tbl
+
+lyt <- basic_table() \%>\%
   split_rows_by("COUNTRY",
     split_fun = remove_split_levels(c(
       "USA", "CAN",
@@ -109,29 +102,21 @@ tbl <- build_table(lyt, DM)
 tbl
 
 lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("COUNTRY",
-    split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
-  ) \%>\%
-  analyze("AGE")
-
-tbl <- build_table(lyt, DM)
-tbl
-
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
   split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
+# Removing "M" and "U" directly, then "UNDIFFERENTIATED" because not in data
 lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) \%>\%
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
+}
+\seealso{
+\link{custom_split_funs}
 }

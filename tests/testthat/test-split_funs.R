@@ -1,13 +1,90 @@
 context("Split Functions")
 
+# Default split functions ------------------------------------------------------
+test_that("keep_split_levels(reorder) works correctly", {
+  lyt <- basic_table() %>%
+    split_rows_by("COUNTRY",
+                  split_fun = keep_split_levels(c("JPN", "USA", "NGA"),
+                                                reorder = FALSE
+                  )
+    ) %>%
+    summarize_row_groups() # for simplicity
+  
+  tbl <- build_table(lyt, DM)
+  
+  expect_equal(
+    row.names(tbl),
+    c("USA", "NGA", "JPN")
+  )
+  
+  # reorder = TRUE
+  lyt <- basic_table() %>%
+    split_rows_by("COUNTRY",
+                  split_fun = keep_split_levels(c("JPN", "USA", "NGA"))
+    ) %>%
+    summarize_row_groups()
+  
+  tbl <- build_table(lyt, DM)
+  
+  expect_equal(
+    row.names(tbl),
+    c("JPN", "USA", "NGA")
+  )
+
+  # Error only during build
+  expect_silent(
+    lyt <- basic_table() %>%
+      split_rows_by("COUNTRY",
+                    split_fun = keep_split_levels(c("AbsentCountry", "USA", "NGA"))
+      ) %>%
+      summarize_row_groups()
+  )
+  expect_error(build_table(lyt, DM), "AbsentCountry")
+})
+
+test_that("reorder_split_levels() works", {
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("F", "PAK", "BRA"),
+        newlabels = c(CAN = "Canada", PAK = "Pakistan", BRA = "Brazil")
+      )
+    ) %>%
+    summarize_row_groups()
+  tab <- build_table(lyt, DM)
+  expect_identical(
+    c("Canada", "Mean", "Pakistan", "Mean", "Brazil", "Mean"),
+    row.names(tab)
+  )
+})
+
+## regression test (https://github.com/insightsengineering/rtables/issues/191)
+test_that("regression for reorder_split_levels(newlabels)", {
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    split_rows_by(
+      "COUNTRY",
+      split_fun = reorder_split_levels(
+        neworder = c("CAN", "PAK", "BRA"),
+        newlabels = c(CAN = "Canada", PAK = "Pakistan", BRA = "Brazil")
+      )
+    ) %>%
+    analyze("AGE")
+  tab <- build_table(lyt, ex_adsl)
+  expect_identical(
+    c("Canada", "Mean", "Pakistan", "Mean", "Brazil", "Mean"),
+    row.names(tab)
+  )
+})
+
 test_that("remove_split_levels works as expected with factor variables", {
   my_split_fun <- remove_split_levels(excl = "ASIAN")
 
-  stopifnot(is.factor(DM$RACE))
   l <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
-    summarize_row_groups(format = "xx")
+    summarize_row_groups()
 
   tab <- build_table(l, DM)
   expect_identical(
@@ -16,6 +93,13 @@ test_that("remove_split_levels works as expected with factor variables", {
   )
 
   expect_false("ASIAN" %in% row.names(tab))
+
+  # No error if not present
+  l <- basic_table() %>%
+    split_rows_by("RACE", split_fun = remove_split_levels("a")) %>%
+    summarize_row_groups()
+
+  expect_silent(tab <- build_table(l, DM))
 })
 
 test_that("remove_split_levels works as expected with character variables", {
@@ -196,7 +280,7 @@ test_that("trim_levels_in_group works", {
   )
 })
 
-
+# Custom functions works -------------------------------------------------------
 test_that("Custom functions in multivar splits work", {
   uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     ret <- do_base_split(spl, df, vals, labels, trim)
@@ -271,7 +355,18 @@ test_that("add_overall_level works", {
   )
 })
 
-test_that("split_rows_by_multivar works", {
+# split_rows_by_multivar works -------------------------------------------------
+test_that("split_rows_by_multivar and add_overall_level throw an error", {
+  expect_silent(
+    lyt <- basic_table() %>%
+      split_rows_by_multivar(c("SEX", "STRATA1"), split_fun = add_overall_level("TOT")) %>%
+      summarize_row_groups()
+  )
+  expect_error(
+    tbl1 <- build_table(lyt, DM),
+    "does not make sense"
+  )
+  
   lyt <- basic_table() %>%
     split_rows_by_multivar(c("SEX", "STRATA1")) %>%
     summarize_row_groups()
@@ -284,6 +379,7 @@ test_that("split_rows_by_multivar works", {
   )
 })
 
+# make_split_fun works ---------------------------------------------------------
 test_that("make_split_fun works", {
   mysplitfun <- make_split_fun(
     pre = list(drop_facet_levels),
@@ -434,48 +530,4 @@ test_that("spl_variable works", {
     build_table(lyt, DM),
     "Split class MultiVarSplit not associated with a single variable"
   )
-})
-
-## combo levels
-
-# default split functions ------------------------------------------------------
-test_that("keep_split_levels(reorder) works correctly", {
-  lyt <- basic_table() %>%
-    split_rows_by("COUNTRY",
-      split_fun = keep_split_levels(c("JPN", "USA", "NGA"),
-        reorder = FALSE
-      )
-    ) %>%
-    summarize_row_groups() # for simplicity
-
-  tbl <- build_table(lyt, DM)
-
-  expect_equal(
-    make_row_df(tbl)$label,
-    c("USA", "NGA", "JPN")
-  )
-
-  # reorder = TRUE
-  lyt <- basic_table() %>%
-    split_rows_by("COUNTRY",
-      split_fun = keep_split_levels(c("JPN", "USA", "NGA"))
-    ) %>%
-    summarize_row_groups()
-
-  tbl <- build_table(lyt, DM)
-
-  expect_equal(
-    make_row_df(tbl)$label,
-    c("JPN", "USA", "NGA")
-  )
-
-  # Error only during build
-  expect_silent(
-    lyt <- basic_table() %>%
-      split_rows_by("COUNTRY",
-        split_fun = keep_split_levels(c("AbsentCountry", "USA", "NGA"))
-      ) %>%
-      summarize_row_groups()
-  )
-  expect_error(build_table(lyt, DM), "AbsentCountry")
 })

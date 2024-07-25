@@ -1,4 +1,4 @@
-## Generics and how they are used directly -------------------------------------
+# Generics and how they are used directly -------------------------------------
 
 ## check_validsplit - Check if the split is valid for the data, error if not
 
@@ -720,14 +720,83 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 #' @name split_funcs
 NULL
 
-#' @describeIn split_funcs Removes specified levels (`excl`) from the split variable.
+# helper fncs
+.get_unique_levels <- function(vec) {
+  out <- if (is.factor(vec)) {
+    levels(vec)
+  } else {
+    unique(vec)
+  }
+  
+  out
+}
+
+.print_setdiff_error <- function(provided, existing) {
+   paste(setdiff(provided, existing), collapse = ", ")
+}
+
+#' @describeIn split_funcs keeps only specified levels (`only`) in the split variable. If any of the specified 
+#'   levels is not present, an error is returned. `reorder = TRUE` (the default) orders the split levels 
+#'   according to the order of `only`.
+#'
+#' @param only (`character`)\cr levels to retain (all others will be dropped). If none of the levels is present
+#'   an empty table is returned.
+#' @param reorder (`flag`)\cr whether the order of `only` should be used as the order of the children of the
+#'   split. Defaults to `TRUE`.
+#'
+#' @examples
+#' # keep_split_levels keeps specified levels (reorder = TRUE by default)
+#' lyt <- basic_table() %>%
+#'   split_rows_by("COUNTRY",
+#'     split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
+#'   ) %>%
+#'   analyze("AGE")
+#'
+#' tbl <- build_table(lyt, DM)
+#' tbl
+#'
+#' @export
+keep_split_levels <- function(only, reorder = TRUE) {
+  function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
+    var <- spl_payload(spl)
+    varvec <- df[[var]]
+    
+    # Unique values from the split variable
+    unique_vals <- .get_unique_levels(varvec)
+    
+    # Error in case not all levels are present
+    if (!all(only %in% unique_vals)) {
+      stop(
+        "Attempted to keep factor level(s) in split that are not present in data: \n",
+        .print_setdiff_error(only, unique_vals)
+      )
+    }
+    
+    df2 <- df[varvec %in% only, ]
+    if (reorder) {
+      df2[[var]] <- factor(df2[[var]], levels = only)
+    } else {
+      # Find original order of only
+      only <- unique_vals[sort(match(only, unique_vals))]
+    }
+    
+    spl_child_order(spl) <- only
+    .apply_split_inner(spl, df2,
+      vals = only,
+      labels = labels,
+      trim = trim
+    )
+  }
+}
+
+#' @describeIn split_funcs Removes specified levels (`excl`) from the split variable. Nothing done if not in data.
 #'
 #' @param excl (`character`)\cr levels to be excluded (they will not be reflected in the resulting table structure
 #'   regardless of presence in the data).
 #'
 #' @examples
+#' # remove_split_levels removes specified split levels
 #' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
 #'   split_rows_by("COUNTRY",
 #'     split_fun = remove_split_levels(c(
 #'       "USA", "CAN",
@@ -751,81 +820,24 @@ remove_split_levels <- function(excl) {
       df2[[var]] <- factor(df2[[var]], levels = levels)
     }
     .apply_split_inner(spl, df2,
-      vals = vals,
-      labels = labels,
-      trim = trim
+                       vals = vals,
+                       labels = labels,
+                       trim = trim
     )
   }
 }
 
-#' @describeIn split_funcs keeps only specified levels (`only`) in the split variable. If none of the levels is
-#'   present, an empty table is returned. `reorder = TRUE` (the default) orders the split levels according to
-#'   the order of `only`.
-#'
-#' @param only (`character`)\cr levels to retain (all others will be dropped). If none of the levels is present
-#'   an empty table is returned.
-#' @param reorder (`flag`)\cr whether the order of `only` should be used as the order of the children of the
-#'   split. Defaults to `TRUE`.
-#'
+#' @describeIn split_funcs Drops levels that have no representation in the data.
+#' 
 #' @examples
+#' # drop_split_levels drops levels that are not present in the data
 #' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("COUNTRY",
-#'     split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
-#'   ) %>%
-#'   analyze("AGE")
-#'
-#' tbl <- build_table(lyt, DM)
-#' tbl
-#'
-#' @export
-keep_split_levels <- function(only, reorder = TRUE) {
-  function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
-    var <- spl_payload(spl)
-    varvec <- df[[var]]
-    
-    # Unique values from the split variable
-    if (is.factor(varvec)) {
-      unique_vals <- levels(varvec)
-    } else {
-      unique_vals <- unique(varvec)
-    }
-    
-    # Error in case not all levels are present
-    if (!all(only %in% unique_vals)) {
-      stop(
-        "Attempted to keep factor level(s) in split that are not present in data: \n",
-        setdiff(only, unique_vals)
-      )
-    }
-    
-    df2 <- df[df[[var]] %in% only, ]
-    if (reorder) {
-      df2[[var]] <- factor(df2[[var]], levels = only)
-    } else {
-      # Find original order of only
-      only <- unique_vals[sort(match(only, unique_vals))]
-    }
-    
-    spl_child_order(spl) <- only
-    .apply_split_inner(spl, df2,
-      vals = only,
-      labels = labels,
-      trim = trim
-    )
-  }
-}
-
-#' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
 #'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' @rdname split_funcs
 #' @export
 drop_split_levels <- function(df,
                               spl,
@@ -847,16 +859,18 @@ drop_split_levels <- function(df,
   )
 }
 
+#' @describeIn split_funcs Removes specified levels `excl` and drops all levels that are
+#'   not in the data.
+#'   
 #' @examples
+#' # Removing "M" and "U" directly, then "UNDIFFERENTIATED" because not in data
 #' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
 #'   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) %>%
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#'
-#' @rdname split_funcs
+#' 
 #' @export
 drop_and_remove_levels <- function(excl) {
   stopifnot(is.character(excl))
@@ -874,35 +888,62 @@ drop_and_remove_levels <- function(excl) {
   }
 }
 
-#' @param neworder (`character`)\cr new order of factor levels.
-#' @param newlabels (`character`)\cr labels for (new order of) factor levels.
-#' @param drlevels (`flag`)\cr whether levels in the data which do not appear in `neworder` should be dropped.
-#'   Defaults to `TRUE`.
+#' @describeIn split_funcs Reorders split levels following `neworder`, which needs to be of
+#'   same size as the levels in data.
 #'
-#' @rdname split_funcs
+#' @param neworder (`character`)\cr new order of factor levels. All need to be present in the data.
+#'   To add empty levels, rely on pre-processing or create your [custom_split_funs].
+#' @param newlabels (`character`)\cr labels for (new order of) factor levels.
+#' @param drlevels (`flag`)\cr whether levels that are not in `neworder` should be dropped.
+#'   Default is `TRUE`.
+#'
 #' @export
 reorder_split_levels <- function(neworder,
                                  newlabels = neworder,
                                  drlevels = TRUE) {
-  if (length(neworder) != length(newlabels)) {
-    stop("Got mismatching lengths for neworder and newlabels.")
-  }
   function(df, spl, trim, ...) {
     df2 <- df
     valvec <- df2[[spl_payload(spl)]]
-    vals <- if (is.factor(valvec)) levels(valvec) else unique(valvec)
+    browser()
+
+    uni_vals <- .get_unique_levels(valvec)
+
+    # No sense adding things that are not present -> creating unexpected NAs
+    if (!all(neworder %in% uni_vals)) {
+      stop(
+        "Attempted to reorder factor levels in split that are not present in data: \n",
+        .print_setdiff_error(neworder, uni_vals)
+      )
+    }
+    
+    # Keeping all levels also from before if not dropped
     if (!drlevels) {
-      neworder <- c(neworder, setdiff(vals, neworder))
+      neworder <- c(neworder, setdiff(uni_vals, neworder))
     }
-    df2[[spl_payload(spl)]] <- factor(valvec, levels = neworder)
-    if (drlevels) {
-      orig_order <- neworder
-      df2[[spl_payload(spl)]] <- droplevels(df2[[spl_payload(spl)]])
-      neworder <- levels(df2[[spl_payload(spl)]])
-      newlabels <- newlabels[orig_order %in% neworder]
-    }
+    valvec <- factor(valvec, levels = neworder)
+    # if (drlevels) {
+    #   orig_order <- neworder
+    #   valvec <- droplevels(valvec) # This would also drop other things
+    #   neworder <- levels(valvec)
+    #   newlabels <- newlabels[orig_order %in% neworder]
+    # }
+    if (!is.null(names(newlabels)) {
+      if (any(!names(newlabels) %in% neworder)) {
+        stop(
+          "Got labels' names for levels that are not present:",
+          setdiff(names(newlabels), neworder)
+        )
+      }
+      # To be safe
+      newlabels <- newlabels[names(newlabels) %in% neworder] # sorting TODO
+    } else if (length(neworder) != length(newlabels)) {
+      stop("Got unnamed newlabels with different length than neworder. Either provide a named vector or")
+    } # TODO
     spl_child_order(spl) <- neworder
-    .apply_split_inner(spl, df2, vals = neworder, labels = newlabels, trim = trim)
+    .apply_split_inner(spl, df2, 
+                       vals = neworder, 
+                       labels = newlabels, 
+                       trim = trim)
   }
 }
 
