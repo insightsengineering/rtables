@@ -1,4 +1,4 @@
-## Generics and how they are used directly
+## Generics and how they are used directly -------------------------------------
 
 ## check_validsplit - Check if the split is valid for the data, error if not
 
@@ -37,7 +37,7 @@ setGeneric(
   ".applysplit_ref_vals",
   function(spl, df, vals) standardGeneric(".applysplit_ref_vals")
 )
-
+# Custom split fncs ------------------------------------------------------------
 #' Custom split functions
 #'
 #' Split functions provide the work-horse for `rtables`'s generalized partitioning. These functions accept a (sub)set
@@ -704,24 +704,27 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
     SIMPLIFY = FALSE
   )
 }
-
+# Split functions --------------------------------------------------------------
 #' Split functions
 #'
 #' @inheritParams sf_args
 #' @inheritParams gen_args
 #' @param vals (`ANY`)\cr for internal use only.
 #' @param labels (`character`)\cr labels to use for the remaining levels instead of the existing ones.
-#' @param excl (`character`)\cr levels to be excluded (they will not be reflected in the resulting table structure
-#'   regardless of presence in the data).
 #'
-#' @inheritSection custom_split_funs Custom Splitting Function Details
+#' @returns A function that can be used to split the data accordingly. The actual function signature
+#'   is similar to the one you can define when creating a fully custom one. For more details see [custom_split_funs].
 #'
-#' @inherit add_overall_level return
+#' @seealso [custom_split_funs]
 #'
 #' @name split_funcs
 NULL
 
-
+#' @describeIn split_funcs Removes specified levels (`excl`) from the split variable.
+#'
+#' @param excl (`character`)\cr levels to be excluded (they will not be reflected in the resulting table structure
+#'   regardless of presence in the data).
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -736,7 +739,6 @@ NULL
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' @rdname split_funcs
 #' @export
 remove_split_levels <- function(excl) {
   stopifnot(is.character(excl))
@@ -756,7 +758,12 @@ remove_split_levels <- function(excl) {
   }
 }
 
-#' @param only (`character`)\cr levels to retain (all others will be dropped).
+#' @describeIn split_funcs keeps only specified levels (`only`) in the split variable. If none of the levels is
+#'   present, an empty table is returned. `reorder = TRUE` (the default) orders the split levels according to
+#'   the order of `only`.
+#'
+#' @param only (`character`)\cr levels to retain (all others will be dropped). If none of the levels is present
+#'   an empty table is returned.
 #' @param reorder (`flag`)\cr whether the order of `only` should be used as the order of the children of the
 #'   split. Defaults to `TRUE`.
 #'
@@ -771,22 +778,35 @@ remove_split_levels <- function(excl) {
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' @rdname split_funcs
 #' @export
 keep_split_levels <- function(only, reorder = TRUE) {
   function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     var <- spl_payload(spl)
     varvec <- df[[var]]
-    if (is.factor(varvec) && !all(only %in% levels(varvec))) {
+    
+    # Unique values from the split variable
+    if (is.factor(varvec)) {
+      unique_vals <- levels(varvec)
+    } else {
+      unique_vals <- unique(varvec)
+    }
+    
+    # Error in case not all levels are present
+    if (!all(only %in% unique_vals)) {
       stop(
-        "Attempted to keep invalid factor level(s) in split ",
-        setdiff(only, levels(varvec))
+        "Attempted to keep factor level(s) in split that are not present in data: \n",
+        setdiff(only, unique_vals)
       )
     }
+    
     df2 <- df[df[[var]] %in% only, ]
     if (reorder) {
       df2[[var]] <- factor(df2[[var]], levels = only)
+    } else {
+      # Find original order of only
+      only <- unique_vals[sort(match(only, unique_vals))]
     }
+    
     spl_child_order(spl) <- only
     .apply_split_inner(spl, df2,
       vals = only,

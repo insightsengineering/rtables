@@ -437,3 +437,44 @@ test_that("spl_variable works", {
 })
 
 ## combo levels
+
+# default split functions ------------------------------------------------------
+test_that("keep_split_levels(reorder) works correctly", {
+  lyt <- basic_table() %>%
+    split_rows_by("COUNTRY",
+                  split_fun = keep_split_levels(c("JPN", "USA", "NGA"), 
+                                                reorder = FALSE)
+    ) %>%
+    summarize_row_groups() # for simplicity
+
+  tbl <- build_table(lyt, DM)
+  
+  expect_equal(
+    make_row_df(tbl)$label,
+    c("USA", "NGA", "JPN")
+  )
+  
+  # reorder = TRUE
+  lyt <- basic_table() %>%
+    split_rows_by("COUNTRY",
+                  split_fun = keep_split_levels(c("JPN", "USA", "NGA"))
+    ) %>%
+    summarize_row_groups()
+
+  tbl <- build_table(lyt, DM)
+  
+  expect_equal(
+    make_row_df(tbl)$label,
+    c("JPN", "USA", "NGA")
+  )
+  
+  # Error only during build
+  expect_silent(  
+    lyt <- basic_table() %>%
+                    split_rows_by("COUNTRY",
+                                  split_fun = keep_split_levels(c("AbsentCountry", "USA", "NGA"))
+                    ) %>%
+                    summarize_row_groups()
+                  )
+  expect_error(build_table(lyt, DM), "AbsentCountry")
+})
