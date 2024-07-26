@@ -1,13 +1,16 @@
 ## rtables 0.6.9.9002
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
+ * `keep_split_levels` throws now an error if the user requests to keep levels that are not present in data.
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
+ * Grouped split functions documentation into one page with precise descriptions
+ of each function and relative examples.
 
 ## rtables 0.6.9
 ### Miscellaneous
- * Update `col_counts` vignette wording, as CRAN macOS check failed. Raised the issue with the R-core team already. 
+ * Update `col_counts` vignette wording, as CRAN `macOS` check failed. Raised the issue with the R-core team already. 
 
 ## rtables 0.6.8
 ### New Features
