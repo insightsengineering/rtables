@@ -1,4 +1,7 @@
 ## rtables 0.6.9.9002
+### Features
+ * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
+
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
  * `keep_split_levels` throws now an error if the user requests to keep levels that are not present in data.
