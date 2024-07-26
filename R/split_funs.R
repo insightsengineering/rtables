@@ -895,7 +895,39 @@ drop_and_remove_levels <- function(excl) {
 #'   To add empty levels, rely on pre-processing or create your [custom_split_funs].
 #' @param newlabels (`character`)\cr labels for (new order of) factor levels.
 #' @param drlevels (`flag`)\cr whether levels that are not in `neworder` should be dropped.
-#'   Default is `TRUE`.
+#'   Default is `TRUE`. Note: `drlevels = TRUE` does not drop levels that are not originally in the data.
+#'   Rely on pre-processing or use a combination of split functions with [make_split_fun()] to also drop 
+#'   unused levels.
+#'   
+#' @examples
+#' # Reordering levels in split variable
+#' lyt <- basic_table() %>%
+#' split_rows_by(
+#'   "SEX",
+#'   split_fun = reorder_split_levels(
+#'     neworder = c("U", "F"),
+#'     newlabels = c(U = "Uu", `F` = "Female")
+#'   )
+#' ) %>%
+#' analyze("AGE")
+#' 
+#' tbl <- build_table(lyt, DM)
+#' tbl
+#' 
+#' # Reordering levels in split variable but keeping all the levels
+#' lyt <- basic_table() %>%
+#' split_rows_by(
+#'   "SEX",
+#'   split_fun = reorder_split_levels(
+#'     neworder = c("U", "F"),
+#'     newlabels = c("Uu", "Female"),
+#'     drlevels = FALSE
+#'   )
+#' ) %>%
+#' analyze("AGE")
+#' 
+#' tbl <- build_table(lyt, DM)
+#' tbl
 #'
 #' @export
 reorder_split_levels <- function(neworder,
@@ -904,28 +936,42 @@ reorder_split_levels <- function(neworder,
   function(df, spl, trim, ...) {
     df2 <- df
     valvec <- df2[[spl_payload(spl)]]
-    browser()
 
     uni_vals <- .get_unique_levels(valvec)
 
     # No sense adding things that are not present -> creating unexpected NAs
     if (!all(neworder %in% uni_vals)) {
       stop(
-        "Attempted to reorder factor levels in split that are not present in data: \n",
+        "Attempted to reorder factor levels in split that are not present in data:\n",
         .print_setdiff_error(neworder, uni_vals)
       )
     }
 
     # Keeping all levels also from before if not dropped
-    if (!drlevels) {
-      neworder <- c(neworder, setdiff(uni_vals, neworder))
+    diff_with_uni_vals <- setdiff(uni_vals, neworder)
+    if (!drlevels && length(diff_with_uni_vals) > 0) {
+      if (length(newlabels) > length(neworder)) {
+        stop(
+          "When keeping levels not in neworder (drlevels = FALSE), newlabels can ",
+          "affect only selected neworder, and not other levels.\n",
+          "Add labels for current neworder: ", paste0(neworder, collapse = ", ")
+        )
+      }
+      neworder <- c(neworder, diff_with_uni_vals)
+      if (is.null(names(newlabels))) {
+        newlabels <- c(newlabels, diff_with_uni_vals)
+      } else {
+        newlabels <- c(newlabels, setNames(diff_with_uni_vals, diff_with_uni_vals))
+      }
     }
+    
     valvec <- factor(valvec, levels = neworder)
-
+    
+    # Labels
     if (!is.null(names(newlabels))) {
       if (any(!names(newlabels) %in% neworder)) {
         stop(
-          "Got labels' names for levels that are not present:",
+          "Got labels' names for levels that are not present:\n",
           setdiff(names(newlabels), neworder)
         )
       }
@@ -934,11 +980,14 @@ reorder_split_levels <- function(neworder,
     } else if (length(neworder) != length(newlabels)) {
       stop(
         "Got unnamed newlabels with different length than neworder. ",
-        "Please provide names or make sure they are of the same length.",
+        "Please provide names or make sure they are of the same length.\n",
         "Current neworder: ", paste0(neworder, collapse = ", ")
       )
     }
+    
+    # Final values
     spl_child_order(spl) <- neworder
+    df2[[spl_payload(spl)]] <- valvec
     .apply_split_inner(spl, df2,
       vals = neworder,
       labels = newlabels,

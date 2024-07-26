@@ -42,20 +42,122 @@ test_that("keep_split_levels(reorder) works correctly", {
   expect_error(build_table(lyt, DM), "AbsentCountry")
 })
 
-test_that("reorder_split_levels() works", {
+test_that("reorder_split_levels(drlevels = TRUE) works", {
   lyt <- basic_table() %>%
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
-        neworder = c("F", "PAK", "BRA"),
-        newlabels = c(CAN = "Canada", PAK = "Pakistan", BRA = "Brazil")
+        neworder = c("U", "F"),
+        newlabels = c(U = "Uu", `F` = "Female")
       )
     ) %>%
     summarize_row_groups()
   tab <- build_table(lyt, DM)
+  
   expect_identical(
-    c("Canada", "Mean", "Pakistan", "Mean", "Brazil", "Mean"),
+    c("Uu", "Female"),
     row.names(tab)
+  )
+  
+  # Error when not present
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("U", "F", "NotPresent"),
+        newlabels = c(U = "Uu", `F` = "Female")
+      )
+    ) %>%
+    summarize_row_groups()
+  
+  expect_error(
+    tab <- build_table(lyt, DM),
+    "NotPresent"
+  )
+  
+  # Error when name not present
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("U", "F"),
+        newlabels = c(U = "Uu", Fem = "Female")
+      )
+    ) %>%
+    summarize_row_groups()
+  
+  expect_error(
+    tab <- build_table(lyt, DM),
+    "Fem"
+  )
+  
+  # Error when vector of different lengths
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("U", "F"),
+        newlabels = c("Uu", "Female", "NotPresent")
+      )
+    ) %>%
+    summarize_row_groups()
+  
+  expect_error(
+    tab <- build_table(lyt, DM),
+    "Current neworder"
+  )
+})
+
+test_that("reorder_split_levels(drlevels = FALSE) works", {
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("U", "F"),
+        newlabels = c(U = "Uu", `F` = "Female"),
+        drlevels = FALSE
+      )
+    ) %>%
+    summarize_row_groups()
+  tab <- build_table(lyt, DM)
+  
+  expect_identical(
+    c("Uu", "Female", "M", "UNDIFFERENTIATED"),
+    row.names(tab)
+  )
+  
+  # Error when newlabels too many
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("F", "U"),
+        newlabels = c(U = "Uu", `F` = "Female", "ThisNotGood"),
+        drlevels = FALSE
+      )
+    ) %>%
+    summarize_row_groups()
+  
+  expect_error(
+    tab <- build_table(lyt, DM),
+    "Add labels for current neworder"
+  )
+  
+  # Error when newlabels have empty "" names (but some names)
+  lyt <- basic_table() %>%
+    split_rows_by(
+      "SEX",
+      split_fun = reorder_split_levels(
+        neworder = c("F", "U"),
+        newlabels = c(U = "Uu", "Female"),
+        drlevels = FALSE
+      )
+    ) %>%
+    summarize_row_groups()
+  
+  expect_error(
+    tab <- build_table(lyt, DM),
+    "names for levels that are not present"
   )
 })
 
