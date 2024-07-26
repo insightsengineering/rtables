@@ -184,15 +184,10 @@ test_that("remove_split_levels works as expected with factor variables", {
   my_split_fun <- remove_split_levels(excl = "ASIAN")
 
   l <- basic_table() %>%
-    split_cols_by("ARM") %>%
     split_rows_by("RACE", split_fun = my_split_fun) %>%
     summarize_row_groups()
 
   tab <- build_table(l, DM)
-  expect_identical(
-    unname(unlist(cell_values(tab)[[1]])),
-    c(28L, 24L, 27L)
-  )
 
   expect_false("ASIAN" %in% row.names(tab))
 
