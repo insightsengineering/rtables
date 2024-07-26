@@ -921,24 +921,21 @@ reorder_split_levels <- function(neworder,
       neworder <- c(neworder, setdiff(uni_vals, neworder))
     }
     valvec <- factor(valvec, levels = neworder)
-    # if (drlevels) {
-    #   orig_order <- neworder
-    #   valvec <- droplevels(valvec) # This would also drop other things
-    #   neworder <- levels(valvec)
-    #   newlabels <- newlabels[orig_order %in% neworder]
-    # }
-    if (!is.null(names(newlabels)) {
+    
+    if (!is.null(names(newlabels))) {
       if (any(!names(newlabels) %in% neworder)) {
         stop(
           "Got labels' names for levels that are not present:",
           setdiff(names(newlabels), neworder)
         )
       }
-      # To be safe
-      newlabels <- newlabels[names(newlabels) %in% neworder] # sorting TODO
+      # To be safe: sorting by neworder
+      newlabels <- newlabels[sapply(names(newlabels), function(x) which(x == neworder))]
     } else if (length(neworder) != length(newlabels)) {
-      stop("Got unnamed newlabels with different length than neworder. Either provide a named vector or")
-    } # TODO
+      stop("Got unnamed newlabels with different length than neworder. ",
+           "Please provide names or make sure they are of the same length.",
+           "Current neworder: ", paste0(neworder, collapse = ", "))
+    }
     spl_child_order(spl) <- neworder
     .apply_split_inner(spl, df2, 
                        vals = neworder, 
