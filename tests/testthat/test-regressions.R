@@ -259,7 +259,7 @@ test_that("calls to make_afun within loop work correctly", {
 })
 
 
-test_that("keeping non-existent levels doesn't break internal machinery", {
+test_that("keeping non-existent levels doesn't break internal machinery but errors", {
   ANL <- DM
   ANL$COUNTRY <- as.character(ANL$COUNTRY)
 
@@ -272,17 +272,7 @@ test_that("keeping non-existent levels doesn't break internal machinery", {
     summarize_row_groups() %>%
     analyze("AGE")
 
-  result <- build_table(lyt, df = ANL)
-  expect_identical(dim(result), c(3L, 1L))
-  expect_identical(row.names(result), c("Mean", "ABC", "Mean"))
-  cbres <- cbind_rtables(result, result)
-  expect_identical(dim(cbres), c(3L, 2L))
-  expect_identical(row.names(cbres), c("Mean", "ABC", "Mean"))
-
-  ## because its a factor and "ABC" isn't a real level
-  expect_error(build_table(lyt, DM))
-
-  expect_error(cbind_rtables(result[-1, ], result[-3, ]), "Mismatching, non-empty row names")
+  expect_error(result <- build_table(lyt, df = ANL), "ABC")
 })
 
 test_that("add_overall_col with no col splits works", {

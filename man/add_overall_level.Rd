@@ -49,7 +49,8 @@ A splitting function (\code{splfun}) that adds or changes the levels of a split.
 }
 \description{
 \code{add_overall_level} is a split function that adds a global level to the current levels in the split. Similarly,
-\code{add_combo_df} uses a user-provided \code{data.frame} to define the combine the levels to be added. Consider defining
+\code{add_combo_df} uses a user-provided \code{data.frame} to define the combine the levels to be added. If you need a
+single overall column, after all splits, please check \code{\link[=add_overall_col]{add_overall_col()}}. Consider also defining
 your custom split function if you need more flexibility (see \link{custom_split_funs}).
 }
 \note{
