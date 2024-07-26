@@ -727,16 +727,16 @@ NULL
   } else {
     unique(vec)
   }
-  
+
   out
 }
 
 .print_setdiff_error <- function(provided, existing) {
-   paste(setdiff(provided, existing), collapse = ", ")
+  paste(setdiff(provided, existing), collapse = ", ")
 }
 
-#' @describeIn split_funcs keeps only specified levels (`only`) in the split variable. If any of the specified 
-#'   levels is not present, an error is returned. `reorder = TRUE` (the default) orders the split levels 
+#' @describeIn split_funcs keeps only specified levels (`only`) in the split variable. If any of the specified
+#'   levels is not present, an error is returned. `reorder = TRUE` (the default) orders the split levels
 #'   according to the order of `only`.
 #'
 #' @param only (`character`)\cr levels to retain (all others will be dropped). If none of the levels is present
@@ -760,10 +760,10 @@ keep_split_levels <- function(only, reorder = TRUE) {
   function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     var <- spl_payload(spl)
     varvec <- df[[var]]
-    
+
     # Unique values from the split variable
     unique_vals <- .get_unique_levels(varvec)
-    
+
     # Error in case not all levels are present
     if (!all(only %in% unique_vals)) {
       stop(
@@ -771,7 +771,7 @@ keep_split_levels <- function(only, reorder = TRUE) {
         .print_setdiff_error(only, unique_vals)
       )
     }
-    
+
     df2 <- df[varvec %in% only, ]
     if (reorder) {
       df2[[var]] <- factor(df2[[var]], levels = only)
@@ -779,7 +779,7 @@ keep_split_levels <- function(only, reorder = TRUE) {
       # Find original order of only
       only <- unique_vals[sort(match(only, unique_vals))]
     }
-    
+
     spl_child_order(spl) <- only
     .apply_split_inner(spl, df2,
       vals = only,
@@ -820,15 +820,15 @@ remove_split_levels <- function(excl) {
       df2[[var]] <- factor(df2[[var]], levels = levels)
     }
     .apply_split_inner(spl, df2,
-                       vals = vals,
-                       labels = labels,
-                       trim = trim
+      vals = vals,
+      labels = labels,
+      trim = trim
     )
   }
 }
 
 #' @describeIn split_funcs Drops levels that have no representation in the data.
-#' 
+#'
 #' @examples
 #' # drop_split_levels drops levels that are not present in the data
 #' lyt <- basic_table() %>%
@@ -861,7 +861,7 @@ drop_split_levels <- function(df,
 
 #' @describeIn split_funcs Removes specified levels `excl` and drops all levels that are
 #'   not in the data.
-#'   
+#'
 #' @examples
 #' # Removing "M" and "U" directly, then "UNDIFFERENTIATED" because not in data
 #' lyt <- basic_table() %>%
@@ -870,7 +870,7 @@ drop_split_levels <- function(df,
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#' 
+#'
 #' @export
 drop_and_remove_levels <- function(excl) {
   stopifnot(is.character(excl))
@@ -915,13 +915,13 @@ reorder_split_levels <- function(neworder,
         .print_setdiff_error(neworder, uni_vals)
       )
     }
-    
+
     # Keeping all levels also from before if not dropped
     if (!drlevels) {
       neworder <- c(neworder, setdiff(uni_vals, neworder))
     }
     valvec <- factor(valvec, levels = neworder)
-    
+
     if (!is.null(names(newlabels))) {
       if (any(!names(newlabels) %in% neworder)) {
         stop(
@@ -932,15 +932,18 @@ reorder_split_levels <- function(neworder,
       # To be safe: sorting by neworder
       newlabels <- newlabels[sapply(names(newlabels), function(x) which(x == neworder))]
     } else if (length(neworder) != length(newlabels)) {
-      stop("Got unnamed newlabels with different length than neworder. ",
-           "Please provide names or make sure they are of the same length.",
-           "Current neworder: ", paste0(neworder, collapse = ", "))
+      stop(
+        "Got unnamed newlabels with different length than neworder. ",
+        "Please provide names or make sure they are of the same length.",
+        "Current neworder: ", paste0(neworder, collapse = ", ")
+      )
     }
     spl_child_order(spl) <- neworder
-    .apply_split_inner(spl, df2, 
-                       vals = neworder, 
-                       labels = newlabels, 
-                       trim = trim)
+    .apply_split_inner(spl, df2,
+      vals = neworder,
+      labels = newlabels,
+      trim = trim
+    )
   }
 }
 
