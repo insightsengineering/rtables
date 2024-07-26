@@ -706,9 +706,9 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 }
 # Split functions --------------------------------------------------------------
 #' Split functions
-#' 
+#'
 #' @description
-#' This is a collection of useful, default split function that can help you in dividing the data, hence the 
+#' This is a collection of useful, default split function that can help you in dividing the data, hence the
 #' table rows or columns, into different parts or groups (splits). You can also create your own split function if you
 #' need to create a custom division as specific as you need. Please consider reading [custom_split_funs] if
 #' this is the case. Beyond this list of functions, you can also use [add_overall_levels()] and [add_combo_levels()]
@@ -725,7 +725,7 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 #'
 #' @note
 #' The following parameters are also documented here but they are only the default
-#' signature of a split function: `df` (data to be split), `spl` (split object), and `vals = NULL`, 
+#' signature of a split function: `df` (data to be split), `spl` (split object), and `vals = NULL`,
 #' `labels = NULL`, `trim = FALSE` (last three only for internal use). See [custom_split_funs] for more details
 #' and [make_split_fun()] for a more advanced API.
 #'
@@ -1011,15 +1011,15 @@ reorder_split_levels <- function(neworder,
   }
 }
 
-#' @describeIn split_funcs Takes the split groups and removes levels of `innervar` if not present in 
+#' @describeIn split_funcs Takes the split groups and removes levels of `innervar` if not present in
 #'   those split groups. If you want to specify a filter of possible combinations, please
 #'   consider using [trim_levels_to_map()].
-#' 
+#'
 #' @param innervar (`string`)\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
 #'   *separately within each grouping defined at this point in the structure*.
 #' @param drop_outlevs (`flag`)\cr whether empty levels in the variable being split on (i.e. the "outer"
 #'   variable, not `innervar`) should be dropped. Defaults to `TRUE`.
-#'   
+#'
 #' @examples
 #' # trim_levels_in_group() trims levels within each group defined by the split variable
 #' dat <- data.frame(
@@ -1031,12 +1031,13 @@ reorder_split_levels <- function(neworder,
 #'   analyze("col2") %>%
 #'   build_table(dat)
 #' tbl
-#' 
+#'
 #' @export
 trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
   myfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     if (!drop_outlevs) {
-      ret <- .apply_split_inner(spl, df, vals = vals,
+      ret <- .apply_split_inner(spl, df,
+        vals = vals,
         labels = labels, trim = trim
       )
     } else {
@@ -1100,7 +1101,7 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 }
 
 #' Add overall or combination levels to split groups
-#' 
+#'
 #' @description
 #' `add_overall_level` is a split function that adds a global level to the current levels in the split. Similarly,
 #' `add_combo_df` uses a user-provided `data.frame` to define the combine the levels to be added. Consider defining

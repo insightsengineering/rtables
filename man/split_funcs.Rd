@@ -64,12 +64,12 @@ A function that can be used to split the data accordingly. The actual function s
 is similar to the one you can define when creating a fully custom one. For more details see \link{custom_split_funs}.
 }
 \description{
-This is a collection of useful default split function that can help you in dividing the data, hence the table,
-into different parts or groups (splits). You can also create your own split function if you
+This is a collection of useful, default split function that can help you in dividing the data, hence the
+table rows or columns, into different parts or groups (splits). You can also create your own split function if you
 need to create a custom division as specific as you need. Please consider reading \link{custom_split_funs} if
-this is the case. Note that the following parameter are also documented here but they are only the default
-signature of a split function: \code{df} (data to be split), \code{spl} (split object), and \code{vals = NULL},
-\code{labels = NULL}, \code{trim = FALSE} (last three only for internal use).
+this is the case. Beyond this list of functions, you can also use \code{\link[=add_overall_levels]{add_overall_levels()}} and \code{\link[=add_combo_levels]{add_combo_levels()}}
+for adding or modifying levels and \code{\link[=trim_levels_to_map]{trim_levels_to_map()}} to provide possible level combinations to filter the split
+with.
 }
 \section{Functions}{
 \itemize{
@@ -92,6 +92,12 @@ those split groups. If you want to specify a filter of possible combinations, pl
 consider using \code{\link[=trim_levels_to_map]{trim_levels_to_map()}}.
 
 }}
+\note{
+The following parameters are also documented here but they are only the default
+signature of a split function: \code{df} (data to be split), \code{spl} (split object), and \code{vals = NULL},
+\code{labels = NULL}, \code{trim = FALSE} (last three only for internal use). See \link{custom_split_funs} for more details
+and \code{\link[=make_split_fun]{make_split_fun()}} for a more advanced API.
+}
 \examples{
 # keep_split_levels keeps specified levels (reorder = TRUE by default)
 lyt <- basic_table() \%>\%
@@ -174,7 +180,5 @@ tbl
 
 }
 \seealso{
-\link{custom_split_funs}
-
-\code{\link[=trim_levels_to_map]{trim_levels_to_map()}}
+\link{custom_split_funs}, \code{\link[=add_overall_levels]{add_overall_levels()}}, \code{\link[=add_combo_levels]{add_combo_levels()}}, and \code{\link[=trim_levels_to_map]{trim_levels_to_map()}}.
 }

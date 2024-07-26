@@ -4,28 +4,28 @@ context("Split Functions")
 test_that("keep_split_levels(reorder) works correctly", {
   lyt <- basic_table() %>%
     split_rows_by("COUNTRY",
-                  split_fun = keep_split_levels(c("JPN", "USA", "NGA"),
-                                                reorder = FALSE
-                  )
+      split_fun = keep_split_levels(c("JPN", "USA", "NGA"),
+        reorder = FALSE
+      )
     ) %>%
     summarize_row_groups() # for simplicity
-  
+
   tbl <- build_table(lyt, DM)
-  
+
   expect_equal(
     row.names(tbl),
     c("USA", "NGA", "JPN")
   )
-  
+
   # reorder = TRUE
   lyt <- basic_table() %>%
     split_rows_by("COUNTRY",
-                  split_fun = keep_split_levels(c("JPN", "USA", "NGA"))
+      split_fun = keep_split_levels(c("JPN", "USA", "NGA"))
     ) %>%
     summarize_row_groups()
-  
+
   tbl <- build_table(lyt, DM)
-  
+
   expect_equal(
     row.names(tbl),
     c("JPN", "USA", "NGA")
@@ -35,7 +35,7 @@ test_that("keep_split_levels(reorder) works correctly", {
   expect_silent(
     lyt <- basic_table() %>%
       split_rows_by("COUNTRY",
-                    split_fun = keep_split_levels(c("AbsentCountry", "USA", "NGA"))
+        split_fun = keep_split_levels(c("AbsentCountry", "USA", "NGA"))
       ) %>%
       summarize_row_groups()
   )
@@ -53,12 +53,12 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
     ) %>%
     summarize_row_groups()
   tab <- build_table(lyt, DM)
-  
+
   expect_identical(
     c("Uu", "Female"),
     row.names(tab)
   )
-  
+
   # Error when not present
   lyt <- basic_table() %>%
     split_rows_by(
@@ -69,12 +69,12 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
       )
     ) %>%
     summarize_row_groups()
-  
+
   expect_error(
     tab <- build_table(lyt, DM),
     "NotPresent"
   )
-  
+
   # Error when name not present
   lyt <- basic_table() %>%
     split_rows_by(
@@ -85,12 +85,12 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
       )
     ) %>%
     summarize_row_groups()
-  
+
   expect_error(
     tab <- build_table(lyt, DM),
     "Fem"
   )
-  
+
   # Error when vector of different lengths
   lyt <- basic_table() %>%
     split_rows_by(
@@ -101,7 +101,7 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
       )
     ) %>%
     summarize_row_groups()
-  
+
   expect_error(
     tab <- build_table(lyt, DM),
     "Current neworder"
@@ -120,12 +120,12 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
     ) %>%
     summarize_row_groups()
   tab <- build_table(lyt, DM)
-  
+
   expect_identical(
     c("Uu", "Female", "M", "UNDIFFERENTIATED"),
     row.names(tab)
   )
-  
+
   # Error when newlabels too many
   lyt <- basic_table() %>%
     split_rows_by(
@@ -137,12 +137,12 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
       )
     ) %>%
     summarize_row_groups()
-  
+
   expect_error(
     tab <- build_table(lyt, DM),
     "Add labels for current neworder"
   )
-  
+
   # Error when newlabels have empty "" names (but some names)
   lyt <- basic_table() %>%
     split_rows_by(
@@ -154,7 +154,7 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
       )
     ) %>%
     summarize_row_groups()
-  
+
   expect_error(
     tab <- build_table(lyt, DM),
     "names for levels that are not present"
@@ -461,15 +461,16 @@ test_that("add_overall_level works", {
 test_that("split_rows_by_multivar and add_overall_level throw an error", {
   expect_silent(
     lyt <- basic_table() %>%
-      split_rows_by_multivar(c("SEX", "STRATA1"), 
-                             split_fun = add_overall_level("TOT")) %>%
+      split_rows_by_multivar(c("SEX", "STRATA1"),
+        split_fun = add_overall_level("TOT")
+      ) %>%
       summarize_row_groups()
   )
   expect_error(
     tbl1 <- build_table(lyt, DM),
     "does not make sense"
   )
-  
+
   lyt <- basic_table() %>%
     split_rows_by_multivar(c("SEX", "STRATA1")) %>%
     summarize_row_groups()
