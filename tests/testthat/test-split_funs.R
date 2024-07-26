@@ -461,7 +461,8 @@ test_that("add_overall_level works", {
 test_that("split_rows_by_multivar and add_overall_level throw an error", {
   expect_silent(
     lyt <- basic_table() %>%
-      split_rows_by_multivar(c("SEX", "STRATA1"), split_fun = add_overall_level("TOT")) %>%
+      split_rows_by_multivar(c("SEX", "STRATA1"), 
+                             split_fun = add_overall_level("TOT")) %>%
       summarize_row_groups()
   )
   expect_error(

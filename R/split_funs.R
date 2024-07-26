@@ -706,6 +706,14 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 }
 # Split functions --------------------------------------------------------------
 #' Split functions
+#' 
+#' @description
+#' This is a collection of useful, default split function that can help you in dividing the data, hence the 
+#' table rows or columns, into different parts or groups (splits). You can also create your own split function if you
+#' need to create a custom division as specific as you need. Please consider reading [custom_split_funs] if
+#' this is the case. Beyond this list of functions, you can also use [add_overall_levels()] and [add_combo_levels()]
+#' for adding or modifying levels and [trim_levels_to_map()] to provide possible level combinations to filter the split
+#' with.
 #'
 #' @inheritParams sf_args
 #' @inheritParams gen_args
@@ -715,7 +723,13 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 #' @returns A function that can be used to split the data accordingly. The actual function signature
 #'   is similar to the one you can define when creating a fully custom one. For more details see [custom_split_funs].
 #'
-#' @seealso [custom_split_funs]
+#' @note
+#' The following parameters are also documented here but they are only the default
+#' signature of a split function: `df` (data to be split), `spl` (split object), and `vals = NULL`, 
+#' `labels = NULL`, `trim = FALSE` (last three only for internal use). See [custom_split_funs] for more details
+#' and [make_split_fun()] for a more advanced API.
+#'
+#' @seealso [custom_split_funs], [add_overall_levels()], [add_combo_levels()], and [trim_levels_to_map()].
 #'
 #' @name split_funcs
 NULL
@@ -893,39 +907,40 @@ drop_and_remove_levels <- function(excl) {
 #'
 #' @param neworder (`character`)\cr new order of factor levels. All need to be present in the data.
 #'   To add empty levels, rely on pre-processing or create your [custom_split_funs].
-#' @param newlabels (`character`)\cr labels for (new order of) factor levels.
+#' @param newlabels (`character`)\cr labels for (new order of) factor levels. If named, the levels are matched.
+#'   Otherwise, the order of `neworder` is used.
 #' @param drlevels (`flag`)\cr whether levels that are not in `neworder` should be dropped.
 #'   Default is `TRUE`. Note: `drlevels = TRUE` does not drop levels that are not originally in the data.
-#'   Rely on pre-processing or use a combination of split functions with [make_split_fun()] to also drop 
+#'   Rely on pre-processing or use a combination of split functions with [make_split_fun()] to also drop
 #'   unused levels.
-#'   
+#'
 #' @examples
 #' # Reordering levels in split variable
 #' lyt <- basic_table() %>%
-#' split_rows_by(
-#'   "SEX",
-#'   split_fun = reorder_split_levels(
-#'     neworder = c("U", "F"),
-#'     newlabels = c(U = "Uu", `F` = "Female")
-#'   )
-#' ) %>%
-#' analyze("AGE")
-#' 
+#'   split_rows_by(
+#'     "SEX",
+#'     split_fun = reorder_split_levels(
+#'       neworder = c("U", "F"),
+#'       newlabels = c(U = "Uu", `F` = "Female")
+#'     )
+#'   ) %>%
+#'   analyze("AGE")
+#'
 #' tbl <- build_table(lyt, DM)
 #' tbl
-#' 
+#'
 #' # Reordering levels in split variable but keeping all the levels
 #' lyt <- basic_table() %>%
-#' split_rows_by(
-#'   "SEX",
-#'   split_fun = reorder_split_levels(
-#'     neworder = c("U", "F"),
-#'     newlabels = c("Uu", "Female"),
-#'     drlevels = FALSE
-#'   )
-#' ) %>%
-#' analyze("AGE")
-#' 
+#'   split_rows_by(
+#'     "SEX",
+#'     split_fun = reorder_split_levels(
+#'       neworder = c("U", "F"),
+#'       newlabels = c("Uu", "Female"),
+#'       drlevels = FALSE
+#'     )
+#'   ) %>%
+#'   analyze("AGE")
+#'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
@@ -964,9 +979,9 @@ reorder_split_levels <- function(neworder,
         newlabels <- c(newlabels, setNames(diff_with_uni_vals, diff_with_uni_vals))
       }
     }
-    
+
     valvec <- factor(valvec, levels = neworder)
-    
+
     # Labels
     if (!is.null(names(newlabels))) {
       if (any(!names(newlabels) %in% neworder)) {
@@ -984,7 +999,7 @@ reorder_split_levels <- function(neworder,
         "Current neworder: ", paste0(neworder, collapse = ", ")
       )
     }
-    
+
     # Final values
     spl_child_order(spl) <- neworder
     df2[[spl_payload(spl)]] <- valvec
@@ -996,18 +1011,32 @@ reorder_split_levels <- function(neworder,
   }
 }
 
+#' @describeIn split_funcs Takes the split groups and removes levels of `innervar` if not present in 
+#'   those split groups. If you want to specify a filter of possible combinations, please
+#'   consider using [trim_levels_to_map()].
+#' 
 #' @param innervar (`string`)\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
 #'   *separately within each grouping defined at this point in the structure*.
 #' @param drop_outlevs (`flag`)\cr whether empty levels in the variable being split on (i.e. the "outer"
 #'   variable, not `innervar`) should be dropped. Defaults to `TRUE`.
-#'
-#' @rdname split_funcs
+#'   
+#' @examples
+#' # trim_levels_in_group() trims levels within each group defined by the split variable
+#' dat <- data.frame(
+#'   col1 = factor(c("A", "B", "C"), levels = c("A", "B", "C", "N")), # N is removed if drop_outlevs = TRUE
+#'   col2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x")) # x is removed always
+#' )
+#' tbl <- basic_table() %>%
+#'   split_rows_by("col1", split_fun = trim_levels_in_group("col2")) %>%
+#'   analyze("col2") %>%
+#'   build_table(dat)
+#' tbl
+#' 
 #' @export
 trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
   myfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
     if (!drop_outlevs) {
-      ret <- .apply_split_inner(spl, df,
-        vals = vals,
+      ret <- .apply_split_inner(spl, df, vals = vals,
         labels = labels, trim = trim
       )
     } else {
@@ -1038,6 +1067,8 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
   myfun
 }
 
+# add_combo_levels -------------------------------------------------------------
+# Dedicated docs are attached to default split functions
 .add_combo_part_info <- function(part,
                                  df,
                                  valuename,
@@ -1068,7 +1099,12 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
   part
 }
 
-#' Add a virtual "overall" level to split
+#' Add overall or combination levels to split groups
+#' 
+#' @description
+#' `add_overall_level` is a split function that adds a global level to the current levels in the split. Similarly,
+#' `add_combo_df` uses a user-provided `data.frame` to define the combine the levels to be added. Consider defining
+#' your custom split function if you need more flexibility (see [custom_split_funs]).
 #'
 #' @inheritParams lyt_args
 #' @inheritParams sf_args
@@ -1077,7 +1113,9 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #' @param first (`flag`)\cr whether the implicit level should appear first (`TRUE`) or last (`FALSE`). Defaults
 #'   to `TRUE`.
 #'
-#' @return A closure suitable for use as a splitting function (`splfun`) when creating a table layout.
+#' @return A splitting function (`splfun`) that adds or changes the levels of a split.
+#'
+#' @seealso [custom_split_funs] and [split_funcs].
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -1122,14 +1160,11 @@ add_overall_level <- function(valname = "Overall",
 setClass("AllLevelsSentinel", contains = "character")
 
 # nocov start
-#' @rdname add_combo_levels
+#' @rdname add_overall_level
 #' @export
 select_all_levels <- new("AllLevelsSentinel")
 # nocov end
 
-#' Add combination levels to split
-#'
-#' @inheritParams sf_args
 #' @param combosdf (`data.frame` or `tbl_df`)\cr a data frame with columns `valname`, `label`, `levelcombo`, and
 #'   `exargs`. `levelcombo` and `exargs` should be list columns. Passing the `select_all_levels` object as a value in
 #'   `comblevels` column indicates that an overall/all-observations level should be created.
@@ -1190,6 +1225,7 @@ select_all_levels <- new("AllLevelsSentinel")
 #' tbl3 <- build_table(lyt3, smallerDM)
 #' tbl3
 #'
+#' @rdname add_overall_level
 #' @export
 add_combo_levels <- function(combosdf,
                              trim = FALSE,
@@ -1262,7 +1298,7 @@ add_combo_levels <- function(combosdf,
 #'
 #' @return A function that can be used as a split function.
 #'
-#' @seealso [trim_levels_in_group()]
+#' @seealso [trim_levels_in_group()].
 #'
 #' @examples
 #' map <- data.frame(

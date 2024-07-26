@@ -47,5 +47,5 @@ tbl <- build_table(lyt, ex_adlb)
 
 }
 \seealso{
-\code{\link[=trim_levels_in_group]{trim_levels_in_group()}}
+\code{\link[=trim_levels_in_group]{trim_levels_in_group()}}.
 }

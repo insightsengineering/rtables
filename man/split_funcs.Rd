@@ -42,12 +42,16 @@ regardless of presence in the data).}
 
 \item{trim}{(\code{flag})\cr whether splits corresponding with 0 observations should be kept when tabulating.}
 
-\item{neworder}{(\code{character})\cr new order of factor levels.}
+\item{neworder}{(\code{character})\cr new order of factor levels. All need to be present in the data.
+To add empty levels, rely on pre-processing or create your \link{custom_split_funs}.}
 
-\item{newlabels}{(\code{character})\cr labels for (new order of) factor levels.}
+\item{newlabels}{(\code{character})\cr labels for (new order of) factor levels. If named, the levels are matched.
+Otherwise, the order of \code{neworder} is used.}
 
-\item{drlevels}{(\code{flag})\cr whether levels in the data which do not appear in \code{neworder} should be dropped.
-Defaults to \code{TRUE}.}
+\item{drlevels}{(\code{flag})\cr whether levels that are not in \code{neworder} should be dropped.
+Default is \code{TRUE}. Note: \code{drlevels = TRUE} does not drop levels that are not originally in the data.
+Rely on pre-processing or use a combination of split functions with \code{\link[=make_split_fun]{make_split_fun()}} to also drop
+unused levels.}
 
 \item{innervar}{(\code{string})\cr variable whose factor levels should be trimmed (e.g. empty levels dropped)
 \emph{separately within each grouping defined at this point in the structure}.}
@@ -60,7 +64,12 @@ A function that can be used to split the data accordingly. The actual function s
 is similar to the one you can define when creating a fully custom one. For more details see \link{custom_split_funs}.
 }
 \description{
-Split functions
+This is a collection of useful default split function that can help you in dividing the data, hence the table,
+into different parts or groups (splits). You can also create your own split function if you
+need to create a custom division as specific as you need. Please consider reading \link{custom_split_funs} if
+this is the case. Note that the following parameter are also documented here but they are only the default
+signature of a split function: \code{df} (data to be split), \code{spl} (split object), and \code{vals = NULL},
+\code{labels = NULL}, \code{trim = FALSE} (last three only for internal use).
 }
 \section{Functions}{
 \itemize{
@@ -68,7 +77,7 @@ Split functions
 levels is not present, an error is returned. \code{reorder = TRUE} (the default) orders the split levels
 according to the order of \code{only}.
 
-\item \code{remove_split_levels()}: Removes specified levels (\code{excl}) from the split variable.
+\item \code{remove_split_levels()}: Removes specified levels (\code{excl}) from the split variable. Nothing done if not in data.
 
 \item \code{drop_split_levels()}: Drops levels that have no representation in the data.
 
@@ -78,8 +87,13 @@ not in the data.
 \item \code{reorder_split_levels()}: Reorders split levels following \code{neworder}, which needs to be of
 same size as the levels in data.
 
+\item \code{trim_levels_in_group()}: Takes the split groups and removes levels of \code{innervar} if not present in
+those split groups. If you want to specify a filter of possible combinations, please
+consider using \code{\link[=trim_levels_to_map]{trim_levels_to_map()}}.
+
 }}
 \examples{
+# keep_split_levels keeps specified levels (reorder = TRUE by default)
 lyt <- basic_table() \%>\%
   split_rows_by("COUNTRY",
     split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
@@ -89,6 +103,7 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, DM)
 tbl
 
+# remove_split_levels removes specified split levels
 lyt <- basic_table() \%>\%
   split_rows_by("COUNTRY",
     split_fun = remove_split_levels(c(
@@ -101,6 +116,7 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, DM)
 tbl
 
+# drop_split_levels drops levels that are not present in the data
 lyt <- basic_table() \%>\%
   split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
   analyze("AGE")
@@ -116,7 +132,49 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, DM)
 tbl
 
+# Reordering levels in split variable
+lyt <- basic_table() \%>\%
+  split_rows_by(
+    "SEX",
+    split_fun = reorder_split_levels(
+      neworder = c("U", "F"),
+      newlabels = c(U = "Uu", `F` = "Female")
+    )
+  ) \%>\%
+  analyze("AGE")
+
+tbl <- build_table(lyt, DM)
+tbl
+
+# Reordering levels in split variable but keeping all the levels
+lyt <- basic_table() \%>\%
+  split_rows_by(
+    "SEX",
+    split_fun = reorder_split_levels(
+      neworder = c("U", "F"),
+      newlabels = c("Uu", "Female"),
+      drlevels = FALSE
+    )
+  ) \%>\%
+  analyze("AGE")
+
+tbl <- build_table(lyt, DM)
+tbl
+
+# trim_levels_in_group() trims levels within each group defined by the split variable
+dat <- data.frame(
+  col1 = factor(c("A", "B", "C"), levels = c("A", "B", "C", "N")), # N is removed if drop_outlevs = TRUE
+  col2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x")) # x is removed always
+)
+tbl <- basic_table() \%>\%
+  split_rows_by("col1", split_fun = trim_levels_in_group("col2")) \%>\%
+  analyze("col2") \%>\%
+  build_table(dat)
+tbl
+
 }
 \seealso{
 \link{custom_split_funs}
+
+\code{\link[=trim_levels_to_map]{trim_levels_to_map()}}
 }
