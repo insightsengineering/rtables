@@ -1105,7 +1105,7 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #'
 #' @description
 #' `add_overall_level` is a split function that adds a global level to the current levels in the split. Similarly,
-#' `add_combo_df` uses a user-provided `data.frame` to define the combine the levels to be added. If you need a 
+#' `add_combo_df` uses a user-provided `data.frame` to define the combine the levels to be added. If you need a
 #' single overall column, after all splits, please check [add_overall_col()]. Consider also defining
 #' your custom split function if you need more flexibility (see [custom_split_funs]).
 #'
