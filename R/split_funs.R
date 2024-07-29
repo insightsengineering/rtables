@@ -711,7 +711,7 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 #' This is a collection of useful, default split function that can help you in dividing the data, hence the
 #' table rows or columns, into different parts or groups (splits). You can also create your own split function if you
 #' need to create a custom division as specific as you need. Please consider reading [custom_split_funs] if
-#' this is the case. Beyond this list of functions, you can also use [add_overall_levels()] and [add_combo_levels()]
+#' this is the case. Beyond this list of functions, you can also use [add_overall_level()] and [add_combo_levels()]
 #' for adding or modifying levels and [trim_levels_to_map()] to provide possible level combinations to filter the split
 #' with.
 #'
@@ -729,7 +729,7 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 #' `labels = NULL`, `trim = FALSE` (last three only for internal use). See [custom_split_funs] for more details
 #' and [make_split_fun()] for a more advanced API.
 #'
-#' @seealso [custom_split_funs], [add_overall_levels()], [add_combo_levels()], and [trim_levels_to_map()].
+#' @seealso [custom_split_funs], [add_overall_level()], [add_combo_levels()], and [trim_levels_to_map()].
 #'
 #' @name split_funcs
 NULL

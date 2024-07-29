@@ -67,7 +67,7 @@ is similar to the one you can define when creating a fully custom one. For more 
 This is a collection of useful, default split function that can help you in dividing the data, hence the
 table rows or columns, into different parts or groups (splits). You can also create your own split function if you
 need to create a custom division as specific as you need. Please consider reading \link{custom_split_funs} if
-this is the case. Beyond this list of functions, you can also use \code{\link[=add_overall_levels]{add_overall_levels()}} and \code{\link[=add_combo_levels]{add_combo_levels()}}
+this is the case. Beyond this list of functions, you can also use \code{\link[=add_overall_level]{add_overall_level()}} and \code{\link[=add_combo_levels]{add_combo_levels()}}
 for adding or modifying levels and \code{\link[=trim_levels_to_map]{trim_levels_to_map()}} to provide possible level combinations to filter the split
 with.
 }
@@ -181,5 +181,5 @@ tbl
 
 }
 \seealso{
-\link{custom_split_funs}, \code{\link[=add_overall_levels]{add_overall_levels()}}, \code{\link[=add_combo_levels]{add_combo_levels()}}, and \code{\link[=trim_levels_to_map]{trim_levels_to_map()}}.
+\link{custom_split_funs}, \code{\link[=add_overall_level]{add_overall_level()}}, \code{\link[=add_combo_levels]{add_combo_levels()}}, and \code{\link[=trim_levels_to_map]{trim_levels_to_map()}}.
 }
