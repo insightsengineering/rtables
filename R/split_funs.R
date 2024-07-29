@@ -708,25 +708,25 @@ make_splvalue_vec <- function(vals, extrs = list(list()), labels = vals,
 #' Split functions
 #'
 #' @description
-#' This is a collection of useful default split functions that can help you to divide data, and therefore table rows or 
-#' columns, into different parts or groups (splits). Beyond this list of functions, you can also use 
-#' [add_overall_level()] and [add_combo_levels()] to add or modify levels, and [trim_levels_to_map()] to provide 
-#' possible level combinations to filter the split with. 
-#' 
-#' If needed, you can design your own split function to create custom divisions as specific as you would like. Please 
-#' consider reading [custom_split_funs] if this is the case. 
+#' This is a collection of useful default split functions that can help you to divide data, and therefore table rows or
+#' columns, into different parts or groups (splits). Beyond this list of functions, you can also use
+#' [add_overall_level()] and [add_combo_levels()] to add or modify levels, and [trim_levels_to_map()] to provide
+#' possible level combinations to filter the split with.
+#'
+#' If needed, you can design your own split function to create custom divisions as specific as you would like. Please
+#' consider reading [custom_split_funs] if this is the case.
 #'
 #' @inheritParams sf_args
 #' @inheritParams gen_args
 #' @param vals (`ANY`)\cr for internal use only.
 #' @param labels (`character`)\cr labels to use for the remaining levels instead of the existing ones.
 #'
-#' @returns A function that can be used to split data within a table. The signature of this function is similar to the 
+#' @returns A function that can be used to split data within a table. The signature of this function is similar to the
 #'   one defined when creating a custom split function (see [custom_split_funs] for more details).
 #'
 #' @note
 #' The following parameters for the default signature of a split function are documented here:
-#' `df` (data to be split), `spl` (split object), and, for internal use only, `vals`, `labels`, and `trim`. See 
+#' `df` (data to be split), `spl` (split object), and, for internal use only, `vals`, `labels`, and `trim`. See
 #' [custom_split_funs] for more details and [make_split_fun()] for a more advanced API.
 #'
 #' @seealso [custom_split_funs], [add_overall_level()], [add_combo_levels()], and [trim_levels_to_map()].
@@ -803,10 +803,10 @@ keep_split_levels <- function(only, reorder = TRUE) {
   }
 }
 
-#' @describeIn split_funcs Removes specified levels (`excl`) from the split variable. Does nothing if the specified 
+#' @describeIn split_funcs Removes specified levels (`excl`) from the split variable. Does nothing if the specified
 #'   levels are not present in the data.
 #'
-#' @param excl (`character`)\cr levels to be excluded. These levels will not be reflected in the resulting table 
+#' @param excl (`character`)\cr levels to be excluded. These levels will not be reflected in the resulting table
 #'   structure regardless of their presence in the data.
 #'
 #' @examples
@@ -902,7 +902,7 @@ drop_and_remove_levels <- function(excl) {
   }
 }
 
-#' @describeIn split_funcs Reorders split levels to follow `neworder`, which must be of the same length as the levels 
+#' @describeIn split_funcs Reorders split levels to follow `neworder`, which must be of the same length as the levels
 #'   in the data.
 #'
 #' @param neworder (`character`)\cr new order of factor levels. All must be present in the data.
@@ -911,7 +911,7 @@ drop_and_remove_levels <- function(excl) {
 #'   Otherwise, the order of `neworder` is used.
 #' @param drlevels (`flag`)\cr whether levels that are not in `neworder` should be dropped.
 #'   Default is `TRUE`. Note: `drlevels = TRUE` does not drop levels that are missing from the data.
-#'   To drop unused levels, rely on pre-processing or implement a combination of split functions (see 
+#'   To drop unused levels, rely on pre-processing or implement a combination of split functions (see
 #'   [make_split_fun()] for details).
 #'
 #' @examples
