@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0.905607147055366" branch-rate="0" lines-covered="7704" lines-valid="8507" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-07-29 08:15:58.754042">
+<coverage line-rate="0.905607147055366" branch-rate="0" lines-covered="7704" lines-valid="8507" branches-covered="0" branches-valid="0" complexity="0" version="3.6.4" timestamp="2024-07-29 22:53:40.482246">
   <sources>
     <source>/__w/rtables/rtables/rtables</source>
   </sources>
@@ -9787,36 +9787,36 @@
             </method>
             <method name="remove_split_levels" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="827" hits="29" branch="false"/>
                 <line number="828" hits="29" branch="false"/>
                 <line number="829" hits="29" branch="false"/>
                 <line number="830" hits="29" branch="false"/>
                 <line number="831" hits="29" branch="false"/>
-                <line number="832" hits="2" branch="false"/>
+                <line number="832" hits="29" branch="false"/>
                 <line number="833" hits="2" branch="false"/>
                 <line number="834" hits="2" branch="false"/>
-                <line number="835" hits="29" branch="false"/>
+                <line number="835" hits="2" branch="false"/>
                 <line number="836" hits="29" branch="false"/>
                 <line number="837" hits="29" branch="false"/>
                 <line number="838" hits="29" branch="false"/>
                 <line number="839" hits="29" branch="false"/>
                 <line number="840" hits="29" branch="false"/>
                 <line number="841" hits="29" branch="false"/>
+                <line number="842" hits="29" branch="false"/>
               </lines>
             </method>
             <method name="drop_split_levels" signature="" line-rate="1" branch-rate="0" complexity="0">
               <lines>
-                <line number="861" hits="168" branch="false"/>
                 <line number="862" hits="168" branch="false"/>
                 <line number="863" hits="168" branch="false"/>
                 <line number="864" hits="168" branch="false"/>
                 <line number="865" hits="168" branch="false"/>
                 <line number="866" hits="168" branch="false"/>
-                <line number="869" hits="168" branch="false"/>
+                <line number="867" hits="168" branch="false"/>
                 <line number="870" hits="168" branch="false"/>
                 <line number="871" hits="168" branch="false"/>
                 <line number="872" hits="168" branch="false"/>
                 <line number="873" hits="168" branch="false"/>
+                <line number="874" hits="168" branch="false"/>
               </lines>
             </method>
             <method name="drop_and_remove_levels" signature="" line-rate="1" branch-rate="0" complexity="0">
@@ -10374,32 +10374,32 @@
             <line number="801" hits="46" branch="false"/>
             <line number="802" hits="46" branch="false"/>
             <line number="803" hits="46" branch="false"/>
-            <line number="827" hits="29" branch="false"/>
             <line number="828" hits="29" branch="false"/>
             <line number="829" hits="29" branch="false"/>
             <line number="830" hits="29" branch="false"/>
             <line number="831" hits="29" branch="false"/>
-            <line number="832" hits="2" branch="false"/>
+            <line number="832" hits="29" branch="false"/>
             <line number="833" hits="2" branch="false"/>
             <line number="834" hits="2" branch="false"/>
-            <line number="835" hits="29" branch="false"/>
+            <line number="835" hits="2" branch="false"/>
             <line number="836" hits="29" branch="false"/>
             <line number="837" hits="29" branch="false"/>
             <line number="838" hits="29" branch="false"/>
             <line number="839" hits="29" branch="false"/>
             <line number="840" hits="29" branch="false"/>
             <line number="841" hits="29" branch="false"/>
-            <line number="861" hits="168" branch="false"/>
+            <line number="842" hits="29" branch="false"/>
             <line number="862" hits="168" branch="false"/>
             <line number="863" hits="168" branch="false"/>
             <line number="864" hits="168" branch="false"/>
             <line number="865" hits="168" branch="false"/>
             <line number="866" hits="168" branch="false"/>
-            <line number="869" hits="168" branch="false"/>
+            <line number="867" hits="168" branch="false"/>
             <line number="870" hits="168" branch="false"/>
             <line number="871" hits="168" branch="false"/>
             <line number="872" hits="168" branch="false"/>
             <line number="873" hits="168" branch="false"/>
+            <line number="874" hits="168" branch="false"/>
             <line number="890" hits="4" branch="false"/>
             <line number="891" hits="4" branch="false"/>
             <line number="892" hits="4" branch="false"/>
