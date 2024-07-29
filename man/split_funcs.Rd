@@ -169,9 +169,10 @@ tbl
 
 # trim_levels_in_group() trims levels within each group defined by the split variable
 dat <- data.frame(
-  col1 = factor(c("A", "B", "C"), levels = c("A", "B", "C", "N")), # N is removed if drop_outlevs = TRUE
-  col2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x")) # x is removed always
-)
+  col1 = factor(c("A", "B", "C"), levels = c("A", "B", "C", "N")), 
+  col2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
+) # N is removed if drop_outlevs = TRUE, x is removed always
+
 tbl <- basic_table() \%>\%
   split_rows_by("col1", split_fun = trim_levels_in_group("col2")) \%>\%
   analyze("col2") \%>\%
