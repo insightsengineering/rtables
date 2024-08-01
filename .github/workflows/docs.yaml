@@ -24,3 +24,4 @@ jobs:
     with:
       sd-direction: upstream
       default-landing-page: latest-tag
+      additional-unit-test-report-directories: unit-test-report-non-cran
