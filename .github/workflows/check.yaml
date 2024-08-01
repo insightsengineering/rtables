@@ -46,6 +46,8 @@ jobs:
     secrets:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
+      additional-env-vars: |
+        NOT_CRAN=true
       enforce-note-blocklist: true
       concurrency-group: non-cran
       unit-test-report-directory: unit-test-report-non-cran
