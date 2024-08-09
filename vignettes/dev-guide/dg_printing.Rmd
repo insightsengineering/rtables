@@ -235,20 +235,20 @@ setMethod(
       ncol = ncol(body)
     )
     
-    # Solve \n in titles
-    if (any(grepl("\n", all_titles(obj)))) {
-      if (any(grepl("\n", main_title(obj)))) {
-        tmp_title_vec <- .quick_handle_nl(main_title(obj))
-        main_title(obj) <- tmp_title_vec[1]
-        subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj)))
-      } else {
-        subtitles(obj) <- .quick_handle_nl(subtitles(obj))
-      }
-    }
-
-    # Solve \n in footers
-    main_footer(obj) <- .quick_handle_nl(main_footer(obj))
-    prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
+    # Solve \n in titles # This is something that is relevant in toString - NO MORE USED HERE
+    # if (any(grepl("\n", all_titles(obj)))) {
+    #   if (any(grepl("\n", main_title(obj)))) {
+    #     tmp_title_vec <- .quick_handle_nl(main_title(obj))
+    #     main_title(obj) <- tmp_title_vec[1]
+    #     subtitles(obj) <- c(tmp_title_vec[-1], .quick_handle_nl(subtitles(obj)))
+    #   } else {
+    #     subtitles(obj) <- .quick_handle_nl(subtitles(obj))
+    #   }
+    # }
+    # 
+    # # Solve \n in footers
+    # main_footer(obj) <- .quick_handle_nl(main_footer(obj))
+    # prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
 
     
     #-> this is still under development as indicated by xxx. The idea is to allow \n also in peculiar
