@@ -10,6 +10,7 @@
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
  * Grouped split functions documentation into one page with precise descriptions
  of each function and relative examples.
+ * Addition of developer's guide vignette about printing methods, specifically `matrix_form` and `toString`.
 
 ## rtables 0.6.9
 ### Miscellaneous

@@ -100,6 +100,7 @@ articles:
     - dev-guide/dg_split_machinery
     - dev-guide/dg_tabulation
     - dev-guide/dg_table_hierarchy
+    - dev-guide/dg_printing
     - dev-guide/dg_debug_rtables
     - dev-guide/dg_notes
 

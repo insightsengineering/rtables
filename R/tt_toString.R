@@ -361,13 +361,6 @@ ccvis_check_subtree <- function(ctree) {
   lapply(kids, ccvis_check_subtree)
   invisible(NULL)
 }
-.quick_handle_nl <- function(str_v) {
-  if (any(grepl("\n", str_v))) {
-    return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
-  } else {
-    return(str_v)
-  }
-}
 
 .resolve_fn_symbol <- function(fn) {
   if (!is(fn, "RefFootnote")) {
