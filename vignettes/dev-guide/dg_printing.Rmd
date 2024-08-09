@@ -1,25 +1,24 @@
 ---
 title: "Printing Machinery"
 author: "Davide Garolini"
-date: '`r Sys.Date()`'
-output:
-  html_document:
-    theme: spacelab
-    toc: true
-    toc_float:
-      collapsed: false
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Printing Machinery}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
 ```
 
 
 ## Disclaimer
 
-In comparison to other entries of the dev-guide, this is intended to keep track of the general concepts and processing pipeline behind the printing machinery. It is not intended to be a complete documentation of the machinery itself, but rather a collection of notes that can be used to understand the machinery and its internals. Hence, be aware that this is a working document that captures a snapshot of the machinery at a certain point in time. It is not meant to be fully maintained, but it can be used as a starting point for one. Differently from other parts of the dev-guide, this will contain the current state of `rlistings`' printing machinery, which is often a simplified version of the machinery that is used in `rtables`.
+In comparison to other entries of the developer guide, this is intended to keep track of the general concepts and processing pipeline behind the printing machinery. It is not intended to be a complete documentation of the machinery itself, but rather a collection of notes that can be used to understand the machinery and its internals. Hence, be aware that this is a working document that captures a snapshot of the machinery at a certain point in time. It is not meant to be fully maintained, but it can be used as a starting point for one. Differently from other parts of the developer guide, this will contain the current state of `rlistings`' printing machinery, which is often a simplified version of the machinery that is used in `rtables`.
 
 
 ### How `print` works
@@ -29,12 +28,12 @@ Lets track down what is going under the hood when a standard table is printed. T
 ```{r}
 library(rtables)
 library(dplyr)
-lyt <- basic_table() %>% 
-  split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>% 
-  split_cols_by("ARM") %>% 
-  analyze("BMRKR1") %>% 
+lyt <- basic_table() %>%
+  split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+  split_cols_by("ARM") %>%
+  analyze("BMRKR1") %>%
   print()
-tbl <- build_table(lyt, ex_adsl) %>% 
+tbl <- build_table(lyt, ex_adsl) %>%
   print()
 ```
 
@@ -57,7 +56,7 @@ setMethod(
 
 This was evident if we searched for methods associated with the class `PreDataTableLayouts`, where only `show` is connected to a sort of printing machinery:
 
-```{r, eval=TRUE}
+```{r}
 methods(class = "PreDataTableLayouts")
 ```
 
@@ -98,7 +97,7 @@ setMethod("toString", "VTableTree", function(x,
 })
 ```
 
-This is only a wrapper/dispatcher to the core toString function in `formatters`, beside the `indent_size` specification. This is based on the "rendering-ready" class `MatrixPrintForm` that is produced by `matrix_form`. The latter is the first core transformation that we need to know to understand the printing process. All exporters and printers are based on `MatrixPrintForm` objects, hence any bug or problem needs to tracked down to this function or `toString`. If we take a look at `toString` for `"listing_df"` in `rlistings`, we will find a shallow wrapper that dispatches to `MatrixPrintForm` objects:
+This is only a wrapper/dispatcher to the core `toString` function in `formatters`, beside the `indent_size` specification. This is based on the "rendering-ready" class `MatrixPrintForm` that is produced by `matrix_form`. The latter is the first core transformation that we need to know to understand the printing process. All exporters and printers are based on `MatrixPrintForm` objects, hence any bug or problem needs to tracked down to this function or `toString`. If we take a look at `toString` for `"listing_df"` in `rlistings`, we will find a shallow wrapper that dispatches to `MatrixPrintForm` objects:
 
 ```{r, eval=FALSE} 
 setMethod("toString", "listing_df", function(x, ...) {
@@ -124,21 +123,21 @@ setMethod(
            expand_newlines = TRUE,
            indent_size = 2) {
     stopifnot(is(obj, "VTableTree"))
-    
-    #-> Read .tbl_header_mat and subfunctions (based largely on cinfo) it can help for understanding 
-    #   column structure and how it is printed (we can add a description of this process xxx) 
+
+    #-> Read .tbl_header_mat and subfunctions (based largely on cinfo) it can help for understanding
+    #   column structure and how it is printed (we can add a description of this process xxx)
     #   Note: it contains the display of column counts directives and specifics
     header_content <- .tbl_header_mat(obj) # first col are for row.names or topleft info
     nr_header <- nrow(header_content$body) # colcounts were added in .tbl_header_mat
-    
+
     #-> As before, reading this function can help understanding how the content of the table is transformed
-    #   in row content and how the structure of the table is preserved in a compact manner. It is complex 
+    #   in row content and how the structure of the table is preserved in a compact manner. It is complex
     #   function as it is a recursive one with the different dispatcher but following how different section_div
     #   are printed (with the dedicated assignment function) can help understanding the table structure and its
     #   row-wise transformation.
     # Summary of row contents - reprint_inds specifies which rows to reprint (hence the grouping)
     sr <- make_row_df(obj)
-    
+
     # With get_formatted_cells we get relevant information inside the table tree
     body_content_strings <- if (NROW(sr) == 0) {
       character()
@@ -154,7 +153,7 @@ setMethod(
     } else {
       cbind("", get_formatted_cells(obj, shell = TRUE))
     }
-    
+
     #-> Here spans are extracted for each row. Spans are rarely modified beyond its standard values.
     # Takes the flatten spans for each row and repeats them according to the number elements
     tsptmp <- lapply(collect_leaves(obj, TRUE, TRUE), function(rr) {
@@ -210,7 +209,7 @@ setMethod(
         incr = indent_size
       )
     }
-    
+
     #-> referential strings are added to the table. get_ref_matrix is the core of this process
     #   along with format_fnote_ref that in this case is used to format the reference string and their
     #   indices. Note that the footnotes for the header is taken from the output of .tbl_header_mat
@@ -234,7 +233,7 @@ setMethod(
       nrow = nrow(body),
       ncol = ncol(body)
     )
-    
+
     # Solve \n in titles # This is something that is relevant in toString - NO MORE USED HERE
     # if (any(grepl("\n", all_titles(obj)))) {
     #   if (any(grepl("\n", main_title(obj)))) {
@@ -245,12 +244,12 @@ setMethod(
     #     subtitles(obj) <- .quick_handle_nl(subtitles(obj))
     #   }
     # }
-    # 
+    #
     # # Solve \n in footers
     # main_footer(obj) <- .quick_handle_nl(main_footer(obj))
     # prov_footer(obj) <- .quick_handle_nl(prov_footer(obj))
 
-    
+
     #-> this is still under development as indicated by xxx. The idea is to allow \n also in peculiar
     #   cases, such as page titles and referential footnotes. The latter are resolved in toString (pagination
     #   will not count them as more than one line each), while for the former we do not have any coverage yet.
@@ -266,7 +265,7 @@ setMethod(
       formats = formats,
       ## display = display, purely a function of spans, handled in constructor now
       row_info = sr, #-> FUNDAMENTAL: this is the data.frame that contains all the information about the rows
-                     #   it is the most complex data brought forward into toString
+      #   it is the most complex data brought forward into toString
       ## line_grouping handled internally now line_grouping = 1:nrow(body),
       ref_fnotes = ref_fnotes,
       nlines_header = nr_header, ## this is fixed internally
@@ -305,13 +304,13 @@ setMethod(
     ##  we intentionally silently ignore indent_rownames because listings have
     ## no rownames, but formatters::vert_pag_indices calls matrix_form(obj, TRUE)
     ## unconditionally.
-    
-    
+
+
     # Keeping only displayed columns
     cols <- attr(obj, "listing_dispcols") # this is the list of columns to be displayed
     listing <- obj[, cols]
     atts <- attributes(obj)
-    atts$names <- cols 
+    atts$names <- cols
     attributes(listing) <- atts
     keycols <- get_keycols(listing)
 
@@ -418,15 +417,15 @@ setMethod("toString", "MatrixPrintForm", function(x,
                                                   fontspec = font_spec(),
                                                   ttype_ok = FALSE) {
   # part 1: checks and widths/max width estimation for columns - propose_column_widths and .handle_max_width
-  # 
+  #
   # part 2: wrapping for the table - do_cell_fnotes_wrap
-  # 
+  #
   # part 3: column gap and cell widths calculations (after wrapping) - .calc_cell_widths
-  # 
+  #
   # part 4: collapse text body and wrapping titles/footers
-  # 
+  #
   # part 5: final cat()
-}
+})
 ```
 
 We rely on the future developer to fill in the blanks in the above description and to follow up the various functions to their core mechanics.
