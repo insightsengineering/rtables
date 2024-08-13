@@ -87,7 +87,8 @@ tbl <- build_table(lyt, ex_adsl)
 # See how section_properties_portrait function is built for custom
 \dontrun{
 tf <- tempfile(fileext = ".docx")
-export_as_docx(tbl, file = tf, 
+export_as_docx(tbl,
+  file = tf,
   section_properties = section_properties_default(orientation = "landscape")
 )
 }

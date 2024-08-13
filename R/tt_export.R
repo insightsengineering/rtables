@@ -606,7 +606,8 @@ formatters::export_as_pdf
 #' # See how section_properties_portrait function is built for custom
 #' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
-#' export_as_docx(tbl, file = tf, 
+#' export_as_docx(tbl,
+#'   file = tf,
 #'   section_properties = section_properties_default(orientation = "landscape")
 #' )
 #' }
@@ -701,11 +702,11 @@ add_text_par <- function(doc, chr_v, text_format) {
 
 #' @describeIn export_as_docx Helper function that defines standard portrait properties for tables.
 #' @param page_size (`character(1)`) page size. Can be `"letter"` or `"A4"`. Defaults to `"letter"`.
-#' @param orientation (`character(1)`) page orientation. Can be `"portrait"` or `"landscape"`. Defaults to 
+#' @param orientation (`character(1)`) page orientation. Can be `"portrait"` or `"landscape"`. Defaults to
 #'   `"portrait"`.
-#' 
+#'
 #' @export
-section_properties_default <- function(page_size = c("letter", "A4"), 
+section_properties_default <- function(page_size = c("letter", "A4"),
                                        orientation = c("portrait", "landscape")) {
   page_size <- page_size[1]
   orientation <- orientation[1]
@@ -717,7 +718,7 @@ section_properties_default <- function(page_size = c("letter", "A4"),
     orientation,
     eval(formals(section_properties_default)$orientation)
   )
-  
+
   if (page_size == "letter") {
     page_size <- officer::page_size(
       orient = orientation,
@@ -729,7 +730,7 @@ section_properties_default <- function(page_size = c("letter", "A4"),
       width = 8.27, height = 11.69
     )
   }
-  
+
   # Final output
   officer::prop_section(
     page_size = page_size,
@@ -1081,7 +1082,7 @@ theme_docx_default <- function(font = "Arial",
           # j = 1, # removed because I suppose we want alignment with body
           i = which(tbl_row_class == "ContentRow"),
           padding.top = 1, padding.bottom = 0, part = "body"
-        ) 
+        )
       }
     }
 
