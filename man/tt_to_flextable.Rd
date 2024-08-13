@@ -7,7 +7,7 @@
 \usage{
 tt_to_flextable(
   tt,
-  theme = theme_docx_default(tt),
+  theme = theme_docx_default(),
   border = flextable::fp_border_default(width = 0.5),
   indent_size = NULL,
   titles_as_header = TRUE,
@@ -24,7 +24,6 @@ tt_to_flextable(
 )
 
 theme_docx_default(
-  tt = NULL,
   font = "Arial",
   font_size = 9,
   bold = c("header", "content_rows", "label_rows"),
@@ -37,12 +36,12 @@ theme_docx_default(
 
 \item{theme}{(\code{function} or \code{NULL})\cr A theme function that is designed internally as a function of a \code{flextable}
 object to change its layout and style. If \code{NULL}, it will produce a table similar to \code{rtables} default. Defaults
-to \code{theme_docx_default(tt)}.}
+to \code{theme_docx_default()}.}
 
-\item{border}{(\code{officer} border object)\cr defaults to \code{officer::fp_border(width = 0.5)}.}
+\item{border}{(\code{flextable::fp_border()})\cr border style. Defaults to \code{flextable::fp_border_default(width = 0.5)}.}
 
-\item{indent_size}{(\code{integer(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[formatters:matrix_form]{formatters::matrix_form()}}
-\code{indent_size}) is used. To work with \code{docx}, any size is multiplied by 2 mm (5.67 pt) by default.}
+\item{indent_size}{(\code{numeric(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[formatters:matrix_form]{formatters::matrix_form()}}
+\code{indent_size}, default is 2) is used. To work with \code{docx}, any size is multiplied by 1 mm (2.83 pt) by default.}
 
 \item{titles_as_header}{(\code{flag})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
 as it makes additional header rows for \code{\link[formatters:title_footer]{formatters::main_title()}} string and \code{\link[formatters:title_footer]{formatters::subtitles()}} character
@@ -125,14 +124,14 @@ tbl <- build_table(lyt, ex_adsl)
 # rtables style
 tt_to_flextable(tbl, theme = NULL)
 
-tt_to_flextable(tbl, theme = theme_docx_default(tbl, font_size = 7))
+tt_to_flextable(tbl, theme = theme_docx_default(font_size = 5))
 
 # Custom theme
 special_bold <- list(
   "header" = list("i" = 1, "j" = c(1, 3)),
   "body" = list("i" = c(1, 2), "j" = 1)
 )
-custom_theme <- theme_docx_default(tbl,
+custom_theme <- theme_docx_default(
   font_size = 10,
   font = "Brush Script MT",
   border = flextable::fp_border_default(color = "pink", width = 2),

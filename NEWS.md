@@ -1,6 +1,9 @@
 ## rtables 0.6.9.9005
 ### Features
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
+ * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
+ * Reworked padding and spacinf in default theme `theme_docx_default()`.
+ * Refactored page size handling for `export_as_docx()`.
 
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
