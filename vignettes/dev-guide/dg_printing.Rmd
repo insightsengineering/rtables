@@ -18,7 +18,7 @@ knitr::opts_chunk$set(comment = "#")
 
 ## Disclaimer
 
-In comparison to other entries of the developer guide, this is intended to keep track of the general concepts and processing pipeline behind the printing machinery. It is not intended to be a complete documentation of the machinery itself, but rather a collection of notes that can be used to understand the machinery and its internals. Hence, be aware that this is a working document that captures a snapshot of the machinery at a certain point in time. It is not meant to be fully maintained, but it can be used as a starting point for one. Differently from other parts of the developer guide, this will contain the current state of `rlistings`' printing machinery, which is often a simplified version of the machinery that is used in `rtables`.
+In comparison to other entries of the developer guide, this is intended to keep track of the general concepts and processing pipeline behind the printing machinery. It is not intended to be a complete documentation of the machinery itself, but rather a collection of notes that can be used to understand the machinery and its internals. Hence, be aware that this is a working document that captures a snapshot of the machinery at a certain point in time. It is not meant to be fully maintained, but it can be used as a starting point for one. Compared to other parts of the developer guide, this will contain the current state of `rlistings`' printing machinery, which is often a simplified version of the machinery that is used in `rtables`.
 
 
 ### How `print` works
