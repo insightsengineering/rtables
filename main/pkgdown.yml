@@ -9,6 +9,7 @@ articles:
   custom_appearance: custom_appearance.html
   dev-guide/dg_debug_rtables: dev-guide/dg_debug_rtables.html
   dev-guide/dg_notes: dev-guide/dg_notes.html
+  dev-guide/dg_printing: dev-guide/dg_printing.html
   dev-guide/dg_split_machinery: dev-guide/dg_split_machinery.html
   dev-guide/dg_table_hierarchy: dev-guide/dg_table_hierarchy.html
   dev-guide/dg_tabulation: dev-guide/dg_tabulation.html
@@ -24,7 +25,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2024-08-06T14:31Z
+last_built: 2024-08-15T07:44Z
 urls:
   reference: https://insightsengineering.github.io/rtables/reference
   article: https://insightsengineering.github.io/rtables/articles
