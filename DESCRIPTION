@@ -78,7 +78,6 @@ Collate:
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
-    'simple_analysis.R'
     'custom_split_funs.R'
     'default_split_funs.R'
     'make_split_fun.R'
