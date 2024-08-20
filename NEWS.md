@@ -1,4 +1,4 @@
-## rtables 0.6.9.9006
+## rtables 0.6.9.9007
 ### Features
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
 
