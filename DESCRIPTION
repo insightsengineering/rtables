@@ -56,7 +56,7 @@ Suggests:
     xml2 (>= 1.1.0)
 VignetteBuilder:
     knitr,
-    rmakrdown
+    rmarkdown
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
