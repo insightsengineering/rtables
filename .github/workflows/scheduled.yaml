@@ -21,8 +21,8 @@ jobs:
       strategy: ${{ matrix.test-strategy }}
       additional-env-vars: |
         PKG_SYSREQS_DRY_RUN=true
-    extra-deps: |
-      xml2 (>= 1.1.0)
+      extra-deps: |
+        xml2 (>= 1.1.0)
   branch-cleanup:
     name: Branch Cleanup 🧹
     uses: insightsengineering/r.pkg.template/.github/workflows/branch-cleanup.yaml@main
