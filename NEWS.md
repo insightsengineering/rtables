@@ -1,4 +1,4 @@
-## rtables 0.6.9.9006
+## rtables 0.6.9.9007
 ### Features
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
  * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
@@ -14,6 +14,7 @@
  * Grouped split functions documentation into one page with precise descriptions
  of each function and relative examples.
  * Addition of developer's guide vignette about printing methods, specifically `matrix_form` and `toString`.
+ * Moved `simple_analysis` into utils file.
 
 ## rtables 0.6.9
 ### Miscellaneous

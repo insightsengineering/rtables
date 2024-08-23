@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.9.9006
-Date: 2024-08-15
+Version: 0.6.9.9007
+Date: 2024-08-20
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -78,7 +78,6 @@ Collate:
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
-    'simple_analysis.R'
     'custom_split_funs.R'
     'default_split_funs.R'
     'make_split_fun.R'
