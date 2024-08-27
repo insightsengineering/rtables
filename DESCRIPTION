@@ -60,7 +60,7 @@ Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
     davidgohel/flextable, yihui/knitr, r-lib/lifecycle,
-    davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, r-lib/testthat,
+    davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, therneau/survival, r-lib/testthat,
     tidyverse/tibble, tidyverse/tidyr, r-lib/withr, r-lib/xml2
 Encoding: UTF-8
 Language: en-US
