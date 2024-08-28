@@ -16,16 +16,16 @@ articles:
   example_analysis_coxreg: example_analysis_coxreg.html
   exploratory_analysis: exploratory_analysis.html
   format_precedence: format_precedence.html
-  introduction: introduction.html
   introspecting_tables: introspecting_tables.html
   manual_table_construction: manual_table_construction.html
+  rtables: rtables.html
   sorting_pruning: sorting_pruning.html
   split_functions: split_functions.html
   subsetting_tables: subsetting_tables.html
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2024-08-27T14:33Z
+last_built: 2024-08-28T14:28Z
 urls:
   reference: https://insightsengineering.github.io/rtables/reference
   article: https://insightsengineering.github.io/rtables/articles
