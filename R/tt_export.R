@@ -836,6 +836,7 @@ tt_to_flextable <- function(tt,
   checkmate::assert_flag(titles_as_header)
   checkmate::assert_flag(footers_as_text)
   checkmate::assert_flag(counts_in_newline)
+  left_right_fixed_margins <- word_mm_to_pt(1.9)
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
@@ -930,6 +931,10 @@ tt_to_flextable <- function(tt,
       )
     }
   }
+  
+  # Re-set the number of row count
+  nr_body <- flextable::nrow_part(flx, part = "body")
+  nr_header <- flextable::nrow_part(flx, part = "header")
 
   # Polish the inner horizontal borders from the header
   flx <- flx %>%
@@ -949,13 +954,32 @@ tt_to_flextable <- function(tt,
   } else {
     indent_size <- indent_size * word_mm_to_pt(1)
   }
-  for (i in seq_len(NROW(tt))) {
+  browser()
+  
+  # rdf contains information about indentation
+  for (i in seq_len(nr_body)) {
     flx <- flextable::padding(flx,
       i = i, j = 1,
-      padding.left = indent_size * rdf$indent[[i]] + word_mm_to_pt(1.9), # margin
-      padding.right = word_mm_to_pt(1.9) # 0.19 mmm in pt (so not to touch the border)
+      padding.left = indent_size * rdf$indent[[i]] + left_right_fixed_margins, # margins
+      padding.right = left_right_fixed_margins, # 0.19 mmm in pt (so not to touch the border)
+      part = "body"
     )
   }
+  
+  # TOPLEFT
+  # Principally used for topleft indentation, this is a bit of a hack xxx 
+  for (i in seq_len(nr_header)) {
+    leading_spaces_count <- nchar(hdr[i, 1]) - nchar(stringi::stri_replace(hdr[i, 1], regex = "^ +", ""))
+    header_indent_size <- leading_spaces_count * word_mm_to_pt(1)
+    flx <- flextable::padding(flx,
+      i = i, j = 1,
+      padding.left = header_indent_size + left_right_fixed_margins, # margins
+      padding.right = left_right_fixed_margins, # 0.19 mmm in pt (so not to touch the border)
+      part = "header"
+    )
+  }
+  # topleft styling (-> bottom aligned) xxx merge_at() could merge these, but let's see
+  flx <- flextable::valign(flx, j = 1, valign = "bottom", part = "header")
 
   # Adding referantial footer line separator if present
   if (length(matform$ref_footnotes) > 0 && isFALSE(footers_as_text)) {
@@ -973,7 +997,7 @@ tt_to_flextable <- function(tt,
   if (!is.null(theme)) {
     flx <- theme(
       flx,
-      tbl_ncol_body = NCOL(tt) + 1, # +1 for rownames
+      tbl_ncol_body = flextable::ncol_keys(flx), # NCOL(tt) + 1, # +1 for rownames
       tbl_row_class = make_row_df(tt)$node_class # These are ignored if not in the theme
     )
   }
@@ -1083,7 +1107,8 @@ theme_docx_default <- function(font = "Arial",
     # Vertical borders
     flx <- flx %>%
       flextable::border_outer(part = "body", border = border) %>%
-      flextable::border_outer(part = "header", border = border)
+      flextable::border_outer(part = "header", border = border) %>%
+      flextable::border_inner(part = "header", border = border) # xxx
 
     # Vertical alignment -> all top for now
     flx <- flx %>%
@@ -1144,6 +1169,11 @@ theme_docx_default <- function(font = "Arial",
       }
       flx <- flextable::bold(flx, j = 1, i = which(tbl_row_class == "LabelRow"), part = "body")
     }
+    # topleft information is also bold if content or label rows are bold
+    if (any(bold %in% c("content_rows", "label_rows"))) {
+      flx <- flextable::bold(flx, j = 1, part = "header")
+    }
+    
     # If you want specific cells to be bold
     if (!is.null(bold_manual)) {
       checkmate::assert_list(bold_manual)
@@ -1170,6 +1200,8 @@ theme_docx_default <- function(font = "Arial",
 }
 
 #' @describeIn tt_to_flextable Padding helper functions to transform mm to pt.
+#' @param mm (`numeric(1)`)\cr the value in mm to transform to pt.
+#' 
 #' @export
 word_mm_to_pt <- function(mm) {
   mm / 0.3527777778
