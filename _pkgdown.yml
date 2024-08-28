@@ -58,7 +58,7 @@ articles:
   - title: Getting Started
     navbar: Getting Started
     contents:
-    - introduction
+    - rtables
     - exploratory_analysis
 
   - title: Clinical Trials
