@@ -73,18 +73,18 @@ install.packages("rtables")
 or you can install the latest development version directly from GitHub with:
 
 ```r
-remotes::install_github("insightsengineering/formatters")
-remotes::install_github("insightsengineering/rtables")
+# install.packages("pak")
+pak::pak("insightsengineering/rtables")
 ```
-
-Note you might need to set your `GITHUB_PAT` environment variable in order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN releases) can be
 found in the [releases list](https://github.com/insightsengineering/rtables/releases).
 
+To understand how to use this package, please refer to the [Introduction to `rtables`](https://insightsengineering.github.io/rtables/latest-tag/articles/rtables.html) article, which provides multiple examples of code implementation.
+
 ## Cheatsheet
 
-<a href="https://github.com/insightsengineering/rtables/blob/main/inst/cheatsheet/rtables_cheatsheet_01-24.pdf"><img src="https://raw.githubusercontent.com/insightsengineering/rtables/main/inst/cheatsheet/rtables_cheatsheet_01-24_thumbs.png" width="630" height="247"/></a>  
+<a href="https://github.com/insightsengineering/rtables/blob/main/inst/cheatsheet/rtables_cheatsheet_01-24.pdf"><img src="https://raw.githubusercontent.com/insightsengineering/rtables/main/inst/cheatsheet/rtables_cheatsheet_01-24_thumbs.png" width="630" height="247"/></a>
 
 ## Usage
 
@@ -152,6 +152,6 @@ Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski, Nick Pasz
 - Advanced rtables Training 2023 [[Part 1 Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)] [[Part 2 Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)]
 - R in Pharma 2022 - Creating Submission-Quality Clinical Trial Reporting Tables in R with rtables [[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)] [[Video](https://www.youtube.com/watch?v=zBm_NZ0VtKs)]
 - R Consortium 2022
-  - R Adoption Series - Reporting Table Creation in R [[Video](https://www.youtube.com/watch?v=1i6vOId2h4A)] [[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)] 
+  - R Adoption Series - Reporting Table Creation in R [[Video](https://www.youtube.com/watch?v=1i6vOId2h4A)] [[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)]
   - Tables in Clinical Trials with R [[Book](https://rconsortium.github.io/rtrs-wg/)]
 - useR! 2020 - rtables Layouting and Tabulation Framework [[Video](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)]

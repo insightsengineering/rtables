@@ -86,16 +86,18 @@ or you can install the latest development version directly from GitHub
 with:
 
 ``` r
-remotes::install_github("insightsengineering/formatters")
-remotes::install_github("insightsengineering/rtables")
+# install.packages("pak")
+pak::pak("insightsengineering/rtables")
 ```
-
-Note you might need to set your `GITHUB_PAT` environment variable in
-order to be able to install from GitHub.
 
 Packaged releases (both those on CRAN and those between official CRAN
 releases) can be found in the [releases
 list](https://github.com/insightsengineering/rtables/releases).
+
+To understand how to use this package, please refer to the [Introduction
+to
+`rtables`](https://insightsengineering.github.io/rtables/latest-tag/articles/rtables.html)
+article, which provides multiple examples of code implementation.
 
 ## Cheatsheet
 
@@ -107,6 +109,8 @@ We first demonstrate with a demographic table-like example and then show
 the creation of a more complex table.
 
 ``` r
+print(getOption(("width")))
+#> [1] 300
 library(rtables)
 
 lyt <- basic_table() %>%
