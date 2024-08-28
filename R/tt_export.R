@@ -931,7 +931,7 @@ tt_to_flextable <- function(tt,
       )
     }
   }
-  
+
   # Re-set the number of row count
   nr_body <- flextable::nrow_part(flx, part = "body")
   nr_header <- flextable::nrow_part(flx, part = "header")
@@ -955,7 +955,7 @@ tt_to_flextable <- function(tt,
     indent_size <- indent_size * word_mm_to_pt(1)
   }
   browser()
-  
+
   # rdf contains information about indentation
   for (i in seq_len(nr_body)) {
     flx <- flextable::padding(flx,
@@ -965,9 +965,9 @@ tt_to_flextable <- function(tt,
       part = "body"
     )
   }
-  
+
   # TOPLEFT
-  # Principally used for topleft indentation, this is a bit of a hack xxx 
+  # Principally used for topleft indentation, this is a bit of a hack xxx
   for (i in seq_len(nr_header)) {
     leading_spaces_count <- nchar(hdr[i, 1]) - nchar(stringi::stri_replace(hdr[i, 1], regex = "^ +", ""))
     header_indent_size <- leading_spaces_count * word_mm_to_pt(1)
@@ -1173,7 +1173,7 @@ theme_docx_default <- function(font = "Arial",
     if (any(bold %in% c("content_rows", "label_rows"))) {
       flx <- flextable::bold(flx, j = 1, part = "header")
     }
-    
+
     # If you want specific cells to be bold
     if (!is.null(bold_manual)) {
       checkmate::assert_list(bold_manual)
@@ -1201,7 +1201,7 @@ theme_docx_default <- function(font = "Arial",
 
 #' @describeIn tt_to_flextable Padding helper functions to transform mm to pt.
 #' @param mm (`numeric(1)`)\cr the value in mm to transform to pt.
-#' 
+#'
 #' @export
 word_mm_to_pt <- function(mm) {
   mm / 0.3527777778
