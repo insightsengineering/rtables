@@ -80,7 +80,7 @@ pak::pak("insightsengineering/rtables")
 Packaged releases (both those on CRAN and those between official CRAN releases) can be
 found in the [releases list](https://github.com/insightsengineering/rtables/releases).
 
-To understand how to use this package, please refer to the [Introduction to `rtables`](https://insightsengineering.github.io/rtables/articles/rtables.html) article, which provides multiple examples of code implementation.
+To understand how to use this package, please refer to the [Introduction to `rtables`](https://insightsengineering.github.io/rtables/main/articles/rtables.html) article, which provides multiple examples of code implementation.
 
 ## Cheatsheet
 

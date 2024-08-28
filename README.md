@@ -96,7 +96,7 @@ list](https://github.com/insightsengineering/rtables/releases).
 
 To understand how to use this package, please refer to the [Introduction
 to
-`rtables`](https://insightsengineering.github.io/rtables/articles/rtables.html)
+`rtables`](https://insightsengineering.github.io/rtables/main/articles/rtables.html)
 article, which provides multiple examples of code implementation.
 
 ## Cheatsheet
