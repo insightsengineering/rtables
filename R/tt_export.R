@@ -954,7 +954,6 @@ tt_to_flextable <- function(tt,
   } else {
     indent_size <- indent_size * word_mm_to_pt(1)
   }
-  browser()
 
   # rdf contains information about indentation
   for (i in seq_len(nr_body)) {
