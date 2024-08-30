@@ -2,8 +2,7 @@
 % Please edit documentation in R/tt_export.R
 \name{export_as_docx}
 \alias{export_as_docx}
-\alias{section_properties_portrait}
-\alias{section_properties_landscape}
+\alias{section_properties_default}
 \alias{margins_potrait}
 \alias{margins_landscape}
 \title{Export as word document}
@@ -15,12 +14,14 @@ export_as_docx(
   titles_as_header = FALSE,
   footers_as_text = TRUE,
   template_file = NULL,
-  section_properties = NULL
+  section_properties = section_properties_default(),
+  ...
 )
 
-section_properties_portrait()
-
-section_properties_landscape()
+section_properties_default(
+  page_size = c("letter", "A4"),
+  orientation = c("portrait", "landscape")
+)
 
 margins_potrait()
 
@@ -48,7 +49,14 @@ paragraph after the table. The same style is applied, but with a smaller font.}
 document. Document attaches the table and uses the defaults defined in the template file.}
 
 \item{section_properties}{(\code{officer::prop_section})\cr an \code{\link[officer:prop_section]{officer::prop_section()}} object which sets margins and
-page size.}
+page size. Defaults to \code{section_properties_default()}.}
+
+\item{...}{(\code{any})\cr additional arguments passed to \code{\link[=tt_to_flextable]{tt_to_flextable()}}.}
+
+\item{page_size}{(\code{character(1)}) page size. Can be \code{"letter"} or \code{"A4"}. Defaults to \code{"letter"}.}
+
+\item{orientation}{(\code{character(1)}) page orientation. Can be \code{"portrait"} or \code{"landscape"}. Defaults to
+\code{"portrait"}.}
 }
 \description{
 From a table, produce a self-contained word document or attach it to a template word
@@ -57,9 +65,7 @@ the \code{officer} package.
 }
 \section{Functions}{
 \itemize{
-\item \code{section_properties_portrait()}: Helper function that defines standard portrait properties for tables.
-
-\item \code{section_properties_landscape()}: Helper function that defines standard landscape properties for tables.
+\item \code{section_properties_default()}: Helper function that defines standard portrait properties for tables.
 
 \item \code{margins_potrait()}: Helper function that defines standard portrait margins for tables.
 
@@ -81,7 +87,10 @@ tbl <- build_table(lyt, ex_adsl)
 # See how section_properties_portrait function is built for custom
 \dontrun{
 tf <- tempfile(fileext = ".docx")
-export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
+export_as_docx(tbl,
+  file = tf,
+  section_properties = section_properties_default(orientation = "landscape")
+)
 }
 
 }

@@ -3,11 +3,12 @@
 \name{tt_to_flextable}
 \alias{tt_to_flextable}
 \alias{theme_docx_default}
+\alias{word_mm_to_pt}
 \title{Create a \code{flextable} from an \code{rtables} table}
 \usage{
 tt_to_flextable(
   tt,
-  theme = theme_docx_default(tt),
+  theme = theme_docx_default(),
   border = flextable::fp_border_default(width = 0.5),
   indent_size = NULL,
   titles_as_header = TRUE,
@@ -24,25 +25,27 @@ tt_to_flextable(
 )
 
 theme_docx_default(
-  tt = NULL,
   font = "Arial",
   font_size = 9,
+  cell_margins = c(word_mm_to_pt(1.9), word_mm_to_pt(1.9), 0, 0),
   bold = c("header", "content_rows", "label_rows"),
   bold_manual = NULL,
   border = flextable::fp_border_default(width = 0.5)
 )
+
+word_mm_to_pt(mm)
 }
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{theme}{(\code{function} or \code{NULL})\cr A theme function that is designed internally as a function of a \code{flextable}
 object to change its layout and style. If \code{NULL}, it will produce a table similar to \code{rtables} default. Defaults
-to \code{theme_docx_default(tt)}.}
+to \code{theme_docx_default()}. See details for more information.}
 
-\item{border}{(\code{officer} border object)\cr defaults to \code{officer::fp_border(width = 0.5)}.}
+\item{border}{(\code{flextable::fp_border()})\cr border style. Defaults to \code{flextable::fp_border_default(width = 0.5)}.}
 
-\item{indent_size}{(\code{integer(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[formatters:matrix_form]{formatters::matrix_form()}}
-\code{indent_size}) is used. To work with \code{docx}, any size is multiplied by 2 mm (5.67 pt) by default.}
+\item{indent_size}{(\code{numeric(1)})\cr if \code{NULL}, the default indent size of the table (see \code{\link[formatters:matrix_form]{formatters::matrix_form()}}
+\code{indent_size}, default is 2) is used. To work with \code{docx}, any size is multiplied by 1 mm (2.83 pt) by default.}
 
 \item{titles_as_header}{(\code{flag})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained
 as it makes additional header rows for \code{\link[formatters:title_footer]{formatters::main_title()}} string and \code{\link[formatters:title_footer]{formatters::subtitles()}} character
@@ -84,12 +87,18 @@ used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{font_size}{(\code{integer(1)})\cr font size. Defaults to 9.}
 
+\item{cell_margins}{(\code{numeric(1)} or \code{numeric(4)})\cr a numeric or a vector of four numbers indicating
+\code{c("left", "right", "top", "bottom")}. It defaults to 0 for top and bottom, and to 0.19 \code{mm} in word \code{pt}
+for left and right.}
+
 \item{bold}{(\code{character})\cr parts of the table text that should be in bold. Can be any combination of
 \code{c("header", "content_rows", "label_rows")}. The first one renders all column names bold (not \code{topleft} content).
 The second and third option use \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to render content or/and label rows as bold.}
 
 \item{bold_manual}{(named \code{list} or \code{NULL})\cr list of index lists. See example for needed structure. Accepted
 groupings/names are \code{c("header", "body")}.}
+
+\item{mm}{(\code{numeric(1)})\cr the value in mm to transform to pt.}
 }
 \value{
 A \code{flextable} object.
@@ -99,9 +108,17 @@ Principally used for export (\code{\link[=export_as_docx]{export_as_docx()}}), t
 from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style will be used. Otherwise,
 \code{\link[=theme_docx_default]{theme_docx_default()}} will produce a \code{.docx}-friendly table.
 }
+\details{
+It is possible to use some hidden values for building your own theme. In particular, \code{tt_to_flextable}
+sends in the following variables \code{tbl_ncol_body = NCOL(tt)} and \code{tbl_row_class = make_row_df(tt)$node_class}.
+These are ignored if not used in the theme. See \code{theme_docx_default} for an example on own to retrieve
+these values and how to use them.
+}
 \section{Functions}{
 \itemize{
 \item \code{theme_docx_default()}: Main theme function for \code{\link[=export_as_docx]{export_as_docx()}}
+
+\item \code{word_mm_to_pt()}: Padding helper functions to transform mm to pt.
 
 }}
 \examples{
@@ -125,14 +142,14 @@ tbl <- build_table(lyt, ex_adsl)
 # rtables style
 tt_to_flextable(tbl, theme = NULL)
 
-tt_to_flextable(tbl, theme = theme_docx_default(tbl, font_size = 7))
+tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
 
 # Custom theme
 special_bold <- list(
   "header" = list("i" = 1, "j" = c(1, 3)),
   "body" = list("i" = c(1, 2), "j" = 1)
 )
-custom_theme <- theme_docx_default(tbl,
+custom_theme <- theme_docx_default(
   font_size = 10,
   font = "Brush Script MT",
   border = flextable::fp_border_default(color = "pink", width = 2),

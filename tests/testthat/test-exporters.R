@@ -267,7 +267,7 @@ test_that("Can create flextable object that works with different styles", {
     "header" = list("i" = c(1, 2), "j" = c(1, 3)),
     "body" = list("i" = c(1, 2), "j" = 1)
   )
-  custom_theme <- theme_docx_default(tbl,
+  custom_theme <- theme_docx_default(
     font_size = 10,
     font = "Brush Script MT",
     border = officer::fp_border(color = "pink", width = 2),
@@ -281,7 +281,7 @@ test_that("Can create flextable object that works with different styles", {
     "header" = list("asdai" = c(1, 2), "j" = c(1, 3)),
     "body" = list("i" = c(1, 2), "j" = 1)
   )
-  custom_theme <- theme_docx_default(tbl,
+  custom_theme <- theme_docx_default(
     font_size = 10,
     font = "Brush Script MT",
     bold = NULL,
@@ -339,18 +339,18 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
   expect_silent(export_as_docx(tbl,
     file = doc_file, doc_metadata = list("title" = "meh"),
     template_file = doc_file,
-    section_properties = section_properties_portrait()
+    section_properties = section_properties_default()
   ))
   # flx table in input
   expect_silent(export_as_docx(flex_tbl,
     file = doc_file, doc_metadata = list("title" = "meh"),
     template_file = doc_file,
-    section_properties = section_properties_portrait()
+    section_properties = section_properties_default(page_size = "A4")
   ))
   expect_silent(export_as_docx(tbl,
     file = doc_file, doc_metadata = list("title" = "meh"),
     template_file = doc_file,
-    section_properties = section_properties_landscape()
+    section_properties = section_properties_default(orientation = "landscape")
   ))
 
   expect_true(file.exists(doc_file))
