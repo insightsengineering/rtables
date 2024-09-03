@@ -163,9 +163,7 @@ tt_to_export <- export_fact()
 
 # Creating data-set with wide content to test wrapping
 tt_to_test_wrapping <- function() {
-  trimmed_data <- ex_adsl %>%
-    filter(SEX %in% c("M", "F")) %>%
-    filter(RACE %in% levels(RACE)[1:2])
+  trimmed_data <- ex_adsl[(ex_adsl$SEX %in% c("M", "F")) & c(ex_adsl$RACE %in% levels(ex_adsl$RACE)[1:2]),]
 
   levels(trimmed_data$ARM)[1] <- "Incredibly long column name to be wrapped"
   levels(trimmed_data$ARM)[2] <- "This_should_be_somewhere_split"
