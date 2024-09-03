@@ -1,7 +1,6 @@
 ## Loading relevant libraries for tests
 library(testthat)
 require(tibble, quietly = TRUE)
-library(rtables)
 require(dplyr, quietly = TRUE)
 
 # # Load and flag for pdftools to check for it
