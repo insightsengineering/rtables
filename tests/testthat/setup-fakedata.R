@@ -1,9 +1,8 @@
 ## Loading relevant libraries for tests
 library(testthat)
-library(xml2)
-library(tibble)
+require(tibble, quietly = TRUE)
 library(rtables)
-library(dplyr)
+require(dplyr, quietly = TRUE)
 
 # # Load and flag for pdftools to check for it
 # check_pdf <- require(pdftools)

@@ -1,6 +1,9 @@
 context("Exporting to HTML")
 
 test_that("as_html smoke test", {
+  require(xml2, quietly = TRUE)
+  skip_if_not_installed("xml2")
+  
   tmpf <- tempfile(fileext = ".html")
 
   tbl <- tt_to_export()
@@ -114,6 +117,9 @@ test_that("as_html indentation is translated to rows with linebreaks", {
 })
 
 test_that("as_html expands or not newlines depending on expand_newlines", {
+  require(dplyr, quietly = TRUE)
+  skip_if_not_installed("dplyr")
+  
   # Table with both col/row names with newlines
   iris_mod <- iris %>%
     mutate(Species2 = as.factor(paste0("General", "\n ", as.character(Species)))) %>%
