@@ -8,6 +8,7 @@
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
  * `keep_split_levels` throws now an error if the user requests to keep levels that are not present in data.
+ * Fixed issue with removal of horizontal lines in `tt_as_flextable` header when title was added.
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
