@@ -3,7 +3,7 @@ context("Analysis functions (afun)")
 test_that(".spl_context contains information about the column split", {
   require(dplyr, quietly = TRUE)
   skip_if_not_installed("dplyr")
-  
+
   ## Duplication hack -> This would need to use  split_cols_by_multivar(...)
   # Workaround for #690
   DM_tmp <- DM %>%
@@ -44,10 +44,10 @@ test_that(".spl_context contains information about the column split", {
 test_that(".spl_context and afun extra parameters contain information about combo counts", {
   require(tibble, quietly = TRUE)
   skip_if_not_installed("tibble")
-  
+
   require(dplyr, quietly = TRUE)
   skip_if_not_installed("dplyr")
-  
+
   ## Fix for https://github.com/insightsengineering/rtables/issues/517
   combodf <- tribble(
     ~valname, ~label, ~levelcombo, ~exargs,
@@ -228,7 +228,7 @@ test_that("Error localization for missing split variable when done in alt_count_
 test_that("Error localization for missmatch split variable when done in alt_count_df", {
   require(dplyr, quietly = TRUE)
   skip_if_not_installed("dplyr")
-  
+
   afun_tmp <- function(x, .alt_df_row, .spl_context, ...) {
     # Important check that order is aligned even if source levels are not
     check_val <- unique(.alt_df_row$ARMCD)
@@ -295,7 +295,7 @@ context("Content functions (cfun)")
 test_that(".alt_df_row appears in cfun but not in afun.", {
   require(dplyr, quietly = TRUE)
   skip_if_not_installed("dplyr")
-  
+
   # Adding STRATA2 col to DM for alt_counts_df col split
   alt_tmp <- DM %>% left_join(
     ex_adsl %>%
