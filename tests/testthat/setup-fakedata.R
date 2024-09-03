@@ -1,5 +1,4 @@
 ## Loading relevant libraries for tests
-library(testthat)
 require(tibble, quietly = TRUE)
 require(dplyr, quietly = TRUE)
 
