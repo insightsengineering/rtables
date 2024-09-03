@@ -474,7 +474,7 @@ select_all_levels <- new("AllLevelsSentinel")
 #' Analysis or summary functions for which the order matters should never be used within the tabulation framework.
 #'
 #' @examplesIf require(tibble)
-#' 
+#'
 #' library(tibble)
 #' combodf <- tribble(
 #'   ~valname, ~label, ~levelcombo, ~exargs,
