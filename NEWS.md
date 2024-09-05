@@ -4,6 +4,7 @@
  * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
  * Reworked padding and spacing in default theme `theme_docx_default()`.
  * Added top left information handling (now bold and bottom aligned).
+ * Now users can add more than one theme to `tt_to_flextable()`, so they can extend the default theme.
 
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
@@ -16,6 +17,7 @@
  of each function and relative examples.
  * Addition of developer's guide vignette about printing methods, specifically `matrix_form` and `toString`.
  * Moved `simple_analysis` into utils file.
+ * Added examples to `theme_docx_default()` showing how to extend the default theme.
 
 ## rtables 0.6.9
 ### Miscellaneous

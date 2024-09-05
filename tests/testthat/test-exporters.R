@@ -355,3 +355,19 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
 
   expect_true(file.exists(doc_file))
 })
+
+test_that("tt_to_flextable does not create different cells when colcounts (or multiple) on different lines", {
+  lyt <- basic_table(show_colcounts = TRUE) %>%
+    split_rows_by("ARM", label_pos = "topleft") %>%
+    split_rows_by("STRATA1", label_pos = "topleft") %>%
+    split_cols_by("STRATA1", split_fun = keep_split_levels("B"), show_colcounts = TRUE) %>%
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+    split_cols_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
+    analyze("AGE")
+  
+  tbl <- build_table(lyt, ex_adsl)
+  ft1 <- tt_to_flextable(tbl, counts_in_newline = FALSE)
+  ft2 <- tt_to_flextable(tbl, counts_in_newline = TRUE)
+  
+  expect_equal(flextable::nrow_part(ft1, "header"), flextable::nrow_part(ft2, "header"))
+})

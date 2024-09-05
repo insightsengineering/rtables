@@ -28,7 +28,7 @@ theme_docx_default(
   font = "Arial",
   font_size = 9,
   cell_margins = c(word_mm_to_pt(1.9), word_mm_to_pt(1.9), 0, 0),
-  bold = c("header", "content_rows", "label_rows"),
+  bold = c("header", "content_rows", "label_rows", "top_left"),
   bold_manual = NULL,
   border = flextable::fp_border_default(width = 0.5)
 )
@@ -92,8 +92,9 @@ used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 for left and right.}
 
 \item{bold}{(\code{character})\cr parts of the table text that should be in bold. Can be any combination of
-\code{c("header", "content_rows", "label_rows")}. The first one renders all column names bold (not \code{topleft} content).
-The second and third option use \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to render content or/and label rows as bold.}
+\code{c("header", "content_rows", "label_rows", "top_left")}. The first one renders all column names bold
+(not \code{topleft} content). The second and third option use \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to render content or/and
+label rows as bold.}
 
 \item{bold_manual}{(named \code{list} or \code{NULL})\cr list of index lists. See example for needed structure. Accepted
 groupings/names are \code{c("header", "body")}.}
@@ -110,8 +111,8 @@ from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style 
 }
 \details{
 It is possible to use some hidden values for building your own theme. In particular, \code{tt_to_flextable}
-sends in the following variables \code{tbl_ncol_body = NCOL(tt)} and \code{tbl_row_class = make_row_df(tt)$node_class}.
-These are ignored if not used in the theme. See \code{theme_docx_default} for an example on own to retrieve
+sends in the following variable \code{tbl_row_class = make_row_df(tt)$node_class}.
+This is ignored if not used in the theme. See \code{theme_docx_default} for an example on own to retrieve
 these values and how to use them.
 }
 \section{Functions}{

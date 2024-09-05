@@ -760,7 +760,7 @@ margins_landscape <- function() {
 #' @inheritParams paginate_table
 #' @param theme (`function` or `NULL`)\cr A theme function that is designed internally as a function of a `flextable`
 #'   object to change its layout and style. If `NULL`, it will produce a table similar to `rtables` default. Defaults
-#'   to `theme_docx_default()`. See details for more information.
+#'   to `theme_docx_default()` that is a classic Word output. See details for more information.
 #' @param border (`officer` border object)\cr defaults to `officer::fp_border(width = 0.5)`.
 #' @param indent_size (`numeric(1)`)\cr if `NULL`, the default indent size of the table (see [formatters::matrix_form()]
 #'   `indent_size`, default is 2) is used. To work with `docx`, any size is multiplied by 1 mm (2.83 pt) by default.
@@ -782,11 +782,14 @@ margins_landscape <- function() {
 #' @return A `flextable` object.
 #'
 #' @details
-#' It is possible to use some hidden values for building your own theme. In particular, `tt_to_flextable`
-#' sends in the following variable `tbl_row_class = make_row_df(tt)$node_class`.
+#' Themes can also be extended when you need only a minor change from a default style. You can either
+#' add your own theme to the theme call (e.g. `c(theme_docx_default(), my_theme)`) or create a new
+#' theme like shown in the examples. Please pay attention to the parameters' inputs as they are relevant
+#' for this to work properly.
+#' Indeed, it is possible to use some hidden values for building your own theme (hence the need of `...`). 
+#' In particular, `tt_to_flextable` sends in the following variable `tbl_row_class = make_row_df(tt)$node_class`.
 #' This is ignored if not used in the theme. See `theme_docx_default` for an example on own to retrieve
 #' these values and how to use them.
-#'
 #'
 #' @seealso [export_as_docx()]
 #'
@@ -812,6 +815,12 @@ margins_landscape <- function() {
 #' tt_to_flextable(tbl, theme = NULL)
 #'
 #' tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
+#' 
+#' # Example with multiple themes (only extending the docx default!)
+#' my_theme <- function(x, ...) {
+#'   border_inner(x, part = "body", border = flextable::fp_border_default(width = 0.5))
+#' }
+#' flx <- tt_to_flextable(tbl, theme = c(theme_docx_default(), my_theme)) 
 #'
 #' @export
 tt_to_flextable <- function(tt,
@@ -887,28 +896,58 @@ tt_to_flextable <- function(tt,
   # row with different columns -> All of this should be fixed at source (in matrix_form)
   # See .tbl_header_mat for this change
   if (hnum > 1) { # otherwise nothing to do
-    browser()
     det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
-    has_nclab <- apply(det_nclab, 1, any)
-    whsnc <- which(has_nclab) # which rows have it -> more than one is not supported
-    if (isFALSE(counts_in_newline) && any(has_nclab) && length(whsnc) == 1L) {
-      what_is_nclab <- det_nclab[whsnc, ]
-
-      # condition for popping the interested row by merging the upper one
-      hdr[whsnc, what_is_nclab] <- paste(hdr[whsnc - 1, what_is_nclab],
-        hdr[whsnc, what_is_nclab],
-        sep = " "
-      )
-      hdr[whsnc - 1, what_is_nclab] <- ""
-
-      # We can remove the row if they are all ""
-      row_to_pop <- whsnc - 1
-      if (all(!nzchar(hdr[row_to_pop, ]))) {
-        hdr <- hdr[-row_to_pop, , drop = FALSE]
-        spans <- spans[-row_to_pop, , drop = FALSE]
-        body <- body[-row_to_pop, , drop = FALSE]
-        mpf_aligns <- mpf_aligns[-row_to_pop, , drop = FALSE]
-        hnum <- hnum - 1
+    has_nclab <- apply(det_nclab, 1, any) # vector of rows with (N=xx)
+    whsnc <- which(has_nclab) # which rows have it
+    if (any(has_nclab)) {
+      for (i in seq_along(whsnc)) {
+        wi <- whsnc[i]
+        what_is_nclab <- det_nclab[wi, ] # extract detected row
+        
+        colcounts_split_chr <- if(isFALSE(counts_in_newline)) {
+          " "
+        } else {
+          "\n"
+        }
+  
+        # condition for popping the interested row by merging the upper one
+        hdr[wi, what_is_nclab] <- paste(hdr[wi - 1, what_is_nclab],
+          hdr[wi, what_is_nclab],
+          sep = colcounts_split_chr
+        )
+        hdr[wi - 1, what_is_nclab] <- ""
+  
+        # Removing unused rows if necessary
+        row_to_pop <- wi - 1
+        
+        # Case where topleft is not empty, we reconstruct the header pushing empty up
+        what_to_put_up <- hdr[row_to_pop, what_is_nclab, drop = FALSE]
+        if (all(!nzchar(what_to_put_up)) && row_to_pop > 1) {
+          reconstructed_hdr <- rbind(
+            cbind(
+              hdr[seq(row_to_pop), !what_is_nclab],
+              rbind(
+                what_to_put_up, 
+                hdr[seq(row_to_pop - 1), what_is_nclab]
+                )
+            ),
+            hdr[seq(row_to_pop + 1, nrow(hdr)), ]
+          )
+          row_to_pop <- 1
+          hdr <- reconstructed_hdr
+        }
+        
+        # We can remove the row if they are all ""
+        if (all(!nzchar(hdr[row_to_pop, ]))) {
+          hdr <- hdr[-row_to_pop, , drop = FALSE]
+          spans <- spans[-row_to_pop, , drop = FALSE]
+          body <- body[-row_to_pop, , drop = FALSE]
+          mpf_aligns <- mpf_aligns[-row_to_pop, , drop = FALSE]
+          hnum <- hnum - 1
+          # for multiple lines
+          whsnc <- whsnc - 1
+          det_nclab <- det_nclab[-row_to_pop, , drop = FALSE]
+        }
       }
     }
   }
@@ -995,12 +1034,17 @@ tt_to_flextable <- function(tt,
   flx <- flextable::width(flx, width = final_cwidths) # xxx to fix
 
   if (!is.null(theme)) {
-    flx <- theme(
-      flx,
-      tbl_row_class = make_row_df(tt)$node_class # These are ignored if not in the theme
-    )
+    # Wrap theme in a list if it's not already a list
+    theme_list <- if (is.list(theme)) theme else list(theme)
+    # Loop through the themes 
+    for (them in theme_list) {
+      flx <- them(
+        flx,
+        tbl_row_class = make_row_df(tt)$node_class # These are ignored if not in the theme
+      )
+    }
   }
-  browser()
+  
   # Title lines (after theme for problems with lines)
   if (titles_as_header && length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
     real_titles <- all_titles(tt)
@@ -1056,6 +1100,20 @@ tt_to_flextable <- function(tt,
 #'   border = flextable::fp_border_default(color = "pink", width = 2),
 #'   theme = custom_theme
 #' )
+#' 
+#' # Extending themes
+#' my_theme <- function(font_size = 6) { # here can pass additional arguments for default theme
+#'   function(flx, ...) {
+#'     # First apply theme_docx_default
+#'     flx <- theme_docx_default(font_size = font_size)(flx, ...)
+#'     
+#'     # Then apply additional styling
+#'     flx <- border_inner(flx, part = "body", border = flextable::fp_border_default(width = 0.5))
+#'     
+#'     return(flx)
+#'   }
+#' }
+#' flx <- tt_to_flextable(tbl, theme = my_theme()) 
 #'
 #' @export
 theme_docx_default <- function(font = "Arial",
