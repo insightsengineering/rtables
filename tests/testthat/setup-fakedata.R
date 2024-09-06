@@ -183,11 +183,11 @@ tt_for_wrap <- tt_to_test_wrapping()
 
 tt_to_test_newline_chars <- function() {
   set.seed(1)
-  DM_trick <- DM 
-  DM_trick$ARM = "ARM \n\nA\n"
-  DM_trick$ARM2 = sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),
-      replace = TRUE, nrow(DM)
-    ) # last \n is eaten up if no empty space
+  DM_trick <- DM
+  DM_trick$ARM <- "ARM \n\nA\n"
+  DM_trick$ARM2 <- sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),
+    replace = TRUE, nrow(DM)
+  ) # last \n is eaten up if no empty space
   levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
   tbl <- basic_table() %>%
     split_rows_by("SEX",
