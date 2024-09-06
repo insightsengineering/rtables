@@ -139,11 +139,15 @@ lyt <- basic_table(
   analyze("AGE", afun = analysisfun)
 
 tbl <- build_table(lyt, ex_adsl)
+
+\dontshow{if (require(flextable)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# example code
+
 # rtables style
 tt_to_flextable(tbl, theme = NULL)
 
 tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
-
+\dontshow{\}) # examplesIf}
 # Custom theme
 special_bold <- list(
   "header" = list("i" = 1, "j" = c(1, 3)),
