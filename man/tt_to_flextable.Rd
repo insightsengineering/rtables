@@ -141,6 +141,7 @@ lyt <- basic_table(
 tbl <- build_table(lyt, ex_adsl)
 
 \dontshow{if (require(flextable)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(flextable)
 # example code
 
 # rtables style
@@ -148,6 +149,8 @@ tt_to_flextable(tbl, theme = NULL)
 
 tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
 \dontshow{\}) # examplesIf}
+\dontshow{if (require(flextable)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(flextable)
 # Custom theme
 special_bold <- list(
   "header" = list("i" = 1, "j" = c(1, 3)),
@@ -164,7 +167,7 @@ tt_to_flextable(tbl,
   border = flextable::fp_border_default(color = "pink", width = 2),
   theme = custom_theme
 )
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=export_as_docx]{export_as_docx()}}
