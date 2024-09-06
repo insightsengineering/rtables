@@ -1,8 +1,8 @@
 context("Exporting to HTML")
 
 test_that("as_html smoke test", {
-  require(xml2, quietly = TRUE)
   skip_if_not_installed("xml2")
+  require(xml2, quietly = TRUE)
 
   tmpf <- tempfile(fileext = ".html")
 
