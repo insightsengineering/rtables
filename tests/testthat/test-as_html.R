@@ -15,6 +15,7 @@ test_that("as_html smoke test", {
 })
 
 test_that("as_html Viewer with newline test", {
+  skip_if_not_installed("xml2")
   tmpf <- tempfile(fileext = ".html")
 
   colfuns <- list(
