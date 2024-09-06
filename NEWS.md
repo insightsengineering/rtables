@@ -1,4 +1,4 @@
-## rtables 0.6.9.9011
+## rtables 0.6.9.9012
 ### Features
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
  * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
