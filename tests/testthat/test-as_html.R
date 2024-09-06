@@ -118,8 +118,8 @@ test_that("as_html indentation is translated to rows with linebreaks", {
 })
 
 test_that("as_html expands or not newlines depending on expand_newlines", {
-  require(dplyr, quietly = TRUE)
   skip_if_not_installed("dplyr")
+  require(dplyr, quietly = TRUE)
 
   # Table with both col/row names with newlines
   iris_mod <- iris %>%
