@@ -11,6 +11,20 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
+
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
 ```
@@ -81,7 +95,7 @@ label (spanning the same number of rows) when set to be visible.
 
 ## Setting Column Counts to Visible at Layout Time
 
-The primary way for users to create tables which displays these "high-level" 
+The primary way for users to create tables which displays these "high-level"
 column counts is to create a layout that specifies they should be visible.
 
 We do this with the new `show_colcounts` argument now accepted by all
@@ -112,7 +126,7 @@ tbl3 <- build_table(lyt3, ex_adsl)
 tbl3
 ```
 
-As before, these column counts are calculated at table creation time, using 
+As before, these column counts are calculated at table creation time, using
 `alt_counts_df` if it is provided (or simply `df` otherwise).
 
 Column formats are set at layout time via the `colcount_format` argument
@@ -134,7 +148,7 @@ facets.
 
 ### Setting individual column counts
 
-The `facet_colcount` getter and setter queries and sets the column count for a facet in column space (note it needs not be a leaf facet). E.g., 
+The `facet_colcount` getter and setter queries and sets the column count for a facet in column space (note it needs not be a leaf facet). E.g.,
 
 ```{r}
 facet_colcount(tbl3, c("ARM", "C: Combination"))

@@ -120,6 +120,7 @@ lyt2
 tbl2 <- build_table(lyt2, DM)
 tbl2
 
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # By default sequentially adding layouts results in nesting
 library(dplyr)
 
@@ -160,7 +161,7 @@ lyt5
 
 tbl5 <- build_table(lyt5, DM)
 tbl5
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Gabriel Becker

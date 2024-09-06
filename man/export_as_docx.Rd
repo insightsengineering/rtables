@@ -78,6 +78,8 @@ we suggest that you use \code{\link[=tt_to_flextable]{tt_to_flextable()}} prior 
 \code{footer_as_text} parameters must be re-specified if the table is changed first using \code{\link[=tt_to_flextable]{tt_to_flextable()}}.
 }
 \examples{
+\dontshow{if (require(flextable)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(flextable)
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%
   analyze(c("AGE", "BMRKR2", "COUNTRY"))
@@ -85,14 +87,12 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, ex_adsl)
 
 # See how section_properties_portrait function is built for custom
-\dontrun{
 tf <- tempfile(fileext = ".docx")
 export_as_docx(tbl,
   file = tf,
   section_properties = section_properties_default(orientation = "landscape")
 )
-}
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=tt_to_flextable]{tt_to_flextable()}}

@@ -1272,6 +1272,7 @@ These are internal methods that are documented only to satisfy \verb{R CMD check
 attention to this documentation.
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -1288,7 +1289,12 @@ lyt <- basic_table() \%>\%
   )
 
 tbl <- build_table(lyt, iris2)
+\dontshow{\}) # examplesIf}
+lyt <- basic_table() \%>\%
+  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
+  analyze("AGE")
 
+tbl <- build_table(lyt, DM)
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl

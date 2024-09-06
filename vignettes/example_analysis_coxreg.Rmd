@@ -7,9 +7,23 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{Example Complex Analysis Function: Modelling Cox Regression}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 ## Introduction
 

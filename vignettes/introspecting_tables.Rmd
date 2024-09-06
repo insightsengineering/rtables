@@ -7,9 +7,23 @@ vignette: >
   %\VignetteIndexEntry{Introspecting Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
@@ -77,8 +91,8 @@ coltree_structure(tbl)
 Further information about the column structure can be found in the vignette on
 [`col_counts`](https://insightsengineering.github.io/rtables/latest-tag/articles/col_counts.html).
 
-The `make_row_df()` and `make_col_df()` functions each create a `data.frame` with a variety of information about 
-the table's structure. Most useful for introspection purposes are the `label`, `name`, `abs_rownumber`, `path` and 
+The `make_row_df()` and `make_col_df()` functions each create a `data.frame` with a variety of information about
+the table's structure. Most useful for introspection purposes are the `label`, `name`, `abs_rownumber`, `path` and
 `node_class` columns (the remainder of the information in the returned `data.frame` is used for pagination)
 
 ```{r}
@@ -91,16 +105,16 @@ There is also a wrapper function, `row_paths()` available for `make_row_df` to d
 row_paths(tbl)
 ```
 
-By default `make_row_df()` summarizes only visible rows, but setting `visible_only` to `FALSE` gives us a structural 
-summary of the table with the full hierarchy of subtables, including those that are not represented directly by any 
+By default `make_row_df()` summarizes only visible rows, but setting `visible_only` to `FALSE` gives us a structural
+summary of the table with the full hierarchy of subtables, including those that are not represented directly by any
 visible rows:
 
 ```{r}
 make_row_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 ```
 
-`make_col_df()` similarly accepts `visible_only`, though here the meaning is slightly different, indicating whether 
-only *leaf* columns should be summarized (defaults to `TRUE`) or whether higher level groups of columns - analogous to 
+`make_col_df()` similarly accepts `visible_only`, though here the meaning is slightly different, indicating whether
+only *leaf* columns should be summarized (defaults to `TRUE`) or whether higher level groups of columns - analogous to
 subtables in row space - should be summarized as well.
 
 ```{r}
@@ -117,8 +131,8 @@ Similarly, there is wrapper function `col_paths()` available, which displays onl
 col_paths(tbl)
 ```
 
-The `row_paths_summary()` and `col_paths_summary()` functions wrap the respective `make_*_df` functions, printing the 
-`name`, `node_class`, and `path` information (in the row case), or the `label` and `path` information (in the column 
+The `row_paths_summary()` and `col_paths_summary()` functions wrap the respective `make_*_df` functions, printing the
+`name`, `node_class`, and `path` information (in the row case), or the `label` and `path` information (in the column
 case), indented to illustrate table structure:
 
 ```{r}
@@ -145,15 +159,15 @@ value_formats(tbl)
 
 ## Applications
 
-Knowing the structure of an `rtable` object is helpful for retrieving specific values from the table. 
+Knowing the structure of an `rtable` object is helpful for retrieving specific values from the table.
 For examples, see the [Path Based Cell Value Accessing](https://insightsengineering.github.io/rtables/latest-tag/articles/subsetting_tables.html#path-based-cell-value-accessing)
 section of the Subsetting and Manipulating Table Contents vignette.
 
-Understanding table structure is also important for post-processing processes such as sorting and pruning. More details 
+Understanding table structure is also important for post-processing processes such as sorting and pruning. More details
 on this are covered in the [Pruning and Sorting Tables vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/sorting_pruning.html)
 vignette.
 
 ## Summary
 
-In this vignette you have learned a number of utility functions that are available for examining the underlying 
+In this vignette you have learned a number of utility functions that are available for examining the underlying
 structure of `rtable` objects.

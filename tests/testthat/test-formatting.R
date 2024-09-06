@@ -135,6 +135,9 @@ test_that("format_na_str functionality works in get_formatted_cells (i.e. printi
 })
 
 test_that("format and na_str inheritance", {
+  require(dplyr, quietly = TRUE)
+  skip_if_not_installed("dplyr")
+
   # Test data
   DM2 <- DM %>%
     filter(ARM != levels(DM$ARM)[3]) %>%
@@ -162,6 +165,9 @@ test_that("format and na_str inheritance", {
 
   # Get the ASCII table
   result <- get_formatted_cells(tbl) # Main function
+
+  require(dplyr, quietly = TRUE)
+  skip_if_not_installed("dplyr")
 
   # Expected data-set is built with dplyr
   expected <- DM2 %>%

@@ -160,6 +160,7 @@ before proceeding. Thus even when nested within another split in column/row spac
 the overall values (e.g., quartiles) in the dataset, NOT the values for subset it is nested under.
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 # split_cols_by_cuts
@@ -239,7 +240,7 @@ lyt6 <- basic_table() \%>\%
 
 tbl6 <- build_table(lyt6, ex_adsl)
 tbl6
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Gabriel Becker

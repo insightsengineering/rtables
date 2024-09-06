@@ -78,6 +78,8 @@ lyt2
 tbl2 <- build_table(lyt2, DM)
 tbl2
 
+\dontshow{if (require(tibble)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 library(tibble)
 combodf <- tribble(
   ~valname, ~label, ~levelcombo, ~exargs,
@@ -125,7 +127,7 @@ lyt3 <- basic_table(show_colcounts = TRUE) \%>\%
 
 tbl3 <- build_table(lyt3, smallerDM)
 tbl3
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link{custom_split_funs} and \link{split_funcs}.

@@ -140,6 +140,7 @@ lyt3 <- basic_table() \%>\%
 
 lyt3
 
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 DM2 <- DM \%>\%
@@ -165,7 +166,7 @@ DM2 <- DM \%>\%
 
 tbl3 <- build_table(lyt3, DM2)
 tbl3
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Gabriel Becker
