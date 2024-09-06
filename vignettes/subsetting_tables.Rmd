@@ -7,10 +7,23 @@ vignette: >
   %\VignetteIndexEntry{Subsetting and Manipulating Table Contents}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
@@ -177,9 +190,9 @@ tbl # {1}, {2}, and {3} are present
 tbl[10, 2] # only {1} which was previously {2}
 ```
 
-Similar to what we have used to keep top left information, we can specify to 
-keep more information from the original table. As a standard the foot notes are 
-always present if the titles are kept. 
+Similar to what we have used to keep top left information, we can specify to
+keep more information from the original table. As a standard the foot notes are
+always present if the titles are kept.
 ```{r}
 tbl[1:3, 2:3, keep_titles = TRUE]
 tbl[1:3, 2:3, keep_titles = FALSE, keep_footers = TRUE]

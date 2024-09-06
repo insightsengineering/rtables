@@ -312,6 +312,7 @@ setMethod(
 #' tbl2 <- build_table(lyt2, DM)
 #' tbl2
 #'
+#' @examplesIf require(dplyr)
 #' # By default sequentially adding layouts results in nesting
 #' library(dplyr)
 #'
@@ -472,6 +473,7 @@ setMethod(
 #'
 #' lyt3
 #'
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' DM2 <- DM %>%
@@ -548,7 +550,7 @@ split_rows_by <- function(lyt,
 #'
 #' @seealso [analyze_colvars()]
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
@@ -661,7 +663,7 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' @inherit split_cols_by return
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' # split_cols_by_cuts
@@ -1188,7 +1190,7 @@ get_acolvar_vars <- function(lyt) {
 #'
 #' @seealso [split_cols_by_multivar()]
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
@@ -2117,7 +2119,7 @@ basic_table <- function(title = "",
 #'
 #' @seealso [top_left()]
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))

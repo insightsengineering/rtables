@@ -1228,6 +1228,7 @@ setMethod(
 #'   split_rows_by("STRATA1") %>%
 #'   analyze("AGE")
 #'
+#' @examplesIf require(dplyr)
 #' library(dplyr) ## for mutate
 #' tbl <- build_table(lyt, DM %>%
 #'   mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
