@@ -1290,6 +1290,11 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, iris2)
 \dontshow{\}) # examplesIf}
+lyt <- basic_table() \%>\%
+  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
+  analyze("AGE")
+
+tbl <- build_table(lyt, DM)
 indent_mod(tbl)
 indent_mod(tbl) <- 1L
 tbl
