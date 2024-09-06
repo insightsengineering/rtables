@@ -807,11 +807,11 @@ margins_landscape <- function() {
 #'   analyze("AGE", afun = analysisfun)
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' 
+#'
 #' @examplesIf require(flextable)
 #' library(flextable)
 #' # example code
-#' 
+#'
 #' # rtables style
 #' tt_to_flextable(tbl, theme = NULL)
 #'
