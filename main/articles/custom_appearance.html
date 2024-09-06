@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.9.9010</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.9.9011</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,24 +71,6 @@
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6-rc1">v0.6.6-rc1</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.9">v0.6.9</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.8">v0.6.8</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.7">v0.6.7</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.6">v0.6.6</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.5">v0.6.5</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.4">v0.6.4</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.3">v0.6.3</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a> </div></li>
-<!-- end dropdown for versions -->
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-reports">
 <li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
@@ -118,7 +100,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini, Abinaya Yogasekaram, and Gabriel Becker</h4>
             
-            <h4 data-toc-skip class="date">2024-08-30</h4>
+            <h4 data-toc-skip class="date">2024-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/custom_appearance.Rmd" class="external-link"><code>vignettes/custom_appearance.Rmd</code></a></small>
       <div class="d-none name"><code>custom_appearance.Rmd</code></div>
@@ -176,13 +158,13 @@ alignment options.</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
-<pre><code><span><span class="co">#          all obs</span></span>
+<span><span class="va">tbl</span></span>
+<span><span class="co">#          all obs</span></span>
 <span><span class="co"># ————————————————</span></span>
 <span><span class="co"># left     l      </span></span>
 <span><span class="co"># right          r</span></span>
-<span><span class="co"># center      c</span></span></code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<span><span class="co"># center      c</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># In in_rows, we use .aligns. This can either set the general value or the</span></span>
 <span><span class="co">#   single values (see NB).</span></span>
 <span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -196,15 +178,15 @@ alignment options.</p>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="va">tbl2</span></span></code></pre></div>
-<pre><code><span><span class="co">#          all obs</span></span>
+<span><span class="va">tbl2</span></span>
+<span><span class="co">#          all obs</span></span>
 <span><span class="co"># ————————————————</span></span>
 <span><span class="co"># left           l</span></span>
 <span><span class="co"># right          r</span></span>
-<span><span class="co"># center         c</span></span></code></pre>
+<span><span class="co"># center         c</span></span></code></pre></div>
 <p>These concepts can be well applied to any clinical table as shown in
 the following, more complex, example.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -223,8 +205,8 @@ the following, more complex, example.</p>
 <span>  <span class="op">}</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span>, na_str <span class="op">=</span> <span class="st">"NE"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">ex_adsl</span><span class="op">)</span></span>
-<span><span class="va">tbl3</span></span></code></pre></div>
-<pre><code><span><span class="co">#                    A: Drug X   B: Placebo   C: Combination</span></span>
+<span><span class="va">tbl3</span></span>
+<span><span class="co">#                    A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                         </span></span>
 <span><span class="co">#   AGE                                                     </span></span>
@@ -249,7 +231,7 @@ the following, more complex, example.</p>
 <span><span class="co">#     mean           28.0        NE           45.0          </span></span>
 <span><span class="co">#     sd             NE          NE           1.4           </span></span>
 <span><span class="co">#   STRATA1                                                 </span></span>
-<span><span class="co">#     STRATA1                1            0                2</span></span></code></pre>
+<span><span class="co">#     STRATA1                1            0                2</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="top-left-materials">Top-left Materials<a class="anchor" aria-label="anchor" href="#top-left-materials"></a>
@@ -261,33 +243,33 @@ with the <code>append_topleft</code> function, and during
 post-processing using the <code><a href="../reference/top_left.html">top_left()</a></code> function. Note:
 Indenting is automatically added <code>label_pos = "topleft"</code>.</p>
 <p>Within the layout initializer:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/append_topleft.html">append_topleft</a></span><span class="op">(</span><span class="st">"New top_left material here"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># New top_left material here   A: Drug X   B: Placebo   C: Combination</span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co"># New top_left material here   A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># A                                                                   </span></span>
 <span><span class="co">#   Mean                         32.53       32.30          35.76     </span></span>
 <span><span class="co"># B                                                                   </span></span>
 <span><span class="co">#   Mean                         35.46       32.42          34.39     </span></span>
 <span><span class="co"># C                                                                   </span></span>
-<span><span class="co">#   Mean                         36.34       34.45          33.54</span></span></code></pre>
+<span><span class="co">#   Mean                         36.34       34.45          33.54</span></span></code></pre></div>
 <p>Specify label position using the <code>split_rows</code> function.
 Notice the position of <code>STRATA1</code> and <code>SEX</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, label_pos <span class="op">=</span> <span class="st">"topleft"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, label_pos <span class="op">=</span> <span class="st">"topleft"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># STRATA1                                                     </span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co"># STRATA1                                                     </span></span>
 <span><span class="co">#   SEX                A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># A                                                           </span></span>
@@ -316,9 +298,9 @@ Notice the position of <code>STRATA1</code> and <code>SEX</code>.</p>
 <span><span class="co">#   U                                                         </span></span>
 <span><span class="co">#     Mean                NA           NA             NA      </span></span>
 <span><span class="co">#   UNDIFFERENTIATED                                          </span></span>
-<span><span class="co">#     Mean                NA           NA             NA</span></span></code></pre>
+<span><span class="co">#     Mean                NA           NA             NA</span></span></code></pre></div>
 <p>Post-processing using the <code><a href="../reference/top_left.html">top_left()</a></code> function:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -340,8 +322,8 @@ Notice the position of <code>STRATA1</code> and <code>SEX</code>.</p>
 <span><span class="co"># Adding top-left material</span></span>
 <span><span class="fu"><a href="../reference/top_left.html">top_left</a></span><span class="op">(</span><span class="va">lyt</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"New top-left material here"</span></span>
 <span></span>
-<span><span class="va">lyt</span></span></code></pre></div>
-<pre><code><span><span class="co"># New top-left material here   A: Drug X   B: Placebo   C: Combination</span></span>
+<span><span class="va">lyt</span></span>
+<span><span class="co"># New top-left material here   A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                                   </span></span>
 <span><span class="co">#   AGE                                                               </span></span>
@@ -366,7 +348,7 @@ Notice the position of <code>STRATA1</code> and <code>SEX</code>.</p>
 <span><span class="co">#     mean                     28.0        NE           45.0          </span></span>
 <span><span class="co">#     sd                       NE          NE           1.4           </span></span>
 <span><span class="co">#   STRATA1                                                           </span></span>
-<span><span class="co">#     STRATA1                          1            0                2</span></span></code></pre>
+<span><span class="co">#     STRATA1                          1            0                2</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="table-inset">Table Inset<a class="anchor" aria-label="anchor" href="#table-inset"></a>
@@ -377,36 +359,36 @@ materials. This can be modified within the layout initializer
 <code><a href="../reference/basic_table.html">basic_table()</a></code> using the <code>inset</code> argument or
 during post-processing with <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html" class="external-link">table_inset()</a></code>.</p>
 <p>Using the layout initializer:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>inset <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#             all obs</span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co">#             all obs</span></span>
 <span><span class="co">#      ——————————————</span></span>
-<span><span class="co">#      Mean    34.22</span></span></code></pre>
+<span><span class="co">#      Mean    34.22</span></span></code></pre></div>
 <p>Using the post-processing function:</p>
 <p>Without inset -</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
-<pre><code><span><span class="co">#        all obs</span></span>
+<span><span class="va">tbl</span></span>
+<span><span class="co">#        all obs</span></span>
 <span><span class="co"># ——————————————</span></span>
-<span><span class="co"># Mean    34.22</span></span></code></pre>
+<span><span class="co"># Mean    34.22</span></span></code></pre></div>
 <p>With an inset of 5 characters -</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html" class="external-link">table_inset</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
-<pre><code><span><span class="co">#             all obs</span></span>
+<span><span class="va">tbl</span></span>
+<span><span class="co">#             all obs</span></span>
 <span><span class="co">#      ——————————————</span></span>
-<span><span class="co">#      Mean    34.22</span></span></code></pre>
+<span><span class="co">#      Mean    34.22</span></span></code></pre></div>
 <p>Below is an example with a table produced for clinical data. Compare
 the inset of the table and main footer between the two tables.</p>
 <p>Without inset -</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">analysisfun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
 <span>    row1 <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -424,8 +406,8 @@ the inset of the table and main footer between the two tables.</p>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="va">analysisfun</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">ex_adsl</span><span class="op">)</span></span>
-<span><span class="va">result</span></span></code></pre></div>
-<pre><code><span><span class="co"># Title says Whaaaat</span></span>
+<span><span class="va">result</span></span>
+<span><span class="co"># Title says Whaaaat</span></span>
 <span><span class="co"># Oh, ok.</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————</span></span>
@@ -441,16 +423,16 @@ the inset of the table and main footer between the two tables.</p>
 <span><span class="co"># </span></span>
 <span><span class="co"># ha HA! Footer!</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># provenaaaaance</span></span></code></pre>
+<span><span class="co"># provenaaaaance</span></span></code></pre></div>
 <p>With inset -</p>
 <p>Notice, the inset does not apply to any title materials (main title,
 subtitles, page titles), or provenance footer materials. Inset settings
 is applied to top-left materials, referential footnotes main footer
 materials and any horizontal dividers.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html" class="external-link">table_inset</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
-<span><span class="va">result</span></span></code></pre></div>
-<pre><code><span><span class="co"># Title says Whaaaat</span></span>
+<span><span class="va">result</span></span>
+<span><span class="co"># Title says Whaaaat</span></span>
 <span><span class="co"># Oh, ok.</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co">#      ——————————————————————————————————————————————————</span></span>
@@ -466,7 +448,7 @@ materials and any horizontal dividers.</p>
 <span><span class="co"># </span></span>
 <span><span class="co">#      ha HA! Footer!</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># provenaaaaance</span></span></code></pre>
+<span><span class="co"># provenaaaaance</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="horizontal-separation">Horizontal Separation<a class="anchor" aria-label="anchor" href="#horizontal-separation"></a>
@@ -483,7 +465,7 @@ materials,</li>
 something on both sides of the divider.</li>
 </ol>
 <p>Below, we replace the default line with “=”.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"Species"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_colcounts.html">add_colcounts</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -497,8 +479,8 @@ something on both sides of the divider.</li>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">iris</span>, hsep <span class="op">=</span> <span class="st">"="</span><span class="op">)</span></span>
-<span><span class="va">tbl</span></span></code></pre></div>
-<pre><code><span><span class="co">#                  setosa      versicolor     virginica </span></span>
+<span><span class="va">tbl</span></span>
+<span><span class="co">#                  setosa      versicolor     virginica </span></span>
 <span><span class="co">#                  (N=50)        (N=50)        (N=50)   </span></span>
 <span><span class="co"># ======================================================</span></span>
 <span><span class="co"># Sepal.Length                                          </span></span>
@@ -508,7 +490,7 @@ something on both sides of the divider.</li>
 <span><span class="co"># Petal.Width                                           </span></span>
 <span><span class="co">#   Mean (sd)    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)</span></span>
 <span><span class="co">#   Variance        0.011         0.039         0.075   </span></span>
-<span><span class="co">#   Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5</span></span></code></pre>
+<span><span class="co">#   Min - Max     0.1 - 0.6     1.0 - 1.8     1.4 - 2.5</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="section-dividers">Section Dividers<a class="anchor" aria-label="anchor" href="#section-dividers"></a>
@@ -517,7 +499,7 @@ something on both sides of the divider.</li>
 every group defined by a split instruction. Note, a trailing divider at
 the end of the table is never printed.</p>
 <p>Below, a “+” is repeated and used as a section divider.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"Species"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -527,8 +509,8 @@ the end of the table is never printed.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span>, section_div <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">iris</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                  setosa      versicolor     virginica </span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="co">#                  setosa      versicolor     virginica </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Sepal.Length                                          </span></span>
 <span><span class="co">#   mean / sd    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)</span></span>
@@ -544,9 +526,9 @@ the end of the table is never printed.</p>
 <span><span class="co"># ++++++++++++++++++++++++++++++++++++++++++++++++++++++</span></span>
 <span><span class="co"># Petal.Width                                           </span></span>
 <span><span class="co">#   mean / sd    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)</span></span>
-<span><span class="co">#   range           0.50          0.80          1.10</span></span></code></pre>
+<span><span class="co">#   range           0.50          0.80          1.10</span></span></code></pre></div>
 <p>Section dividers can be set to ” ” to create a blank line.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"Species"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>, afun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -556,8 +538,8 @@ the end of the table is never printed.</p>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span>, section_div <span class="op">=</span> <span class="st">" "</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">iris</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                  setosa      versicolor     virginica </span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="co">#                  setosa      versicolor     virginica </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————</span></span>
 <span><span class="co"># Sepal.Length                                          </span></span>
 <span><span class="co">#   mean / sd    5.01 (0.35)   5.94 (0.52)   6.59 (0.64)</span></span>
@@ -573,19 +555,19 @@ the end of the table is never printed.</p>
 <span><span class="co">#                                                       </span></span>
 <span><span class="co"># Petal.Width                                           </span></span>
 <span><span class="co">#   mean / sd    0.25 (0.11)   1.33 (0.20)   2.03 (0.27)</span></span>
-<span><span class="co">#   range           0.50          0.80          1.10</span></span></code></pre>
+<span><span class="co">#   range           0.50          0.80          1.10</span></span></code></pre></div>
 <p>Separation characters can be specified for different row splits.
 However, only one will be printed if they “pile up” next to each
 other.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"RACE"</span>, section_div <span class="op">=</span> <span class="st">"="</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, section_div <span class="op">=</span> <span class="st">"~"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, var_labels <span class="op">=</span> <span class="st">"Age"</span>, format <span class="op">=</span> <span class="st">"xx.xx"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                             A: Drug X   B: Placebo   C: Combination</span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co">#                                             A: Drug X   B: Placebo   C: Combination</span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                                                                              </span></span>
 <span><span class="co">#   A                                                                                </span></span>
@@ -665,7 +647,7 @@ other.</p>
 <span><span class="co">#     mean                                       NA           NA             NA      </span></span>
 <span><span class="co"># ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span>
 <span><span class="co">#   C                                                                                </span></span>
-<span><span class="co">#     mean                                       NA           NA             NA</span></span></code></pre>
+<span><span class="co">#     mean                                       NA           NA             NA</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="indent-modifier">Indent Modifier<a class="anchor" aria-label="anchor" href="#indent-modifier"></a>
@@ -675,7 +657,7 @@ indent value can be supplied with the <code>indent_mod</code> argument
 within a split function to modify this default. Compare the indenting of
 the tables below:</p>
 <p>Default Indent -</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span></span>
 <span>  title <span class="op">=</span> <span class="st">"Study XXXXXXXX"</span>,</span>
 <span>  subtitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subtitle YYYYYYYYYY"</span>, <span class="st">"subtitle2 ZZZZZZZZZ"</span><span class="op">)</span>,</span>
@@ -686,8 +668,8 @@ the tables below:</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># Study XXXXXXXX</span></span>
+<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
 <span><span class="co"># </span></span>
@@ -726,9 +708,9 @@ the tables below:</p>
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre>
+<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre></div>
 <p>Modified indent -</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span></span>
 <span>  title <span class="op">=</span> <span class="st">"Study XXXXXXXX"</span>,</span>
 <span>  subtitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subtitle YYYYYYYYYY"</span>, <span class="st">"subtitle2 ZZZZZZZZZ"</span><span class="op">)</span>,</span>
@@ -739,8 +721,8 @@ the tables below:</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, indent_mod <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, indent_mod <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># Study XXXXXXXX</span></span>
+<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
 <span><span class="co"># </span></span>
@@ -779,7 +761,7 @@ the tables below:</p>
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre>
+<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="variable-label-visibility">Variable Label Visibility<a class="anchor" aria-label="anchor" href="#variable-label-visibility"></a>
@@ -798,15 +780,15 @@ The <code>child_label</code> argument can force labels to be visible in
 addition to content rows but we cannot hide or move the content
 rows.</p>
 <p>Notice the placement of the “AGE” label in this example:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, show_labels <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#               A: Drug X          B: Placebo       C: Combination </span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co">#               A: Drug X          B: Placebo       C: Combination </span></span>
 <span><span class="co">#                (N=121)            (N=106)            (N=129)     </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># F                                                                </span></span>
@@ -822,20 +804,20 @@ rows.</p>
 <span><span class="co">#   B                                                              </span></span>
 <span><span class="co">#     mean   36.6428571428571   32.0869565217391   34.3684210526316</span></span>
 <span><span class="co">#   C                                                              </span></span>
-<span><span class="co">#     mean   37.3913043478261       32.8125        32.8333333333333</span></span></code></pre>
+<span><span class="co">#     mean   37.3913043478261       32.8125        32.8333333333333</span></span></code></pre></div>
 <p>When set to default, the label <code>AGE</code> is not repeated since
 there is only one variable being analyzed at the same level of nesting.
 Override this by setting the <code>show_labels</code> argument as
 “visible”.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span>var <span class="op">=</span> <span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, child_labels <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, show_labels <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#               A: Drug X          B: Placebo       C: Combination </span></span>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co">#               A: Drug X          B: Placebo       C: Combination </span></span>
 <span><span class="co">#                (N=121)            (N=106)            (N=129)     </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># A                                                                </span></span>
@@ -855,14 +837,14 @@ Override this by setting the <code>show_labels</code> argument as
 <span><span class="co">#     mean   36.6428571428571   32.0869565217391   34.3684210526316</span></span>
 <span><span class="co"># C                                                                </span></span>
 <span><span class="co">#   AGE                                                            </span></span>
-<span><span class="co">#     mean   37.3913043478261       32.8125        32.8333333333333</span></span></code></pre>
+<span><span class="co">#     mean   37.3913043478261       32.8125        32.8333333333333</span></span></code></pre></div>
 <p>Below is an example using the <code>label_pos</code> argument for
 modifying label visibility:</p>
 <p>Label order will mirror the order of <code>split_rows_by</code>
 calls. If the labels of any subgroups should be hidden, the
 <code>label_pos</code> argument should be set to hidden.</p>
 <p>“SEX” label position is hidden -</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span></span>
 <span>  title <span class="op">=</span> <span class="st">"Study XXXXXXXX"</span>,</span>
 <span>  subtitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subtitle YYYYYYYYYY"</span>, <span class="st">"subtitle2 ZZZZZZZZZ"</span><span class="op">)</span>,</span>
@@ -873,8 +855,8 @@ calls. If the labels of any subgroups should be hidden, the
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, label_pos <span class="op">=</span> <span class="st">"visible"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, label_pos <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># Study XXXXXXXX</span></span>
+<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
 <span><span class="co"># </span></span>
@@ -900,9 +882,9 @@ calls. If the labels of any subgroups should be hidden, the
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre>
+<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre></div>
 <p>“SEX” label position is with the top-left materials -</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span></span>
 <span>  title <span class="op">=</span> <span class="st">"Study XXXXXXXX"</span>,</span>
 <span>  subtitles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subtitle YYYYYYYYYY"</span>, <span class="st">"subtitle2 ZZZZZZZZZ"</span><span class="op">)</span>,</span>
@@ -913,8 +895,8 @@ calls. If the labels of any subgroups should be hidden, the
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"SEX"</span>, split_fun <span class="op">=</span> <span class="va">drop_split_levels</span>, label_pos <span class="op">=</span> <span class="st">"topleft"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"STRATA1"</span>, label_pos <span class="op">=</span> <span class="st">"hidden"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, <span class="va">mean</span>, format <span class="op">=</span> <span class="st">"xx.x"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># Study XXXXXXXX</span></span>
+<span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span></span>
+<span><span class="co"># Study XXXXXXXX</span></span>
 <span><span class="co"># subtitle YYYYYYYYYY</span></span>
 <span><span class="co"># subtitle2 ZZZZZZZZZ</span></span>
 <span><span class="co"># </span></span>
@@ -939,7 +921,7 @@ calls. If the labels of any subgroups should be hidden, the
 <span><span class="co"># </span></span>
 <span><span class="co"># Analysis was done using cool methods that are correct</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre>
+<span><span class="co"># file: /path/to/stuff/that/lives/there HASH:1ac41b242a</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="cell-label-and-annotation-wrapping">Cell, Label, and Annotation Wrapping<a class="anchor" aria-label="anchor" href="#cell-label-and-annotation-wrapping"></a>
@@ -950,7 +932,7 @@ titles/footers.</p>
 <p>This is demonstrated using the sample data and table below. In this
 section we aim to render this table with a reduced width since the table
 has very wide contents in several cells, labels, and titles/footers.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">trimmed_data</span> <span class="op">&lt;-</span> <span class="va">ex_adsl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">RACE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
@@ -973,8 +955,8 @@ has very wide contents in several cells, labels, and titles/footers.</p>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">trimmed_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wide_tbl</span></span></code></pre></div>
-<pre><code><span><span class="co"># Title that is too long and also needs to be wrapped to a smaller width</span></span>
+<span><span class="va">wide_tbl</span></span>
+<span><span class="co"># Title that is too long and also needs to be wrapped to a smaller width</span></span>
 <span><span class="co"># Subtitle that is also long and also needs to be wrapped to a smaller width</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
@@ -994,7 +976,7 @@ has very wide contents in several cells, labels, and titles/footers.</p>
 <span><span class="co"># </span></span>
 <span><span class="co"># Footnote that is wider than expected for this table.</span></span>
 <span><span class="co"># </span></span>
-<span><span class="co"># Provenance footer material that is also wider than expected for this table.</span></span></code></pre>
+<span><span class="co"># Provenance footer material that is also wider than expected for this table.</span></span></code></pre></div>
 <p>In the following sections we will use the <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/tostring.html" class="external-link">toString()</a></code>
 function to render the table in string form. This resulting string
 representation is ready to be printed or written to a plain text file,
@@ -1028,11 +1010,11 @@ continued on the following line. By default there are 3 spaces
 separating each of the columns in the rendered table but this can be
 customized via the <code>col_gap</code> argument to
 <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/tostring.html" class="external-link">toString()</a></code> if further width customization is desired.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_wrap_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/tostring.html" class="external-link">toString</a></span><span class="op">(</span><span class="va">wide_tbl</span>, widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">matrix_wrap_cells</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">result_wrap_cells</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">matrix_wrap_cells</span></span></code></pre></div>
-<pre><code><span><span class="co">#       [,1]                                                                         </span></span>
+<span><span class="va">matrix_wrap_cells</span></span>
+<span><span class="co">#       [,1]                                                                         </span></span>
 <span><span class="co">#  [1,] "Title that is too long and also needs to be wrapped to a smaller width"     </span></span>
 <span><span class="co">#  [2,] "Subtitle that is also long and also needs to be wrapped to a smaller width" </span></span>
 <span><span class="co">#  [3,] ""                                                                           </span></span>
@@ -1074,7 +1056,7 @@ customized via the <code>col_gap</code> argument to
 <span><span class="co"># [39,] ""                                                                           </span></span>
 <span><span class="co"># [40,] "Footnote that is wider than expected for this table."                       </span></span>
 <span><span class="co"># [41,] ""                                                                           </span></span>
-<span><span class="co"># [42,] "Provenance footer material that is also wider than expected for this table."</span></span></code></pre>
+<span><span class="co"># [42,] "Provenance footer material that is also wider than expected for this table."</span></span></code></pre></div>
 <p>In the resulting output we can see that the table has been correctly
 rendered using wrapping with a total width of 43 characters, but that
 the titles and footers remain wider than the rendered table.</p>
@@ -1091,7 +1073,7 @@ for titles/footers. The four <code>export_as_*</code> functions and
 the same two arguments. In the following code, we set
 <code>max_width = 43</code> so that the rendered table and all of its
 annotations have a maximum width of 43 characters.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_wrap_cells_tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/tostring.html" class="external-link">toString</a></span><span class="op">(</span></span>
 <span>  <span class="va">wide_tbl</span>,</span>
 <span>  widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span><span class="op">)</span>,</span>
@@ -1099,8 +1081,8 @@ annotations have a maximum width of 43 characters.</p>
 <span>  max_width <span class="op">=</span> <span class="fl">43</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">matrix_wrap_cells_tf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">result_wrap_cells_tf</span>, <span class="st">"\n"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">matrix_wrap_cells_tf</span></span></code></pre></div>
-<pre><code><span><span class="co">#       [,1]                                         </span></span>
+<span><span class="va">matrix_wrap_cells_tf</span></span>
+<span><span class="co">#       [,1]                                         </span></span>
 <span><span class="co">#  [1,] "Title that is too long and also needs to be"</span></span>
 <span><span class="co">#  [2,] "wrapped to a smaller width"                 </span></span>
 <span><span class="co">#  [3,] "Subtitle that is also long and also needs"  </span></span>
@@ -1146,7 +1128,7 @@ annotations have a maximum width of 43 characters.</p>
 <span><span class="co"># [43,] "this table."                                </span></span>
 <span><span class="co"># [44,] ""                                           </span></span>
 <span><span class="co"># [45,] "Provenance footer material that is also"    </span></span>
-<span><span class="co"># [46,] "wider than expected for this table."</span></span></code></pre>
+<span><span class="co"># [46,] "wider than expected for this table."</span></span></code></pre></div>
 </div>
 </div>
 </div>
