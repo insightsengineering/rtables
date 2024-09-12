@@ -175,6 +175,22 @@ basic_layout %>%
 #### Using conditional custom formatting
 Importantly, it is also possible to program completely custom formatting functions. 
 
+Let's investigate what `format_value` function does. 
+
+```{r, echo=FALSE}
+format_value(3.14159265359, "xx.xxx")
+```
+
+When value is supplied, the function will return the value formatted according to the format string. If the value is missing, the function will return NA. If the function is ran on table, it will return the table with formatted values.
+
+```{r, echo=FALSE}
+basic_layout %>%
+  analyze(vars = "AGE", afun = mean, format = format_value("xx.xx")) %>%
+  build_table(ADSL)
+```
+
+How could we create our own custom format function? 
+
 ```{r, echo=FALSE}
 custom_format_value <- function(x, format = NULL, na_str = "NA") {
   if (length(x) == 0) {
@@ -203,8 +219,10 @@ custom_format_value <- function(x, format = NULL, na_str = "NA") {
 
 # Example usage
 basic_layout %>%
-  analyze(vars = "AGE", afun = mean, format = custom_format_value()) %>%
+  analyze(vars = "AGE", afun = mean, format = format_value("xx.xx")) %>%
   build_table(ADSL)
+
+
 
 ```
 
