@@ -21,7 +21,7 @@ NULL
 #'
 #' @return A string representation of `x` as it appears when printed.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -80,7 +80,7 @@ setMethod("toString", "VTableTree", function(x,
 #'
 #' @seealso [value_formats()] for a matrix of formats for each cell in a table.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -174,7 +174,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #'
 #' With an additional `nrow_header` attribute indicating the number of pseudo "rows" that the column structure defines.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -360,13 +360,6 @@ ccvis_check_subtree <- function(ctree) {
   }
   lapply(kids, ccvis_check_subtree)
   invisible(NULL)
-}
-.quick_handle_nl <- function(str_v) {
-  if (any(grepl("\n", str_v))) {
-    return(unlist(strsplit(str_v, "\n", fixed = TRUE)))
-  } else {
-    return(str_v)
-  }
 }
 
 .resolve_fn_symbol <- function(fn) {
@@ -653,7 +646,7 @@ get_formatted_fnotes <- function(tt) {
 #'
 #' @return The formatted print-strings for all (body) cells in `obj`.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%

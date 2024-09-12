@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.9.9001
-Date: 2024-07-10
+Version: 0.6.9.9013
+Date: 2024-09-06
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -29,7 +29,7 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
-    formatters (>= 0.5.8),
+    formatters (>= 0.5.8.9006),
     magrittr (>= 1.5),
     methods,
     R (>= 2.10)
@@ -43,9 +43,9 @@ Suggests:
     broom (>= 1.0.6),
     car (>= 3.0-13),
     dplyr (>= 1.0.5),
-    flextable (>= 0.9.5),
+    flextable (>= 0.9.6),
     knitr (>= 1.42),
-    officer (>= 0.5.0),
+    officer (>= 0.6.6),
     r2rtf (>= 0.3.2),
     rmarkdown (>= 2.23),
     survival (>= 3.3-1),
@@ -55,13 +55,15 @@ Suggests:
     withr (>= 2.0.0),
     xml2 (>= 1.1.0)
 VignetteBuilder:
-    knitr
+    knitr,
+    rmarkdown
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
     davidgohel/flextable, yihui/knitr, r-lib/lifecycle,
-    davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, r-lib/testthat,
-    tidyverse/tibble, tidyverse/tidyr, r-lib/withr, r-lib/xml2
+    davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, therneau/survival,
+    r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
+    r-lib/xml2
 Encoding: UTF-8
 Language: en-US
 LazyData: true
@@ -78,8 +80,8 @@ Collate:
     'format_rcell.R'
     'indent.R'
     'make_subset_expr.R'
-    'simple_analysis.R'
-    'split_funs.R'
+    'custom_split_funs.R'
+    'default_split_funs.R'
     'make_split_fun.R'
     'summary.R'
     'package.R'

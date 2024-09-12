@@ -31,3 +31,12 @@ jobs:
     uses: insightsengineering/r.pkg.template/.github/workflows/cran-status.yaml@main
     with:
       issue-assignees: "shajoezhu,Melkiades,edelarua,ayogasekaram"
+  revdepcheck:
+    name: revdepcheck ↩️
+    uses: insightsengineering/r.pkg.template/.github/workflows/revdepcheck.yaml@main
+  rhub:
+    name: R-hub 🌐
+    uses: insightsengineering/r.pkg.template/.github/workflows/rhub.yaml@main
+    with:
+      lookup-refs: |
+        insightsengineering/formatters

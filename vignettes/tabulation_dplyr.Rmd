@@ -7,11 +7,23 @@ vignette: >
   %\VignetteIndexEntry{Comparison with dplyr Tabulation}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
-
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr", "tibble")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
@@ -120,7 +132,7 @@ tbl <- build_table(lyt, df)
 tbl
 ```
 
-As mentioned in the introduction to this vignette, please ignore the difference in arranging and formatting the data: it's possible to condense the `rtable` more and it is possible to make the `tibble` look more like the reference table using the `gt` R package. 
+As mentioned in the introduction to this vignette, please ignore the difference in arranging and formatting the data: it's possible to condense the `rtable` more and it is possible to make the `tibble` look more like the reference table using the `gt` R package.
 
 In terms of tabulation for this example there was arguably not much added by `rtables` over `dplyr`.
 

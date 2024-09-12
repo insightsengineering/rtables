@@ -7,9 +7,23 @@ vignette: >
   %\VignetteIndexEntry{Pruning and Sorting Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = "#")
@@ -104,7 +118,7 @@ of the table that is split (with `split_rows_by("RACE") %>%`) into two
 subtables: `[TableTree] ASIAN [cont: 1 x 6]` and `[TableTree] BLACK OR
 AFRICAN AMERICAN [cont: 1 x 6]`. These are then "described" with
 `summarize_row_groups() %>%`, which creates for every split a
-"content" table containing 1 row (the 1 in `cont: 1 x 6`), which 
+"content" table containing 1 row (the 1 in `cont: 1 x 6`), which
 when rendered takes the place of `LabelRow`.
 
 
@@ -265,7 +279,7 @@ row_paths_summary(pruned)
 ```
 
 Note in the latter we see content rows as those with paths following
-`@content`, e.g., `ASIAN, @content, ASIAN`. The first of these at 
+`@content`, e.g., `ASIAN, @content, ASIAN`. The first of these at
 a given path (i.e., `<path>, @content, <>` are the rows which will be
 used by the scoring functions which begin with `cont_`.
 
@@ -490,7 +504,7 @@ We need the F and M percents, only for Arm C (i.e. columns 5 and 6),
 differenced.
 
 We will sort _**the strata within each ethnicity**_ by the percent
-difference in counts between males and females in arm C. 
+difference in counts between males and females in arm C.
 
 Note: this is not statistically meaningful at all, and is in fact a
 terrible idea because it reorders the strata seemingly (but not) at

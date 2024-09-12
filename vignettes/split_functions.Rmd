@@ -7,10 +7,23 @@ vignette: >
   %\VignetteIndexEntry{Controlling Splitting Behavior}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr", "tibble")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 # Controlling Facet Levels
 
@@ -227,7 +240,7 @@ To add more arbitrary combinations, we use `add_combo_levels`.
 levels to the faceting structure of our table.
 
 We do this by defining a *combination data.frame* which describes the
-levels we want to add. A combination `data.frame` has the 
+levels we want to add. A combination `data.frame` has the
 following columns and one row for each combination to add:
 
 - `valname` - string indicating the name of the value, which will appear
@@ -280,7 +293,7 @@ as the combination of 3 steps:
    representing individual facets.
 3. postprocessing - operations on the facets - e.g., combining them,
    removing them, etc.
-   
+
 The `make_split_fun()` function allows us to specify custom behaviors
 for each of these steps independently when defining custom splitting
 behavior via the `pre`, `core_split`, and `post` arguments, which
@@ -299,8 +312,8 @@ The pre-processing component is useful for things such as manipulating
 factor levels, e.g., to trim unobserved ones or to reorder levels
 based on observed counts, etc.
 
-For a more detailed discussion on what custom split functions do, and an 
-example of a custom split function not implemented via `make_split_fun()`, 
+For a more detailed discussion on what custom split functions do, and an
+example of a custom split function not implemented via `make_split_fun()`,
 see `?custom_split_funs`.
 
 ## An Example Custom Split Function
@@ -458,7 +471,7 @@ either functions or function factories:
 - Pre-processing "behavior blocks"
   - `drop_facet_levels` - drop unobserved levels in the variable being
     split
-  
+
 - Post-processing "behavior blocks"
   - `trim_levels_in_facets` - provides `trim_levels_in_group` behavior
   - `add_overall_facet` - add a combination facet for the full data

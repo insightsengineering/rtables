@@ -5,7 +5,7 @@ template:
 
 navbar:
   structure:
-    left: [reference, articles, dev-guide, news, reports]
+    left: [intro, reference, articles, dev-guide, news, reports]
     right: [search, github]
   components:
     github:
@@ -22,7 +22,7 @@ navbar:
         - text: Tabulation
           href: articles/dev-guide/dg_tabulation.html
         - text: Table Hierarchy
-          href: articles/dev-guide/dg_table_hierarchy.html        
+          href: articles/dev-guide/dg_table_hierarchy.html
         - text: Debugging in {rtables} and Beyond
           href: articles/dev-guide/dg_debug_rtables.html
         - text: Sparse Notes on {rtables} Internals
@@ -34,6 +34,8 @@ navbar:
           href: coverage-report/
         - text: Unit test report
           href: unit-test-report/
+        - text: Non-CRAN unit test report
+          href: unit-test-report-non-cran/
 
 repo:
   url:
@@ -56,7 +58,7 @@ articles:
   - title: Getting Started
     navbar: Getting Started
     contents:
-    - introduction
+    - rtables
     - exploratory_analysis
 
   - title: Clinical Trials
@@ -90,7 +92,7 @@ articles:
     contents:
     - manual_table_construction
     - tabulation_dplyr
-    
+
   - title: Developer Guide
     desc: Articles intended for developer use only.
     contents:
@@ -98,6 +100,7 @@ articles:
     - dev-guide/dg_split_machinery
     - dev-guide/dg_tabulation
     - dev-guide/dg_table_hierarchy
+    - dev-guide/dg_printing
     - dev-guide/dg_debug_rtables
     - dev-guide/dg_notes
 

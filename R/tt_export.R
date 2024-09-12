@@ -587,7 +587,8 @@ formatters::export_as_pdf
 #' @param template_file (`string`)\cr template file that `officer` will use as a starting point for the final
 #'   document. Document attaches the table and uses the defaults defined in the template file.
 #' @param section_properties (`officer::prop_section`)\cr an [officer::prop_section()] object which sets margins and
-#'   page size.
+#'   page size. Defaults to `section_properties_default()`.
+#' @param ... (`any`)\cr additional arguments passed to [tt_to_flextable()].
 #'
 #' @note `export_as_docx()` has few customization options available. If you require specific formats and details,
 #'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `title_as_header` and
@@ -595,7 +596,8 @@ formatters::export_as_pdf
 #'
 #' @seealso [tt_to_flextable()]
 #'
-#' @examples
+#' @examplesIf require(flextable)
+#' library(flextable)
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
@@ -603,10 +605,11 @@ formatters::export_as_pdf
 #' tbl <- build_table(lyt, ex_adsl)
 #'
 #' # See how section_properties_portrait function is built for custom
-#' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
-#' export_as_docx(tbl, file = tf, section_properties = section_properties_portrait())
-#' }
+#' export_as_docx(tbl,
+#'   file = tf,
+#'   section_properties = section_properties_default(orientation = "landscape")
+#' )
 #'
 #' @export
 export_as_docx <- function(tt,
@@ -615,13 +618,15 @@ export_as_docx <- function(tt,
                            titles_as_header = FALSE,
                            footers_as_text = TRUE,
                            template_file = NULL,
-                           section_properties = NULL) {
+                           section_properties = section_properties_default(),
+                           ...) {
   # Checks
   check_required_packages(c("flextable", "officer"))
   if (inherits(tt, "VTableTree")) {
     flex_tbl <- tt_to_flextable(tt,
       titles_as_header = titles_as_header,
-      footers_as_text = footers_as_text
+      footers_as_text = footers_as_text,
+      ...
     )
     if (isFALSE(titles_as_header) || isTRUE(footers_as_text)) {
       # Ugly but I could not find a getter for font.size
@@ -664,7 +669,7 @@ export_as_docx <- function(tt,
 
   # add footers as paragraphs
   if (isTRUE(footers_as_text) && inherits(tt, "VTableTree")) {
-    # Adding referantial footer line separator if present
+    # Adding referential footer line separator if present
     # (this is usually done differently, i.e. inside footnotes)
     matform <- matrix_form(tt, indent_rownames = TRUE)
     if (length(matform$ref_footnotes) > 0) {
@@ -695,28 +700,41 @@ add_text_par <- function(doc, chr_v, text_format) {
 }
 
 #' @describeIn export_as_docx Helper function that defines standard portrait properties for tables.
+#' @param page_size (`character(1)`) page size. Can be `"letter"` or `"A4"`. Defaults to `"letter"`.
+#' @param orientation (`character(1)`) page orientation. Can be `"portrait"` or `"landscape"`. Defaults to
+#'   `"portrait"`.
+#'
 #' @export
-section_properties_portrait <- function() {
-  officer::prop_section(
-    page_size = officer::page_size(
-      orient = "portrait",
+section_properties_default <- function(page_size = c("letter", "A4"),
+                                       orientation = c("portrait", "landscape")) {
+  page_size <- page_size[1]
+  orientation <- orientation[1]
+  checkmate::assert_choice(
+    page_size,
+    eval(formals(section_properties_default)$page_size)
+  )
+  checkmate::assert_choice(
+    orientation,
+    eval(formals(section_properties_default)$orientation)
+  )
+
+  if (page_size == "letter") {
+    page_size <- officer::page_size(
+      orient = orientation,
       width = 8.5, height = 11
-    ),
+    )
+  } else { # A4
+    page_size <- officer::page_size(
+      orient = orientation,
+      width = 8.27, height = 11.69
+    )
+  }
+
+  # Final output
+  officer::prop_section(
+    page_size = page_size,
     type = "continuous",
     page_margins = margins_potrait()
-  )
-}
-
-#' @describeIn export_as_docx Helper function that defines standard landscape properties for tables.
-#' @export
-section_properties_landscape <- function() {
-  officer::prop_section(
-    page_size = officer::page_size(
-      orient = "landscape",
-      width = 8.5, height = 11
-    ),
-    type = "continuous",
-    page_margins = margins_landscape()
   )
 }
 
@@ -741,10 +759,10 @@ margins_landscape <- function() {
 #' @inheritParams paginate_table
 #' @param theme (`function` or `NULL`)\cr A theme function that is designed internally as a function of a `flextable`
 #'   object to change its layout and style. If `NULL`, it will produce a table similar to `rtables` default. Defaults
-#'   to `theme_docx_default(tt)`.
+#'   to `theme_docx_default()`. See details for more information.
 #' @param border (`officer` border object)\cr defaults to `officer::fp_border(width = 0.5)`.
-#' @param indent_size (`integer(1)`)\cr if `NULL`, the default indent size of the table (see [formatters::matrix_form()]
-#'   `indent_size`) is used. To work with `docx`, any size is multiplied by 2 mm (5.67 pt) by default.
+#' @param indent_size (`numeric(1)`)\cr if `NULL`, the default indent size of the table (see [formatters::matrix_form()]
+#'   `indent_size`, default is 2) is used. To work with `docx`, any size is multiplied by 1 mm (2.83 pt) by default.
 #' @param titles_as_header (`flag`)\cr defaults to `TRUE` for [tt_to_flextable()], so the table is self-contained
 #'   as it makes additional header rows for [formatters::main_title()] string and [formatters::subtitles()] character
 #'   vector (one per element). `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text
@@ -761,6 +779,13 @@ margins_landscape <- function() {
 #' @param total_width (`numeric(1)`)\cr total width (in inches) for the resulting flextable(s). Defaults to 10.
 #'
 #' @return A `flextable` object.
+#'
+#' @details
+#' It is possible to use some hidden values for building your own theme. In particular, `tt_to_flextable`
+#' sends in the following variables `tbl_ncol_body = NCOL(tt)` and `tbl_row_class = make_row_df(tt)$node_class`.
+#' These are ignored if not used in the theme. See `theme_docx_default` for an example on own to retrieve
+#' these values and how to use them.
+#'
 #'
 #' @seealso [export_as_docx()]
 #'
@@ -782,14 +807,19 @@ margins_landscape <- function() {
 #'   analyze("AGE", afun = analysisfun)
 #'
 #' tbl <- build_table(lyt, ex_adsl)
+#'
+#' @examplesIf require(flextable)
+#' library(flextable)
+#' # example code
+#'
 #' # rtables style
 #' tt_to_flextable(tbl, theme = NULL)
 #'
-#' tt_to_flextable(tbl, theme = theme_docx_default(tbl, font_size = 7))
+#' tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
 #'
 #' @export
 tt_to_flextable <- function(tt,
-                            theme = theme_docx_default(tt),
+                            theme = theme_docx_default(),
                             border = flextable::fp_border_default(width = 0.5),
                             indent_size = NULL,
                             titles_as_header = TRUE,
@@ -810,6 +840,7 @@ tt_to_flextable <- function(tt,
   checkmate::assert_flag(titles_as_header)
   checkmate::assert_flag(footers_as_text)
   checkmate::assert_flag(counts_in_newline)
+  left_right_fixed_margins <- word_mm_to_pt(1.9)
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
@@ -830,7 +861,7 @@ tt_to_flextable <- function(tt,
   # xxx FIXME missing transformer from character based widths to mm or pt
 
   # Extract relevant information
-  matform <- matrix_form(tt, indent_rownames = TRUE)
+  matform <- matrix_form(tt, indent_rownames = FALSE)
   body <- mf_strings(matform) # Contains header
   spans <- mf_spans(matform) # Contains header
   mpf_aligns <- mf_aligns(matform) # Contains header
@@ -905,6 +936,10 @@ tt_to_flextable <- function(tt,
     }
   }
 
+  # Re-set the number of row count
+  nr_body <- flextable::nrow_part(flx, part = "body")
+  nr_header <- flextable::nrow_part(flx, part = "header")
+
   # Polish the inner horizontal borders from the header
   flx <- flx %>%
     remove_hborder(part = "header", w = "all") %>%
@@ -916,17 +951,38 @@ tt_to_flextable <- function(tt,
     apply_alignments(mpf_aligns[-seq_len(hnum), , drop = FALSE], "body")
 
   # Rownames indentation
-  checkmate::check_int(indent_size, null.ok = TRUE)
+  checkmate::check_number(indent_size, null.ok = TRUE)
   if (is.null(indent_size)) {
-    indent_size <- matform$indent_size * word_mm_to_pt(2) # default is 2mm (5.7pt)
+    # Default indent_size in {rtables} is 2 characters
+    indent_size <- matform$indent_size * word_mm_to_pt(1) # default is 2mm (5.7pt)
+  } else {
+    indent_size <- indent_size * word_mm_to_pt(1)
   }
-  for (i in seq_len(NROW(tt))) {
+
+  # rdf contains information about indentation
+  for (i in seq_len(nr_body)) {
     flx <- flextable::padding(flx,
       i = i, j = 1,
-      padding.left = indent_size * rdf$indent[[i]] + word_mm_to_pt(0.1), # 0.1 mmm in pt
-      padding.right = word_mm_to_pt(0.1) # 0.1 mmm in pt (so not to touch the border)
+      padding.left = indent_size * rdf$indent[[i]] + left_right_fixed_margins, # margins
+      padding.right = left_right_fixed_margins, # 0.19 mmm in pt (so not to touch the border)
+      part = "body"
     )
   }
+
+  # TOPLEFT
+  # Principally used for topleft indentation, this is a bit of a hack xxx
+  for (i in seq_len(nr_header)) {
+    leading_spaces_count <- nchar(hdr[i, 1]) - nchar(stringi::stri_replace(hdr[i, 1], regex = "^ +", ""))
+    header_indent_size <- leading_spaces_count * word_mm_to_pt(1)
+    flx <- flextable::padding(flx,
+      i = i, j = 1,
+      padding.left = header_indent_size + left_right_fixed_margins, # margins
+      padding.right = left_right_fixed_margins, # 0.19 mmm in pt (so not to touch the border)
+      part = "header"
+    )
+  }
+  # topleft styling (-> bottom aligned) xxx merge_at() could merge these, but let's see
+  flx <- flextable::valign(flx, j = 1, valign = "bottom", part = "header")
 
   # Adding referantial footer line separator if present
   if (length(matform$ref_footnotes) > 0 && isFALSE(footers_as_text)) {
@@ -942,7 +998,11 @@ tt_to_flextable <- function(tt,
   flx <- flextable::width(flx, width = final_cwidths) # xxx to fix
 
   if (!is.null(theme)) {
-    flx <- theme(flx)
+    flx <- theme(
+      flx,
+      tbl_ncol_body = flextable::ncol_keys(flx), # NCOL(tt) + 1, # +1 for rownames
+      tbl_row_class = make_row_df(tt)$node_class # These are ignored if not in the theme
+    )
   }
 
   # Title lines (after theme for problems with lines)
@@ -971,24 +1031,28 @@ tt_to_flextable <- function(tt,
 
 #' @describeIn tt_to_flextable Main theme function for [export_as_docx()]
 #'
-#' @inheritParams export_as_docx
 #' @param font (`string`)\cr defaults to `"Arial"`. If the font is not available, `flextable` default is used.
 #' @param font_size (`integer(1)`)\cr font size. Defaults to 9.
+#' @param cell_margins (`numeric(1)` or `numeric(4)`)\cr a numeric or a vector of four numbers indicating
+#'   `c("left", "right", "top", "bottom")`. It defaults to 0 for top and bottom, and to 0.19 `mm` in word `pt`
+#'   for left and right.
 #' @param bold (`character`)\cr parts of the table text that should be in bold. Can be any combination of
 #'   `c("header", "content_rows", "label_rows")`. The first one renders all column names bold (not `topleft` content).
 #'   The second and third option use [formatters::make_row_df()] to render content or/and label rows as bold.
 #' @param bold_manual (named `list` or `NULL`)\cr list of index lists. See example for needed structure. Accepted
 #'   groupings/names are `c("header", "body")`.
+#' @param border (`flextable::fp_border()`)\cr border style. Defaults to `flextable::fp_border_default(width = 0.5)`.
 #'
 #' @seealso [export_as_docx()]
 #'
-#' @examples
+#' @examplesIf require(flextable)
+#' library(flextable)
 #' # Custom theme
 #' special_bold <- list(
 #'   "header" = list("i" = 1, "j" = c(1, 3)),
 #'   "body" = list("i" = c(1, 2), "j" = 1)
 #' )
-#' custom_theme <- theme_docx_default(tbl,
+#' custom_theme <- theme_docx_default(
 #'   font_size = 10,
 #'   font = "Brush Script MT",
 #'   border = flextable::fp_border_default(color = "pink", width = 2),
@@ -1001,13 +1065,18 @@ tt_to_flextable <- function(tt,
 #' )
 #'
 #' @export
-theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
-                               font = "Arial",
+theme_docx_default <- function(font = "Arial",
                                font_size = 9,
+                               cell_margins = c(
+                                 word_mm_to_pt(1.9),
+                                 word_mm_to_pt(1.9),
+                                 0,
+                                 0
+                               ), # Default in docx
                                bold = c("header", "content_rows", "label_rows"),
                                bold_manual = NULL,
                                border = flextable::fp_border_default(width = 0.5)) {
-  function(flx) {
+  function(flx, ...) {
     check_required_packages("flextable")
     if (!inherits(flx, "flextable")) {
       stop(sprintf(
@@ -1015,15 +1084,24 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
         "theme_box()"
       ))
     }
-    if (!is.null(tt) && !inherits(tt, "VTableTree")) {
-      stop("Input table is not an rtables' object.")
-    }
-    checkmate::assert_int(font_size, lower = 1)
+    checkmate::assert_int(font_size, lower = 6, upper = 12)
     checkmate::assert_string(font)
     checkmate::assert_subset(bold,
       eval(formals(theme_docx_default)$bold),
       empty.ok = TRUE
     )
+    if (length(cell_margins) == 1) {
+      cell_margins <- rep(cell_margins, 4)
+    }
+    checkmate::assert_numeric(cell_margins, lower = 0, len = 4)
+
+    # Setting values coming from ...
+    args <- list(...)
+    tbl_row_class <- args$tbl_row_class # This is internal info
+    tbl_ncol_body <- args$tbl_ncol_body # This is internal info
+    if (is.null(tbl_ncol_body)) {
+      tbl_ncol_body <- flextable::ncol_keys(flx) # tbl_ncol_body respects if rownames = FALSE
+    }
 
     # Font setting
     flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
@@ -1033,31 +1111,73 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
     # Vertical borders
     flx <- flx %>%
       flextable::border_outer(part = "body", border = border) %>%
-      flextable::border_outer(part = "header", border = border)
+      flextable::border_outer(part = "header", border = border) %>%
+      flextable::border_inner(part = "header", border = border) # xxx
 
-    # Vertical alignment -> all top for now, we will set it for the future
+    # Vertical alignment -> all top for now
     flx <- flx %>%
-      flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "body") %>%
+      flextable::valign(j = seq(2, tbl_ncol_body), valign = "top", part = "body") %>%
       flextable::valign(j = 1, valign = "top", part = "body") %>%
-      flextable::valign(j = 2:(NCOL(tt) + 1), valign = "top", part = "header")
+      flextable::valign(j = seq(2, tbl_ncol_body), valign = "top", part = "header")
+
+    # Vertical padding/spaces - rownames
+    flx <- flx %>% # summary/data rows and cells
+      flextable::padding(padding.top = cell_margins[3], padding.bottom = cell_margins[4], part = "body")
+    if (any(tbl_row_class == "LabelRow")) { # label rows - 3pt top
+      flx <- flextable::padding(flx,
+        j = 1, i = which(tbl_row_class == "LabelRow"),
+        padding.top = 3 + cell_margins[3], padding.bottom = cell_margins[4], part = "body"
+      )
+    }
+    if (any(tbl_row_class == "ContentRow")) { # content rows - 1pt top
+      flx <- flextable::padding(flx,
+        # j = 1, # removed because I suppose we want alignment with body
+        i = which(tbl_row_class == "ContentRow"),
+        padding.top = 1 + cell_margins[3], padding.bottom = cell_margins[4], part = "body"
+      )
+    }
+
+    # Horizontal padding all table margin 0.19 mm
+    flx <- flextable::padding(flx,
+      j = seq(2, tbl_ncol_body),
+      padding.left = cell_margins[1],
+      padding.right = cell_margins[2]
+    )
+
+    # Vertical padding/spaces - header (3pt after)
+    flx <- flx %>%
+      flextable::padding(
+        j = seq(2, tbl_ncol_body),
+        padding.top = cell_margins[3],
+        padding.bottom = cell_margins[4],
+        part = "header"
+      )
+
+    # single line spacing (for safety) -> space = 1
+    flx <- flextable::line_spacing(flx, space = 1, part = "all")
 
     # Bold settings
     if (any(bold == "header")) {
-      flx <- flextable::bold(flx, j = 2:(NCOL(tt) + 1), part = "header") # Done with theme
+      flx <- flextable::bold(flx, j = seq(2, tbl_ncol_body), part = "header") # Done with theme
     }
     # Content rows are effectively our labels in row names
     if (any(bold == "content_rows")) {
-      if (is.null(tt)) stop('bold = "content_rows" needs the original rtables object (tt).')
-      rdf <- make_row_df(tt)
-      which_body <- which(rdf$node_class == "ContentRow")
-      flx <- flextable::bold(flx, j = 1, i = which_body, part = "body")
+      if (is.null(tbl_row_class)) {
+        stop('bold = "content_rows" needs tbl_row_class = make_row_df(tt).')
+      }
+      flx <- flextable::bold(flx, j = 1, i = which(tbl_row_class == "ContentRow"), part = "body")
     }
     if (any(bold == "label_rows")) {
-      if (is.null(tt)) stop('bold = "content_rows" needs the original rtables object (tt).')
-      rdf <- make_row_df(tt)
-      which_body <- which(rdf$node_class == "LabelRow")
-      flx <- flextable::bold(flx, j = 1, i = which_body, part = "body")
+      if (is.null(tbl_row_class)) {
+        stop('bold = "content_rows" needs tbl_row_class = make_row_df(tt).')
+      }
+      flx <- flextable::bold(flx, j = 1, i = which(tbl_row_class == "LabelRow"), part = "body")
     }
+    # topleft information is also bold if content or label rows are bold
+    if (any(bold %in% c("content_rows", "label_rows"))) {
+      flx <- flextable::bold(flx, j = 1, part = "header")
+    }
+
     # If you want specific cells to be bold
     if (!is.null(bold_manual)) {
       checkmate::assert_list(bold_manual)
@@ -1079,27 +1199,22 @@ theme_docx_default <- function(tt = NULL, # Option for more complicated stuff
       }
     }
 
-    # vertical padding is manual atm and respect doc std
-    flx <- flx %>%
-      # flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = , part = "body") %>% # not specified
-      flextable::padding(j = 1, padding.top = 1, padding.bottom = 1, part = "body") %>%
-      flextable::padding(j = 2:(NCOL(tt) + 1), padding.top = 0, padding.bottom = 3, part = "header")
-
-    # single line spacing (for safety) -> space = 1
-    flx <- flextable::line_spacing(flx, space = 1, part = "all")
-
     flx
   }
+}
+
+#' @describeIn tt_to_flextable Padding helper functions to transform mm to pt.
+#' @param mm (`numeric(1)`)\cr the value in mm to transform to pt.
+#'
+#' @export
+word_mm_to_pt <- function(mm) {
+  mm / 0.3527777778
 }
 
 # Padding helper functions to transform mm to pt and viceversa
 # # General note for word: 1pt -> 0.3527777778mm -> 0.013888888888889"
 word_inch_to_pt <- function(inch) { # nocov
   inch / 0.013888888888889 # nocov
-}
-
-word_mm_to_pt <- function(mm) {
-  mm / 0.3527777778
 }
 
 # Polish horizontal borders

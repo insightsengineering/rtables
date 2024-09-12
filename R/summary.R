@@ -43,7 +43,7 @@ col_paths <- function(x) {
 #'
 #' @return A data frame summarizing the row- or column-structure of `x`.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' ex_adsl_MF <- ex_adsl %>% dplyr::filter(SEX %in% c("M", "F"))
 #'
 #' lyt <- basic_table() %>%
@@ -155,7 +155,7 @@ col_paths_summary <- function(x) {
 #' @param depth (`numeric(1)`)\cr depth.
 #' @param indent (`numeric(1)`)\cr indent.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%
@@ -234,7 +234,7 @@ setMethod(
 #'
 #' @return No return value. Called for the side-effect of printing a row- or subtable-structure summary of `x`.
 #'
-#' @examples
+#' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
 #' iris2 <- iris %>%

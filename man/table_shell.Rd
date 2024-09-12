@@ -54,6 +54,7 @@ A table shell is a rendering of the table which maintains the structure, but doe
 displaying the formatting instructions for each cell.
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -68,7 +69,7 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, iris2)
 table_shell(tbl)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=value_formats]{value_formats()}} for a matrix of formats for each cell in a table.

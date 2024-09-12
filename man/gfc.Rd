@@ -46,6 +46,7 @@ The formatted print-strings for all (body) cells in \code{obj}.
 Get formatted cells
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -60,5 +61,5 @@ tbl <- basic_table() \%>\%
   build_table(iris2)
 
 get_formatted_cells(tbl)
-
+\dontshow{\}) # examplesIf}
 }

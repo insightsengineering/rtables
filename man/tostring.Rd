@@ -64,6 +64,7 @@ undefined wrapping behavior. Passing vectors of already split strings remains su
 case each string is word-wrapped separately with the behavior described above.
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -79,7 +80,7 @@ lyt <- basic_table() \%>\%
 tbl <- build_table(lyt, iris2)
 
 cat(toString(tbl, col_gap = 3))
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[formatters:wrap_string]{wrap_string()}}

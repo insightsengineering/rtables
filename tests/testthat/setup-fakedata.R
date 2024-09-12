@@ -1,9 +1,6 @@
 ## Loading relevant libraries for tests
-library(testthat)
-library(xml2)
-library(tibble)
-library(rtables)
-library(dplyr)
+require(tibble, quietly = TRUE)
+require(dplyr, quietly = TRUE)
 
 # # Load and flag for pdftools to check for it
 # check_pdf <- require(pdftools)
@@ -164,9 +161,7 @@ tt_to_export <- export_fact()
 
 # Creating data-set with wide content to test wrapping
 tt_to_test_wrapping <- function() {
-  trimmed_data <- ex_adsl %>%
-    filter(SEX %in% c("M", "F")) %>%
-    filter(RACE %in% levels(RACE)[1:2])
+  trimmed_data <- ex_adsl[(ex_adsl$SEX %in% c("M", "F")) & c(ex_adsl$RACE %in% levels(ex_adsl$RACE)[1:2]), ]
 
   levels(trimmed_data$ARM)[1] <- "Incredibly long column name to be wrapped"
   levels(trimmed_data$ARM)[2] <- "This_should_be_somewhere_split"
@@ -188,11 +183,11 @@ tt_for_wrap <- tt_to_test_wrapping()
 
 tt_to_test_newline_chars <- function() {
   set.seed(1)
-  DM_trick <- DM %>%
-    mutate(ARM = "ARM \n\nA\n") %>%
-    mutate(ARM2 = sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),
-      replace = TRUE, nrow(DM)
-    )) # last \n is eaten up if no empty space
+  DM_trick <- DM
+  DM_trick$ARM <- "ARM \n\nA\n"
+  DM_trick$ARM2 <- sample(c("TWO\nwords\n ", "A wo\n\nrd\n\n"),
+    replace = TRUE, nrow(DM)
+  ) # last \n is eaten up if no empty space
   levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
   tbl <- basic_table() %>%
     split_rows_by("SEX",

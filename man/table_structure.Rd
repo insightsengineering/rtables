@@ -18,6 +18,7 @@ No return value. Called for the side-effect of printing a row- or subtable-struc
 Summarize table
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -41,5 +42,5 @@ row_paths(tbl)
 table_structure(tbl)
 
 table_structure(tbl, detail = "row")
-
+\dontshow{\}) # examplesIf}
 }

@@ -1,5 +1,7 @@
 # Reporting an Issue with rtables
 
+Do not use this form to ask a question, or ask for assistance. Instead, ask on [Stackoverflow](https://stackoverflow.com/) using the `nest-rtables` tag. Questions about a function's use will be closed without a response.
+
 Please briefly describe your problem and, when relevant, the output you expect.
 Please also provide the output of `utils::sessionInfo()` or
 `devtools::session_info()` at the end of your post.

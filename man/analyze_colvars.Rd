@@ -51,6 +51,7 @@ A \code{PreDataTableLayouts} object suitable for passing to further layouting fu
 Generate rows analyzing different variables across columns
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
@@ -90,7 +91,7 @@ lyt2 <- basic_table() \%>\%
 
 tbl2 <- build_table(lyt2, ANL)
 tbl2
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=split_cols_by_multivar]{split_cols_by_multivar()}}
