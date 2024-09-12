@@ -131,21 +131,82 @@ basic_layout %>%
 ```
 
 #### Using `sprintf_format` on 2d and 3d tables
-Let's continue with more complex examples. We will use the `sprintf_format` function on 2d and 3d tables. 
+Let's continue with more complex examples. As seen below, we use the `sprintf_format` function on 2d and 3d tables. 
+
+
+```{r, echo=FALSE}
+format_mean_median_sd <- sprintf_format("%.2f - %.1f - %.0f")
+```
+
+We can use this format in the `analyze` function. Below is the example for table with values in mean, median, and sd. The format above is defined for three values separated by a dash.
 
 ```{r, echo=FALSE}
 basic_layout %>%
   analyze(vars = "AGE", afun = function(x) {
     list(
-      "Age: mean, median, sd" = rcell(c(mean(x), median(x) ,sd(x))),
-      "Age: max, min" = rcell(c(max(x), min(x))),
-      "Age: range" = rcell(max(x) - min(x))
+      "Age: mean, median, sd" = rcell(c(mean(x), median(x) ,sd(x)))
     )
-    }) %>%
+    }, format = format_mean_median_sd) %>%
+  build_table(ADSL)
+```
+
+Extending the example to 3d table, we can use the same format. However, we need to add a few more format definitions to support all of the values in the table.
+
+```{r, echo=FALSE}
+format_mean_median_sd <- sprintf_format("%.2f - %.1f - %.0f")
+format_max_min <- sprintf_format("%.0f - %.0f")
+format_range <- sprintf_format("%.0f")
+```
+
+
+In this case, the most clear is to define the format for each values in the list separately. We can do this becauase the `rcell` function allows us to define the format.
+```{r, echo=FALSE}
+basic_layout %>%
+  analyze(vars = "AGE", afun = function(x) {
+    list(
+      "Age: mean, median, sd" = rcell(c(mean(x), median(x), sd(x)), format = format_mean_median_sd),
+      "Age: max, min" = rcell(c(max(x), min(x)), format = format_max_min),
+      "Age: range" = rcell(max(x) - min(x), format = format_range)
+    )
+  }) %>%
   build_table(ADSL)
 ```
 
 #### Using conditional custom formatting
+Importantly, it is also possible to program completely custom formatting functions. 
+
+```{r, echo=FALSE}
+custom_format_value <- function(x, format = NULL, na_str = "NA") {
+  if (length(x) == 0) {
+    return("")
+  }
+  
+  if (length(na_str) == 0) {
+    na_str <- "NA"
+  }
+  
+  if (is.null(format)) {
+    return(toString(x))
+  }
+  
+  # Simplified switch statement for format handling
+  switch(format,
+    "xx" = as.character(x),
+    "xx." = round(x, digits = 0),
+    "xx.x" = round(x, digits = 1),
+    "xx.xx" = round(x, digits = 2),
+    "xx.xxx" = round(x, digits = 3),
+    "xx.xxxx" = round(x, digits = 4),
+    paste("format string", format, "not found")
+  )
+}
+
+# Example usage
+basic_layout %>%
+  analyze(vars = "AGE", afun = mean, format = custom_format_value()) %>%
+  build_table(ADSL)
+
+```
 
 
 
