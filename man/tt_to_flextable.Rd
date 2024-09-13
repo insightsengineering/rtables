@@ -169,6 +169,46 @@ tt_to_flextable(tbl, theme = NULL)
 
 tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
 
+# Example with multiple themes (only extending the docx default!)
+my_theme <- function(x, ...) {
+  border_inner(x, part = "body", border = flextable::fp_border_default(width = 0.5))
+}
+flx <- tt_to_flextable(tbl, theme = c(theme_docx_default(), my_theme))
+\dontshow{\}) # examplesIf}
+\dontshow{if (require(flextable)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(flextable)
+# Custom theme
+special_bold <- list(
+  "header" = list("i" = 1, "j" = c(1, 3)),
+  "body" = list("i" = c(1, 2), "j" = 1)
+)
+custom_theme <- theme_docx_default(
+  font_size = 10,
+  font = "Brush Script MT",
+  border = flextable::fp_border_default(color = "pink", width = 2),
+  bold = NULL,
+  bold_manual = special_bold
+)
+tt_to_flextable(tbl,
+  border = flextable::fp_border_default(color = "pink", width = 2),
+  theme = custom_theme
+)
+
+# Extending themes
+my_theme <- function(font_size = 6) { # here can pass additional arguments for default theme
+  function(flx, ...) {
+    # First apply theme_docx_default
+    flx <- theme_docx_default(font_size = font_size)(flx, ...)
+
+    # Then apply additional styling
+    flx <- border_inner(flx, part = "body", border = flextable::fp_border_default(width = 0.5))
+
+    return(flx)
+  }
+}
+flx <- tt_to_flextable(tbl, theme = my_theme())
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=export_as_docx]{export_as_docx()}}
 
