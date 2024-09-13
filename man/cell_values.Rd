@@ -47,6 +47,7 @@ lyt <- basic_table() \%>\%
   split_rows_by("STRATA1") \%>\%
   analyze("AGE")
 
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr) ## for mutate
 tbl <- build_table(lyt, DM \%>\%
   mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
@@ -94,5 +95,5 @@ cvnolist <- value_at(
   c("ARM", "B: Placebo", "SEX", "M")
 )
 stopifnot(identical(cvlist[[1]], cvnolist))
-
+\dontshow{\}) # examplesIf}
 }

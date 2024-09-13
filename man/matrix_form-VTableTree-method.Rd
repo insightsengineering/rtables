@@ -55,6 +55,7 @@ values are determined using \code{get_formatted_cells}. (Column labels are calcu
 function.
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
@@ -74,5 +75,5 @@ lyt
 tbl <- build_table(lyt, iris2)
 
 matrix_form(tbl)
-
+\dontshow{\}) # examplesIf}
 }

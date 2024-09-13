@@ -19,6 +19,7 @@ A data frame summarizing the row- or column-structure of \code{x}.
 Print row/column paths summary
 }
 \examples{
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 ex_adsl_MF <- ex_adsl \%>\% dplyr::filter(SEX \%in\% c("M", "F"))
 
 lyt <- basic_table() \%>\%
@@ -46,5 +47,5 @@ tbl2 <- rtable(
   rrow("r1", 1, 2, 1, 2), rrow("r2", 3, 4, 2, 1)
 )
 col_paths_summary(tbl2)
-
+\dontshow{\}) # examplesIf}
 }
