@@ -596,7 +596,8 @@ formatters::export_as_pdf
 #'
 #' @seealso [tt_to_flextable()]
 #'
-#' @examples
+#' @examplesIf require(flextable)
+#' library(flextable)
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
@@ -604,13 +605,11 @@ formatters::export_as_pdf
 #' tbl <- build_table(lyt, ex_adsl)
 #'
 #' # See how section_properties_portrait function is built for custom
-#' \dontrun{
 #' tf <- tempfile(fileext = ".docx")
 #' export_as_docx(tbl,
 #'   file = tf,
 #'   section_properties = section_properties_default(orientation = "landscape")
 #' )
-#' }
 #'
 #' @export
 export_as_docx <- function(tt,
@@ -813,6 +812,11 @@ margins_landscape <- function() {
 #'   analyze("AGE", afun = analysisfun)
 #'
 #' tbl <- build_table(lyt, ex_adsl)
+#'
+#' @examplesIf require(flextable)
+#' library(flextable)
+#' # example code
+#'
 #' # rtables style
 #' tt_to_flextable(tbl, theme = NULL)
 #'
@@ -1110,7 +1114,8 @@ tt_to_flextable <- function(tt,
 #'
 #' @seealso [export_as_docx()]
 #'
-#' @examples
+#' @examplesIf require(flextable)
+#' library(flextable)
 #' # Custom theme
 #' special_bold <- list(
 #'   "header" = list("i" = 1, "j" = c(1, 3)),
