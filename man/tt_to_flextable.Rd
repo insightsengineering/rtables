@@ -3,6 +3,7 @@
 \name{tt_to_flextable}
 \alias{tt_to_flextable}
 \alias{theme_docx_default}
+\alias{theme_html_default}
 \alias{word_mm_to_pt}
 \title{Create a \code{flextable} from an \code{rtables} table}
 \usage{
@@ -12,6 +13,7 @@ tt_to_flextable(
   border = flextable::fp_border_default(width = 0.5),
   indent_size = NULL,
   titles_as_header = TRUE,
+  bold_titles = TRUE,
   footers_as_text = FALSE,
   counts_in_newline = FALSE,
   paginate = FALSE,
@@ -33,6 +35,13 @@ theme_docx_default(
   border = flextable::fp_border_default(width = 0.5)
 )
 
+theme_html_default(
+  font = "FreeMono",
+  font_size = 9,
+  cell_margins = 0.2,
+  border = flextable::fp_border_default(width = 0.5)
+)
+
 word_mm_to_pt(mm)
 }
 \arguments{
@@ -40,7 +49,7 @@ word_mm_to_pt(mm)
 
 \item{theme}{(\code{function} or \code{NULL})\cr A theme function that is designed internally as a function of a \code{flextable}
 object to change its layout and style. If \code{NULL}, it will produce a table similar to \code{rtables} default. Defaults
-to \code{theme_docx_default()}. See details for more information.}
+to \code{theme_docx_default()} that is a classic Word output. See details for more information.}
 
 \item{border}{(\code{flextable::fp_border()})\cr border style. Defaults to \code{flextable::fp_border_default(width = 0.5)}.}
 
@@ -51,6 +60,9 @@ to \code{theme_docx_default()}. See details for more information.}
 as it makes additional header rows for \code{\link[formatters:title_footer]{formatters::main_title()}} string and \code{\link[formatters:title_footer]{formatters::subtitles()}} character
 vector (one per element). \code{FALSE} is suggested for \code{\link[=export_as_docx]{export_as_docx()}}. This adds titles and subtitles as a text
 paragraph above the table. The same style is applied.}
+
+\item{bold_titles}{(\code{flag} or \code{integer})\cr defaults to \code{TRUE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the titles are bold. If
+it is one or more integers, those lines will be bold.}
 
 \item{footers_as_text}{(\code{flag})\cr defaults to \code{FALSE} for \code{\link[=tt_to_flextable]{tt_to_flextable()}}, so the table is self-contained with
 the \code{flextable} definition of footnotes. \code{TRUE} is used for \code{\link[=export_as_docx]{export_as_docx()}} to add the footers as a new
@@ -83,7 +95,8 @@ used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
 \item{total_width}{(\code{numeric(1)})\cr total width (in inches) for the resulting flextable(s). Defaults to 10.}
 
-\item{font}{(\code{string})\cr defaults to \code{"Arial"}. If the font is not available, \code{flextable} default is used.}
+\item{font}{(\code{string})\cr defaults to \code{"Arial"}. If the font is not available, \code{flextable} default is used.
+Please consider consulting the family column from \code{systemfonts::system_fonts()}.}
 
 \item{font_size}{(\code{integer(1)})\cr font size. Defaults to 9.}
 
@@ -110,14 +123,20 @@ from an \code{rtables} table. If \code{theme = NULL}, \code{rtables}-like style 
 \code{\link[=theme_docx_default]{theme_docx_default()}} will produce a \code{.docx}-friendly table.
 }
 \details{
-It is possible to use some hidden values for building your own theme. In particular, \code{tt_to_flextable}
-sends in the following variable \code{tbl_row_class = make_row_df(tt)$node_class}.
+Themes can also be extended when you need only a minor change from a default style. You can either
+add your own theme to the theme call (e.g. \code{c(theme_docx_default(), my_theme)}) or create a new
+theme like shown in the examples. Please pay attention to the parameters' inputs as they are relevant
+for this to work properly.
+Indeed, it is possible to use some hidden values for building your own theme (hence the need of \code{...}).
+In particular, \code{tt_to_flextable} sends in the following variable \code{tbl_row_class = make_row_df(tt)$node_class}.
 This is ignored if not used in the theme. See \code{theme_docx_default} for an example on own to retrieve
 these values and how to use them.
 }
 \section{Functions}{
 \itemize{
-\item \code{theme_docx_default()}: Main theme function for \code{\link[=export_as_docx]{export_as_docx()}}
+\item \code{theme_docx_default()}: Main theme function for \code{\link[=export_as_docx]{export_as_docx()}}.
+
+\item \code{theme_html_default()}: Theme function for html outputs.
 
 \item \code{word_mm_to_pt()}: Padding helper functions to transform mm to pt.
 
@@ -145,6 +164,12 @@ tt_to_flextable(tbl, theme = NULL)
 
 tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
 
+# Example with multiple themes (only extending the docx default!)
+my_theme <- function(x, ...) {
+  border_inner(x, part = "body", border = flextable::fp_border_default(width = 0.5))
+}
+flx <- tt_to_flextable(tbl, theme = c(theme_docx_default(), my_theme))
+
 # Custom theme
 special_bold <- list(
   "header" = list("i" = 1, "j" = c(1, 3)),
@@ -161,6 +186,20 @@ tt_to_flextable(tbl,
   border = flextable::fp_border_default(color = "pink", width = 2),
   theme = custom_theme
 )
+
+# Extending themes
+my_theme <- function(font_size = 6) { # here can pass additional arguments for default theme
+  function(flx, ...) {
+    # First apply theme_docx_default
+    flx <- theme_docx_default(font_size = font_size)(flx, ...)
+
+    # Then apply additional styling
+    flx <- border_inner(flx, part = "body", border = flextable::fp_border_default(width = 0.5))
+
+    return(flx)
+  }
+}
+flx <- tt_to_flextable(tbl, theme = my_theme())
 
 }
 \seealso{

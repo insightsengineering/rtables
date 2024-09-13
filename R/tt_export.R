@@ -768,6 +768,8 @@ margins_landscape <- function() {
 #'   as it makes additional header rows for [formatters::main_title()] string and [formatters::subtitles()] character
 #'   vector (one per element). `FALSE` is suggested for [export_as_docx()]. This adds titles and subtitles as a text
 #'   paragraph above the table. The same style is applied.
+#' @param bold_titles (`flag` or `integer`)\cr defaults to `TRUE` for [tt_to_flextable()], so the titles are bold. If
+#'   it is one or more integers, those lines will be bold.
 #' @param footers_as_text (`flag`)\cr defaults to `FALSE` for [tt_to_flextable()], so the table is self-contained with
 #'   the `flextable` definition of footnotes. `TRUE` is used for [export_as_docx()] to add the footers as a new
 #'   paragraph after the table. The same style is applied, but with a smaller font.
@@ -786,7 +788,7 @@ margins_landscape <- function() {
 #' add your own theme to the theme call (e.g. `c(theme_docx_default(), my_theme)`) or create a new
 #' theme like shown in the examples. Please pay attention to the parameters' inputs as they are relevant
 #' for this to work properly.
-#' Indeed, it is possible to use some hidden values for building your own theme (hence the need of `...`). 
+#' Indeed, it is possible to use some hidden values for building your own theme (hence the need of `...`).
 #' In particular, `tt_to_flextable` sends in the following variable `tbl_row_class = make_row_df(tt)$node_class`.
 #' This is ignored if not used in the theme. See `theme_docx_default` for an example on own to retrieve
 #' these values and how to use them.
@@ -815,12 +817,12 @@ margins_landscape <- function() {
 #' tt_to_flextable(tbl, theme = NULL)
 #'
 #' tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
-#' 
+#'
 #' # Example with multiple themes (only extending the docx default!)
 #' my_theme <- function(x, ...) {
 #'   border_inner(x, part = "body", border = flextable::fp_border_default(width = 0.5))
 #' }
-#' flx <- tt_to_flextable(tbl, theme = c(theme_docx_default(), my_theme)) 
+#' flx <- tt_to_flextable(tbl, theme = c(theme_docx_default(), my_theme))
 #'
 #' @export
 tt_to_flextable <- function(tt,
@@ -828,6 +830,7 @@ tt_to_flextable <- function(tt,
                             border = flextable::fp_border_default(width = 0.5),
                             indent_size = NULL,
                             titles_as_header = TRUE,
+                            bold_titles = TRUE,
                             footers_as_text = FALSE,
                             counts_in_newline = FALSE,
                             paginate = FALSE,
@@ -884,6 +887,10 @@ tt_to_flextable <- function(tt,
 
   # Fundamental content of the table
   content <- as.data.frame(body[-seq_len(hnum), , drop = FALSE])
+  
+  # Fix for empty strings -> they used to get wrong font and size
+  content[content == ""] <- " "
+  
   flx <- flextable::qflextable(content) %>%
     # Default rtables if no footnotes
     remove_hborder(part = "body", w = "bottom")
@@ -891,10 +898,7 @@ tt_to_flextable <- function(tt,
   # Header addition -> NB: here we have a problem with (N=xx)
   hdr <- body[seq_len(hnum), , drop = FALSE]
 
-  # XXX NOT NECESSARY change of (N=xx) which is by default on a new line but we do not
-  # want this in docx, and it depends on the size of the table, it is not another
-  # row with different columns -> All of this should be fixed at source (in matrix_form)
-  # See .tbl_header_mat for this change
+  # Change of (N=xx) behavior as we need it in the same cell, even if on diff lines
   if (hnum > 1) { # otherwise nothing to do
     det_nclab <- apply(hdr, 2, grepl, pattern = "\\(N=[0-9]+\\)$")
     has_nclab <- apply(det_nclab, 1, any) # vector of rows with (N=xx)
@@ -903,23 +907,23 @@ tt_to_flextable <- function(tt,
       for (i in seq_along(whsnc)) {
         wi <- whsnc[i]
         what_is_nclab <- det_nclab[wi, ] # extract detected row
-        
-        colcounts_split_chr <- if(isFALSE(counts_in_newline)) {
+
+        colcounts_split_chr <- if (isFALSE(counts_in_newline)) {
           " "
         } else {
           "\n"
         }
-  
+
         # condition for popping the interested row by merging the upper one
         hdr[wi, what_is_nclab] <- paste(hdr[wi - 1, what_is_nclab],
           hdr[wi, what_is_nclab],
           sep = colcounts_split_chr
         )
         hdr[wi - 1, what_is_nclab] <- ""
-  
+
         # Removing unused rows if necessary
         row_to_pop <- wi - 1
-        
+
         # Case where topleft is not empty, we reconstruct the header pushing empty up
         what_to_put_up <- hdr[row_to_pop, what_is_nclab, drop = FALSE]
         if (all(!nzchar(what_to_put_up)) && row_to_pop > 1) {
@@ -927,16 +931,16 @@ tt_to_flextable <- function(tt,
             cbind(
               hdr[seq(row_to_pop), !what_is_nclab],
               rbind(
-                what_to_put_up, 
+                what_to_put_up,
                 hdr[seq(row_to_pop - 1), what_is_nclab]
-                )
+              )
             ),
             hdr[seq(row_to_pop + 1, nrow(hdr)), ]
           )
           row_to_pop <- 1
           hdr <- reconstructed_hdr
         }
-        
+
         # We can remove the row if they are all ""
         if (all(!nzchar(hdr[row_to_pop, ]))) {
           hdr <- hdr[-row_to_pop, , drop = FALSE]
@@ -952,6 +956,9 @@ tt_to_flextable <- function(tt,
     }
   }
 
+  # Fix for empty strings
+  hdr[hdr == ""] <- " "
+
   flx <- flx %>%
     flextable::set_header_labels( # Needed bc headers must be unique
       values = setNames(
@@ -959,7 +966,8 @@ tt_to_flextable <- function(tt,
         names(content)
       )
     )
-  # If there are more rows
+
+  # If there are more rows -> add them
   if (hnum > 1) {
     for (i in seq(hnum - 1, 1)) {
       sel <- spans_to_viscell(spans[i, ])
@@ -981,7 +989,7 @@ tt_to_flextable <- function(tt,
     remove_hborder(part = "header", w = "all") %>%
     add_hborder("header", ii = c(0, hnum), border = border)
 
-  # ALIGNS
+  # ALIGNS - horizontal
   flx <- flx %>%
     apply_alignments(mpf_aligns[seq_len(hnum), , drop = FALSE], "header") %>%
     apply_alignments(mpf_aligns[-seq_len(hnum), , drop = FALSE], "body")
@@ -1017,8 +1025,6 @@ tt_to_flextable <- function(tt,
       part = "header"
     )
   }
-  # topleft styling (-> bottom aligned) xxx merge_at() could merge these, but let's see
-  flx <- flextable::valign(flx, j = 1, valign = "top", part = "header")
 
   # Adding referantial footer line separator if present
   if (length(matform$ref_footnotes) > 0 && isFALSE(footers_as_text)) {
@@ -1028,15 +1034,17 @@ tt_to_flextable <- function(tt,
 
   # Footer lines
   if (length(all_footers(tt)) > 0 && isFALSE(footers_as_text)) {
-    flx <- flextable::add_footer_lines(flx, values = all_footers(tt))
+    flx <- flextable::add_footer_lines(flx, values = all_footers(tt)) %>%
+      add_hborder(part = "body", ii = nrow(tt), border = border)
   }
 
   flx <- flextable::width(flx, width = final_cwidths) # xxx to fix
 
+  # Last step! Apply the theme
   if (!is.null(theme)) {
     # Wrap theme in a list if it's not already a list
     theme_list <- if (is.list(theme)) theme else list(theme)
-    # Loop through the themes 
+    # Loop through the themes
     for (them in theme_list) {
       flx <- them(
         flx,
@@ -1044,20 +1052,12 @@ tt_to_flextable <- function(tt,
       )
     }
   }
-  
+
   # Title lines (after theme for problems with lines)
   if (titles_as_header && length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
-    real_titles <- all_titles(tt)
-    real_titles <- real_titles[nzchar(real_titles)]
-    flx <- flx %>% 
-      flextable::add_header_lines(values = real_titles, top = TRUE) %>%
-      # Remove the added borders
-      flextable::border(part = "header", i = seq_along(real_titles), 
-                        border.top = flextable::fp_border_default(width = 0),
-                        border.left = flextable::fp_border_default(width = 0),
-                        border.right = flextable::fp_border_default(width = 0))
+    flx <- .add_titles_as_header(flx, all_titles = all_titles(tt), bold = bold_titles)
   }
-  
+
   # These final formatting need to work with colwidths
   flx <- flextable::set_table_properties(flx, layout = "autofit", align = "left") # xxx to fix
   # NB: autofit or fixed may be switched if widths are correctly staying in the page
@@ -1066,16 +1066,43 @@ tt_to_flextable <- function(tt,
   flx
 }
 
-#' @describeIn tt_to_flextable Main theme function for [export_as_docx()]
+.add_titles_as_header <- function(flx, all_titles, bold = TRUE) {
+  all_titles <- all_titles[nzchar(all_titles)] # Remove empty titles (use " ")
+  flx <- flx %>%
+    flextable::add_header_lines(values = all_titles, top = TRUE) %>%
+    # Remove the added borders
+    flextable::border(
+      part = "header", i = seq_along(all_titles),
+      border.top = flextable::fp_border_default(width = 0),
+      border.bottom = flextable::fp_border_default(width = 0),
+      border.left = flextable::fp_border_default(width = 0),
+      border.right = flextable::fp_border_default(width = 0)
+    ) %>% 
+    flextable::bg(part = "header", i = seq_along(all_titles), bg = "white")
+  
+  if (isTRUE(bold)) {
+    flx <- flextable::bold(flx, part = "header", i = seq_along(all_titles))
+  } else if (checkmate::test_integerish(bold)) {
+    if (any(bold > length(all_titles))) {
+      stop("bold values are greater than the number of titles lines.")
+    }
+    flx <- flextable::bold(flx, part = "header", i = bold)
+  }
+  
+  flx
+}
+
+#' @describeIn tt_to_flextable Main theme function for [export_as_docx()].
 #'
 #' @param font (`string`)\cr defaults to `"Arial"`. If the font is not available, `flextable` default is used.
+#'   Please consider consulting the family column from `systemfonts::system_fonts()`.
 #' @param font_size (`integer(1)`)\cr font size. Defaults to 9.
 #' @param cell_margins (`numeric(1)` or `numeric(4)`)\cr a numeric or a vector of four numbers indicating
 #'   `c("left", "right", "top", "bottom")`. It defaults to 0 for top and bottom, and to 0.19 `mm` in word `pt`
 #'   for left and right.
 #' @param bold (`character`)\cr parts of the table text that should be in bold. Can be any combination of
-#'   `c("header", "content_rows", "label_rows", "top_left")`. The first one renders all column names bold 
-#'   (not `topleft` content). The second and third option use [formatters::make_row_df()] to render content or/and 
+#'   `c("header", "content_rows", "label_rows", "top_left")`. The first one renders all column names bold
+#'   (not `topleft` content). The second and third option use [formatters::make_row_df()] to render content or/and
 #'   label rows as bold.
 #' @param bold_manual (named `list` or `NULL`)\cr list of index lists. See example for needed structure. Accepted
 #'   groupings/names are `c("header", "body")`.
@@ -1100,20 +1127,20 @@ tt_to_flextable <- function(tt,
 #'   border = flextable::fp_border_default(color = "pink", width = 2),
 #'   theme = custom_theme
 #' )
-#' 
+#'
 #' # Extending themes
 #' my_theme <- function(font_size = 6) { # here can pass additional arguments for default theme
 #'   function(flx, ...) {
 #'     # First apply theme_docx_default
 #'     flx <- theme_docx_default(font_size = font_size)(flx, ...)
-#'     
+#'
 #'     # Then apply additional styling
 #'     flx <- border_inner(flx, part = "body", border = flextable::fp_border_default(width = 0.5))
-#'     
+#'
 #'     return(flx)
 #'   }
 #' }
-#' flx <- tt_to_flextable(tbl, theme = my_theme()) 
+#' flx <- tt_to_flextable(tbl, theme = my_theme())
 #'
 #' @export
 theme_docx_default <- function(font = "Arial",
@@ -1148,33 +1175,54 @@ theme_docx_default <- function(font = "Arial",
 
     # Setting values coming from ...
     args <- list(...)
-    tbl_row_class <- args$tbl_row_class # This is internal info
+    tbl_row_class <- args$tbl_row_class
+    tbl_titles <- args$titles
     tbl_ncol_body <- flextable::ncol_keys(flx) # tbl_ncol_body respects if rownames = FALSE (only rlistings)
 
     # Font setting
     flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
       flextable::fontsize(size = font_size - 1, part = "footer") %>%
       flextable::font(fontname = font, part = "all")
-    
-    # Vertical borders
+
+    # all borders
     flx <- flx %>%
       flextable::border_outer(part = "body", border = border) %>%
-      flextable::border_outer(part = "header", border = border) %>%
-      flextable::border(part = "header", j = seq(2, tbl_ncol_body), 
-                        border.left = border,
-                        border.right = border,
-                        border.top = border,
-                        border.bottom = border)
+      # flextable::border_outer(part = "header", border = border) %>%
+      flextable::border(
+        part = "header", j = 1,
+        border.left = border,
+        border.right = border
+      ) %>%
+      flextable::border(
+        part = "header", j = 1, i = 1,
+        border.top = border
+      ) %>%
+      flextable::border(
+        part = "header", j = 1, i = flextable::nrow_part(flx, "header"),
+        border.bottom = border
+      ) %>%
+      flextable::border(
+        part = "header", j = seq(2, tbl_ncol_body),
+        border.left = border,
+        border.right = border,
+        border.top = border,
+        border.bottom = border
+      )
 
     # Vertical alignment -> all top for now
     flx <- flx %>%
       flextable::valign(j = seq(2, tbl_ncol_body), valign = "top", part = "body") %>%
       flextable::valign(j = 1, valign = "top", part = "all") %>%
+      # topleft styling (-> bottom aligned) xxx merge_at() could merge these, but let's see
+      flextable::valign(j = 1, valign = "top", part = "header") %>%
       flextable::valign(j = seq(2, tbl_ncol_body), valign = "top", part = "header")
 
+    flx <- .apply_indentation_and_margin(flx,
+      cell_margins = cell_margins, tbl_row_class = tbl_row_class,
+      tbl_ncol_body = tbl_ncol_body
+    )
+
     # Vertical padding/spaces - rownames
-    flx <- flx %>% # summary/data rows and cells
-      flextable::padding(padding.top = cell_margins[3], padding.bottom = cell_margins[4], part = "body")
     if (any(tbl_row_class == "LabelRow")) { # label rows - 3pt top
       flx <- flextable::padding(flx,
         j = 1, i = which(tbl_row_class == "LabelRow"),
@@ -1188,23 +1236,6 @@ theme_docx_default <- function(font = "Arial",
         padding.top = 1 + cell_margins[3], padding.bottom = cell_margins[4], part = "body"
       )
     }
-
-    # Horizontal padding all table margin 0.19 mm
-    flx <- flextable::padding(flx,
-      j = seq(2, tbl_ncol_body),
-      padding.left = cell_margins[1],
-      padding.right = cell_margins[2]
-    )
-
-    # Vertical padding/spaces - header (3pt after)
-    flx <- flx %>%
-      flextable::padding(
-        j = seq(1, tbl_ncol_body), # also topleft
-        padding.top = cell_margins[3],
-        padding.bottom = cell_margins[4],
-        part = "header"
-      )
-
     # single line spacing (for safety) -> space = 1
     flx <- flextable::line_spacing(flx, space = 1, part = "all")
 
@@ -1231,28 +1262,142 @@ theme_docx_default <- function(font = "Arial",
     }
 
     # If you want specific cells to be bold
-    if (!is.null(bold_manual)) {
-      checkmate::assert_list(bold_manual)
-      valid_sections <- c("header", "body") # Only valid values
-      checkmate::assert_subset(names(bold_manual), valid_sections)
-      for (bi in seq_along(bold_manual)) {
-        bld_tmp <- bold_manual[[bi]]
-        checkmate::assert_list(bld_tmp)
-        if (!all(c("i", "j") %in% names(bld_tmp)) || !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
-          stop(
-            "Found an allowed section for manual bold (", names(bold_manual)[bi],
-            ") that was not a named list with i (row) and j (col) integer vectors."
-          )
-        }
-        flx <- flextable::bold(flx,
-          i = bld_tmp$i, j = bld_tmp$j,
-          part = names(bold_manual)[bi]
-        )
-      }
-    }
+    flx <- .apply_bold_manual(flx, bold_manual)
 
     flx
   }
+}
+
+#' @describeIn tt_to_flextable Theme function for html outputs.
+#'
+#' @export
+theme_html_default <- function(font = "FreeMono",
+                               font_size = 9,
+                               cell_margins = 0.2, 
+                               border = flextable::fp_border_default(width = 0.5)) {
+  function(flx, ...) {
+    check_required_packages("flextable")
+    if (!inherits(flx, "flextable")) {
+      stop(sprintf(
+        "Function `%s` supports only flextable objects.",
+        "theme_box()"
+      ))
+    }
+    checkmate::assert_int(font_size, lower = 6, upper = 12)
+    checkmate::assert_string(font)
+    if (length(cell_margins) == 1) {
+      cell_margins <- rep(cell_margins, 4)
+    }
+    checkmate::assert_numeric(cell_margins, lower = 0, len = 4)
+    
+    # Setting values coming from ...
+    args <- list(...)
+    tbl_row_class <- args$tbl_row_class # This is internal info
+    nc_body <- flextable::ncol_keys(flx) # respects if rownames = FALSE (only rlistings)
+    nr_header <- flextable::nrow_part(flx, "header")
+
+    # Font setting
+    flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
+      flextable::fontsize(size = font_size - 1, part = "footer") %>%
+      flextable::font(fontname = font, part = "all")
+    
+    # all borders
+    flx <- flx %>%
+      flextable::border_outer(part = "body", border = border) %>%
+      border_inner(part = "body", border = border) %>%
+      # flextable::border_outer(part = "header", border = border) %>%
+      flextable::border(
+        part = "header", j = 1,
+        border.left = border,
+        border.right = border
+      ) %>%
+      flextable::border(
+        part = "header", j = 1, i = 1,
+        border.top = border
+      ) %>%
+      flextable::border(
+        part = "header", j = 1, i = flextable::nrow_part(flx, "header"),
+        border.bottom = border
+      ) %>%
+      flextable::border(
+        part = "header", j = seq(2, nc_body),
+        border.left = border,
+        border.right = border,
+        border.top = border,
+        border.bottom = border
+      )
+    
+    if (any(tbl_row_class == "LabelRow")) { # label rows - one border
+      flx <- flextable::border(flx,
+                               j = seq(2, nc_body - 1),
+                               i = which(tbl_row_class == "LabelRow"), part = "body",
+                               border.left = flextable::fp_border_default(width = 0),
+                               border.right = flextable::fp_border_default(width = 0)
+      ) %>%
+        flextable::border(j = 1,
+                          i = which(tbl_row_class == "LabelRow"), part = "body",
+                          border.right = flextable::fp_border_default(width = 0)
+        ) %>%
+        flextable::border(j = nc_body,
+                          i = which(tbl_row_class == "LabelRow"), part = "body",
+                          border.left = flextable::fp_border_default(width = 0)
+        )
+    }
+    flx <- flextable::bg(flx, i = seq_len(nr_header), bg = "grey", part = "header")
+    
+    return(flx)
+  }
+}
+
+.apply_bold_manual <- function(flx, bold_manual) {
+  if (is.null(bold_manual)) {
+    return(flx)
+  }
+  checkmate::assert_list(bold_manual)
+  valid_sections <- c("header", "body") # Only valid values
+  checkmate::assert_subset(names(bold_manual), valid_sections)
+  for (bi in seq_along(bold_manual)) {
+    bld_tmp <- bold_manual[[bi]]
+    checkmate::assert_list(bld_tmp)
+    if (!all(c("i", "j") %in% names(bld_tmp)) || !all(vapply(bld_tmp, checkmate::test_integerish, logical(1)))) {
+      stop(
+        "Found an allowed section for manual bold (", names(bold_manual)[bi],
+        ") that was not a named list with i (row) and j (col) integer vectors."
+      )
+    }
+    flx <- flextable::bold(flx,
+      i = bld_tmp$i, j = bld_tmp$j,
+      part = names(bold_manual)[bi]
+    )
+  }
+
+  flx
+}
+
+.apply_indentation_and_margin <- function(flx, cell_margins, tbl_row_class, tbl_ncol_body) {
+  flx <- flx %>% # summary/data rows and cells
+    flextable::padding(
+      padding.top = cell_margins[3],
+      padding.bottom = cell_margins[4], part = "body"
+    )
+
+  # Horizontal padding all table margin 0.19 mm
+  flx <- flextable::padding(flx,
+    j = seq(2, tbl_ncol_body),
+    padding.left = cell_margins[1],
+    padding.right = cell_margins[2]
+  )
+
+  # Vertical padding/spaces - header (3pt after)
+  flx <- flx %>%
+    flextable::padding(
+      j = seq(1, tbl_ncol_body), # also topleft
+      padding.top = cell_margins[3],
+      padding.bottom = cell_margins[4],
+      part = "header"
+    )
+
+  flx
 }
 
 #' @describeIn tt_to_flextable Padding helper functions to transform mm to pt.

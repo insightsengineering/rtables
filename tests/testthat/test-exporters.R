@@ -364,10 +364,29 @@ test_that("tt_to_flextable does not create different cells when colcounts (or mu
     split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
     split_cols_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
     analyze("AGE")
-  
+
   tbl <- build_table(lyt, ex_adsl)
   ft1 <- tt_to_flextable(tbl, counts_in_newline = FALSE)
   ft2 <- tt_to_flextable(tbl, counts_in_newline = TRUE)
-  
+
   expect_equal(flextable::nrow_part(ft1, "header"), flextable::nrow_part(ft2, "header"))
+})
+
+test_that("tt_to_flextable does not create different cells when colcounts (or multiple) on different lines", {
+  lyt <- basic_table(show_colcounts = TRUE) %>%
+    split_rows_by("ARM", label_pos = "topleft") %>%
+    split_rows_by("STRATA1", label_pos = "topleft") %>%
+    split_cols_by("STRATA1", split_fun = keep_split_levels("B"), show_colcounts = TRUE) %>%
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+    split_cols_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
+    analyze("AGE")
+
+  tbl <- build_table(lyt, ex_adsl)
+  main_title(tbl) <- "Main title"
+  subtitles(tbl) <- c("Some Many", "Subtitles")
+  main_footer(tbl) <- c("Some Footer", "Mehr")
+
+  expect_silent(ft1 <- tt_to_flextable(tbl, bold_titles = FALSE))
+  expect_silent(ft1 <- tt_to_flextable(tbl, bold_titles = c(2, 3)))
+  expect_error(ft1 <- tt_to_flextable(tbl, bold_titles = c(2, 3, 5)))
 })

@@ -4,12 +4,16 @@
  * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
  * Reworked padding and spacing in default theme `theme_docx_default()`.
  * Added top left information handling (now bold and bottom aligned).
- * Now users can add more than one theme to `tt_to_flextable()`, so they can extend the default theme.
+ * Now users can add more than one theme to `tt_to_flextable()`, and/or extend themes.
+ * Added default theme for `.html` outputs.
+ * Added parameter `bold_titles` to `tt_to_flextable()` to bold titles.
 
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
  * `keep_split_levels` throws now an error if the user requests to keep levels that are not present in data.
  * Fixed issue with removal of horizontal lines in `tt_as_flextable` header when title was added.
+ * Fixed multiple counts in header issue when exporting to `flextable`.
+ * Fixed issue with empty cells `""` having larger imposed margins than filled cell. They are transformed into `" "` before rendering.
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
