@@ -891,10 +891,10 @@ tt_to_flextable <- function(tt,
 
   # Fundamental content of the table
   content <- as.data.frame(body[-seq_len(hnum), , drop = FALSE])
-  
+
   # Fix for empty strings -> they used to get wrong font and size
   content[content == ""] <- " "
-  
+
   flx <- flextable::qflextable(content) %>%
     # Default rtables if no footnotes
     remove_hborder(part = "body", w = "bottom")
@@ -1081,9 +1081,9 @@ tt_to_flextable <- function(tt,
       border.bottom = flextable::fp_border_default(width = 0),
       border.left = flextable::fp_border_default(width = 0),
       border.right = flextable::fp_border_default(width = 0)
-    ) %>% 
+    ) %>%
     flextable::bg(part = "header", i = seq_along(all_titles), bg = "white")
-  
+
   if (isTRUE(bold)) {
     flx <- flextable::bold(flx, part = "header", i = seq_along(all_titles))
   } else if (checkmate::test_integerish(bold)) {
@@ -1092,7 +1092,7 @@ tt_to_flextable <- function(tt,
     }
     flx <- flextable::bold(flx, part = "header", i = bold)
   }
-  
+
   flx
 }
 
@@ -1278,7 +1278,7 @@ theme_docx_default <- function(font = "Arial",
 #' @export
 theme_html_default <- function(font = "FreeMono",
                                font_size = 9,
-                               cell_margins = 0.2, 
+                               cell_margins = 0.2,
                                border = flextable::fp_border_default(width = 0.5)) {
   function(flx, ...) {
     check_required_packages("flextable")
@@ -1294,7 +1294,7 @@ theme_html_default <- function(font = "FreeMono",
       cell_margins <- rep(cell_margins, 4)
     }
     checkmate::assert_numeric(cell_margins, lower = 0, len = 4)
-    
+
     # Setting values coming from ...
     args <- list(...)
     tbl_row_class <- args$tbl_row_class # This is internal info
@@ -1305,7 +1305,7 @@ theme_html_default <- function(font = "FreeMono",
     flx <- flextable::fontsize(flx, size = font_size, part = "all") %>%
       flextable::fontsize(size = font_size - 1, part = "footer") %>%
       flextable::font(fontname = font, part = "all")
-    
+
     # all borders
     flx <- flx %>%
       flextable::border_outer(part = "body", border = border) %>%
@@ -1331,25 +1331,27 @@ theme_html_default <- function(font = "FreeMono",
         border.top = border,
         border.bottom = border
       )
-    
+
     if (any(tbl_row_class == "LabelRow")) { # label rows - one border
       flx <- flextable::border(flx,
-                               j = seq(2, nc_body - 1),
-                               i = which(tbl_row_class == "LabelRow"), part = "body",
-                               border.left = flextable::fp_border_default(width = 0),
-                               border.right = flextable::fp_border_default(width = 0)
+        j = seq(2, nc_body - 1),
+        i = which(tbl_row_class == "LabelRow"), part = "body",
+        border.left = flextable::fp_border_default(width = 0),
+        border.right = flextable::fp_border_default(width = 0)
       ) %>%
-        flextable::border(j = 1,
-                          i = which(tbl_row_class == "LabelRow"), part = "body",
-                          border.right = flextable::fp_border_default(width = 0)
+        flextable::border(
+          j = 1,
+          i = which(tbl_row_class == "LabelRow"), part = "body",
+          border.right = flextable::fp_border_default(width = 0)
         ) %>%
-        flextable::border(j = nc_body,
-                          i = which(tbl_row_class == "LabelRow"), part = "body",
-                          border.left = flextable::fp_border_default(width = 0)
+        flextable::border(
+          j = nc_body,
+          i = which(tbl_row_class == "LabelRow"), part = "body",
+          border.left = flextable::fp_border_default(width = 0)
         )
     }
     flx <- flextable::bg(flx, i = seq_len(nr_header), bg = "grey", part = "header")
-    
+
     return(flx)
   }
 }
