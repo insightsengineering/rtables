@@ -17,10 +17,11 @@ tt_to_flextable(
   footers_as_text = FALSE,
   counts_in_newline = FALSE,
   paginate = FALSE,
+  fontspec = NULL,
   lpp = NULL,
   cpp = NULL,
   ...,
-  colwidths = propose_column_widths(matrix_form(tt, indent_rownames = TRUE)),
+  colwidths = NULL,
   tf_wrap = !is.null(cpp),
   max_width = cpp,
   total_width = 10
@@ -36,10 +37,11 @@ theme_docx_default(
 )
 
 theme_html_default(
-  font = "FreeMono",
+  font = "Courier",
   font_size = 9,
   cell_margins = 0.2,
-  border = flextable::fp_border_default(width = 0.5)
+  remove_internal_borders = "label_rows",
+  border = flextable::fp_border_default(width = 1, color = "black")
 )
 
 word_mm_to_pt(mm)
@@ -75,6 +77,9 @@ on the same line.}
 \item{paginate}{(\code{flag})\cr when exporting \code{.docx} documents using \code{export_as_docx}, we suggest relying on the
 Microsoft Word pagination system. If \code{TRUE}, this option splits \code{tt} into different "pages" as multiple
 \code{flextables}. Cooperation between the two mechanisms is not guaranteed. Defaults to \code{FALSE}.}
+
+\item{fontspec}{(\code{font_spec})\cr a font_spec object specifying the font information to use for
+calculating string widths and heights, as returned by \code{\link[formatters:font_spec]{font_spec()}}.}
 
 \item{lpp}{(\code{numeric(1)})\cr maximum lines per page including (re)printed header and context rows.}
 
@@ -112,6 +117,9 @@ label rows as bold.}
 \item{bold_manual}{(named \code{list} or \code{NULL})\cr list of index lists. See example for needed structure. Accepted
 groupings/names are \code{c("header", "body")}.}
 
+\item{remove_internal_borders}{(\code{character})\cr defaults to \code{"label_rows"}. Remove internal borders between rows.
+Currently there are no other options and can be turned off by providing any character value.}
+
 \item{mm}{(\code{numeric(1)})\cr the value in mm to transform to pt.}
 }
 \value{
@@ -128,7 +136,7 @@ add your own theme to the theme call (e.g. \code{c(theme_docx_default(), my_them
 theme like shown in the examples. Please pay attention to the parameters' inputs as they are relevant
 for this to work properly.
 Indeed, it is possible to use some hidden values for building your own theme (hence the need of \code{...}).
-In particular, \code{tt_to_flextable} sends in the following variable \code{tbl_row_class = make_row_df(tt)$node_class}.
+In particular, \code{tt_to_flextable} sends in the following variable: \code{tbl_row_class = make_row_df(tt)$node_class}.
 This is ignored if not used in the theme. See \code{theme_docx_default} for an example on own to retrieve
 these values and how to use them.
 }
@@ -169,6 +177,46 @@ tt_to_flextable(tbl, theme = NULL)
 
 tt_to_flextable(tbl, theme = theme_docx_default(font_size = 6))
 
+# Example with multiple themes (only extending the docx default!)
+my_theme <- function(x, ...) {
+  border_inner(x, part = "body", border = flextable::fp_border_default(width = 0.5))
+}
+flx <- tt_to_flextable(tbl, theme = c(theme_docx_default(), my_theme))
+\dontshow{\}) # examplesIf}
+\dontshow{if (require(flextable)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(flextable)
+# Custom theme
+special_bold <- list(
+  "header" = list("i" = 1, "j" = c(1, 3)),
+  "body" = list("i" = c(1, 2), "j" = 1)
+)
+custom_theme <- theme_docx_default(
+  font_size = 10,
+  font = "Brush Script MT",
+  border = flextable::fp_border_default(color = "pink", width = 2),
+  bold = NULL,
+  bold_manual = special_bold
+)
+tt_to_flextable(tbl,
+  border = flextable::fp_border_default(color = "pink", width = 2),
+  theme = custom_theme
+)
+
+# Extending themes
+my_theme <- function(font_size = 6) { # here can pass additional arguments for default theme
+  function(flx, ...) {
+    # First apply theme_docx_default
+    flx <- theme_docx_default(font_size = font_size)(flx, ...)
+
+    # Then apply additional styling
+    flx <- border_inner(flx, part = "body", border = flextable::fp_border_default(width = 0.5))
+
+    return(flx)
+  }
+}
+flx <- tt_to_flextable(tbl, theme = my_theme())
+\dontshow{\}) # examplesIf}
+}
 \seealso{
 \code{\link[=export_as_docx]{export_as_docx()}}
 

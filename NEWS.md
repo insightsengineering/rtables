@@ -14,6 +14,7 @@
  * Fixed issue with removal of horizontal lines in `tt_as_flextable` header when title was added.
  * Fixed multiple counts in header issue when exporting to `flextable`.
  * Fixed issue with empty cells `""` having larger imposed margins than filled cell. They are transformed into `" "` before rendering.
+ * Fixed issue with borders appearing in `theme_docx_default()` when only one line of column names is present, but top left information is on multiple lines.
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
@@ -22,6 +23,7 @@
  * Addition of developer's guide vignette about printing methods, specifically `matrix_form` and `toString`.
  * Moved `simple_analysis` into utils file.
  * Added examples to `theme_docx_default()` showing how to extend the default theme.
+ * Added the possibility to remove internal borders from label rows in `theme_html_default()`.
 
 ## rtables 0.6.9
 ### Miscellaneous

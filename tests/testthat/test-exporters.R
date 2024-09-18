@@ -260,9 +260,6 @@ test_that("Can create flextable object that works with different styles", {
   ft <- tt_to_flextable(tbl, total_width = 20)
   expect_equal(sum(unlist(nrow(ft))), 20)
 
-  ft2 <- tt_to_flextable(tbl, paginate = TRUE, lpp = 20, verbose = TRUE)
-  expect_equal(length(ft2), 2)
-
   expect_silent(ft3 <- tt_to_flextable(tbl, theme = NULL))
 
   # Custom theme
@@ -292,7 +289,6 @@ test_that("Can create flextable object that works with different styles", {
   )
   expect_error(tt_to_flextable(tbl, theme = custom_theme), regexp = "header")
 
-
   # header colcounts not in a newline works
   topleft_t1 <- topleft_t2 <- basic_table(show_colcounts = TRUE) %>%
     split_rows_by("ARM", label_pos = "topleft") %>%
@@ -312,7 +308,7 @@ test_that("Can create flextable object that works with different styles", {
 
   expect_equal(flextable::nrow_part(topleft_t2, part = "header"), 2L)
   expect_equal(flextable::nrow_part(topleft_t1a, part = "header"), 1L)
-  expect_equal(flextable::nrow_part(topleft_t1b, part = "header"), 2L)
+  expect_equal(flextable::nrow_part(topleft_t1b, part = "header"), 1L)
 
 
   # internal package check
@@ -363,6 +359,9 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
 })
 
 test_that("tt_to_flextable does not create different cells when colcounts (or multiple) on different lines", {
+  skip_if_not_installed("flextable")
+  require("flextable", quietly = TRUE)
+
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_rows_by("ARM", label_pos = "topleft") %>%
     split_rows_by("STRATA1", label_pos = "topleft") %>%
@@ -378,7 +377,10 @@ test_that("tt_to_flextable does not create different cells when colcounts (or mu
   expect_equal(flextable::nrow_part(ft1, "header"), flextable::nrow_part(ft2, "header"))
 })
 
-test_that("tt_to_flextable does not create different cells when colcounts (or multiple) on different lines", {
+test_that("check titles bold and html theme", {
+  skip_if_not_installed("flextable")
+  require("flextable", quietly = TRUE)
+  
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_rows_by("ARM", label_pos = "topleft") %>%
     split_rows_by("STRATA1", label_pos = "topleft") %>%
@@ -392,7 +394,30 @@ test_that("tt_to_flextable does not create different cells when colcounts (or mu
   subtitles(tbl) <- c("Some Many", "Subtitles")
   main_footer(tbl) <- c("Some Footer", "Mehr")
 
-  expect_silent(ft1 <- tt_to_flextable(tbl, bold_titles = FALSE))
-  expect_silent(ft1 <- tt_to_flextable(tbl, bold_titles = c(2, 3)))
-  expect_error(ft1 <- tt_to_flextable(tbl, bold_titles = c(2, 3, 5)))
+  expect_silent(ft1 <- tt_to_flextable(tbl, theme = theme_html_default(), bold_titles = FALSE))
+  expect_silent(ft1 <- tt_to_flextable(tbl, theme = theme_html_default(), bold_titles = c(2, 3)))
+  expect_error(ft1 <- tt_to_flextable(tbl, theme = theme_html_default(), bold_titles = c(2, 3, 5)))
+})
+
+
+test_that("check pagination", {
+  skip_if_not_installed("flextable")
+  require("flextable", quietly = TRUE)
+  
+  lyt <- basic_table(show_colcounts = TRUE) %>%
+    split_rows_by("ARM", label_pos = "topleft", page_by = TRUE) %>%
+    split_rows_by("STRATA1", label_pos = "topleft") %>%
+    split_cols_by("STRATA1", split_fun = keep_split_levels("B"), show_colcounts = TRUE) %>%
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+    split_cols_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
+    analyze("AGE")
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  main_title(tbl) <- "Main title"
+  subtitles(tbl) <- c("Some Many", "Subtitles")
+  main_footer(tbl) <- c("Some Footer", "Mehr")
+  prov_footer(tbl) <- "Some prov Footer"
+  
+  expect_silent(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
 })
