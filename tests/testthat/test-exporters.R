@@ -380,7 +380,7 @@ test_that("tt_to_flextable does not create different cells when colcounts (or mu
 test_that("check titles bold and html theme", {
   skip_if_not_installed("flextable")
   require("flextable", quietly = TRUE)
-  
+
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_rows_by("ARM", label_pos = "topleft") %>%
     split_rows_by("STRATA1", label_pos = "topleft") %>%
@@ -403,7 +403,7 @@ test_that("check titles bold and html theme", {
 test_that("check pagination", {
   skip_if_not_installed("flextable")
   require("flextable", quietly = TRUE)
-  
+
   lyt <- basic_table(show_colcounts = TRUE) %>%
     split_rows_by("ARM", label_pos = "topleft", page_by = TRUE) %>%
     split_rows_by("STRATA1", label_pos = "topleft") %>%
@@ -411,13 +411,13 @@ test_that("check pagination", {
     split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
     split_cols_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
     analyze("AGE")
-  
+
   tbl <- build_table(lyt, ex_adsl)
-  
+
   main_title(tbl) <- "Main title"
   subtitles(tbl) <- c("Some Many", "Subtitles")
   main_footer(tbl) <- c("Some Footer", "Mehr")
   prov_footer(tbl) <- "Some prov Footer"
-  
+
   expect_silent(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
 })
