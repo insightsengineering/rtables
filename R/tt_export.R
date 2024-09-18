@@ -1386,7 +1386,7 @@ theme_html_default <- function(font = "Courier",
   # Special bottom and top for when there is no empty row
   raw_header <- flx$header$content$data # HACK xxx
   extracted_header <- NULL
-  for (ii in seq(nrow(raw_header))) {
+  for (ii in seq_len(nrow(raw_header))) {
     extracted_header <- rbind(
       extracted_header,
       sapply(raw_header[ii, ], function(x) x$txt)
