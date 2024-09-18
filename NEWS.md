@@ -1,19 +1,21 @@
-## rtables 0.6.9.9015
-### Features
- * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
- * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
- * Reworked padding and spacing in default theme `theme_docx_default()`.
+## rtables 0.6.10
+### New Features
  * Added top left information handling (now bold and bottom aligned).
+ * Added `section_properties_default()` function to define standard portrait properties for tables.
+
+### Enhancements
+ * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
+ * Removed table tree `tt` input from `theme_docx_default()` and added code to handle row classes and number of columns internally.
+ * Reworked padding and spacing in default theme `theme_docx_default()`.
 
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
- * `keep_split_levels` throws now an error if the user requests to keep levels that are not present in data.
+ * `keep_split_levels` throws now an error if the user requests to keep levels that are not presented in the data.
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
- * Grouped split functions documentation into one page with precise descriptions
- of each function and relative examples.
- * Addition of developer's guide vignette about printing methods, specifically `matrix_form` and `toString`.
+ * Added developer's guide vignette. New materials are focused on printing methods, specifically `matrix_form` and `toString`.
+ * Grouped split functions documentation into one page with precise descriptions of each function and relative examples.
  * Moved `simple_analysis` into utils file.
 
 ## rtables 0.6.9
