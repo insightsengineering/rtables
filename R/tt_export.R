@@ -149,17 +149,17 @@ export_as_docx <- function(tt,
     )
     if (isFALSE(titles_as_header) || isTRUE(footers_as_text)) {
       # Ugly but I could not find a getter for font.size
-      font_sz <- flex_tbl$header$styles$text$font.size$data[1, 1]
-      footer_sizes <- flex_tbl$footer$styles$text$font.size$data
-      font_sz_footer <- if (length(footer_sizes) > 0) {
-        footer_sizes[1, 1]
+      font_sz_body <- flex_tbl$header$styles$text$font.size$data[1, 1]
+      font_size_footer <- flex_tbl$footer$styles$text$font.size$data
+      font_sz_footer <- if (length(font_size_footer) > 0) {
+        font_size_footer[1, 1]
       } else {
-        font_sz - 1
+        font_sz_body - 1
       }
       font_fam <- flex_tbl$header$styles$text$font.family$data[1, 1]
 
       # Set the test as the tt
-      fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz)
+      fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz_body)
       fpt_footer <- officer::fp_text(font.family = font_fam, font.size = font_sz_footer)
     }
   } else {
