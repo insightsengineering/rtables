@@ -11,7 +11,7 @@
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
  * `keep_split_levels()` throws now an error if the user requests to keep levels that are not present in data.
- * Fixed issue with removal of horizontal lines in `tt_as_flextable` header when title was added.
+ * Fixed issue with removal of horizontal lines in `tt_as_flextable()` header when title was added.
  * Fixed multiple counts in header issue when exporting to `flextable`.
  * Fixed issue with empty cells `""` having larger imposed margins than filled cell. They are transformed into `" "` before rendering.
  * Fixed issue with borders appearing in `theme_docx_default()` when only one line of column names is present, but top left information is on multiple lines.
