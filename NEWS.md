@@ -24,6 +24,7 @@
  * Moved `simple_analysis` into utils file.
  * Added examples to `theme_docx_default()` showing how to extend the default theme.
  * Added the possibility to remove internal borders from label rows in `theme_html_default()`.
+ * Split export functions into separate source files. Similarly for test files.
 
 ## rtables 0.6.9
 ### Miscellaneous
