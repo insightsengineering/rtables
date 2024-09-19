@@ -49,18 +49,18 @@ as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
   checkmate::assert_class(tt, "VTableTree")
   checkmate::assert_string(spec)
   checkmate::assert_flag(simplify)
-  
+
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
   }
-  
+
   result_df_fun <- lookup_result_df_specfun(spec)
   out <- result_df_fun(tt, ...)
-  
+
   if (simplify) {
     out <- .simplify_result_df(out)
   }
-  
+
   out
 }
 
@@ -69,7 +69,7 @@ as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
   col_df <- colnames(df)
   row_names_col <- which(col_df == "row_name")
   result_cols <- seq(which(col_df == "node_class") + 1, length(col_df))
-  
+
   df[, c(row_names_col, result_cols)]
 }
 
@@ -126,12 +126,12 @@ result_df_v0_experimental <- function(tt,
   checkmate::assert_flag(expand_colnames)
   checkmate::assert_flag(keep_label_rows)
   checkmate::assert_flag(as_is)
-  
+
   if (as_is) {
     keep_label_rows <- TRUE
     expand_colnames <- FALSE
   }
-  
+
   raw_cvals <- cell_values(tt)
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
@@ -139,15 +139,15 @@ result_df_v0_experimental <- function(tt,
   if (nrow(tt) == 1 && length(raw_cvals) > 1) {
     raw_cvals <- list(raw_cvals)
   }
-  
+
   # Flatten the list of lists (rows) of cell values into a data frame
   cellvals <- as.data.frame(do.call(rbind, raw_cvals))
   row.names(cellvals) <- NULL
-  
+
   if (nrow(tt) == 1 && ncol(tt) == 1) {
     colnames(cellvals) <- names(raw_cvals)
   }
-  
+
   if (as_viewer || as_strings) {
     # we keep previous calculations to check the format of the data
     mf_tt <- matrix_form(tt)
@@ -171,17 +171,17 @@ result_df_v0_experimental <- function(tt,
       cellvals <- mf_result_numeric
     }
   }
-  
+
   rdf <- make_row_df(tt)
-  
+
   df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
   # Removing initial root elements from path (out of the loop -> right maxlen)
   df$path <- lapply(df$path, .remove_root_elems_from_path,
-                    which_root_name = c("root", "rbind_root"),
-                    all = TRUE
+    which_root_name = c("root", "rbind_root"),
+    all = TRUE
   )
   maxlen <- max(lengths(df$path))
-  
+
   # Loop for metadata (path and details from make_row_df)
   metadf <- do.call(
     rbind.data.frame,
@@ -192,7 +192,7 @@ result_df_v0_experimental <- function(tt,
       }
     )
   )
-  
+
   # Should we keep label rows with NAs instead of values?
   if (keep_label_rows) {
     cellvals_mat_struct <- as.data.frame(
@@ -207,7 +207,7 @@ result_df_v0_experimental <- function(tt,
       cellvals
     )
   }
-  
+
   # If we want to expand colnames
   if (expand_colnames) {
     col_name_structure <- .get_formatted_colnames(clayout(tt))
@@ -218,15 +218,15 @@ result_df_v0_experimental <- function(tt,
         " number of columns as in the result data frame. This is a bug. Please report it."
       ) # nocov
     }
-    
+
     buffer_rows_for_colnames <- matrix(
       rep("<only_for_column_names>", number_of_non_data_cols * NROW(col_name_structure)),
       nrow = NROW(col_name_structure)
     )
-    
+
     header_colnames_matrix <- cbind(buffer_rows_for_colnames, data.frame(col_name_structure))
     colnames(header_colnames_matrix) <- colnames(ret)
-    
+
     count_row <- NULL
     if (disp_ccounts(tt)) {
       ccounts <- col_counts(tt)
@@ -239,7 +239,7 @@ result_df_v0_experimental <- function(tt,
     }
     ret <- rbind(header_colnames_matrix, ret)
   }
-  
+
   # Using only labels for row names and losing information about paths
   if (as_is) {
     tmp_rownames <- ret$label_name
@@ -253,7 +253,7 @@ result_df_v0_experimental <- function(tt,
   } else {
     rownames(ret) <- NULL
   }
-  
+
   ret
 }
 
@@ -261,7 +261,7 @@ result_df_v0_experimental <- function(tt,
   if (is.null(dim(char_df))) {
     return(char_df[nzchar(char_df, keepNA = TRUE)])
   }
-  
+
   apply(char_df, 2, function(col_i) col_i[nzchar(col_i, keepNA = TRUE)])
 }
 
@@ -270,14 +270,14 @@ result_df_v0_experimental <- function(tt,
   if (is.null(dim(char_df))) {
     return(as.numeric(stringi::stri_extract_all(char_df, regex = "\\d+.\\d+|\\d+")))
   }
-  
+
   ret <- apply(char_df, 2, function(col_i) {
     lapply(
       stringi::stri_extract_all(col_i, regex = "\\d+.\\d+|\\d+"),
       as.numeric
     )
   })
-  
+
   do.call(cbind, ret)
 }
 
@@ -294,12 +294,12 @@ do_label_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
   # Adjusting for the fact that we have two columns for each split
   extra_nas_from_splits <- floor((maxlen - length(pth)) / 2) * 2
-  
+
   # Special cases with hidden labels
   if (length(pth) %% 2 == 1) {
     extra_nas_from_splits <- extra_nas_from_splits + 1
   }
-  
+
   c(
     as.list(pth[seq_len(length(pth) - 1)]),
     as.list(replicate(extra_nas_from_splits, list(NA_character_))),
@@ -316,9 +316,9 @@ do_label_row <- function(rdfrow, maxlen) {
 do_content_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
   contpos <- which(pth == "@content")
-  
+
   seq_before <- seq_len(contpos - 1)
-  
+
   c(
     as.list(pth[seq_before]),
     as.list(replicate(maxlen - contpos, list(NA_character_))),
@@ -371,23 +371,23 @@ do_data_row <- function(rdfrow, maxlen) {
     }
     path <- path[-root_path_to_remove]
   }
-  
+
   # Fix for very edge case where we have only root elements
   if (length(path) == 0) {
     path <- which_root_name[1]
   }
-  
+
   path
 }
 
 handle_rdf_row <- function(rdfrow, maxlen) {
   nclass <- rdfrow$node_class
-  
+
   ret <- switch(nclass,
-                LabelRow = do_label_row(rdfrow, maxlen),
-                ContentRow = do_content_row(rdfrow, maxlen),
-                DataRow = do_data_row(rdfrow, maxlen),
-                stop("Unrecognized node type in row dataframe, unable to generate result data frame")
+    LabelRow = do_label_row(rdfrow, maxlen),
+    ContentRow = do_content_row(rdfrow, maxlen),
+    DataRow = do_data_row(rdfrow, maxlen),
+    stop("Unrecognized node type in row dataframe, unable to generate result data frame")
   )
   setNames(ret, make_result_df_md_colnames(maxlen))
 }

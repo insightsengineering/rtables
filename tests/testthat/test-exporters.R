@@ -274,4 +274,3 @@ test_that("export_as_doc works thanks to tt_to_flextable", {
 
   expect_true(file.exists(doc_file))
 })
-
