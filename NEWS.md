@@ -1,4 +1,5 @@
 ## rtables 0.6.10
+
 ### New Features
  * Added top left information handling (now bold and bottom aligned).
  * Added `section_properties_default()` function to define standard portrait properties for tables.
@@ -7,16 +8,27 @@
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
  * Removed table tree `tt` input from `theme_docx_default()` and added code to handle row classes and number of columns internally.
  * Reworked padding and spacing in default theme `theme_docx_default()`.
+ * Added top left information handling (now bold and bottom aligned).
+ * Now users can add more than one theme to `tt_to_flextable()`, and/or extend themes.
+ * Added default theme for `.html` outputs.
+ * Added parameter `bold_titles` to `tt_to_flextable()` to bold titles.
 
 ### Bug Fixes
  * Fixed `"\n"` newline issues in `as_html` by relying onto output devices for newline handling. Added `expand_newlines = FALSE` default to allow previous behavior.
- * `keep_split_levels` throws now an error if the user requests to keep levels that are not presented in the data.
+ * `keep_split_levels()` throws now an error if the user requests to keep levels that are not present in data.
+ * Fixed issue with removal of horizontal lines in `tt_as_flextable()` header when title was added.
+ * Fixed multiple counts in header issue when exporting to `flextable`.
+ * Fixed issue with empty cells `""` having larger imposed margins than filled cell. They are transformed into `" "` before rendering.
+ * Fixed issue with borders appearing in `theme_docx_default()` when only one line of column names is present, but top left information is on multiple lines.
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
  * Added developer's guide vignette. New materials are focused on printing methods, specifically `matrix_form` and `toString`.
  * Grouped split functions documentation into one page with precise descriptions of each function and relative examples.
  * Moved `simple_analysis` into utils file.
+ * Added examples to `theme_docx_default()` showing how to extend the default theme.
+ * Added the possibility to remove internal borders from label rows in `theme_html_default()`.
+ * Split export functions into separate source files. Similarly for test files.
 
 ## rtables 0.6.9
 ### Miscellaneous
