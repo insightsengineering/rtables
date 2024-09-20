@@ -5,7 +5,7 @@
  * Added `section_properties_default()` function to define standard portrait properties for tables.
  * Added default theme for `.html` outputs.
  * Added parameter `bold_titles` to `tt_to_flextable()` to bold titles.
-  * Now users can add more than one theme to `tt_to_flextable()`, and/or extend themes.
+ * Now users can add more than one theme to `tt_to_flextable()`, and/or extend themes.
  
 ### Enhancements
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
