@@ -3,7 +3,9 @@
 ### New Features
  * Added top left information handling (now bold and bottom aligned).
  * Added `section_properties_default()` function to define standard portrait properties for tables.
-
+ * Added default theme for `.html` outputs.
+ * Added parameter `bold_titles` to `tt_to_flextable()` to bold titles.
+ 
 ### Enhancements
  * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
  * Removed table tree `tt` input from `theme_docx_default()` and added code to handle row classes and number of columns internally.
