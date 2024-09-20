@@ -511,7 +511,6 @@ theme_docx_default <- function(font = "Arial",
     # Setting values coming from ...
     args <- list(...)
     tbl_row_class <- args$tbl_row_class
-    tbl_titles <- args$titles
     tbl_ncol_body <- flextable::ncol_keys(flx) # tbl_ncol_body respects if rownames = FALSE (only rlistings)
 
     # Font setting
