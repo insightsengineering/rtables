@@ -1,11 +1,16 @@
-## rtables 0.6.9.9016
-### Features
- * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
- * Removed `tt` input from `theme_docx_default()` and added internal handling for row classes and number of columns.
- * Reworked padding and spacing in default theme `theme_docx_default()`.
+## rtables 0.6.10
+
+### New Features
  * Added top left information handling (now bold and bottom aligned).
- * Now users can add more than one theme to `tt_to_flextable()`, and/or extend themes.
+ * Added `section_properties_default()` function to define standard portrait properties for tables.
  * Added default theme for `.html` outputs.
+ * Added parameter `bold_titles` to `tt_to_flextable()` to bold titles.
+ * Now users can add more than one theme to `tt_to_flextable()`, and/or extend themes.
+ 
+### Enhancements
+ * Modified `reorder_split_levels()` to cover more edge cases and be more stringent in the allowed inputs.
+ * Removed table tree `tt` input from `theme_docx_default()` and added code to handle row classes and number of columns internally.
+ * Reworked padding and spacing in default theme `theme_docx_default()`.
  * Added parameter `bold_titles` to `tt_to_flextable()` to bold titles.
 
 ### Bug Fixes
@@ -18,9 +23,8 @@
 
 ### Miscellaneous
  * Added option to change `sep = "\t"` and set other parameters via `...` parameter propagation in `export_as_tsv`.
- * Grouped split functions documentation into one page with precise descriptions
- of each function and relative examples.
- * Addition of developer's guide vignette about printing methods, specifically `matrix_form` and `toString`.
+ * Added developer's guide vignette. New materials are focused on printing methods, specifically `matrix_form` and `toString`.
+ * Grouped split functions documentation into one page with precise descriptions of each function and relative examples.
  * Moved `simple_analysis` into utils file.
  * Added examples to `theme_docx_default()` showing how to extend the default theme.
  * Added the possibility to remove internal borders from label rows in `theme_html_default()`.
