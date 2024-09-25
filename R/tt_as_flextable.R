@@ -275,6 +275,7 @@ tt_to_flextable <- function(tt,
   for (i in seq_len(nr_header)) {
     leading_spaces_count <- nchar(hdr[i, 1]) - nchar(stringi::stri_replace(hdr[i, 1], regex = "^ +", ""))
     header_indent_size <- leading_spaces_count * word_mm_to_pt(1)
+    hdr[i, 1] <- stringi::stri_replace(hdr[i, 1], regex = "^ +", "")
 
     # This solution does not keep indentation
     # top_left_tmp2 <- paste0(top_left_tmp, collapse = "\n") %>%

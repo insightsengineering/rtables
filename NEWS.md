@@ -1,5 +1,8 @@
 ## rtables 0.6.10.9000
 
+### Bug Fixes
+ * Fixed bug that was keeping indentation space characters in top left information when making a `flextable` from a `TableTree` object.
+
 ## rtables 0.6.10
 
 ### New Features
