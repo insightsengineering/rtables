@@ -31,6 +31,8 @@
 #'   Microsoft Word pagination system. If `TRUE`, this option splits `tt` into different "pages" as multiple
 #'   `flextables`. Cooperation between the two mechanisms is not guaranteed. Defaults to `FALSE`.
 #' @param total_width (`numeric(1)`)\cr total width (in inches) for the resulting flextable(s). Defaults to 10.
+#' @param ... (`any`)\cr additional parameters to be passed to the pagination function. See [paginate_table()] 
+#'   for further details.
 #'
 #' @return A `flextable` object.
 #'
@@ -110,6 +112,7 @@ tt_to_flextable <- function(tt,
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
     if (is.null(lpp)) {
+      # lpp needs to be estimated along with cpp if not provided
       stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
     }
     tabs <- paginate_table(tt,

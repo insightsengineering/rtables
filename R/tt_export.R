@@ -162,8 +162,31 @@ export_as_docx <- function(tt,
       fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz_body)
       fpt_footer <- officer::fp_text(font.family = font_fam, font.size = font_sz_footer)
     }
-  } else {
+  } else if (inherits(tt, "flextable")) {
     flex_tbl <- tt
+  } else if (inherits(tt, "list")) {
+    export_as_docx(tt[[1]], # First paginated table that uses template_file
+                   file = file, 
+                   doc_metadata = doc_metadata, 
+                   title_as_header = title_as_header, 
+                   footers_as_text = footers_as_text,
+                   template_file = template_file,
+                   section_properties = section_properties,
+                   ...)
+    if (length(tt) > 1) {
+      lapply(tt[-1], export_as_docx, 
+             file = file, 
+             doc_metadata = doc_metadata, 
+             title_as_header = title_as_header, 
+             footers_as_text = footers_as_text,
+             template_file = file, # Uses the just-created file as template
+             section_properties = section_properties,
+             ...)
+    }
+    
+    invisible(TRUE)
+  } else {
+    stop("The table must be a VTableTree, a flextable, or a list of VTableTree or flextable objects.")
   }
   if (!is.null(template_file) && !file.exists(template_file)) {
     template_file <- NULL
@@ -212,6 +235,8 @@ export_as_docx <- function(tt,
 
   # Save the Word document to a file
   print(doc, target = file)
+  
+  invisible(TRUE)
 }
 
 # Shorthand to add text paragraph
