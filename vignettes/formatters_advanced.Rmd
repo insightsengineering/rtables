@@ -17,20 +17,25 @@ editor_options:
 knitr::opts_chunk$set(comment = "#")
 ```
 
-```{r, message=FALSE}
+```{r, message=FALSE, echo=FALSE}
 library(rtables)
 library(dplyr)
-ADSL <- ex_adsl %>%
-  mutate(ARM = factor(ARM), SEX = factor(SEX))
 ```
 
 ### Introduction
 
 The  section will showcase how to extend the standard examples of `list_valid_format_labels()` to create your own format functions.  It is recommended that before this tutorial, the reader will familiarise themselves with the basic functionality of `formatters` package in the following [getting started page](https://insightsengineering.github.io/formatters/latest-tag/articles/formatters.html) for `formatters` package and the [introduction](https://insightsengineering.github.io/rtables/main/articles/introduction.html) to `rtables`. The next step is to understand the basics of the [format precedence](https://insightsengineering.github.io/rtables/main/articles/format_precedence.html#parent-table-format-and-inheritance).
 
+Firstly, lets load the `ADSL` dataset and create a basic layout. The dataset is available in the `formatters` package.
+
+```{r, echo=TRUE}
+ADSL <- formatters::ex_adsl %>%
+  mutate(ARM = factor(ARM), SEX = factor(SEX))
+```
+
 We will use the following layout to demo the different approaches. The layout is missing the `analyze` step so the output does not have generate table with any analysed variables, but we will add it later.
 
-```{r adsl_analyzed, echo=FALSE}
+```{r adsl_analyzed, echo=TRUE, eval=FALSE}
 basic_layout <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX")
@@ -40,7 +45,7 @@ build_table(basic_layout, ADSL)
 
 If we need to apply any standard formatting, we can simply look for one of the pre-defined formats from `list_valid_format_labels()`.
 
-```{r, echo=FALSE}
+```{r, echo=TRUE}
 list_valid_format_labels()
 ```
 
@@ -138,9 +143,9 @@ We can use this format in the `analyze` function. Below is the example for table
 basic_layout %>%
   analyze(vars = "AGE", afun = function(x) {
     list(
-      "Age: mean, median, sd" = rcell(c(mean(x), median(x) ,sd(x)))
+      "Age: mean, median, sd" = rcell(c(mean(x), median(x), sd(x)))
     )
-    }, format = format_mean_median_sd) %>%
+  }, format = format_mean_median_sd) %>%
   build_table(ADSL)
 ```
 
@@ -178,7 +183,7 @@ format_value(3.14159265359, "xx.xxx")
 
 When value is supplied, the function will return the value formatted according to the format string. If the value is missing, the function will return NA. 
 
-The function can also be applied as part of the `analyze` function. Let's see how to use it.
+The function can also be applied as part of the `analyze` function. The following example illustrates how to use the `format_value` function to format the mean of AGE to two decimal places.
 
 ```{r, echo=FALSE}
 basic_layout %>%
@@ -186,23 +191,27 @@ basic_layout %>%
   build_table(ADSL)
 ```
 
-How could we create our own custom format function? We can use the `format_value` function as a template. Below is an example of a custom format function that will round the value to the nearest integer.
+To create completely custom formatting function, we can use the `format_value` as a template. Below is an example of a custom format function that will round the value to the nearest integer.
 
 ```{r, echo=FALSE}
 format_value_custom <- function(x, format = "xx", na_str = "NA") {
+  # These are assertions to ensure that the format is correct.
+
+  # If the value is missing, return NA
   if (length(x) == 0) {
     return("")
   }
-
+  # If the value is NA, return the NA string
   if (length(na_str) == 0) {
     na_str <- "NA"
   }
-
+  # If the values is NULL, return to empty string.
   if (is.null(format)) {
     return(toString(x))
   }
 
-  # Simplified switch statement for format handling
+  # This is the core of the function. It is a switch statement that will return the value formatted according to the format string.
+
   switch(format,
     "xx" = as.character(x),
     "xx." = round(x, digits = 0),
@@ -216,6 +225,21 @@ format_value_custom <- function(x, format = "xx", na_str = "NA") {
 
 format_value_custom(pi, "xx.")
 ```
+
+Let's break the core part of the function down, the `switch` statement.
+
+```
+switch(format,
+  "xx" = as.character(x),
+  NA
+  )
+```
+
+As seen above, the core part of the function is `switch` statement. Think of it as a lookup function. The `switch()` evaluates an expression against elements of a list. If the evaluated element matches an item from the list, the corresponding value is returned.
+
+For example, if user imputes format "xx", then the function will go through elements on the left side of the `=` sign and if it finds "xx", it will return the value round(x, digits = 0). 
+
+You can input any format you wan, as long as you defined it in the `switch` statement. 
 
 ```{r}
 basic_layout %>%
