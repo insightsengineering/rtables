@@ -24,6 +24,7 @@ tt_to_flextable(
   colwidths = NULL,
   tf_wrap = !is.null(cpp),
   max_width = cpp,
+  total_page_height = 10,
   total_page_width = 10,
   autofit_to_page = TRUE
 )
@@ -102,6 +103,9 @@ footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
+\item{total_page_height}{(\code{numeric(1)})\cr total page height (in inches) for the resulting flextable(s). Used only
+to estimate number of lines per page (\code{lpp}) when \code{paginate = TRUE}. Defaults to 10.}
+
 \item{total_page_width}{(\code{numeric(1)})\cr total page width (in inches) for the resulting flextable(s). Any values
 added for column widths is normalized by the total page width. Defaults to 10. If \code{autofit_to_page = TRUE}, this
 value is automatically set to the allowed page width.}
@@ -159,6 +163,11 @@ these values and how to use them.
 \item \code{word_mm_to_pt()}: Padding helper functions to transform mm to pt.
 
 }}
+\note{
+Currently \code{cpp}, \code{tf_wrap}, and \code{max_width} are only used in pagination and do not yet have a
+clear cooperation with \code{colwidths} and \code{autofit_to_page}. at the moment it is suggested to use the \code{cpp}
+parameter family cautiously. If issues arise, please communicate with the maintainers or raise an issue.
+}
 \examples{
 analysisfun <- function(x, ...) {
   in_rows(

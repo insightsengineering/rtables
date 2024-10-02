@@ -142,11 +142,12 @@ test_that("check pagination", {
   main_footer(tbl) <- c("Some Footer", "Mehr")
   prov_footer(tbl) <- "Some prov Footer"
 
-  expect_silent(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
+  expect_warning(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
+  expect_equal(length(out), 3L)
 })
 
 
-test_that("check colwidths and pagination", {
+test_that("check colwidths in flextable object", {
   skip_if_not_installed("flextable")
   require("flextable", quietly = TRUE)
 
@@ -178,7 +179,4 @@ test_that("check colwidths and pagination", {
                                       colwidths = cw) # if you add cw then autofit_to_page = FALSE
   dflx <- dim(flx_res) %>% print()
   testthat::expect_equal(fin_cw, unname(dflx$widths))
-  
-  
-  expect_silent(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
 })

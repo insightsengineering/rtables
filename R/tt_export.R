@@ -175,18 +175,21 @@ export_as_docx <- function(tt,
       ...
     )
     if (length(tt) > 1) {
-      lapply(tt[-1], export_as_docx,
-        file = file,
-        doc_metadata = doc_metadata,
-        title_as_header = title_as_header,
-        footers_as_text = footers_as_text,
-        template_file = file, # Uses the just-created file as template
-        section_properties = section_properties,
-        ...
+      out <- mapply(
+        export_as_docx,
+        tt = tt[-1], # Remaining paginated tables
+        MoreArgs = list(
+          file = file,
+          doc_metadata = doc_metadata,
+          titles_as_header = titles_as_header,
+          footers_as_text = footers_as_text,
+          template_file = file, # Uses the just-created file as template
+          section_properties = section_properties,
+          ...
+        )
       )
     }
-
-    invisible(TRUE)
+    return()
   } else {
     stop("The table must be a VTableTree, a flextable, or a list of VTableTree or flextable objects.")
   }
@@ -203,7 +206,7 @@ export_as_docx <- function(tt,
 
   # page width and orientation settings
   doc <- officer::body_set_default_section(doc, section_properties)
-  if (flex_tbl$properties$layout != "autofit") { # fixed
+  if (flex_tbl$properties$layout != "autofit") { # fixed layout
     page_width <- section_properties$page_size$width
     dflx <- dim(flex_tbl)
     if (abs(sum(unname(dflx$widths)) - page_width) > 1e-2) {

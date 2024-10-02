@@ -33,6 +33,8 @@
 #' @param total_page_width (`numeric(1)`)\cr total page width (in inches) for the resulting flextable(s). Any values
 #'   added for column widths is normalized by the total page width. Defaults to 10. If `autofit_to_page = TRUE`, this
 #'   value is automatically set to the allowed page width.
+#' @param total_page_height (`numeric(1)`)\cr total page height (in inches) for the resulting flextable(s). Used only
+#'   to estimate number of lines per page (`lpp`) when `paginate = TRUE`. Defaults to 10.
 #' @param colwidths (`numeric`)\cr column widths for the resulting flextable(s). If `NULL`, the column widths estimated
 #'   with [formatters::propose_column_widths()] will be used. When exporting into `.docx` these values are normalized
 #'   to represent a fraction of the `total_page_width`. If these are specified, `autofit_to_page` is set to `FALSE`.
@@ -43,6 +45,11 @@
 #'   for further details.
 #'
 #' @return A `flextable` object.
+#' 
+#' @note
+#' Currently `cpp`, `tf_wrap`, and `max_width` are only used in pagination and do not yet have a
+#' clear cooperation with `colwidths` and `autofit_to_page`. at the moment it is suggested to use the `cpp`
+#' parameter family cautiously. If issues arise, please communicate with the maintainers or raise an issue.
 #'
 #' @details
 #' Themes can also be extended when you need only a minor change from a default style. You can either
@@ -107,7 +114,8 @@ tt_to_flextable <- function(tt,
                             colwidths = NULL,
                             tf_wrap = !is.null(cpp),
                             max_width = cpp,
-                            total_page_width = 10,
+                            total_page_height = 10, # portrait 11 landscape  8.5
+                            total_page_width = 10, # portrait 8.5 landscape  11
                             autofit_to_page = TRUE) {
   check_required_packages("flextable")
   if (!inherits(tt, "VTableTree")) {
@@ -118,6 +126,7 @@ tt_to_flextable <- function(tt,
   checkmate::assert_flag(counts_in_newline)
   checkmate::assert_flag(autofit_to_page)
   checkmate::assert_number(total_page_width, lower = 1)
+  checkmate::assert_number(total_page_height, lower = 1)
   checkmate::assert_numeric(colwidths, lower = 0, len = ncol(tt) + 1, null.ok = TRUE)
   if (!is.null(colwidths)) {
     autofit_to_page <- FALSE
@@ -127,19 +136,55 @@ tt_to_flextable <- function(tt,
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
   if (paginate) {
+    # Lets find out the row heights in inches with flextable
+    # Capture all current arguments in a list
+    args <- as.list(environment())
+
+    # Modify the 'paginate' argument
+    args$paginate <- FALSE
+
+    # Use do.call to call the same function with modified arguments
+    tmp_flx <- do.call(tt_to_flextable, args)
+
+    # Determine line per pages (lpp) expected from heights of rows (in inches)
+    row_heights <- dim(tmp_flx)$heights
+    nr_header <- flextable::nrow_part(tmp_flx, part = "header")
+    nr_body <- flextable::nrow_part(tmp_flx, part = "body")
+    nr_footer <- flextable::nrow_part(tmp_flx, part = "footer")
+    if (sum(nr_header, nr_body, nr_footer) != length(row_heights)) {
+      stop("Something went wrong with the row heights. Maybe \\n? Contact maintener.") # nocov
+    }
+    rh_df <- data.frame(rh = row_heights, part = c(
+      rep("header", nr_header), rep("body", nr_body), rep("footer", nr_footer)
+    ))
+    needed_height_header_footer <- sum(rh_df$rh[rh_df$part %in% c("header", "footer")])
+    starting_lpp <- nr_header + nr_footer
+    cumsum_page_heights <- needed_height_header_footer + cumsum(rh_df$rh[rh_df$part == "body"])
+    expected_lpp <- starting_lpp + max(which(cumsum_page_heights < total_page_height))
     if (is.null(lpp)) {
+      lpp <- expected_lpp
+    } else if (expected_lpp < lpp) {
       # lpp needs to be estimated along with cpp if not provided
-      stop("lpp must be specified when calling tt_to_flextable with paginate=TRUE")
+      warning("lpp is too large for the given total_page_height. Change the parameters or",
+           " each table will be too long to fit each page.")  
     }
     tabs <- paginate_table(tt,
       fontspec = fontspec,
-      lpp = lpp, cpp = cpp,
-      tf_wrap = tf_wrap, max_width = max_width, ...
+      lpp = lpp, 
+      cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, # This can only be trial an error
+      ...
     )
     cinds <- lapply(tabs, function(tb) c(1, .figure_out_colinds(tb, tt) + 1L))
+    args$colwidths <- NULL
+    args$tt <- NULL
+    cl <- if (!is.null(colwidths)) {
+      lapply(cinds, function(ci) colwidths[ci])
+    } else {
+      lapply(cinds, function(ci) return(NULL))
+    }
     return(mapply(tt_to_flextable,
-      tt = tabs, colwidths = cinds,
-      MoreArgs = list(paginate = FALSE, total_page_width = total_page_width),
+      tt = tabs, colwidths = cl,
+      MoreArgs = args,
       SIMPLIFY = FALSE
     ))
   }
