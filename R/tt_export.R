@@ -166,24 +166,26 @@ export_as_docx <- function(tt,
     flex_tbl <- tt
   } else if (inherits(tt, "list")) {
     export_as_docx(tt[[1]], # First paginated table that uses template_file
-                   file = file, 
-                   doc_metadata = doc_metadata, 
-                   title_as_header = title_as_header, 
-                   footers_as_text = footers_as_text,
-                   template_file = template_file,
-                   section_properties = section_properties,
-                   ...)
+      file = file,
+      doc_metadata = doc_metadata,
+      title_as_header = title_as_header,
+      footers_as_text = footers_as_text,
+      template_file = template_file,
+      section_properties = section_properties,
+      ...
+    )
     if (length(tt) > 1) {
-      lapply(tt[-1], export_as_docx, 
-             file = file, 
-             doc_metadata = doc_metadata, 
-             title_as_header = title_as_header, 
-             footers_as_text = footers_as_text,
-             template_file = file, # Uses the just-created file as template
-             section_properties = section_properties,
-             ...)
+      lapply(tt[-1], export_as_docx,
+        file = file,
+        doc_metadata = doc_metadata,
+        title_as_header = title_as_header,
+        footers_as_text = footers_as_text,
+        template_file = file, # Uses the just-created file as template
+        section_properties = section_properties,
+        ...
+      )
     }
-    
+
     invisible(TRUE)
   } else {
     stop("The table must be a VTableTree, a flextable, or a list of VTableTree or flextable objects.")
@@ -199,8 +201,21 @@ export_as_docx <- function(tt,
     doc <- officer::read_docx()
   }
 
-  if (!is.null(section_properties)) {
-    doc <- officer::body_set_default_section(doc, section_properties)
+  # page width and orientation settings
+  doc <- officer::body_set_default_section(doc, section_properties)
+  if (flex_tbl$properties$layout != "autofit") { # fixed
+    page_width <- section_properties$page_size$width
+    dflx <- dim(flex_tbl)
+    if (abs(sum(unname(dflx$widths)) - page_width) > 1e-2) {
+      warning(
+        "The total table width does not match the page width. The column widths",
+        " will be resized to fit the page. Please consider modifying the parameter",
+        " total_page_width in tt_to_flextable()."
+      )
+
+      final_cwidths <- page_width * unname(dflx$widths) / sum(unname(dflx$widths))
+      flex_tbl <- flextable::width(flex_tbl, width = final_cwidths)
+    }
   }
 
   # Extract title
@@ -235,7 +250,7 @@ export_as_docx <- function(tt,
 
   # Save the Word document to a file
   print(doc, target = file)
-  
+
   invisible(TRUE)
 }
 

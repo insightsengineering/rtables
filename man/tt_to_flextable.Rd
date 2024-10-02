@@ -24,7 +24,8 @@ tt_to_flextable(
   colwidths = NULL,
   tf_wrap = !is.null(cpp),
   max_width = cpp,
-  total_width = 10
+  total_page_width = 10,
+  autofit_to_page = TRUE
 )
 
 theme_docx_default(
@@ -87,9 +88,12 @@ calculating string widths and heights, as returned by \code{\link[formatters:fon
 \code{NA} (the default) indicates \code{cpp} should be inferred from the page size; \code{NULL} indicates no horizontal
 pagination should be done regardless of page size.}
 
-\item{...}{additional parameters passed to methods or tabulation functions.}
+\item{...}{(\code{any})\cr additional parameters to be passed to the pagination function. See \code{\link[=paginate_table]{paginate_table()}}
+for further details.}
 
-\item{colwidths}{(\code{numeric})\cr a vector of column widths for use in vertical pagination.}
+\item{colwidths}{(\code{numeric})\cr column widths for the resulting flextable(s). If \code{NULL}, the column widths estimated
+with \code{\link[formatters:propose_column_widths]{formatters::propose_column_widths()}} will be used. When exporting into \code{.docx} these values are normalized
+to represent a fraction of the \code{total_page_width}. If these are specified, \code{autofit_to_page} is set to \code{FALSE}.}
 
 \item{tf_wrap}{(\code{flag})\cr whether the text for title, subtitles, and footnotes should be wrapped.}
 
@@ -98,7 +102,13 @@ footnotes) materials should be word-wrapped to. If \code{NULL}, it is set to the
 session (\code{getOption("width")}). If set to \code{"auto"}, the width of the table (plus any table inset) is
 used. Parameter is ignored if \code{tf_wrap = FALSE}.}
 
-\item{total_width}{(\code{numeric(1)})\cr total width (in inches) for the resulting flextable(s). Defaults to 10.}
+\item{total_page_width}{(\code{numeric(1)})\cr total page width (in inches) for the resulting flextable(s). Any values
+added for column widths is normalized by the total page width. Defaults to 10. If \code{autofit_to_page = TRUE}, this
+value is automatically set to the allowed page width.}
+
+\item{autofit_to_page}{(\code{flag})\cr defaults to \code{TRUE}. If \code{TRUE}, the column widths are automatically adjusted to
+fit the total page width. If \code{FALSE}, the \code{colwidths} are used as an indicative proportion of \code{total_page_width}.
+See \code{flextable::set_table_properties(layout)} for more details.}
 
 \item{font}{(\code{string})\cr defaults to \code{"Arial"}. If the font is not available, \code{flextable} default is used.
 Please consider consulting the family column from \code{systemfonts::system_fonts()}.}

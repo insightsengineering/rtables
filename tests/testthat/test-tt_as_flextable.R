@@ -144,3 +144,41 @@ test_that("check pagination", {
 
   expect_silent(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
 })
+
+
+test_that("check colwidths and pagination", {
+  skip_if_not_installed("flextable")
+  require("flextable", quietly = TRUE)
+
+  lyt <- basic_table(show_colcounts = TRUE) %>%
+    split_rows_by("ARM", label_pos = "topleft", page_by = TRUE) %>%
+    split_rows_by("STRATA1", label_pos = "topleft") %>%
+    split_cols_by("STRATA1", split_fun = keep_split_levels("B"), show_colcounts = TRUE) %>%
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+    split_cols_by("COUNTRY", split_fun = keep_split_levels("CHN")) %>%
+    analyze("AGE")
+
+  tbl <- build_table(lyt, ex_adsl)
+
+  main_title(tbl) <- "Main title"
+  subtitles(tbl) <- c("Some Many", "Subtitles")
+  main_footer(tbl) <- c("Some Footer", "Mehr")
+  prov_footer(tbl) <- "Some prov Footer"
+  
+  cw <- c(0.9, 0.05, 0.05)
+  spd <- section_properties_default(orientation = "landscape")
+  fin_cw <- cw * spd$page_size$width / 2 / sum(cw)
+  
+  # Fixed total width is / 2
+  flx_res <- rtables::tt_to_flextable(tbl, 
+                                      total_page_width = spd$page_size$width / 2,
+                                      counts_in_newline = TRUE,
+                                      autofit_to_page = TRUE,
+                                      bold_titles = TRUE, 
+                                      colwidths = cw) # if you add cw then autofit_to_page = FALSE
+  dflx <- dim(flx_res) %>% print()
+  testthat::expect_equal(fin_cw, unname(dflx$widths))
+  
+  
+  expect_silent(out <- tt_to_flextable(tbl, paginate = TRUE, lpp = 100))
+})

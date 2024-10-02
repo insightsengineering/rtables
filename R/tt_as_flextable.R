@@ -30,8 +30,16 @@
 #' @param paginate (`flag`)\cr when exporting `.docx` documents using `export_as_docx`, we suggest relying on the
 #'   Microsoft Word pagination system. If `TRUE`, this option splits `tt` into different "pages" as multiple
 #'   `flextables`. Cooperation between the two mechanisms is not guaranteed. Defaults to `FALSE`.
-#' @param total_width (`numeric(1)`)\cr total width (in inches) for the resulting flextable(s). Defaults to 10.
-#' @param ... (`any`)\cr additional parameters to be passed to the pagination function. See [paginate_table()] 
+#' @param total_page_width (`numeric(1)`)\cr total page width (in inches) for the resulting flextable(s). Any values
+#'   added for column widths is normalized by the total page width. Defaults to 10. If `autofit_to_page = TRUE`, this
+#'   value is automatically set to the allowed page width.
+#' @param colwidths (`numeric`)\cr column widths for the resulting flextable(s). If `NULL`, the column widths estimated
+#'   with [formatters::propose_column_widths()] will be used. When exporting into `.docx` these values are normalized
+#'   to represent a fraction of the `total_page_width`. If these are specified, `autofit_to_page` is set to `FALSE`.
+#' @param autofit_to_page (`flag`)\cr defaults to `TRUE`. If `TRUE`, the column widths are automatically adjusted to
+#'   fit the total page width. If `FALSE`, the `colwidths` are used as an indicative proportion of `total_page_width`.
+#'   See `flextable::set_table_properties(layout)` for more details.
+#' @param ... (`any`)\cr additional parameters to be passed to the pagination function. See [paginate_table()]
 #'   for further details.
 #'
 #' @return A `flextable` object.
@@ -99,7 +107,8 @@ tt_to_flextable <- function(tt,
                             colwidths = NULL,
                             tf_wrap = !is.null(cpp),
                             max_width = cpp,
-                            total_width = 10) {
+                            total_page_width = 10,
+                            autofit_to_page = TRUE) {
   check_required_packages("flextable")
   if (!inherits(tt, "VTableTree")) {
     stop("Input table is not an rtables' object.")
@@ -107,6 +116,13 @@ tt_to_flextable <- function(tt,
   checkmate::assert_flag(titles_as_header)
   checkmate::assert_flag(footers_as_text)
   checkmate::assert_flag(counts_in_newline)
+  checkmate::assert_flag(autofit_to_page)
+  checkmate::assert_number(total_page_width, lower = 1)
+  checkmate::assert_numeric(colwidths, lower = 0, len = ncol(tt) + 1, null.ok = TRUE)
+  if (!is.null(colwidths)) {
+    autofit_to_page <- FALSE
+  }
+
   left_right_fixed_margins <- word_mm_to_pt(1.9)
 
   ## if we're paginating, just call -> pagination happens also afterwards if needed
@@ -123,7 +139,7 @@ tt_to_flextable <- function(tt,
     cinds <- lapply(tabs, function(tb) c(1, .figure_out_colinds(tb, tt) + 1L))
     return(mapply(tt_to_flextable,
       tt = tabs, colwidths = cinds,
-      MoreArgs = list(paginate = FALSE, total_width = total_width),
+      MoreArgs = list(paginate = FALSE, total_page_width = total_page_width),
       SIMPLIFY = FALSE
     ))
   }
@@ -317,10 +333,6 @@ tt_to_flextable <- function(tt,
     # what about margins?
     colwidths <- propose_column_widths(matform, fontspec = fontspec, indent_size = indent_size)
   }
-  final_cwidths <- total_width * colwidths / sum(colwidths) # xxx to fix
-  # xxx FIXME missing transformer from character based widths to mm or pt
-
-  flx <- flextable::width(flx, width = final_cwidths) # xxx to fix
 
   # Title lines (after theme for problems with lines)
   if (titles_as_header && length(all_titles(tt)) > 0 && any(nzchar(all_titles(tt)))) {
@@ -331,8 +343,21 @@ tt_to_flextable <- function(tt,
       )
   }
 
+  # xxx FIXME missing transformer from character based widths to mm or pt
+  final_cwidths <- total_page_width * colwidths / sum(colwidths)
+
+  flx <- flextable::width(flx, width = final_cwidths)
+
   # These final formatting need to work with colwidths
-  flx <- flextable::set_table_properties(flx, layout = "autofit", align = "left") # xxx to fix
+  flx <- flextable::set_table_properties(flx,
+    layout = ifelse(autofit_to_page, "autofit", "fixed"),
+    align = "left",
+    opts_word = list(
+      "split" = FALSE,
+      "keep_with_next" = TRUE
+    )
+  )
+
   # NB: autofit or fixed may be switched if widths are correctly staying in the page
   flx <- flextable::fix_border_issues(flx) # Fixes some rendering gaps in borders
 
