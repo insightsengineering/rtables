@@ -45,7 +45,7 @@
 #'   for further details.
 #'
 #' @return A `flextable` object.
-#' 
+#'
 #' @note
 #' Currently `cpp`, `tf_wrap`, and `max_width` are only used in pagination and do not yet have a
 #' clear cooperation with `colwidths` and `autofit_to_page`. at the moment it is suggested to use the `cpp`
@@ -165,12 +165,14 @@ tt_to_flextable <- function(tt,
       lpp <- expected_lpp
     } else if (expected_lpp < lpp) {
       # lpp needs to be estimated along with cpp if not provided
-      warning("lpp is too large for the given total_page_height. Change the parameters or",
-           " each table will be too long to fit each page.")  
+      warning(
+        "lpp is too large for the given total_page_height. Change the parameters or",
+        " each table will be too long to fit each page."
+      )
     }
     tabs <- paginate_table(tt,
       fontspec = fontspec,
-      lpp = lpp, 
+      lpp = lpp,
       cpp = cpp, tf_wrap = tf_wrap, max_width = max_width, # This can only be trial an error
       ...
     )
@@ -180,7 +182,9 @@ tt_to_flextable <- function(tt,
     cl <- if (!is.null(colwidths)) {
       lapply(cinds, function(ci) colwidths[ci])
     } else {
-      lapply(cinds, function(ci) return(NULL))
+      lapply(cinds, function(ci) {
+        return(NULL)
+      })
     }
     return(mapply(tt_to_flextable,
       tt = tabs, colwidths = cl,

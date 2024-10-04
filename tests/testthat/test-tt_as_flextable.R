@@ -165,18 +165,19 @@ test_that("check colwidths in flextable object", {
   subtitles(tbl) <- c("Some Many", "Subtitles")
   main_footer(tbl) <- c("Some Footer", "Mehr")
   prov_footer(tbl) <- "Some prov Footer"
-  
+
   cw <- c(0.9, 0.05, 0.05)
   spd <- section_properties_default(orientation = "landscape")
   fin_cw <- cw * spd$page_size$width / 2 / sum(cw)
-  
+
   # Fixed total width is / 2
-  flx_res <- rtables::tt_to_flextable(tbl, 
-                                      total_page_width = spd$page_size$width / 2,
-                                      counts_in_newline = TRUE,
-                                      autofit_to_page = TRUE,
-                                      bold_titles = TRUE, 
-                                      colwidths = cw) # if you add cw then autofit_to_page = FALSE
+  flx_res <- rtables::tt_to_flextable(tbl,
+    total_page_width = spd$page_size$width / 2,
+    counts_in_newline = TRUE,
+    autofit_to_page = TRUE,
+    bold_titles = TRUE,
+    colwidths = cw
+  ) # if you add cw then autofit_to_page = FALSE
   dflx <- dim(flx_res) %>% print()
   testthat::expect_equal(fin_cw, unname(dflx$widths))
 })
