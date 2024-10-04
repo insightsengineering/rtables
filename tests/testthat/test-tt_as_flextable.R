@@ -21,7 +21,7 @@ test_that("Can create flextable object that works with different styles", {
 
 
   tbl <- build_table(lyt, ex_adsl)
-  ft <- tt_to_flextable(tbl, total_width = 20)
+  ft <- tt_to_flextable(tbl, total_page_width = 20)
   expect_equal(sum(unlist(nrow(ft))), 20)
 
   expect_silent(ft3 <- tt_to_flextable(tbl, theme = NULL))
