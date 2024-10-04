@@ -74,7 +74,7 @@ the \code{officer} package.
 }}
 \note{
 \code{export_as_docx()} has few customization options available. If you require specific formats and details,
-we suggest that you use \code{\link[=tt_to_flextable]{tt_to_flextable()}} prior to \code{export_as_docx}. Only the \code{title_as_header} and
+we suggest that you use \code{\link[=tt_to_flextable]{tt_to_flextable()}} prior to \code{export_as_docx}. Only the \code{titles_as_header} and
 \code{footer_as_text} parameters must be re-specified if the table is changed first using \code{\link[=tt_to_flextable]{tt_to_flextable()}}.
 }
 \examples{

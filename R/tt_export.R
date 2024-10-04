@@ -110,7 +110,7 @@ formatters::export_as_pdf
 #' @param ... (`any`)\cr additional arguments passed to [tt_to_flextable()].
 #'
 #' @note `export_as_docx()` has few customization options available. If you require specific formats and details,
-#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `title_as_header` and
+#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `titles_as_header` and
 #'   `footer_as_text` parameters must be re-specified if the table is changed first using [tt_to_flextable()].
 #'
 #' @seealso [tt_to_flextable()]
@@ -168,7 +168,7 @@ export_as_docx <- function(tt,
     export_as_docx(tt[[1]], # First paginated table that uses template_file
       file = file,
       doc_metadata = doc_metadata,
-      title_as_header = title_as_header,
+      titles_as_header = titles_as_header,
       footers_as_text = footers_as_text,
       template_file = template_file,
       section_properties = section_properties,
