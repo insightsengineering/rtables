@@ -110,7 +110,7 @@ formatters::export_as_pdf
 #' @param ... (`any`)\cr additional arguments passed to [tt_to_flextable()].
 #'
 #' @note `export_as_docx()` has few customization options available. If you require specific formats and details,
-#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `title_as_header` and
+#'   we suggest that you use [tt_to_flextable()] prior to `export_as_docx`. Only the `titles_as_header` and
 #'   `footer_as_text` parameters must be re-specified if the table is changed first using [tt_to_flextable()].
 #'
 #' @seealso [tt_to_flextable()]
@@ -162,8 +162,36 @@ export_as_docx <- function(tt,
       fpt <- officer::fp_text(font.family = font_fam, font.size = font_sz_body)
       fpt_footer <- officer::fp_text(font.family = font_fam, font.size = font_sz_footer)
     }
-  } else {
+  } else if (inherits(tt, "flextable")) {
     flex_tbl <- tt
+  } else if (inherits(tt, "list")) {
+    export_as_docx(tt[[1]], # First paginated table that uses template_file
+      file = file,
+      doc_metadata = doc_metadata,
+      titles_as_header = titles_as_header,
+      footers_as_text = footers_as_text,
+      template_file = template_file,
+      section_properties = section_properties,
+      ...
+    )
+    if (length(tt) > 1) {
+      out <- mapply(
+        export_as_docx,
+        tt = tt[-1], # Remaining paginated tables
+        MoreArgs = list(
+          file = file,
+          doc_metadata = doc_metadata,
+          titles_as_header = titles_as_header,
+          footers_as_text = footers_as_text,
+          template_file = file, # Uses the just-created file as template
+          section_properties = section_properties,
+          ...
+        )
+      )
+    }
+    return()
+  } else {
+    stop("The table must be a VTableTree, a flextable, or a list of VTableTree or flextable objects.")
   }
   if (!is.null(template_file) && !file.exists(template_file)) {
     template_file <- NULL
@@ -176,8 +204,21 @@ export_as_docx <- function(tt,
     doc <- officer::read_docx()
   }
 
-  if (!is.null(section_properties)) {
-    doc <- officer::body_set_default_section(doc, section_properties)
+  # page width and orientation settings
+  doc <- officer::body_set_default_section(doc, section_properties)
+  if (flex_tbl$properties$layout != "autofit") { # fixed layout
+    page_width <- section_properties$page_size$width
+    dflx <- dim(flex_tbl)
+    if (abs(sum(unname(dflx$widths)) - page_width) > 1e-2) {
+      warning(
+        "The total table width does not match the page width. The column widths",
+        " will be resized to fit the page. Please consider modifying the parameter",
+        " total_page_width in tt_to_flextable()."
+      )
+
+      final_cwidths <- page_width * unname(dflx$widths) / sum(unname(dflx$widths))
+      flex_tbl <- flextable::width(flex_tbl, width = final_cwidths)
+    }
   }
 
   # Extract title
@@ -212,6 +253,8 @@ export_as_docx <- function(tt,
 
   # Save the Word document to a file
   print(doc, target = file)
+
+  invisible(TRUE)
 }
 
 # Shorthand to add text paragraph

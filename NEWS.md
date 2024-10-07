@@ -1,5 +1,12 @@
 ## rtables 0.6.10.9000
 
+### New Features
+ * Experimental pagination is now possible in `tt_as_flextable()` and `export_as_docx()`.
+ * Added handling of widths in `tt_as_flextable()`. Now it is possible to change column widths for `.docx` exports.
+
+### Bug Fixes
+ * Fixed bug that was keeping indentation space characters in top left information when making a `flextable` from a `TableTree` object.
+
 ## rtables 0.6.10
 
 ### New Features
