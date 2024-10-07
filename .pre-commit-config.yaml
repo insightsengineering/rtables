@@ -1,7 +1,7 @@
 ---
 # All available hooks: https://pre-commit.com/hooks.html
 # R specific hooks: https://github.com/lorenzwalthert/precommit
-default_stages: [commit]
+default_stages: [pre-commit]
 default_language_version:
   python: python3
 repos:
@@ -60,7 +60,7 @@ repos:
       - id: no-debug-statement
       - id: deps-in-desc
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
         args: ['--maxkb=200']
