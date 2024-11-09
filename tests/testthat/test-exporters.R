@@ -232,4 +232,3 @@ test_that("export_as_rtf works", {
   res <- export_as_rtf(tbl, file = tmpf)
   expect_true(file.exists(tmpf))
 })
-
