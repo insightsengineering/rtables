@@ -89,5 +89,3 @@ formatters::export_as_txt
 #'
 #' @export
 formatters::export_as_pdf
-
-
