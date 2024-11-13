@@ -1,8 +1,7 @@
 context("Result Data Frames")
 
 test_that("Result Data Frame generation works v0", {
-  ## change here (only) when v0 is crystalized (no longer experimental)
-  spec_version <- "v0_experimental"
+  spec_version <- default_df # We do not use versions anymore (can be reinstated with following fncs)
   lyt <- make_big_lyt()
 
   tbl <- build_table(lyt, rawdat)

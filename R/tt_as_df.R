@@ -1,38 +1,32 @@
-# data.frame output ------------------------------------------------------------
-
+# as_result_df ------------------------------------------------------------
 #' Generate a result data frame
 #'
 #' Collection of utilities to extract `data.frame` objects from `TableTree` objects.
 #'
 #' @inheritParams gen_args
-#' @param spec (`string`)\cr the specification to use to extract the result data frame. See Details below.
-#' @param simplify (`flag`)\cr whether the result data frame should only have labels and result columns visible.
-#' @param ... additional arguments passed to spec-specific result data frame conversion function. Currently it can be
-#'   one or more of the following parameters (valid only for `v0_experimental` spec. for now):
-#'   - `expand_colnames`: when `TRUE`, the result data frame will have expanded column names above the usual
-#'     output. This is useful when the result data frame is used for further processing.
-#'   - `simplify`: when `TRUE`, the result data frame will have only visible labels and result columns.
-#'   - `as_strings`: when `TRUE`, the result data frame will have all values as strings, as they appear
-#'     in the final table (it can also be retrieved from `matrix_form(tt)$strings`). This is also true for
-#'     column counts if `expand_colnames = TRUE`.
-#'   - `as_viewer`: when `TRUE`, the result data frame will have all values as they appear in the final table,
-#'     i.e. with the same precision and numbers, but in easy-to-use numeric form.
-#'   - `keep_label_rows`: when `TRUE`, the result data frame will have all labels as they appear in the
-#'     final table.
-#'   - `as_is`: when `TRUE`, the result data frame will have all the values as they appear in the final table,
-#'     but without information about the row structure. Row labels will be assigned to rows so to work well
-#'     with [df_to_tt()].
-#'
-#' @details `as_result_df()`: Result data frame specifications may differ in the exact information
-#' they include and the form in which they represent it. Specifications whose names end in "_experimental"
-#' are subject to change without notice, but specifications without the "_experimental"
-#' suffix will remain available *including any bugs in their construction* indefinitely.
+#' @param spec (`function`)\cr function that generates the result data frame from a table (`TableTree`).
+#' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and 
+#'   result columns.
+#' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
+#' @param expand_colnames (`flag`)\cr when `TRUE`, the result data frame will have expanded column 
+#'   names above the usual output. This is useful when the result data frame is used for further processing.
+#' @param as_strings (`flag`)\cr when `TRUE`, the result data frame will have all values as strings, 
+#'   as they appear in the final table (it can also be retrieved from `matrix_form(tt)$strings`). 
+#'   This is also true for column counts if `expand_colnames = TRUE`.
+#' @param as_viewer (`flag`)\cr when `TRUE`, the result data frame will have all values as 
+#'   they appear in the final table, i.e. with the same precision and numbers, but in 
+#'   easy-to-use numeric form.
+#' @param keep_label_rows (`flag`)\cr when `TRUE`, the result data frame will have all labels 
+#'   as they appear in the final table.
+#' @param as_is (`flag`)\cr when `TRUE`, the result data frame will have all the values as 
+#'   they appear in the final table, but without information about the row structure. 
+#'   Row labels will be assigned to rows so to work well with [df_to_tt()].
 #'
 #' @return
 #' * `as_result_df` returns a result `data.frame`.
 #'
-#' @seealso [df_to_tt()] when using `as_is = TRUE` and [formatters::make_row_df()] to have a comprehensive view of the
-#'   hierarchical structure of the rows.
+#' @seealso [df_to_tt()] when using `as_is = TRUE` and [formatters::make_row_df()] to have a 
+#'   comprehensive view of the hierarchical structure of the rows.
 #'
 #' @examples
 #' lyt <- basic_table() %>%
@@ -41,21 +35,21 @@
 #'   analyze(c("AGE", "BMRKR2"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
-#' as_result_df(tbl)
+#' as_result_df(tbl, simplify = TRUE)
 #'
 #' @name data.frame_export
 #' @export
-as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
+as_result_df <- function(tt, spec = default_df, simplify = FALSE, ...) {
   checkmate::assert_class(tt, "VTableTree")
-  checkmate::assert_string(spec)
+  checkmate::assert_function(spec)
   checkmate::assert_flag(simplify)
 
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
   }
 
-  result_df_fun <- lookup_result_df_specfun(spec)
-  out <- result_df_fun(tt, ...)
+  # Applying specs
+  out <- spec(tt, ...)
 
   if (simplify) {
     out <- .simplify_result_df(out)
@@ -73,54 +67,21 @@ as_result_df <- function(tt, spec = "v0_experimental", simplify = FALSE, ...) {
   df[, c(row_names_col, result_cols)]
 }
 
-# Not used in rtables
-# .split_colwidths <- function(ptabs, nctot, colwidths) {
-#   ret <- list()
-#   i <- 1L
-#
-#   rlw <- colwidths[1]
-#   colwidths <- colwidths[-1]
-#   donenc <- 0
-#   while (donenc < nctot) {
-#     curnc <- NCOL(ptabs[[i]])
-#     ret[[i]] <- c(rlw, colwidths[seq_len(curnc)])
-#     colwidths <- colwidths[-1 * seq_len(curnc)]
-#     donenc <- donenc + curnc
-#     i <- i + 1
-#   }
-#   ret
-# }
-
-#' @describeIn data.frame_export A list of functions that extract result data frames from `TableTree`s.
+#' @describeIn data.frame_export a standard `spec` function for producing default data frames.
 #'
 #' @return
-#' * `result_df_specs()` returns a named list of result data frame extraction functions by "specification".
+#' * `default_df()` produces a default data table.
 #'
 #' @examples
-#' result_df_specs()
+#' default_df(tbl)
 #'
 #' @export
-result_df_specs <- function() {
-  list(v0_experimental = result_df_v0_experimental)
-}
-
-lookup_result_df_specfun <- function(spec) {
-  if (!(spec %in% names(result_df_specs()))) {
-    stop(
-      "unrecognized result data frame specification: ",
-      spec,
-      "If that specification is correct you may need to update your version of rtables"
-    )
-  }
-  result_df_specs()[[spec]]
-}
-
-result_df_v0_experimental <- function(tt,
-                                      as_viewer = FALSE,
-                                      as_strings = FALSE,
-                                      expand_colnames = FALSE,
-                                      keep_label_rows = FALSE,
-                                      as_is = FALSE) {
+default_df <- function(tt,
+                       as_viewer = FALSE,
+                       as_strings = FALSE,
+                       expand_colnames = FALSE,
+                       keep_label_rows = FALSE,
+                       as_is = FALSE) {
   checkmate::assert_flag(as_viewer)
   checkmate::assert_flag(as_strings)
   checkmate::assert_flag(expand_colnames)
@@ -407,7 +368,8 @@ handle_rdf_row <- function(rdfrow, maxlen) {
     return(ret)
   }
 }
-
+# path_enriched_df ------------------------------------------------------------
+# 
 #' @describeIn data.frame_export Transform a `TableTree` object to a path-enriched `data.frame`.
 #'
 #' @param path_fun (`function`)\cr function to transform paths into single-string row/column names.
