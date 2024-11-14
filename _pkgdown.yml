@@ -239,7 +239,6 @@ reference:
     contents:
     - as_html
     - starts_with("export_as")
-    - tt_to_flextable
     - tostring
     - get_formatted_cells
     - path_enriched_df

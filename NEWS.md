@@ -1,4 +1,7 @@
-## rtables 0.6.10.9002
+## rtables 0.6.10.9003
+
+### Miscellaneous
+ * Split `docx` document generation to the new package [`rtables.officer`](https://github.com/insightsengineering/rtables.officer).
 
 ### New Features
  * Experimental pagination is now possible in `tt_as_flextable()` and `export_as_docx()`.
