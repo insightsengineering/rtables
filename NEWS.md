@@ -1,4 +1,4 @@
-## rtables 0.6.10.9003
+## rtables 0.6.10.9004
 
 ### Miscellaneous
  * Split `docx` document generation to the new package [`rtables.officer`](https://github.com/insightsengineering/rtables.officer).
