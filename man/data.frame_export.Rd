@@ -3,19 +3,18 @@
 \name{data.frame_export}
 \alias{data.frame_export}
 \alias{as_result_df}
-\alias{default_df}
 \alias{path_enriched_df}
 \title{Generate a result data frame}
 \usage{
-as_result_df(tt, spec = default_df, simplify = FALSE, ...)
-
-default_df(
+as_result_df(
   tt,
-  as_viewer = FALSE,
-  as_strings = FALSE,
+  spec = NULL,
+  data_format = c("full_precision", "strings", "numeric"),
   expand_colnames = FALSE,
   keep_label_rows = FALSE,
-  as_is = FALSE
+  as_is = FALSE,
+  simplify = FALSE,
+  ...
 )
 
 path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
@@ -23,20 +22,12 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 \arguments{
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
-\item{spec}{(\code{function})\cr function that generates the result data frame from a table (\code{TableTree}).}
+\item{spec}{(\code{function})\cr function that generates the result data frame from a table (\code{TableTree}).
+It defaults to \code{NULL}, for standard processing.}
 
-\item{simplify}{(\code{flag})\cr when \code{TRUE}, the result data frame will have only visible labels and
-result columns.}
-
-\item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}).}
-
-\item{as_viewer}{(\code{flag})\cr when \code{TRUE}, the result data frame will have all values as
-they appear in the final table, i.e. with the same precision and numbers, but in
-easy-to-use numeric form.}
-
-\item{as_strings}{(\code{flag})\cr when \code{TRUE}, the result data frame will have all values as strings,
-as they appear in the final table (it can also be retrieved from \code{matrix_form(tt)$strings}).
-This is also true for column counts if \code{expand_colnames = TRUE}.}
+\item{data_format}{(\code{character})\cr the format of the data in the result data frame. It can be one value
+between \code{"full_precision"} (default), \code{"strings"}, and \code{"numeric"}. The last two values show the numeric
+data with the visible precision.}
 
 \item{expand_colnames}{(\code{flag})\cr when \code{TRUE}, the result data frame will have expanded column
 names above the usual output. This is useful when the result data frame is used for further processing.}
@@ -48,6 +39,11 @@ as they appear in the final table.}
 they appear in the final table, but without information about the row structure.
 Row labels will be assigned to rows so to work well with \code{\link[=df_to_tt]{df_to_tt()}}.}
 
+\item{simplify}{(\code{flag})\cr when \code{TRUE}, the result data frame will have only visible labels and
+result columns.}
+
+\item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}).}
+
 \item{path_fun}{(\code{function})\cr function to transform paths into single-string row/column names.}
 
 \item{value_fun}{(\code{function})\cr function to transform cell values into cells of a \code{data.frame}. Defaults to
@@ -56,10 +52,6 @@ Row labels will be assigned to rows so to work well with \code{\link[=df_to_tt]{
 \value{
 \itemize{
 \item \code{as_result_df} returns a result \code{data.frame}.
-}
-
-\itemize{
-\item \code{default_df()} produces a default data table.
 }
 
 \itemize{
@@ -73,8 +65,6 @@ Collection of utilities to extract \code{data.frame} objects from \code{TableTre
 }
 \section{Functions}{
 \itemize{
-\item \code{default_df()}: a standard \code{spec} function for producing default data frames.
-
 \item \code{path_enriched_df()}: Transform a \code{TableTree} object to a path-enriched \code{data.frame}.
 
 }}
@@ -86,8 +76,6 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, ex_adsl)
 as_result_df(tbl, simplify = TRUE)
-
-default_df(tbl)
 
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%

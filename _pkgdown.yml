@@ -299,7 +299,6 @@ reference:
     desc: Functions for generating result data frames from rtables TableTree objects
     contents:
     - as_result_df
-    - default_df
 
   - title: internal
     desc: Internal documented methods

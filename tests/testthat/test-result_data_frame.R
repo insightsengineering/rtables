@@ -1,12 +1,11 @@
 context("Result Data Frames")
 
 test_that("Result Data Frame generation works v0", {
-  spec_version <- default_df # We do not use versions anymore (can be reinstated with following fncs)
   lyt <- make_big_lyt()
 
   tbl <- build_table(lyt, rawdat)
 
-  result_df <- as_result_df(tbl, spec_version)
+  result_df <- as_result_df(tbl)
   expect_identical(
     result_df[2, "ARM1.M"][[1]],
     c(37, 37 / 256)
@@ -29,7 +28,7 @@ test_that("Result Data Frame generation works v0", {
     analyze(c("AGE", "BMRKR2"))
 
   tbl2 <- build_table(lyt, ex_adsl)
-  result_df2 <- as_result_df(tbl2, spec_version)
+  result_df2 <- as_result_df(tbl2)
 
   ## regression test
   expect_false(any(is.na(result_df2$spl_var_1)))
@@ -45,7 +44,7 @@ test_that("Result Data Frame generation works v0", {
     analyze_colvars(afun = length, inclNAs = TRUE)
 
   tbl3 <- build_table(lyt3, test)
-  result_df3 <- as_result_df(tbl3, spec_version)
+  result_df3 <- as_result_df(tbl3)
 
   expect_identical(nrow(result_df3), 1L)
 
@@ -66,14 +65,14 @@ test_that("Result Data Frame generation works v0", {
   )
 })
 
-test_that("as_result_df works with visual output (as_viewer)", {
+test_that("as_result_df works with visual output (data_format as numeric)", {
   lyt <- make_big_lyt()
   tbl <- build_table(lyt, rawdat)
 
-  res <- expect_silent(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE))
+  res <- expect_silent(as_result_df(tbl, simplify = TRUE, data_format = "numeric"))
   expect_equal(res$ARM1.M[[1]], c(116.0, 45.3))
 
-  res <- expect_silent(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE, as_strings = TRUE))
+  res <- expect_silent(as_result_df(tbl, data_format = "strings", simplify = TRUE))
   expect_equal(res$ARM1.M[[1]], "116 (45.3%)")
 
   mf <- matrix_form(tbl)
@@ -82,7 +81,7 @@ test_that("as_result_df works with visual output (as_viewer)", {
   colnames(string_tbl) <- colnames(res)
   expect_equal(res, data.frame(string_tbl))
 
-  res <- expect_silent(as_result_df(tbl, simplify = TRUE, as_strings = TRUE, expand_colnames = TRUE))
+  res <- expect_silent(as_result_df(tbl, simplify = TRUE, data_format = "strings", expand_colnames = TRUE))
   string_tbl <- mf_strings(mf)
   string_tbl <- data.frame(string_tbl[nzchar(string_tbl[, 2]), ])
   colnames(string_tbl) <- colnames(res)
@@ -96,11 +95,11 @@ test_that("as_result_df works with visual output (as_viewer)", {
     build_table(DM)
   expect_equal(as_result_df(tbl)$`all obs`, 5.851948, tolerance = 1e-6)
   expect_equal(
-    as_result_df(tbl, as_viewer = TRUE)$`all obs`,
-    as.numeric(as_result_df(tbl, as_strings = TRUE)$`all obs`)
+    as_result_df(tbl, data_format = "numeric")$`all obs`,
+    as.numeric(as_result_df(tbl, data_format = "strings")$`all obs`)
   )
   expect_equal(as_result_df(tbl, expand_colnames = TRUE)$`all obs`[2], "356")
-  expect_equal(as_result_df(tbl, expand_colnames = TRUE, as_strings = TRUE)$`all obs`[2], "(N=356)")
+  expect_equal(as_result_df(tbl, expand_colnames = TRUE, data_format = "strings")$`all obs`[2], "(N=356)")
 
 
   # Test for integer extraction and ranges
@@ -110,7 +109,7 @@ test_that("as_result_df works with visual output (as_viewer)", {
     analyze("AGE", afun = function(x) list(a = mean(x), b = range(x)))
 
   tbl <- build_table(lyt, ex_adsl)
-  expect_equal(as_result_df(tbl, simplify = TRUE, as_viewer = TRUE)[2, 2][[1]], c(24, 46))
+  expect_equal(as_result_df(tbl, simplify = TRUE, data_format = "numeric")[2, 2][[1]], c(24, 46))
 
   # Test for tables with less than 3 rows
   tbl <- rtable(
@@ -158,8 +157,8 @@ test_that("as_result_df keeps label rows", {
 
   rd1 <- as_result_df(tbl, keep_label_rows = TRUE)
   rd2 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE)
-  rd3 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, as_strings = TRUE)
-  rd4 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, as_viewer = TRUE)
+  rd3 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, data_format = "strings")
+  rd4 <- as_result_df(tbl, keep_label_rows = TRUE, expand_colnames = TRUE, data_format = "numeric")
 
   expect_equal(nrow(rd1), nrow(rd2) - 2)
   expect_equal(nrow(rd1), nrow(rd3) - 2)
@@ -192,12 +191,12 @@ test_that("as_result_df keeps label rows", {
   )
 })
 
-test_that("as_result_df as_is is producing a data.frame that is compatible with df_to_tt", {
+test_that("as_result_df simplify is producing a data.frame that is compatible with df_to_tt", {
   # More challenging labels
   lyt <- make_big_lyt()
   tbl <- build_table(lyt, rawdat)
 
-  ard_out <- as_result_df(tbl, as_is = TRUE)
+  ard_out <- as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE)
   mf_tbl <- matrix_form(tbl)
 
   # Label works
@@ -213,7 +212,7 @@ test_that("as_result_df as_is is producing a data.frame that is compatible with 
 
   init_tbl <- df_to_tt(mtcars)
   end_tbl <- init_tbl %>%
-    as_result_df(as_is = TRUE) %>%
+    as_result_df(simplify = TRUE) %>%
     df_to_tt()
 
   expect_equal(

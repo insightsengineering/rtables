@@ -5,27 +5,24 @@
 #'
 #' @inheritParams gen_args
 #' @param spec (`function`)\cr function that generates the result data frame from a table (`TableTree`).
-#' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and 
-#'   result columns.
-#' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
+#'   It defaults to `NULL`, for standard processing.
 #' @param expand_colnames (`flag`)\cr when `TRUE`, the result data frame will have expanded column 
 #'   names above the usual output. This is useful when the result data frame is used for further processing.
-#' @param as_strings (`flag`)\cr when `TRUE`, the result data frame will have all values as strings, 
-#'   as they appear in the final table (it can also be retrieved from `matrix_form(tt)$strings`). 
-#'   This is also true for column counts if `expand_colnames = TRUE`.
-#' @param as_viewer (`flag`)\cr when `TRUE`, the result data frame will have all values as 
-#'   they appear in the final table, i.e. with the same precision and numbers, but in 
-#'   easy-to-use numeric form.
+#' @param data_format (`string`)\cr the format of the data in the result data frame. It can be one value
+#'   between `"full_precision"` (default), `"strings"`, and `"numeric"`. The last two values show the numeric
+#'   data with the visible precision.
+#' @param make_ard (`flag`)\cr when `TRUE`, the result data frame will have only one statistic per row.
 #' @param keep_label_rows (`flag`)\cr when `TRUE`, the result data frame will have all labels 
 #'   as they appear in the final table.
-#' @param as_is (`flag`)\cr when `TRUE`, the result data frame will have all the values as 
-#'   they appear in the final table, but without information about the row structure. 
-#'   Row labels will be assigned to rows so to work well with [df_to_tt()].
+#' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and 
+#'   result columns. Consider showing also label rows with `keep_label_rows = TRUE`. This output can be
+#'   used again to create a `TableTree` object with [df_to_tt()].
+#' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
 #'
 #' @return
 #' * `as_result_df` returns a result `data.frame`.
 #'
-#' @seealso [df_to_tt()] when using `as_is = TRUE` and [formatters::make_row_df()] to have a 
+#' @seealso [df_to_tt()] when using `simplify = TRUE` and [formatters::make_row_df()] to have a 
 #'   comprehensive view of the hierarchical structure of the rows.
 #'
 #' @examples
@@ -39,20 +36,191 @@
 #'
 #' @name data.frame_export
 #' @export
-as_result_df <- function(tt, spec = default_df, simplify = FALSE, ...) {
+as_result_df <- function(tt, spec = NULL,
+                         data_format = c("full_precision", "strings", "numeric"),
+                         make_ard = FALSE,
+                         expand_colnames = FALSE,
+                         keep_label_rows = FALSE,
+                         simplify = FALSE,
+                         ...) {
+  data_format <- data_format[[1]]
   checkmate::assert_class(tt, "VTableTree")
-  checkmate::assert_function(spec)
+  checkmate::assert_function(spec, null.ok = TRUE)
+  checkmate::assert_choice(data_format[[1]], choices = eval(formals(as_result_df)[["data_format"]]))
+  checkmate::assert_flag(make_ard)
+  checkmate::assert_flag(expand_colnames)
+  checkmate::assert_flag(keep_label_rows)
   checkmate::assert_flag(simplify)
 
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
   }
+  
+  if (make_ard) {
+    simplify <- FALSE
+    expand_colnames <- TRUE
+    keep_label_rows <- FALSE
+  }
 
-  # Applying specs
-  out <- spec(tt, ...)
-
-  if (simplify) {
-    out <- .simplify_result_df(out)
+  if (is.null(spec)) {
+    raw_cvals <- cell_values(tt)
+    ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
+    ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
+    ## at this point.
+    if (nrow(tt) == 1 && length(raw_cvals) > 1) {
+      raw_cvals <- list(raw_cvals)
+    }
+    
+    # Flatten the list of lists (rows) of cell values into a data frame
+    cellvals <- as.data.frame(do.call(rbind, raw_cvals))
+    row.names(cellvals) <- NULL
+    
+    if (nrow(tt) == 1 && ncol(tt) == 1) {
+      colnames(cellvals) <- names(raw_cvals)
+    }
+    
+    if (data_format %in% c("strings", "numeric")) {
+      # we keep previous calculations to check the format of the data
+      mf_tt <- matrix_form(tt)
+      mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1]
+      mf_result_chars <- .remove_empty_elements(mf_result_chars)
+      mf_result_numeric <- as.data.frame(
+        .make_numeric_char_mf(mf_result_chars)
+      )
+      mf_result_chars <- as.data.frame(mf_result_chars)
+      if (!setequal(dim(mf_result_numeric), dim(cellvals)) || !setequal(dim(mf_result_chars), dim(cellvals))) {
+        stop(
+          "The extracted numeric data.frame does not have the same dimension of the",
+          " cell values extracted with cell_values(). This is a bug. Please report it."
+        ) # nocov
+      }
+      if (data_format == "strings") {
+        colnames(mf_result_chars) <- colnames(cellvals)
+        cellvals <- mf_result_chars
+      } else {
+        colnames(mf_result_numeric) <- colnames(cellvals)
+        cellvals <- mf_result_numeric
+      }
+    }
+    
+    rdf <- make_row_df(tt)
+    
+    df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
+    # Removing initial root elements from path (out of the loop -> right maxlen)
+    df$path <- lapply(df$path, .remove_root_elems_from_path,
+                      which_root_name = c("root", "rbind_root"),
+                      all = TRUE
+    )
+    maxlen <- max(lengths(df$path))
+    
+    # Loop for metadata (path and details from make_row_df)
+    metadf <- do.call(
+      rbind.data.frame,
+      lapply(
+        seq_len(NROW(df)),
+        function(ii) {
+          handle_rdf_row(df[ii, ], maxlen = maxlen)
+        }
+      )
+    )
+    
+    # Should we keep label rows with NAs instead of values?
+    if (keep_label_rows) {
+      cellvals_mat_struct <- as.data.frame(
+        matrix(NA, nrow = nrow(rdf), ncol = ncol(cellvals))
+      )
+      colnames(cellvals_mat_struct) <- colnames(cellvals)
+      cellvals_mat_struct[metadf$node_class != "LabelRow", ] <- cellvals
+      ret <- cbind(metadf, cellvals_mat_struct)
+    } else {
+      ret <- cbind(
+        metadf[metadf$node_class != "LabelRow", ],
+        cellvals
+      )
+    }
+    
+    # If we want to expand colnames
+    if (expand_colnames) {
+      col_name_structure <- .get_formatted_colnames(clayout(tt))
+      number_of_non_data_cols <- which(colnames(ret) == "node_class")
+      if (NCOL(ret) - number_of_non_data_cols != NCOL(col_name_structure)) {
+        stop(
+          "When expanding colnames structure, we were not able to find the same",
+          " number of columns as in the result data frame. This is a bug. Please report it."
+        ) # nocov
+      }
+      
+      buffer_rows_for_colnames <- matrix(
+        rep("<only_for_column_names>", number_of_non_data_cols * NROW(col_name_structure)),
+        nrow = NROW(col_name_structure)
+      )
+      
+      header_colnames_matrix <- cbind(buffer_rows_for_colnames, data.frame(col_name_structure))
+      colnames(header_colnames_matrix) <- colnames(ret)
+      
+      count_row <- NULL
+      if (disp_ccounts(tt)) {
+        ccounts <- col_counts(tt)
+        if (data_format == "strings") {
+          ccounts <- mf_strings(mf_tt)[mf_nlheader(mf_tt), ]
+          ccounts <- .remove_empty_elements(ccounts)
+        }
+        count_row <- c(rep("<only_for_column_counts>", number_of_non_data_cols), ccounts)
+        header_colnames_matrix <- rbind(header_colnames_matrix, count_row)
+      }
+      ret <- rbind(header_colnames_matrix, ret)
+    }
+    
+    # ARD part for one stat per row
+    if (make_ard) {
+      
+      # Unnecessary columns
+      ret_tmp <- ret[, !colnames(ret) %in% c("row_num", "is_group_summary", "node_class")]
+      
+      # Indexes of real columns (visible in the output, but no row names)
+      only_col_indexes <- seq(which(colnames(ret_tmp) == "label_name") + 1, ncol(ret_tmp))
+      
+      # Core row names
+      col_label_rows <- grepl("<only_for_column_*", ret_tmp$avar_name)
+      core_row_names <- ret_tmp[!col_label_rows, -only_col_indexes]
+      
+      # Moving colnames to rows (flattening)
+      ret_w_cols <- NULL
+      # col_i <- only_col_indexes[1]
+      for (col_i in only_col_indexes) {
+        tmp_ret_by_col_i <- cbind(
+          group1 = ret_tmp[, col_i][[1]], # it should be the name of the split column xxx
+          group1_level = ret_tmp[, col_i][[1]],
+          # instead of avar_name  row_name       label_name
+          setNames(core_row_names, c("variable", "variable_level", "variable_label")), # missing stat_name xxx
+          stat = I(setNames(ret_tmp[!col_label_rows, col_i], NULL))
+        )
+        
+        ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
+      }
+      # # Adding group names
+      # stopifnot(length(unique(ard_rt$group)) == length(names(tbl_rt)))
+      # group_mapping <- setNames(names(tbl_rt), unique(ard_rt$group))
+      # 
+      # ard_rt <- ard_rt |>
+      #   mutate(group1 = recode(group, !!!group_mapping)) |> 
+      #   mutate(stat_name = sapply(ard_rt$value, names)) |>
+      #   unnest(cols = c("value", "stat_name")) |>
+      #   rename(
+      #     stat = value,
+      #     group1_level = group
+      #   ) |>
+      #   print(n = 30)
+    }
+    
+    out <- if (simplify) {
+      .simplify_result_df(ret)
+    } else {
+      ret
+    }
+  } else {
+    # Applying specs
+    out <- spec(tt, ...)
   }
 
   out
@@ -61,161 +229,13 @@ as_result_df <- function(tt, spec = default_df, simplify = FALSE, ...) {
 # Function that selects specific outputs from the result data frame
 .simplify_result_df <- function(df) {
   col_df <- colnames(df)
-  row_names_col <- which(col_df == "row_name")
+  if (!all(c("row_name", "node_class") %in% col_df)) {
+    stop("Please simplify the result data frame only when it has 'row_name' and 'node_class' columns.")
+  }
+  row_names_col <- which(col_df == "label_name")
   result_cols <- seq(which(col_df == "node_class") + 1, length(col_df))
 
   df[, c(row_names_col, result_cols)]
-}
-
-#' @describeIn data.frame_export a standard `spec` function for producing default data frames.
-#'
-#' @return
-#' * `default_df()` produces a default data table.
-#'
-#' @examples
-#' default_df(tbl)
-#'
-#' @export
-default_df <- function(tt,
-                       as_viewer = FALSE,
-                       as_strings = FALSE,
-                       expand_colnames = FALSE,
-                       keep_label_rows = FALSE,
-                       as_is = FALSE) {
-  checkmate::assert_flag(as_viewer)
-  checkmate::assert_flag(as_strings)
-  checkmate::assert_flag(expand_colnames)
-  checkmate::assert_flag(keep_label_rows)
-  checkmate::assert_flag(as_is)
-
-  if (as_is) {
-    keep_label_rows <- TRUE
-    expand_colnames <- FALSE
-  }
-
-  raw_cvals <- cell_values(tt)
-  ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
-  ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
-  ## at this point.
-  if (nrow(tt) == 1 && length(raw_cvals) > 1) {
-    raw_cvals <- list(raw_cvals)
-  }
-
-  # Flatten the list of lists (rows) of cell values into a data frame
-  cellvals <- as.data.frame(do.call(rbind, raw_cvals))
-  row.names(cellvals) <- NULL
-
-  if (nrow(tt) == 1 && ncol(tt) == 1) {
-    colnames(cellvals) <- names(raw_cvals)
-  }
-
-  if (as_viewer || as_strings) {
-    # we keep previous calculations to check the format of the data
-    mf_tt <- matrix_form(tt)
-    mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1]
-    mf_result_chars <- .remove_empty_elements(mf_result_chars)
-    mf_result_numeric <- as.data.frame(
-      .make_numeric_char_mf(mf_result_chars)
-    )
-    mf_result_chars <- as.data.frame(mf_result_chars)
-    if (!setequal(dim(mf_result_numeric), dim(cellvals)) || !setequal(dim(mf_result_chars), dim(cellvals))) {
-      stop(
-        "The extracted numeric data.frame does not have the same dimension of the",
-        " cell values extracted with cell_values(). This is a bug. Please report it."
-      ) # nocov
-    }
-    if (as_strings) {
-      colnames(mf_result_chars) <- colnames(cellvals)
-      cellvals <- mf_result_chars
-    } else {
-      colnames(mf_result_numeric) <- colnames(cellvals)
-      cellvals <- mf_result_numeric
-    }
-  }
-
-  rdf <- make_row_df(tt)
-
-  df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
-  # Removing initial root elements from path (out of the loop -> right maxlen)
-  df$path <- lapply(df$path, .remove_root_elems_from_path,
-    which_root_name = c("root", "rbind_root"),
-    all = TRUE
-  )
-  maxlen <- max(lengths(df$path))
-
-  # Loop for metadata (path and details from make_row_df)
-  metadf <- do.call(
-    rbind.data.frame,
-    lapply(
-      seq_len(NROW(df)),
-      function(ii) {
-        handle_rdf_row(df[ii, ], maxlen = maxlen)
-      }
-    )
-  )
-
-  # Should we keep label rows with NAs instead of values?
-  if (keep_label_rows) {
-    cellvals_mat_struct <- as.data.frame(
-      matrix(NA, nrow = nrow(rdf), ncol = ncol(cellvals))
-    )
-    colnames(cellvals_mat_struct) <- colnames(cellvals)
-    cellvals_mat_struct[metadf$node_class != "LabelRow", ] <- cellvals
-    ret <- cbind(metadf, cellvals_mat_struct)
-  } else {
-    ret <- cbind(
-      metadf[metadf$node_class != "LabelRow", ],
-      cellvals
-    )
-  }
-
-  # If we want to expand colnames
-  if (expand_colnames) {
-    col_name_structure <- .get_formatted_colnames(clayout(tt))
-    number_of_non_data_cols <- which(colnames(ret) == "node_class")
-    if (NCOL(ret) - number_of_non_data_cols != NCOL(col_name_structure)) {
-      stop(
-        "When expanding colnames structure, we were not able to find the same",
-        " number of columns as in the result data frame. This is a bug. Please report it."
-      ) # nocov
-    }
-
-    buffer_rows_for_colnames <- matrix(
-      rep("<only_for_column_names>", number_of_non_data_cols * NROW(col_name_structure)),
-      nrow = NROW(col_name_structure)
-    )
-
-    header_colnames_matrix <- cbind(buffer_rows_for_colnames, data.frame(col_name_structure))
-    colnames(header_colnames_matrix) <- colnames(ret)
-
-    count_row <- NULL
-    if (disp_ccounts(tt)) {
-      ccounts <- col_counts(tt)
-      if (as_strings) {
-        ccounts <- mf_strings(mf_tt)[mf_nlheader(mf_tt), ]
-        ccounts <- .remove_empty_elements(ccounts)
-      }
-      count_row <- c(rep("<only_for_column_counts>", number_of_non_data_cols), ccounts)
-      header_colnames_matrix <- rbind(header_colnames_matrix, count_row)
-    }
-    ret <- rbind(header_colnames_matrix, ret)
-  }
-
-  # Using only labels for row names and losing information about paths
-  if (as_is) {
-    tmp_rownames <- ret$label_name
-    ret <- ret[, -seq_len(which(colnames(ret) == "node_class"))]
-    if (length(unique(tmp_rownames)) == length(tmp_rownames)) {
-      rownames(ret) <- tmp_rownames
-    } else {
-      ret <- cbind("label_name" = tmp_rownames, ret)
-      rownames(ret) <- NULL
-    }
-  } else {
-    rownames(ret) <- NULL
-  }
-
-  ret
 }
 
 .remove_empty_elements <- function(char_df) {
