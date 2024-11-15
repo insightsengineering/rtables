@@ -104,6 +104,9 @@ as_result_df <- function(tt, spec = NULL,
     }
     
     rdf <- make_row_df(tt)
+    cinfo_df <- col_info(tt)
+    ci_coltree <- coltree(cinfo_df)
+    column_split_names <- .get_column_split_name(ci_coltree) # used only in make_ard
     
     df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
     # Removing initial root elements from path (out of the loop -> right maxlen)
@@ -189,7 +192,7 @@ as_result_df <- function(tt, spec = NULL,
       # col_i <- only_col_indexes[1]
       for (col_i in only_col_indexes) {
         tmp_ret_by_col_i <- cbind(
-          group1 = ret_tmp[, col_i][[1]], # it should be the name of the split column xxx
+          group1 = column_split_names[[ret_tmp[, col_i][[1]]]],
           group1_level = ret_tmp[, col_i][[1]],
           # instead of avar_name  row_name       label_name
           setNames(core_row_names, c("variable", "variable_level", "variable_label")), # missing stat_name xxx
@@ -198,19 +201,8 @@ as_result_df <- function(tt, spec = NULL,
         
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
       }
-      # # Adding group names
-      # stopifnot(length(unique(ard_rt$group)) == length(names(tbl_rt)))
-      # group_mapping <- setNames(names(tbl_rt), unique(ard_rt$group))
-      # 
-      # ard_rt <- ard_rt |>
-      #   mutate(group1 = recode(group, !!!group_mapping)) |> 
-      #   mutate(stat_name = sapply(ard_rt$value, names)) |>
-      #   unnest(cols = c("value", "stat_name")) |>
-      #   rename(
-      #     stat = value,
-      #     group1_level = group
-      #   ) |>
-      #   print(n = 30)
+      
+      ret <- ret_w_cols
     }
     
     out <- if (simplify) {
@@ -225,6 +217,16 @@ as_result_df <- function(tt, spec = NULL,
 
   out
 }
+
+
+.get_column_split_name <- function(ci_coltree) {
+  # ci stands for column information
+  if (is(ci_coltree, "LayoutAxisTree")) {
+    kids <- tree_children(ci_coltree)
+    return(unlist(lapply(kids, .get_column_split_name)))
+  }
+  sapply(pos_splits(tree_pos(ci_coltree)), spl_payload)
+} 
 
 # Function that selects specific outputs from the result data frame
 .simplify_result_df <- function(df) {
