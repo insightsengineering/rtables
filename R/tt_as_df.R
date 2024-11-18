@@ -209,10 +209,9 @@ as_result_df <- function(tt, spec = NULL,
     } else {
       ret
     }
-    
+
     # take out rownames
     rownames(out) <- NULL
-    
   } else {
     # Applying specs
     out <- spec(tt, ...)
