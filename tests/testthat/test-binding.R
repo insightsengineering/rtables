@@ -215,7 +215,7 @@ test_that("count visibility syncing works when cbinding", {
 test_that("equivalent split funs withs differrent environments dont' block rbinding", {
   skip_if_not_installed("tibble")
   require(tibble, quietly = TRUE)
-  
+
   combodf <- tribble(
     ~valname, ~label, ~levelcombo, ~exargs,
     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
