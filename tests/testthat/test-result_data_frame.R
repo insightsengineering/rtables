@@ -77,15 +77,17 @@ test_that("as_result_df works with visual output (data_format as numeric)", {
 
   mf <- matrix_form(tbl)
   string_tbl <- mf_strings(mf)[-seq_len(mf_nlheader(mf)), ]
-  string_tbl <- string_tbl[nzchar(string_tbl[, 2]), ]
+  string_tbl <- as.data.frame(string_tbl[nzchar(string_tbl[, 2]), ])
   colnames(string_tbl) <- colnames(res)
-  expect_equal(res, data.frame(string_tbl))
+  rownames(string_tbl) <- NULL
+  expect_equal(res, string_tbl)
 
   res <- expect_silent(as_result_df(tbl, simplify = TRUE, data_format = "strings", expand_colnames = TRUE))
   string_tbl <- mf_strings(mf)
   string_tbl <- data.frame(string_tbl[nzchar(string_tbl[, 2]), ])
   colnames(string_tbl) <- colnames(res)
-  string_tbl$row_name[seq_len(mf_nlheader(mf))] <- res$row_name[seq_len(mf_nlheader(mf))]
+  string_tbl$label_name[seq_len(mf_nlheader(mf))] <- res$label_name[seq_len(mf_nlheader(mf))]
+  rownames(string_tbl) <- NULL
   expect_equal(res, string_tbl)
 
   expect_silent(basic_table() %>% build_table(DM) %>% as_result_df())

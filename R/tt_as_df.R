@@ -188,12 +188,11 @@ as_result_df <- function(tt, spec = NULL,
 
       # Moving colnames to rows (flattening)
       ret_w_cols <- NULL
-      # col_i <- only_col_indexes[1]
       for (col_i in only_col_indexes) {
         tmp_ret_by_col_i <- cbind(
           group1 = column_split_names[[ret_tmp[, col_i][[1]]]],
           group1_level = ret_tmp[, col_i][[1]],
-          # instead of avar_name  row_name       label_name
+          # instead of avar_name  row_name       label_name ("variable_label" is not present in ARDs)
           setNames(core_row_names, c("variable", "variable_level", "variable_label")), # missing stat_name xxx
           stat = I(setNames(ret_tmp[!col_label_rows, col_i], NULL))
         )
@@ -204,11 +203,16 @@ as_result_df <- function(tt, spec = NULL,
       ret <- ret_w_cols
     }
 
+    # Simplify the result data frame
     out <- if (simplify) {
       .simplify_result_df(ret)
     } else {
       ret
     }
+    
+    # take out rownames
+    rownames(out) <- NULL
+    
   } else {
     # Applying specs
     out <- spec(tt, ...)
@@ -230,13 +234,13 @@ as_result_df <- function(tt, spec = NULL,
 # Function that selects specific outputs from the result data frame
 .simplify_result_df <- function(df) {
   col_df <- colnames(df)
-  if (!all(c("row_name", "node_class") %in% col_df)) {
-    stop("Please simplify the result data frame only when it has 'row_name' and 'node_class' columns.")
+  if (!all(c("label_name", "node_class") %in% col_df)) {
+    stop("Please simplify the result data frame only when it has 'label_name' and 'node_class' columns.")
   }
-  row_names_col <- which(col_df == "label_name")
+  label_names_col <- which(col_df == "label_name")
   result_cols <- seq(which(col_df == "node_class") + 1, length(col_df))
 
-  df[, c(row_names_col, result_cols)]
+  df[, c(label_names_col, result_cols)]
 }
 
 .remove_empty_elements <- function(char_df) {
