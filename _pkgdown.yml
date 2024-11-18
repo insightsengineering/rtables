@@ -66,6 +66,7 @@ articles:
     contents:
     - clinical_trials
     - baseline
+    - ard_how_to
 
   - title: Table Customization
     navbar: Table Customization

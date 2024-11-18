@@ -218,7 +218,7 @@ as_result_df <- function(tt, spec = NULL,
   out
 }
 
-
+# Helper function to get column split names
 .get_column_split_name <- function(ci_coltree) {
   # ci stands for column information
   if (is(ci_coltree, "LayoutAxisTree")) {
