@@ -10,9 +10,9 @@ as_result_df(
   tt,
   spec = NULL,
   data_format = c("full_precision", "strings", "numeric"),
+  make_ard = FALSE,
   expand_colnames = FALSE,
   keep_label_rows = FALSE,
-  as_is = FALSE,
   simplify = FALSE,
   ...
 )
@@ -25,9 +25,11 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 \item{spec}{(\code{function})\cr function that generates the result data frame from a table (\code{TableTree}).
 It defaults to \code{NULL}, for standard processing.}
 
-\item{data_format}{(\code{character})\cr the format of the data in the result data frame. It can be one value
+\item{data_format}{(\code{string})\cr the format of the data in the result data frame. It can be one value
 between \code{"full_precision"} (default), \code{"strings"}, and \code{"numeric"}. The last two values show the numeric
 data with the visible precision.}
+
+\item{make_ard}{(\code{flag})\cr when \code{TRUE}, the result data frame will have only one statistic per row.}
 
 \item{expand_colnames}{(\code{flag})\cr when \code{TRUE}, the result data frame will have expanded column
 names above the usual output. This is useful when the result data frame is used for further processing.}
@@ -35,12 +37,9 @@ names above the usual output. This is useful when the result data frame is used 
 \item{keep_label_rows}{(\code{flag})\cr when \code{TRUE}, the result data frame will have all labels
 as they appear in the final table.}
 
-\item{as_is}{(\code{flag})\cr when \code{TRUE}, the result data frame will have all the values as
-they appear in the final table, but without information about the row structure.
-Row labels will be assigned to rows so to work well with \code{\link[=df_to_tt]{df_to_tt()}}.}
-
 \item{simplify}{(\code{flag})\cr when \code{TRUE}, the result data frame will have only visible labels and
-result columns.}
+result columns. Consider showing also label rows with \code{keep_label_rows = TRUE}. This output can be
+used again to create a \code{TableTree} object with \code{\link[=df_to_tt]{df_to_tt()}}.}
 
 \item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}).}
 
@@ -86,6 +85,6 @@ path_enriched_df(tbl)
 
 }
 \seealso{
-\code{\link[=df_to_tt]{df_to_tt()}} when using \code{as_is = TRUE} and \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to have a
+\code{\link[=df_to_tt]{df_to_tt()}} when using \code{simplify = TRUE} and \code{\link[formatters:make_row_df]{formatters::make_row_df()}} to have a
 comprehensive view of the hierarchical structure of the rows.
 }
