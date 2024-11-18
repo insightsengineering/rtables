@@ -6,15 +6,15 @@
 #' @inheritParams gen_args
 #' @param spec (`function`)\cr function that generates the result data frame from a table (`TableTree`).
 #'   It defaults to `NULL`, for standard processing.
-#' @param expand_colnames (`flag`)\cr when `TRUE`, the result data frame will have expanded column 
+#' @param expand_colnames (`flag`)\cr when `TRUE`, the result data frame will have expanded column
 #'   names above the usual output. This is useful when the result data frame is used for further processing.
 #' @param data_format (`string`)\cr the format of the data in the result data frame. It can be one value
 #'   between `"full_precision"` (default), `"strings"`, and `"numeric"`. The last two values show the numeric
 #'   data with the visible precision.
 #' @param make_ard (`flag`)\cr when `TRUE`, the result data frame will have only one statistic per row.
-#' @param keep_label_rows (`flag`)\cr when `TRUE`, the result data frame will have all labels 
+#' @param keep_label_rows (`flag`)\cr when `TRUE`, the result data frame will have all labels
 #'   as they appear in the final table.
-#' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and 
+#' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and
 #'   result columns. Consider showing also label rows with `keep_label_rows = TRUE`. This output can be
 #'   used again to create a `TableTree` object with [df_to_tt()].
 #' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
@@ -22,7 +22,7 @@
 #' @return
 #' * `as_result_df` returns a result `data.frame`.
 #'
-#' @seealso [df_to_tt()] when using `simplify = TRUE` and [formatters::make_row_df()] to have a 
+#' @seealso [df_to_tt()] when using `simplify = TRUE` and [formatters::make_row_df()] to have a
 #'   comprehensive view of the hierarchical structure of the rows.
 #'
 #' @examples
@@ -55,7 +55,7 @@ as_result_df <- function(tt, spec = NULL,
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
   }
-  
+
   if (make_ard) {
     simplify <- FALSE
     expand_colnames <- TRUE
@@ -70,15 +70,15 @@ as_result_df <- function(tt, spec = NULL,
     if (nrow(tt) == 1 && length(raw_cvals) > 1) {
       raw_cvals <- list(raw_cvals)
     }
-    
+
     # Flatten the list of lists (rows) of cell values into a data frame
     cellvals <- as.data.frame(do.call(rbind, raw_cvals))
     row.names(cellvals) <- NULL
-    
+
     if (nrow(tt) == 1 && ncol(tt) == 1) {
       colnames(cellvals) <- names(raw_cvals)
     }
-    
+
     if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
@@ -102,20 +102,20 @@ as_result_df <- function(tt, spec = NULL,
         cellvals <- mf_result_numeric
       }
     }
-    
+
     rdf <- make_row_df(tt)
     cinfo_df <- col_info(tt)
     ci_coltree <- coltree(cinfo_df)
     column_split_names <- .get_column_split_name(ci_coltree) # used only in make_ard
-    
+
     df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
     # Removing initial root elements from path (out of the loop -> right maxlen)
     df$path <- lapply(df$path, .remove_root_elems_from_path,
-                      which_root_name = c("root", "rbind_root"),
-                      all = TRUE
+      which_root_name = c("root", "rbind_root"),
+      all = TRUE
     )
     maxlen <- max(lengths(df$path))
-    
+
     # Loop for metadata (path and details from make_row_df)
     metadf <- do.call(
       rbind.data.frame,
@@ -126,7 +126,7 @@ as_result_df <- function(tt, spec = NULL,
         }
       )
     )
-    
+
     # Should we keep label rows with NAs instead of values?
     if (keep_label_rows) {
       cellvals_mat_struct <- as.data.frame(
@@ -141,7 +141,7 @@ as_result_df <- function(tt, spec = NULL,
         cellvals
       )
     }
-    
+
     # If we want to expand colnames
     if (expand_colnames) {
       col_name_structure <- .get_formatted_colnames(clayout(tt))
@@ -152,15 +152,15 @@ as_result_df <- function(tt, spec = NULL,
           " number of columns as in the result data frame. This is a bug. Please report it."
         ) # nocov
       }
-      
+
       buffer_rows_for_colnames <- matrix(
         rep("<only_for_column_names>", number_of_non_data_cols * NROW(col_name_structure)),
         nrow = NROW(col_name_structure)
       )
-      
+
       header_colnames_matrix <- cbind(buffer_rows_for_colnames, data.frame(col_name_structure))
       colnames(header_colnames_matrix) <- colnames(ret)
-      
+
       count_row <- NULL
       if (disp_ccounts(tt)) {
         ccounts <- col_counts(tt)
@@ -173,20 +173,19 @@ as_result_df <- function(tt, spec = NULL,
       }
       ret <- rbind(header_colnames_matrix, ret)
     }
-    
+
     # ARD part for one stat per row
     if (make_ard) {
-      
       # Unnecessary columns
       ret_tmp <- ret[, !colnames(ret) %in% c("row_num", "is_group_summary", "node_class")]
-      
+
       # Indexes of real columns (visible in the output, but no row names)
       only_col_indexes <- seq(which(colnames(ret_tmp) == "label_name") + 1, ncol(ret_tmp))
-      
+
       # Core row names
       col_label_rows <- grepl("<only_for_column_*", ret_tmp$avar_name)
       core_row_names <- ret_tmp[!col_label_rows, -only_col_indexes]
-      
+
       # Moving colnames to rows (flattening)
       ret_w_cols <- NULL
       # col_i <- only_col_indexes[1]
@@ -198,13 +197,13 @@ as_result_df <- function(tt, spec = NULL,
           setNames(core_row_names, c("variable", "variable_level", "variable_label")), # missing stat_name xxx
           stat = I(setNames(ret_tmp[!col_label_rows, col_i], NULL))
         )
-        
+
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
       }
-      
+
       ret <- ret_w_cols
     }
-    
+
     out <- if (simplify) {
       .simplify_result_df(ret)
     } else {
@@ -226,7 +225,7 @@ as_result_df <- function(tt, spec = NULL,
     return(unlist(lapply(kids, .get_column_split_name)))
   }
   sapply(pos_splits(tree_pos(ci_coltree)), spl_payload)
-} 
+}
 
 # Function that selects specific outputs from the result data frame
 .simplify_result_df <- function(df) {
@@ -391,7 +390,7 @@ handle_rdf_row <- function(rdfrow, maxlen) {
   }
 }
 # path_enriched_df ------------------------------------------------------------
-# 
+#
 #' @describeIn data.frame_export Transform a `TableTree` object to a path-enriched `data.frame`.
 #'
 #' @param path_fun (`function`)\cr function to transform paths into single-string row/column names.
