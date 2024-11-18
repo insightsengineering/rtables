@@ -49,7 +49,7 @@ ADSL <- ex_adsl # Example ADSL dataset
 mean_sd_custom <- function(x) {
   mean <- mean(x, na.rm = FALSE)
   sd <- sd(x, na.rm = FALSE)
-  
+
   rcell(c(mean, sd), label = "Mean (SD)", format = "xx.x (xx.x)")
 }
 counts_percentage_custom <- function(x) {
@@ -63,10 +63,10 @@ counts_percentage_custom <- function(x) {
 }
 
 lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-  # split_rows_by("STRATA1", split_fun = keep_split_levels(c("A"))) %>% 
-  # split_cols_by("STRATA2") %>% 
+  # split_rows_by("STRATA1", split_fun = keep_split_levels(c("A"))) %>%
+  # split_cols_by("STRATA2") %>%
   split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
-  analyze(vars = "AGE", afun = mean_sd_custom) %>% 
+  analyze(vars = "AGE", afun = mean_sd_custom) %>%
   analyze(vars = "SEX", afun = counts_percentage_custom)
 
 tbl <- build_table(lyt, ADSL)
