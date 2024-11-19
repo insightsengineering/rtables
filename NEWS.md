@@ -1,11 +1,17 @@
 ## rtables 0.6.10.9004
 
-### Miscellaneous
- * Split `docx` document generation to the new package [`rtables.officer`](https://github.com/insightsengineering/rtables.officer).
-
 ### New Features
  * Experimental pagination is now possible in `tt_as_flextable()` and `export_as_docx()`.
  * Added handling of widths in `tt_as_flextable()`. Now it is possible to change column widths for `.docx` exports.
+ * Initialized vignette about quality control outputs of `as_result_df()`.
+ * Initialized parameter `make_ard` output for single-line statistical outputs.
+
+### Miscellaneous
+ * Split `docx` document generation to the new package [`rtables.officer`](https://github.com/insightsengineering/rtables.officer).
+ * Refactored  `as_result_df()` parameters `as_strings` and `as_viewer` into `data_format = c("full_precision", "strings", "numeric")` following the same outputs.
+ * Refactored `as_result_df()` to have a standard behavior, with all the relevant parameters, and a possibility to add personalized `spec`.
+ * Removed `result_df_specs()`, because `as_result_df()` was a too shallow wrapper.
+ * Merged behavior of  `as_result_df()` parameters `as_is` and `simplify` parameters to remove structural information.
 
 ### Bug Fixes
  * Fixed bug that was keeping indentation space characters in top left information when making a `flextable` from a `TableTree` object.
