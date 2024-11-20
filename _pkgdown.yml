@@ -66,6 +66,7 @@ articles:
     contents:
     - clinical_trials
     - baseline
+    - ard_how_to
 
   - title: Table Customization
     navbar: Table Customization
@@ -298,7 +299,6 @@ reference:
     desc: Functions for generating result data frames from rtables TableTree objects
     contents:
     - as_result_df
-    - result_df_specs
 
   - title: internal
     desc: Internal documented methods

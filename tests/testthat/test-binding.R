@@ -213,7 +213,10 @@ test_that("count visibility syncing works when cbinding", {
 ## cause problems with any of the column info checks
 
 test_that("equivalent split funs withs differrent environments dont' block rbinding", {
-  combodf <- tibble::tribble(
+  skip_if_not_installed("tibble")
+  require(tibble, quietly = TRUE)
+
+  combodf <- tribble(
     ~valname, ~label, ~levelcombo, ~exargs,
     "A_B", "Arms A+B", c("A: Drug X", "B: Placebo"), list(),
     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()

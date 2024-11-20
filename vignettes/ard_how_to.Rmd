@@ -1,0 +1,92 @@
+---
+title: "How to generate QC-ready result data frames from tables"
+author: "Davide Garolini"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to generate QC-ready result data frames from tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
+
+```{css, echo=FALSE}
+.reveal .r code {
+    white-space: pre;
+}
+```
+# Disclaimer
+
+This vignette is a work in progress.
+
+## Create the example table
+
+First of all we need a table to retrieve all the necessary information. Borrowing one from the [vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/clinical_trials.html) about clinical trials.
+
+```{r}
+library(rtables)
+ADSL <- ex_adsl # Example ADSL dataset
+mean_sd_custom <- function(x) {
+  mean <- mean(x, na.rm = FALSE)
+  sd <- sd(x, na.rm = FALSE)
+
+  rcell(c(mean, sd), label = "Mean (SD)", format = "xx.x (xx.x)")
+}
+counts_percentage_custom <- function(x) {
+  # browser()
+  cnts <- table(x)
+  out <- lapply(cnts, function(x) {
+    perc <- x / sum(cnts)
+    rcell(c(x, perc), format = "xx. (xx.%)")
+  })
+  in_rows(.list = as.list(out), .labels = names(cnts))
+}
+
+lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
+  # split_rows_by("STRATA1", split_fun = keep_split_levels(c("A"))) %>%
+  # split_cols_by("STRATA2") %>%
+  split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
+  analyze(vars = "AGE", afun = mean_sd_custom) %>%
+  analyze(vars = "SEX", afun = counts_percentage_custom)
+
+tbl <- build_table(lyt, ADSL)
+tbl
+```
+
+## Convert the table to a result data frame
+
+The `as_result_df` function is the one that converts a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may differ for different standard and lets see how to produce different outputs. Final goal is having clearly one result for row. Lets play with different options.
+
+```{r}
+as_result_df(tbl)
+
+as_result_df(tbl, data_format = "strings")
+as_result_df(tbl, simplify = TRUE)
+as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE)
+as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE, expand_colnames = TRUE)
+```
+
+Now lets get the final `ARD` output. This is the one that is ready to be used for quality control purposes.
+```{r}
+as_result_df(tbl, make_ard = TRUE)
+```
