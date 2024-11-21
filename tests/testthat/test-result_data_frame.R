@@ -249,7 +249,7 @@ test_that("make_ard produces realisting ARD output with as_result_df", {
     .formats = c("xx - xx", "xx.x - xx.x"),
     .format_na_strs = list(c("asda", "lkjklj")),
     .stat_names = list(c("A", "B"), c("B", "C")) # if c("A", "B") one each row, if single list duplicated
-  ) %>% print()
+  )
 
   expect_equal(
     list("a" = c("A", "B"), "b" = c("B", "C")), # now it is named
