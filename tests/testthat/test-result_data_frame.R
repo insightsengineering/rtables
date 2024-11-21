@@ -238,3 +238,210 @@ test_that("as_result_df works fine with empty tables and no character(0) is allo
     "a"
   )
 })
+
+test_that("make_ard produces realisting ARD output with as_result_df", {
+  # Testing fundamental getters/setters
+  rc <- rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
+  expect_equal(obj_stat_names(rc), c("Rand1", "Rand2"))
+  
+  rc_row <- in_rows(
+    .list = list(a = c(NA, 1), b = c(1, NA)), 
+    .formats = c("xx - xx", "xx.x - xx.x"),
+    .format_na_strs = list(c("asda", "lkjklj")),
+    .stat_names = list(c("A", "B"), c("B", "C")) # if c("A", "B") one each row, if single list duplicated
+  ) %>% print()
+  
+  expect_equal(
+    list("a" = c("A", "B"), "b" = c("B", "C")), # now it is named
+    lapply(rc_row, obj_stat_names)
+  )
+  
+  # Lets make a custom function and check ARDs
+  mean_sd_custom <- function(x) {
+    mean <- mean(x, na.rm = FALSE)
+    sd <- sd(x, na.rm = FALSE)
+    
+    rcell(c(mean, sd), label = "Mean (SD)", format = "xx.x (xx.x)", 
+          stat_names = c("Mean", "SD"))
+  }
+  counts_percentage_custom <- function(x) {
+    # browser()
+    cnts <- table(x)
+    out <- lapply(cnts, function(x) {
+      perc <- x / sum(cnts)
+      rcell(c(x, perc), format = "xx. (xx.%)")
+    })
+    in_rows(.list = as.list(out), .labels = names(cnts), 
+            .stat_names = list(c("Count", "Percentage")))
+  }
+  
+  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
+    analyze(vars = "AGE", afun = mean_sd_custom) %>%
+    analyze(vars = "SEX", afun = counts_percentage_custom)
+  
+  tbl <- build_table(lyt, ex_adsl)
+  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  
+  # Numeric output
+  expect_equal(
+    ard_out[2, , drop = TRUE],
+    list(
+      group1 = "ARM",
+      group1_level = "A: Drug X",
+      variable = "AGE",
+      variable_level = "Mean (SD)",
+      variable_label = "Mean (SD)",
+      stat_name = "SD",
+      stat = 6.553326
+    ), 
+    tolerance = 10e-6
+  )
+  
+  # Percentage output
+  expect_equal(
+    ard_out[14, , drop = TRUE],
+    list(
+      group1 = "ARM",
+      group1_level = "B: Placebo",
+      variable = "SEX",
+      variable_level = "F",
+      variable_label = "F",
+      stat_name = "Percentage",
+      stat = 0.5746269
+    ), 
+    tolerance = 10e-6
+  )
+  
+  # Default values
+  lyt <- basic_table() %>%
+    split_cols_by("ARM") %>%
+    analyze(c("AGE", "SEX"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  
+  expect_equal(unique(ard_out$stat_name), c("mean", "n"))
+})
+
+test_that("make_ard works with multiple row levels", {
+  lyt <- basic_table() %>%
+    split_rows_by("STRATA1") %>%
+    split_rows_by("STRATA2") %>%
+    split_cols_by("ARM") %>%
+    analyze(c("AGE", "SEX"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  
+  expect_equal(unique(ard_out$stat_name), c("mean", "n"))
+  expect_contains(colnames(ard_out), c("spl_var_2", "spl_value_2"))
+  
+  # Count output
+  expect_equal(
+    ard_out[90, , drop = TRUE],
+    list(
+      group1 = "ARM",
+      group1_level = "C: Combination",
+      spl_var_1 = "STRATA1",
+      spl_value_1 = "C",
+      spl_var_2 = "STRATA2",
+      spl_value_2 = "S2",
+      variable = "SEX",
+      variable_level = "UNDIFFERENTIATED",
+      variable_label = "UNDIFFERENTIATED",
+      stat_name = "n",
+      stat = 0
+    ), 
+    tolerance = 10e-6
+  )
+})
+
+test_that("make_ard works with multiple column levels", {
+  lyt <- basic_table() %>%
+    split_rows_by("STRATA1") %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA2") %>%
+    analyze(c("AGE", "SEX"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  
+  expect_equal(unique(ard_out$stat_name), c("mean", "n"))
+  expect_contains(colnames(ard_out), c("spl_var_1", "spl_value_1"))
+  expect_contains(colnames(ard_out), c("group2", "group2_level"))
+  
+  # Count output
+  expect_equal(
+    ard_out[16, , drop = TRUE],
+    list(
+      group1 = "ARM",
+      group2 = "STRATA2",
+      group1_level = "A: Drug X",
+      group2_level = "S2",
+      spl_var_1 = "STRATA1",
+      spl_value_1 = "A",
+      variable = "AGE",
+      variable_level = "Mean",
+      variable_label = "Mean",
+      stat_name = "mean",
+      stat = 34.4
+    ), 
+    tolerance = 10e-6
+  )
+})
+
+test_that("make_ard works with summarize_row_groups", {
+  lyt <- basic_table() %>%
+    split_rows_by("STRATA2") %>% 
+    summarize_row_groups() %>% 
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>% 
+    analyze(c("AGE", "SEX"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  
+  expect_contains(unique(ard_out$stat_name), c("mean", "n", "p"))
+  expect_contains(colnames(ard_out), c("spl_var_1", "spl_value_1"))
+  expect_contains(colnames(ard_out), c("group2", "group2_level"))
+  
+  # label row output
+  expect_equal(
+    ard_out[1, , drop = TRUE],
+    list(
+      group1 = "ARM",
+      group2 = "STRATA1",
+      group1_level = "A: Drug X",
+      group2_level = "A",
+      spl_var_1 = "STRATA2",
+      spl_value_1 = "S1",
+      variable = "S1",
+      variable_level = "S1",
+      variable_label = "S1",
+      stat_name = "n",
+      stat = 18
+    ), 
+    tolerance = 10e-6
+  )
+  
+  # label row output
+  expect_equal(
+    ard_out[86, , drop = TRUE],
+    list(
+      group1 = "ARM",
+      group2 = "STRATA1",
+      group1_level = "C: Combination",
+      group2_level = "A",
+      spl_var_1 = "STRATA2",
+      spl_value_1 = "S1",
+      variable = "S1",
+      variable_level = "S1",
+      variable_label = "S1",
+      stat_name = "p",
+      stat = 0.35
+    ), 
+    tolerance = 10e-6
+  )
+})
+

@@ -63,22 +63,10 @@ as_result_df <- function(tt, spec = NULL,
   }
 
   if (is.null(spec)) {
-    raw_cvals <- cell_values(tt)
-    ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
-    ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
-    ## at this point.
-    if (nrow(tt) == 1 && length(raw_cvals) > 1) {
-      raw_cvals <- list(raw_cvals)
-    }
-
-    # Flatten the list of lists (rows) of cell values into a data frame
-    cellvals <- as.data.frame(do.call(rbind, raw_cvals))
-    row.names(cellvals) <- NULL
-
-    if (nrow(tt) == 1 && ncol(tt) == 1) {
-      colnames(cellvals) <- names(raw_cvals)
-    }
-
+    # raw values
+    rawvals <- cell_values(tt)
+    cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
+    
     if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
@@ -104,9 +92,6 @@ as_result_df <- function(tt, spec = NULL,
     }
 
     rdf <- make_row_df(tt)
-    cinfo_df <- col_info(tt)
-    ci_coltree <- coltree(cinfo_df)
-    column_split_names <- .get_column_split_name(ci_coltree) # used only in make_ard
 
     df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
     # Removing initial root elements from path (out of the loop -> right maxlen)
@@ -140,6 +125,12 @@ as_result_df <- function(tt, spec = NULL,
         metadf[metadf$node_class != "LabelRow", ],
         cellvals
       )
+    }
+    
+    # Fix for content rows analysis variable label
+    if (any(ret$node_class == "ContentRow")) {
+      where_to <- ret$node_class == "ContentRow"
+      ret$avar_name[where_to] <- ret$spl_value_1[where_to]
     }
 
     # If we want to expand colnames
@@ -176,6 +167,10 @@ as_result_df <- function(tt, spec = NULL,
 
     # ARD part for one stat per row
     if (make_ard) {
+      cinfo_df <- col_info(tt)
+      ci_coltree <- coltree(cinfo_df)
+      column_split_names <- .get_column_split_name(ci_coltree) # used only in make_ard
+      
       # Unnecessary columns
       ret_tmp <- ret[, !colnames(ret) %in% c("row_num", "is_group_summary", "node_class")]
 
@@ -184,18 +179,57 @@ as_result_df <- function(tt, spec = NULL,
 
       # Core row names
       col_label_rows <- grepl("<only_for_column_*", ret_tmp$avar_name)
+      number_of_col_splits <- sum(grepl("<only_for_column_names>", ret_tmp$avar_name))
       core_row_names <- ret_tmp[!col_label_rows, -only_col_indexes]
+      colnames_to_rename <- colnames(core_row_names) %in% c("avar_name", "row_name", "label_name")
+      # instead of avar_name  row_name  label_name ("variable_label" is not present in ARDs)
+      colnames(core_row_names)[colnames_to_rename] <- c("variable", "variable_level", "variable_label")
+      
+      # Adding stats_names if present
+      raw_stat_names <- .get_stat_names_from_table(tt, add.labrows = keep_label_rows)
+      cell_stat_names <- .make_df_from_raw_data(raw_stat_names, nr = nrow(tt), nc = ncol(tt))
 
       # Moving colnames to rows (flattening)
       ret_w_cols <- NULL
+      # Looping on statistical columns
       for (col_i in only_col_indexes) {
-        tmp_ret_by_col_i <- cbind(
-          group1 = column_split_names[[ret_tmp[, col_i][[1]]]],
-          group1_level = ret_tmp[, col_i][[1]],
-          # instead of avar_name  row_name       label_name ("variable_label" is not present in ARDs)
-          setNames(core_row_names, c("variable", "variable_level", "variable_label")), # missing stat_name xxx
-          stat = I(setNames(ret_tmp[!col_label_rows, col_i], NULL))
+        # Making row splits into row specifications (group1 group1_level)
+        current_col_split_level <- unlist(ret_tmp[seq_len(number_of_col_splits), col_i], use.names = FALSE)
+        flattened_cols_names <- c(column_split_names[[1]][[1]], current_col_split_level)
+        names(flattened_cols_names) <- c(
+          paste0("group", seq_along(column_split_names[[1]][[1]])),
+          paste0("group", seq_along(current_col_split_level), "_level")
         )
+        
+        tmp_core_ret_by_col_i <- cbind(
+          t(data.frame(flattened_cols_names)),
+          core_row_names,
+          row.names = NULL
+        )
+        
+        # retrieving stat names and stats
+        stat_name <- setNames(cell_stat_names[, col_i - min(only_col_indexes) + 1, drop = TRUE], NULL)
+        stat <- setNames(ret_tmp[!col_label_rows, col_i, drop = TRUE], NULL)
+        necessary_stat_lengths <- sapply(stat, length)
+        
+        # Truncating or adding NA if stat names has more or less elements than stats
+        stat_name <- lapply(seq_along(stat_name), function(sn_i) {
+          stat_name[[sn_i]][seq_len(necessary_stat_lengths[sn_i])]
+        })
+        
+        # unnesting stat_name and stat
+        tmp_ret_by_col_i <- NULL
+        for (row_i in seq_along(stat)){
+          tmp_ret_by_col_i <- rbind(
+            tmp_ret_by_col_i,
+            cbind(
+              tmp_core_ret_by_col_i[row_i,], 
+              stat_name = stat_name[[row_i]], 
+              stat = stat[[row_i]],
+              row.names = NULL
+            )
+          )
+        } 
 
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
       }
@@ -220,12 +254,41 @@ as_result_df <- function(tt, spec = NULL,
   out
 }
 
+# Helper function used to structure the raw values into a dataframe
+.make_df_from_raw_data <- function(raw_vals, nr, nc) {
+  ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
+  ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
+  ## at this point.
+  if (nr == 1 && length(raw_vals) > 1) {
+    raw_vals <- list(raw_vals)
+  }
+  
+  # Flatten the list of lists (rows) of cell values into a data frame
+  cellvals <- as.data.frame(do.call(rbind, raw_vals))
+  row.names(cellvals) <- NULL
+  
+  if (nr == 1 && nc == 1) {
+    colnames(cellvals) <- names(raw_vals)
+  }
+  
+  cellvals
+}
+
+# Amazing helper function to get the statistic names from row cells!
+.get_stat_names_from_table <- function(tt, add.labrows = FALSE) {
+  # omit_labrows # omit label rows
+  rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = add.labrows)
+  lapply(rows, function(ri) {
+    lapply(row_cells(ri), obj_stat_names)
+  })
+}
+
 # Helper function to get column split names
 .get_column_split_name <- function(ci_coltree) {
   # ci stands for column information
   if (is(ci_coltree, "LayoutAxisTree")) {
     kids <- tree_children(ci_coltree)
-    return(unlist(lapply(kids, .get_column_split_name)))
+    return(lapply(kids, .get_column_split_name))
   }
   sapply(pos_splits(tree_pos(ci_coltree)), spl_payload)
 }
