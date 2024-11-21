@@ -15,7 +15,7 @@
 #' @inherit CellValue return
 #'
 #' @note Currently column spanning is only supported for defining header structure.
-#' 
+#'
 #' @examples
 #' rcell(1, format = "xx.x")
 #' rcell(c(1, 2), format = c("xx - xx"))

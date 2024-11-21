@@ -4324,11 +4324,11 @@ setMethod(
 )
 
 # stat_names for ARD -----------------------------------------------------------
-# 
+#
 #' @rdname int_methods
 #' @export
 setGeneric("obj_stat_names", function(obj) standardGeneric("obj_stat_names"))
-# 
+#
 #' @rdname int_methods
 #' @export
 setGeneric("obj_stat_names<-", function(obj, value) standardGeneric("obj_stat_names<-"))

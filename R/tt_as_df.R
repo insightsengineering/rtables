@@ -66,7 +66,7 @@ as_result_df <- function(tt, spec = NULL,
     # raw values
     rawvals <- cell_values(tt)
     cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
-    
+
     if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
@@ -126,7 +126,7 @@ as_result_df <- function(tt, spec = NULL,
         cellvals
       )
     }
-    
+
     # Fix for content rows analysis variable label
     if (any(ret$node_class == "ContentRow")) {
       where_to <- ret$node_class == "ContentRow"
@@ -170,7 +170,7 @@ as_result_df <- function(tt, spec = NULL,
       cinfo_df <- col_info(tt)
       ci_coltree <- coltree(cinfo_df)
       column_split_names <- .get_column_split_name(ci_coltree) # used only in make_ard
-      
+
       # Unnecessary columns
       ret_tmp <- ret[, !colnames(ret) %in% c("row_num", "is_group_summary", "node_class")]
 
@@ -184,7 +184,7 @@ as_result_df <- function(tt, spec = NULL,
       colnames_to_rename <- colnames(core_row_names) %in% c("avar_name", "row_name", "label_name")
       # instead of avar_name  row_name  label_name ("variable_label" is not present in ARDs)
       colnames(core_row_names)[colnames_to_rename] <- c("variable", "variable_level", "variable_label")
-      
+
       # Adding stats_names if present
       raw_stat_names <- .get_stat_names_from_table(tt, add.labrows = keep_label_rows)
       cell_stat_names <- .make_df_from_raw_data(raw_stat_names, nr = nrow(tt), nc = ncol(tt))
@@ -200,36 +200,36 @@ as_result_df <- function(tt, spec = NULL,
           paste0("group", seq_along(column_split_names[[1]][[1]])),
           paste0("group", seq_along(current_col_split_level), "_level")
         )
-        
+
         tmp_core_ret_by_col_i <- cbind(
           t(data.frame(flattened_cols_names)),
           core_row_names,
           row.names = NULL
         )
-        
+
         # retrieving stat names and stats
         stat_name <- setNames(cell_stat_names[, col_i - min(only_col_indexes) + 1, drop = TRUE], NULL)
         stat <- setNames(ret_tmp[!col_label_rows, col_i, drop = TRUE], NULL)
         necessary_stat_lengths <- sapply(stat, length)
-        
+
         # Truncating or adding NA if stat names has more or less elements than stats
         stat_name <- lapply(seq_along(stat_name), function(sn_i) {
           stat_name[[sn_i]][seq_len(necessary_stat_lengths[sn_i])]
         })
-        
+
         # unnesting stat_name and stat
         tmp_ret_by_col_i <- NULL
-        for (row_i in seq_along(stat)){
+        for (row_i in seq_along(stat)) {
           tmp_ret_by_col_i <- rbind(
             tmp_ret_by_col_i,
             cbind(
-              tmp_core_ret_by_col_i[row_i,], 
-              stat_name = stat_name[[row_i]], 
+              tmp_core_ret_by_col_i[row_i, ],
+              stat_name = stat_name[[row_i]],
               stat = stat[[row_i]],
               row.names = NULL
             )
           )
-        } 
+        }
 
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
       }
@@ -262,15 +262,15 @@ as_result_df <- function(tt, spec = NULL,
   if (nr == 1 && length(raw_vals) > 1) {
     raw_vals <- list(raw_vals)
   }
-  
+
   # Flatten the list of lists (rows) of cell values into a data frame
   cellvals <- as.data.frame(do.call(rbind, raw_vals))
   row.names(cellvals) <- NULL
-  
+
   if (nr == 1 && nc == 1) {
     colnames(cellvals) <- names(raw_vals)
   }
-  
+
   cellvals
 }
 

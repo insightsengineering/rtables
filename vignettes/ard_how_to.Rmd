@@ -84,10 +84,10 @@ rc <- rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
 print(obj_stat_names(rc)) # c("Rand1", "Rand2")
 
 rc_row <- in_rows(
-  .list = list(a = c(NA, 1), b = c(1, NA)), 
+  .list = list(a = c(NA, 1), b = c(1, NA)),
   .formats = c("xx - xx", "xx.x - xx.x"),
   .format_na_strs = list(c("asda", "lkjklj")),
-  .stat_names = list(c("A", "B"), c("B", "C")) 
+  .stat_names = list(c("A", "B"), c("B", "C"))
 )
 
 # Only a getter for this object
@@ -95,7 +95,7 @@ print(obj_stat_names(rc_row)) # list(a = c("A", "B"), b = c("B", "C"))
 
 # if c("A", "B") one each row, if single list duplicated
 rc_row <- in_rows(
-  .list = list(a = c(NA, 1), b = c(1, NA)), 
+  .list = list(a = c(NA, 1), b = c(1, NA)),
   .formats = c("xx - xx", "xx.x - xx.x"),
   .format_na_strs = list(c("asda", "lkjklj")),
   .stat_names = c("A", "B")
@@ -104,7 +104,7 @@ print(obj_stat_names(rc_row)) # c("A", "B") # one for each row
 print(lapply(rc_row, obj_stat_names)) # identical to above + row names
 
 rc_row <- in_rows(
-  .list = list(a = c(NA, 1), b = c(1, NA)), 
+  .list = list(a = c(NA, 1), b = c(1, NA)),
   .formats = c("xx - xx", "xx.x - xx.x"),
   .format_na_strs = list(c("asda", "lkjklj")),
   .stat_names = list(c("A", "B")) # It is duplicated, check it your self!
@@ -115,31 +115,35 @@ Lets put it into practice:
 
 ```{r}
 mean_sd_custom <- function(x) {
-    mean <- mean(x, na.rm = FALSE)
-    sd <- sd(x, na.rm = FALSE)
-    
-    rcell(c(mean, sd), label = "Mean (SD)", format = "xx.x (xx.x)", 
-          stat_names = c("Mean", "SD"))
-  }
-  counts_percentage_custom <- function(x) {
-    # browser()
-    cnts <- table(x)
-    out <- lapply(cnts, function(x) {
-      perc <- x / sum(cnts)
-      rcell(c(x, perc), format = "xx. (xx.%)")
-    })
-    in_rows(.list = as.list(out), .labels = names(cnts), 
-            .stat_names = list(c("Count", "Percentage")))
-  }
-  
-  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
-    analyze(vars = "AGE", afun = mean_sd_custom) %>%
-    analyze(vars = "SEX", afun = counts_percentage_custom)
-  
-  tbl <- build_table(lyt, ex_adsl)
-  
-  as_result_df(tbl, make_ard = TRUE)
+  mean <- mean(x, na.rm = FALSE)
+  sd <- sd(x, na.rm = FALSE)
+
+  rcell(c(mean, sd),
+    label = "Mean (SD)", format = "xx.x (xx.x)",
+    stat_names = c("Mean", "SD")
+  )
+}
+counts_percentage_custom <- function(x) {
+  # browser()
+  cnts <- table(x)
+  out <- lapply(cnts, function(x) {
+    perc <- x / sum(cnts)
+    rcell(c(x, perc), format = "xx. (xx.%)")
+  })
+  in_rows(
+    .list = as.list(out), .labels = names(cnts),
+    .stat_names = list(c("Count", "Percentage"))
+  )
+}
+
+lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
+  split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
+  analyze(vars = "AGE", afun = mean_sd_custom) %>%
+  analyze(vars = "SEX", afun = counts_percentage_custom)
+
+tbl <- build_table(lyt, ex_adsl)
+
+as_result_df(tbl, make_ard = TRUE)
 ```
 
 # More complex outputs
@@ -147,10 +151,10 @@ mean_sd_custom <- function(x) {
 Lets add hierarchical row and column splits.
 ```{r}
 lyt <- basic_table() %>%
-  split_rows_by("STRATA2") %>% 
-  summarize_row_groups() %>% 
+  split_rows_by("STRATA2") %>%
+  summarize_row_groups() %>%
   split_cols_by("ARM") %>%
-  split_cols_by("STRATA1") %>% 
+  split_cols_by("STRATA1") %>%
   analyze(c("AGE", "SEX"))
 
 tbl <- build_table(lyt, ex_adsl)
