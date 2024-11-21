@@ -58,7 +58,7 @@ tbl
 
 ## Convert the table to a result data frame
 
-The `as_result_df` function is the one that converts a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may differ for different standard and lets see how to produce different outputs. The following default ouputs are available for visual appreciation, or to transform into a table again with `df_to_tt()`.
+The `as_result_df` function is the one that converts a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may differ for different standard and lets see how to produce different result `data.frame`. The following default ouputs are available for visual appreciation, or to transform into a table again with `df_to_tt()`.
 
 ```{r}
 as_result_df(tbl)
@@ -76,7 +76,7 @@ as_result_df(tbl, make_ard = TRUE)
 
 ## Customizing the output
 
-`as_result_df` and `ARD` outputs follow the content of the table, so it is possible to modify those to get some custom outputs. For example, we can add some user-defined statistics with their own statistical names:
+`as_result_df` and `ARD` depend on the content of the table, so it is possible to modify the table to get some custom output. For example, we can add some user-defined statistics with their own statistical names:
 
 ```{r}
 # rcell and in_rows are the core of any analysis function

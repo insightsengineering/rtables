@@ -13,7 +13,8 @@ rcell(
   indent_mod = NULL,
   footnotes = NULL,
   align = NULL,
-  format_na_str = NULL
+  format_na_str = NULL,
+  stat_names = NULL
 )
 
 non_ref_rcell(
@@ -50,6 +51,8 @@ corresponds to the unmodified default behavior.}
 \item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
 
+\item{stat_names}{(\code{character})\cr names for the statistics in the cell. It can be a vector of strings.}
+
 \item{is_ref}{(\code{flag})\cr whether function is being used in the reference column (i.e. \code{.in_ref_col} should be
 passed to this argument).}
 
@@ -68,4 +71,10 @@ be passed the value of \code{.in_ref_col} when it is used.
 }
 \note{
 Currently column spanning is only supported for defining header structure.
+}
+\examples{
+rcell(1, format = "xx.x")
+rcell(c(1, 2), format = c("xx - xx"))
+rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
+
 }
