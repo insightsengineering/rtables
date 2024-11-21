@@ -140,7 +140,11 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' in_rows(1, 2, 3, .names = c("a", "b", "c"))
 #' in_rows(1, 2, 3, .labels = c("a", "b", "c"))
 #' in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
-#' in_rows(.list = list(a = c(NA, NA)), .formats = "xx - xx", .format_na_strs = list(c("asda", "lkjklj")))
+#' in_rows(
+#'   .list = list(a = c(NA, NA)), 
+#'   .formats = "xx - xx", 
+#'   .format_na_strs = list(c("asda", "lkjklj"))
+#' )
 #' in_rows(.list = list(a = c(NA, NA)), .format_na_strs = c("asda", "lkjklj"))
 #'
 #' in_rows(.list = list(a = 1, b = 2, c = 3))
