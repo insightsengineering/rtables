@@ -1113,6 +1113,9 @@ analyze <- function(lyt,
                     section_div = NA_character_) {
   show_labels <- match.arg(show_labels)
   subafun <- substitute(afun)
+  # R treats a single NA value as a logical atomic. The below
+  # maps all the NAs in `var_labels` to NA_character_ required by `Split`
+  # and avoids the error when `var_labels` is just c(NA).
   var_labels <- vapply(var_labels, function(label) ifelse(is.na(label), NA_character_, label), character(1))
   if (
     is.name(subafun) &&

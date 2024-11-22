@@ -15,6 +15,8 @@
 
 ### Bug Fixes
  * Fixed bug that was keeping indentation space characters in top left information when making a `flextable` from a `TableTree` object.
+ * Fixed bug in `analyze` that was causing an error when passing a single `NA` value to the
+`var_labels` parameter.
 
 ## rtables 0.6.10
 
