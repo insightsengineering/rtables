@@ -1113,6 +1113,7 @@ analyze <- function(lyt,
                     section_div = NA_character_) {
   show_labels <- match.arg(show_labels)
   subafun <- substitute(afun)
+  var_labels <- vapply(var_labels, function(label) ifelse(is.na(label), NA_character_, label), character(1))
   if (
     is.name(subafun) &&
       is.function(afun) &&
