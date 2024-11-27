@@ -1,10 +1,10 @@
 ---
-title: "How to generate QC-ready result data frames from tables"
+title: "Generating QC-Ready Result Data Frames (ARDs) from Tables"
 author: "Davide Garolini"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How to generate QC-ready result data frames from tables}
+  %\VignetteIndexEntry{Generating QC-Ready Result Data Frames (ARDs) from Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -29,19 +29,19 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(comment = "#")
 ```
 
-
 ```{css, echo=FALSE}
 .reveal .r code {
     white-space: pre;
 }
 ```
+
 # Disclaimer
 
-This vignette is a work in progress.
+This vignette is a work in progress and subject to change.
 
-## Create the example table
+## Creating an Example Table
 
-First of all we need a table to retrieve all the necessary information. Borrowing one from the [vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/clinical_trials.html) about clinical trials.
+In order to generate an ARD (Analysis Results Dataset), we first need to create a table from which all the necessary information will be retrieved. We will borrow a simple table from [this vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/clinical_trials.html) about clinical trials.
 
 ```{r}
 library(rtables)
@@ -56,9 +56,11 @@ tbl <- build_table(lyt, ADSL)
 tbl
 ```
 
-## Convert the table to a result data frame
+## Converting the Table to a Result Data Frame (ARD)
 
-The `as_result_df` function is the one that converts a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may differ for different standard and lets see how to produce different result `data.frame`. The following default ouputs are available for visual appreciation, or to transform into a table again with `df_to_tt()`.
+The `as_result_df()` function is used to convert a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may be customized according to different standards.
+
+Let's see how we can produce different result `data.frame`s. The following outputs can be returned by setting different parameters in the `as_results_df()` function, and these results can be transformed back into a table using the `df_to_tt()` function.
 
 ```{r}
 as_result_df(tbl)
@@ -69,14 +71,15 @@ as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE)
 as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE, expand_colnames = TRUE)
 ```
 
-Now lets get the final `ARD` output. This is the one that is ready to be used for quality control purposes.
+Now let's generate our final ARD output, which is ready to be used for quality control purposes.
+
 ```{r}
 as_result_df(tbl, make_ard = TRUE)
 ```
 
-## Customizing the output
+## Customizing the Output
 
-`as_result_df` and `ARD` depend on the content of the table, so it is possible to modify the table to get some custom output. For example, we can add some user-defined statistics with their own statistical names:
+`as_result_df()` and ARDs depend on the content of the table, so it is possible to modify the table to customize the output. For example, we can add some user-defined statistics with custom names:
 
 ```{r}
 # rcell and in_rows are the core of any analysis function
@@ -93,7 +96,8 @@ rc_row <- in_rows(
 # Only a getter for this object
 print(obj_stat_names(rc_row)) # list(a = c("A", "B"), b = c("B", "C"))
 
-# if c("A", "B") one each row, if single list duplicated
+# if c("A", "B"), one for each row
+# if single list, duplicated
 rc_row <- in_rows(
   .list = list(a = c(NA, 1), b = c(1, NA)),
   .formats = c("xx - xx", "xx.x - xx.x"),
@@ -107,11 +111,11 @@ rc_row <- in_rows(
   .list = list(a = c(NA, 1), b = c(1, NA)),
   .formats = c("xx - xx", "xx.x - xx.x"),
   .format_na_strs = list(c("asda", "lkjklj")),
-  .stat_names = list(c("A", "B")) # It is duplicated, check it your self!
+  .stat_names = list(c("A", "B")) # It is duplicated, check it yourself!
 )
 ```
 
-Lets put it into practice:
+Let's put it into practice:
 
 ```{r}
 mean_sd_custom <- function(x) {
@@ -124,7 +128,6 @@ mean_sd_custom <- function(x) {
   )
 }
 counts_percentage_custom <- function(x) {
-  # browser()
   cnts <- table(x)
   out <- lapply(cnts, function(x) {
     perc <- x / sum(cnts)
@@ -146,9 +149,10 @@ tbl <- build_table(lyt, ex_adsl)
 as_result_df(tbl, make_ard = TRUE)
 ```
 
-# More complex outputs
+# More Complex Outputs
 
-Lets add hierarchical row and column splits.
+Let's add hierarchical row and column splits:
+
 ```{r}
 lyt <- basic_table() %>%
   split_rows_by("STRATA2") %>%
