@@ -1,4 +1,4 @@
-## rtables 0.6.10.9005
+## rtables 0.6.10.9006
 
 ### New Features
  * Experimental pagination is now possible in `tt_as_flextable()` and `export_as_docx()`.
