@@ -39,7 +39,8 @@ corresponds to the unmodified default behavior.}
 \item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
 
-\item{stat_names}{(\code{character})\cr names for the statistics in the cell. It can be a vector of strings.}
+\item{stat_names}{(\code{character} or \code{NULL})\cr names for the statistics in the cell. It can be a vector of strings.
+If \code{NULL}, statistic names are not specified.}
 }
 \value{
 An object representing the value within a single cell within a populated table. The underlying structure

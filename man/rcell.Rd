@@ -51,7 +51,8 @@ corresponds to the unmodified default behavior.}
 \item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
 
-\item{stat_names}{(\code{character})\cr names for the statistics in the cell. It can be a vector of strings.}
+\item{stat_names}{(\code{character} or \code{NULL})\cr names for the statistics in the cell. It can be a vector of strings.
+If \code{NULL}, statistic names are not specified.}
 
 \item{is_ref}{(\code{flag})\cr whether function is being used in the reference column (i.e. \code{.in_ref_col} should be
 passed to this argument).}

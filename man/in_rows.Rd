@@ -41,7 +41,7 @@ See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for c
 \item{.format_na_strs}{(\code{character} or \code{NULL})\cr NA strings for the cells.}
 
 \item{.stat_names}{(\code{character} or \code{NULL})\cr names for the statistics in the cells.
-It can be a vector of values.}
+It can be a vector of values. If \code{NULL}, statistic names are not specified.}
 }
 \value{
 A \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an
