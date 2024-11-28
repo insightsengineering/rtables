@@ -267,7 +267,6 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
     )
   }
   counts_percentage_custom <- function(x) {
-    # browser()
     cnts <- table(x)
     out <- lapply(cnts, function(x) {
       perc <- x / sum(cnts)
