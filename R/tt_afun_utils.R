@@ -232,7 +232,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     if (is.null(.aligns)) {
       .aligns <- list(NULL)
     }
-    
+
     l2 <- mapply(rcell,
       x = l, format = .formats,
       footnotes = .cell_footnotes %||% list(NULL),
