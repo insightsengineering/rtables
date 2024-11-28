@@ -239,7 +239,7 @@ test_that("as_result_df works fine with empty tables and no character(0) is allo
   )
 })
 
-test_that("make_ard produces realisting ARD output with as_result_df", {
+test_that("make_ard produces realistic ARD output with as_result_df", {
   # Testing fundamental getters/setters
   rc <- rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
   expect_equal(obj_stat_names(rc), c("Rand1", "Rand2"))
