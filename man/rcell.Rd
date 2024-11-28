@@ -14,7 +14,7 @@ rcell(
   footnotes = NULL,
   align = NULL,
   format_na_str = NULL,
-  stat_names = NULL
+  stat_names = NA_character_
 )
 
 non_ref_rcell(
@@ -51,8 +51,8 @@ corresponds to the unmodified default behavior.}
 \item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
 
-\item{stat_names}{(\code{character} or \code{NULL})\cr names for the statistics in the cell. It can be a vector of strings.
-If \code{NULL}, statistic names are not specified.}
+\item{stat_names}{(\code{character} or \code{NA})\cr names for the statistics in the cell. It can be a vector of strings.
+If \code{NA}, statistic names are not specified.}
 
 \item{is_ref}{(\code{flag})\cr whether function is being used in the reference column (i.e. \code{.in_ref_col} should be
 passed to this argument).}

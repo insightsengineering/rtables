@@ -464,3 +464,22 @@ test_that("make_ard works with summarize_row_groups", {
     tolerance = 10e-6
   )
 })
+
+test_that("make_ard works if there are no stat_names", {
+  mean_sd_custom <- function(x) {
+    mean <- mean(x, na.rm = FALSE)
+    sd <- sd(x, na.rm = FALSE)
+    
+    rcell(c(mean, sd),
+          label = "Mean (SD)", format = "xx.x (xx.x)"
+    )
+  }
+  
+  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
+    analyze(vars = "AGE", afun = mean_sd_custom)
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  expect_equal(as_result_df(tbl, make_ard = TRUE)$stat_name, rep(NA_character_, 4)) 
+})

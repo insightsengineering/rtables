@@ -15,7 +15,7 @@ in_rows(
   .row_footnotes = list(NULL),
   .aligns = NULL,
   .format_na_strs = NULL,
-  .stat_names = list(NULL)
+  .stat_names = list(NA_character_)
 )
 }
 \arguments{

@@ -1933,7 +1933,7 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 ## indent_mod: indent modifier to be used for parent row
 CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
                       indent_mod = NULL, footnotes = NULL,
-                      align = NULL, format_na_str = NULL, stat_names = NULL) {
+                      align = NULL, format_na_str = NULL, stat_names = NA_character_) {
   if (is.null(colspan)) {
     colspan <- 1L
   }

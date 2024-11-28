@@ -123,8 +123,8 @@ mean_sd_custom <- function(x) {
   sd <- sd(x, na.rm = FALSE)
 
   rcell(c(mean, sd),
-    label = "Mean (SD)", format = "xx.x (xx.x)",
-    stat_names = c("Mean", "SD")
+    label = "Mean (SD)", format = "xx.x (xx.x)"#,
+    # stat_names = c("Mean", "SD")
   )
 }
 counts_percentage_custom <- function(x) {

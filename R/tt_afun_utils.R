@@ -10,8 +10,8 @@
 #' @param label (`string` or `NULL`)\cr label. If non-`NULL`, it will be looked at when determining row labels.
 #' @param colspan (`integer(1)`)\cr column span value.
 #' @param footnotes (`list` or `NULL`)\cr referential footnote messages for the cell.
-#' @param stat_names (`character` or `NULL`)\cr names for the statistics in the cell. It can be a vector of strings.
-#'   If `NULL`, statistic names are not specified.
+#' @param stat_names (`character` or `NA`)\cr names for the statistics in the cell. It can be a vector of strings.
+#'   If `NA`, statistic names are not specified.
 #'
 #' @inherit CellValue return
 #'
@@ -32,7 +32,7 @@ rcell <- function(x,
                   footnotes = NULL,
                   align = NULL,
                   format_na_str = NULL,
-                  stat_names = NULL) {
+                  stat_names = NA_character_) {
   checkmate::assert_character(stat_names, null.ok = TRUE)
   if (!is.null(align)) {
     check_aligns(align)
@@ -172,7 +172,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .row_footnotes = list(NULL),
                     .aligns = NULL,
                     .format_na_strs = NULL,
-                    .stat_names = list(NULL)) {
+                    .stat_names = list(NA_character_)) {
   if (is.function(.formats)) {
     .formats <- list(.formats)
   }
@@ -236,7 +236,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
       footnotes = .cell_footnotes %||% list(NULL),
       align = .aligns,
       format_na_str = .format_na_strs %||% list(NULL),
-      stat_names = .stat_names %||% list(NULL),
+      stat_names = .stat_names %||% list(NA_character_),
       SIMPLIFY = FALSE
     )
   }
