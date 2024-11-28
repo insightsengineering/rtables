@@ -129,8 +129,17 @@ as_result_df <- function(tt, spec = NULL,
 
     # Fix for content rows analysis variable label
     if (any(ret$node_class == "ContentRow")) {
-      where_to <- ret$node_class == "ContentRow"
-      ret$avar_name[where_to] <- ret$spl_value_1[where_to]
+      where_to <- which(ret$node_class == "ContentRow")
+      for (crow_i in where_to) {
+        # For each Content row, extract the row split that is used as analysis variable
+        tmp_tbl <- ret[crow_i, , drop = FALSE]
+        na_labels <- lapply(tmp_tbl, is.na) %>% unlist(use.names = FALSE)
+        group_to_take <- colnames(tmp_tbl[, !na_labels])
+        group_to_take <- group_to_take[grep("^group[0-9]+$", group_to_take)]
+
+        # Final assignment of each Content row to its correct analysis label
+        ret$avar_name[crow_i] <- ret[[group_to_take[length(group_to_take)]]][crow_i]
+      }
     }
 
     # If we want to expand colnames
@@ -173,6 +182,15 @@ as_result_df <- function(tt, spec = NULL,
 
       # Unnecessary columns
       ret_tmp <- ret[, !colnames(ret) %in% c("row_num", "is_group_summary", "node_class")]
+      n_row_groups <- sapply(colnames(ret), function(x) {
+        if (grepl("^group", x)) {
+          # Extract the number after "group" using regex
+          return(as.numeric(sub("group(\\d+).*", "\\1", x)))
+        } else {
+          return(0) # Return 0 if no "group" is found
+        }
+      }) %>%
+        max()
 
       # Indexes of real columns (visible in the output, but no row names)
       only_col_indexes <- seq(which(colnames(ret_tmp) == "label_name") + 1, ncol(ret_tmp))
@@ -186,7 +204,7 @@ as_result_df <- function(tt, spec = NULL,
       colnames(core_row_names)[colnames_to_rename] <- c("variable", "variable_level", "variable_label")
 
       # Adding stats_names if present
-      raw_stat_names <- .get_stat_names_from_table(tt, add.labrows = keep_label_rows)
+      raw_stat_names <- .get_stat_names_from_table(tt, add_labrows = keep_label_rows)
       cell_stat_names <- .make_df_from_raw_data(raw_stat_names, nr = nrow(tt), nc = ncol(tt))
 
       # Moving colnames to rows (flattening)
@@ -195,17 +213,26 @@ as_result_df <- function(tt, spec = NULL,
       for (col_i in only_col_indexes) {
         # Making row splits into row specifications (group1 group1_level)
         current_col_split_level <- unlist(ret_tmp[seq_len(number_of_col_splits), col_i], use.names = FALSE)
-        flattened_cols_names <- c(column_split_names[[1]][[1]], current_col_split_level)
-        names(flattened_cols_names) <- c(
-          paste0("group", seq_along(column_split_names[[1]][[1]])),
-          paste0("group", seq_along(current_col_split_level), "_level")
+        flattened_cols_names <- .c_alternated(column_split_names[[1]][[1]], current_col_split_level)
+        names(flattened_cols_names) <- .c_alternated(
+          paste0("group", seq_along(column_split_names[[1]][[1]]) + n_row_groups),
+          paste0("group", seq_along(current_col_split_level) + n_row_groups, "_level")
         )
 
-        tmp_core_ret_by_col_i <- cbind(
-          t(data.frame(flattened_cols_names)),
-          core_row_names,
-          row.names = NULL
-        )
+        if (n_row_groups > 0) {
+          tmp_core_ret_by_col_i <- cbind(
+            core_row_names[, seq(n_row_groups * 2)],
+            t(data.frame(flattened_cols_names)),
+            core_row_names[, -seq(n_row_groups * 2)],
+            row.names = NULL
+          )
+        } else {
+          tmp_core_ret_by_col_i <- cbind(
+            t(data.frame(flattened_cols_names)),
+            core_row_names,
+            row.names = NULL
+          )
+        }
 
         # retrieving stat names and stats
         stat_name <- setNames(cell_stat_names[, col_i - min(only_col_indexes) + 1, drop = TRUE], NULL)
@@ -274,10 +301,15 @@ as_result_df <- function(tt, spec = NULL,
   cellvals
 }
 
+# Is there a better alternative?
+.c_alternated <- function(v1, v2) {
+  unlist(mapply(c, v1, v2, SIMPLIFY = FALSE))
+}
+
 # Amazing helper function to get the statistic names from row cells!
-.get_stat_names_from_table <- function(tt, add.labrows = FALSE) {
+.get_stat_names_from_table <- function(tt, add_labrows = FALSE) {
   # omit_labrows # omit label rows
-  rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = add.labrows)
+  rows <- collect_leaves(tt, incl.cont = TRUE, add.labrows = add_labrows)
   lapply(rows, function(ri) {
     lapply(row_cells(ri), obj_stat_names)
   })
@@ -333,7 +365,7 @@ make_result_df_md_colnames <- function(maxlen) {
   spllen <- floor((maxlen - 2) / 2)
   ret <- character()
   if (spllen > 0) {
-    ret <- paste(c("spl_var", "spl_value"), rep(seq_len(spllen), rep(2, spllen)), sep = "_")
+    ret <- paste("group", rep(seq_len(spllen), each = 2), c("", "_level"), sep = "")
   }
   ret <- c(ret, c("avar_name", "row_name", "label_name", "row_num", "is_group_summary", "node_class"))
 }

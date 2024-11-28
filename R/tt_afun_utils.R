@@ -10,7 +10,8 @@
 #' @param label (`string` or `NULL`)\cr label. If non-`NULL`, it will be looked at when determining row labels.
 #' @param colspan (`integer(1)`)\cr column span value.
 #' @param footnotes (`list` or `NULL`)\cr referential footnote messages for the cell.
-#' @param stat_names (`character`)\cr names for the statistics in the cell. It can be a vector of strings.
+#' @param stat_names (`character` or `NULL`)\cr names for the statistics in the cell. It can be a vector of strings.
+#'   If `NULL`, statistic names are not specified.
 #'
 #' @inherit CellValue return
 #'
@@ -126,7 +127,7 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #'   See [formatters::list_valid_aligns()] for currently supported alignments.
 #' @param .format_na_strs (`character` or `NULL`)\cr NA strings for the cells.
 #' @param .stat_names (`character` or `NULL`)\cr names for the statistics in the cells.
-#'   It can be a vector of values.
+#'   It can be a vector of values. If `NULL`, statistic names are not specified.
 #'
 #' @note In post-processing, referential footnotes can also be added using row and column
 #'   paths with [`fnotes_at_path<-`].

@@ -18,7 +18,7 @@ test_that("Result Data Frame generation works v0", {
 
   expect_identical(
     names(result_df)[1:5],
-    c("spl_var_1", "spl_value_1", "spl_var_2", "spl_value_2", "avar_name")
+    c("group1", "group1_level", "group2", "group2_level", "avar_name")
   )
 
   ## handle multiple analyses
@@ -338,18 +338,18 @@ test_that("make_ard works with multiple row levels", {
   ard_out <- as_result_df(tbl, make_ard = TRUE)
 
   expect_equal(unique(ard_out$stat_name), c("mean", "n"))
-  expect_contains(colnames(ard_out), c("spl_var_2", "spl_value_2"))
+  expect_contains(colnames(ard_out), c("group2", "group2_level"))
 
   # Count output
   expect_equal(
     ard_out[90, , drop = TRUE],
     list(
-      group1 = "ARM",
-      group1_level = "C: Combination",
-      spl_var_1 = "STRATA1",
-      spl_value_1 = "C",
-      spl_var_2 = "STRATA2",
-      spl_value_2 = "S2",
+      group1 = "STRATA1",
+      group1_level = "C",
+      group2 = "STRATA2",
+      group2_level = "S2",
+      group3 = "ARM",
+      group3_level = "C: Combination",
       variable = "SEX",
       variable_level = "UNDIFFERENTIATED",
       variable_label = "UNDIFFERENTIATED",
@@ -371,19 +371,19 @@ test_that("make_ard works with multiple column levels", {
   ard_out <- as_result_df(tbl, make_ard = TRUE)
 
   expect_equal(unique(ard_out$stat_name), c("mean", "n"))
-  expect_contains(colnames(ard_out), c("spl_var_1", "spl_value_1"))
+  expect_contains(colnames(ard_out), c("group1", "group1_level"))
   expect_contains(colnames(ard_out), c("group2", "group2_level"))
 
   # Count output
   expect_equal(
     ard_out[16, , drop = TRUE],
     list(
-      group1 = "ARM",
-      group2 = "STRATA2",
-      group1_level = "A: Drug X",
-      group2_level = "S2",
-      spl_var_1 = "STRATA1",
-      spl_value_1 = "A",
+      group1 = "STRATA1",
+      group1_level = "A",
+      group2 = "ARM",
+      group2_level = "A: Drug X",
+      group3 = "STRATA2",
+      group3_level = "S2",
       variable = "AGE",
       variable_level = "Mean",
       variable_label = "Mean",
@@ -398,6 +398,7 @@ test_that("make_ard works with summarize_row_groups", {
   lyt <- basic_table() %>%
     split_rows_by("STRATA2") %>%
     summarize_row_groups() %>%
+    split_rows_by("ARM") %>%
     split_cols_by("ARM") %>%
     split_cols_by("STRATA1") %>%
     analyze(c("AGE", "SEX"))
@@ -406,20 +407,22 @@ test_that("make_ard works with summarize_row_groups", {
   ard_out <- as_result_df(tbl, make_ard = TRUE)
 
   expect_contains(unique(ard_out$stat_name), c("mean", "n", "p"))
-  expect_contains(colnames(ard_out), c("spl_var_1", "spl_value_1"))
+  expect_contains(colnames(ard_out), c("group1", "group1_level"))
   expect_contains(colnames(ard_out), c("group2", "group2_level"))
 
   # label row output
   expect_equal(
     ard_out[1, , drop = TRUE],
     list(
-      group1 = "ARM",
-      group2 = "STRATA1",
-      group1_level = "A: Drug X",
-      group2_level = "A",
-      spl_var_1 = "STRATA2",
-      spl_value_1 = "S1",
-      variable = "S1",
+      group1 = "STRATA2",
+      group1_level = "S1",
+      group2 = NA_character_,
+      group2_level = NA_character_,
+      group3 = "ARM",
+      group3_level = "A: Drug X",
+      group4 = "STRATA1",
+      group4_level = "A",
+      variable = "STRATA2",
       variable_level = "S1",
       variable_label = "S1",
       stat_name = "n",
@@ -428,21 +431,35 @@ test_that("make_ard works with summarize_row_groups", {
     tolerance = 10e-6
   )
 
+  # Testing different placements of summarize_row_groups
+  lyt <- basic_table() %>%
+    split_rows_by("STRATA2") %>%
+    split_rows_by("ARM") %>%
+    summarize_row_groups() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>%
+    analyze(c("AGE", "SEX"))
+
+  tbl <- build_table(lyt, ex_adsl)
+  ard_out <- as_result_df(tbl, make_ard = TRUE)
+
   # label row output
   expect_equal(
-    ard_out[86, , drop = TRUE],
+    ard_out[1, , drop = TRUE],
     list(
-      group1 = "ARM",
-      group2 = "STRATA1",
-      group1_level = "C: Combination",
-      group2_level = "A",
-      spl_var_1 = "STRATA2",
-      spl_value_1 = "S1",
-      variable = "S1",
-      variable_level = "S1",
-      variable_label = "S1",
-      stat_name = "p",
-      stat = 0.35
+      group1 = "STRATA2",
+      group1_level = "S1",
+      group2 = "ARM",
+      group2_level = "A: Drug X",
+      group3 = "ARM",
+      group3_level = "A: Drug X",
+      group4 = "STRATA1",
+      group4_level = "A",
+      variable = "ARM",
+      variable_level = "A: Drug X",
+      variable_label = "A: Drug X",
+      stat_name = "n",
+      stat = 18
     ),
     tolerance = 10e-6
   )
