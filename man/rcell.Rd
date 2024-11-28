@@ -14,7 +14,7 @@ rcell(
   footnotes = NULL,
   align = NULL,
   format_na_str = NULL,
-  stat_names = NA_character_
+  stat_names = NULL
 )
 
 non_ref_rcell(

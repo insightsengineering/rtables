@@ -32,7 +32,7 @@ rcell <- function(x,
                   footnotes = NULL,
                   align = NULL,
                   format_na_str = NULL,
-                  stat_names = NA_character_) {
+                  stat_names = NULL) {
   checkmate::assert_character(stat_names, null.ok = TRUE)
   if (!is.null(align)) {
     check_aligns(align)
@@ -79,7 +79,7 @@ rcell <- function(x,
       indent_mod = indent_mod,
       footnotes = footnotes,
       format_na_str = format_na_str,
-      stat_names = stat_names
+      stat_names = stat_names %||% NA_character_
     ) # RefFootnote(footnote))
   }
   if (!is.null(align)) {
@@ -126,8 +126,9 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .aligns (`character` or `NULL`)\cr alignments for the cells. Standard for `NULL` is `"center"`.
 #'   See [formatters::list_valid_aligns()] for currently supported alignments.
 #' @param .format_na_strs (`character` or `NULL`)\cr NA strings for the cells.
-#' @param .stat_names (`character` or `NULL`)\cr names for the statistics in the cells.
-#'   It can be a vector of values. If `NULL`, statistic names are not specified.
+#' @param .stat_names (`list`)\cr names for the statistics in the cells.
+#'   It can be a vector of values. If `list(NULL)`, statistic names are not specified and will
+#'   appear as `NA`.
 #'
 #' @note In post-processing, referential footnotes can also be added using row and column
 #'   paths with [`fnotes_at_path<-`].
@@ -172,7 +173,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .row_footnotes = list(NULL),
                     .aligns = NULL,
                     .format_na_strs = NULL,
-                    .stat_names = list(NA_character_)) {
+                    .stat_names = list(NULL)) {
   if (is.function(.formats)) {
     .formats <- list(.formats)
   }
@@ -195,7 +196,7 @@ in_rows <- function(..., .list = NULL, .names = NULL,
         length(.names) > 0 ||
         length(.indent_mods) > 0 ||
         length(.format_na_strs) > 0 ||
-        length(.stat_names) > 0
+        (!all(is.na(.stat_names)) && length(.stat_names) > 0)
     ) {
       stop(
         "in_rows got 0 rows but length >0 of at least one of ",
@@ -231,12 +232,13 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     if (is.null(.aligns)) {
       .aligns <- list(NULL)
     }
+    
     l2 <- mapply(rcell,
       x = l, format = .formats,
       footnotes = .cell_footnotes %||% list(NULL),
       align = .aligns,
       format_na_str = .format_na_strs %||% list(NULL),
-      stat_names = .stat_names %||% list(NA_character_),
+      stat_names = .stat_names %||% list(NULL),
       SIMPLIFY = FALSE
     )
   }

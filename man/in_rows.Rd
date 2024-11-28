@@ -15,7 +15,7 @@ in_rows(
   .row_footnotes = list(NULL),
   .aligns = NULL,
   .format_na_strs = NULL,
-  .stat_names = list(NA_character_)
+  .stat_names = list(NULL)
 )
 }
 \arguments{
@@ -40,8 +40,9 @@ See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for c
 
 \item{.format_na_strs}{(\code{character} or \code{NULL})\cr NA strings for the cells.}
 
-\item{.stat_names}{(\code{character} or \code{NULL})\cr names for the statistics in the cells.
-It can be a vector of values. If \code{NULL}, statistic names are not specified.}
+\item{.stat_names}{(\code{list})\cr names for the statistics in the cells.
+It can be a vector of values. If \code{list(NULL)}, statistic names are not specified and will
+appear as \code{NA}.}
 }
 \value{
 A \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an
