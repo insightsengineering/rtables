@@ -4,7 +4,8 @@
  * Experimental pagination is now possible in `tt_as_flextable()` and `export_as_docx()`.
  * Added handling of widths in `tt_as_flextable()`. Now it is possible to change column widths for `.docx` exports.
  * Initialized vignette about quality control outputs of `as_result_df()`.
- * Initialized parameter `make_ard` output for single-line statistical outputs.
+ * Completed parameter `make_ard` output for single-line statistical outputs.
+ * Added `stat_names` to `rcell()` to be used by `as_result_df(make_ard = TRUE)`.
 
 ### Miscellaneous
  * Split `docx` document generation to the new package [`rtables.officer`](https://github.com/insightsengineering/rtables.officer).
