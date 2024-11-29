@@ -12,7 +12,8 @@ CellValue(
   indent_mod = NULL,
   footnotes = NULL,
   align = NULL,
-  format_na_str = NULL
+  format_na_str = NULL,
+  stat_names = NA_character_
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ corresponds to the unmodified default behavior.}
 
 \item{format_na_str}{(\code{string})\cr string which should be displayed when formatted if this cell's value(s)
 are all \code{NA}.}
+
+\item{stat_names}{(\code{character} or \code{NA})\cr names for the statistics in the cell. It can be a vector of strings.
+If \code{NA}, statistic names are not specified.}
 }
 \value{
 An object representing the value within a single cell within a populated table. The underlying structure

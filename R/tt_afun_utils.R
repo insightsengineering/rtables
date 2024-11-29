@@ -10,10 +10,17 @@
 #' @param label (`string` or `NULL`)\cr label. If non-`NULL`, it will be looked at when determining row labels.
 #' @param colspan (`integer(1)`)\cr column span value.
 #' @param footnotes (`list` or `NULL`)\cr referential footnote messages for the cell.
+#' @param stat_names (`character` or `NA`)\cr names for the statistics in the cell. It can be a vector of strings.
+#'   If `NA`, statistic names are not specified.
 #'
 #' @inherit CellValue return
 #'
 #' @note Currently column spanning is only supported for defining header structure.
+#'
+#' @examples
+#' rcell(1, format = "xx.x")
+#' rcell(c(1, 2), format = c("xx - xx"))
+#' rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
 #'
 #' @rdname rcell
 #' @export
@@ -24,7 +31,9 @@ rcell <- function(x,
                   indent_mod = NULL,
                   footnotes = NULL,
                   align = NULL,
-                  format_na_str = NULL) {
+                  format_na_str = NULL,
+                  stat_names = NULL) {
+  checkmate::assert_character(stat_names, null.ok = TRUE)
   if (!is.null(align)) {
     check_aligns(align)
   }
@@ -47,6 +56,9 @@ rcell <- function(x,
     if (!is.null(format_na_str)) {
       obj_na_str(x) <- format_na_str
     }
+    if (!is.null(stat_names)) {
+      obj_stat_names(x) <- stat_names
+    }
     ret <- x
   } else {
     if (is.null(label)) {
@@ -66,7 +78,8 @@ rcell <- function(x,
       label = label,
       indent_mod = indent_mod,
       footnotes = footnotes,
-      format_na_str = format_na_str
+      format_na_str = format_na_str,
+      stat_names = stat_names %||% NA_character_
     ) # RefFootnote(footnote))
   }
   if (!is.null(align)) {
@@ -113,6 +126,9 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' @param .aligns (`character` or `NULL`)\cr alignments for the cells. Standard for `NULL` is `"center"`.
 #'   See [formatters::list_valid_aligns()] for currently supported alignments.
 #' @param .format_na_strs (`character` or `NULL`)\cr NA strings for the cells.
+#' @param .stat_names (`list`)\cr names for the statistics in the cells.
+#'   It can be a vector of values. If `list(NULL)`, statistic names are not specified and will
+#'   appear as `NA`.
 #'
 #' @note In post-processing, referential footnotes can also be added using row and column
 #'   paths with [`fnotes_at_path<-`].
@@ -126,6 +142,12 @@ non_ref_rcell <- function(x, is_ref, format = NULL, colspan = 1L,
 #' in_rows(1, 2, 3, .names = c("a", "b", "c"))
 #' in_rows(1, 2, 3, .labels = c("a", "b", "c"))
 #' in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
+#' in_rows(
+#'   .list = list(a = c(NA, NA)),
+#'   .formats = "xx - xx",
+#'   .format_na_strs = list(c("asda", "lkjklj"))
+#' )
+#' in_rows(.list = list(a = c(NA, NA)), .format_na_strs = c("asda", "lkjklj"))
 #'
 #' in_rows(.list = list(a = 1, b = 2, c = 3))
 #' in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
@@ -150,7 +172,8 @@ in_rows <- function(..., .list = NULL, .names = NULL,
                     .cell_footnotes = list(NULL),
                     .row_footnotes = list(NULL),
                     .aligns = NULL,
-                    .format_na_strs = NULL) {
+                    .format_na_strs = NULL,
+                    .stat_names = list(NULL)) {
   if (is.function(.formats)) {
     .formats <- list(.formats)
   }
@@ -172,11 +195,12 @@ in_rows <- function(..., .list = NULL, .names = NULL,
         length(.formats) > 0 ||
         length(.names) > 0 ||
         length(.indent_mods) > 0 ||
-        length(.format_na_strs) > 0
+        length(.format_na_strs) > 0 ||
+        (!all(is.na(.stat_names)) && length(.stat_names) > 0)
     ) {
       stop(
         "in_rows got 0 rows but length >0 of at least one of ",
-        ".labels, .formats, .names, .indent_mods, .format_na_strs. ",
+        ".labels, .formats, .names, .indent_mods, .format_na_strs, .stat_names. ",
         "Does your analysis/summary function handle the 0 row ",
         "df/length 0 x case?"
       )
@@ -208,11 +232,13 @@ in_rows <- function(..., .list = NULL, .names = NULL,
     if (is.null(.aligns)) {
       .aligns <- list(NULL)
     }
+
     l2 <- mapply(rcell,
       x = l, format = .formats,
       footnotes = .cell_footnotes %||% list(NULL),
       align = .aligns,
       format_na_str = .format_na_strs %||% list(NULL),
+      stat_names = .stat_names %||% list(NULL),
       SIMPLIFY = FALSE
     )
   }

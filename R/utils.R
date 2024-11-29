@@ -31,21 +31,21 @@ setGeneric("simple_analysis", function(x, ...) standardGeneric("simple_analysis"
 #' @exportMethod simple_analysis
 setMethod(
   "simple_analysis", "numeric",
-  function(x, ...) in_rows("Mean" = rcell(mean(x, ...), format = "xx.xx"))
+  function(x, ...) in_rows("Mean" = rcell(mean(x, ...), stat_names = "mean", format = "xx.xx"))
 )
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
 setMethod(
   "simple_analysis", "logical",
-  function(x, ...) in_rows("Count" = rcell(sum(x, ...), format = "xx"))
+  function(x, ...) in_rows("Count" = rcell(sum(x, ...), stat_names = "n", format = "xx"))
 )
 
 #' @rdname rtinner
 #' @exportMethod simple_analysis
 setMethod(
   "simple_analysis", "factor",
-  function(x, ...) in_rows(.list = as.list(table(x)))
+  function(x, ...) in_rows(.list = as.list(table(x)), .stat_names = "n")
 )
 
 #' @rdname rtinner

@@ -351,6 +351,11 @@
 \alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-,VTableTree,character-method}
 \alias{fnotes_at_path<-,VTableTree,NULL-method}
+\alias{obj_stat_names}
+\alias{obj_stat_names<-}
+\alias{obj_stat_names<-,CellValue-method}
+\alias{obj_stat_names,CellValue-method}
+\alias{obj_stat_names,RowsVerticalSection-method}
 \alias{rbind2,VTableNodeInfo,missing-method}
 \alias{tt_at_path,VTableTree-method}
 \alias{tt_at_path<-,VTableTree,ANY,VTableTree-method}
@@ -1117,6 +1122,16 @@ spl_varnames(object) <- value
 \S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 \S4method{fnotes_at_path}{VTableTree,NULL}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
+
+obj_stat_names(obj)
+
+obj_stat_names(obj) <- value
+
+\S4method{obj_stat_names}{CellValue}(obj) <- value
+
+\S4method{obj_stat_names}{CellValue}(obj)
+
+\S4method{obj_stat_names}{RowsVerticalSection}(obj)
 
 \S4method{rbind2}{VTableNodeInfo,missing}(x, y)
 

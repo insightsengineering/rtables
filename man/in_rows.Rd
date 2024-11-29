@@ -14,7 +14,8 @@ in_rows(
   .cell_footnotes = list(NULL),
   .row_footnotes = list(NULL),
   .aligns = NULL,
-  .format_na_strs = NULL
+  .format_na_strs = NULL,
+  .stat_names = list(NULL)
 )
 }
 \arguments{
@@ -38,6 +39,10 @@ in_rows(
 See \code{\link[formatters:list_formats]{formatters::list_valid_aligns()}} for currently supported alignments.}
 
 \item{.format_na_strs}{(\code{character} or \code{NULL})\cr NA strings for the cells.}
+
+\item{.stat_names}{(\code{list})\cr names for the statistics in the cells.
+It can be a vector of values. If \code{list(NULL)}, statistic names are not specified and will
+appear as \code{NA}.}
 }
 \value{
 A \code{RowsVerticalSection} object (or \code{NULL}). The details of this object should be considered an
@@ -54,6 +59,12 @@ paths with \code{\link{fnotes_at_path<-}}.
 in_rows(1, 2, 3, .names = c("a", "b", "c"))
 in_rows(1, 2, 3, .labels = c("a", "b", "c"))
 in_rows(1, 2, 3, .names = c("a", "b", "c"), .labels = c("AAA", "BBB", "CCC"))
+in_rows(
+  .list = list(a = c(NA, NA)),
+  .formats = "xx - xx",
+  .format_na_strs = list(c("asda", "lkjklj"))
+)
+in_rows(.list = list(a = c(NA, NA)), .format_na_strs = c("asda", "lkjklj"))
 
 in_rows(.list = list(a = 1, b = 2, c = 3))
 in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))

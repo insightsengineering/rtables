@@ -1,10 +1,10 @@
 ---
-title: "How to generate QC-ready result data frames from tables"
+title: "Generating QC-Ready Result Data Frames (ARDs) from Tables"
 author: "Davide Garolini"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How to generate QC-ready result data frames from tables}
+  %\VignetteIndexEntry{Generating QC-Ready Result Data Frames (ARDs) from Tables}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -29,53 +29,38 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(comment = "#")
 ```
 
-
 ```{css, echo=FALSE}
 .reveal .r code {
     white-space: pre;
 }
 ```
+
 # Disclaimer
 
-This vignette is a work in progress.
+This vignette is a work in progress and subject to change.
 
-## Create the example table
+## Creating an Example Table
 
-First of all we need a table to retrieve all the necessary information. Borrowing one from the [vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/clinical_trials.html) about clinical trials.
+In order to generate an ARD (Analysis Results Dataset), we first need to create a table from which all the necessary information will be retrieved. We will borrow a simple table from [this vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/clinical_trials.html) about clinical trials.
 
 ```{r}
 library(rtables)
 ADSL <- ex_adsl # Example ADSL dataset
-mean_sd_custom <- function(x) {
-  mean <- mean(x, na.rm = FALSE)
-  sd <- sd(x, na.rm = FALSE)
 
-  rcell(c(mean, sd), label = "Mean (SD)", format = "xx.x (xx.x)")
-}
-counts_percentage_custom <- function(x) {
-  # browser()
-  cnts <- table(x)
-  out <- lapply(cnts, function(x) {
-    perc <- x / sum(cnts)
-    rcell(c(x, perc), format = "xx. (xx.%)")
-  })
-  in_rows(.list = as.list(out), .labels = names(cnts))
-}
-
-lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-  # split_rows_by("STRATA1", split_fun = keep_split_levels(c("A"))) %>%
-  # split_cols_by("STRATA2") %>%
-  split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
-  analyze(vars = "AGE", afun = mean_sd_custom) %>%
-  analyze(vars = "SEX", afun = counts_percentage_custom)
+# Very simple table
+lyt <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(c("AGE", "SEX"))
 
 tbl <- build_table(lyt, ADSL)
 tbl
 ```
 
-## Convert the table to a result data frame
+## Converting the Table to a Result Data Frame (ARD)
 
-The `as_result_df` function is the one that converts a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may differ for different standard and lets see how to produce different outputs. Final goal is having clearly one result for row. Lets play with different options.
+The `as_result_df()` function is used to convert a table to a result data frame. The result data frame is a data frame that contains the result of the summary table and is ready to be used for quality control purposes. This may be customized according to different standards.
+
+Let's see how we can produce different result `data.frame`s. The following outputs can be returned by setting different parameters in the `as_results_df()` function, and these results can be transformed back into a table using the `df_to_tt()` function.
 
 ```{r}
 as_result_df(tbl)
@@ -86,7 +71,97 @@ as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE)
 as_result_df(tbl, simplify = TRUE, keep_label_rows = TRUE, expand_colnames = TRUE)
 ```
 
-Now lets get the final `ARD` output. This is the one that is ready to be used for quality control purposes.
+Now let's generate our final ARD output, which is ready to be used for quality control purposes.
+
 ```{r}
+as_result_df(tbl, make_ard = TRUE)
+```
+
+## Customizing the Output
+
+`as_result_df()` and ARDs depend on the content of the table, so it is possible to modify the table to customize the output. For example, we can add some user-defined statistics with custom names:
+
+```{r}
+# rcell and in_rows are the core of any analysis function
+rc <- rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
+print(obj_stat_names(rc)) # c("Rand1", "Rand2")
+
+rc_row <- in_rows(
+  .list = list(a = c(NA, 1), b = c(1, NA)),
+  .formats = c("xx - xx", "xx.x - xx.x"),
+  .format_na_strs = list(c("asda", "lkjklj")),
+  .stat_names = list(c("A", "B"), c("B", "C"))
+)
+
+# Only a getter for this object
+print(obj_stat_names(rc_row)) # list(a = c("A", "B"), b = c("B", "C"))
+
+# if c("A", "B"), one for each row
+# if single list, duplicated
+rc_row <- in_rows(
+  .list = list(a = c(NA, 1), b = c(1, NA)),
+  .formats = c("xx - xx", "xx.x - xx.x"),
+  .format_na_strs = list(c("asda", "lkjklj")),
+  .stat_names = c("A", "B")
+)
+print(obj_stat_names(rc_row)) # c("A", "B") # one for each row
+print(lapply(rc_row, obj_stat_names)) # identical to above + row names
+
+rc_row <- in_rows(
+  .list = list(a = c(NA, 1), b = c(1, NA)),
+  .formats = c("xx - xx", "xx.x - xx.x"),
+  .format_na_strs = list(c("asda", "lkjklj")),
+  .stat_names = list(c("A", "B")) # It is duplicated, check it yourself!
+)
+```
+
+Let's put it into practice:
+
+```{r}
+mean_sd_custom <- function(x) {
+  mean <- mean(x, na.rm = FALSE)
+  sd <- sd(x, na.rm = FALSE)
+
+  rcell(c(mean, sd),
+    label = "Mean (SD)", format = "xx.x (xx.x)" # ,
+    # stat_names = c("Mean", "SD")
+  )
+}
+counts_percentage_custom <- function(x) {
+  cnts <- table(x)
+  out <- lapply(cnts, function(x) {
+    perc <- x / sum(cnts)
+    rcell(c(x, perc), format = "xx. (xx.%)")
+  })
+  in_rows(
+    .list = as.list(out), .labels = names(cnts),
+    .stat_names = list(c("Count", "Percentage"))
+  )
+}
+
+lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
+  split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
+  analyze(vars = "AGE", afun = mean_sd_custom) %>%
+  analyze(vars = "SEX", afun = counts_percentage_custom)
+
+tbl <- build_table(lyt, ex_adsl)
+
+as_result_df(tbl, make_ard = TRUE)
+```
+
+# More Complex Outputs
+
+Let's add hierarchical row and column splits:
+
+```{r}
+lyt <- basic_table() %>%
+  split_rows_by("STRATA2") %>%
+  summarize_row_groups() %>%
+  split_cols_by("ARM") %>%
+  split_cols_by("STRATA1") %>%
+  analyze(c("AGE", "SEX"))
+
+tbl <- build_table(lyt, ex_adsl)
+
 as_result_df(tbl, make_ard = TRUE)
 ```

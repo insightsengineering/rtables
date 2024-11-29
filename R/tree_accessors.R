@@ -4322,3 +4322,31 @@ setMethod(
     obj
   }
 )
+
+# stat_names for ARD -----------------------------------------------------------
+#
+#' @rdname int_methods
+#' @export
+setGeneric("obj_stat_names", function(obj) standardGeneric("obj_stat_names"))
+#
+#' @rdname int_methods
+#' @export
+setGeneric("obj_stat_names<-", function(obj, value) standardGeneric("obj_stat_names<-"))
+
+#' @rdname int_methods
+#' @export
+setMethod("obj_stat_names<-", "CellValue", function(obj, value) {
+  attr(obj, "stat_names") <- value
+  obj
+})
+
+#' @rdname int_methods
+#' @export
+setMethod("obj_stat_names", "CellValue", function(obj) attr(obj, "stat_names"))
+
+#' @rdname int_methods
+#' @export
+setMethod(
+  "obj_stat_names", "RowsVerticalSection",
+  function(obj) lapply(obj, obj_stat_names)
+)
