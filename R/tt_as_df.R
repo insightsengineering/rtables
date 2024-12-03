@@ -99,8 +99,13 @@ as_result_df <- function(tt, spec = NULL,
       which_root_name = c("root", "rbind_root"),
       all = TRUE
     )
+    
+    # Correcting maxlen for even number of paths (only multianalysis diff table names) 
     maxlen <- max(lengths(df$path))
-
+    if (maxlen %% 2 != 0) {
+      maxlen <- maxlen + 1
+    }
+    
     # Loop for metadata (path and details from make_row_df)
     metadf <- do.call(
       rbind.data.frame,
@@ -174,6 +179,7 @@ as_result_df <- function(tt, spec = NULL,
       ret <- rbind(header_colnames_matrix, ret)
     }
 
+    # make_ard -----------------------------------------------------------------
     # ARD part for one stat per row
     if (make_ard) {
       cinfo_df <- col_info(tt)
@@ -238,11 +244,13 @@ as_result_df <- function(tt, spec = NULL,
         stat_name <- setNames(cell_stat_names[, col_i - min(only_col_indexes) + 1, drop = TRUE], NULL)
         stat <- setNames(ret_tmp[!col_label_rows, col_i, drop = TRUE], NULL)
         necessary_stat_lengths <- sapply(stat, length)
+        stat[sapply(stat, is.null)] <- NA
 
         # Truncating or adding NA if stat names has more or less elements than stats
         stat_name <- lapply(seq_along(stat_name), function(sn_i) {
           stat_name[[sn_i]][seq_len(necessary_stat_lengths[sn_i])]
         })
+        stat_name[sapply(stat_name, function(x) length(x) == 0)] <- NA
 
         # unnesting stat_name and stat
         tmp_ret_by_col_i <- NULL
@@ -322,7 +330,15 @@ as_result_df <- function(tt, spec = NULL,
     kids <- tree_children(ci_coltree)
     return(lapply(kids, .get_column_split_name))
   }
-  sapply(pos_splits(tree_pos(ci_coltree)), spl_payload)
+  
+  lapply(pos_splits(tree_pos(ci_coltree)), function(x) {
+    pl <- spl_payload(x)
+    if (!is.null(pl)) { # it is null when all obs (1 column)
+      return(pl)
+    } else {
+      return(x@name)
+    }
+  })
 }
 
 # Function that selects specific outputs from the result data frame
@@ -378,6 +394,9 @@ do_label_row <- function(rdfrow, maxlen) {
   # Special cases with hidden labels
   if (length(pth) %% 2 == 1) {
     extra_nas_from_splits <- extra_nas_from_splits + 1
+  } else {
+    pth <- c("<analysis_spl_tbl_name>", pth)
+    extra_nas_from_splits <- extra_nas_from_splits - 1
   }
 
   c(
@@ -415,15 +434,17 @@ do_content_row <- function(rdfrow, maxlen) {
 do_data_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
   pthlen <- length(pth)
-  ## odd means we have a multi-analsysis step in the path, we dont' want that in the result data frame
+  ## odd means we have a multi-analsysis step in the path, we do not want this in the result
   if (pthlen %% 2 == 1) {
-    pth <- pth[-1 * (pthlen - 2)]
+    # we remove the last element, as it is a fake split (tbl_name from analyse)
+    # pth <- pth[-1 * (pthlen - 2)]
+    pth <- c("<analysis_spl_tbl_name>", pth)
   }
   pthlen_new <- length(pth)
-  if (maxlen == 1) pthlen_new <- 3
+  if (maxlen == 1) pthlen_new <- 3 # why?
   c(
     as.list(pth[seq_len(pthlen_new - 2)]),
-    replicate(maxlen - pthlen, list(NA_character_)),
+    replicate(ifelse((maxlen - pthlen_new) > 0, maxlen - pthlen_new, 0), list(NA_character_)),
     as.list(tail(pth, 2)),
     list(
       label_name = rdfrow$label,
