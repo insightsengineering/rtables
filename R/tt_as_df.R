@@ -99,13 +99,13 @@ as_result_df <- function(tt, spec = NULL,
       which_root_name = c("root", "rbind_root"),
       all = TRUE
     )
-    
-    # Correcting maxlen for even number of paths (only multianalysis diff table names) 
+
+    # Correcting maxlen for even number of paths (only multianalysis diff table names)
     maxlen <- max(lengths(df$path))
     if (maxlen %% 2 != 0) {
       maxlen <- maxlen + 1
     }
-    
+
     # Loop for metadata (path and details from make_row_df)
     metadf <- do.call(
       rbind.data.frame,
@@ -330,7 +330,7 @@ as_result_df <- function(tt, spec = NULL,
     kids <- tree_children(ci_coltree)
     return(lapply(kids, .get_column_split_name))
   }
-  
+
   lapply(pos_splits(tree_pos(ci_coltree)), function(x) {
     pl <- spl_payload(x)
     if (!is.null(pl)) { # it is null when all obs (1 column)

@@ -241,10 +241,10 @@ test_that("as_result_df works fine with empty tables and no character(0) is allo
 
 test_that("as_result_df works with only analyze tables (odd num of path elements)", {
   tbl <- basic_table() %>%
-    analyze("cyl", table_names = "a") %>% 
-    analyze("mpg") %>% 
+    analyze("cyl", table_names = "a") %>%
+    analyze("mpg") %>%
     build_table(mtcars)
-  
+
   expect_equal(as_result_df(tbl)$group1[[1]], "<analysis_spl_tbl_name>")
   expect_equal(as_result_df(tbl, make_ard = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
 })
