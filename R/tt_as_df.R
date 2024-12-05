@@ -250,7 +250,7 @@ as_result_df <- function(tt, spec = NULL,
         stat_name <- lapply(seq_along(stat_name), function(sn_i) {
           stat_name[[sn_i]][seq_len(necessary_stat_lengths[sn_i])]
         })
-        stat_name[sapply(stat_name, function(x) length(x) == 0)] <- NA
+        stat_name[!nzchar(stat_name)] <- NA
 
         # unnesting stat_name and stat
         tmp_ret_by_col_i <- NULL
