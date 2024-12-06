@@ -240,7 +240,7 @@ test_that("as_result_df works fine with empty tables and no character(0) is allo
   )
 })
 
-test_that("as_result_df works with only analyze tables (odd num of path elements)", {
+test_that("as_result_df works with analyze-only tables (odd num of path elements)", {
   tbl <- basic_table() %>%
     analyze("cyl", table_names = "a") %>%
     analyze("mpg") %>%

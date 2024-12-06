@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.10.9008
-Date: 2024-11-29
+Version: 0.6.10.9009
+Date: 2024-12-05
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -40,7 +40,7 @@ Imports:
     stats,
     stringi (>= 1.6)
 Suggests:
-    broom (>= 1.0.6),
+    broom (>= 1.0.5),
     car (>= 3.0-13),
     dplyr (>= 1.0.5),
     knitr (>= 1.42),
