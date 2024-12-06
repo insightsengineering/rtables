@@ -59,6 +59,7 @@ test_that("Result Data Frame generation works v0", {
   expect_identical(
     names(result_df4),
     c(
+      "group1", "group1_level",
       "avar_name", "row_name", "label_name", "row_num", "is_group_summary",
       "node_class", "A: Drug X", "B: Placebo", "C: Combination"
     )
@@ -300,8 +301,10 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
   expect_equal(
     ard_out[2, , drop = TRUE],
     list(
-      group1 = "ARM",
-      group1_level = "A: Drug X",
+      group1 = "<analysis_spl_tbl_name>",
+      group1_level = "ma_AGE_SEX",
+      group2 = "ARM",
+      group2_level = "A: Drug X",
       variable = "AGE",
       variable_level = "Mean (SD)",
       variable_label = "Mean (SD)",
@@ -315,8 +318,10 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
   expect_equal(
     ard_out[14, , drop = TRUE],
     list(
-      group1 = "ARM",
-      group1_level = "B: Placebo",
+      group1 = "<analysis_spl_tbl_name>",
+      group1_level = "ma_AGE_SEX",
+      group2 = "ARM",
+      group2_level = "B: Placebo",
       variable = "SEX",
       variable_level = "F",
       variable_label = "F",

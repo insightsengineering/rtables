@@ -435,13 +435,15 @@ do_data_row <- function(rdfrow, maxlen) {
   pth <- rdfrow$path[[1]]
   pthlen <- length(pth)
   ## odd means we have a multi-analsysis step in the path, we do not want this in the result
-  if (pthlen %% 2 == 1) {
+  if (pthlen %% 2 == 1 && pthlen > 1) {
     # we remove the last element, as it is a fake split (tbl_name from analyse)
     # pth <- pth[-1 * (pthlen - 2)]
     pth <- c("<analysis_spl_tbl_name>", pth)
   }
   pthlen_new <- length(pth)
-  if (maxlen == 1) pthlen_new <- 3 # why?
+  if (pthlen_new == 1) {
+    pthlen_new <- 3 # why?
+  }
   c(
     as.list(pth[seq_len(pthlen_new - 2)]),
     replicate(ifelse((maxlen - pthlen_new) > 0, maxlen - pthlen_new, 0), list(NA_character_)),
