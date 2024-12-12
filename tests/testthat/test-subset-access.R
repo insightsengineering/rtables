@@ -136,6 +136,9 @@ test_rowpaths <- function(tt, visonly = TRUE) {
 
 
 test_that("make_row_df, make_col_df give paths which all work", {
+  skip_if_not_installed("tibble")
+  require(tibble, quietly = TRUE)
+
   lyt <- basic_table() %>%
     split_cols_by("ARM") %>%
     split_cols_by("SEX", ref_group = "F") %>%
