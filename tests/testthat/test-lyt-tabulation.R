@@ -239,7 +239,7 @@ test_that("labelkids parameter works", {
 test_that("ref_group comparisons work", {
   skip_if_not_installed("tibble")
   require(tibble, quietly = TRUE)
-  
+
   blthing <- basic_table() %>%
     split_cols_by("ARM", ref_group = "ARM1") %>%
     analyze("AGE", show_labels = "hidden") %>%
