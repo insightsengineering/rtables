@@ -801,6 +801,9 @@ test_that("horizontal separator is propagated from table to print and export", {
 ## higher-level showing ncols works:
 
 test_that("showing higher-level ncols works", {
+  skip_if_not_installed("tibble")
+  require(tibble, quietly = TRUE)
+  
   mydat <- subset(ex_adsl, SEX %in% c("M", "F"))
   mydat$SEX2 <- factor(
     ifelse(

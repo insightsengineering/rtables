@@ -249,6 +249,9 @@ test_that("drop_and_remove_levels also works with character variables", {
 })
 
 test_that("trim_levels_to_map split function works", {
+  skip_if_not_installed("tibble")
+  require(tibble, quietly = TRUE)
+  
   map <- data.frame(
     LBCAT = c("CHEMISTRY", "CHEMISTRY", "CHEMISTRY", "IMMUNOLOGY"),
     PARAMCD = c("ALT", "CRP", "CRP", "IGA"),
