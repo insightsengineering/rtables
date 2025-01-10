@@ -1,8 +1,6 @@
-## rtables 0.6.10.9014
+## rtables 0.6.11
 
 ### New Features
- * Experimental pagination is now possible in `tt_as_flextable()` and `export_as_docx()`.
- * Added handling of widths in `tt_as_flextable()`. Now it is possible to change column widths for `.docx` exports.
  * Initialized vignette about quality control outputs of `as_result_df()`.
  * Completed parameter `make_ard` output for single-line statistical outputs.
  * Added `stat_names` to `rcell()` to be used by `as_result_df(make_ard = TRUE)`.

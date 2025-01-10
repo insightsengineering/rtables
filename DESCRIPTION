@@ -1,17 +1,18 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.10.9014
-Date: 2024-12-20
+Version: 0.6.11
+Date: 2025-01-09
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
     person("Adrian", "Waddell", , "adrian.waddell@gene.com", role = "aut"),
     person("Daniel", "Sabanés Bové", , "daniel.sabanes_bove@roche.com", role = "ctb"),
     person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "ctb"),
-    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "ctb"),
-    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "ctb"),
+    person("Davide", "Garolini", , "davide.garolini@roche.com", role = "aut"),
+    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "aut"),
     person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb"),
-    person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("ctb", "cre")),
+    person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7566-2787")),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd"))
   )
 Description: Reporting tables often have structure that goes beyond simple
@@ -29,7 +30,7 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
-    formatters (>= 0.5.9.9004),
+    formatters (>= 0.5.10),
     magrittr (>= 1.5),
     methods,
     R (>= 2.10)
