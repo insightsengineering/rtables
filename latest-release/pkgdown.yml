@@ -1,8 +1,9 @@
-pandoc: '3.3'
+pandoc: '3.4'
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   advanced_usage: advanced_usage.html
+  ard_how_to: ard_how_to.html
   baseline: baseline.html
   clinical_trials: clinical_trials.html
   col_counts: col_counts.html
@@ -25,7 +26,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2024-09-23T02:17Z
+last_built: 2025-01-10T04:46Z
 urls:
   reference: https://insightsengineering.github.io/rtables/reference
   article: https://insightsengineering.github.io/rtables/articles

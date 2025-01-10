@@ -5,6 +5,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/ISSUE_TEMPLATE.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/LICENSE-text.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/advanced_usage.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/articles/ard_how_to.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/baseline.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/clinical_trials.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/col_counts.html</loc></url>
@@ -72,7 +73,6 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/dimensions.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/do_base_split.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/drop_facet_levels.html</loc></url>
-<url><loc>https://insightsengineering.github.io/rtables/reference/export_as_docx.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/facet_colcount.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/facet_colcounts_visible-set.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/find_degen_struct.html</loc></url>
@@ -145,7 +145,6 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/trim_prune_funs.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/trim_rows.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/tsv_io.html</loc></url>
-<url><loc>https://insightsengineering.github.io/rtables/reference/tt_to_flextable.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/ttap.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/update_ref_indexing.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/validate_table_struct.html</loc></url>

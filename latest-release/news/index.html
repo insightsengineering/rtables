@@ -18,7 +18,7 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Changelog">
-<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.png">
+<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.svg">
 <link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -30,7 +30,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.11</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@
     <li><h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6></li>
     <li><a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a></li>
     <li><a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a></li>
+    <li><a class="dropdown-item" href="../articles/ard_how_to.html">Generating QC-Ready Result Data Frames (ARDs) from Tables</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Table Customization</h6></li>
     <li><a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a></li>
@@ -73,7 +74,6 @@
 </li>
 <li class="active nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-reports">
 <li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
@@ -81,12 +81,13 @@
     <li><a class="dropdown-item" href="../unit-test-report-non-cran/">Non-CRAN unit test report</a></li>
   </ul>
 </li>
-      <li class="nav-item dropdown">
+      <div><li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-versions">Versions</a>
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.11">v0.6.11</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.10">v0.6.10</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.9">v0.6.9</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.8">v0.6.8</a>
@@ -99,7 +100,7 @@
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a>
 </div>
-</li>
+</li></div>
 </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -114,10 +115,44 @@
 </nav><div class="container template-news">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Changelog</h1>
       <small>Source: <a href="https://github.com/insightsengineering/rtables/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.11" id="rtables-0611">rtables 0.6.11<a class="anchor" aria-label="anchor" href="#rtables-0611"></a>
+</h2>
+<p class="text-muted">CRAN release: 2025-01-10</p>
+<div class="section level3">
+<h3 id="new-features-0-6-11">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-11"></a>
+</h3>
+<ul>
+<li>Initialized vignette about quality control outputs of <code><a href="../reference/data.frame_export.html">as_result_df()</a></code>.</li>
+<li>Completed parameter <code>make_ard</code> output for single-line statistical outputs.</li>
+<li>Added <code>stat_names</code> to <code><a href="../reference/rcell.html">rcell()</a></code> to be used by <code>as_result_df(make_ard = TRUE)</code>.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="miscellaneous-0-6-11">Miscellaneous<a class="anchor" aria-label="anchor" href="#miscellaneous-0-6-11"></a>
+</h3>
+<ul>
+<li>Split <code>docx</code> document generation to the new package <a href="https://github.com/insightsengineering/rtables.officer" class="external-link"><code>rtables.officer</code></a>.</li>
+<li>Refactored <code><a href="../reference/data.frame_export.html">as_result_df()</a></code> parameters <code>as_strings</code> and <code>as_viewer</code> into <code>data_format = c("full_precision", "strings", "numeric")</code> following the same outputs.</li>
+<li>Refactored <code><a href="../reference/data.frame_export.html">as_result_df()</a></code> to have a standard behavior, with all the relevant parameters, and a possibility to add personalized <code>spec</code>.</li>
+<li>Removed <code>result_df_specs()</code>, because <code><a href="../reference/data.frame_export.html">as_result_df()</a></code> was a too shallow wrapper.</li>
+<li>Merged behavior of <code><a href="../reference/data.frame_export.html">as_result_df()</a></code> parameters <code>as_is</code> and <code>simplify</code> parameters to remove structural information.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="bug-fixes-0-6-11">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-6-11"></a>
+</h3>
+<ul>
+<li>Fixed bug that was keeping indentation space characters in top left information when making a <code>flextable</code> from a <code>TableTree</code> object.</li>
+<li>Fixed bug in <code>analyze</code> that was causing an error when passing a single <code>NA</code> value to the <code>var_labels</code> parameter.</li>
+<li>Fixed bugs for multiple <code>analyze</code> calls in <code>as_result_df</code>.</li>
+</ul>
+</div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.10" id="rtables-0610">rtables 0.6.10<a class="anchor" aria-label="anchor" href="#rtables-0610"></a>
 </h2>
@@ -127,10 +162,10 @@
 </h3>
 <ul>
 <li>Added top left information handling (now bold and bottom aligned).</li>
-<li>Added <code><a href="../reference/export_as_docx.html">section_properties_default()</a></code> function to define standard portrait properties for tables.</li>
+<li>Added <code>section_properties_default()</code> function to define standard portrait properties for tables.</li>
 <li>Added default theme for <code>.html</code> outputs.</li>
-<li>Added parameter <code>bold_titles</code> to <code><a href="../reference/tt_to_flextable.html">tt_to_flextable()</a></code> to bold titles.</li>
-<li>Now users can add more than one theme to <code><a href="../reference/tt_to_flextable.html">tt_to_flextable()</a></code>, and/or extend themes.</li>
+<li>Added parameter <code>bold_titles</code> to <code>tt_to_flextable()</code> to bold titles.</li>
+<li>Now users can add more than one theme to <code>tt_to_flextable()</code>, and/or extend themes.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -138,9 +173,9 @@
 </h3>
 <ul>
 <li>Modified <code><a href="../reference/split_funcs.html">reorder_split_levels()</a></code> to cover more edge cases and be more stringent in the allowed inputs.</li>
-<li>Removed table tree <code>tt</code> input from <code><a href="../reference/tt_to_flextable.html">theme_docx_default()</a></code> and added code to handle row classes and number of columns internally.</li>
-<li>Reworked padding and spacing in default theme <code><a href="../reference/tt_to_flextable.html">theme_docx_default()</a></code>.</li>
-<li>Added parameter <code>bold_titles</code> to <code><a href="../reference/tt_to_flextable.html">tt_to_flextable()</a></code> to bold titles.</li>
+<li>Removed table tree <code>tt</code> input from <code>theme_docx_default()</code> and added code to handle row classes and number of columns internally.</li>
+<li>Reworked padding and spacing in default theme <code>theme_docx_default()</code>.</li>
+<li>Added parameter <code>bold_titles</code> to <code>tt_to_flextable()</code> to bold titles.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -153,7 +188,7 @@
 <li>Fixed issue with removal of horizontal lines in <code>tt_as_flextable()</code> header when title was added.</li>
 <li>Fixed multiple counts in header issue when exporting to <code>flextable</code>.</li>
 <li>Fixed issue with empty cells <code>""</code> having larger imposed margins than filled cell. They are transformed into <code>" "</code> before rendering.</li>
-<li>Fixed issue with borders appearing in <code><a href="../reference/tt_to_flextable.html">theme_docx_default()</a></code> when only one line of column names is present, but top left information is on multiple lines.</li>
+<li>Fixed issue with borders appearing in <code>theme_docx_default()</code> when only one line of column names is present, but top left information is on multiple lines.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -164,8 +199,8 @@
 <li>Added developer’s guide vignette. New materials are focused on printing methods, specifically <code>matrix_form</code> and <code>toString</code>.</li>
 <li>Grouped split functions documentation into one page with precise descriptions of each function and relative examples.</li>
 <li>Moved <code>simple_analysis</code> into utils file.</li>
-<li>Added examples to <code><a href="../reference/tt_to_flextable.html">theme_docx_default()</a></code> showing how to extend the default theme.</li>
-<li>Added the possibility to remove internal borders from label rows in <code><a href="../reference/tt_to_flextable.html">theme_html_default()</a></code>.</li>
+<li>Added examples to <code>theme_docx_default()</code> showing how to extend the default theme.</li>
+<li>Added the possibility to remove internal borders from label rows in <code>theme_html_default()</code>.</li>
 <li>Split export functions into separate source files. Similarly for test files.</li>
 </ul>
 </div>
@@ -345,8 +380,8 @@
 <h3 id="new-features-0-6-4">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-6-4"></a>
 </h3>
 <ul>
-<li>Added support for <code>.docx</code> exports with <code><a href="../reference/export_as_docx.html">export_as_docx()</a></code>.</li>
-<li>Expanded support for <code>flextable</code> customization with theme function specific for word documents (<code><a href="../reference/tt_to_flextable.html">theme_docx_default()</a></code>).</li>
+<li>Added support for <code>.docx</code> exports with <code>export_as_docx()</code>.</li>
+<li>Expanded support for <code>flextable</code> customization with theme function specific for word documents (<code>theme_docx_default()</code>).</li>
 </ul>
 </div>
 <div class="section level3">
