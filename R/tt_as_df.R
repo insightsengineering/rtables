@@ -67,7 +67,7 @@ as_result_df <- function(tt, spec = NULL,
     rawvals <- cell_values(tt)
     cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
 
-    if (data_format %in% c("strings", "numeric")) {
+    if (data_format %in% c("strings", "numeric", "both")) {
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
       mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1]
@@ -82,12 +82,20 @@ as_result_df <- function(tt, spec = NULL,
           " cell values extracted with cell_values(). This is a bug. Please report it."
         ) # nocov
       }
+      
+      colnames(mf_result_chars) <- colnames(cellvals)
+      colnames(mf_result_numeric) <- colnames(cellvals)
       if (data_format == "strings") {
-        colnames(mf_result_chars) <- colnames(cellvals)
         cellvals <- mf_result_chars
-      } else {
-        colnames(mf_result_numeric) <- colnames(cellvals)
-        cellvals <- mf_result_numeric
+        if (isTRUE(make_ard)) {
+          stop("make_ard = TRUE is not compatible with data_format = 'strings'")
+        }
+      } else if (data_format == "numeric"){
+        if (isTRUE(make_ard)) {
+          cellvals <- .convert_to_character(mf_result_numeric)
+        } else {
+          cellvals <- mf_result_numeric
+        }
       }
     }
 
@@ -267,6 +275,12 @@ as_result_df <- function(tt, spec = NULL,
         }
 
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
+      }
+      
+      # If already_done is not present, we need to call the function again to keep precision
+      if (!"already_done" %in% names(list(...))) {
+        stat_string_ret <- as_result_df(tt = tt, spec = spec, data_format = "numeric", make_ard = TRUE, already_done = TRUE, ...)
+        ret_w_cols <- cbind(ret_w_cols, "stat_strings" = stat_string_ret$stat)
       }
 
       ret <- ret_w_cols
@@ -510,6 +524,23 @@ handle_rdf_row <- function(rdfrow, maxlen) {
     return(ret)
   }
 }
+
+# Function to convert all elements to character while preserving structure
+.convert_to_character <- function(df) {
+  # Apply transformation to each column
+  df_converted <- lapply(df, function(col) {
+    if (is.list(col)) {
+      # For columns with vector cells, convert each vector to a character vector
+      I(lapply(col, as.character))
+    } else {
+      # For regular columns, directly convert to character
+      as.character(col)
+    }
+  })
+  # Return the transformed data frame
+  data.frame(df_converted, stringsAsFactors = FALSE)
+}
+
 # path_enriched_df ------------------------------------------------------------
 #
 #' @describeIn data.frame_export Transform a `TableTree` object to a path-enriched `data.frame`.
