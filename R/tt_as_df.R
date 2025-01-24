@@ -65,12 +65,12 @@ as_result_df <- function(tt, spec = NULL,
   if (is.null(spec)) {
     # raw values
     rawvals <- cell_values(tt)
-    cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
+    cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt), could_be_flattened = TRUE)
 
-    if (data_format %in% c("strings", "numeric", "both")) {
+    if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
-      mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1]
+      mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1, drop = FALSE]
       mf_result_chars <- .remove_empty_elements(mf_result_chars)
       mf_result_numeric <- as.data.frame(
         .make_numeric_char_mf(mf_result_chars)
@@ -304,22 +304,25 @@ as_result_df <- function(tt, spec = NULL,
 }
 
 # Helper function used to structure the raw values into a dataframe
-.make_df_from_raw_data <- function(raw_vals, nr, nc) {
+.make_df_from_raw_data <- function(raw_vals, nr, nc, could_be_flattened = FALSE) {
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
   ## at this point.
   if (nr == 1 && length(raw_vals) > 1) {
     raw_vals <- list(raw_vals)
   }
-
+  
   # Flatten the list of lists (rows) of cell values into a data frame
   cellvals <- as.data.frame(do.call(rbind, raw_vals))
-  row.names(cellvals) <- NULL
 
   if (nr == 1 && nc == 1) {
+    if (isTRUE(could_be_flattened)) { # This happens only with nr = nc = 1 for raw values
+      cellvals <- as.data.frame(I(raw_vals))
+    }
     colnames(cellvals) <- names(raw_vals)
   }
-
+  
+  row.names(cellvals) <- NULL
   cellvals
 }
 
@@ -372,13 +375,22 @@ as_result_df <- function(tt, spec = NULL,
     return(char_df[nzchar(char_df, keepNA = TRUE)])
   }
 
-  apply(char_df, 2, function(col_i) col_i[nzchar(col_i, keepNA = TRUE)])
+  ret <- apply(char_df, 2, function(col_i) col_i[nzchar(col_i, keepNA = TRUE)], simplify = FALSE)
+  ret <- if(nrow(char_df) == 1 && ncol(char_df) > 1) {
+    do.call(cbind, ret)
+  } else {
+    ret
+  }
+  ret
 }
 
 # Helper function to make the character matrix numeric
 .make_numeric_char_mf <- function(char_df) {
   if (is.null(dim(char_df))) {
-    return(as.numeric(stringi::stri_extract_all(char_df, regex = "\\d+.\\d+|\\d+")))
+    ret <- lapply(char_df[[1]], function(x) {
+      as.numeric(stringi::stri_extract_all(x, regex = "\\d+.\\d+|\\d+")[[1]])
+    }) # keeps the list (single element) for data.frame
+    return(I(ret))
   }
 
   ret <- apply(char_df, 2, function(col_i) {

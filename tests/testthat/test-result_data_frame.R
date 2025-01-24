@@ -498,3 +498,30 @@ test_that("make_ard works if there are no stat_names", {
 
   expect_equal(as_result_df(tbl, make_ard = TRUE)$stat_name, rep(NA_character_, 4))
 })
+
+test_that("make_ard works if string precision is needed", {
+  lyt <- basic_table() %>%
+    split_rows_by("ARM") %>%
+    summarize_row_groups() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>%
+    analyze(c("AGE", "SEX"))
+  
+  tbl <- build_table(lyt, ex_adsl)
+  
+  # Some edge cases
+  expect_equal(
+    as_result_df(tbl[, 1], make_ard = TRUE) %>% dim(),
+    c(21, 12)
+  )
+  expect_equal(
+    as_result_df(tbl[1, ], make_ard = TRUE) %>% dim(),
+    c(18, 12)
+  )
+  
+  # One result
+  test_out <- as_result_df(tbl[, 1][1, ], make_ard = TRUE)
+  expect_equal(test_out$stat_name, c("n", "p"))
+  expect_equal(test_out$stat, c(38, 1))
+  expect_equal(test_out$stat_strings, c("38", "100"))
+})
