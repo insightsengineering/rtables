@@ -283,7 +283,10 @@ as_result_df <- function(tt, spec = NULL,
 
       # If already_done is not present, we need to call the function again to keep precision
       if (!"already_done" %in% names(list(...))) {
-        stat_string_ret <- as_result_df(tt = tt, spec = spec, data_format = "numeric", make_ard = TRUE, already_done = TRUE, ...)
+        stat_string_ret <- as_result_df(
+          tt = tt, spec = spec, data_format = "numeric",
+          make_ard = TRUE, already_done = TRUE, ...
+        )
         ret_w_cols <- cbind(ret_w_cols, "stat_string" = stat_string_ret$stat)
       }
 
