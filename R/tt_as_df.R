@@ -17,7 +17,7 @@
 #' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and
 #'   result columns. Consider showing also label rows with `keep_label_rows = TRUE`. This output can be
 #'   used again to create a `TableTree` object with [df_to_tt()].
-#' @param add_tbl_name_split (`flag`)\cr when `TRUE` and when the table has more than one 
+#' @param add_tbl_name_split (`flag`)\cr when `TRUE` and when the table has more than one
 #'   `analyze(table_names = "<diff_names>")`, the table names will be present as a group split named
 #'   `"<analysis_spl_tbl_name>"`.
 #' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
@@ -86,7 +86,7 @@ as_result_df <- function(tt, spec = NULL,
           " cell values extracted with cell_values(). This is a bug. Please report it."
         ) # nocov
       }
-      
+
       colnames(mf_result_chars) <- colnames(cellvals)
       colnames(mf_result_numeric) <- colnames(cellvals)
       if (data_format == "strings") {
@@ -94,7 +94,7 @@ as_result_df <- function(tt, spec = NULL,
         if (isTRUE(make_ard)) {
           stop("make_ard = TRUE is not compatible with data_format = 'strings'")
         }
-      } else if (data_format == "numeric"){
+      } else if (data_format == "numeric") {
         if (isTRUE(make_ard)) {
           cellvals <- .convert_to_character(mf_result_numeric)
         } else {
@@ -280,7 +280,7 @@ as_result_df <- function(tt, spec = NULL,
 
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
       }
-      
+
       # If already_done is not present, we need to call the function again to keep precision
       if (!"already_done" %in% names(list(...))) {
         stat_string_ret <- as_result_df(tt = tt, spec = spec, data_format = "numeric", make_ard = TRUE, already_done = TRUE, ...)
@@ -315,7 +315,7 @@ as_result_df <- function(tt, spec = NULL,
   if (nr == 1 && length(rawvals) > 1) {
     rawvals <- list(rawvals)
   }
-  
+
   # Flatten the list of lists (rows) of cell values into a data frame
   cellvals <- as.data.frame(do.call(rbind, rawvals))
 
@@ -325,7 +325,7 @@ as_result_df <- function(tt, spec = NULL,
     }
     colnames(cellvals) <- names(rawvals)
   }
-  
+
   row.names(cellvals) <- NULL
   cellvals
 }

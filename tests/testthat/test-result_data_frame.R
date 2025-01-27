@@ -512,9 +512,9 @@ test_that("make_ard works if string precision is needed", {
     split_cols_by("ARM") %>%
     split_cols_by("STRATA1") %>%
     analyze(c("AGE", "SEX"))
-  
+
   tbl <- build_table(lyt, ex_adsl)
-  
+
   # Some edge cases
   expect_equal(
     as_result_df(tbl[, 1], make_ard = TRUE) %>% dim(),
@@ -524,7 +524,7 @@ test_that("make_ard works if string precision is needed", {
     as_result_df(tbl[1, ], make_ard = TRUE) %>% dim(),
     c(18, 12)
   )
-  
+
   # One result
   test_out <- as_result_df(tbl[, 1][1, ], make_ard = TRUE)
   expect_equal(test_out$stat_name, c("n", "p"))
