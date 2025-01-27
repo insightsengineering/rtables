@@ -1,5 +1,9 @@
 ## rtables 0.6.11.9001
 
+### New Features
+ * Added `stat_string` to `as_result_df(make_ard = TRUE)` to preserve the original string representation of the statistics.
+ * Added `add_tbl_name_split` to `as_result_df()` to handle split levels constituted by different table names.
+
 ## rtables 0.6.11
 
 ### New Features

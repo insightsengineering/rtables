@@ -98,7 +98,7 @@ test_that("as_result_df works with visual output (data_format as numeric)", {
     build_table(DM)
   expect_equal(as_result_df(tbl)$`all obs`, 5.851948, tolerance = 1e-6)
   expect_equal(
-    as_result_df(tbl, data_format = "numeric")$`all obs`,
+    as_result_df(tbl, data_format = "numeric")$`all obs`[[1]],
     as.numeric(as_result_df(tbl, data_format = "strings")$`all obs`)
   )
   expect_equal(as_result_df(tbl, expand_colnames = TRUE)$`all obs`[2], "356")
@@ -171,7 +171,7 @@ test_that("as_result_df keeps label rows", {
   expect_identical(ncol(rd1), ncol(rd4))
 
   expect_identical(as.character(rd1[3, ]), as.character(rd2[5, ]))
-  expect_identical(rd2[is.na(rd2[, ncol(rd2)]), ], rd4[is.na(rd4[, ncol(rd4)]), ])
+  expect_identical(rd3[["A: Drug X.S1"]], rd4[["A: Drug X.S1"]] %>% unlist())
 
   # More challenging labels
   lyt <- make_big_lyt()
@@ -246,8 +246,8 @@ test_that("as_result_df works with analyze-only tables (odd num of path elements
     analyze("mpg") %>%
     build_table(mtcars)
 
-  expect_equal(as_result_df(tbl)$group1[[1]], "<analysis_spl_tbl_name>")
-  expect_equal(as_result_df(tbl, make_ard = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
+  expect_equal(as_result_df(tbl, add_tbl_name_split = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
+  expect_equal(as_result_df(tbl, make_ard = TRUE, add_tbl_name_split = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
 })
 
 test_that("make_ard produces realistic ARD output with as_result_df", {
@@ -295,7 +295,7 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
     analyze(vars = "SEX", afun = counts_percentage_custom)
 
   tbl <- build_table(lyt, ex_adsl)
-  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  ard_out <- as_result_df(tbl, make_ard = TRUE, add_tbl_name_split = TRUE)
 
   # Numeric output
   expect_equal(
@@ -309,7 +309,8 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
       variable_level = "Mean (SD)",
       variable_label = "Mean (SD)",
       stat_name = "SD",
-      stat = 6.553326
+      stat = 6.553326,
+      stat_string = "6.6"
     ),
     tolerance = 10e-6
   )
@@ -326,7 +327,8 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
       variable_level = "F",
       variable_label = "F",
       stat_name = "Percentage",
-      stat = 0.5746269
+      stat = 0.5746269,
+      stat_string = "57"
     ),
     tolerance = 10e-6
   )
@@ -369,7 +371,8 @@ test_that("make_ard works with multiple row levels", {
       variable_level = "UNDIFFERENTIATED",
       variable_label = "UNDIFFERENTIATED",
       stat_name = "n",
-      stat = 0
+      stat = 0,
+      stat_string = "0"
     ),
     tolerance = 10e-6
   )
@@ -403,7 +406,8 @@ test_that("make_ard works with multiple column levels", {
       variable_level = "Mean",
       variable_label = "Mean",
       stat_name = "mean",
-      stat = 34.4
+      stat = 34.4,
+      stat_string = "34.4"
     ),
     tolerance = 10e-6
   )
@@ -441,7 +445,8 @@ test_that("make_ard works with summarize_row_groups", {
       variable_level = "S1",
       variable_label = "S1",
       stat_name = "n",
-      stat = 18
+      stat = 18,
+      stat_string = "18"
     ),
     tolerance = 10e-6
   )
@@ -474,7 +479,8 @@ test_that("make_ard works with summarize_row_groups", {
       variable_level = "A: Drug X",
       variable_label = "A: Drug X",
       stat_name = "n",
-      stat = 18
+      stat = 18,
+      stat_string = "18"
     ),
     tolerance = 10e-6
   )
@@ -523,5 +529,5 @@ test_that("make_ard works if string precision is needed", {
   test_out <- as_result_df(tbl[, 1][1, ], make_ard = TRUE)
   expect_equal(test_out$stat_name, c("n", "p"))
   expect_equal(test_out$stat, c(38, 1))
-  expect_equal(test_out$stat_strings, c("38", "100"))
+  expect_equal(test_out$stat_string, c("38", "100"))
 })

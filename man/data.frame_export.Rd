@@ -13,6 +13,7 @@ as_result_df(
   make_ard = FALSE,
   expand_colnames = FALSE,
   keep_label_rows = FALSE,
+  add_tbl_name_split = FALSE,
   simplify = FALSE,
   ...
 )
@@ -36,6 +37,10 @@ names above the usual output. This is useful when the result data frame is used 
 
 \item{keep_label_rows}{(\code{flag})\cr when \code{TRUE}, the result data frame will have all labels
 as they appear in the final table.}
+
+\item{add_tbl_name_split}{(\code{flag})\cr when \code{TRUE} and when the table has more than one
+\code{analyze(table_names = "<diff_names>")}, the table names will be present as a group split named
+\code{"<analysis_spl_tbl_name>"}.}
 
 \item{simplify}{(\code{flag})\cr when \code{TRUE}, the result data frame will have only visible labels and
 result columns. Consider showing also label rows with \code{keep_label_rows = TRUE}. This output can be

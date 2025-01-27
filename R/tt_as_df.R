@@ -17,6 +17,9 @@
 #' @param simplify (`flag`)\cr when `TRUE`, the result data frame will have only visible labels and
 #'   result columns. Consider showing also label rows with `keep_label_rows = TRUE`. This output can be
 #'   used again to create a `TableTree` object with [df_to_tt()].
+#' @param add_tbl_name_split (`flag`)\cr when `TRUE` and when the table has more than one 
+#'   `analyze(table_names = "<diff_names>")`, the table names will be present as a group split named
+#'   `"<analysis_spl_tbl_name>"`.
 #' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
 #'
 #' @return
@@ -41,6 +44,7 @@ as_result_df <- function(tt, spec = NULL,
                          make_ard = FALSE,
                          expand_colnames = FALSE,
                          keep_label_rows = FALSE,
+                         add_tbl_name_split = FALSE,
                          simplify = FALSE,
                          ...) {
   data_format <- data_format[[1]]
@@ -51,6 +55,7 @@ as_result_df <- function(tt, spec = NULL,
   checkmate::assert_flag(expand_colnames)
   checkmate::assert_flag(keep_label_rows)
   checkmate::assert_flag(simplify)
+  checkmate::assert_flag(add_tbl_name_split)
 
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
@@ -65,17 +70,16 @@ as_result_df <- function(tt, spec = NULL,
   if (is.null(spec)) {
     # raw values
     rawvals <- cell_values(tt)
-    cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt), could_be_flattened = TRUE)
+    cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
 
     if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
       mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1, drop = FALSE]
       mf_result_chars <- .remove_empty_elements(mf_result_chars)
-      mf_result_numeric <- as.data.frame(
-        .make_numeric_char_mf(mf_result_chars)
-      )
+      mf_result_numeric <- .make_numeric_char_mf(mf_result_chars)
       mf_result_chars <- as.data.frame(mf_result_chars)
+      mf_result_numeric <- as.data.frame(mf_result_numeric)
       if (!setequal(dim(mf_result_numeric), dim(cellvals)) || !setequal(dim(mf_result_chars), dim(cellvals))) {
         stop(
           "The extracted numeric data.frame does not have the same dimension of the",
@@ -120,7 +124,7 @@ as_result_df <- function(tt, spec = NULL,
       lapply(
         seq_len(NROW(df)),
         function(ii) {
-          handle_rdf_row(df[ii, ], maxlen = maxlen)
+          handle_rdf_row(df[ii, ], maxlen = maxlen, add_tbl_name_split = add_tbl_name_split)
         }
       )
     )
@@ -251,12 +255,12 @@ as_result_df <- function(tt, spec = NULL,
         # retrieving stat names and stats
         stat_name <- setNames(cell_stat_names[, col_i - min(only_col_indexes) + 1, drop = TRUE], NULL)
         stat <- setNames(ret_tmp[!col_label_rows, col_i, drop = TRUE], NULL)
-        necessary_stat_lengths <- sapply(stat, length)
+        necessary_stat_lengths <- lapply(stat, length)
         stat[sapply(stat, is.null)] <- NA
 
         # Truncating or adding NA if stat names has more or less elements than stats
         stat_name <- lapply(seq_along(stat_name), function(sn_i) {
-          stat_name[[sn_i]][seq_len(necessary_stat_lengths[sn_i])]
+          unlist(stat_name[[sn_i]], use.names = FALSE)[seq_len(necessary_stat_lengths[[sn_i]])]
         })
         stat_name[!nzchar(stat_name)] <- NA
 
@@ -280,7 +284,7 @@ as_result_df <- function(tt, spec = NULL,
       # If already_done is not present, we need to call the function again to keep precision
       if (!"already_done" %in% names(list(...))) {
         stat_string_ret <- as_result_df(tt = tt, spec = spec, data_format = "numeric", make_ard = TRUE, already_done = TRUE, ...)
-        ret_w_cols <- cbind(ret_w_cols, "stat_strings" = stat_string_ret$stat)
+        ret_w_cols <- cbind(ret_w_cols, "stat_string" = stat_string_ret$stat)
       }
 
       ret <- ret_w_cols
@@ -304,22 +308,22 @@ as_result_df <- function(tt, spec = NULL,
 }
 
 # Helper function used to structure the raw values into a dataframe
-.make_df_from_raw_data <- function(raw_vals, nr, nc, could_be_flattened = FALSE) {
+.make_df_from_raw_data <- function(rawvals, nr, nc) {
   ## if the table has one row and multiple columns, sometimes the cell values returns a list of the cell values
   ## rather than a list of length 1 representing the single row. This is bad but may not be changeable
   ## at this point.
-  if (nr == 1 && length(raw_vals) > 1) {
-    raw_vals <- list(raw_vals)
+  if (nr == 1 && length(rawvals) > 1) {
+    rawvals <- list(rawvals)
   }
   
   # Flatten the list of lists (rows) of cell values into a data frame
-  cellvals <- as.data.frame(do.call(rbind, raw_vals))
+  cellvals <- as.data.frame(do.call(rbind, rawvals))
 
   if (nr == 1 && nc == 1) {
-    if (isTRUE(could_be_flattened)) { # This happens only with nr = nc = 1 for raw values
-      cellvals <- as.data.frame(I(raw_vals))
+    if (length(unlist(rawvals)) > 1) { # This happens only with nr = nc = 1 for raw values
+      cellvals <- as.data.frame(I(rawvals))
     }
-    colnames(cellvals) <- names(raw_vals)
+    colnames(cellvals) <- names(rawvals)
   }
   
   row.names(cellvals) <- NULL
@@ -376,12 +380,7 @@ as_result_df <- function(tt, spec = NULL,
   }
 
   ret <- apply(char_df, 2, function(col_i) col_i[nzchar(col_i, keepNA = TRUE)], simplify = FALSE)
-  ret <- if(nrow(char_df) == 1 && ncol(char_df) > 1) {
-    do.call(cbind, ret)
-  } else {
-    ret
-  }
-  ret
+  do.call(cbind, ret)
 }
 
 # Helper function to make the character matrix numeric
@@ -394,11 +393,16 @@ as_result_df <- function(tt, spec = NULL,
   }
 
   ret <- apply(char_df, 2, function(col_i) {
-    lapply(
+    out <- lapply(
       stringi::stri_extract_all(col_i, regex = "\\d+.\\d+|\\d+"),
       as.numeric
     )
-  })
+    if (all(dim(char_df) == c(1, 1)) && is.list(out[[1]])) {
+      return(unlist(out, use.names = FALSE))
+    } else {
+      return(out)
+    }
+  }, simplify = FALSE)
 
   do.call(cbind, ret)
 }
@@ -412,7 +416,7 @@ make_result_df_md_colnames <- function(maxlen) {
   ret <- c(ret, c("avar_name", "row_name", "label_name", "row_num", "is_group_summary", "node_class"))
 }
 
-do_label_row <- function(rdfrow, maxlen) {
+do_label_row <- function(rdfrow, maxlen, add_tbl_name_split = FALSE) {
   pth <- rdfrow$path[[1]]
   # Adjusting for the fact that we have two columns for each split
   extra_nas_from_splits <- floor((maxlen - length(pth)) / 2) * 2
@@ -421,8 +425,13 @@ do_label_row <- function(rdfrow, maxlen) {
   if (length(pth) %% 2 == 1) {
     extra_nas_from_splits <- extra_nas_from_splits + 1
   } else {
-    pth <- c("<analysis_spl_tbl_name>", pth)
-    extra_nas_from_splits <- extra_nas_from_splits - 1
+    if (isTRUE(add_tbl_name_split)) {
+      pth <- c("<analysis_spl_tbl_name>", pth)
+      extra_nas_from_splits <- extra_nas_from_splits - 1
+    } else {
+      pth <- pth[-1]
+      extra_nas_from_splits <- extra_nas_from_splits + 1
+    }
   }
 
   c(
@@ -457,14 +466,18 @@ do_content_row <- function(rdfrow, maxlen) {
   )
 }
 
-do_data_row <- function(rdfrow, maxlen) {
+do_data_row <- function(rdfrow, maxlen, add_tbl_name_split = FALSE) {
   pth <- rdfrow$path[[1]]
   pthlen <- length(pth)
   ## odd means we have a multi-analsysis step in the path, we do not want this in the result
   if (pthlen %% 2 == 1 && pthlen > 1) {
     # we remove the last element, as it is a fake split (tbl_name from analyse)
     # pth <- pth[-1 * (pthlen - 2)]
-    pth <- c("<analysis_spl_tbl_name>", pth)
+    if (isTRUE(add_tbl_name_split)) {
+      pth <- c("<analysis_spl_tbl_name>", pth)
+    } else {
+      pth <- pth[-1]
+    }
   }
   pthlen_new <- length(pth)
   if (pthlen_new == 1) {
@@ -509,13 +522,13 @@ do_data_row <- function(rdfrow, maxlen) {
   path
 }
 
-handle_rdf_row <- function(rdfrow, maxlen) {
+handle_rdf_row <- function(rdfrow, maxlen, add_tbl_name_split = FALSE) {
   nclass <- rdfrow$node_class
 
   ret <- switch(nclass,
-    LabelRow = do_label_row(rdfrow, maxlen),
+    LabelRow = do_label_row(rdfrow, maxlen, add_tbl_name_split = add_tbl_name_split),
     ContentRow = do_content_row(rdfrow, maxlen),
-    DataRow = do_data_row(rdfrow, maxlen),
+    DataRow = do_data_row(rdfrow, maxlen, add_tbl_name_split = add_tbl_name_split),
     stop("Unrecognized node type in row dataframe, unable to generate result data frame")
   )
   setNames(ret, make_result_df_md_colnames(maxlen))
