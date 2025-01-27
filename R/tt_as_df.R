@@ -231,9 +231,22 @@ as_result_df <- function(tt, spec = NULL,
       for (col_i in only_col_indexes) {
         # Making row splits into row specifications (group1 group1_level)
         current_col_split_level <- unlist(ret_tmp[seq_len(number_of_col_splits), col_i], use.names = FALSE)
-        flattened_cols_names <- .c_alternated(column_split_names[[1]][[1]], current_col_split_level)
+        col_split_names <- column_split_names[[1]][[1]] # cross section of the column split names (not values)
+        more_than_one_name_in_csn <- sapply(col_split_names, length) > 1
+        
+        # Correction for cases where there is split_cols_by_multivar
+        if (any(more_than_one_name_in_csn)) {
+          col_split_names[more_than_one_name_in_csn] <- lapply(
+            seq(sum(more_than_one_name_in_csn)), 
+            function(i) {
+              paste0("multivar_split", i)
+          })
+        }
+        
+        # Alternated association of split names and values (along with group split)
+        flattened_cols_names <- .c_alternated(col_split_names, current_col_split_level)
         names(flattened_cols_names) <- .c_alternated(
-          paste0("group", seq_along(column_split_names[[1]][[1]]) + n_row_groups),
+          paste0("group", seq_along(col_split_names) + n_row_groups),
           paste0("group", seq_along(current_col_split_level) + n_row_groups, "_level")
         )
 
