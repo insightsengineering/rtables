@@ -5,7 +5,7 @@
  * Added `add_tbl_name_split` to `as_result_df()` to handle split levels constituted by different table names.
  
 ### Bug Fixes
- * Fixed issue with `splic_cols_by_multivar()` when having more than one value. Now `as_result_df(make_ard = TRUE)` adds a predefined split name for each of the `multivar` splits.
+ * Fixed issue with `split_cols_by_multivar()` when having more than one value. Now `as_result_df(make_ard = TRUE)` adds a predefined split name for each of the `multivar` splits.
 
 ## rtables 0.6.11
 
