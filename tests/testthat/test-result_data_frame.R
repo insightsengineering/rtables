@@ -535,7 +535,7 @@ test_that("make_ard works if string precision is needed", {
 test_that("make_ard works with split_cols_by_multivar", {
   # Regression test #970
   n <- 400
-  
+
   df <- tibble(
     arm = factor(sample(c("Arm A", "Arm B"), n, replace = TRUE), levels = c("Arm A", "Arm B")),
     country = factor(sample(c("CAN", "USA"), n, replace = TRUE, prob = c(.55, .45)), levels = c("CAN", "USA")),
@@ -545,21 +545,21 @@ test_that("make_ard works with split_cols_by_multivar", {
   ) %>% mutate(
     weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
   )
-  
+
   colfuns <- list(
     function(x) in_rows(mean = mean(x), .formats = "xx.x"),
     function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
   )
-  
+
   lyt <- basic_table() %>%
     split_cols_by("arm") %>%
     split_cols_by_multivar(c("age", "weight")) %>%
     split_rows_by("country") %>%
     summarize_row_groups() %>%
     analyze_colvars(afun = colfuns)
-  
+
   tbl <- build_table(lyt, df)
-  
+
   expect_silent(out <- as_result_df(tbl, make_ard = TRUE))
   expect_true(all(out$group3 == "multivar_split1"))
 })

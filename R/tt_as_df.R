@@ -233,16 +233,17 @@ as_result_df <- function(tt, spec = NULL,
         current_col_split_level <- unlist(ret_tmp[seq_len(number_of_col_splits), col_i], use.names = FALSE)
         col_split_names <- column_split_names[[1]][[1]] # cross section of the column split names (not values)
         more_than_one_name_in_csn <- sapply(col_split_names, length) > 1
-        
+
         # Correction for cases where there is split_cols_by_multivar
         if (any(more_than_one_name_in_csn)) {
           col_split_names[more_than_one_name_in_csn] <- lapply(
-            seq(sum(more_than_one_name_in_csn)), 
+            seq(sum(more_than_one_name_in_csn)),
             function(i) {
               paste0("multivar_split", i)
-          })
+            }
+          )
         }
-        
+
         # Alternated association of split names and values (along with group split)
         flattened_cols_names <- .c_alternated(col_split_names, current_col_split_level)
         names(flattened_cols_names) <- .c_alternated(
