@@ -98,7 +98,7 @@ test_that("as_result_df works with visual output (data_format as numeric)", {
     build_table(DM)
   expect_equal(as_result_df(tbl)$`all obs`, 5.851948, tolerance = 1e-6)
   expect_equal(
-    as_result_df(tbl, data_format = "numeric")$`all obs`,
+    as_result_df(tbl, data_format = "numeric")$`all obs`[[1]],
     as.numeric(as_result_df(tbl, data_format = "strings")$`all obs`)
   )
   expect_equal(as_result_df(tbl, expand_colnames = TRUE)$`all obs`[2], "356")
@@ -171,7 +171,7 @@ test_that("as_result_df keeps label rows", {
   expect_identical(ncol(rd1), ncol(rd4))
 
   expect_identical(as.character(rd1[3, ]), as.character(rd2[5, ]))
-  expect_identical(rd2[is.na(rd2[, ncol(rd2)]), ], rd4[is.na(rd4[, ncol(rd4)]), ])
+  expect_identical(rd3[["A: Drug X.S1"]], rd4[["A: Drug X.S1"]] %>% unlist())
 
   # More challenging labels
   lyt <- make_big_lyt()
@@ -246,8 +246,8 @@ test_that("as_result_df works with analyze-only tables (odd num of path elements
     analyze("mpg") %>%
     build_table(mtcars)
 
-  expect_equal(as_result_df(tbl)$group1[[1]], "<analysis_spl_tbl_name>")
-  expect_equal(as_result_df(tbl, make_ard = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
+  expect_equal(as_result_df(tbl, add_tbl_name_split = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
+  expect_equal(as_result_df(tbl, make_ard = TRUE, add_tbl_name_split = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
 })
 
 test_that("make_ard produces realistic ARD output with as_result_df", {
@@ -295,7 +295,7 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
     analyze(vars = "SEX", afun = counts_percentage_custom)
 
   tbl <- build_table(lyt, ex_adsl)
-  ard_out <- as_result_df(tbl, make_ard = TRUE)
+  ard_out <- as_result_df(tbl, make_ard = TRUE, add_tbl_name_split = TRUE)
 
   # Numeric output
   expect_equal(
@@ -309,7 +309,8 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
       variable_level = "Mean (SD)",
       variable_label = "Mean (SD)",
       stat_name = "SD",
-      stat = 6.553326
+      stat = 6.553326,
+      stat_string = "6.6"
     ),
     tolerance = 10e-6
   )
@@ -326,7 +327,8 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
       variable_level = "F",
       variable_label = "F",
       stat_name = "Percentage",
-      stat = 0.5746269
+      stat = 0.5746269,
+      stat_string = "57"
     ),
     tolerance = 10e-6
   )
@@ -369,7 +371,8 @@ test_that("make_ard works with multiple row levels", {
       variable_level = "UNDIFFERENTIATED",
       variable_label = "UNDIFFERENTIATED",
       stat_name = "n",
-      stat = 0
+      stat = 0,
+      stat_string = "0"
     ),
     tolerance = 10e-6
   )
@@ -403,7 +406,8 @@ test_that("make_ard works with multiple column levels", {
       variable_level = "Mean",
       variable_label = "Mean",
       stat_name = "mean",
-      stat = 34.4
+      stat = 34.4,
+      stat_string = "34.4"
     ),
     tolerance = 10e-6
   )
@@ -441,7 +445,8 @@ test_that("make_ard works with summarize_row_groups", {
       variable_level = "S1",
       variable_label = "S1",
       stat_name = "n",
-      stat = 18
+      stat = 18,
+      stat_string = "18"
     ),
     tolerance = 10e-6
   )
@@ -474,7 +479,8 @@ test_that("make_ard works with summarize_row_groups", {
       variable_level = "A: Drug X",
       variable_label = "A: Drug X",
       stat_name = "n",
-      stat = 18
+      stat = 18,
+      stat_string = "18"
     ),
     tolerance = 10e-6
   )
@@ -497,4 +503,63 @@ test_that("make_ard works if there are no stat_names", {
   tbl <- build_table(lyt, ex_adsl)
 
   expect_equal(as_result_df(tbl, make_ard = TRUE)$stat_name, rep(NA_character_, 4))
+})
+
+test_that("make_ard works if string precision is needed", {
+  lyt <- basic_table() %>%
+    split_rows_by("ARM") %>%
+    summarize_row_groups() %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("STRATA1") %>%
+    analyze(c("AGE", "SEX"))
+
+  tbl <- build_table(lyt, ex_adsl)
+
+  # Some edge cases
+  expect_equal(
+    as_result_df(tbl[, 1], make_ard = TRUE) %>% dim(),
+    c(21, 12)
+  )
+  expect_equal(
+    as_result_df(tbl[1, ], make_ard = TRUE) %>% dim(),
+    c(18, 12)
+  )
+
+  # One result
+  test_out <- as_result_df(tbl[, 1][1, ], make_ard = TRUE)
+  expect_equal(test_out$stat_name, c("n", "p"))
+  expect_equal(test_out$stat, c(38, 1))
+  expect_equal(test_out$stat_string, c("38", "100"))
+})
+
+test_that("make_ard works with split_cols_by_multivar", {
+  # Regression test #970
+  n <- 400
+
+  df <- tibble(
+    arm = factor(sample(c("Arm A", "Arm B"), n, replace = TRUE), levels = c("Arm A", "Arm B")),
+    country = factor(sample(c("CAN", "USA"), n, replace = TRUE, prob = c(.55, .45)), levels = c("CAN", "USA")),
+    gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
+    handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
+    age = rchisq(n, 30) + 10
+  ) %>% mutate(
+    weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
+  )
+
+  colfuns <- list(
+    function(x) in_rows(mean = mean(x), .formats = "xx.x"),
+    function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
+  )
+
+  lyt <- basic_table() %>%
+    split_cols_by("arm") %>%
+    split_cols_by_multivar(c("age", "weight")) %>%
+    split_rows_by("country") %>%
+    summarize_row_groups() %>%
+    analyze_colvars(afun = colfuns)
+
+  tbl <- build_table(lyt, df)
+
+  expect_silent(out <- as_result_df(tbl, make_ard = TRUE))
+  expect_true(all(out$group3 == "multivar_split1"))
 })
