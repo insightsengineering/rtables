@@ -125,12 +125,12 @@ as_result_df <- function(tt, spec = NULL,
           which(apply(dmc, 1, any, simplify = TRUE)),
           as.data.frame(selected_rows_to_print[apply(dmc, 1, any), , drop = FALSE])
         )
-        colnames(selected_rows_to_print)  <- c("row_number", "row_name", colnames(cellvals_init))
+        colnames(selected_rows_to_print) <- c("row_number", "row_name", colnames(cellvals_init))
         warning_msg <- if (verbose) {
           paste0(
             warning_msg,
             "\n",
-            "Following row.names were modified: ", 
+            "Following row.names were modified: ",
             paste(selected_rows_to_print$row_name, sep = ", ", collapse = ", "),
             "\n"
           )
