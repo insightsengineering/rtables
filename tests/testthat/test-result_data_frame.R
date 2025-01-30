@@ -563,3 +563,25 @@ test_that("make_ard works with split_cols_by_multivar", {
   expect_silent(out <- as_result_df(tbl, make_ard = TRUE))
   expect_true(all(out$group3 == "multivar_split1"))
 })
+test_that("make_ard works when printed format differs from cell values", {
+  mean_sd_custom <- function(x, ...) {
+    rcell(c(1, 2),
+      label = "Mean (SD)", format = function(xf, ...) return(as.character(xf[1]))
+    )
+  }
+  
+  test_out <- basic_table() %>%
+    split_rows_by("ARM") %>%
+    split_cols_by("ARM") %>%
+    analyze(vars = "AGE", afun = mean_sd_custom) %>%
+    build_table(DM)
+  
+  expect_warning(
+    out <- as_result_df(test_out, make_ard = TRUE, verbose = TRUE),
+    "We found 9 values"
+  )
+  expect_equal(
+    out$stat,
+    out$stat_string
+  )
+})
