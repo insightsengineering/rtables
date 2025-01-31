@@ -20,6 +20,8 @@
 #' @param add_tbl_name_split (`flag`)\cr when `TRUE` and when the table has more than one
 #'   `analyze(table_names = "<diff_names>")`, the table names will be present as a group split named
 #'   `"<analysis_spl_tbl_name>"`.
+#' @param verbose (`flag`)\cr when `TRUE`, the function will print additional information for
+#'   `data_format != "full_precision"`.
 #' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
 #'
 #' @return
@@ -46,6 +48,7 @@ as_result_df <- function(tt, spec = NULL,
                          keep_label_rows = FALSE,
                          add_tbl_name_split = FALSE,
                          simplify = FALSE,
+                         verbose = FALSE,
                          ...) {
   data_format <- data_format[[1]]
   checkmate::assert_class(tt, "VTableTree")
@@ -56,6 +59,7 @@ as_result_df <- function(tt, spec = NULL,
   checkmate::assert_flag(keep_label_rows)
   checkmate::assert_flag(simplify)
   checkmate::assert_flag(add_tbl_name_split)
+  checkmate::assert_flag(verbose)
 
   if (nrow(tt) == 0) {
     return(sanitize_table_struct(tt))
@@ -70,7 +74,7 @@ as_result_df <- function(tt, spec = NULL,
   if (is.null(spec)) {
     # raw values
     rawvals <- cell_values(tt)
-    cellvals <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
+    cellvals_init <- .make_df_from_raw_data(rawvals, nr = nrow(tt), nc = ncol(tt))
 
     if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
@@ -80,15 +84,17 @@ as_result_df <- function(tt, spec = NULL,
       mf_result_numeric <- .make_numeric_char_mf(mf_result_chars)
       mf_result_chars <- as.data.frame(mf_result_chars)
       mf_result_numeric <- as.data.frame(mf_result_numeric)
-      if (!setequal(dim(mf_result_numeric), dim(cellvals)) || !setequal(dim(mf_result_chars), dim(cellvals))) {
+      cond1 <- !setequal(dim(mf_result_chars), dim(cellvals_init))
+      cond2 <- !setequal(dim(mf_result_numeric), dim(cellvals_init))
+      if (cond1 || cond2) {
         stop(
           "The extracted numeric data.frame does not have the same dimension of the",
           " cell values extracted with cell_values(). This is a bug. Please report it."
         ) # nocov
       }
 
-      colnames(mf_result_chars) <- colnames(cellvals)
-      colnames(mf_result_numeric) <- colnames(cellvals)
+      colnames(mf_result_chars) <- colnames(cellvals_init)
+      colnames(mf_result_numeric) <- colnames(cellvals_init)
       if (data_format == "strings") {
         cellvals <- mf_result_chars
         if (isTRUE(make_ard)) {
@@ -101,6 +107,41 @@ as_result_df <- function(tt, spec = NULL,
           cellvals <- mf_result_numeric
         }
       }
+
+      diff_in_cellvals <- length(unlist(cellvals_init)) - length(unlist(cellvals))
+      if (make_ard && abs(diff_in_cellvals) > 0) {
+        warning_msg <- paste0(
+          "Found ", abs(diff_in_cellvals), " cell values that differ from ",
+          "printed values. This is possibly related to conditional formatting. "
+        )
+
+        # number of values difference mask between cellvals and cellvals_init (TRUE if different)
+        dmc <- lengths(unlist(cellvals, recursive = FALSE)) != lengths(unlist(cellvals_init, recursive = FALSE))
+        dmc <- matrix(dmc, nrow = nrow(cellvals), ncol = ncol(cellvals))
+
+        # Mainly used for debugging
+        selected_rows_to_print <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), , drop = FALSE]
+        selected_rows_to_print <- cbind(
+          which(apply(dmc, 1, any, simplify = TRUE)),
+          as.data.frame(selected_rows_to_print[apply(dmc, 1, any), , drop = FALSE])
+        )
+        colnames(selected_rows_to_print) <- c("row_number", "row_name", colnames(cellvals_init))
+        warning_msg <- if (verbose) {
+          paste0(
+            warning_msg,
+            "\n",
+            "The following row names were modified: ",
+            paste(selected_rows_to_print$row_name, sep = ", ", collapse = ", "),
+            "\n"
+          )
+        } else {
+          paste0(warning_msg, "To see the affected row names use `verbose = TRUE`.")
+        }
+        warning(warning_msg)
+        cellvals[dmc] <- cellvals_init[dmc]
+      }
+    } else {
+      cellvals <- cellvals_init
     }
 
     rdf <- make_row_df(tt)
@@ -115,7 +156,11 @@ as_result_df <- function(tt, spec = NULL,
     # Correcting maxlen for even number of paths (only multianalysis diff table names)
     maxlen <- max(lengths(df$path))
     if (maxlen %% 2 != 0) {
-      maxlen <- maxlen + 1
+      maxlen <- if (add_tbl_name_split) {
+        maxlen + 1
+      } else {
+        maxlen - 1
+      }
     }
 
     # Loop for metadata (path and details from make_row_df)
@@ -299,7 +344,7 @@ as_result_df <- function(tt, spec = NULL,
       if (!"already_done" %in% names(list(...))) {
         stat_string_ret <- as_result_df(
           tt = tt, spec = spec, data_format = "numeric",
-          make_ard = TRUE, already_done = TRUE, ...
+          make_ard = TRUE, already_done = TRUE, verbose = verbose, ...
         )
         ret_w_cols <- cbind(ret_w_cols, "stat_string" = stat_string_ret$stat)
       }
