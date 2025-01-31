@@ -111,7 +111,7 @@ as_result_df <- function(tt, spec = NULL,
       diff_in_cellvals <- length(unlist(cellvals_init)) - length(unlist(cellvals))
       if (make_ard && abs(diff_in_cellvals) > 0) {
         warning_msg <- paste0(
-          "We found ", abs(diff_in_cellvals), " values that have cell values that differ from ",
+          "Found ", abs(diff_in_cellvals), " cell values that differ from ",
           "printed values. This is possibly related to conditional formatting. "
         )
 
