@@ -130,7 +130,7 @@ as_result_df <- function(tt, spec = NULL,
           paste0(
             warning_msg,
             "\n",
-            "Following row.names were modified: ",
+            "The following row names were modified: ",
             paste(selected_rows_to_print$row_name, sep = ", ", collapse = ", "),
             "\n"
           )
