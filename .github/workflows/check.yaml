@@ -26,8 +26,6 @@ jobs:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/formatters
       additional-env-vars: |
         _R_CHECK_CRAN_INCOMING_REMOTE_=false
       additional-r-cmd-check-params: --as-cran
@@ -50,8 +48,6 @@ jobs:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/formatters
       additional-env-vars: |
         NOT_CRAN=true
       enforce-note-blocklist: true
@@ -73,8 +69,6 @@ jobs:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/formatters
       additional-env-vars: |
         NOT_CRAN=true
   linter:
@@ -88,8 +82,6 @@ jobs:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/formatters
       auto-update: true
   gitleaks:
     name: gitleaks 💧
