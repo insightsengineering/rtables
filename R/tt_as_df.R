@@ -135,7 +135,7 @@ as_result_df <- function(tt, spec = NULL,
             "\n"
           )
         } else {
-          paste0(warning_msg, "To see the affected row names use verbose = TRUE.")
+          paste0(warning_msg, "To see the affected row names use `verbose = TRUE`.")
         }
         warning(warning_msg)
         cellvals[dmc] <- cellvals_init[dmc]
