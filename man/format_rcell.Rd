@@ -11,6 +11,7 @@ format_rcell(
   na_str = obj_na_str(x) \%||\% "NA",
   pr_row_format = NULL,
   pr_row_na_str = NULL,
+  round_type = c("iec", "sas"),
   shell = FALSE
 )
 }

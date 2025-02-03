@@ -13,15 +13,15 @@
 \alias{get_cell_aligns,LabelRow-method}
 \title{Get formatted cells}
 \usage{
-get_formatted_cells(obj, shell = FALSE)
+get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
 
-\S4method{get_formatted_cells}{TableTree}(obj, shell = FALSE)
+\S4method{get_formatted_cells}{TableTree}(obj, shell = FALSE, round_type = c("iec", "sas"))
 
-\S4method{get_formatted_cells}{ElementaryTable}(obj, shell = FALSE)
+\S4method{get_formatted_cells}{ElementaryTable}(obj, shell = FALSE, round_type = c("iec", "sas"))
 
-\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE)
+\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE, round_type = c("iec", "sas"))
 
-\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE)
+\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE, round_type = c("iec", "sas"))
 
 get_cell_aligns(obj)
 
