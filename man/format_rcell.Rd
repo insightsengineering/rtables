@@ -29,6 +29,10 @@ apply to \code{x}.}
 
 \item{pr_row_na_str}{(\code{list})\cr list of default \code{"NA"} strings coming from the general row.}
 
+\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+the default, peforms rounding compliant with IEC 60559 (see details), while
+sas performs nearest-value rounding consistent with rounding within SAS.}
+
 \item{shell}{(\code{flag})\cr whether the formats themselves should be returned instead of the
 values with formats applied. Defaults to \code{FALSE}.}
 }

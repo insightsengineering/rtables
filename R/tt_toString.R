@@ -646,6 +646,7 @@ get_formatted_fnotes <- function(tt) {
 #' Get formatted cells
 #'
 #' @inheritParams gen_args
+#' @inheritParams formatters::format_value
 #' @param shell (`flag`)\cr whether the formats themselves should be returned instead of the values with formats
 #'   applied. Defaults to `FALSE`.
 #'
