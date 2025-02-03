@@ -128,8 +128,10 @@ test_that("export_as_txt works with sas rounding", {
     c(1.845, 0.845),
     c(10.845, 8.845, 12.845)
   )
-  forms <- lapply(list_valid_format_labels(),
-                  function(x) grep("xx[.]xx([^x%]|$)", x, value = TRUE))
+  forms <- lapply(
+    list_valid_format_labels(),
+    function(x) grep("xx[.]xx([^x%]|$)", x, value = TRUE)
+  )
   vals <- rep(vals, times = lengths(forms))
   names(vals) <- paste0("row", seq_along(vals))
   forms <- setNames(unlist(forms), nm = names(vals))
@@ -147,10 +149,14 @@ test_that("export_as_txt works with sas rounding", {
   lyt2 <- basic_table() |>
     analyze("AGE", afun = superdumbfun2)
   tbl2 <- build_table(lyt2, DM)
-  expect_identical(export_as_txt(tbl, round_type = "sas"),
-                   export_as_txt(tbl2))
-  expect_identical(toString(tbl, round_type = "sas"),
-                   export_as_txt(tbl, round_type = "sas"))
+  expect_identical(
+    export_as_txt(tbl, round_type = "sas"),
+    export_as_txt(tbl2)
+  )
+  expect_identical(
+    toString(tbl, round_type = "sas"),
+    export_as_txt(tbl, round_type = "sas")
+  )
 })
 
 test_that("tsv roundtripping for path_enriched_df", {
