@@ -32,6 +32,7 @@ format_rcell <- function(x, format,
                          na_str = obj_na_str(x) %||% "NA",
                          pr_row_format = NULL,
                          pr_row_na_str = NULL,
+                         round_type = c("iec", "sas"),
                          shell = FALSE) {
   # Check for format and parent row format
   format <- if (missing(format)) obj_format(x) else format
@@ -50,6 +51,7 @@ format_rcell <- function(x, format,
   format_value(rawvalues(x),
     format = format,
     output = output,
-    na_str = na_str
+    na_str = na_str,
+    round_type = round_type
   )
 }

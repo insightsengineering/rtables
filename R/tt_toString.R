@@ -49,20 +49,23 @@ setMethod("toString", "VTableTree", function(x,
                                              tf_wrap = FALSE,
                                              max_width = NULL,
                                              fontspec = font_spec(),
-                                             ttype_ok = FALSE) {
+                                             ttype_ok = FALSE,
+                                             round_type = c("iec", "sas")) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
       indent_size = indent_size,
       fontspec = fontspec,
-      col_gap = col_gap
+      col_gap = col_gap,
+      round_type = round_type
     ),
     widths = widths, col_gap = col_gap,
     hsep = hsep,
     tf_wrap = tf_wrap,
     max_width = max_width,
     fontspec = fontspec,
-    ttype_ok = ttype_ok
+    ttype_ok = ttype_ok,
+    round_type = round_type
   )
 })
 
@@ -146,6 +149,7 @@ table_shell_str <- function(tt, widths = NULL, col_gap = 3, hsep = default_hsep(
 #' it is useful to map the `rtable` to an in-between state with the formatted cells in a matrix form.
 #'
 #' @inheritParams gen_args
+#' @inheritParams formatters::format_value
 #' @param indent_rownames (`flag`)\cr if `TRUE`, the column with the row names in the `strings` matrix of the output
 #'   has indented row names (strings pre-fixed).
 #' @param expand_newlines (`flag`)\cr whether the matrix form generated should expand rows whose values contain
@@ -203,7 +207,8 @@ setMethod(
            expand_newlines = TRUE,
            indent_size = 2,
            fontspec = NULL,
-           col_gap = 3L) {
+           col_gap = 3L,
+           round_type = c("iec", "sas")) {
     stopifnot(is(obj, "VTableTree"))
     check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names
@@ -213,7 +218,7 @@ setMethod(
     body_content_strings <- if (NROW(sr) == 0) {
       character()
     } else {
-      cbind(as.character(sr$label), get_formatted_cells(obj))
+      cbind(as.character(sr$label), get_formatted_cells(obj, round_type = round_type))
     }
 
     formats_strings <- if (NROW(sr) == 0) {
@@ -664,17 +669,17 @@ get_formatted_fnotes <- function(tt) {
 #'
 #' @export
 #' @rdname gfc
-setGeneric("get_formatted_cells", function(obj, shell = FALSE) standardGeneric("get_formatted_cells"))
+setGeneric("get_formatted_cells", function(obj, shell = FALSE, round_type = c("iec", "sas")) standardGeneric("get_formatted_cells"))
 
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableTree",
-  function(obj, shell = FALSE) {
-    lr <- get_formatted_cells(tt_labelrow(obj), shell = shell)
+  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+    lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
 
-    ct <- get_formatted_cells(content_table(obj), shell = shell)
+    ct <- get_formatted_cells(content_table(obj), shell = shell, round_type = round_type)
 
-    els <- lapply(tree_children(obj), get_formatted_cells, shell = shell)
+    els <- lapply(tree_children(obj), get_formatted_cells, shell = shell, round_type = round_type)
 
     ## TODO fix ncol problem for rrow()
     if (ncol(ct) == 0 && ncol(lr) != ncol(ct)) {
@@ -688,9 +693,9 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "ElementaryTable",
-  function(obj, shell = FALSE) {
-    lr <- get_formatted_cells(tt_labelrow(obj), shell = shell)
-    els <- lapply(tree_children(obj), get_formatted_cells, shell = shell)
+  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+    lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
+    els <- lapply(tree_children(obj), get_formatted_cells, shell = shell, round_type = round_type)
     do.call(rbind, c(list(lr), els))
   }
 )
@@ -698,7 +703,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableRow",
-  function(obj, shell = FALSE) {
+  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
     # Parent row format and na_str
     pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
     pr_row_na_str <- obj_na_str(obj) %||% "NA"
@@ -710,7 +715,8 @@ setMethod(
         out <- format_rcell(val,
           pr_row_format = pr_row_format,
           pr_row_na_str = pr_row_na_str,
-          shell = shelli
+          shell = shelli,
+          round_type = round_type
         )
         if (!is.function(out) && is.character(out)) {
           out <- paste(out, collapse = ", ")
@@ -726,7 +732,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "LabelRow",
-  function(obj, shell = FALSE) {
+  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
     vstr <- if (shell) "-" else ""
     if (labelrow_visible(obj)) {
