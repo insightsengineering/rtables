@@ -54,7 +54,7 @@ test_that("Result Data Frame generation works v0", {
     analyze(c("AGE", "SEX"))
 
   tbl4 <- build_table(lyt4, DM)
-  result_df4 <- as_result_df(tbl4)
+  result_df4 <- as_result_df(tbl4, add_tbl_name_split = TRUE)
 
   expect_identical(
     names(result_df4),
@@ -580,7 +580,7 @@ test_that("make_ard works when printed format differs from cell values", {
 
   expect_warning(
     out <- as_result_df(test_out, make_ard = TRUE, verbose = TRUE),
-    "We found 9 values"
+    "Found 9 cell"
   )
   expect_equal(
     out$stat,
