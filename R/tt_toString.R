@@ -670,7 +670,8 @@ get_formatted_fnotes <- function(tt) {
 #'
 #' @export
 #' @rdname gfc
-setGeneric("get_formatted_cells", function(obj, shell = FALSE, round_type = c("iec", "sas")) standardGeneric("get_formatted_cells"))
+setGeneric("get_formatted_cells",
+           function(obj, shell = FALSE, round_type = c("iec", "sas")) standardGeneric("get_formatted_cells"))
 
 #' @rdname gfc
 setMethod(
