@@ -533,6 +533,9 @@ test_that("make_ard works if string precision is needed", {
 })
 
 test_that("make_ard works with split_cols_by_multivar", {
+  skip_if_not_installed("dplyr")
+  require(dplyr, quietly = TRUE)
+
   # Regression test #970
   n <- 400
 
