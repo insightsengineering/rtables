@@ -295,12 +295,13 @@ setMethod(
     if (obj_name(tt) == path[1]) {
       path <- path[-1]
     }
-    # cur_tbl <- tt
-    # cur_path <- path
+
+    # Extract sub-tables from the tree
     .extract_through_path(tt, path)
   }
 )
 
+# Recursive helper function to retrieve sub-tables from the tree
 .extract_through_path <- function(cur_tbl, cur_path, no_stop = FALSE) {
   while (length(cur_path > 0)) {
     kids <- tree_children(cur_tbl)
@@ -309,10 +310,9 @@ setMethod(
       cur_tbl <- content_table(cur_tbl)
     } else if (curname %in% names(kids)) {
       cur_tbl <- kids[names(kids) == curname]
+
+      # Case where there are more than one tree sub node with identical names
       if (length(cur_tbl) > 1 && length(cur_path) > 1) {
-        # cur_tbl_tmp <- cur_tbl
-        # cur_tbl <- cur_tbl[[1]]
-        # cur_path <- cur_path[-1]
         cur_tbl <- sapply(cur_tbl, function(cti) .extract_through_path(cti, cur_path[-1], no_stop = TRUE))
         found_values <- !sapply(cur_tbl, is.null)
         cur_tbl <- cur_tbl[found_values]
@@ -321,7 +321,7 @@ setMethod(
         }
         cur_path <- cur_path[1]
       } else {
-        cur_tbl <- cur_tbl[[1]]
+        cur_tbl <- cur_tbl[[1]] # Usual case (only one matching value)
       }
     } else if (!no_stop) {
       stop("Path appears invalid for this tree at step ", curname)

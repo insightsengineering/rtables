@@ -297,3 +297,25 @@ test_that("paths come out correct when sorting with '*'", {
     list("A: Drug X" = 12)
   )
 })
+
+test_that("sort_at_path throws an error when trying to sort a table with identical branching names", {
+  # Related to regression test #864
+  lyt <- basic_table() %>%
+    split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
+    split_rows_by("SEX") %>%
+    analyze("BMRKR1") %>%
+    split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
+    split_rows_by("SEX") %>%
+    analyze("AGE")
+
+  tbl <- build_table(lyt, adsl)
+
+  scorefun <- function(tt) {
+    unlist(cell_values(tt))
+  }
+
+  expect_error(
+    sort_at_path(tbl, c("root", "flag", "Y", "SEX"), scorefun),
+    "position element flag appears more than once, not currently supported"
+  )
+})
