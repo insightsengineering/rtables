@@ -15,6 +15,7 @@ as_result_df(
   keep_label_rows = FALSE,
   add_tbl_name_split = FALSE,
   simplify = FALSE,
+  verbose = FALSE,
   ...
 )
 
@@ -45,6 +46,9 @@ as they appear in the final table.}
 \item{simplify}{(\code{flag})\cr when \code{TRUE}, the result data frame will have only visible labels and
 result columns. Consider showing also label rows with \code{keep_label_rows = TRUE}. This output can be
 used again to create a \code{TableTree} object with \code{\link[=df_to_tt]{df_to_tt()}}.}
+
+\item{verbose}{(\code{flag})\cr when \code{TRUE}, the function will print additional information for
+\code{data_format != "full_precision"}.}
 
 \item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}).}
 
