@@ -300,6 +300,9 @@ test_that("paths come out correct when sorting with '*'", {
 
 test_that("sort_at_path throws an error when trying to sort a table with identical branching names", {
   # Related to regression test #864
+  adsl <- ex_adsl
+  adsl$flag <- sample(c("Y", "N"), nrow(adsl), replace = TRUE)
+  
   lyt <- basic_table() %>%
     split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
     split_rows_by("SEX") %>%
