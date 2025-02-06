@@ -295,17 +295,19 @@ setMethod(
     if (obj_name(tt) == path[1]) {
       path <- path[-1]
     }
-    cur <- tt
+    cur <- list(tt)
     curpath <- path
     while (length(curpath > 0)) {
-      kids <- tree_children(cur)
-      curname <- curpath[1]
-      if (curname == "@content") {
-        cur <- content_table(cur)
-      } else if (curname %in% names(kids)) {
-        cur <- kids[[curname]]
-      } else {
-        stop("Path appears invalid for this tree at step ", curname)
+      for (n_id_levs in seq_along(cur)) {
+        kids <- tree_children(cur[[n_id_levs]])
+        curname <- curpath[1]
+        if (curname == "@content") {
+          cur <- content_table(cur)
+        } else if (curname %in% names(kids)) {
+          cur <- kids[names(kids) == curname]
+        } else if (n_id_levs == length(cur)) {
+          stop("Path appears invalid for this tree at step ", curname)
+        }
       }
       curpath <- curpath[-1]
     }
