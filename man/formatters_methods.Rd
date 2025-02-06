@@ -163,7 +163,7 @@
   sibpos = NA_integer_,
   nsibs = NA_integer_,
   max_width = NULL,
-  fontspec = font_spec(),
+  fontspec,
   col_gap = 3
 )
 
@@ -180,7 +180,7 @@
   sibpos = NA_integer_,
   nsibs = NA_integer_,
   max_width = NULL,
-  fontspec = font_spec(),
+  fontspec,
   col_gap = 3
 )
 }

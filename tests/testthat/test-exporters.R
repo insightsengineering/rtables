@@ -120,6 +120,45 @@ test_that("export_as_txt works with wrapping", {
   expect_identical(pagepos3[1], pagepos2b[1])
 })
 
+
+test_that("export_as_txt works with sas rounding", {
+  ## this also tests pagination and all supported formats with 2 decimals of precision
+  vals <- list(
+    0.845,
+    c(1.845, 0.845),
+    c(10.845, 8.845, 12.845)
+  )
+  forms <- lapply(
+    list_valid_format_labels(),
+    function(x) grep("xx[.]xx([^x%]|$)", x, value = TRUE)
+  )
+  vals <- rep(vals, times = lengths(forms))
+  names(vals) <- paste0("row", seq_along(vals))
+  forms <- setNames(unlist(forms), nm = names(vals))
+  superdumbafun <- function(x) {
+    in_rows(.list = vals, .formats = forms)
+  }
+  superdumbfun2 <- function(x) {
+    txtvals <- mapply(format_value, x = vals, format = forms, round_type = "sas")
+    in_rows(.list = txtvals)
+  }
+  lyt <- basic_table() |>
+    analyze("AGE", afun = superdumbafun)
+  tbl <- build_table(lyt, DM)
+  txt <- export_as_txt(tbl, round_type = "sas")
+  lyt2 <- basic_table() |>
+    analyze("AGE", afun = superdumbfun2)
+  tbl2 <- build_table(lyt2, DM)
+  expect_identical(
+    export_as_txt(tbl, round_type = "sas"),
+    export_as_txt(tbl2)
+  )
+  expect_identical(
+    toString(tbl, round_type = "sas"),
+    export_as_txt(tbl, round_type = "sas")
+  )
+})
+
 test_that("tsv roundtripping for path_enriched_df", {
   tbl2 <- tt_to_export()
 
