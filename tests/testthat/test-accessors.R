@@ -416,3 +416,40 @@ test_that("top_level_section_div works", {
   top_lev_div_str <- strsplit(toString(tbl), "\n")[[1]][7]
   expect_true(check_pattern(top_lev_div_str, "=", nchar(top_lev_div_str)))
 })
+
+
+test_that("tt_at_path works with identical split names", {
+  adsl <- ex_adsl
+  adsl$flag <- sample(c("Y", "N"), nrow(adsl), replace = TRUE)
+  
+  afun <- function(x, ...) rcell(label = "Flagged Pop. Count", sum(x == "Y"))
+  
+  lyt <- basic_table() %>%
+    analyze("flag", afun = afun) %>%
+    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden", nest = TRUE) %>%
+    split_rows_by("SEX") %>%
+    analyze("BMRKR1")
+  
+  tbl <- build_table(lyt, adsl)
+  
+  expect_equal(
+    tt_at_path(tbl, c("root", "flag", "Y")),
+    tree_children(tree_children(tbl)[[2]])[[1]]
+  )
+  
+  # Even with branching
+  lyt <- basic_table() %>%
+    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden", nest = FALSE) %>%
+    split_rows_by("SEX", split_fun = keep_split_levels("U")) %>%
+    analyze("BMRKR1") %>% 
+    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden", nest = FALSE) %>%
+    split_rows_by("SEX", split_fun = keep_split_levels("U")) %>%
+    analyze("AGE")
+  
+  tbl <- build_table(lyt, adsl)
+  
+  expect_equal(
+    names(tt_at_path(tbl, c("root", "flag", "Y", "SEX", "U"))),
+    rep("flag", 2)
+  )
+})

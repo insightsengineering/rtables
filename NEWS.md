@@ -6,6 +6,7 @@
  
 ### Bug Fixes
  * Fixed issue with `split_cols_by_multivar()` when having more than one value. Now `as_result_df(make_ard = TRUE)` adds a predefined split name for each of the `multivar` splits.
+ * Fixed a bug with `tt_at_path()` caused by the impossibility to solve multiple branches with identical names. 
 
 ## rtables 0.6.11
 
