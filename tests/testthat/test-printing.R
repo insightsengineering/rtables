@@ -411,19 +411,49 @@ test_that("section_div works when analyzing multiple variables", {
 
   expect_true(check_pattern(out[11], "|", length(out[1])))
   expect_true(check_pattern(out[16], "-", length(out[1])))
+})
 
-  # One-var still works
-  lyt <- basic_table() %>%
-    split_rows_by("Species", section_div = "|") %>%
-    analyze("Petal.Width",
-      afun = function(x) list("m" = mean(x), "sd" = sd(x)), section_div = "-"
-    )
+## section_div passed to analyze works correctly in all cases #863
+test_that("analyze section_div works correctly", {
+  lyt1 <- basic_table() %>%
+    split_rows_by("STRATA1") %>%
+    analyze("SEX", section_div = " ")
+  tbl1 <- build_table(lyt1, ex_adsl)
+  lns <- capture.output(print(tbl1))
+  expect_equal(grep("^[[:space:]]*$", lns), c(8, 14))
 
-  tbl <- build_table(lyt, iris)
-  out <- strsplit(toString(tbl), "\n")[[1]]
+  ## analyze section_divs do NOT override split section_divs
+  ## this is so users can specify a divider between multi-analyze blocks
+  ## that is different than one they want between split sections
+  lyt2 <- basic_table() %>%
+    split_rows_by("STRATA1", section_div = "*") %>%
+    analyze("SEX", section_div = " ")
+  tbl2 <- build_table(lyt2, ex_adsl)
+  lns2 <- capture.output(print(tbl2))
+  expect_equal(grep("^[*]*$", lns2), c(8, 14))
 
-  expect_true(check_pattern(out[7], "|", length(out[1])))
-  expect_true(check_pattern(out[10], "-", length(out[1])))
+  lyt3  <- basic_table() %>%
+    analyze("SEX", section_div = " ") %>%
+    analyze("STRATA1")
+  tbl3 <- build_table(lyt3, ex_adsl)
+  lns3 <- capture.output(print(tbl3))
+  expect_equal(grep("^[ ]*$", lns3), 8)
+
+  lyt4 <-  basic_table() %>%
+    split_rows_by("STRATA1", section_div = "*") %>%
+    analyze("SEX", section_div = " ") %>%
+    analyze("STRATA1")
+  tbl4 <- build_table(lyt4, ex_adsl)
+  lns4 <- capture.output(print(tbl4))
+  expect_equal(grep("^[[:space:]]*$", lns4), c(9, 21, 33))
+  expect_equal(grep("^[*]*$", lns4), c(14, 26))
+
+  lyt5 <-  basic_table() %>%
+    split_rows_by("STRATA1", section_div = "*") %>%
+    analyze(c("SEX", "STRATA1"), section_div = " ")
+  tbl5 <- build_table(lyt5, ex_adsl)      
+  lns5 <- capture.output(print(tbl5))
+  expect_identical(lns4, lns5)
 })
 
 test_that("Inset works for table, ref_footnotes, and main footer", {
@@ -748,7 +778,7 @@ test_that("Separators and wrapping work together with getter and setters", {
   mf1 <- matrix_form(tbl1)
   mf2 <- matrix_form(tbl2)
   expect_identical(mf1$row_info$trailing_sep, mf2$row_info$trailing_sep)
-  expect_identical(mf1$row_info$trailing_sep, rep(c(NA, " ", "~"), 2))
+  expect_identical(mf1$row_info$trailing_sep, rep(c(NA, NA, "~"), 2))
 
   exp1 <- c(
     "            all obs",
@@ -758,12 +788,10 @@ test_that("Separators and wrapping work together with getter and setters", {
     "thing its          ",
     "so                 ",
     "  m            8   ",
-    "                   ",
     "  m/2          5   ",
     "~~~~~~~~~~~~~~~~~~~",
     "long               ",
     "  m            2   ",
-    "                   ",
     "  m/2         1.5  "
   )
 

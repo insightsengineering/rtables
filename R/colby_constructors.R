@@ -1048,6 +1048,11 @@ NULL
 #' the tabulation will occur at the current/next level of nesting by default.
 #'
 #' @inheritParams lyt_args
+#' @param section_div (`string`)\cr string which should be repeated as a section divider after the set of rows  defined
+#'   by (each sub-analysis/variable) of this analyze instruction, or
+#'   `NA_character_` (the default) for no section divider. This section
+#'   divider will be overridden by a split-level section divider when
+#'   both apply to the same position in the rendered output.
 #'
 #' @inherit split_cols_by return
 #'
