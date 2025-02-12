@@ -4102,11 +4102,18 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
     } else {
       # All leaves are modified
       trailing_section_div(tt_labelrow(obj)) <- char_v[1]
-      trailing_section_div(obj) <- NA_character_
       section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v[-1]
+      if (are(tree_children(obj), "TableRow")) {
+        trailing_section_div(obj) <- tail(char_v, 1)
+      } else {
+        trailing_section_div(obj) <- NA_character_
+      }
     }
   } else {
     section_div(tree_children(obj), only_sep_sections = only_sep_sections) <- char_v
+    if (are(tree_children(obj), "TableRow")) {
+      trailing_section_div(obj) <- tail(char_v, 1)
+    }
   }
   obj
 })
