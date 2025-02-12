@@ -432,14 +432,14 @@ test_that("analyze section_div works correctly", {
   lns2 <- capture.output(print(tbl2))
   expect_equal(grep("^[*]*$", lns2), c(8, 14))
 
-  lyt3  <- basic_table() %>%
+  lyt3 <- basic_table() %>%
     analyze("SEX", section_div = " ") %>%
     analyze("STRATA1")
   tbl3 <- build_table(lyt3, ex_adsl)
   lns3 <- capture.output(print(tbl3))
   expect_equal(grep("^[ ]*$", lns3), 8)
 
-  lyt4 <-  basic_table() %>%
+  lyt4 <- basic_table() %>%
     split_rows_by("STRATA1", section_div = "*") %>%
     analyze("SEX", section_div = " ") %>%
     analyze("STRATA1")
@@ -448,10 +448,10 @@ test_that("analyze section_div works correctly", {
   expect_equal(grep("^[[:space:]]*$", lns4), c(9, 21, 33))
   expect_equal(grep("^[*]*$", lns4), c(14, 26))
 
-  lyt5 <-  basic_table() %>%
+  lyt5 <- basic_table() %>%
     split_rows_by("STRATA1", section_div = "*") %>%
     analyze(c("SEX", "STRATA1"), section_div = " ")
-  tbl5 <- build_table(lyt5, ex_adsl)      
+  tbl5 <- build_table(lyt5, ex_adsl)
   lns5 <- capture.output(print(tbl5))
   expect_identical(lns4, lns5)
 })
