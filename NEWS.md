@@ -1,4 +1,3 @@
-
 ## rtables 0.6.11.9004
 
 ### New Features
