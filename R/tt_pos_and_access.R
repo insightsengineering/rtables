@@ -582,11 +582,11 @@ setMethod(
                 if (is(nxtval, "CellValue")) {
                   rcs <- row_cells(curkid)
                   rcs[j] <- value[seq_along(j)]
-                  row_cells(curkid) <- rcs                  
-                } else{
+                  row_cells(curkid) <- rcs
+                } else {
                   rvs <- row_values(curkid)
                   rvs[j] <- value[seq_along(j)]
-                  row_values(curkid) <- rvs                   
+                  row_values(curkid) <- rvs
                 }
                 value <- value[-(seq_along(j))]
               }
