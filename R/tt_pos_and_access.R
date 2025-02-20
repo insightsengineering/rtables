@@ -579,9 +579,15 @@ setMethod(
                 curkid <- nxtval
                 value <- value[-1]
               } else {
-                rvs <- row_values(curkid)
-                rvs[j] <- value[seq_along(j)]
-                row_values(curkid) <- rvs
+                if (is(nxtval, "CellValue")) {
+                  rcs <- row_cells(curkid)
+                  rcs[j] <- value[seq_along(j)]
+                  row_cells(curkid) <- rcs                  
+                } else{
+                  rvs <- row_values(curkid)
+                  rvs[j] <- value[seq_along(j)]
+                  row_values(curkid) <- rvs                   
+                }
                 value <- value[-(seq_along(j))]
               }
               kids[[pos]] <- curkid
