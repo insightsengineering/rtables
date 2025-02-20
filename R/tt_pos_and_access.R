@@ -467,7 +467,7 @@ setMethod(
 #' tbl[, -1]
 #'
 #' # Values can be reassigned
-#' tbl[2, 1] <- rcell(999)
+#' tbl[4, 2] <- rcell(999, format = "xx.x")
 #' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 #' tbl[6, ] <- list(-111, -222, -333)
 #' tbl
