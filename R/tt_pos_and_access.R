@@ -50,7 +50,7 @@ recursive_replace <- function(tab, path, value) { ## incontent = FALSE, rows = N
     ##         newkid[rows, cols] = value
     ##     }
     ## }
-    return(newkid)
+    newkid
   } else if (path[[1]] == "@content") {
     ctb <- content_table(tab)
     ctb <- recursive_replace(ctb,
