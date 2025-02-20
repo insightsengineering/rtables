@@ -376,8 +376,30 @@ test_that("setters work ok", {
     cell_values(tbl4)[["U.AGE.mean"]],
     list(5, 7, 8)
   )
+  
+  tbl5 <- tbl
+  tbl5[4, 1] <- rcell(999, format = "xx.xx")
+  tbl5[5, 2] <- list(c(3, 0.25))
+  tbl5[5, 3] <- rcell(NA, format_na_str = "<NA>")
+  tbl5[6, ] <- list(-111, -222, -333)
+  matform5 <- matrix_form(tbl5)
+  expect_identical(
+    c("mean", "999.00", "32.1", "34.2794117647059"), 
+    mf_strings(matform5)[5, ]
+  )
+  expect_identical(
+    c("U", "0 (0.0%)", "3 (25.0%)", "<NA>"), 
+    mf_strings(matform5)[6, ]
+  )
+  expect_identical(
+    c("mean", "-111", "-222", "-333"), 
+    mf_strings(matform5)[7, ]
+  )
+  expect_identical(
+    c("", "xx.xx", "xx", "xx"),
+    mf_formats(matform5)[5, ]
+  )
 })
-
 
 test_that("cell_values and value_at work on row objects", {
   tbl <- basic_table() %>%
