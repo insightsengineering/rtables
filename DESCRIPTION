@@ -45,6 +45,7 @@ Suggests:
     car (>= 3.0-13),
     dplyr (>= 1.0.5),
     knitr (>= 1.42),
+    lme4 (>= 1.1-35.5),
     r2rtf (>= 0.3.2),
     rmarkdown (>= 2.23),
     survival (>= 3.3-1),
