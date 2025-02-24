@@ -50,7 +50,7 @@ recursive_replace <- function(tab, path, value) { ## incontent = FALSE, rows = N
     ##         newkid[rows, cols] = value
     ##     }
     ## }
-    return(newkid)
+    newkid
   } else if (path[[1]] == "@content") {
     ctb <- content_table(tab)
     ctb <- recursive_replace(ctb,
@@ -487,7 +487,7 @@ setMethod(
 #' tbl[, -1]
 #'
 #' # Values can be reassigned
-#' tbl[2, 1] <- rcell(999)
+#' tbl[4, 2] <- rcell(999, format = "xx.x")
 #' tbl[2, ] <- list(rrow("FFF", 888, 666, 777))
 #' tbl[6, ] <- list(-111, -222, -333)
 #' tbl
@@ -599,9 +599,15 @@ setMethod(
                 curkid <- nxtval
                 value <- value[-1]
               } else {
-                rvs <- row_values(curkid)
-                rvs[j] <- value[seq_along(j)]
-                row_values(curkid) <- rvs
+                if (is(nxtval, "CellValue")) {
+                  rcs <- row_cells(curkid)
+                  rcs[j] <- value[seq_along(j)]
+                  row_cells(curkid) <- rcs
+                } else {
+                  rvs <- row_values(curkid)
+                  rvs[j] <- value[seq_along(j)]
+                  row_values(curkid) <- rvs
+                }
                 value <- value[-(seq_along(j))]
               }
               kids[[pos]] <- curkid

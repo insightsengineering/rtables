@@ -1,4 +1,4 @@
-## rtables 0.6.11.9005
+## rtables 0.6.11.9006
 
 ### New Features
  * Added `stat_string` to `as_result_df(make_ard = TRUE)` to preserve the original string representation of the statistics.
@@ -8,7 +8,8 @@
  * Fixed issue with `split_cols_by_multivar()` when having more than one value. Now `as_result_df(make_ard = TRUE)` adds a predefined split name for each of the `multivar` splits.
  * Fixed a bug with `tt_at_path()` caused by the impossibility to solve multiple branches with identical names. 
  * Fixed bug happening when format functions were changing the number of printed values. Now `as_result_df(make_ard = TRUE)` uses the cell values for `stat_strings` for these exceptions.
-
+ * Fixed bug in `[<-` causing information to be stripped from other cells if a new `rcell` is set within a table row.
+ 
 ## rtables 0.6.11
 
 ### New Features
