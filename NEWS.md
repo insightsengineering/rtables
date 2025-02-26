@@ -7,8 +7,9 @@
 ### Bug Fixes
  * Fixed issue with `split_cols_by_multivar()` when having more than one value. Now `as_result_df(make_ard = TRUE)` adds a predefined split name for each of the `multivar` splits.
  * Fixed bug happening when format functions were changing the number of printed values. Now `as_result_df(make_ard = TRUE)` uses the cell values for `stat_strings` for these exceptions.
+ * `section_div` argument to `analyze` no longer sometimes applies dividers between each generated row in some cases. by @gmbecker
  * Fixed bug in `[<-` causing information to be stripped from other cells if a new `rcell` is set within a table row.
- 
+
 ## rtables 0.6.11
 
 ### New Features
