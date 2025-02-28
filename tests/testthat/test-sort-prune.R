@@ -121,7 +121,7 @@ test_that("provided score functions work", {
 ## contributed by daniel
 test_that("sort_at_path just returns an empty input table", {
   silly_prune_condition <- function(tt) {
-    return(TRUE)
+    TRUE
   }
   emptytable <- trim_rows(rawtable, silly_prune_condition)
   expect_identical(dim(emptytable), c(0L, ncol(rawtable)))
@@ -295,5 +295,30 @@ test_that("paths come out correct when sorting with '*'", {
   expect_equal(
     res,
     list("A: Drug X" = 12)
+  )
+})
+
+test_that("sort_at_path throws an error when trying to sort a table with identical branching names", {
+  # Related to regression test #864
+  adsl <- ex_adsl
+  adsl$flag <- sample(c("Y", "N"), nrow(adsl), replace = TRUE)
+
+  lyt <- basic_table() %>%
+    split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
+    split_rows_by("SEX") %>%
+    analyze("BMRKR1") %>%
+    split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
+    split_rows_by("SEX") %>%
+    analyze("AGE")
+
+  tbl <- build_table(lyt, adsl)
+
+  scorefun <- function(tt) {
+    unlist(cell_values(tt))
+  }
+
+  expect_error(
+    sort_at_path(tbl, c("root", "flag", "Y", "SEX"), scorefun),
+    "position element flag appears more than once, not currently supported"
   )
 })
