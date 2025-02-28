@@ -121,7 +121,7 @@ test_that("provided score functions work", {
 ## contributed by daniel
 test_that("sort_at_path just returns an empty input table", {
   silly_prune_condition <- function(tt) {
-    return(TRUE)
+    TRUE
   }
   emptytable <- trim_rows(rawtable, silly_prune_condition)
   expect_identical(dim(emptytable), c(0L, ncol(rawtable)))
