@@ -244,9 +244,9 @@ test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
     expect_identical(tree_children(content_elem_tbl)[[1]] %>% getter(), val_per_lev$contentrow)
   }
 
-  # The elementary table has it?
+  ## The elementary table has it?
   leaves_elementary_tbl <- tree_children(split1)[[1]]
-  expect_identical(leaves_elementary_tbl %>% getter(), val_per_lev$elem_tbl_labelrow)
+  expect_identical(leaves_elementary_tbl %>% getter(), val_per_lev$elem_tbl)
   expect_identical(tt_labelrow(leaves_elementary_tbl) %>% getter(), val_per_lev$elem_tbl_labelrow)
 
   # Data rows has it?
@@ -284,7 +284,8 @@ test_that("section_div getter and setter works", {
     "contentrow" = NA_character_,
     "content_labelrow" = NA_character_,
     "elem_tbl_labelrow" = NA_character_,
-    "datarow" = c(" ", " ")
+    "elem_tbl" = " ",
+    "datarow" = c(NA_character_, NA_character_)
   )
 
   # Checks of structure - precedence is top to bottom
@@ -314,6 +315,7 @@ test_that("section_div getter and setter works", {
     "contentrow" = NA_character_,
     "content_labelrow" = NA_character_,
     "elem_tbl_labelrow" = NA_character_,
+    "elem_tbl" = "c",
     "datarow" = c("b", "c")
   )
 

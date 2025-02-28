@@ -569,7 +569,7 @@ gen_rowvalues <- function(dfpart,
   )
 
   # Adding section_div for DataRows (analyze leaves)
-  kids <- .set_kids_section_div(kids, spl_section_div(spl), "DataRow")
+  # kids <- .set_kids_section_div(kids, spl_section_div(spl), "DataRow")
 
   if (is(kids, "error")) {
     stop("Error applying analysis function (var - ",
@@ -588,7 +588,8 @@ gen_rowvalues <- function(dfpart,
     cinfo = cinfo,
     format = obj_format(spl),
     na_str = obj_na_str(spl),
-    indent_mod = indent_mod(spl)
+    indent_mod = indent_mod(spl),
+    trailing_section_div = spl_section_div(spl)
   )
 
   labelrow_visible(ret) <- dolab

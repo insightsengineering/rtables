@@ -198,3 +198,16 @@ test_that("format and na_str inheritance", {
   # Check if it preserves the shell format
   expect_identical(result, expected)
 })
+
+
+test_that("sas-style formatting works", {
+  dumbafun <- function(x) rcell(0.845, format = "xx.xx")
+  lyt <- basic_table() |>
+    analyze("AGE", dumbafun)
+
+  tbl <- build_table(lyt, DM)
+  str1 <- toString(tbl)
+  str2 <- toString(tbl, round_type = "sas")
+  expect_true(grepl("0.84", str1, fixed = TRUE))
+  expect_true(grepl("0.85", str2, fixed = TRUE))
+})

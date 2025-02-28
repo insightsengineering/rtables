@@ -10,7 +10,8 @@
   expand_newlines = TRUE,
   indent_size = 2,
   fontspec = NULL,
-  col_gap = 3L
+  col_gap = 3L,
+  round_type = c("iec", "sas")
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ rendering this \code{MatrixPrintForm} object, or NULL (the default).}
 by \code{fontspec}) that should be placed between columns when the table
 is rendered directly to text (e.g., by \code{toString} or \code{export_as_txt}). Defaults
 to \code{3}.}
+
+\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
+the default, peforms rounding compliant with IEC 60559 (see details), while
+sas performs nearest-value rounding consistent with rounding within SAS.}
 }
 \value{
 A list with the following elements:
