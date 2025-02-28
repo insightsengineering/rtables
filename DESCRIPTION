@@ -65,6 +65,8 @@ Config/Needs/verdepcheck: insightsengineering/formatters,
     r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
     r-lib/xml2
 Encoding: UTF-8
+Remotes:
+    insightsengineering/formatters@main
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
