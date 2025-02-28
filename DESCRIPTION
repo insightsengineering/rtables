@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.11.9008
-Date: 2025-02-26
+Version: 0.6.11.9009
+Date: 2025-02-28
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -57,6 +57,8 @@ Suggests:
 VignetteBuilder:
     knitr,
     rmarkdown
+Remotes:
+    insightsengineering/formatters@main
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
@@ -65,8 +67,6 @@ Config/Needs/verdepcheck: insightsengineering/formatters,
     r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
     r-lib/xml2
 Encoding: UTF-8
-Remotes:
-    insightsengineering/formatters@main
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
