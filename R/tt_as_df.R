@@ -252,9 +252,9 @@ as_result_df <- function(tt, spec = NULL,
       n_row_groups <- sapply(colnames(ret), function(x) {
         if (grepl("^group", x)) {
           # Extract the number after "group" using regex
-          return(as.numeric(sub("group(\\d+).*", "\\1", x)))
+          as.numeric(sub("group(\\d+).*", "\\1", x))
         } else {
-          return(0) # Return 0 if no "group" is found
+          0 # Return 0 if no "group" is found
         }
       }) %>%
         max()
@@ -436,9 +436,9 @@ as_result_df <- function(tt, spec = NULL,
   lapply(pos_splits(tree_pos(ci_coltree)), function(x) {
     pl <- spl_payload(x)
     if (!is.null(pl)) { # it is null when all obs (1 column)
-      return(pl)
+      pl
     } else {
-      return(x@name)
+      x@name
     }
   })
 }
@@ -478,9 +478,9 @@ as_result_df <- function(tt, spec = NULL,
       as.numeric
     )
     if (all(dim(char_df) == c(1, 1)) && is.list(out[[1]])) {
-      return(unlist(out, use.names = FALSE))
+      unlist(out, use.names = FALSE)
     } else {
-      return(out)
+      out
     }
   }, simplify = FALSE)
 
@@ -621,12 +621,12 @@ handle_rdf_row <- function(rdfrow, maxlen, add_tbl_name_split = FALSE) {
     ret <- NULL
   }
   if (is.null(tree_children(clyt))) {
-    return(ret)
+    ret
   } else {
     ret <- rbind(ret, do.call(cbind, lapply(tree_children(clyt), .get_formatted_colnames)))
     colnames(ret) <- NULL
     rownames(ret) <- NULL
-    return(ret)
+    ret
   }
 }
 

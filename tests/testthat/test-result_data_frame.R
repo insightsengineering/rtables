@@ -571,13 +571,10 @@ test_that("make_ard works when printed format differs from cell values", {
   # Also regression test for #1001
   mean_sd_custom <- function(x, .spl_context, ...) {
     if (.spl_context$value[2] == "B: Placebo" || .spl_context$cur_col_id[2] == "B: Placebo") {
-      return(NULL)
+      NULL
+    } else {
+      rcell(c(1, 2), label = "Mean (SD)", format = function(xf, ...) as.character(xf[1]))
     }
-    rcell(c(1, 2),
-      label = "Mean (SD)", format = function(xf, ...) {
-        return(as.character(xf[1]))
-      }
-    )
   }
 
   test_out <- basic_table() %>%
