@@ -22,7 +22,9 @@
 #'   `"<analysis_spl_tbl_name>"`.
 #' @param verbose (`flag`)\cr when `TRUE`, the function will print additional information for
 #'   `data_format != "full_precision"`.
-#' @param ... additional arguments passed to spec-specific result data frame function (`spec`).
+#' @param ... additional arguments passed to spec-specific result data frame function (`spec`). When
+#'   using `make_ard = TRUE`, it is possible to turn off the extraction of the exact string decimals
+#'   printed by the table with `add_tbl_str_decimals = FALSE`.
 #'
 #' @return
 #' * `as_result_df` returns a result `data.frame`.
@@ -80,7 +82,8 @@ as_result_df <- function(tt, spec = NULL,
       # we keep previous calculations to check the format of the data
       mf_tt <- matrix_form(tt)
       mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1, drop = FALSE]
-      mf_result_chars <- .remove_empty_elements(mf_result_chars)
+      is_not_label_rows <- make_row_df(tt)$node_class != "LabelRow"
+      mf_result_chars <- .remove_empty_elements(mf_result_chars, is_not_label_rows)
       mf_result_numeric <- .make_numeric_char_mf(mf_result_chars)
       mf_result_chars <- as.data.frame(mf_result_chars)
       mf_result_numeric <- as.data.frame(mf_result_numeric)
@@ -107,7 +110,6 @@ as_result_df <- function(tt, spec = NULL,
           cellvals <- mf_result_numeric
         }
       }
-
       diff_in_cellvals <- length(unlist(cellvals_init)) - length(unlist(cellvals))
       if (make_ard && abs(diff_in_cellvals) > 0) {
         warning_msg <- paste0(
@@ -116,17 +118,19 @@ as_result_df <- function(tt, spec = NULL,
         )
 
         # number of values difference mask between cellvals and cellvals_init (TRUE if different)
-        dmc <- lengths(unlist(cellvals, recursive = FALSE)) != lengths(unlist(cellvals_init, recursive = FALSE))
+        dmc <- .lengths_with_nulls(unlist(cellvals, recursive = FALSE)) !=
+          .lengths_with_nulls(unlist(cellvals_init, recursive = FALSE))
         dmc <- matrix(dmc, nrow = nrow(cellvals), ncol = ncol(cellvals))
 
         # Mainly used for debugging
-        selected_rows_to_print <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), , drop = FALSE]
-        selected_rows_to_print <- cbind(
-          which(apply(dmc, 1, any, simplify = TRUE)),
-          as.data.frame(selected_rows_to_print[apply(dmc, 1, any), , drop = FALSE])
-        )
-        colnames(selected_rows_to_print) <- c("row_number", "row_name", colnames(cellvals_init))
-        warning_msg <- if (verbose) {
+        warning_msg <- if (verbose) { # beware that \n will break this (use make_row_df(tt)$self_extent for fix)
+          selected_rows_to_print <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), , drop = FALSE]
+          selected_rows_to_print <- selected_rows_to_print[!make_row_df(tt)$node_class == "LabelRow", , drop = FALSE]
+          selected_rows_to_print <- cbind(
+            which(apply(dmc, 1, any, simplify = TRUE)),
+            as.data.frame(selected_rows_to_print[apply(dmc, 1, any), , drop = FALSE])
+          )
+          colnames(selected_rows_to_print) <- c("row_number", "row_name", colnames(cellvals_init))
           paste0(
             warning_msg,
             "\n",
@@ -315,13 +319,14 @@ as_result_df <- function(tt, spec = NULL,
         stat_name <- setNames(cell_stat_names[, col_i - min(only_col_indexes) + 1, drop = TRUE], NULL)
         stat <- setNames(ret_tmp[!col_label_rows, col_i, drop = TRUE], NULL)
         necessary_stat_lengths <- lapply(stat, length)
-        stat[sapply(stat, is.null)] <- NA
+        stat[!lengths(stat) > 0] <- NA
 
         # Truncating or adding NA if stat names has more or less elements than stats
         stat_name <- lapply(seq_along(stat_name), function(sn_i) {
           unlist(stat_name[[sn_i]], use.names = FALSE)[seq_len(necessary_stat_lengths[[sn_i]])]
         })
         stat_name[!nzchar(stat_name)] <- NA
+        stat_name[!lengths(stat_name) > 0] <- NA
 
         # unnesting stat_name and stat
         tmp_ret_by_col_i <- NULL
@@ -340,13 +345,22 @@ as_result_df <- function(tt, spec = NULL,
         ret_w_cols <- rbind(ret_w_cols, tmp_ret_by_col_i)
       }
 
-      # If already_done is not present, we need to call the function again to keep precision
-      if (!"already_done" %in% names(list(...))) {
-        stat_string_ret <- as_result_df(
-          tt = tt, spec = spec, data_format = "numeric",
-          make_ard = TRUE, already_done = TRUE, verbose = verbose, ...
+      # If add_tbl_str_decimals is not present, we need to call the function again to keep precision
+      add_tbl_str_decimals <- list(...)$add_tbl_str_decimals
+      if (is.null(add_tbl_str_decimals) || isTRUE(add_tbl_str_decimals)) {
+        # Trying to extract strings as numeric for comparison
+        tryCatch(
+          {
+            stat_string_ret <- as_result_df(
+              tt = tt, spec = spec, data_format = "numeric",
+              make_ard = TRUE, add_tbl_str_decimals = FALSE, verbose = verbose
+            )
+            ret_w_cols <- cbind(ret_w_cols, "stat_string" = stat_string_ret$stat)
+          },
+          error = function(e) {
+            warning("Could not add 'stat_string' column to the result data frame. Error: ", e$message)
+          }
         )
-        ret_w_cols <- cbind(ret_w_cols, "stat_string" = stat_string_ret$stat)
       }
 
       ret <- ret_w_cols
@@ -368,6 +382,11 @@ as_result_df <- function(tt, spec = NULL,
 
   out
 }
+
+.lengths_with_nulls <- function(lst) {
+  sapply(lst, function(x) if (is.null(x)) 1 else length(x))
+}
+
 
 # Helper function used to structure the raw values into a dataframe
 .make_df_from_raw_data <- function(rawvals, nr, nc) {
@@ -436,13 +455,12 @@ as_result_df <- function(tt, spec = NULL,
   df[, c(label_names_col, result_cols)]
 }
 
-.remove_empty_elements <- function(char_df) {
+.remove_empty_elements <- function(char_df, is_not_label_rows) {
   if (is.null(dim(char_df))) {
     return(char_df[nzchar(char_df, keepNA = TRUE)])
   }
-
-  ret <- apply(char_df, 2, function(col_i) col_i[nzchar(col_i, keepNA = TRUE)], simplify = FALSE)
-  do.call(cbind, ret)
+  rows_to_remove <- apply(char_df, 1, function(row_i) all(!nzchar(row_i, keepNA = TRUE)), simplify = TRUE)
+  char_df[!rows_to_remove | is_not_label_rows, , drop = FALSE]
 }
 
 # Helper function to make the character matrix numeric

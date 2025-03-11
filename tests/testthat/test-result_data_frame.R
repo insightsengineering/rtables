@@ -566,8 +566,13 @@ test_that("make_ard works with split_cols_by_multivar", {
   expect_silent(out <- as_result_df(tbl, make_ard = TRUE))
   expect_true(all(out$group3 == "multivar_split1"))
 })
+
 test_that("make_ard works when printed format differs from cell values", {
-  mean_sd_custom <- function(x, ...) {
+  # Also regression test for #1001
+  mean_sd_custom <- function(x, .spl_context, ...) {
+    if (.spl_context$value[2] == "B: Placebo" || .spl_context$cur_col_id[2] == "B: Placebo") {
+      return(NULL)
+    }
     rcell(c(1, 2),
       label = "Mean (SD)", format = function(xf, ...) {
         return(as.character(xf[1]))
@@ -583,10 +588,14 @@ test_that("make_ard works when printed format differs from cell values", {
 
   expect_warning(
     out <- as_result_df(test_out, make_ard = TRUE, verbose = TRUE),
-    "Found 9 cell"
+    paste0(
+      "Found 1 cell values that differ from printed values. ",
+      "This is possibly related to conditional formatting. ",
+      "\\\nThe following row names were modified: Mean \\(SD\\), Mean \\(SD\\)\\\n"
+    )
   )
   expect_equal(
-    out$stat,
+    as.character(out$stat),
     out$stat_string
   )
 })
