@@ -3810,6 +3810,7 @@ setMethod(
            colpath = NULL,
            reset_idx = TRUE,
            value) {
+    browser()
     rw <- tt_at_path(obj, rowpath)
     .fnote_set_inner(rw, colpath) <- value
     tt_at_path(obj, rowpath) <- rw

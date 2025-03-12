@@ -625,3 +625,22 @@ test_that("tt_at_path works with identical split names", {
     rep("flag", 2)
   )
 })
+
+test_that("tt_at_path gives an informative error when labels are used instead of row names", {
+  # Issue #1004
+  adsl <- ex_adsl
+  
+  out <- basic_table() %>%
+    split_rows_by("ARM") %>% 
+    analyze("BMRKR1", afun = mean, show_labels = "visible", var_label = "An error may occur") %>% 
+    build_table(adsl)
+  
+  real_path <- row_paths(out)[[3]]
+  expect_silent(nothing <- tt_at_path(out, real_path))
+  
+  real_path[3] <- "An error may occur" # using the labels
+  expect_error(
+    tt_at_path(out, real_path),
+    "Path appears invalid for this tree at step \\'An error may occur\\'. Please use only row names and NOT"
+  )
+})

@@ -17,6 +17,7 @@
  * Added handler `add_tbl_str_decimals = TRUE` to `...` into `as_result_df(make_ard = TRUE)` to add `stat_string` column for the 
  `ARD` output.
  * As `stat_string` are more fragile than default `as_result_df(make_ard = TRUE)` calculation and are in theory optional, a warning is thrown when errors arise and the `stat_string` column is not added.
+ * Improved error messaging for cases where `tt_at_path` used a path based on row labels instead of row names.
 
 ## rtables 0.6.11
 
