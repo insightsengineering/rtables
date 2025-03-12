@@ -365,12 +365,12 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
 
 
 test_that("full alt_counts_df is accessible from afun/cfun via .alt_df_full", {
-
   fun <- function(x, labelstr, .alt_df_full) {
-    if (identical(.alt_df_full, ex_adsl))
+    if (identical(.alt_df_full, ex_adsl)) {
       "ok"
-    else
+    } else {
       "fail"
+    }
   }
   ## row labels will be nonsense but we don't care about that for this check
   lyt <- basic_table() %>%
