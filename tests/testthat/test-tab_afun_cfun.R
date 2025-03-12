@@ -362,3 +362,25 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
   )
   expect_silent(lyt %>% build_table(ex_adsl, alt_counts_df = alt_tmp))
 })
+
+
+test_that("full alt_counts_df is accessible from afun/cfun via .alt_df_full", {
+
+  fun <- function(x, labelstr, .alt_df_full) {
+    if (identical(.alt_df_full, ex_adsl))
+      "ok"
+    else
+      "fail"
+  }
+  ## row labels will be nonsense but we don't care about that for this check
+  lyt <- basic_table() %>%
+    split_cols_by("SEX") %>%
+    split_cols_by("STRATA1") %>%
+    split_rows_by("AEBODSYS", split_fun = trim_levels_in_group("AEDECOD")) %>%
+    summarize_row_groups("AEBODSYS", cfun = fun, format = "xx") %>%
+    analyze("AEDECOD", afun = fun)
+
+  tbl <- build_table(lyt, ex_adae[1:3, ], alt_counts_df = ex_adsl)
+  cvals <- unlist(cell_values(tbl))
+  expect_true(all(cvals == "ok"))
+})
