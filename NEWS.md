@@ -11,6 +11,14 @@
  * Fixed bug happening when format functions were changing the number of printed values. Now `as_result_df(make_ard = TRUE)` uses the cell values for `stat_strings` for these exceptions.
  * `section_div` argument to `analyze` no longer sometimes applies dividers between each generated row in some cases. by @gmbecker
  * Fixed bug in `[<-` causing information to be stripped from other cells if a new `rcell` is set within a table row.
+ * Fixed a bug in `as_result_df(make_ard = TRUE)` when different columns had different amounts of `""` values.
+ * Fixed bug in cases where `stat_name` is `character(0)` (`as_result_df(make_ard = TRUE)`).
+ 
+### Miscellaneous
+ * Added handler `add_tbl_str_decimals = TRUE` to `...` into `as_result_df(make_ard = TRUE)` to add `stat_string` column for the 
+ `ARD` output.
+ * As `stat_string` are more fragile than default `as_result_df(make_ard = TRUE)` calculation and are in theory optional, a warning is thrown when errors arise and the `stat_string` column is not added.
+ * Improved error messaging for cases where `tt_at_path` used a path based on row labels instead of row names.
 
 ## rtables 0.6.11
 
