@@ -50,7 +50,9 @@ used again to create a \code{TableTree} object with \code{\link[=df_to_tt]{df_to
 \item{verbose}{(\code{flag})\cr when \code{TRUE}, the function will print additional information for
 \code{data_format != "full_precision"}.}
 
-\item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}).}
+\item{...}{additional arguments passed to spec-specific result data frame function (\code{spec}). When
+using \code{make_ard = TRUE}, it is possible to turn off the extraction of the exact string decimals
+printed by the table with \code{add_tbl_str_decimals = FALSE}.}
 
 \item{path_fun}{(\code{function})\cr function to transform paths into single-string row/column names.}
 

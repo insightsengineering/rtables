@@ -3646,7 +3646,7 @@ setMethod(
       return(NULL)
     }
 
-    return(all_col_fnotes)
+    all_col_fnotes
   }
 )
 

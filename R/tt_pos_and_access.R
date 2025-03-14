@@ -306,10 +306,11 @@ setMethod(
   while (length(cur_path > 0)) {
     kids <- tree_children(cur_tbl)
     curname <- cur_path[1]
+    kids_names <- sapply(kids, obj_name)
     if (curname == "@content") {
       cur_tbl <- content_table(cur_tbl)
-    } else if (curname %in% names(kids)) {
-      cur_tbl <- kids[names(kids) == curname]
+    } else if (curname %in% kids_names) {
+      cur_tbl <- kids[kids_names == curname]
 
       # Case where there are more than one tree sub node with identical names
       if (length(cur_tbl) > 1 && length(cur_path) > 1) {
@@ -324,7 +325,10 @@ setMethod(
         cur_tbl <- cur_tbl[[1]] # Usual case (only one matching value)
       }
     } else if (!no_stop) {
-      stop("Path appears invalid for this tree at step ", curname)
+      stop(
+        "Path appears invalid for this tree at step '", curname, "'. Please use only",
+        " row names and NOT row labels. You can retrieve them with `row_paths_summary()$path`."
+      )
     } else {
       return(NULL)
     }
