@@ -1022,12 +1022,15 @@ NULL
 #'   \item{.in_ref_col}{Boolean indicating if calculation is done for cells within the reference column.}
 #'   \item{.spl_context}{`data.frame` where each row gives information about a previous 'ancestor' split state.
 #'     See [spl_context].}
-#'   \item{.alt_df_row}{`data.frame`, i.e. the `alt_count_df` after row splitting. It can be used with
+#'   \item{.alt_df_row}{`data.frame`, i.e. the `alt_counts_df` after row splitting. It can be used with
 #'     `.all_col_exprs` and `.spl_context` information to retrieve current faceting, but for `alt_count_df`.
 #'     It can be an empty table if all the entries are filtered out.}
 #'   \item{.alt_df}{`data.frame`, `.alt_df_row` but filtered by columns expression. This data present the same
 #'     faceting of main data `df`. This also filters `NA`s out if related parameters are set to do so (e.g. `inclNAs`
-#'     in [analyze()]). Similarly to `.alt_df_row`, it can be an empty table if all the entries are filtered out.}
+#'     in [analyze()]). Similarly to `.alt_df_row`, it can be an empty data.frame if all the entries are filtered out.}
+#'   \item{.alt_df_full}{`data.frame`, the full `alt_counts_df` as passed into `build_table`.
+#'     Unlike `.alt_df` and `.alt_df_row`, this parameter can be used in cases
+#'     where the variables required for row splitting are not present in `alt_counts_df`.}
 #'   \item{.all_col_exprs}{List of expressions. Each of them represents a different column splitting.}
 #'   \item{.all_col_counts}{Vector of integers. Each of them represents the global count for each column. It differs
 #'     if `alt_counts_df` is used (see [build_table()]).}
@@ -1073,7 +1076,7 @@ NULL
 #' other parameters which, *if and only if* present in the formals, will be passed to the function by the tabulation
 #' machinery. These are listed and described in [additional_fun_params].
 #'
-#' @note None of the arguments described in the Details section can be overridden via `extra_args` or when calling
+#' @note None of the arguments described in [additional_fun_params] can be overridden via `extra_args` or when calling
 #'   [make_afun()]. `.N_col` and `.N_total` can be overridden via the `col_counts` argument to [build_table()].
 #'   Alternative values for the others must be calculated within `afun` based on a combination of extra arguments and
 #'   the unmodified values provided by the tabulation framework.

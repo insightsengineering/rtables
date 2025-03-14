@@ -26,12 +26,15 @@ defined by row-splitting. Only required/meaningful if a \code{ref_group} column 
 \item{.in_ref_col}{Boolean indicating if calculation is done for cells within the reference column.}
 \item{.spl_context}{\code{data.frame} where each row gives information about a previous 'ancestor' split state.
 See \link{spl_context}.}
-\item{.alt_df_row}{\code{data.frame}, i.e. the \code{alt_count_df} after row splitting. It can be used with
+\item{.alt_df_row}{\code{data.frame}, i.e. the \code{alt_counts_df} after row splitting. It can be used with
 \code{.all_col_exprs} and \code{.spl_context} information to retrieve current faceting, but for \code{alt_count_df}.
 It can be an empty table if all the entries are filtered out.}
 \item{.alt_df}{\code{data.frame}, \code{.alt_df_row} but filtered by columns expression. This data present the same
 faceting of main data \code{df}. This also filters \code{NA}s out if related parameters are set to do so (e.g. \code{inclNAs}
-in \code{\link[=analyze]{analyze()}}). Similarly to \code{.alt_df_row}, it can be an empty table if all the entries are filtered out.}
+in \code{\link[=analyze]{analyze()}}). Similarly to \code{.alt_df_row}, it can be an empty data.frame if all the entries are filtered out.}
+\item{.alt_df_full}{\code{data.frame}, the full \code{alt_counts_df} as passed into \code{build_table}.
+Unlike \code{.alt_df} and \code{.alt_df_row}, this parameter can be used in cases
+where the variables required for row splitting are not present in \code{alt_counts_df}.}
 \item{.all_col_exprs}{List of expressions. Each of them represents a different column splitting.}
 \item{.all_col_counts}{Vector of integers. Each of them represents the global count for each column. It differs
 if \code{alt_counts_df} is used (see \code{\link[=build_table]{build_table()}}).}
