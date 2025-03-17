@@ -89,7 +89,7 @@ other parameters which, \emph{if and only if} present in the formals, will be pa
 machinery. These are listed and described in \link{additional_fun_params}.
 }
 \note{
-None of the arguments described in the Details section can be overridden via \code{extra_args} or when calling
+None of the arguments described in \link{additional_fun_params} can be overridden via \code{extra_args} or when calling
 \code{\link[=make_afun]{make_afun()}}. \code{.N_col} and \code{.N_total} can be overridden via the \code{col_counts} argument to \code{\link[=build_table]{build_table()}}.
 Alternative values for the others must be calculated within \code{afun} based on a combination of extra arguments and
 the unmodified values provided by the tabulation framework.

@@ -7,6 +7,7 @@ match_extra_args <- function(f,
                              .ref_group = NULL,
                              .alt_df_row = NULL,
                              .alt_df = NULL,
+                             .alt_df_full = NULL,
                              .ref_full = NULL,
                              .in_ref_col = NULL,
                              .spl_context = NULL,
@@ -40,6 +41,11 @@ match_extra_args <- function(f,
   if (!is.null(.alt_df)) {
     possargs <- c(possargs, list(.alt_df = .alt_df))
   }
+
+  if (!is.null(.alt_df_full)) {
+    possargs <- c(possargs, list(.alt_df_full = .alt_df_full))
+  }
+
   if (!is.null(.ref_full)) {
     possargs <- c(possargs, list(.ref_full = .ref_full))
   }
@@ -77,6 +83,7 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
                       takesdf = .takes_df(func),
                       baselinedf,
                       alt_dfpart,
+                      alt_df_full,
                       inclNAs,
                       col_parent_inds,
                       spl_context) {
@@ -143,6 +150,7 @@ gen_onerv <- function(csub, col, count, cextr, cpath,
     .ref_group = baselinedf,
     .alt_df_row = alt_dfpart,
     .alt_df = alt_dfpart_fil,
+    .alt_df_full = alt_df_full,
     .ref_full = fullrefcoldat,
     .in_ref_col = inrefcol,
     .N_row = NROW(dfpart),
@@ -188,8 +196,9 @@ gen_rowvalues <- function(dfpart,
                           takesdf = NULL,
                           baselines,
                           alt_dfpart,
+                          alt_df_full,
                           inclNAs,
-                          spl_context = spl_context) {
+                          spl_context) {
   colexprs <- col_exprs(cinfo)
   colcounts <- col_counts(cinfo)
   colextras <- col_extra_args(cinfo, NULL)
@@ -286,6 +295,7 @@ gen_rowvalues <- function(dfpart,
     splextra = exargs,
     MoreArgs = list(
       dfpart = dfpart,
+      alt_df_full = alt_df_full,
       totcount = totcount,
       inclNAs = inclNAs,
       spl_context = spl_context
@@ -305,6 +315,7 @@ gen_rowvalues <- function(dfpart,
 #' @return A list of table rows, even when only one is generated.
 .make_tablerows <- function(dfpart,
                             alt_dfpart,
+                            alt_df_full,
                             func,
                             cinfo,
                             datcol = NULL,
@@ -339,6 +350,7 @@ gen_rowvalues <- function(dfpart,
 
   rawvals <- gen_rowvalues(dfpart,
     alt_dfpart = alt_dfpart,
+    alt_df_full = alt_df_full,
     datcol = datcol,
     cinfo = cinfo,
     func = func,
@@ -487,6 +499,7 @@ gen_rowvalues <- function(dfpart,
                        cvar = NULL,
                        inclNAs,
                        alt_df,
+                       alt_df_full,
                        extra_args,
                        spl_context = context_df_row(cinfo = cinfo)) {
   if (length(cvar) == 0 || is.na(cvar) || identical(nchar(cvar), 0L)) {
@@ -507,6 +520,7 @@ gen_rowvalues <- function(dfpart,
         ),
         inclNAs = FALSE,
         alt_dfpart = alt_df,
+        alt_df_full = alt_df_full,
         splextra = extra_args,
         spl_context = spl_context
       ),
@@ -538,6 +552,7 @@ gen_rowvalues <- function(dfpart,
 
 .make_analyzed_tab <- function(df,
                                alt_df,
+                               alt_df_full,
                                spl,
                                cinfo,
                                partlabel = "",
@@ -562,6 +577,7 @@ gen_rowvalues <- function(dfpart,
       splextra = split_exargs(spl),
       baselines = baselines,
       alt_dfpart = alt_df,
+      alt_df_full = alt_df_full,
       inclNAs = avar_inclNAs(spl),
       spl_context = spl_context
     ),
@@ -613,6 +629,7 @@ setMethod(
            ...,
            df,
            alt_df,
+           alt_df_full,
            lvl,
            name,
            cinfo,
@@ -627,6 +644,7 @@ setMethod(
     ret <- .make_analyzed_tab(
       df = df,
       alt_df,
+      alt_df_full = alt_df_full,
       spl = spl,
       cinfo = cinfo,
       lvl = lvl + 1L,
@@ -730,6 +748,7 @@ setMethod(
            splvec, ## passed to recursive_applysplit
            df, ## used to apply split
            alt_df, ## used to apply split for alternative df
+           alt_df_full, ## passed to recursive_applysplit
            lvl, ## used to calculate innerlev
            cinfo, ## used for sanity check
            baselines, ## used to calc new baselines
@@ -902,6 +921,7 @@ setMethod(
         recursive_applysplit(
           df = dfpart,
           alt_df = alt_dfpart,
+          alt_df_full = alt_df_full,
           name = nm,
           lvl = innerlev,
           splvec = splvec,
@@ -994,6 +1014,7 @@ context_df_row <- function(split = character(),
 recursive_applysplit <- function(df,
                                  lvl = 0L,
                                  alt_df,
+                                 alt_df_full,
                                  splvec,
                                  name,
                                  #         label,
@@ -1033,6 +1054,7 @@ recursive_applysplit <- function(df,
     indent_mod = cindent_mod,
     cvar = cvar,
     alt_df = alt_df,
+    alt_df_full = alt_df_full,
     extra_args = cextra_args,
     spl_context = spl_context
   )
@@ -1062,6 +1084,7 @@ recursive_applysplit <- function(df,
       spl = spl,
       df = df,
       alt_df = alt_df,
+      alt_df_full = alt_df_full,
       lvl = lvl,
       splvec = splvec,
       name = name,
@@ -1268,6 +1291,7 @@ build_table <- function(lyt, df,
   rtspl <- root_spl(rlyt)
   ctab <- .make_ctab(df, 0L,
     alt_df = NULL,
+    alt_df_full = alt_counts_df,
     name = "root",
     label = "",
     cinfo = cinfo, ## cexprs, ctree,
@@ -1293,6 +1317,7 @@ build_table <- function(lyt, df,
     recursive_applysplit(
       df = df, lvl = 0L,
       alt_df = alt_counts_df,
+      alt_df_full = alt_counts_df,
       name = nm,
       splvec = splvec,
       cinfo = cinfo,
