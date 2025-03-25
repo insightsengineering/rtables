@@ -1,4 +1,4 @@
-## rtables 0.6.11.9013
+## rtables 0.6.11.9014
 
 ### New Features
  * Added `stat_string` to `as_result_df(make_ard = TRUE)` to preserve the original string representation of the statistics.
