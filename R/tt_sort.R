@@ -41,6 +41,19 @@ cont_n_onecol <- function(j) {
   }
 }
 
+## used for pruning functions and scoring functions(sorting)
+match_fun_args <- function(fun, ...) {
+  dotargs <- list(...)
+  retargs <- list()
+  formnms <- names(formals(fun))
+  if ("..." %in% formnms) {
+    retargs <- dotargs
+  } else if (any(names(dotargs) %in% formnms)) {
+    retargs <- dotargs[names(dotargs) %in% formnms]
+  }
+  retargs 
+}
+
 #' Sorting a table at a specific path
 #'
 #' Main sorting function to order the sub-structure of a `TableTree` at a particular path in the table tree.
@@ -56,6 +69,8 @@ cont_n_onecol <- function(j) {
 #'   `"omit"`, which removes them. Other allowed values are `"last"`  and `"first"`, which indicate where `NA` scores
 #'   should be placed in the order.
 #' @param .prev_path (`character`)\cr internal detail, do not set manually.
+#' @param ... Additional (named) arguments that will be passed directly down to
+#'   `score_fun` *if* it accepts them (or accepts `...` itself).
 #'
 #' @return A `TableTree` with the same structure as `tt` with the exception that the requested sorting has been done
 #'   at `path`.
@@ -65,6 +80,11 @@ cont_n_onecol <- function(j) {
 #' wildcard). For each such subtable, it then calls `scorefun` on each direct child of the table, using the resulting
 #' scores to determine their sorted order. `tt` is then modified to reflect each of these one or more sorting
 #' operations.
+#'
+#' `score_fun` can optionally accept `decreasing`, which will be passed the value passed
+#' to `sort_at_path` automatically, and other arguments which can be set via `...`. The
+#' first argument passed to `scorefun` will always be the table structure (subtable or row)
+#' it is scoring.
 #'
 #' In `path`, a leading `"root"` element will be ignored, regardless of whether this matches the object name (and thus
 #' actual root path name) of `tt`. Including `"root"` in paths where it does not match the name of `tt` may mask deeper
@@ -148,13 +168,32 @@ cont_n_onecol <- function(j) {
 #' # Sorting mean and median for all the AGE leaves!
 #' sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
 #'
+#' last_cat_scorefun <- function(x, decreasing, lastcat) {
+#'   mycat <- obj_name(x)
+#'   if (mycat == lastcat)
+#'     ifelse(isTRUE(decreasing), -Inf, Inf)
+#'   else
+#'     match(tolower(substr(mycat, 1, 1)), letters)
+#' }
+#'
+#' lyt2 <- basic_table() %>%
+#'   split_rows_by("SEX") %>%
+#'   analyze("AGE")
+#'
+#' tbl2 <- build_table(lyt2, DM)
+#' sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M")
+#' sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M", decreasing = FALSE)
+#' 
+#' 
+#'
 #' @export
 sort_at_path <- function(tt,
                          path,
                          scorefun,
                          decreasing = NA,
                          na.pos = c("omit", "last", "first"),
-                         .prev_path = character()) {
+                         .prev_path = character(),
+                         ...) {
   if (NROW(tt) == 0) {
     return(tt)
   }
@@ -195,7 +234,8 @@ sort_at_path <- function(tt,
             na.pos = na.pos,
             ## its ok to modify the "path" here because its only ever used for
             ## informative error reporting.
-            .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")"))
+            .prev_path = c(.prev_path, backpath, paste0("* (", oldnames[i], ")")),
+            ...
           )
         }
       )
@@ -229,7 +269,9 @@ sort_at_path <- function(tt,
   kids <- tree_children(subtree)
   ## relax this to allow character "scores"
   ## scores <- vapply(kids, scorefun, NA_real_)
-  scores <- lapply(kids, function(x) tryCatch(scorefun(x), error = function(e) e))
+  more_args <- match_fun_args(scorefun, decreasing = decreasing, ...)
+  scores <- lapply(kids, function(x) tryCatch(do.call(scorefun, c(list(x), more_args)),
+                                              error = function(e) e))
   errs <- which(vapply(scores, is, class2 = "error", TRUE))
   if (length(errs) > 0) {
     stop("Encountered at least ", length(errs), " error(s) when applying score function.\n",

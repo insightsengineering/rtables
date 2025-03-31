@@ -8,7 +8,8 @@ prune_table(
   tt,
   prune_func = prune_empty_level,
   stop_depth = NA_real_,
-  depth = 0
+  depth = 0,
+  ...
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ entire subtree should be removed.}
 Defaults to \code{NA} which indicates pruning should happen at all levels.}
 
 \item{depth}{(\code{numeric(1)})\cr used internally, not intended to be set by the end user.}
+
+\item{...}{named arguments to optionally be passed down to \code{prune_func} if it
+accepts them (or \code{...})}
 }
 \value{
 A \code{TableTree} pruned via recursive application of \code{prune_func}.
