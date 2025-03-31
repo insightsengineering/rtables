@@ -348,7 +348,8 @@ test_that("passing extra stuff to sorting and pruning works", {
   }
 
   scorefun3 <- function(x, decreasing, myarg) {
-    force(decreasing); force(myarg)
+    force(decreasing)
+    force(myarg)
     rnorm(1)
   }
 

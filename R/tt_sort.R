@@ -51,7 +51,7 @@ match_fun_args <- function(fun, ...) {
   } else if (any(names(dotargs) %in% formnms)) {
     retargs <- dotargs[names(dotargs) %in% formnms]
   }
-  retargs 
+  retargs
 }
 
 #' Sorting a table at a specific path
@@ -170,10 +170,11 @@ match_fun_args <- function(fun, ...) {
 #'
 #' last_cat_scorefun <- function(x, decreasing, lastcat) {
 #'   mycat <- obj_name(x)
-#'   if (mycat == lastcat)
+#'   if (mycat == lastcat) {
 #'     ifelse(isTRUE(decreasing), -Inf, Inf)
-#'   else
+#'   } else {
 #'     match(tolower(substr(mycat, 1, 1)), letters)
+#'   }
 #' }
 #'
 #' lyt2 <- basic_table() %>%
@@ -183,8 +184,6 @@ match_fun_args <- function(fun, ...) {
 #' tbl2 <- build_table(lyt2, DM)
 #' sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M")
 #' sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M", decreasing = FALSE)
-#' 
-#' 
 #'
 #' @export
 sort_at_path <- function(tt,
@@ -270,8 +269,11 @@ sort_at_path <- function(tt,
   ## relax this to allow character "scores"
   ## scores <- vapply(kids, scorefun, NA_real_)
   more_args <- match_fun_args(scorefun, decreasing = decreasing, ...)
-  scores <- lapply(kids, function(x) tryCatch(do.call(scorefun, c(list(x), more_args)),
-                                              error = function(e) e))
+  scores <- lapply(kids, function(x) {
+    tryCatch(do.call(scorefun, c(list(x), more_args)),
+      error = function(e) e
+    )
+  })
   errs <- which(vapply(scores, is, class2 = "error", TRUE))
   if (length(errs) > 0) {
     stop("Encountered at least ", length(errs), " error(s) when applying score function.\n",
