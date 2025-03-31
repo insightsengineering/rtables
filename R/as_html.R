@@ -278,6 +278,11 @@ as_html <- function(x,
   div_helper(
     class = "rtables-all-parts-block",
     list(
+      tags$head(
+        tags$style(
+          ".rtables-all-parts-block table tr {    border-top: 1px solid #ddd;}"
+        )
+      ),
       hdrtag,
       tabletag,
       ftrtag
