@@ -136,10 +136,11 @@ sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
 
 last_cat_scorefun <- function(x, decreasing, lastcat) {
   mycat <- obj_name(x)
-  if (mycat == lastcat)
+  if (mycat == lastcat) {
     ifelse(isTRUE(decreasing), -Inf, Inf)
-  else
+  } else {
     match(tolower(substr(mycat, 1, 1)), letters)
+  }
 }
 
 lyt2 <- basic_table() \%>\%
@@ -149,8 +150,6 @@ lyt2 <- basic_table() \%>\%
 tbl2 <- build_table(lyt2, DM)
 sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M")
 sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M", decreasing = FALSE)
-
-
 
 }
 \seealso{
