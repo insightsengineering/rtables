@@ -57,7 +57,7 @@ test_that("as_html does not trim whitespace", {
     rrow("r3   ", indent = 2)
   )
   html_tbl <- as_html(tbl)
-  html_parts <- html_tbl$children[[1]][[2]]$children
+  html_parts <- html_tbl$children[[1]][[3]]$children
   expect_true(all(sapply(1:4, function(x) "white-space: pre;" %in% html_parts[[x]]$attribs)))
 })
 
@@ -70,7 +70,7 @@ test_that("as_html bolding works", {
     rrow("r3   ", indent = 2)
   )
   html_tbl <- as_html(tbl, bold = "row_names")
-  html_parts <- html_tbl$children[[1]][[2]]$children
+  html_parts <- html_tbl$children[[1]][[3]]$children
   expect_true(all(sapply(2:4, function(x) "font-weight: bold;" %in% html_parts[[x]]$children[[1]][[1]]$attribs)))
 })
 
@@ -83,7 +83,7 @@ test_that("as_html header line works", {
     rrow("r3   ", indent = 2)
   )
   html_tbl <- as_html(tbl, header_sep_line = TRUE)
-  html_parts <- html_tbl$children[[1]][[2]]$children[[1]]$children[[1]]
+  html_parts <- html_tbl$children[[1]][[3]]$children[[1]]$children[[1]]
   expect_true(all(sapply(1:4, function(x) "border-bottom: 1px solid black;" %in% html_parts[[x]]$attribs)))
 })
 
@@ -108,11 +108,11 @@ test_that("as_html indentation is translated to rows with linebreaks", {
   # Resolves correctly \n
   expect_silent(res <- as_html(tbl, expand_newlines = TRUE))
   expect_equal(
-    as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[1]]),
+    as.character(res$children[[1]][[3]]$children[[7]]$children[[1]][[1]]),
     '<td style="text-align: left; padding-left: 3ch;"></td>'
   )
   expect_equal(
-    as.character(res$children[[1]][[2]]$children[[7]]$children[[1]][[2]]),
+    as.character(res$children[[1]][[3]]$children[[7]]$children[[1]][[2]]),
     '<td style="text-align: center;">  ^  </td>'
   )
 })
