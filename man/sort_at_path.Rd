@@ -10,7 +10,8 @@ sort_at_path(
   scorefun,
   decreasing = NA,
   na.pos = c("omit", "last", "first"),
-  .prev_path = character()
+  .prev_path = character(),
+  ...
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ characters.}
 should be placed in the order.}
 
 \item{.prev_path}{(\code{character})\cr internal detail, do not set manually.}
+
+\item{...}{Additional (named) arguments that will be passed directly down to
+\code{score_fun} \emph{if} it accepts them (or accepts \code{...} itself).}
 }
 \value{
 A \code{TableTree} with the same structure as \code{tt} with the exception that the requested sorting has been done
@@ -45,6 +49,11 @@ Main sorting function to order the sub-structure of a \code{TableTree} at a part
 wildcard). For each such subtable, it then calls \code{scorefun} on each direct child of the table, using the resulting
 scores to determine their sorted order. \code{tt} is then modified to reflect each of these one or more sorting
 operations.
+
+\code{score_fun} can optionally accept \code{decreasing}, which will be passed the value passed
+to \code{sort_at_path} automatically, and other arguments which can be set via \code{...}. The
+first argument passed to \code{scorefun} will always be the table structure (subtable or row)
+it is scoring.
 
 In \code{path}, a leading \code{"root"} element will be ignored, regardless of whether this matches the object name (and thus
 actual root path name) of \code{tt}. Including \code{"root"} in paths where it does not match the name of \code{tt} may mask deeper
@@ -124,6 +133,23 @@ scorefun <- function(tt) {
 }
 # Sorting mean and median for all the AGE leaves!
 sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
+
+last_cat_scorefun <- function(x, decreasing, lastcat) {
+  mycat <- obj_name(x)
+  if (mycat == lastcat) {
+    ifelse(isTRUE(decreasing), -Inf, Inf)
+  } else {
+    match(tolower(substr(mycat, 1, 1)), letters)
+  }
+}
+
+lyt2 <- basic_table() \%>\%
+  split_rows_by("SEX") \%>\%
+  analyze("AGE")
+
+tbl2 <- build_table(lyt2, DM)
+sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M")
+sort_at_path(tbl2, "SEX", last_cat_scorefun, lastcat = "M", decreasing = FALSE)
 
 }
 \seealso{

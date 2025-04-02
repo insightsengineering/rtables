@@ -216,6 +216,8 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #' @param stop_depth (`numeric(1)`)\cr the depth after which subtrees should not be checked for pruning.
 #'   Defaults to `NA` which indicates pruning should happen at all levels.
 #' @param depth (`numeric(1)`)\cr used internally, not intended to be set by the end user.
+#' @param ... named arguments to optionally be passed down to `prune_func` if it
+#'   accepts them (or `...`)
 #'
 #' @return A `TableTree` pruned via recursive application of `prune_func`.
 #'
@@ -241,7 +243,8 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 prune_table <- function(tt,
                         prune_func = prune_empty_level,
                         stop_depth = NA_real_,
-                        depth = 0) {
+                        depth = 0,
+                        ...) {
   if (!is.na(stop_depth) && depth > stop_depth) {
     return(tt)
   }
@@ -254,15 +257,17 @@ prune_table <- function(tt,
 
   kids <- tree_children(tt)
 
+  more_args <- match_fun_args(prune_func, depth = depth, ...)
   torm <- vapply(kids, function(tb) {
-    !is.null(tb) && prune_func(tb)
+    !is.null(tb) && do.call(prune_func, c(list(tb), more_args))
   }, NA)
 
   keepkids <- kids[!torm]
   keepkids <- lapply(keepkids, prune_table,
     prune_func = prune_func,
     stop_depth = stop_depth,
-    depth = depth + 1
+    depth = depth + 1,
+    ...
   )
 
   keepkids <- keepkids[!vapply(keepkids, is.null, NA)]
