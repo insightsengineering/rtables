@@ -73,9 +73,10 @@ keep_split_levels <- function(only, reorder = TRUE) {
     unique_vals <- .get_unique_levels(varvec)
 
     # Error in case not all levels are present
-    if (!all(only %in% unique_vals)) {
+    if (length(varvec) > 0 && !all(only %in% unique_vals)) {
+      what <- ifelse(is.factor(varvec), "factor level(s)", "character value(s)")
       stop(
-        "Attempted to keep factor level(s) in split that are not present in data: \n",
+        "Attempted to keep ", what, " in split that are not present in data: \n",
         .print_setdiff_error(only, unique_vals)
       )
     }
