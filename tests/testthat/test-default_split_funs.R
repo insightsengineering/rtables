@@ -42,6 +42,41 @@ test_that("keep_split_levels(reorder) works correctly", {
   expect_error(build_table(lyt, DM), "AbsentCountry")
 })
 
+test_that("keep_split_level works also with empty splits", {
+  # Regression #1010
+  iris2 <- iris %>%
+    mutate(chr_split = as.character(Species)) %>%
+    mutate(fct_split = factor(rep(1, nrow(iris)), levels = c(1, 2)))
+
+  lyt <- basic_table() %>%
+    split_rows_by("fct_split") %>%
+    split_rows_by("chr_split", split_fun = keep_split_levels(c("setosa"))) %>%
+    analyze("Sepal.Length")
+
+  expect_silent(tbl <- build_table(lyt, iris2))
+
+  # Error with character
+  lyt <- basic_table() %>%
+    split_rows_by("chr_split", split_fun = keep_split_levels(c("a"))) %>%
+    analyze("Sepal.Length")
+
+  expect_error(
+    tbl <- build_table(lyt, iris2),
+    "Attempted to keep character value"
+  )
+
+  # Error with factor
+  iris2$chr_split <- as.factor(iris2$chr_split)
+  lyt <- basic_table() %>%
+    split_rows_by("chr_split", split_fun = keep_split_levels(c("a"))) %>%
+    analyze("Sepal.Length")
+
+  expect_error(
+    tbl <- build_table(lyt, iris2),
+    "Attempted to keep factor level"
+  )
+})
+
 test_that("reorder_split_levels(drlevels = TRUE) works", {
   lyt <- basic_table() %>%
     split_rows_by(
