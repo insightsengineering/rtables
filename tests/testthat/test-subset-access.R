@@ -112,6 +112,22 @@ test_that("cell_values function works as desired", {
   )
 })
 
+test_that("Subsetting by integer(0) keeps decorations", {
+  # Regression #870
+  test_tbl <- basic_table(title = "t", subtitles = "s", main_footer = "mf", prov_footer = "pf") %>%
+    analyze("BMRKR1") %>%
+    build_table(DM)
+
+  expect_equal(main_title(test_tbl), main_title(test_tbl[integer(), , keep_titles = TRUE]))
+  expect_equal(subtitles(test_tbl), subtitles(test_tbl[integer(), , keep_titles = TRUE]))
+  expect_equal(all_footers(test_tbl), all_footers(test_tbl[integer(), , keep_footers = TRUE]))
+
+  expect_error(
+    test_tbl[, integer()],
+    "No column selected."
+  )
+})
+
 
 test_colpaths <- function(tt) {
   cdf <- make_col_df(tt, visible_only = TRUE)
