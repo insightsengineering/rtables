@@ -121,7 +121,7 @@ test_that("Subsetting by integer(0) keeps decorations", {
   expect_equal(main_title(test_tbl), main_title(test_tbl[integer(), , keep_titles = TRUE]))
   expect_equal(subtitles(test_tbl), subtitles(test_tbl[integer(), , keep_titles = TRUE]))
   expect_equal(all_footers(test_tbl), all_footers(test_tbl[integer(), , keep_footers = TRUE]))
-  
+
   expect_no_error(test_tbl[, NA])
   expect_no_error(test_tbl[NA, NA])
   expect_no_error(test_tbl[, c(0, 1)])
