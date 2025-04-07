@@ -121,6 +121,11 @@ test_that("Subsetting by integer(0) keeps decorations", {
   expect_equal(main_title(test_tbl), main_title(test_tbl[integer(), , keep_titles = TRUE]))
   expect_equal(subtitles(test_tbl), subtitles(test_tbl[integer(), , keep_titles = TRUE]))
   expect_equal(all_footers(test_tbl), all_footers(test_tbl[integer(), , keep_footers = TRUE]))
+  
+  expect_no_error(test_tbl[, NA])
+  expect_no_error(test_tbl[NA, NA])
+  expect_no_error(test_tbl[, c(0, 1)])
+  expect_no_error(test_tbl[, c(NA, 1)])
 
   expect_error(
     test_tbl[, integer()],
@@ -648,7 +653,7 @@ test_that("tt_at_path gives an informative error when labels are used instead of
 
   out <- basic_table() %>%
     split_rows_by("ARM") %>%
-    analyze("BMRKR1", afun = mean, show_labels = "visible", var_label = "An error may occur") %>%
+    analyze("BMRKR1", afun = mean, show_labels = "visible", var_labels = "An error may occur") %>%
     build_table(adsl)
 
   real_path <- row_paths(out)[[3]]
