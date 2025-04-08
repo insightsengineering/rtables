@@ -43,6 +43,9 @@ test_that("keep_split_levels(reorder) works correctly", {
 })
 
 test_that("keep_split_level works also with empty splits", {
+  skip_if_not_installed("dplyr")
+  require(dplyr, quietly = TRUE)
+
   # Regression #1010
   iris2 <- iris %>%
     mutate(chr_split = as.character(Species)) %>%
