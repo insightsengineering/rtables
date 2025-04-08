@@ -15,6 +15,7 @@
  * Fixed a bug in `as_result_df(make_ard = TRUE)` when different columns had different amounts of `""` values.
  * Fixed bug in cases where `stat_name` is `character(0)` (`as_result_df(make_ard = TRUE)`).
  * Added safe condition for `keep_split_levels()` when branch is empty (`character(0)`).
+ * Fixed a bug dropping information from tables when indexed with `integer()`, i.e. producing an empty table.
  
 ### Miscellaneous
  * Added handler `add_tbl_str_decimals = TRUE` to `...` into `as_result_df(make_ard = TRUE)` to add `stat_string` column for the 
@@ -22,6 +23,7 @@
  * As `stat_string` are more fragile than default `as_result_df(make_ard = TRUE)` calculation and are in theory optional, a warning is thrown when errors arise and the `stat_string` column is not added.
  * Improved error messaging for cases where `tt_at_path` used a path based on row labels instead of row names.
  * Added more informative error message when `keep_split_levels()` is used to keep absent values.
+ * Clearer error message when selecting 0 columns from a table with `[`.
 
 ## rtables 0.6.11
 

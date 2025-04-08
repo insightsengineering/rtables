@@ -943,6 +943,14 @@ subset_by_rownum <- function(tt,
     if (isTRUE(keep_topleft)) {
       top_left(ret) <- top_left(tt)
     }
+    if (isTRUE(keep_titles)) {
+      main_title(ret) <- main_title(tt)
+      subtitles(ret) <- subtitles(tt)
+    }
+    if (isTRUE(keep_footers)) {
+      main_footer(ret) <- main_footer(tt)
+      prov_footer(ret) <- prov_footer(tt)
+    }
     return(ret)
   }
 
@@ -1146,6 +1154,10 @@ setMethod(
     keep_titles <- list(...)[["keep_titles"]] %||% FALSE
     keep_footers <- list(...)[["keep_footers"]] %||% keep_titles
     reindex_refs <- list(...)[["reindex_refs"]] %||% TRUE
+
+    if (length(j) == 0 || (length(j) == 1 && !is.na(j) && j == 0)) {
+      stop("No column selected. Please consider using rtables::row.names(<tbl>) to get the row names.")
+    }
 
     nr <- nrow(x)
     nc <- ncol(x)
