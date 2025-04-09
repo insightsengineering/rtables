@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
 Version: 0.6.12
-Date: 2025-04-09
+Date: 2025-04-08
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
