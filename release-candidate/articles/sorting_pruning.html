@@ -6,7 +6,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="rtables">
 <title>Pruning and Sorting Tables • rtables</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -15,27 +14,22 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Pruning and Sorting Tables">
-<meta property="og:description" content="rtables">
-<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><link rel="stylesheet" href="../consent.css">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Pruning and Sorting Tables">
+<link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.12</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,55 +38,56 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/rtables.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/introduction.html">Introduction to {rtables}</a>
-    <a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6>
-    <a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
-    <a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
-    <a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a>
-    <a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a>
-    <a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6></li>
+    <li><a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a></li>
+    <li><a class="dropdown-item" href="../articles/ard_how_to.html">Generating QC-Ready Result Data Frames (ARDs) from Tables</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Table Customization</h6></li>
+    <li><a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a></li>
+    <li><a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a></li>
+    <li><a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/col_counts.html">Column Counts and Formats</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-developer-guide">Developer Guide</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
-    <a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-developer-guide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Developer Guide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
+<li><a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
-
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
-    <a class="dropdown-item" href="../coverage-report/">Coverage report</a>
-    <a class="dropdown-item" href="../unit-test-report/">Unit test report</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-reports">
+<li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
+    <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
+    <li><a class="dropdown-item" href="../unit-test-report-non-cran/">Non-CRAN unit test report</a></li>
+  </ul>
 </li>
-      <li class="nav-item dropdown">
+      <div><li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-versions">Versions</a>
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc2">v0.6.12-rc2</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc1">v0.6.12-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.11">v0.6.11</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.10">v0.6.10</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.9">v0.6.9</a>
@@ -106,19 +101,13 @@
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a>
 </div>
-</li>
+</li></div>
 </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/insightsengineering/rtables">
-    <span class="fa fa-github fa-lg"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/insightsengineering/rtables"><span class="fa fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -131,18 +120,18 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Pruning and Sorting Tables</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Pruning and Sorting Tables</h1>
                         <h4 data-toc-skip class="author">Gabriel Becker,
 Adrian Waddell and Davide Garolini</h4>
-
-            <h4 data-toc-skip class="date">2023-12-07</h4>
-
+            
+            <h4 data-toc-skip class="date">2025-04-10</h4>
+      
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/sorting_pruning.Rmd" class="external-link"><code>vignettes/sorting_pruning.Rmd</code></a></small>
       <div class="d-none name"><code>sorting_pruning.Rmd</code></div>
     </div>
 
-
-
+    
+    
 <style type="text/css">
 .reveal .r code {
     white-space: pre;
@@ -178,8 +167,8 @@ other filtering contain 0 rows.</li>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">raw_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">raw_lyt</span>, <span class="va">DM</span><span class="op">)</span></span>
-<span><span class="va">raw_tbl</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
+<span><span class="va">raw_tbl</span></span>
+<span><span class="co">#                                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                                       44 (62.9%)   35 (68.6%)   0 (NA%)       0 (NA%)        37 (66.1%)   31 (62.0%)   0 (NA%)       0 (NA%)        40 (65.6%)   44 (64.7%)   0 (NA%)       0 (NA%)     </span></span>
@@ -237,7 +226,7 @@ other filtering contain 0 rows.</li>
 <span><span class="co">#   B                                          0 (0.0%)     0 (0.0%)    0 (NA%)       0 (NA%)         0 (0.0%)     0 (0.0%)    0 (NA%)       0 (NA%)         0 (0.0%)     0 (0.0%)    0 (NA%)       0 (NA%)     </span></span>
 <span><span class="co">#     Mean                                        NA           NA         NA             NA              NA           NA         NA             NA              NA           NA         NA             NA       </span></span>
 <span><span class="co">#   C                                          0 (0.0%)     0 (0.0%)    0 (NA%)       0 (NA%)         0 (0.0%)     0 (0.0%)    0 (NA%)       0 (NA%)         0 (0.0%)     0 (0.0%)    0 (NA%)       0 (NA%)     </span></span>
-<span><span class="co">#     Mean                                        NA           NA         NA             NA              NA           NA         NA             NA              NA           NA         NA             NA</span></span></code></pre>
+<span><span class="co">#     Mean                                        NA           NA         NA             NA              NA           NA         NA             NA              NA           NA         NA             NA</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="trimming">Trimming<a class="anchor" aria-label="anchor" href="#trimming"></a>
@@ -260,9 +249,9 @@ and returns <code>TRUE</code> if the row should be removed.</p>
 <p>The default trimming function removes rows in which all columns have
 no values in them, i.e. that have all <code>NA</code> values or all
 <code>0</code> values:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/trim_rows.html">trim_rows</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span></span>
+<span><span class="co">#                                                  A: Drug X                                              B: Placebo                                           C: Combination                   </span></span>
 <span><span class="co">#                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED</span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   0 (NA%)       0 (NA%)        37 (66.1%)   31 (62.0%)   0 (NA%)       0 (NA%)        40 (65.6%)   44 (64.7%)   0 (NA%)       0 (NA%)     </span></span>
@@ -285,7 +274,7 @@ no values in them, i.e. that have all <code>NA</code> values or all
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)    0 (NA%)       0 (NA%)         1 (1.8%)     4 (8.0%)    0 (NA%)       0 (NA%)         3 (4.9%)     1 (1.5%)    0 (NA%)       0 (NA%)     </span></span>
 <span><span class="co">#     Mean                      37.00        43.67        NA             NA            48.00        36.75        NA             NA            34.33        36.00        NA             NA       </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)    0 (NA%)       0 (NA%)         3 (5.4%)     0 (0.0%)    0 (NA%)       0 (NA%)         4 (6.6%)     4 (5.9%)    0 (NA%)       0 (NA%)     </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        NA             NA            44.67          NA         NA             NA            38.50        35.00        NA             NA</span></span></code></pre>
+<span><span class="co">#     Mean                      35.50        44.00        NA             NA            44.67          NA         NA             NA            38.50        35.00        NA             NA</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="trimming-columns">Trimming Columns<a class="anchor" aria-label="anchor" href="#trimming-columns"></a>
@@ -293,15 +282,14 @@ no values in them, i.e. that have all <code>NA</code> values or all
 <p>There are currently no special utilities for trimming columns but we
 can remove the empty columns with fairly straightforward column
 subsetting using the <code><a href="../reference/col_accessors.html">col_counts()</a></code> function:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">coltrimmed</span> <span class="op">&lt;-</span> <span class="va">raw_tbl</span><span class="op">[</span>, <span class="fu"><a href="../reference/col_accessors.html">col_counts</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co"># Note: method with signature 'VTableTree#missing#ANY' chosen for function '[',</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">coltrimmed</span> <span class="op">&lt;-</span> <span class="va">raw_tbl</span><span class="op">[</span>, <span class="fu"><a href="../reference/col_accessors.html">col_counts</a></span><span class="op">(</span><span class="va">raw_tbl</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span></span>
+<span><span class="co"># Note: method with signature 'VTableTree#missing#ANY' chosen for function '[',</span></span>
 <span><span class="co">#  target signature 'TableTree#missing#logical'.</span></span>
-<span><span class="co">#  "VTableTree#ANY#logical" would also be valid</span></span></code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">h_coltrimmed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="va">coltrimmed</span>, n <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span>
-<span><span class="va">h_coltrimmed</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="co">#  "VTableTree#ANY#logical" would also be valid</span></span>
+<span><span class="va">h_coltrimmed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="va">coltrimmed</span>, n <span class="op">=</span> <span class="fl">14</span><span class="op">)</span></span>
+<span><span class="va">h_coltrimmed</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -317,11 +305,11 @@ subsetting using the <code><a href="../reference/col_accessors.html">col_counts(
 <span><span class="co">#   B                         7 (10.0%)     3 (5.9%)     3 (5.4%)     3 (6.0%)     6 (9.8%)     6 (8.8%) </span></span>
 <span><span class="co">#     Mean                      36.14        34.33        29.67        32.00        36.33        31.00   </span></span>
 <span><span class="co">#   C                          6 (8.6%)    6 (11.8%)     4 (7.1%)    7 (14.0%)     3 (4.9%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      31.33        39.67        34.50        34.00        33.00        36.50</span></span></code></pre>
+<span><span class="co">#     Mean                      31.33        39.67        34.50        34.00        33.00        36.50</span></span></code></pre></div>
 <p>Now, it is interesting to see how this table is structured:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">h_coltrimmed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># [TableTree] RACE</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">h_coltrimmed</span><span class="op">)</span></span>
+<span><span class="co"># [TableTree] RACE</span></span>
 <span><span class="co">#  [TableTree] ASIAN [cont: 1 x 6]</span></span>
 <span><span class="co">#   [TableTree] STRATA1</span></span>
 <span><span class="co">#    [TableTree] A [cont: 1 x 6]</span></span>
@@ -337,7 +325,7 @@ subsetting using the <code><a href="../reference/col_accessors.html">col_counts(
 <span><span class="co">#    [TableTree] B [cont: 1 x 6]</span></span>
 <span><span class="co">#     [ElementaryTable] AGE (1 x 6)</span></span>
 <span><span class="co">#    [TableTree] C [cont: 1 x 6]</span></span>
-<span><span class="co">#     [ElementaryTable] AGE (1 x 6)</span></span></code></pre>
+<span><span class="co">#     [ElementaryTable] AGE (1 x 6)</span></span></code></pre></div>
 <p>For a deeper understanding of the fundamental structures in
 <code>rtables</code>, we suggest taking a look at slides 69-76 of this
 <a href="https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing" class="external-link">Slide
@@ -366,9 +354,9 @@ should be treated differently.</p>
 <p>Another interesting function that can be used to understand the
 connection between row names and their representational path is the
 following:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">h_coltrimmed</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># rowname                      node_class    path                                                                </span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">h_coltrimmed</span><span class="op">)</span></span>
+<span><span class="co"># rowname                      node_class    path                                                                </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                        ContentRow    RACE, ASIAN, @content, ASIAN                                        </span></span>
 <span><span class="co">#   A                          ContentRow    RACE, ASIAN, STRATA1, A, @content, A                                </span></span>
@@ -383,7 +371,7 @@ following:</p>
 <span><span class="co">#   B                          ContentRow    RACE, BLACK OR AFRICAN AMERICAN, STRATA1, B, @content, B            </span></span>
 <span><span class="co">#     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, B, AGE, Mean              </span></span>
 <span><span class="co">#   C                          ContentRow    RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C, @content, C            </span></span>
-<span><span class="co">#     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C, AGE, Mean</span></span></code></pre>
+<span><span class="co">#     Mean                     DataRow       RACE, BLACK OR AFRICAN AMERICAN, STRATA1, C, AGE, Mean</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -403,10 +391,10 @@ contains all zeros or all <code>NA</code>s</li>
 <code>NA</code>s</li>
 <li>Removing the full subtree if no unpruned children remain</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span><span class="op">)</span></span>
-<span><span class="va">pruned</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="va">pruned</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -429,16 +417,16 @@ contains all zeros or all <code>NA</code>s</li>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
+<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre></div>
 <p>We can also use the <code><a href="../reference/trim_prune_funs.html">low_obs_pruner()</a></code> pruning function
 constructor to create a pruning function which removes subtrees with
 content summaries whose first entries for each column sum or average are
 below a specified number. (In the default summaries the first entry per
 column is the count).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"mean"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">pruned2</span></span></code></pre></div>
-<pre><code><span><span class="co">#                   A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="va">pruned2</span></span>
+<span><span class="co">#                   A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                F            M            F            M            F            M     </span></span>
 <span><span class="co"># ——————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN      44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -447,16 +435,16 @@ column is the count).</p>
 <span><span class="co">#   B        16 (22.9%)   8 (15.7%)    13 (23.2%)   16 (32.0%)   10 (16.4%)   12 (17.6%)</span></span>
 <span><span class="co">#     Mean     33.75        34.88        32.46        30.94        33.30        35.92   </span></span>
 <span><span class="co">#   C        13 (18.6%)   15 (29.4%)   10 (17.9%)   9 (18.0%)    15 (24.6%)   16 (23.5%)</span></span>
-<span><span class="co">#     Mean     36.92        35.60        34.00        31.89        33.47        31.38</span></span></code></pre>
+<span><span class="co">#     Mean     36.92        35.60        34.00        31.89        33.47        31.38</span></span></code></pre></div>
 <p>Note that because the pruning is being applied recursively, only the
 <code>ASIAN</code> subtree remains because even though the full
 <code>BLACK OR AFRICAN AMERICAN</code> subtree encompassed enough
 observations, the strata within it did not. We can take care of this by
 setting the <code>stop_depth</code> for pruning to <code>1</code>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"sum"</span><span class="op">)</span>, stop_depth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">pruned3</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="va">pruned3</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -479,15 +467,15 @@ setting the <code>stop_depth</code> for pruning to <code>1</code>.</p>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
+<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre></div>
 <p>We can also see that pruning to a lower number of observations, say,
 to a total of <code>16</code>, with no <code>stop_depth</code> removes
 some but not all of the strata from our third race
 (<code>WHITE</code>).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pruned4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="va">coltrimmed</span>, <span class="fu"><a href="../reference/trim_prune_funs.html">low_obs_pruner</a></span><span class="op">(</span><span class="fl">16</span>, <span class="st">"sum"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">pruned4</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="va">pruned4</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -506,7 +494,7 @@ some but not all of the strata from our third race
 <span><span class="co">#     Mean                      31.33        39.67        34.50        34.00        33.00        36.50   </span></span>
 <span><span class="co"># WHITE                       8 (11.4%)    6 (11.8%)    7 (12.5%)    7 (14.0%)    8 (13.1%)    10 (14.7%)</span></span>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
-<span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00</span></span></code></pre>
+<span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="sorting">Sorting<a class="anchor" aria-label="anchor" href="#sorting"></a>
@@ -536,9 +524,9 @@ that this function fails if the child being scored does not have a
 content function (i.e., if <code><a href="../reference/summarize_row_groups.html">summarize_row_groups()</a></code> was not
 used at the corresponding point in the layout). We can see this in it’s
 definition, below:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cont_n_allcols</span></span></code></pre></div>
-<pre><code><span><span class="co"># function (tt) </span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cont_n_allcols</span></span>
+<span><span class="co"># function (tt) </span></span>
 <span><span class="co"># {</span></span>
 <span><span class="co">#     ctab &lt;- content_table(tt)</span></span>
 <span><span class="co">#     if (NROW(ctab) == 0) {</span></span>
@@ -547,16 +535,16 @@ definition, below:</p>
 <span><span class="co">#     }</span></span>
 <span><span class="co">#     sum(sapply(row_values(tree_children(ctab)[[1]]), function(cv) cv[1]))</span></span>
 <span><span class="co"># }</span></span>
-<span><span class="co"># &lt;bytecode: 0x55fea8fcecd8&gt;</span></span>
-<span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre>
+<span><span class="co"># &lt;bytecode: 0x55e18fc9cb10&gt;</span></span>
+<span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre></div>
 <p>Therefore, a fundamental difference between pruning and sorting is
 that sorting occurs at particular places in the table, as defined by a
 path.</p>
 <p>For example, we can sort the strata values (<code>ContentRow</code>)
 by observation counts within just the <code>ASIAN</code> subtable:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -579,9 +567,8 @@ by observation counts within just the <code>ASIAN</code> subtable:</p>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># B and C are swapped as the global count (sum of all column counts) of strata C is higher than the one of strata B</span></span></code></pre></div>
+<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span>
+<span><span class="co"># B and C are swapped as the global count (sum of all column counts) of strata C is higher than the one of strata B</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="wildcards-in-sort-paths">Wildcards in Sort Paths<a class="anchor" aria-label="anchor" href="#wildcards-in-sort-paths"></a>
@@ -594,9 +581,9 @@ after the <code>*</code> and the score function.</p>
 <p>Thus we can extend our sorting of strata within the
 <code>ASIAN</code> subtable to all race-specific subtables by using the
 wildcard:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -619,16 +606,15 @@ wildcard:</p>
 <span><span class="co">#   A                          2 (2.9%)     1 (2.0%)     3 (5.4%)     3 (6.0%)     1 (1.6%)     5 (7.4%) </span></span>
 <span><span class="co">#     Mean                      34.00        45.00        29.33        33.33        35.00        32.80   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># All subtables, i.e. ASIAN, BLACK..., and WHITE, are reordered separately</span></span></code></pre></div>
+<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span>
+<span><span class="co"># All subtables, i.e. ASIAN, BLACK..., and WHITE, are reordered separately</span></span></code></pre></div>
 <p>The above is equivalent to separately calling the following:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tmptbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"ASIAN"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span>
 <span><span class="va">tmptbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tmptbl</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"BLACK OR AFRICAN AMERICAN"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span>
 <span><span class="va">tmptbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tmptbl</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"WHITE"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span><span class="op">)</span></span>
-<span><span class="va">tmptbl</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="va">tmptbl</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -651,13 +637,13 @@ wildcard:</p>
 <span><span class="co">#   A                          2 (2.9%)     1 (2.0%)     3 (5.4%)     3 (6.0%)     1 (1.6%)     5 (7.4%) </span></span>
 <span><span class="co">#     Mean                      34.00        45.00        29.33        33.33        35.00        32.80   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
+<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre></div>
 <p>It is possible to understand better pathing with
 <code><a href="../reference/table_structure.html">table_structure()</a></code> that highlights the tree-like structure
 and the node names:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">pruned</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># [TableTree] RACE</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">pruned</span><span class="op">)</span></span>
+<span><span class="co"># [TableTree] RACE</span></span>
 <span><span class="co">#  [TableTree] ASIAN [cont: 1 x 6]</span></span>
 <span><span class="co">#   [TableTree] STRATA1</span></span>
 <span><span class="co">#    [TableTree] A [cont: 1 x 6]</span></span>
@@ -681,11 +667,11 @@ and the node names:</p>
 <span><span class="co">#    [TableTree] B [cont: 1 x 6]</span></span>
 <span><span class="co">#     [ElementaryTable] AGE (1 x 6)</span></span>
 <span><span class="co">#    [TableTree] C [cont: 1 x 6]</span></span>
-<span><span class="co">#     [ElementaryTable] AGE (1 x 6)</span></span></code></pre>
+<span><span class="co">#     [ElementaryTable] AGE (1 x 6)</span></span></code></pre></div>
 <p>or with <code>row_paths_summary</code>:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">pruned</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co"># rowname                      node_class    path                                                                </span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/row_paths_summary.html">row_paths_summary</a></span><span class="op">(</span><span class="va">pruned</span><span class="op">)</span></span>
+<span><span class="co"># rowname                      node_class    path                                                                </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                        ContentRow    RACE, ASIAN, @content, ASIAN                                        </span></span>
 <span><span class="co">#   A                          ContentRow    RACE, ASIAN, STRATA1, A, @content, A                                </span></span>
@@ -707,7 +693,7 @@ and the node names:</p>
 <span><span class="co">#   B                          ContentRow    RACE, WHITE, STRATA1, B, @content, B                                </span></span>
 <span><span class="co">#     Mean                     DataRow       RACE, WHITE, STRATA1, B, AGE, Mean                                  </span></span>
 <span><span class="co">#   C                          ContentRow    RACE, WHITE, STRATA1, C, @content, C                                </span></span>
-<span><span class="co">#     Mean                     DataRow       RACE, WHITE, STRATA1, C, AGE, Mean</span></span></code></pre>
+<span><span class="co">#     Mean                     DataRow       RACE, WHITE, STRATA1, C, AGE, Mean</span></span></code></pre></div>
 <p>Note in the latter we see content rows as those with paths following
 <code>@content</code>, e.g., <code>ASIAN, @content, ASIAN</code>. The
 first of these at a given path (i.e.,
@@ -715,10 +701,10 @@ first of these at a given path (i.e.,
 used by the scoring functions which begin with <code>cont_</code>.</p>
 <p>We can directly sort the ethnicity by observations in increasing
 order:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ethsort</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span><span class="op">)</span>, scorefun <span class="op">=</span> <span class="va">cont_n_allcols</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="va">ethsort</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="va">ethsort</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># WHITE                       8 (11.4%)    6 (11.8%)    7 (12.5%)    7 (14.0%)    8 (13.1%)    10 (14.7%)</span></span>
@@ -741,12 +727,12 @@ order:</p>
 <span><span class="co">#   B                         16 (22.9%)   8 (15.7%)    13 (23.2%)   16 (32.0%)   10 (16.4%)   12 (17.6%)</span></span>
 <span><span class="co">#     Mean                      33.75        34.88        32.46        30.94        33.30        35.92   </span></span>
 <span><span class="co">#   C                         13 (18.6%)   15 (29.4%)   10 (17.9%)   9 (18.0%)    15 (24.6%)   16 (23.5%)</span></span>
-<span><span class="co">#     Mean                      36.92        35.60        34.00        31.89        33.47        31.38</span></span></code></pre>
+<span><span class="co">#     Mean                      36.92        35.60        34.00        31.89        33.47        31.38</span></span></code></pre></div>
 <p>Within each ethnicity separately, sort the strata by number of
 females in arm C (i.e. column position <code>5</code>):</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="fu"><a href="../reference/score_funs.html">cont_n_onecol</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="fu"><a href="../reference/score_funs.html">cont_n_onecol</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -769,7 +755,7 @@ females in arm C (i.e. column position <code>5</code>):</p>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   A                          2 (2.9%)     1 (2.0%)     3 (5.4%)     3 (6.0%)     1 (1.6%)     5 (7.4%) </span></span>
-<span><span class="co">#     Mean                      34.00        45.00        29.33        33.33        35.00        32.80</span></span></code></pre>
+<span><span class="co">#     Mean                      34.00        45.00        29.33        33.33        35.00        32.80</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="sorting-within-an-analysis-subtable">Sorting Within an Analysis Subtable<a class="anchor" aria-label="anchor" href="#sorting-within-an-analysis-subtable"></a>
@@ -784,7 +770,7 @@ printed</strong></em>.</p>
 (<code>DataRow</code>), and a content subtable
 (<code>ContentRow</code>), we modify and prune (as before) a similar raw
 table as before:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">more_analysis_fnc</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/in_rows.html">in_rows</a></span><span class="op">(</span></span>
 <span>    <span class="st">"median"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html" class="external-link">median</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
@@ -806,8 +792,8 @@ table as before:</p>
 <span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">raw_lyt</span>, <span class="va">DM</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span></span>
 <span><span class="co">#   A                         27 (22.3%)   20 (18.9%)     31 (24.0%)  </span></span>
@@ -828,7 +814,7 @@ table as before:</p>
 <span><span class="co">#     mean                       35.6         30.8           33.7     </span></span>
 <span><span class="co">#   C                         12 (9.9%)    11 (10.4%)      7 (5.4%)   </span></span>
 <span><span class="co">#     median                     33.0         36.0           32.0     </span></span>
-<span><span class="co">#     mean                       35.5         34.2           35.0</span></span></code></pre>
+<span><span class="co">#     mean                       35.5         34.2           35.0</span></span></code></pre></div>
 <p>What should we do now if we want to sort each median and mean in each
 of the strata variables? We need to write a custom score function as the
 ready-made ones at the moment work only with content nodes
@@ -838,9 +824,9 @@ we will talk in a moment). But before that, we need to think about what
 are we ordering, i.e. we need to specify the right path. We suggest
 looking at the structure first with <code><a href="../reference/table_structure.html">table_structure()</a></code> or
 <code><a href="../reference/row_paths_summary.html">row_paths_summary()</a></code>.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="co"># Direct inspection into the tree-like structure of rtables</span></span></code></pre></div>
-<pre><code><span><span class="co"># [TableTree] RACE</span></span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/table_structure.html">table_structure</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="co"># Direct inspection into the tree-like structure of rtables</span></span>
+<span><span class="co"># [TableTree] RACE</span></span>
 <span><span class="co">#  [TableTree] ASIAN [cont: 1 x 3]</span></span>
 <span><span class="co">#   [TableTree] STRATA1</span></span>
 <span><span class="co">#    [TableTree] A [cont: 1 x 3]</span></span>
@@ -856,7 +842,7 @@ looking at the structure first with <code><a href="../reference/table_structure.
 <span><span class="co">#    [TableTree] B [cont: 1 x 3]</span></span>
 <span><span class="co">#     [ElementaryTable] AGE (2 x 3)</span></span>
 <span><span class="co">#    [TableTree] C [cont: 1 x 3]</span></span>
-<span><span class="co">#     [ElementaryTable] AGE (2 x 3)</span></span></code></pre>
+<span><span class="co">#     [ElementaryTable] AGE (2 x 3)</span></span></code></pre></div>
 <p>We see that to order all of the <code>AGE</code> nodes we need to get
 there with something like this:
 <code>RACE, ASIAN, STRATA1, A, AGE</code> and no more as the next level
@@ -874,13 +860,13 @@ with <code>row_values(tt)</code> from the subtable that is fed to the
 function itself. Note that any score function should be defined as
 having a subtable <code>tt</code> as a unique input parameter and a
 single numeric value as output.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scorefun</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co"># Here we could use browser()</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/row_accessors.html">row_values</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span>, <span class="st">"*"</span>, <span class="st">"AGE"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
+<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span>, <span class="st">"*"</span>, <span class="st">"AGE"</span><span class="op">)</span>, <span class="va">scorefun</span><span class="op">)</span></span>
+<span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span></span>
 <span><span class="co">#   A                         27 (22.3%)   20 (18.9%)     31 (24.0%)  </span></span>
@@ -901,7 +887,7 @@ single numeric value as output.</p>
 <span><span class="co">#     median                     33.0         30.0           33.5     </span></span>
 <span><span class="co">#   C                         12 (9.9%)    11 (10.4%)      7 (5.4%)   </span></span>
 <span><span class="co">#     mean                       35.5         34.2           35.0     </span></span>
-<span><span class="co">#     median                     33.0         36.0           32.0</span></span></code></pre>
+<span><span class="co">#     median                     33.0         36.0           32.0</span></span></code></pre></div>
 <p>To help the user visualize what is happening in the score function we
 show here an example of its exploration from the debugging:</p>
 <pre><code>&gt; sort_at_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE"), scorefun)
@@ -925,9 +911,9 @@ sorting principles from within the custom scoring function. We show this
 by selecting a specific column to sort. Looking at the pre-defined
 function <code><a href="../reference/score_funs.html">cont_n_onecol()</a></code> gives us an insight into how to
 proceed.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cont_n_onecol</span></span></code></pre></div>
-<pre><code><span><span class="co"># function (j) </span></span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cont_n_onecol</span></span>
+<span><span class="co"># function (j) </span></span>
 <span><span class="co"># {</span></span>
 <span><span class="co">#     function(tt) {</span></span>
 <span><span class="co">#         ctab &lt;- content_table(tt)</span></span>
@@ -938,21 +924,21 @@ proceed.</p>
 <span><span class="co">#         row_values(tree_children(ctab)[[1]])[[j]][1]</span></span>
 <span><span class="co">#     }</span></span>
 <span><span class="co"># }</span></span>
-<span><span class="co"># &lt;bytecode: 0x55feaa53e768&gt;</span></span>
-<span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre>
+<span><span class="co"># &lt;bytecode: 0x55e18fe23cb8&gt;</span></span>
+<span><span class="co"># &lt;environment: namespace:rtables&gt;</span></span></code></pre></div>
 <p>We see that a similar function to <code><a href="../reference/score_funs.html">cont_n_allcols()</a></code> is
 wrapped by one that allows a parameter <code>j</code> to be used to
 select a specific column. We will do the same here for selecting which
 column we want to sort.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">scorefun_onecol</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">colpath</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># Here we could use browser()</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span><span class="va">tt</span>, colpath <span class="op">=</span> <span class="va">colpath</span><span class="op">)</span>, use.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="co"># Modified to lose the list names</span></span>
 <span>  <span class="op">}</span></span>
 <span><span class="op">}</span></span>
-<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span>, <span class="st">"*"</span>, <span class="st">"AGE"</span><span class="op">)</span>, <span class="fu">scorefun_onecol</span><span class="op">(</span>colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
+<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span>, <span class="st">"*"</span>, <span class="st">"AGE"</span><span class="op">)</span>, <span class="fu">scorefun_onecol</span><span class="op">(</span>colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"A: Drug X"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#                             A: Drug X    B: Placebo   C: Combination</span></span>
 <span><span class="co"># ————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       79 (65.3%)   68 (64.2%)     84 (65.1%)  </span></span>
 <span><span class="co">#   A                         27 (22.3%)   20 (18.9%)     31 (24.0%)  </span></span>
@@ -973,13 +959,13 @@ column we want to sort.</p>
 <span><span class="co">#     median                     33.0         30.0           33.5     </span></span>
 <span><span class="co">#   C                         12 (9.9%)    11 (10.4%)      7 (5.4%)   </span></span>
 <span><span class="co">#     mean                       35.5         34.2           35.0     </span></span>
-<span><span class="co">#     median                     33.0         36.0           32.0</span></span></code></pre>
+<span><span class="co">#     median                     33.0         36.0           32.0</span></span></code></pre></div>
 <p>In the above table we see that the mean and median rows are reordered
 by their values in the first column, compared to the raw table, as
 desired.</p>
 <p>With this function we can also do the same for columns that are
 nested within larger splits:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simpler table</span></span>
 <span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -989,19 +975,19 @@ nested within larger splits:</p>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"AGE"</span>, afun <span class="op">=</span> <span class="va">more_analysis_fnc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">DM</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/prune_table.html">prune_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#           A: Drug X      B: Placebo      C: Combination  </span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#           A: Drug X      B: Placebo      C: Combination  </span></span>
 <span><span class="co">#            F      M       F       M        F         M   </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># median   32.0    35.0   33.0    31.0     35.0      32.0  </span></span>
-<span><span class="co"># mean     33.7    36.5   33.8    32.1     34.9      34.3</span></span></code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span>, <span class="fu">scorefun_onecol</span><span class="op">(</span>colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"B: Placebo"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#           A: Drug X      B: Placebo      C: Combination  </span></span>
+<span><span class="co"># mean     33.7    36.5   33.8    32.1     34.9      34.3</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">tbl</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"AGE"</span><span class="op">)</span>, <span class="fu">scorefun_onecol</span><span class="op">(</span>colpath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ARM"</span>, <span class="st">"B: Placebo"</span>, <span class="st">"SEX"</span>, <span class="st">"F"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#           A: Drug X      B: Placebo      C: Combination  </span></span>
 <span><span class="co">#            F      M       F       M        F         M   </span></span>
 <span><span class="co"># —————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># mean     33.7    36.5   33.8    32.1     34.9      34.3  </span></span>
-<span><span class="co"># median   32.0    35.0   33.0    31.0     35.0      32.0</span></span></code></pre>
+<span><span class="co"># median   32.0    35.0   33.0    31.0     35.0      32.0</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -1029,11 +1015,11 @@ restrict which cell values are returned</li>
 </ul>
 </li>
 <li>
-<code><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name()</a></code> - Retrieves the name of an object. Note this
+<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_name()</a></code> - Retrieves the name of an object. Note this
 can differ from the label that is displayed (if any is) when printing.
 This will match the element in the path.</li>
 <li>
-<code><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_label()</a></code> - Retrieves the display label of an object.
+<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_label()</a></code> - Retrieves the display label of an object.
 Note this can differ from the name that appears in the path.</li>
 <li>
 <code><a href="../reference/content_table.html">content_table()</a></code> - Retrieves a <code>TableTree</code>
@@ -1055,18 +1041,18 @@ table element but any logic which returns a single string could be used
 here.</p>
 <p>We sort the ethnicity by alphabetical order (in practice undoing our
 previous sorting by ethnicity above).</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_name_scorer</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">nm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span></span>
+<span>  <span class="va">nm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">nm</span><span class="op">)</span></span>
 <span>  <span class="va">nm</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">ethsort</span>, <span class="st">"RACE"</span>, <span class="va">silly_name_scorer</span><span class="op">)</span> <span class="co"># Now, it is sorted alphabetically!</span></span></code></pre></div>
-<pre><code><span><span class="co"># [1] "WHITE"</span></span>
+<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">ethsort</span>, <span class="st">"RACE"</span>, <span class="va">silly_name_scorer</span><span class="op">)</span> <span class="co"># Now, it is sorted alphabetically!</span></span>
+<span><span class="co"># [1] "WHITE"</span></span>
 <span><span class="co"># [1] "BLACK OR AFRICAN AMERICAN"</span></span>
-<span><span class="co"># [1] "ASIAN"</span></span></code></pre>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="co"># [1] "ASIAN"</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -1089,7 +1075,7 @@ previous sorting by ethnicity above).</p>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
 <span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00   </span></span>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
-<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre>
+<span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00</span></span></code></pre></div>
 <p><strong>NOTE</strong>: Generally this would be more appropriately
 done using the <code><a href="../reference/split_funcs.html">reorder_split_levels()</a></code> function within the
 layout rather than as a sort post-processing step, but other character
@@ -1108,10 +1094,10 @@ males and females in arm C.</p>
 terrible idea because it reorders the strata seemingly (but not) at
 random within each race, but illustrates the various things we need to
 do inside custom sorting functions.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_gender_diffcount</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tt</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co">## (1st) content row has same name as object (STRATA1 level)</span></span>
-<span>  <span class="va">rpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span>, <span class="st">"@content"</span>, <span class="fu"><a href="https://rdrr.io/pkg/formatters/man/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">rpath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span>, <span class="st">"@content"</span>, <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html" class="external-link">obj_name</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="co">## the [1] below is cause these are count (pct%) cells</span></span>
 <span>  <span class="co">## and we only want the count part!</span></span>
 <span>  <span class="va">mcount</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="../reference/cell_values.html">cell_values</a></span><span class="op">(</span></span>
@@ -1127,8 +1113,8 @@ do inside custom sorting functions.</p>
 <span>  <span class="op">(</span><span class="va">mcount</span> <span class="op">-</span> <span class="va">fcount</span><span class="op">)</span> <span class="op">/</span> <span class="va">fcount</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="va">silly_gender_diffcount</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
+<span><span class="fu"><a href="../reference/sort_at_path.html">sort_at_path</a></span><span class="op">(</span><span class="va">pruned</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RACE"</span>, <span class="st">"*"</span>, <span class="st">"STRATA1"</span><span class="op">)</span>, <span class="va">silly_gender_diffcount</span><span class="op">)</span></span>
+<span><span class="co">#                                    A: Drug X                B: Placebo              C: Combination     </span></span>
 <span><span class="co">#                                 F            M            F            M            F            M     </span></span>
 <span><span class="co"># ———————————————————————————————————————————————————————————————————————————————————————————————————————</span></span>
 <span><span class="co"># ASIAN                       44 (62.9%)   35 (68.6%)   37 (66.1%)   31 (62.0%)   40 (65.6%)   44 (64.7%)</span></span>
@@ -1151,11 +1137,11 @@ do inside custom sorting functions.</p>
 <span><span class="co">#   C                          2 (2.9%)     2 (3.9%)     3 (5.4%)     0 (0.0%)     4 (6.6%)     4 (5.9%) </span></span>
 <span><span class="co">#     Mean                      35.50        44.00        44.67          NA         38.50        35.00   </span></span>
 <span><span class="co">#   B                          4 (5.7%)     3 (5.9%)     1 (1.8%)     4 (8.0%)     3 (4.9%)     1 (1.5%) </span></span>
-<span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00</span></span></code></pre>
+<span><span class="co">#     Mean                      37.00        43.67        48.00        36.75        34.33        36.00</span></span></code></pre></div>
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 

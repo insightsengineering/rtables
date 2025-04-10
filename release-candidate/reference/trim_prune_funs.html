@@ -6,9 +6,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Criteria functions (and constructors thereof) for trimming and pruning
-tables.">
-<title>Trimming and Pruning Criteria — all_zero_or_na • rtables</title>
+<title>Trimming and pruning criteria — all_zero_or_na • rtables</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -16,28 +14,25 @@ tables.">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Trimming and Pruning Criteria — all_zero_or_na">
-<meta property="og:description" content="Criteria functions (and constructors thereof) for trimming and pruning
-tables.">
-<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><link rel="stylesheet" href="../consent.css">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Trimming and pruning criteria — all_zero_or_na">
+<meta name="description" content="Criteria functions (and constructors thereof) for trimming and pruning tables.">
+<meta property="og:description" content="Criteria functions (and constructors thereof) for trimming and pruning tables.">
+<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.svg">
+<link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.12</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,55 +41,56 @@ tables.">
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
+<li class="nav-item"><a class="nav-link" href="../articles/rtables.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6></li>
+    <li><a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a></li>
+    <li><a class="dropdown-item" href="../articles/ard_how_to.html">Generating QC-Ready Result Data Frames (ARDs) from Tables</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Table Customization</h6></li>
+    <li><a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a></li>
+    <li><a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a></li>
+    <li><a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/col_counts.html">Column Counts and Formats</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/introduction.html">Introduction to {rtables}</a>
-    <a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6>
-    <a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
-    <a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
-    <a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a>
-    <a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a>
-    <a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-developer-guide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Developer Guide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
+<li><a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a></li>
+  </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-developer-guide">Developer Guide</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
-    <a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-reports">
+<li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
+    <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
+    <li><a class="dropdown-item" href="../unit-test-report-non-cran/">Non-CRAN unit test report</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
-
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
-    <a class="dropdown-item" href="../coverage-report/">Coverage report</a>
-    <a class="dropdown-item" href="../unit-test-report/">Unit test report</a>
-  </div>
-</li>
-      <li class="nav-item dropdown">
+      <div><li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-versions">Versions</a>
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc2">v0.6.12-rc2</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc1">v0.6.12-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.11">v0.6.11</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.10">v0.6.10</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.9">v0.6.9</a>
@@ -108,19 +104,13 @@ tables.">
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a>
 </div>
-</li>
+</li></div>
 </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/insightsengineering/rtables">
-    <span class="fa fa-github fa-lg"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/insightsengineering/rtables"><span class="fa fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -129,14 +119,13 @@ tables.">
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Trimming and Pruning Criteria</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Trimming and pruning criteria</h1>
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/R/tt_compare_tables.R" class="external-link"><code>R/tt_compare_tables.R</code></a></small>
       <div class="d-none name"><code>trim_prune_funs.Rd</code></div>
     </div>
 
     <div class="ref-description section level2">
-    <p>Criteria functions (and constructors thereof) for trimming and pruning
-tables.</p>
+    <p>Criteria functions (and constructors thereof) for trimming and pruning tables.</p>
     </div>
 
     <div class="section level2">
@@ -158,71 +147,63 @@ tables.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a>
 </h2>
-    <dl>
-<dt>tr</dt>
-<dd><p><code>TableRow</code> (or related class). A <code>TableRow</code> object representing a
-single row within a populated table.</p></dd>
 
 
-<dt>tt</dt>
-<dd><p><code>TableTree</code> (or related class). A <code>TableTree</code> object representing a
-populated table.</p></dd>
+<dl>
+<dt id="arg-tr">tr<a class="anchor" aria-label="anchor" href="#arg-tr"></a>
+</dt>
+<dd><p>(<code>TableRow</code> or related class)<br> a <code>TableRow</code> object representing a single row within a populated table.</p></dd>
 
 
-<dt>criteria</dt>
-<dd><p>function. Function which takes a <code>TableRow</code> object and returns
-<code>TRUE</code> if that row should be removed. Defaults to
-<code>all_zero_or_na</code></p></dd>
+<dt id="arg-tt">tt<a class="anchor" aria-label="anchor" href="#arg-tt"></a>
+</dt>
+<dd><p>(<code>TableTree</code> or related class)<br> a <code>TableTree</code> object representing a populated table.</p></dd>
 
 
-<dt>min</dt>
-<dd><p>numeric(1). (<code>low_obs_pruner</code> only). Minimum aggregate count value.
-Subtables whose combined/average count are below this threshold will be
-pruned</p></dd>
+<dt id="arg-criteria">criteria<a class="anchor" aria-label="anchor" href="#arg-criteria"></a>
+</dt>
+<dd><p>(<code>function</code>)<br> function which takes a <code>TableRow</code> object and returns <code>TRUE</code> if that row
+should be removed. Defaults to <code>all_zero_or_na()</code>.</p></dd>
 
 
-<dt>type</dt>
-<dd><p>character(1). How count values should be aggregated. Must be
-<code>"sum"</code> (the default) or <code>"mean"</code></p></dd>
+<dt id="arg-min">min<a class="anchor" aria-label="anchor" href="#arg-min"></a>
+</dt>
+<dd><p>(<code>numeric(1)</code>)<br> (used by <code>low_obs_pruner</code> only). Minimum aggregate count value.
+Subtables whose combined/average count are below this threshold will be pruned.</p></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a>
+</dt>
+<dd><p>(<code>string</code>)<br> how count values should be aggregated. Must be <code>"sum"</code> (the default) or <code>"mean"</code>.</p></dd>
 
 </dl>
 </div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a>
 </h2>
-
-
-<p>A logical value indicating whether <code>tr</code> should be included
-(<code>TRUE</code>) or pruned (<code>FALSE</code>) during pruning.</p>
+    <p>A logical value indicating whether <code>tr</code> should be included (<code>TRUE</code>) or pruned (<code>FALSE</code>) during pruning.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
 </h2>
-    <p><code>all_zero_or_na</code> returns <code>TRUE</code> (and thus indicates
-trimming/pruning) for any <em>non-<code>LabelRow</code></em> <code>TableRow</code> which contain
-only any mix of <code>NA</code> (including <code>NaN</code>), <code>0</code>, <code>Inf</code> and
-<code>-Inf</code> values.</p>
-<p><code>all_zero</code> returns <code>TRUE</code> for any non-Label row which
-contains only (non-missing) zero values.</p>
-<p><code>content_all_zeros_nas</code> Prunes a subtable if a) it has a
-content table with exactly one row in it, and b) <code>all_zero_or_na</code>
-returns <code>TRUE</code> for that single content row. In practice, when the
-default summary/content function is used, this represents pruning any
-subtable which corresponds to an empty set of the input data (e.g., because
-a factor variable was used in <code><a href="split_rows_by.html">split_rows_by</a></code> but not all
-levels were present in the data).</p>
-<p><code>prune_empty_level</code> combines <code>all_zero_or_na</code> behavior for
-<code>TableRow</code> objects, <code>content_all_zeros_nas</code> on
-<code>content_table(tt)</code> for <code>TableTree</code> objects, and an additional
-check that returns <code>TRUE</code> if the <code>tt</code> has no children.</p>
-<p><code>prune_zeros_only</code> behaves as <code>prune_empty_level</code> does,
-except that like <code>all_zero</code> it prunes only in the case of all
-non-missing zero values.</p>
-<p><code>low_obs_pruner</code> is a <em>constructor function</em> which, when
-called, returns a pruning criteria function which will prune on content
-rows by comparing sum or mean (dictated by <code>type</code>) of the count
-portions of the cell values (defined as the first value per cell regardless
-of how many values per cell there are) against <code>min</code>.</p>
+    <p><code>all_zero_or_na</code> returns <code>TRUE</code> (and thus indicates trimming/pruning) for any <em>non-<code>LabelRow</code></em>
+<code>TableRow</code> which contain only any mix of <code>NA</code> (including <code>NaN</code>), <code>0</code>, <code>Inf</code> and <code>-Inf</code> values.</p>
+<p><code>all_zero</code> returns <code>TRUE</code> for any non-<code>LabelRow</code> which contains only (non-missing) zero values.</p>
+<p><code>content_all_zeros_nas</code> prunes a subtable if both of the following are true:</p>
+<ul>
+<li><p>It has a content table with exactly one row in it.</p></li>
+<li><p><code>all_zero_or_na</code> returns <code>TRUE</code> for that single content row. In practice, when the default summary/content
+function is used, this represents pruning any subtable which corresponds to an empty set of the input data
+(e.g. because a factor variable was used in <code><a href="split_rows_by.html">split_rows_by()</a></code> but not all levels were present in the data).</p></li>
+</ul>
+<p><code>prune_empty_level</code> combines <code>all_zero_or_na</code> behavior for <code>TableRow</code> objects, <code>content_all_zeros_nas</code> on
+<code>content_table(tt)</code> for <code>TableTree</code> objects, and an additional check that returns <code>TRUE</code> if the <code>tt</code> has no
+children.</p>
+<p><code>prune_zeros_only</code> behaves as <code>prune_empty_level</code> does, except that like <code>all_zero</code> it prunes
+only in the case of all non-missing zero values.</p>
+<p><code>low_obs_pruner</code> is a <em>constructor function</em> which, when called, returns a pruning criteria function which
+will prune on content rows by comparing sum or mean (dictated by <code>type</code>) of the count portions of the cell
+values (defined as the first value per cell regardless of how many values per cell there are) against <code>min</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a>
@@ -411,7 +392,7 @@ of how many values per cell there are) against <code>min</code>.</p>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 

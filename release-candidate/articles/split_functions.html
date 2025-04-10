@@ -6,7 +6,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="rtables">
 <title>Controlling Splitting Behavior • rtables</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -15,27 +14,22 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Controlling Splitting Behavior">
-<meta property="og:description" content="rtables">
-<meta property="og:image" content="https://insightsengineering.github.io/rtables/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><link rel="stylesheet" href="../consent.css">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Controlling Splitting Behavior">
+<link rel="stylesheet" href="../consent.css">
 <script src="../consent.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.12</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,55 +38,56 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/rtables.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <h6 class="dropdown-header" data-toc-skip>Getting Started</h6>
-    <a class="dropdown-item" href="../articles/introduction.html">Introduction to {rtables}</a>
-    <a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6>
-    <a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a>
-    <a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a>
-    <div class="dropdown-divider"></div>
-    <h6 class="dropdown-header" data-toc-skip>Table Customization</h6>
-    <a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a>
-    <a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a>
-    <a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="../articles/index.html">More articles...</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
+    <li><a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6></li>
+    <li><a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/baseline.html">Comparing Against Baselines or Control</a></li>
+    <li><a class="dropdown-item" href="../articles/ard_how_to.html">Generating QC-Ready Result Data Frames (ARDs) from Tables</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Table Customization</h6></li>
+    <li><a class="dropdown-item" href="../articles/custom_appearance.html">Customizing Appearance</a></li>
+    <li><a class="dropdown-item" href="../articles/title_footer.html">Titles, Footers, and Referential Footnotes</a></li>
+    <li><a class="dropdown-item" href="../articles/sorting_pruning.html">Pruning and Sorting Tables</a></li>
+    <li><a class="dropdown-item" href="../articles/col_counts.html">Column Counts and Formats</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
+  </ul>
 </li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-developer-guide">Developer Guide</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
-    <a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a>
-    <a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-developer-guide" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Developer Guide</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-developer-guide">
+<li><a class="dropdown-item" href="../articles/dev-guide/dg_split_machinery.html">Split Machinery</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_tabulation.html">Tabulation</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_table_hierarchy.html">Table Hierarchy</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_debug_rtables.html">Debugging in {rtables} and Beyond</a></li>
+    <li><a class="dropdown-item" href="../articles/dev-guide/dg_notes.html">Sparse Notes on {rtables} Internals</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
-
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
 <li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-reports">
-    <a class="dropdown-item" href="../coverage-report/">Coverage report</a>
-    <a class="dropdown-item" href="../unit-test-report/">Unit test report</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-reports" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Reports</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-reports">
+<li><a class="dropdown-item" href="../coverage-report/">Coverage report</a></li>
+    <li><a class="dropdown-item" href="../unit-test-report/">Unit test report</a></li>
+    <li><a class="dropdown-item" href="../unit-test-report-non-cran/">Non-CRAN unit test report</a></li>
+  </ul>
 </li>
-      <li class="nav-item dropdown">
+      <div><li class="nav-item dropdown">
     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-versions">Versions</a>
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc2">v0.6.12-rc2</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc1">v0.6.12-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.11">v0.6.11</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.10">v0.6.10</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.9">v0.6.9</a>
@@ -106,19 +101,13 @@
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.2">v0.6.2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.1">v0.6.1</a>
 </div>
-</li>
+</li></div>
 </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/insightsengineering/rtables">
-    <span class="fa fa-github fa-lg"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/insightsengineering/rtables"><span class="fa fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -131,18 +120,18 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Controlling Splitting Behavior</h1>
+      <img src="../logo.svg" class="logo" alt=""><h1>Controlling Splitting Behavior</h1>
                         <h4 data-toc-skip class="author">Gabriel
 Becker</h4>
-
-            <h4 data-toc-skip class="date">2023-12-07</h4>
-
+            
+            <h4 data-toc-skip class="date">2025-04-10</h4>
+      
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/split_functions.Rmd" class="external-link"><code>vignettes/split_functions.Rmd</code></a></small>
       <div class="d-none name"><code>split_functions.Rmd</code></div>
     </div>
 
-
-
+    
+    
 <div class="section level2">
 <h2 id="controlling-facet-levels">Controlling Facet Levels<a class="anchor" aria-label="anchor" href="#controlling-facet-levels"></a>
 </h2>
@@ -240,14 +229,14 @@ using the following artificial data:</p>
 <span>    <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">40000</span>, sd <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   vehicle_class vehicle_type color      cost</span></span>
-<span><span class="co">## 1          boat     sailboat black 100393.81</span></span>
-<span><span class="co">## 2          auto          car white  38150.17</span></span>
-<span><span class="co">## 3          boat     sailboat white  98696.13</span></span>
-<span><span class="co">## 4          auto        truck white  37677.16</span></span>
-<span><span class="co">## 5          auto        truck black  38489.27</span></span>
-<span><span class="co">## 6          boat  cruiseliner black 108709.72</span></span></code></pre>
+<span><span class="fu"><a href="../reference/head_tail.html">head</a></span><span class="op">(</span><span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   vehicle_class vehicle_type color      cost</span></span>
+<span><span class="co">#&gt; 1          boat     sailboat black 100393.81</span></span>
+<span><span class="co">#&gt; 2          auto          car white  38150.17</span></span>
+<span><span class="co">#&gt; 3          boat     sailboat white  98696.13</span></span>
+<span><span class="co">#&gt; 4          auto        truck white  37677.16</span></span>
+<span><span class="co">#&gt; 5          auto        truck black  38489.27</span></span>
+<span><span class="co">#&gt; 6          boat  cruiseliner black 108709.72</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="trim_levels_in_group">
 <code>trim_levels_in_group</code><a class="anchor" aria-label="anchor" href="#trim_levels_in_group"></a>
@@ -258,7 +247,7 @@ which <em>is observed in the data being tabulated</em> will appear as
 nested facets within the table, while those that do not, will not.</p>
 <p>If we use default level-based faceting, we get several logically
 incoherent cells within our table:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/rtables" class="external-link">rtables</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lyt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -267,57 +256,57 @@ incoherent cells within our table:</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                   black      white        red   </span></span>
-<span><span class="co">## ————————————————————————————————————————————————</span></span>
-<span><span class="co">## auto                                            </span></span>
-<span><span class="co">##   car                                           </span></span>
-<span><span class="co">##     Mean        40431.92    40518.92   38713.14 </span></span>
-<span><span class="co">##   truck                                         </span></span>
-<span><span class="co">##     Mean        40061.70    40635.74   40024.41 </span></span>
-<span><span class="co">##   suv                                           </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">##   sailboat                                      </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">##   cruiseliner                                   </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">## boat                                            </span></span>
-<span><span class="co">##   car                                           </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">##   truck                                         </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">##   suv                                           </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">##   sailboat                                      </span></span>
-<span><span class="co">##     Mean        99349.69    99996.54   101865.73</span></span>
-<span><span class="co">##   cruiseliner                                   </span></span>
-<span><span class="co">##     Mean        100212.00   99340.25   100363.52</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   black      white        red   </span></span>
+<span><span class="co">#&gt; ————————————————————————————————————————————————</span></span>
+<span><span class="co">#&gt; auto                                            </span></span>
+<span><span class="co">#&gt;   car                                           </span></span>
+<span><span class="co">#&gt;     Mean        40431.92    40518.92   38713.14 </span></span>
+<span><span class="co">#&gt;   truck                                         </span></span>
+<span><span class="co">#&gt;     Mean        40061.70    40635.74   40024.41 </span></span>
+<span><span class="co">#&gt;   suv                                           </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt;   sailboat                                      </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt;   cruiseliner                                   </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt; boat                                            </span></span>
+<span><span class="co">#&gt;   car                                           </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt;   truck                                         </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt;   suv                                           </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt;   sailboat                                      </span></span>
+<span><span class="co">#&gt;     Mean        99349.69    99996.54   101865.73</span></span>
+<span><span class="co">#&gt;   cruiseliner                                   </span></span>
+<span><span class="co">#&gt;     Mean        100212.00   99340.25   100363.52</span></span></code></pre></div>
 <p>This is obviously not the table we want, as the majority of its space
 is taken up by meaningless combinations. If we use
 <code>trim_levels_in_group</code> to trim the levels of
 <code>vehicle_type</code> separately within each level of
 <code>vehicle_class</code>, we get a table which only has meaningful
 combinations:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"color"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_class"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../reference/split_funcs.html">trim_levels_in_group</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                   black      white        red   </span></span>
-<span><span class="co">## ————————————————————————————————————————————————</span></span>
-<span><span class="co">## auto                                            </span></span>
-<span><span class="co">##   car                                           </span></span>
-<span><span class="co">##     Mean        40431.92    40518.92   38713.14 </span></span>
-<span><span class="co">##   truck                                         </span></span>
-<span><span class="co">##     Mean        40061.70    40635.74   40024.41 </span></span>
-<span><span class="co">## boat                                            </span></span>
-<span><span class="co">##   sailboat                                      </span></span>
-<span><span class="co">##     Mean        99349.69    99996.54   101865.73</span></span>
-<span><span class="co">##   cruiseliner                                   </span></span>
-<span><span class="co">##     Mean        100212.00   99340.25   100363.52</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt2</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   black      white        red   </span></span>
+<span><span class="co">#&gt; ————————————————————————————————————————————————</span></span>
+<span><span class="co">#&gt; auto                                            </span></span>
+<span><span class="co">#&gt;   car                                           </span></span>
+<span><span class="co">#&gt;     Mean        40431.92    40518.92   38713.14 </span></span>
+<span><span class="co">#&gt;   truck                                         </span></span>
+<span><span class="co">#&gt;     Mean        40061.70    40635.74   40024.41 </span></span>
+<span><span class="co">#&gt; boat                                            </span></span>
+<span><span class="co">#&gt;   sailboat                                      </span></span>
+<span><span class="co">#&gt;     Mean        99349.69    99996.54   101865.73</span></span>
+<span><span class="co">#&gt;   cruiseliner                                   </span></span>
+<span><span class="co">#&gt;     Mean        100212.00   99340.25   100363.52</span></span></code></pre></div>
 <p>Note, however, that it does not contain <em>all</em> meaningful
 combinations, only those that were actually observed in our data; which
 <em>happens</em> to not include the perfectly valid <code>"auto"</code>,
@@ -338,7 +327,7 @@ variables. Unlike its sibling function, however, with
 combinations <em>a priori</em>, and that exact set of combinations is
 produced in the resulting table, regardless of whether they are observed
 or not.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></span><span class="op">)</span></span>
 <span><span class="va">map</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">vehicle_class</span>, <span class="op">~</span><span class="va">vehicle_type</span>,</span>
@@ -355,21 +344,21 @@ or not.</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                   black      white        red   </span></span>
-<span><span class="co">## ————————————————————————————————————————————————</span></span>
-<span><span class="co">## auto                                            </span></span>
-<span><span class="co">##   car                                           </span></span>
-<span><span class="co">##     Mean        40431.92    40518.92   38713.14 </span></span>
-<span><span class="co">##   truck                                         </span></span>
-<span><span class="co">##     Mean        40061.70    40635.74   40024.41 </span></span>
-<span><span class="co">##   suv                                           </span></span>
-<span><span class="co">##     Mean           NA          NA         NA    </span></span>
-<span><span class="co">## boat                                            </span></span>
-<span><span class="co">##   sailboat                                      </span></span>
-<span><span class="co">##     Mean        99349.69    99996.54   101865.73</span></span>
-<span><span class="co">##   cruiseliner                                   </span></span>
-<span><span class="co">##     Mean        100212.00   99340.25   100363.52</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt3</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   black      white        red   </span></span>
+<span><span class="co">#&gt; ————————————————————————————————————————————————</span></span>
+<span><span class="co">#&gt; auto                                            </span></span>
+<span><span class="co">#&gt;   car                                           </span></span>
+<span><span class="co">#&gt;     Mean        40431.92    40518.92   38713.14 </span></span>
+<span><span class="co">#&gt;   truck                                         </span></span>
+<span><span class="co">#&gt;     Mean        40061.70    40635.74   40024.41 </span></span>
+<span><span class="co">#&gt;   suv                                           </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA    </span></span>
+<span><span class="co">#&gt; boat                                            </span></span>
+<span><span class="co">#&gt;   sailboat                                      </span></span>
+<span><span class="co">#&gt;     Mean        99349.69    99996.54   101865.73</span></span>
+<span><span class="co">#&gt;   cruiseliner                                   </span></span>
+<span><span class="co">#&gt;     Mean        100212.00   99340.25   100363.52</span></span></code></pre></div>
 <p>Now we see that the <code>"auto"</code>, <code>"suv"</code>
 combination is again present, even though it is populated with
 <code>NA</code>s (because there is no data in that category), but the
@@ -397,29 +386,29 @@ the name of the new level, as well as <code>label</code>, and
 or last, if <code>FALSE</code>, in the ordering).</p>
 <p>Building further on our arbitrary vehicles table, we can use this to
 create an “all colors” category:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lyt4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"color"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../reference/add_overall_level.html">add_overall_level</a></span><span class="op">(</span><span class="st">"allcolors"</span>, label <span class="op">=</span> <span class="st">"All Colors"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_class"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../reference/trim_levels_to_map.html">trim_levels_to_map</a></span><span class="op">(</span><span class="va">map</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt4</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                 All Colors     black      white        red   </span></span>
-<span><span class="co">##                  (N=1000)     (N=521)    (N=251)     (N=228) </span></span>
-<span><span class="co">## —————————————————————————————————————————————————————————————</span></span>
-<span><span class="co">## auto                                                         </span></span>
-<span><span class="co">##   car                                                        </span></span>
-<span><span class="co">##     Mean         40095.49    40431.92    40518.92   38713.14 </span></span>
-<span><span class="co">##   truck                                                      </span></span>
-<span><span class="co">##     Mean         40194.68    40061.70    40635.74   40024.41 </span></span>
-<span><span class="co">##   suv                                                        </span></span>
-<span><span class="co">##     Mean            NA          NA          NA         NA    </span></span>
-<span><span class="co">## boat                                                         </span></span>
-<span><span class="co">##   sailboat                                                   </span></span>
-<span><span class="co">##     Mean        100133.22    99349.69    99996.54   101865.73</span></span>
-<span><span class="co">##   cruiseliner                                                </span></span>
-<span><span class="co">##     Mean        100036.76    100212.00   99340.25   100363.52</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt4</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                 All Colors     black      white        red   </span></span>
+<span><span class="co">#&gt;                  (N=1000)     (N=521)    (N=251)     (N=228) </span></span>
+<span><span class="co">#&gt; —————————————————————————————————————————————————————————————</span></span>
+<span><span class="co">#&gt; auto                                                         </span></span>
+<span><span class="co">#&gt;   car                                                        </span></span>
+<span><span class="co">#&gt;     Mean         40095.49    40431.92    40518.92   38713.14 </span></span>
+<span><span class="co">#&gt;   truck                                                      </span></span>
+<span><span class="co">#&gt;     Mean         40194.68    40061.70    40635.74   40024.41 </span></span>
+<span><span class="co">#&gt;   suv                                                        </span></span>
+<span><span class="co">#&gt;     Mean            NA          NA          NA         NA    </span></span>
+<span><span class="co">#&gt; boat                                                         </span></span>
+<span><span class="co">#&gt;   sailboat                                                   </span></span>
+<span><span class="co">#&gt;     Mean        100133.22    99349.69    99996.54   101865.73</span></span>
+<span><span class="co">#&gt;   cruiseliner                                                </span></span>
+<span><span class="co">#&gt;     Mean        100036.76    100212.00   99340.25   100363.52</span></span></code></pre></div>
 <p>With the column counts turned on, we can see that the “All Colors”
 column encompasses the full 1000 (completely fake) vehicles in our data
 set.</p>
@@ -453,7 +442,7 @@ tabulated within this column or row.</li>
 </ul>
 <p>Suppose we wanted combinations levels for all non-white colors, and
 for white and black colors. We do this like so:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">combodf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tribble.html" class="external-link">tribble</a></span><span class="op">(</span></span>
 <span>  <span class="op">~</span><span class="va">valname</span>, <span class="op">~</span><span class="va">label</span>, <span class="op">~</span><span class="va">levelcombo</span>, <span class="op">~</span><span class="va">exargs</span>,</span>
 <span>  <span class="st">"non-white"</span>, <span class="st">"Non-White"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"red"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -462,27 +451,27 @@ for white and black colors. We do this like so:</p>
 <span></span>
 <span></span>
 <span><span class="va">lyt5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"color"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../reference/add_combo_levels.html">add_combo_levels</a></span><span class="op">(</span><span class="va">combodf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"color"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../reference/add_overall_level.html">add_combo_levels</a></span><span class="op">(</span><span class="va">combodf</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_class"</span>, split_fun <span class="op">=</span> <span class="fu"><a href="../reference/trim_levels_to_map.html">trim_levels_to_map</a></span><span class="op">(</span><span class="va">map</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt5</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                   black      white        red      Non-White   Black or White</span></span>
-<span><span class="co">##                  (N=521)    (N=251)     (N=228)     (N=749)       (N=772)    </span></span>
-<span><span class="co">## —————————————————————————————————————————————————————————————————————————————</span></span>
-<span><span class="co">## auto                                                                         </span></span>
-<span><span class="co">##   car                                                                        </span></span>
-<span><span class="co">##     Mean        40431.92    40518.92   38713.14    39944.93       40460.77   </span></span>
-<span><span class="co">##   truck                                                                      </span></span>
-<span><span class="co">##     Mean        40061.70    40635.74   40024.41    40050.66       40243.57   </span></span>
-<span><span class="co">##   suv                                                                        </span></span>
-<span><span class="co">##     Mean           NA          NA         NA          NA             NA      </span></span>
-<span><span class="co">## boat                                                                         </span></span>
-<span><span class="co">##   sailboat                                                                   </span></span>
-<span><span class="co">##     Mean        99349.69    99996.54   101865.73   100179.72      99567.50   </span></span>
-<span><span class="co">##   cruiseliner                                                                </span></span>
-<span><span class="co">##     Mean        100212.00   99340.25   100363.52   100258.56      99937.47</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt5</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   black      white        red      Non-White   Black or White</span></span>
+<span><span class="co">#&gt;                  (N=521)    (N=251)     (N=228)     (N=749)       (N=772)    </span></span>
+<span><span class="co">#&gt; —————————————————————————————————————————————————————————————————————————————</span></span>
+<span><span class="co">#&gt; auto                                                                         </span></span>
+<span><span class="co">#&gt;   car                                                                        </span></span>
+<span><span class="co">#&gt;     Mean        40431.92    40518.92   38713.14    39944.93       40460.77   </span></span>
+<span><span class="co">#&gt;   truck                                                                      </span></span>
+<span><span class="co">#&gt;     Mean        40061.70    40635.74   40024.41    40050.66       40243.57   </span></span>
+<span><span class="co">#&gt;   suv                                                                        </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA         NA          NA             NA      </span></span>
+<span><span class="co">#&gt; boat                                                                         </span></span>
+<span><span class="co">#&gt;   sailboat                                                                   </span></span>
+<span><span class="co">#&gt;     Mean        99349.69    99996.54   101865.73   100179.72      99567.50   </span></span>
+<span><span class="co">#&gt;   cruiseliner                                                                </span></span>
+<span><span class="co">#&gt;     Mean        100212.00   99340.25   100363.52   100258.56      99937.47</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -553,7 +542,7 @@ and</li>
 <li>A function factory which creates a function that removes a level and
 the data associated with it.</li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## reverse order of levels</span></span>
 <span></span>
 <span><span class="va">rev_lev</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">df</span>, <span class="va">spl</span>, <span class="va">vals</span>, <span class="va">labels</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -580,7 +569,7 @@ the data associated with it.</li>
 <p>Finally we implement our post-processing function. Here we will
 reorder the facets based on the amount of data each of them
 represents.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sort_them_facets</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">splret</span>, <span class="va">spl</span>, <span class="va">fulldf</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">ord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">splret</span><span class="op">$</span><span class="va">datasplit</span>, <span class="va">nrow</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/make_split_result.html">make_split_result</a></span><span class="op">(</span></span>
@@ -591,7 +580,7 @@ represents.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>Finally, we construct our custom split function and use it to create
 our table:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_splfun1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_split_fun.html">make_split_fun</a></span><span class="op">(</span></span>
 <span>  pre <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    <span class="va">rev_lev</span>,</span>
@@ -606,22 +595,22 @@ our table:</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt6</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                    red        black  </span></span>
-<span><span class="co">##                  (N=228)     (N=521) </span></span>
-<span><span class="co">## —————————————————————————————————————</span></span>
-<span><span class="co">## auto                                 </span></span>
-<span><span class="co">##   car                                </span></span>
-<span><span class="co">##     Mean        38713.14    40431.92 </span></span>
-<span><span class="co">##   truck                              </span></span>
-<span><span class="co">##     Mean        40024.41    40061.70 </span></span>
-<span><span class="co">##   suv                                </span></span>
-<span><span class="co">##     Mean           NA          NA    </span></span>
-<span><span class="co">## boat                                 </span></span>
-<span><span class="co">##   sailboat                           </span></span>
-<span><span class="co">##     Mean        101865.73   99349.69 </span></span>
-<span><span class="co">##   cruiseliner                        </span></span>
-<span><span class="co">##     Mean        100363.52   100212.00</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt6</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                    red        black  </span></span>
+<span><span class="co">#&gt;                  (N=228)     (N=521) </span></span>
+<span><span class="co">#&gt; —————————————————————————————————————</span></span>
+<span><span class="co">#&gt; auto                                 </span></span>
+<span><span class="co">#&gt;   car                                </span></span>
+<span><span class="co">#&gt;     Mean        38713.14    40431.92 </span></span>
+<span><span class="co">#&gt;   truck                              </span></span>
+<span><span class="co">#&gt;     Mean        40024.41    40061.70 </span></span>
+<span><span class="co">#&gt;   suv                                </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA    </span></span>
+<span><span class="co">#&gt; boat                                 </span></span>
+<span><span class="co">#&gt;   sailboat                           </span></span>
+<span><span class="co">#&gt;     Mean        101865.73   99349.69 </span></span>
+<span><span class="co">#&gt;   cruiseliner                        </span></span>
+<span><span class="co">#&gt;     Mean        100363.52   100212.00</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="overriding-the-core-split-function">Overriding the Core Split Function<a class="anchor" aria-label="anchor" href="#overriding-the-core-split-function"></a>
@@ -634,7 +623,7 @@ observations 501-900, and the last hundred. We could claim this was to
 test for structural bias in the first and last observations, but really
 its to simply illustrate overriding the core splitting machinery and has
 no meaningful statistical purpose.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">silly_core_split</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">spl</span>, <span class="va">df</span>, <span class="va">vals</span>, <span class="va">labels</span>, <span class="va">.spl_context</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/make_split_result.html">make_split_result</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"first"</span>, <span class="st">"lowmid"</span>, <span class="st">"highmid"</span>, <span class="st">"last"</span><span class="op">)</span>,</span>
@@ -657,7 +646,7 @@ combined with pre- and post-processing functions, as each of the stages
 is performed independently, but in this case, we won’t, because our core
 splitting behavior is such that pre- or post-processing do not make much
 sense.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">even_sillier_splfun</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_split_fun.html">make_split_fun</a></span><span class="op">(</span>core_split <span class="op">=</span> <span class="va">silly_core_split</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lyt7</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/basic_table.html">basic_table</a></span><span class="op">(</span>show_colcounts <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -666,54 +655,54 @@ sense.</p>
 <span>  <span class="fu"><a href="../reference/split_rows_by.html">split_rows_by</a></span><span class="op">(</span><span class="st">"vehicle_type"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/analyze.html">analyze</a></span><span class="op">(</span><span class="st">"cost"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt7</span>, <span class="va">vehic_data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##                   black       white        red   </span></span>
-<span><span class="co">##                  (N=521)     (N=251)     (N=228) </span></span>
-<span><span class="co">## —————————————————————————————————————————————————</span></span>
-<span><span class="co">## first 100                                        </span></span>
-<span><span class="co">##   car                                            </span></span>
-<span><span class="co">##     Mean        40496.05    37785.41    37623.17 </span></span>
-<span><span class="co">##   truck                                          </span></span>
-<span><span class="co">##     Mean        41094.17    40437.29    37866.81 </span></span>
-<span><span class="co">##   suv                                            </span></span>
-<span><span class="co">##     Mean           NA          NA          NA    </span></span>
-<span><span class="co">##   sailboat                                       </span></span>
-<span><span class="co">##     Mean        100560.80   102017.05   101185.96</span></span>
-<span><span class="co">##   cruiseliner                                    </span></span>
-<span><span class="co">##     Mean        100838.12   96952.27    100610.71</span></span>
-<span><span class="co">## obs 101-500                                      </span></span>
-<span><span class="co">##   car                                            </span></span>
-<span><span class="co">##     Mean        39350.88    41185.98    37978.72 </span></span>
-<span><span class="co">##   truck                                          </span></span>
-<span><span class="co">##     Mean        40166.87    41385.32    39885.72 </span></span>
-<span><span class="co">##   suv                                            </span></span>
-<span><span class="co">##     Mean           NA          NA          NA    </span></span>
-<span><span class="co">##   sailboat                                       </span></span>
-<span><span class="co">##     Mean        98845.47    99563.02    101462.79</span></span>
-<span><span class="co">##   cruiseliner                                    </span></span>
-<span><span class="co">##     Mean        101558.62   99039.91    97335.05 </span></span>
-<span><span class="co">## obs 501-900                                      </span></span>
-<span><span class="co">##   car                                            </span></span>
-<span><span class="co">##     Mean        40721.82    40379.48    38681.26 </span></span>
-<span><span class="co">##   truck                                          </span></span>
-<span><span class="co">##     Mean        39951.92    39846.89    39840.39 </span></span>
-<span><span class="co">##   suv                                            </span></span>
-<span><span class="co">##     Mean           NA          NA          NA    </span></span>
-<span><span class="co">##   sailboat                                       </span></span>
-<span><span class="co">##     Mean        99533.20    100347.18   102732.12</span></span>
-<span><span class="co">##   cruiseliner                                    </span></span>
-<span><span class="co">##     Mean        99140.43    100074.43   101994.99</span></span>
-<span><span class="co">## last 100                                         </span></span>
-<span><span class="co">##   car                                            </span></span>
-<span><span class="co">##     Mean        45204.44    40626.95    41214.33 </span></span>
-<span><span class="co">##   truck                                          </span></span>
-<span><span class="co">##     Mean        38920.70    40620.47    42899.14 </span></span>
-<span><span class="co">##   suv                                            </span></span>
-<span><span class="co">##     Mean           NA          NA          NA    </span></span>
-<span><span class="co">##   sailboat                                       </span></span>
-<span><span class="co">##     Mean        99380.21    97644.77    101691.92</span></span>
-<span><span class="co">##   cruiseliner                                    </span></span>
-<span><span class="co">##     Mean        100017.53   99581.94    100751.30</span></span></code></pre>
+<span><span class="fu"><a href="../reference/build_table.html">build_table</a></span><span class="op">(</span><span class="va">lyt7</span>, <span class="va">vehic_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                   black       white        red   </span></span>
+<span><span class="co">#&gt;                  (N=521)     (N=251)     (N=228) </span></span>
+<span><span class="co">#&gt; —————————————————————————————————————————————————</span></span>
+<span><span class="co">#&gt; first 100                                        </span></span>
+<span><span class="co">#&gt;   car                                            </span></span>
+<span><span class="co">#&gt;     Mean        40496.05    37785.41    37623.17 </span></span>
+<span><span class="co">#&gt;   truck                                          </span></span>
+<span><span class="co">#&gt;     Mean        41094.17    40437.29    37866.81 </span></span>
+<span><span class="co">#&gt;   suv                                            </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA          NA    </span></span>
+<span><span class="co">#&gt;   sailboat                                       </span></span>
+<span><span class="co">#&gt;     Mean        100560.80   102017.05   101185.96</span></span>
+<span><span class="co">#&gt;   cruiseliner                                    </span></span>
+<span><span class="co">#&gt;     Mean        100838.12   96952.27    100610.71</span></span>
+<span><span class="co">#&gt; obs 101-500                                      </span></span>
+<span><span class="co">#&gt;   car                                            </span></span>
+<span><span class="co">#&gt;     Mean        39350.88    41185.98    37978.72 </span></span>
+<span><span class="co">#&gt;   truck                                          </span></span>
+<span><span class="co">#&gt;     Mean        40166.87    41385.32    39885.72 </span></span>
+<span><span class="co">#&gt;   suv                                            </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA          NA    </span></span>
+<span><span class="co">#&gt;   sailboat                                       </span></span>
+<span><span class="co">#&gt;     Mean        98845.47    99563.02    101462.79</span></span>
+<span><span class="co">#&gt;   cruiseliner                                    </span></span>
+<span><span class="co">#&gt;     Mean        101558.62   99039.91    97335.05 </span></span>
+<span><span class="co">#&gt; obs 501-900                                      </span></span>
+<span><span class="co">#&gt;   car                                            </span></span>
+<span><span class="co">#&gt;     Mean        40721.82    40379.48    38681.26 </span></span>
+<span><span class="co">#&gt;   truck                                          </span></span>
+<span><span class="co">#&gt;     Mean        39951.92    39846.89    39840.39 </span></span>
+<span><span class="co">#&gt;   suv                                            </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA          NA    </span></span>
+<span><span class="co">#&gt;   sailboat                                       </span></span>
+<span><span class="co">#&gt;     Mean        99533.20    100347.18   102732.12</span></span>
+<span><span class="co">#&gt;   cruiseliner                                    </span></span>
+<span><span class="co">#&gt;     Mean        99140.43    100074.43   101994.99</span></span>
+<span><span class="co">#&gt; last 100                                         </span></span>
+<span><span class="co">#&gt;   car                                            </span></span>
+<span><span class="co">#&gt;     Mean        45204.44    40626.95    41214.33 </span></span>
+<span><span class="co">#&gt;   truck                                          </span></span>
+<span><span class="co">#&gt;     Mean        38920.70    40620.47    42899.14 </span></span>
+<span><span class="co">#&gt;   suv                                            </span></span>
+<span><span class="co">#&gt;     Mean           NA          NA          NA    </span></span>
+<span><span class="co">#&gt;   sailboat                                       </span></span>
+<span><span class="co">#&gt;     Mean        99380.21    97644.77    101691.92</span></span>
+<span><span class="co">#&gt;   cruiseliner                                    </span></span>
+<span><span class="co">#&gt;     Mean        100017.53   99581.94    100751.30</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="design-of-pre--and-post-processing-functions-for-use-in-make_split_fun">Design of Pre- and Post-Processing Functions For Use in
@@ -751,7 +740,7 @@ call)</li>
 </div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
