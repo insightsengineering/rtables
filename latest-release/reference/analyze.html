@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Generate rows analyzing variables across columns — analyze">
 <meta name="description" content="Adding analyzed variables to our table layout defines the primary tabulation to be performed. We do this by
 adding calls to analyze and/or analyze_colvars() into our layout pipeline. As with adding further splitting,
@@ -36,7 +36,7 @@ the tabulation will occur at the current/next level of nesting by default.">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.12</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,8 @@ the tabulation will occur at the current/next level of nesting by default.">
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12">v0.6.12</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc2">v0.6.12-rc2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.12-rc1">v0.6.12-rc1</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.11">v0.6.11</a>
@@ -233,8 +234,11 @@ corresponds to the unmodified default behavior.</p></dd>
 
 <dt id="arg-section-div">section_div<a class="anchor" aria-label="anchor" href="#arg-section-div"></a>
 </dt>
-<dd><p>(<code>string</code>)<br> string which should be repeated as a section divider after each group defined
-by this split instruction, or <code>NA_character_</code> (the default) for no section divider.</p></dd>
+<dd><p>(<code>string</code>)<br> string which should be repeated as a section divider after the set of rows  defined
+by (each sub-analysis/variable) of this analyze instruction, or
+<code>NA_character_</code> (the default) for no section divider. This section
+divider will be overridden by a split-level section divider when
+both apply to the same position in the rendered output.</p></dd>
 
 </dl>
 </div>
@@ -264,7 +268,7 @@ machinery. These are listed and described in <a href="additional_fun_params.html
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a>
 </h2>
-    <p>None of the arguments described in the Details section can be overridden via <code>extra_args</code> or when calling
+    <p>None of the arguments described in <a href="additional_fun_params.html">additional_fun_params</a> can be overridden via <code>extra_args</code> or when calling
 <code><a href="make_afun.html">make_afun()</a></code>. <code>.N_col</code> and <code>.N_total</code> can be overridden via the <code>col_counts</code> argument to <code><a href="build_table.html">build_table()</a></code>.
 Alternative values for the others must be calculated within <code>afun</code> based on a combination of extra arguments and
 the unmodified values provided by the tabulation framework.</p>
