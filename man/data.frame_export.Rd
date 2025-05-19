@@ -78,6 +78,14 @@ Collection of utilities to extract \code{data.frame} objects from \code{TableTre
 \item \code{path_enriched_df()}: Transform a \code{TableTree} object to a path-enriched \code{data.frame}.
 
 }}
+\note{
+When \code{parent_name} is used when constructing a layout to directly control
+the name of subtables in a table, that will be reflected in the 'group' values
+returned in the result dataframe/ard. When automatic de-duplication of sibling names
+is performed by \code{rtables}, that is automatically undone during the result
+df creation process, so the group values will be as if the relevant siblings
+had identical names.
+}
 \examples{
 lyt <- basic_table() \%>\%
   split_cols_by("ARM") \%>\%

@@ -95,6 +95,16 @@ Asians within the placebo group would be pathed to via
 \code{c("ARM", "B: Placebo", "RACE", "ASIAN", "@content", "ASIAN")} for the
 row.
 }
+\note{
+some pathing-based functionality supports the "*" wildcard (typically
+'setters'/functionality which alters a table and returns it) while some
+does not (typically 'getters' which retrieve a subtable/row from a table
+or some attribute of that subtable/row).
+
+The \code{"*"} wildcard will never act as \code{"@content"} to step into
+a subtable's content table; that must be specified in the path, via
+e.g., \code{c("*", "*", "@content")} instead of \code{c("*", "*", "*")}.
+}
 \examples{
 lyt <- basic_table() |>
   split_rows_by("ARM") |>

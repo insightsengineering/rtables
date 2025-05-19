@@ -432,12 +432,32 @@ test_that("section_div getter and setter works", {
   modltrs[ltrinds4] <- "-"
   expect_true(check_all_patterns(txtvec4[sepinds], head(modltrs, -1), wid))
   expect_false(identical(sdf4$trailing_sep, sdf4$self_section_div))
+
+  ## crazy people with their crazy ... label and content rows
+  ## both visible
+
+  lytcrazy <- basic_table() |>
+    split_rows_by("ARM", child_labels = "visible") |>
+    summarize_row_groups() |>
+    analyze("AGE")
+
+  ## regression for unreported bug
+  tblcrazy <- build_table(lytcrazy, DM)
+  section_div(tblcrazy) <- letters[seq_len(nrow(tblcrazy))]
+  txtcrazy <- strsplit(toString(tblcrazy), split = "\n")[[1]]
+  expect_true(
+    check_all_patterns(
+      txtcrazy[seq(4, length(txtcrazy), by = 2)],
+      letters[1:(nrow(tblcrazy) - 1)],
+      len = nchar(txtcrazy[2])
+    )
+  )
 })
 
 test_that("the split only setter works", {
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
-  tbl <- basic_table() %>%
+  tbla <- tbl <- basic_table() %>%
     split_rows_by("ARM", section_div = "=") %>%
     split_rows_by("STRATA1", section_div = "-") %>%
     analyze("BMRKR1") %>%
@@ -454,6 +474,21 @@ test_that("the split only setter works", {
   expect_true(all(is.na(make_row_df(tbl)$self_section_div)))
 
   sect_div_info_ok(tbl)
+
+  expect_warning({
+    section_div(tbla, only_sep_sections = TRUE) <- letters
+  }, "Unable to find 4 levels of nesting in table structure.")
+  ## the above is setting "c" on the analysis tables, but that doesn't
+  ## matter since they are perfectly masked by the b's from the
+  ## STRATA1 split facets. That's "probably wrong behavior" (setting
+  ## the invisible 'c' section divs) technically, but it doesn't
+  ## make any difference in practice and I'm not convinced we can make
+  ## the nesting-detection heuristic smart enough to handle that
+  ## successfully.
+  ##
+  ## Their text renderings are identical, though...
+  expect_false(identical(tbl, tbla))
+  expect_identical(toString(tbl), toString(tbla))
 
   # multiple analyze
   tbl <- basic_table(header_section_div = " ") %>%

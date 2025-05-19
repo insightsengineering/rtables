@@ -4116,21 +4116,6 @@ setGeneric("section_div<-", function(obj, only_sep_sections = FALSE, value) {
   standardGeneric("section_div<-")
 })
 
-last_row_path <- function(tt) tail(row_paths(tt), 1)
-
-get_section_paths <- function(tt) {
-  root_kids <- tree_children(tt)
-  pths <- list()
-  for (kid in root_kids) {
-    if (is(kid, "ElementaryTable")) {
-      pths <- c(pths, list(obj_name(kid)))
-    } else {
-      pths <- c(pths, lapply(tree_children(kid), function(ki) c(obj_name(kid), obj_name(ki))))
-    }
-  }
-  pths
-}
-
 #' @rdname section_div
 #' @aliases section_div<-,VTableTree-method
 setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE, value) {
@@ -4161,7 +4146,10 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
         found <- TRUE
       }
       if (!found) {
-        stop("Unable to locate path with ", length(curpth) / 2, " nested split (/analyze) steps.")
+        warning("Unable to find ", ceiling(length(curpth) / 2), " levels of nesting",
+                " in table structure. Ignoring remaining ",  length(value) - i,
+                " section_div values.")
+        break
       }
       curpth <- c(curpth, "*", "*") ## add another split/value pair level of nesting
     }
@@ -4473,8 +4461,8 @@ clear_subtable_sectdivs <- function(obj) {
   ## **on the subtable itself**
   ##
   if (!tt_type_ok(subtree, tt_type) &&
-    ## womp womp. tt_type_ok fails for subtables when we want their label row.
-    !(labelrow && is(subtree, "VTableTree"))) {
+        ## womp womp. tt_type_ok fails for subtables when we want their label row.
+        !(labelrow && is(subtree, "VTableTree"))) {
     stop(
       "Path ",
       paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
@@ -4482,7 +4470,7 @@ clear_subtable_sectdivs <- function(obj) {
       " expected ", tt_type
     )
   } else if (is(subtree, "TableRow") ||
-    (is(subtree, "VTableTree") && !labelrow)) {
+               (is(subtree, "VTableTree") && !labelrow)) {
     ## rows can only set it on themselves
     ## if its a table (and tables are allowed by tt_type) it sets it on
     ## itself iff labelrow is FALSE

@@ -223,7 +223,7 @@ tt_for_nl <- tt_to_test_newline_chars()
 check_pattern <- function(element, letter, len) {
   # Regular expression to match exactly len of the same letter
   regex <- paste0(rep(letter, len), collapse = "")
-  return(grepl(regex, element, fixed = TRUE))
+  grepl(regex, element, fixed = TRUE)
 }
 
 check_all_patterns <- function(elements, letters, len) {

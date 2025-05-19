@@ -32,6 +32,13 @@
 #' @seealso [df_to_tt()] when using `simplify = TRUE` and [formatters::make_row_df()] to have a
 #'   comprehensive view of the hierarchical structure of the rows.
 #'
+#' @note When `parent_name` is used when constructing a layout to directly control
+#'   the name of subtables in a table, that will be reflected in the 'group' values
+#'   returned in the result dataframe/ard. When automatic de-duplication of sibling names
+#'   is performed by `rtables`, that is automatically undone during the result
+#'   df creation process, so the group values will be as if the relevant siblings
+#'   had identical names.
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%

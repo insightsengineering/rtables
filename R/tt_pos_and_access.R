@@ -390,6 +390,15 @@ tt_type_ok <- function(obj, type) {
 #'   `c("ARM", "B: Placebo", "RACE", "ASIAN", "@content", "ASIAN")` for the
 #'   row.
 #'
+#' @note some pathing-based functionality supports the "*" wildcard (typically
+#'   'setters'/functionality which alters a table and returns it) while some
+#'   does not (typically 'getters' which retrieve a subtable/row from a table
+#'   or some attribute of that subtable/row).
+#'
+#' @note The `"*"` wildcard will never act as `"@content"` to step into
+#'   a subtable's content table; that must be specified in the path, via
+#'   e.g., `c("*", "*", "@content")` instead of `c("*", "*", "*")`.
+#'
 #' @description for `tt_row_path_exists`, tests whether a single path (potentially
 #'    including `"*"` wildcards) resolves to at least one element satisfying
 #'    `tt_type` (if specified).
@@ -422,7 +431,7 @@ tt_row_path_exists <- function(obj, path, tt_type = c("any", "row", "table", "el
     ## we matched everything and called it again, evaluate type condition and return answer
     return(tt_type_ok(obj, tt_type))
   } else if (length(path) > 1 &&
-    (is.null(obj) || is(obj, "TableRow"))) {
+               (is.null(obj) || is(obj, "TableRow"))) {
     ## we got to a leaf node but still have >1 step remaining, path doesn't exist
     return(FALSE)
   }

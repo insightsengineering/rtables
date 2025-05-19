@@ -33,6 +33,11 @@ other parameters which will be populated by the tabulation framework. See Detail
 
 \item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
+\item{parent_name}{(\code{characgter(1)})\cr Name to assign to the table corresponding
+to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
+\verb{analyze*} when analyzing more than one variable, respectively. Ignored when
+analyzing a single variable.}
+
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
 functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
