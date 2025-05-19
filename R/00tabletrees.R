@@ -1551,7 +1551,7 @@ uniqify_child_names <- function(kidlst) {
         ## this is so tables created with parent_name = in the layout pass
         ## identicality checks with ones we're automatically uniqifying names in
         if (!is.null(c_tt) &&
-              nzchar(obj_name(c_tt))) {
+          nzchar(obj_name(c_tt))) {
           obj_name(c_tt) <- gsub(oldnms[i], newnms[i], obj_name(c_tt), fixed = TRUE)
           content_table(kid) <- c_tt
         }

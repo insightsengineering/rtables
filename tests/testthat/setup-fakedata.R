@@ -228,8 +228,9 @@ check_pattern <- function(element, letter, len) {
 
 check_all_patterns <- function(elements, letters, len) {
   res <- mapply(check_pattern,
-                element = elements,
-                letter = letters,
-                MoreArgs = list(len = len))
+    element = elements,
+    letter = letters,
+    MoreArgs = list(len = len)
+  )
   all(res)
 }

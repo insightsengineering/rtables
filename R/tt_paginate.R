@@ -307,7 +307,7 @@ setMethod(
       ## this isn't right, we can display content and label rows at the
       ## same time (though by default we don't) and they could, in theory
       ## have different trailing section divs...
-      ##trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(tt))
+      ## trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(tt))
       contdf <- make_row_df(ct_tt,
         colwidths = colwidths,
         visible_only = visible_only,
@@ -458,28 +458,31 @@ setMethod(
     rownum <- rownum + 1
     indent <- indent + indent_mod(tt)
     ret <- pagdfrow(tt,
-                    extent = nlines(tt,
-                                    colwidths = colwidths,
-                                    max_width = max_width,
-                                    fontspec = fontspec,
-                                    col_gap = col_gap),
-                    rnum = rownum,
-                    colwidths = colwidths,
-                    sibpos = sibpos,
-                    nsibs = nsibs,
-                    pth = path,
-                    repext = repr_ext,
-                    repind = repr_inds,
-                    indent = indent,
-                    nrowrefs = length(row_footnotes(tt)),
-                    ncellrefs = 0L,
-                    nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
-                                           colwidths = colwidths,
-                                           max_width = max_width,
-                                           fontspec = fontspec,
-                                           col_gap = col_gap)),
-                    trailing_sep = trailing_section_div(tt),
-                    fontspec = fontspec)
+      extent = nlines(tt,
+        colwidths = colwidths,
+        max_width = max_width,
+        fontspec = fontspec,
+        col_gap = col_gap
+      ),
+      rnum = rownum,
+      colwidths = colwidths,
+      sibpos = sibpos,
+      nsibs = nsibs,
+      pth = path,
+      repext = repr_ext,
+      repind = repr_inds,
+      indent = indent,
+      nrowrefs = length(row_footnotes(tt)),
+      ncellrefs = 0L,
+      nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
+        colwidths = colwidths,
+        max_width = max_width,
+        fontspec = fontspec,
+        col_gap = col_gap
+      )),
+      trailing_sep = trailing_section_div(tt),
+      fontspec = fontspec
+    )
     ret <- add_sect_div_path(ret, NA_character_)
     ret$self_section_div <- trailing_section_div(tt)
     if (!labelrow_visible(tt)) {

@@ -1706,7 +1706,7 @@ test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
   build_and_check_row_paths <- function(lyt, expect_message = TRUE, data = ex_adsl) {
     if (expect_message) {
       tbl <- expect_message(build_table(lyt, data), "Modifying subtable (or row) names", fixed = TRUE)
-    }  else {
+    } else {
       tbl <- expect_silent(build_table(lyt, data))
     }
 
@@ -1728,7 +1728,7 @@ test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
 
   tbl1 <- build_and_check_row_paths(lyt1, TRUE)
 
-  lyt1b <-  basic_table() %>%
+  lyt1b <- basic_table() %>%
     analyze("STRATA1") %>%
     split_rows_by("STRATA1", parent_name = "STRATA1[2]") %>%
     analyze("AGE") %>%
@@ -1738,9 +1738,11 @@ test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
   expect_identical(tbl1, tbl1b)
 
   ## badly designed a/cfun
-  bad_acfun <- function(x, labelstr = NULL,  ...) {
-    list(rcell("haha", label = "bad name"),
-         rcell("haha", label = "bad name"))
+  bad_acfun <- function(x, labelstr = NULL, ...) {
+    list(
+      rcell("haha", label = "bad name"),
+      rcell("haha", label = "bad name")
+    )
   }
 
   lyt2 <- basic_table() %>%
@@ -1759,7 +1761,7 @@ test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
 
   tbl3 <- build_and_check_row_paths(lyt3, TRUE)
 
-  lyt3b <-  basic_table() %>%
+  lyt3b <- basic_table() %>%
     analyze(c("STRATA1", "AGE")) %>%
     analyze(c("STRATA1", "AGE"), nested = FALSE, parent_name = "ma_STRATA1_AGE[2]")
   tbl3b <- build_and_check_row_paths(lyt3b, FALSE)

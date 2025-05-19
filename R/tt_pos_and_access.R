@@ -339,10 +339,11 @@ setMethod(
 
 tt_type_ok <- function(obj, type) {
   switch(type,
-         any = TRUE,
-         row = is(obj, "TableRow"),
-         table = is(obj, "VTableTree"),
-         elemtable = is(obj, "ElementaryTable"))
+    any = TRUE,
+    row = is(obj, "TableRow"),
+    table = is(obj, "VTableTree"),
+    elemtable = is(obj, "ElementaryTable")
+  )
 }
 
 #' Pathing
@@ -404,24 +405,24 @@ tt_type_ok <- function(obj, type) {
 #'   analyze("SEX") |>
 #'   analyze("SEX", nested = FALSE)
 #' tbl <- build_table(lyt, DM)
-#' tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX")) #TRUE
-#' tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX")) #TRUE
-#' tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX")) #FALSE
-#' tt_row_path_exists(tbl, "FAKE") #FALSE
-#' tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX")) #TRUE
-#' tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX")) #FALSE
-#' tt_row_path_exists(tbl, "SEX") #TRUE
-#' tt_row_path_exists(tbl, "SEX", tt_type = "table") #TRUE
-#' tt_row_path_exists(tbl, "SEX", tt_type = "elemtable") #TRUE
-#' tt_row_path_exists(tbl, "SEX", tt_type = "row") #FALSE
-#' tt_row_path_exists(tbl, c("SEX", "*")) #TRUE
+#' tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX")) # TRUE
+#' tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX")) # TRUE
+#' tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX")) # FALSE
+#' tt_row_path_exists(tbl, "FAKE") # FALSE
+#' tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX")) # TRUE
+#' tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX")) # FALSE
+#' tt_row_path_exists(tbl, "SEX") # TRUE
+#' tt_row_path_exists(tbl, "SEX", tt_type = "table") # TRUE
+#' tt_row_path_exists(tbl, "SEX", tt_type = "elemtable") # TRUE
+#' tt_row_path_exists(tbl, "SEX", tt_type = "row") # FALSE
+#' tt_row_path_exists(tbl, c("SEX", "*")) # TRUE
 tt_row_path_exists <- function(obj, path, tt_type = c("any", "row", "table", "elemtable")) {
   tt_type <- match.arg(tt_type)
   if (length(path) == 0) {
     ## we matched everything and called it again, evaluate type condition and return answer
     return(tt_type_ok(obj, tt_type))
   } else if (length(path) > 1 &&
-               (is.null(obj) || is(obj, "TableRow"))) {
+    (is.null(obj) || is(obj, "TableRow"))) {
     ## we got to a leaf node but still have >1 step remaining, path doesn't exist
     return(FALSE)
   }
@@ -440,8 +441,9 @@ tt_row_path_exists <- function(obj, path, tt_type = c("any", "row", "table", "el
     ret <- any(vapply(kids, tt_row_path_exists, path = nextpth, tt_type = tt_type, TRUE))
   } else if (curpth == "@content") {
     ctab <- content_table(obj)
-    if (NROW(ctab) == 0)
+    if (NROW(ctab) == 0) {
       return(FALSE)
+    }
     ret <- tt_row_path_exists(ctab, nextpth, tt_type = tt_type)
   } else if (curpth %in% kidnms) {
     ret <- tt_row_path_exists(kids[[curpth]], nextpth, tt_type = tt_type)
@@ -466,19 +468,22 @@ tt_row_path_exists <- function(obj, path, tt_type = c("any", "row", "table", "el
 #' @aliases pathing
 #' @examples
 #' tt_normalize_row_path(tbl, c("root", "ARM", "*", "*", "*", "SEX"))
-#' tt_normalize_row_path(tbl, "SEX", tt_type = "row") #empty list
+#' tt_normalize_row_path(tbl, "SEX", tt_type = "row") # empty list
 tt_normalize_row_path <- function(obj,
                                   path,
                                   .prev_path = character(),
                                   tt_type = c("any", "row", "table", "elemtable")) {
-  if (length(path) == 0)
+  if (length(path) == 0) {
     return(list(.prev_path))
+  }
   tt_type <- match.arg(tt_type)
-  if (!tt_row_path_exists(obj, path, tt_type = tt_type))
+  if (!tt_row_path_exists(obj, path, tt_type = tt_type)) {
     return(list())
+  }
   wcpos <- grep("^[*]$", path)
-  if (length(wcpos) == 0)
+  if (length(wcpos) == 0) {
     return(list(c(.prev_path, path)))
+  }
 
   befwc <- path[seq_len(wcpos[1] - 1)]
   if (length(befwc) > 0) {
@@ -497,17 +502,19 @@ tt_normalize_row_path <- function(obj,
       keep <- vapply(kids, tt_type_ok, tt_type = tt_type, TRUE)
     }
     nextstps <- nextstps[keep]
-    if (length(nextstps) == 0)
+    if (length(nextstps) == 0) {
       return(list())
+    }
     kids <- kids[keep]
   }
   unlist(
     recursive = FALSE,
     lapply(
-           kids,
-           function(kdi) {
-             tt_normalize_row_path(kdi, path = aftrwc, .prev_path = c(.prev_path, befwc,  obj_name(kdi)))
-           })
+      kids,
+      function(kdi) {
+        tt_normalize_row_path(kdi, path = aftrwc, .prev_path = c(.prev_path, befwc, obj_name(kdi)))
+      }
+    )
   )
 }
 

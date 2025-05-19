@@ -4122,10 +4122,11 @@ get_section_paths <- function(tt) {
   root_kids <- tree_children(tt)
   pths <- list()
   for (kid in root_kids) {
-    if (is(kid, "ElementaryTable"))
+    if (is(kid, "ElementaryTable")) {
       pths <- c(pths, list(obj_name(kid)))
-    else
+    } else {
       pths <- c(pths, lapply(tree_children(kid), function(ki) c(obj_name(kid), obj_name(ki))))
+    }
   }
   pths
 }
@@ -4135,8 +4136,9 @@ get_section_paths <- function(tt) {
 setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE, value) {
   sdf <- section_div_info(obj)
   pths <- sdf$path
-  if (length(value) < length(pths))
+  if (length(value) < length(pths)) {
     only_sep_sections <- TRUE
+  }
   ## I really don't like this but it should be the correct generalization
   ## of the previous behavior :(
   if (only_sep_sections) {
@@ -4164,11 +4166,14 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
       curpth <- c(curpth, "*", "*") ## add another split/value pair level of nesting
     }
   } else {
-    if (length(value) > 1 && length(pths) %% length(value)  != 0)
-      stop("Number of values (",
-           length(value),
-           ") does not divide evenly into number of elements (",
-           length(pths), ").")
+    if (length(value) > 1 && length(pths) %% length(value) != 0) {
+      stop(
+        "Number of values (",
+        length(value),
+        ") does not divide evenly into number of elements (",
+        length(pths), ")."
+      )
+    }
     value <- rep(value, length.out = length(pths))
     ## clear out the structural (ie from layout) section divs so all
     ## the row divs take effect. Not sure this is right but its the existing behavior
@@ -4314,13 +4319,15 @@ setMethod(
 #'     `NA_character_` for label rows, which are not pathable).
 #' @export
 section_div_info <- function(obj) {
-  make_row_df(obj)[, c("label",
-                       "name",
-                       "node_class",
-                       "path",
-                       "trailing_sep",
-                       "self_section_div",
-                       "sect_div_from_path")]
+  make_row_df(obj)[, c(
+    "label",
+    "name",
+    "node_class",
+    "path",
+    "trailing_sep",
+    "self_section_div",
+    "sect_div_from_path"
+  )]
 }
 
 #' @rdname section_div
@@ -4334,8 +4341,9 @@ section_div_info <- function(obj) {
 #' @export
 section_div_at_path <- function(obj, path, labelrow = FALSE) {
   tt <- tt_at_path(obj, path)
-  if (is(tt, "VTableTree") && labelrow)
+  if (is(tt, "VTableTree") && labelrow) {
     tt <- tt_labelrow(tt)
+  }
   trailing_section_div(tt)
 }
 
@@ -4385,20 +4393,24 @@ clear_subtable_sectdivs <- function(obj) {
         ## successfully resolve
         kidmatches <- which(vapply(oldkids, tt_row_path_exists, TRUE, path = curpath[-1], tt_type = tt_type))
         if (length(kidmatches) == 0) {
-          stop("Unable to resolve path step involving * \n\t occurred at path: ",
-               paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-               "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
-               "'table_structure(obj)' to explore valid paths.")
-
+          stop(
+            "Unable to resolve path step involving * \n\t occurred at path: ",
+            paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+            "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+            "'table_structure(obj)' to explore valid paths."
+          )
         }
         newkids <- lapply(seq_along(oldkids), function(i) {
           kid <- oldkids[[i]]
           if (i %in% kidmatches) {
-            new_prev_path <- c(.prev_path, backpath,
-                               paste0("* (", oldnames[i], ")"))
+            new_prev_path <- c(
+              .prev_path, backpath,
+              paste0("* (", oldnames[i], ")")
+            )
             section_div_at_path(kid,
-                                path = curpath[-1],
-                                .prev_path = new_prev_path) <- value
+              path = curpath[-1],
+              .prev_path = new_prev_path
+            ) <- value
           }
           kid
         })
@@ -4419,7 +4431,7 @@ clear_subtable_sectdivs <- function(obj) {
       return(ret)
     } else if (curname == "@content") {
       ctab <- content_table(subtree)
-      #curpath is just 'content' resolve to content table
+      # curpath is just 'content' resolve to content table
       if (length(curpath) == 1) {
         trailing_section_div(ctab) <- value
         ## weird to set section divs on content rows but that is what the
@@ -4427,10 +4439,12 @@ clear_subtable_sectdivs <- function(obj) {
       } else if (length(curpath) == 2 && tt_row_path_exists(ctab, curpath[2])) {
         section_div_at_path(ctab, curpath[2], tt_type = "row") <- value
       } else {
-        stop("Unable to resolve path step involving @content \n\t occurred at path: ",
-             paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-             "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
-             "'table_structure(obj)' to explore valid paths.")
+        stop(
+          "Unable to resolve path step involving @content \n\t occurred at path: ",
+          paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+          "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+          "'table_structure(obj)' to explore valid paths."
+        )
       }
       content_table(subtree) <- ctab
       if (length(backpath) > 0) {
@@ -4440,10 +4454,12 @@ clear_subtable_sectdivs <- function(obj) {
       }
       return(ret)
     } else if (!(curname %in% names(oldkids))) {
-      stop("Unable to find child(ren) '", curname, "'\n\t occurred at path: ",
-           paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-           "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
-           "'table_structure(obj)' to explore valid paths.")
+      stop(
+        "Unable to find child(ren) '", curname, "'\n\t occurred at path: ",
+        paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+        "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+        "'table_structure(obj)' to explore valid paths."
+      )
     }
     subtree <- tree_children(subtree)[[curname]]
     backpath <- c(backpath, curpath[1])
@@ -4457,14 +4473,16 @@ clear_subtable_sectdivs <- function(obj) {
   ## **on the subtable itself**
   ##
   if (!tt_type_ok(subtree, tt_type) &&
-        ## womp womp. tt_type_ok fails for subtables when we want their label row.
-        !(labelrow && is(subtree, "VTableTree"))) {
-    stop("Path ",
-         paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-         " lead to an element of the wrong tt_type (got ", class(subtree),
-         " expected ", tt_type)
+    ## womp womp. tt_type_ok fails for subtables when we want their label row.
+    !(labelrow && is(subtree, "VTableTree"))) {
+    stop(
+      "Path ",
+      paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+      " lead to an element of the wrong tt_type (got ", class(subtree),
+      " expected ", tt_type
+    )
   } else if (is(subtree, "TableRow") ||
-               (is(subtree, "VTableTree") && !labelrow)) {
+    (is(subtree, "VTableTree") && !labelrow)) {
     ## rows can only set it on themselves
     ## if its a table (and tables are allowed by tt_type) it sets it on
     ## itself iff labelrow is FALSE

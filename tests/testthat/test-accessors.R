@@ -361,7 +361,7 @@ test_that("section_div getter and setter works", {
     "contentrow" = NA_character_,
     "content_labelrow" = NA_character_,
     "elem_tbl_labelrow" = NA_character_,
-    "elem_tbl" = NA_character_, #"c",
+    "elem_tbl" = NA_character_, # "c",
     "datarow" = c("b", "c")
   )
 
@@ -369,12 +369,12 @@ test_that("section_div getter and setter works", {
     "global" = NA_character_,
     "global_labelrow" = NA_character_,
     "split" = NA_character_,
-    "split_labelrow" = NA_character_, #"a",
+    "split_labelrow" = NA_character_, # "a",
     "content" = NA_character_,
-    "contentrow" = "a", #NA_character_,
+    "contentrow" = "a", # NA_character_,
     "content_labelrow" = NA_character_,
     "elem_tbl_labelrow" = NA_character_,
-    "elem_tbl" = NA_character_, #"c",
+    "elem_tbl" = NA_character_, # "c",
     "datarow" = c("b", "c")
   )
 

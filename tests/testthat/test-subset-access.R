@@ -642,7 +642,7 @@ test_that("tt_at_path works with identical split names", {
     split_rows_by("SEX", split_fun = keep_split_levels("U")) %>%
     analyze("AGE")
 
-  tbl <- expect_message(build_table(lyt, adsl),  "[flag  -> { flag, flag[2] }]", fixed = TRUE)
+  tbl <- expect_message(build_table(lyt, adsl), "[flag  -> { flag, flag[2] }]", fixed = TRUE)
 
   expect_equal(
     names(tt_at_path(tbl, c("root", "flag", "Y", "SEX", "U"))),
@@ -672,8 +672,9 @@ test_that("tt_at_path gives an informative error when labels are used instead of
 
 strip_root_els <- function(pthlst) {
   lapply(pthlst, function(pth) {
-    if (pth[1] == "root")
+    if (pth[1] == "root") {
       pth <- pth[-1]
+    }
     pth
   })
 }
@@ -684,20 +685,20 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
     analyze("SEX") |>
     analyze("SEX", nested = FALSE)
   tbl <- build_table(lyt, DM)
-  expect_true(tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX"))) #TRUE
-  expect_true(tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX"))) #TRUE
-  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX"))) #FALSE
-  expect_false(tt_row_path_exists(tbl, "FAKE")) #FALSE
-  expect_true(tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX"))) #TRUE
-  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX"))) #FALSE
-  expect_true(tt_row_path_exists(tbl, "SEX")) #TRUE
-  expect_true(tt_row_path_exists(tbl, "SEX", tt_type = "table")) #TRUE
-  expect_true(tt_row_path_exists(tbl, "SEX", tt_type = "elemtable")) #TRUE
-  expect_false(tt_row_path_exists(tbl, "SEX", tt_type = "row")) #FALSE
-  expect_true(tt_row_path_exists(tbl, c("SEX", "*"))) #TRUE
+  expect_true(tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX"))) # TRUE
+  expect_true(tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX"))) # TRUE
+  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX"))) # FALSE
+  expect_false(tt_row_path_exists(tbl, "FAKE")) # FALSE
+  expect_true(tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX"))) # TRUE
+  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX"))) # FALSE
+  expect_true(tt_row_path_exists(tbl, "SEX")) # TRUE
+  expect_true(tt_row_path_exists(tbl, "SEX", tt_type = "table")) # TRUE
+  expect_true(tt_row_path_exists(tbl, "SEX", tt_type = "elemtable")) # TRUE
+  expect_false(tt_row_path_exists(tbl, "SEX", tt_type = "row")) # FALSE
+  expect_true(tt_row_path_exists(tbl, c("SEX", "*"))) # TRUE
 
   ## more complicated
-  lyt2 <-  basic_table() |>
+  lyt2 <- basic_table() |>
     split_rows_by("ARM") |>
     split_rows_by("STRATA1") |>
     analyze("SEX") |>
@@ -713,20 +714,30 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
   expect_true(tt_row_path_exists(tbl2, "*", tt_type = "elemtable"))
   expect_false(tt_row_path_exists(tbl2, "AGE", tt_type = "elemtable"))
   ## we can resolve specifics after wildcards and it behaves itself
-  expect_equal(length(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1", "A", "*"), tt_type = "elemtable")),
-               length(levels(DM$ARM)) + length(levels(DM$RACE)))
-  expect_equal(length(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1", "A", "*", "*"), tt_type = "row")),
-               ## analyze sex gives 1 row per level within each arm, analyzing age just gives one row (mean)
-               length(levels(DM$ARM)) * length(levels(DM$SEX)) + length(levels(DM$RACE)))
+  expect_equal(
+    length(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1", "A", "*"), tt_type = "elemtable")),
+    length(levels(DM$ARM)) + length(levels(DM$RACE))
+  )
+  expect_equal(
+    length(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1", "A", "*", "*"), tt_type = "row")),
+    ## analyze sex gives 1 row per level within each arm, analyzing age just gives one row (mean)
+    length(levels(DM$ARM)) * length(levels(DM$SEX)) + length(levels(DM$RACE))
+  )
   ## bad steps return no results even if surrounded by wildcards
-  expect_identical(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1FAKEFAKE", "A", "*"), tt_type = "elemtable"),
-                   list())
+  expect_identical(
+    tt_normalize_row_path(tbl2, c("*", "*", "STRATA1FAKEFAKE", "A", "*"), tt_type = "elemtable"),
+    list()
+  )
   ## we can get all the row paths if we do weird things because we feel like it
   rdf <- make_row_df(tbl2)
   datarowpaths <- rdf$path[rdf$node_class == "DataRow"]
-  expect_equal(c(unname(tt_normalize_row_path(tbl2, c("*", "*", "*", "*", "*", "*"), tt_type = "row")),
-                 unname(tt_normalize_row_path(tbl2, c("*", "*"), tt_type = "row"))),
-               strip_root_els(datarowpaths)) ## get rid of "root" that rdf has
+  expect_equal(
+    c(
+      unname(tt_normalize_row_path(tbl2, c("*", "*", "*", "*", "*", "*"), tt_type = "row")),
+      unname(tt_normalize_row_path(tbl2, c("*", "*"), tt_type = "row"))
+    ),
+    strip_root_els(datarowpaths)
+  ) ## get rid of "root" that rdf has
 
   ## not fooled by content tables that are "technically there" but have no rows
   expect_false(tt_row_path_exists(tbl2, c("*", "*", "@content")))
@@ -743,10 +754,12 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
   tbl3 <- build_table(lyt3, DM)
   rdf3 <- make_row_df(tbl3)
   ## can find content table/rows that ARE there....
-  expect_true(tt_row_path_exists(tbl3, c("*", "*",  "@content")))
-  expect_false(tt_row_path_exists(tbl3, c("*", "*",  "@content"), tt_type = "row"))
-  expect_true(tt_row_path_exists(tbl3, c("*", "*",  "@content", "*"), tt_type = "row"))
-  expect_true(tt_row_path_exists(tbl3, c("*", "*",  "@content", "*"), tt_type = "row"))
-  expect_equal(unname(tt_normalize_row_path(tbl3, c("*", "*",  "@content", "*"), tt_type = "row")),
-               strip_root_els(rdf3$path[rdf3$node_class == "ContentRow"]))
+  expect_true(tt_row_path_exists(tbl3, c("*", "*", "@content")))
+  expect_false(tt_row_path_exists(tbl3, c("*", "*", "@content"), tt_type = "row"))
+  expect_true(tt_row_path_exists(tbl3, c("*", "*", "@content", "*"), tt_type = "row"))
+  expect_true(tt_row_path_exists(tbl3, c("*", "*", "@content", "*"), tt_type = "row"))
+  expect_equal(
+    unname(tt_normalize_row_path(tbl3, c("*", "*", "@content", "*"), tt_type = "row")),
+    strip_root_els(rdf3$path[rdf3$node_class == "ContentRow"])
+  )
 })
