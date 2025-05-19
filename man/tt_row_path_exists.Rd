@@ -102,17 +102,17 @@ lyt <- basic_table() |>
   analyze("SEX") |>
   analyze("SEX", nested = FALSE)
 tbl <- build_table(lyt, DM)
-tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX")) #TRUE
-tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX")) #TRUE
-tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX")) #FALSE
-tt_row_path_exists(tbl, "FAKE") #FALSE
-tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX")) #TRUE
-tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX")) #FALSE
-tt_row_path_exists(tbl, "SEX") #TRUE
-tt_row_path_exists(tbl, "SEX", tt_type = "table") #TRUE
-tt_row_path_exists(tbl, "SEX", tt_type = "elemtable") #TRUE
-tt_row_path_exists(tbl, "SEX", tt_type = "row") #FALSE
-tt_row_path_exists(tbl, c("SEX", "*")) #TRUE
+tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX")) # TRUE
+tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX")) # TRUE
+tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX")) # FALSE
+tt_row_path_exists(tbl, "FAKE") # FALSE
+tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX")) # TRUE
+tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX")) # FALSE
+tt_row_path_exists(tbl, "SEX") # TRUE
+tt_row_path_exists(tbl, "SEX", tt_type = "table") # TRUE
+tt_row_path_exists(tbl, "SEX", tt_type = "elemtable") # TRUE
+tt_row_path_exists(tbl, "SEX", tt_type = "row") # FALSE
+tt_row_path_exists(tbl, c("SEX", "*")) # TRUE
 tt_normalize_row_path(tbl, c("root", "ARM", "*", "*", "*", "SEX"))
-tt_normalize_row_path(tbl, "SEX", tt_type = "row") #empty list
+tt_normalize_row_path(tbl, "SEX", tt_type = "row") # empty list
 }
