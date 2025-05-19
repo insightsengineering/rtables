@@ -29,6 +29,7 @@ gen_args(
   na_str,
   inset,
   table_inset,
+  tt_type = c("any", "row", "table", "elemtable"),
   ...
 )
 }
@@ -93,6 +94,14 @@ main_footer, as compared to alignment of title, subtitle, and provenance footer.
 
 \item{table_inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes,
 and main footer, as compared to alignment of title, subtitles, and provenance footer. Defaults to 0 (no inset).}
+
+\item{tt_type}{(\code{character(1)})\cr One of "any", "row", "table", "elemtable";
+when testing existence or resolving a path with "*" wildcards,
+this indicates a restriction on \emph{the final element the path resolves to}.
+E.g., for "table", possible paths which match the structure of the
+wild-card path but resolve to an individual row will not be considered matching.
+The value "elemtable" indicates an Elementary table, i.e., one representing a
+single variable within an \code{analyze} call.}
 
 \item{...}{additional parameters passed to methods or tabulation functions.}
 }

@@ -7,6 +7,7 @@
 analyze_colvars(
   lyt,
   afun,
+  parent_name = get_acolvar_name(lyt),
   format = NULL,
   na_str = NA_character_,
   nested = TRUE,

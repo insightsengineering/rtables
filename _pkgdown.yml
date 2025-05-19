@@ -288,6 +288,8 @@ reference:
     - label_at_path
     - tt_at_path
     - insert_row_at_path
+    - starts_with("section_div_at_path")
+    - tt_row_path_exists
 
   - title: Referential Footnotes
     desc: Functions related to referential footnotes

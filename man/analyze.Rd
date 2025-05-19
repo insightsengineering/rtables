@@ -10,6 +10,7 @@ analyze(
   afun = simple_analysis,
   var_labels = vars,
   table_names = vars,
+  parent_name = NULL,
   format = NULL,
   na_str = NA_character_,
   nested = TRUE,

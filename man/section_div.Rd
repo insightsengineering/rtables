@@ -8,9 +8,7 @@
 \alias{section_div,TableRow-method}
 \alias{section_div<-}
 \alias{section_div<-,VTableTree-method}
-\alias{section_div<-,list-method}
 \alias{section_div<-,TableRow-method}
-\alias{section_div<-,LabelRow-method}
 \alias{header_section_div}
 \alias{header_section_div,PreDataTableLayouts-method}
 \alias{header_section_div,VTableTree-method}
@@ -21,6 +19,9 @@
 \alias{top_level_section_div,PreDataTableLayouts-method}
 \alias{top_level_section_div<-}
 \alias{top_level_section_div<-,PreDataTableLayouts-method}
+\alias{section_div_info}
+\alias{section_div_at_path}
+\alias{section_div_at_path<-}
 \title{Section dividers accessor and setter}
 \usage{
 section_div(obj)
@@ -35,11 +36,7 @@ section_div(obj, only_sep_sections = FALSE) <- value
 
 \S4method{section_div}{VTableTree}(obj, only_sep_sections = FALSE) <- value
 
-\S4method{section_div}{list}(obj, only_sep_sections = FALSE) <- value
-
 \S4method{section_div}{TableRow}(obj, only_sep_sections = FALSE) <- value
-
-\S4method{section_div}{LabelRow}(obj, only_sep_sections = FALSE) <- value
 
 header_section_div(obj)
 
@@ -60,6 +57,18 @@ top_level_section_div(obj)
 top_level_section_div(obj) <- value
 
 \S4method{top_level_section_div}{PreDataTableLayouts}(obj) <- value
+
+section_div_info(obj)
+
+section_div_at_path(obj, path, labelrow = FALSE)
+
+section_div_at_path(
+  obj,
+  path,
+  .prev_path = character(),
+  labelrow = FALSE,
+  tt_type = c("any", "row", "table", "elemtable")
+) <- value
 }
 \arguments{
 \item{obj}{(\code{VTableTree})\cr table object. This can be of any class that inherits from \code{VTableTree}
@@ -70,15 +79,46 @@ you to set the section divider only for sections that are splits or analyses if 
 values is less than the number of rows in the table. If \code{TRUE}, the section divider will
 be set for all rows of the table.}
 
-\item{value}{(\code{character})\cr vector of single characters to use as section dividers. Each character
-is repeated such that all section dividers span the width of the table. Each character that is
-not \code{NA_character_} will produce a trailing separator for each row of the table. \code{value} length
+\item{value}{(\code{character})\cr vector of strings to use as section dividers
+(a single string for \verb{section_div_at_path<-}). Each string's character(s)
+are repeated to the full width of the printed table. Non-\code{NA} strings
+will result in a trailing separator at the associated location (see Details);
+values of \code{NA_character_} result in no visible divider when the table is printed/exported.
+For \verb{section_div<-}, \code{value}'s length should be 1 or the number of rows in \code{obj},
+or the number of when
+\code{only_sep_sections} is \code{FALSE} or
 should reflect the number of rows, or be between 1 and the number of splits/levels.
 See the Details section below for more information.}
+
+\item{path}{(\code{character})\cr The path of the element(s) to
+set section_div(s) on. Can include \code{'*'} wildcards for
+\verb{section_div_at_path<-} only.}
+
+\item{labelrow}{(\code{logical(1)})\cr For \code{section_div_at_path},
+when \code{path} leads to a subtable, indicates whether the section
+div be set/retrieved for the subtable (\code{FALSE}, the default) or the
+subtable's label row (\code{TRUE}).}
+
+\item{.prev_path}{(\code{character})\cr Internal detail, do not manually set.}
+
+\item{tt_type}{(\code{character(1)})\cr One of "any", "row", "table", "elemtable";
+when testing existence or resolving a path with "*" wildcards,
+this indicates a restriction on \emph{the final element the path resolves to}.
+E.g., for "table", possible paths which match the structure of the
+wild-card path but resolve to an individual row will not be considered matching.
+The value "elemtable" indicates an Elementary table, i.e., one representing a
+single variable within an \code{analyze} call.}
 }
 \value{
 The section divider string. Each line that does not have a trailing separator
 will have \code{NA_character_} as section divider.
+
+For \code{section_div_info}, a dataframe containing \code{label},
+\code{name}, "node_class", \code{path}, \code{trailing_sep} (the effective divider, whether
+inherited or not), \code{self_section_div} (the divider set on the
+row itself), and \code{sect_div_from_path} (the path to the table
+element the value in \code{trailing_sep} is inherited from, or
+\code{NA_character_} for label rows, which are not pathable).
 }
 \description{
 \code{section_div} can be used to set or get the section divider for a table object
@@ -86,20 +126,80 @@ produced by \code{\link[=build_table]{build_table()}}. When assigned in post-pro
 the table can have a section divider after every row, each assigned independently.
 If assigning during layout creation, only \code{\link[=split_rows_by]{split_rows_by()}} (and its related row-wise
 splits) and \code{\link[=analyze]{analyze()}} have a \code{section_div} parameter that will produce separators
-between split sections and data subgroups, respectively.
+between split sections and data subgroups, respectively. These two approaches
+generally should not be mixed (see Details).
 }
 \details{
-Assigned value to section divider must be a character vector. If any value is \code{NA_character_}
-the section divider will be absent for that row or section. When you want to only affect sections
-or splits, please use \code{only_sep_sections} or provide a shorter vector than the number of rows.
-Ideally, the length of the vector should be less than the number of splits with, eventually, the
-leaf-level, i.e. \code{DataRow} where analyze results are. Note that if only one value is inserted,
-only the first split will be affected.
-If \code{only_sep_sections = TRUE}, which is the default for \code{section_div()} produced from the table
-construction, the section divider will be set for all the splits and eventually analyses, but
-not for the header or each row of the table. This can be set with \code{header_section_div} in
-\code{\link[=basic_table]{basic_table()}} or, eventually, with \code{hsep} in \code{\link[=build_table]{build_table()}}. If \code{FALSE}, the section
-divider will be set for all the rows of the table.
+Section dividers provide visual breaks between structural elements
+of a table in row space. They are repeated to fill a full line of
+the table and printed after the element (row, subtable) they are
+associated with. Use a value of \code{" "} to display a blank line
+section divider in the table. A section divider of
+\code{NA_character_} indicates no visible divider (i.e., no line at all)
+should be printed for that row or section when rendering the table.
+
+When multiple section dividers would appear consecutively with no
+rows between them (e.g., a subtable and its last row both having a
+section divider set), only the \emph{least specific} section divider
+(the subtable divider in this example) will be displayed when
+rendering the table. This is to avoid multiple non-informative
+lines of consecutive dividers when there is nested splitting in
+the row structure of a table.
+
+\verb{section_div_at_path<-} accepts a single path (which can include
+the \code{'*'} wildcard), and a single string in \code{value} and sets the
+section divider on the element(s) of \code{obj} that the path resolve
+to.
+
+For \verb{section_div<-} \code{value} should be a character vector. When you
+want to only affect sections or splits, please use
+\code{only_sep_sections} or provide a shorter vector than the number
+of rows.  Ideally, the length of the vector should be less than
+the number of splits with, eventually, the leaf-level,
+i.e. \code{DataRow} where analyze results are. Note that if only one
+value is inserted, only the first split will be affected.  If
+\code{only_sep_sections = TRUE}, which is the default for
+\code{section_div()} produced from the table construction, the section
+divider will be set for all the splits and eventually analyses,
+but not for the header or each row of the table. This can be set
+with \code{header_section_div} in \code{\link[=basic_table]{basic_table()}} or, eventually, with
+\code{hsep} in \code{\link[=build_table]{build_table()}}. If \code{only_sep_sections} is \code{FALSE},
+"section" dividers will be set for each row in the table
+\emph{including content and label rows}.
+
+In \verb{section_div<-}, when \code{only_sep_sections} is \code{FALSE} (by passing the
+argument or by providing a vector of values with length \verb{<nrow(obj)}),
+\emph{all higher order section divs are removed, even when new value
+for a row that they would apply to is \code{NA}}.
+
+A \code{section_div} -> modify -> \verb{section_div<-} workflow will
+not work to modify section dividers declared in a layout (i.e.,
+with \verb{split_rows_by*(., section_div=)} or
+\code{analyze(.,section_div=)}) after the table has been built. In
+that case a row 'inherits' its section divider behavior from
+the largest subtable that has a section divider set and for
+which it is the final row.  \code{section_div} returns the vector of
+these inherited \emph{effective section dividers} for each row;
+\verb{section_div<-} (when given a vector of length \code{nrow(obj)}),
+meanwhile, sets section dividers \emph{on the rows themselves}, thus
+not changing the effective section divider used when rendering
+the table.
+
+Setting section_dividers for rows which do not currently inherit
+section divider behavior from a containing subtable will work
+as expected.
+
+\code{section_div_info} returns a data.frame of section divider
+info (a subset of the result of \code{make_row_df} when called on a
+table tree or row object).  This information can be used to reset
+section dividers at the correct path via \code{section_div_at_path} for
+tables which have section dividers deriving from their layout (
+which will be attached to subtables, rather than rows).
+}
+\note{
+Section dividers which would appear after the last row of the
+table (ie those on the last row or last elementary subtable in
+the table) are never printed when rendering the table.
 }
 \examples{
 # Data

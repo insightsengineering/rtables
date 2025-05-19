@@ -152,7 +152,7 @@ as_result_df <- function(tt, spec = NULL,
 
     df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
     # Removing initial root elements from path (out of the loop -> right maxlen)
-    df$path <- lapply(df$path, .remove_root_elems_from_path,
+    df$path <- lapply(df$path, .fix_raw_row_path,
       which_root_name = c("root", "rbind_root"),
       all = TRUE
     )
@@ -576,7 +576,12 @@ do_data_row <- function(rdfrow, maxlen, add_tbl_name_split = FALSE) {
   )
 }
 
-.remove_root_elems_from_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
+deuniqify_path_elements <- function(path) {
+  gsub("\\[[[:digit:]]+\\]$", "", path)
+}
+
+.fix_raw_row_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
+  path <- deuniqify_path_elements(path)
   any_root_paths <- path[1] %in% which_root_name
   if (any_root_paths) {
     if (isTRUE(all)) {

@@ -10,6 +10,7 @@ split_rows_by_multivar(
   split_fun = NULL,
   split_label = "",
   varlabels = vars,
+  parent_name = "multivars",
   format = NULL,
   na_str = NA_character_,
   nested = TRUE,

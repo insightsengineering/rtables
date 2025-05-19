@@ -40,6 +40,13 @@
 #' @param value (`ANY`)\cr the new value.
 #' @param verbose (`flag`)\cr whether additional information should be displayed to the user. Defaults to `FALSE`.
 #' @param x (`ANY`)\cr an object.
+#' @param tt_type (`character(1)`)\cr One of "any", "row", "table", "elemtable";
+#'   when testing existence or resolving a path with "*" wildcards,
+#'   this indicates a restriction on *the final element the path resolves to*.
+#'   E.g., for "table", possible paths which match the structure of the
+#'   wild-card path but resolve to an individual row will not be considered matching.
+#'   The value "elemtable" indicates an Elementary table, i.e., one representing a
+#'   single variable within an `analyze` call.
 #'
 #' @return No return value.
 #'
@@ -49,7 +56,7 @@
 gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, obj, x,
                      value, object, path, label, label_pos, # visible_label,
                      cvar, topleft, page_prefix, hsep, indent_size, section_div, na_str, inset,
-                     table_inset,
+                     table_inset, tt_type = c("any", "row", "table", "elemtable"),
                      ...) {
   NULL
 }

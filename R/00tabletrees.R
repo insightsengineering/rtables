@@ -1528,9 +1528,50 @@ setClass("ElementaryTable",
   } else if (!identical(realnames, lstnames)) {
     names(lst) <- realnames
   }
-
+  if (any(duplicated(realnames))) {
+    lst <- uniqify_child_names(lst)
+  }
   lst
 }
+
+## assumes that list names match obj_names before calling this
+uniqify_child_names <- function(kidlst) {
+  while (any(duplicated(names(kidlst)))) {
+    oldnms <- names(kidlst)
+    val_to_fix <- oldnms[duplicated(oldnms)][1]
+    inds <- which(oldnms == val_to_fix)[-1] ## don'tneed to change first one
+    newnms <- paste0(val_to_fix, "[", seq_along(inds) + 1, "]")
+    kidlst[inds] <- lapply(
+      seq_along(inds),
+      function(i) {
+        kid <- kidlst[[inds[i]]]
+        c_tt <- content_table(kid)
+        ## match existing behavior which is unfortunately somewhat inconsistent
+        ## if the content table has a name update it, otherwise leave it as ""
+        ## this is so tables created with parent_name = in the layout pass
+        ## identicality checks with ones we're automatically uniqifying names in
+        if (!is.null(c_tt) &&
+              nzchar(obj_name(c_tt))) {
+          obj_name(c_tt) <- gsub(oldnms[i], newnms[i], obj_name(c_tt), fixed = TRUE)
+          content_table(kid) <- c_tt
+        }
+        obj_name(kid) <- newnms[i]
+        kid
+      }
+    )
+    message(
+      "Modifying subtable (or row) names to ensure uniqueness among direct siblings\n[",
+      paste(val_to_fix, " -> {", paste(c(val_to_fix, newnms), collapse = ", "), "}]\n"),
+      "  To control table names use split_rows_by*(, parent_name =.) or ",
+      " analyze(., table_names = .) when analyzing a single variable, or ",
+      "analyze(., parent_name = .) when analyzing multiple variables in a single call.",
+      call. = FALSE
+    )
+    names(kidlst)[inds] <- newnms
+  }
+  kidlst
+}
+
 
 #' Table constructors and classes
 #'

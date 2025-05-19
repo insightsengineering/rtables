@@ -10,6 +10,7 @@ split_rows_by(
   labels_var = var,
   split_label = var,
   split_fun = NULL,
+  parent_name = var,
   format = NULL,
   na_str = NA_character_,
   nested = TRUE,

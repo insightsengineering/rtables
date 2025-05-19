@@ -189,7 +189,24 @@ pos_to_path <- function(pos) {
   path
 }
 
+
+add_sect_div_path <- function(df, path) {
+  df[["sect_div_from_path"]] <- I(list(path))
+  df
+}
+
 # make_row_df ---------------------------------------------------------------
+
+## We now extend the rowdf beyond what is (currently as of writing) defined in
+## formatters with the following columns to support section divider shenanigans:
+## - self_section_div - the section divider set on that exact object (row, or table if visible_only=FALSE)
+## - sect_div_from_path - the path to the element `trailing_section_div` was
+## inherited from (or NA_character_ for label rows which aren't pathable and
+## can only receive section divs from themselves).
+## This should probably be migrated down into formatters for the next release but
+## its fine here for the rtables patch release because nothing in formatters
+## (ie printing or pagination) needs or uses this new info.
+## TODO: migrate above down to formatters
 
 #' @inherit formatters::make_row_df
 #'
@@ -233,25 +250,29 @@ setMethod(
 
     ## note this is the **table** not the label row
     if (!visible_only) {
+      tabrdf <- pagdfrow(
+        rnum = NA,
+        nm = obj_name(tt),
+        lab = "",
+        pth = path,
+        colwidths = colwidths,
+        repext = repr_ext,
+        repind = list(repr_inds),
+        extent = 0,
+        indent = indent,
+        rclass = class(tt), sibpos = sibpos,
+        nsibs = nsibs,
+        nrowrefs = 0L,
+        ncellrefs = 0L,
+        nreflines = 0L,
+        fontspec = fontspec,
+        trailing_sep = trailing_section_div(tt)
+      )
+      tabrdf <- add_sect_div_path(tabrdf, path)
+      tabrdf$self_section_div <- trailing_section_div(tt)
       ret <- c(
         ret,
-        list(pagdfrow(
-          rnum = NA,
-          nm = obj_name(tt),
-          lab = "",
-          pth = path,
-          colwidths = colwidths,
-          repext = repr_ext,
-          repind = list(repr_inds),
-          extent = 0,
-          indent = indent,
-          rclass = class(tt), sibpos = sibpos,
-          nsibs = nsibs,
-          nrowrefs = 0L,
-          ncellrefs = 0L,
-          nreflines = 0L,
-          fontspec = fontspec
-        ))
+        list(tabrdf)
       )
     }
     if (labelrow_visible(tt)) {
@@ -269,6 +290,7 @@ setMethod(
         fontspec = fontspec
       )
       rownum <- max(newdf$abs_rownumber, na.rm = TRUE)
+      # newdf <- add_sect_div_path(newdf, NA_character_) ## label rows aren't pathable...
 
       ret <- c(
         ret,
@@ -282,7 +304,10 @@ setMethod(
     if (NROW(content_table(tt)) > 0) {
       ct_tt <- content_table(tt)
       cind <- indent + indent_mod(ct_tt)
-      trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(tt))
+      ## this isn't right, we can display content and label rows at the
+      ## same time (though by default we don't) and they could, in theory
+      ## have different trailing section divs...
+      ##trailing_section_div(ct_tt) <- trailing_section_div(tt_labelrow(tt))
       contdf <- make_row_df(ct_tt,
         colwidths = colwidths,
         visible_only = visible_only,
@@ -303,6 +328,13 @@ setMethod(
         rownum <- newrownum
         repr_ext <- repr_ext + length(crnums)
         repr_inds <- c(repr_inds, crnums)
+      }
+      ## if someone attached a trailing separator to a content table somehow
+      ## weird but not /technically/ impossible, it overrides its last row's div,
+      ## as always
+      if (!is.na(trailing_section_div(ct_tt))) {
+        contdf$trailing_section_div[nrow(contdf)] <- trailing_section_div(ct_tt)
+        contdf$sect_div_from_path[[nrow(contdf)]] <- c(path, "@content")
       }
       ret <- c(ret, list(contdf))
       indent <- cind + 1
@@ -334,9 +366,15 @@ setMethod(
 
     ret <- do.call(rbind, ret)
 
-    # Case where it has Elementary table or VTableTree section_div it is overridden
+    ## Case where it has Elementary table or VTableTree section_div it is overridden
+    ## precedence is least specific -> most specific, so the last row of any
+    ## subtable is overridden by the subtable's div, we are calling make_row_df
+    ## recursively so this achieves that even when levels of structure are skipped
+    ## e.g. grandparent has a section div but section div doesn't (we now have
+    ## a test for this)
     if (!is.na(trailing_section_div(tt))) {
       ret$trailing_sep[nrow(ret)] <- trailing_section_div(tt)
+      ret$sect_div_from_path[[nrow(ret)]] <- path
     }
     ret
   }
@@ -375,13 +413,14 @@ setMethod(
         col_gap = col_gap
       )
     ) ## col_gap not strictly necessary as these aren't rows, but why not
+    self_path <- c(path, unname(obj_name(tt)))
     ret <- pagdfrow(
       row = tt,
       rnum = rownum,
       colwidths = colwidths,
       sibpos = sibpos,
       nsibs = nsibs,
-      pth = c(path, unname(obj_name(tt))),
+      pth = self_path,
       repext = repr_ext,
       repind = repr_inds,
       indent = indent,
@@ -393,6 +432,8 @@ setMethod(
       trailing_sep = trailing_section_div(tt),
       fontspec = fontspec
     )
+    ret <- add_sect_div_path(ret, self_path)
+    ret$self_section_div <- trailing_section_div(tt)
     ret
   }
 )
@@ -417,26 +458,30 @@ setMethod(
     rownum <- rownum + 1
     indent <- indent + indent_mod(tt)
     ret <- pagdfrow(tt,
-      extent = nlines(tt, colwidths = colwidths, max_width = max_width, fontspec = fontspec, col_gap = col_gap),
-      rnum = rownum,
-      colwidths = colwidths,
-      sibpos = sibpos,
-      nsibs = nsibs,
-      pth = path,
-      repext = repr_ext,
-      repind = repr_inds,
-      indent = indent,
-      nrowrefs = length(row_footnotes(tt)),
-      ncellrefs = 0L,
-      nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
-        colwidths = colwidths,
-        max_width = max_width,
-        fontspec = fontspec,
-        col_gap = col_gap
-      )),
-      trailing_sep = trailing_section_div(tt),
-      fontspec = fontspec
-    )
+                    extent = nlines(tt,
+                                    colwidths = colwidths,
+                                    max_width = max_width,
+                                    fontspec = fontspec,
+                                    col_gap = col_gap),
+                    rnum = rownum,
+                    colwidths = colwidths,
+                    sibpos = sibpos,
+                    nsibs = nsibs,
+                    pth = path,
+                    repext = repr_ext,
+                    repind = repr_inds,
+                    indent = indent,
+                    nrowrefs = length(row_footnotes(tt)),
+                    ncellrefs = 0L,
+                    nreflines = sum(vapply(row_footnotes(tt), nlines, NA_integer_,
+                                           colwidths = colwidths,
+                                           max_width = max_width,
+                                           fontspec = fontspec,
+                                           col_gap = col_gap)),
+                    trailing_sep = trailing_section_div(tt),
+                    fontspec = fontspec)
+    ret <- add_sect_div_path(ret, NA_character_)
+    ret$self_section_div <- trailing_section_div(tt)
     if (!labelrow_visible(tt)) {
       ret <- ret[0, , drop = FALSE]
     }
