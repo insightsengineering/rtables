@@ -4146,9 +4146,11 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
         found <- TRUE
       }
       if (!found) {
-        warning("Unable to find ", ceiling(length(curpth) / 2), " levels of nesting",
-                " in table structure. Ignoring remaining ",  length(value) - i,
-                " section_div values.")
+        warning(
+          "Unable to find ", ceiling(length(curpth) / 2), " levels of nesting",
+          " in table structure. Ignoring remaining ", length(value) - i,
+          " section_div values."
+        )
         break
       }
       curpth <- c(curpth, "*", "*") ## add another split/value pair level of nesting
@@ -4461,8 +4463,8 @@ clear_subtable_sectdivs <- function(obj) {
   ## **on the subtable itself**
   ##
   if (!tt_type_ok(subtree, tt_type) &&
-        ## womp womp. tt_type_ok fails for subtables when we want their label row.
-        !(labelrow && is(subtree, "VTableTree"))) {
+    ## womp womp. tt_type_ok fails for subtables when we want their label row.
+    !(labelrow && is(subtree, "VTableTree"))) {
     stop(
       "Path ",
       paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
@@ -4470,7 +4472,7 @@ clear_subtable_sectdivs <- function(obj) {
       " expected ", tt_type
     )
   } else if (is(subtree, "TableRow") ||
-               (is(subtree, "VTableTree") && !labelrow)) {
+    (is(subtree, "VTableTree") && !labelrow)) {
     ## rows can only set it on themselves
     ## if its a table (and tables are allowed by tt_type) it sets it on
     ## itself iff labelrow is FALSE

@@ -475,9 +475,12 @@ test_that("the split only setter works", {
 
   sect_div_info_ok(tbl)
 
-  expect_warning({
-    section_div(tbla, only_sep_sections = TRUE) <- letters
-  }, "Unable to find 4 levels of nesting in table structure.")
+  expect_warning(
+    {
+      section_div(tbla, only_sep_sections = TRUE) <- letters
+    },
+    "Unable to find 4 levels of nesting in table structure."
+  )
   ## the above is setting "c" on the analysis tables, but that doesn't
   ## matter since they are perfectly masked by the b's from the
   ## STRATA1 split facets. That's "probably wrong behavior" (setting
