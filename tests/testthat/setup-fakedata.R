@@ -131,7 +131,7 @@ make_big_lyt <- function() {
       format = "xx.x - xx.x",
       table_names = "AgeRedux"
     ) %>%
-    ## Note nested=TRUE, this creates a NEW subtable directly under the
+    ## Note nested=FALSE, this creates a NEW subtable directly under the
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
     ## levels of VAR3, in this case 2.
@@ -223,5 +223,14 @@ tt_for_nl <- tt_to_test_newline_chars()
 check_pattern <- function(element, letter, len) {
   # Regular expression to match exactly len of the same letter
   regex <- paste0(rep(letter, len), collapse = "")
-  return(grepl(regex, element, fixed = TRUE))
+  grepl(regex, element, fixed = TRUE)
+}
+
+check_all_patterns <- function(elements, letters, len) {
+  res <- mapply(check_pattern,
+    element = elements,
+    letter = letters,
+    MoreArgs = list(len = len)
+  )
+  all(res)
 }

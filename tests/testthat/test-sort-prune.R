@@ -298,7 +298,10 @@ test_that("paths come out correct when sorting with '*'", {
   )
 })
 
-test_that("sort_at_path throws an error when trying to sort a table with identical branching names", {
+
+## rtables now guarantees uniqueness of sibling names so this
+## is no longer an error
+test_that("sort_at_path works with uniqified names", {
   # Related to regression test #864
   adsl <- ex_adsl
   adsl$flag <- sample(c("Y", "N"), nrow(adsl), replace = TRUE)
@@ -317,10 +320,7 @@ test_that("sort_at_path throws an error when trying to sort a table with identic
     unlist(cell_values(tt))
   }
 
-  expect_error(
-    sort_at_path(tbl, c("root", "flag", "Y", "SEX"), scorefun),
-    "position element flag appears more than once, not currently supported"
-  )
+  expect_silent(sort_at_path(tbl, c("root", "flag", "Y", "SEX"), scorefun))
 })
 
 test_that("passing extra stuff to sorting and pruning works", {

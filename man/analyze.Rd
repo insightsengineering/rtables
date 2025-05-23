@@ -10,6 +10,7 @@ analyze(
   afun = simple_analysis,
   var_labels = vars,
   table_names = vars,
+  parent_name = NULL,
   format = NULL,
   na_str = NA_character_,
   nested = TRUE,
@@ -31,6 +32,11 @@ other parameters which will be populated by the tabulation framework. See Detail
 \item{var_labels}{(\code{character})\cr vector of labels for one or more variables.}
 
 \item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
+
+\item{parent_name}{(\code{character(1)})\cr Name to assign to the table corresponding
+to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
+\verb{analyze*} when analyzing more than one variable, respectively. Ignored when
+analyzing a single variable.}
 
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of

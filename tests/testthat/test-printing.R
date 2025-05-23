@@ -396,6 +396,15 @@ test_that("section_div works throughout", {
   expect_identical(mylns[9], "                        ")
   expect_identical(mylns[12], "------------------------")
   expect_identical(length(mylns), 31L) ## sect div not printed for last one
+
+  lyt2 <- basic_table() %>%
+    split_rows_by("ARM", section_div = "-") %>%
+    split_rows_by("STRATA1") %>%
+    analyze("AGE")
+
+  tbl2 <- build_table(lyt2, DM)
+  mylns2 <- strsplit(toString(tbl2), "\\n")[[1]]
+  expect_true(check_all_patterns(mylns2[c(10, 18)], "-", nchar(mylns2[2])))
 })
 
 test_that("section_div works when analyzing multiple variables", {

@@ -10,6 +10,7 @@ split_rows_by(
   labels_var = var,
   split_label = var,
   split_fun = NULL,
+  parent_name = var,
   format = NULL,
   na_str = NA_character_,
   nested = TRUE,
@@ -32,6 +33,11 @@ split_rows_by(
 with labels assigned to each child (which are based on the data and type of split during tabulation).}
 
 \item{split_fun}{(\code{function} or \code{NULL})\cr custom splitting function. See \link{custom_split_funs}.}
+
+\item{parent_name}{(\code{character(1)})\cr Name to assign to the table corresponding
+to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
+\verb{analyze*} when analyzing more than one variable, respectively. Ignored when
+analyzing a single variable.}
 
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of

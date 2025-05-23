@@ -231,7 +231,7 @@ test_that("as_result_df works fine with empty tables and no character(0) is allo
   expect_silent(as_result_df(tbl))
 
   expect_equal(
-    .remove_root_elems_from_path(
+    .fix_raw_row_path(
       c("a", "b", "c"),
       which_root_name = c("a", "b", "c"),
       all = TRUE

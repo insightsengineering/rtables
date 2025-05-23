@@ -255,6 +255,40 @@ test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
   }
 }
 
+
+sdf_row_ok <- function(i, rdf) {
+  trail_sep <- rdf$trailing_sep[i]
+  pth <- rdf$path[[i]]
+  sect_div_pth <- rdf$sect_div_from_path[[i]]
+  self_div <- rdf$self_section_div[i]
+  paths_match <- paste(pth, collapse = "") == paste(sect_div_pth, collapse = "")
+  if (rdf$node_class[i] == "LabelRow") {
+    ## label rows have NA for section_div_from_path even
+    ## though they technically have a path value because
+    ## its wrong and doesn't actually path to that row
+    ## can't path to a label row
+    ret <- is.na(sect_div_pth) &&
+      (is.na(trail_sep) || trail_sep == self_div)
+  } else if (is.na(trail_sep)) {
+    ret <- is.na(self_div) &&
+      (all(is.na(sect_div_pth)) || identical(pth, sect_div_pth))
+  } else if (is.na(self_div)) {
+    ## trail_sep is NOT na here, so it has to inherit from somewhere else
+    ret <- !paths_match
+  } else {
+    ## assumes we set different seps on table and last row in table
+    ## ok for our unit tests but not safe hard assumption "in the wild"
+    divmatch <- trail_sep == self_div ## both non na
+    ## seps match if and only if paths match
+    ret <- paths_match == divmatch
+  }
+  ret
+}
+
+sect_div_info_ok <- function(tt, sdf = section_div_info(tt)) {
+  expect_true(all(vapply(seq_len(nrow(sdf)), sdf_row_ok, rdf = sdf, TRUE)))
+}
+
 test_that("section_div getter and setter works", {
   df <- data.frame(
     cat = c(
@@ -269,11 +303,40 @@ test_that("section_div getter and setter works", {
     analyze("value", afun = fast_afun, section_div = " ") %>%
     build_table(df)
 
+  sdf <- section_div_info(tbl)
+  sect_div_info_ok(sdf = sdf)
+
+  ## basic section_div_at_path checks
+  ## this should have NO section_divs set on individual rows...
+
+
+  ## label row "pathing" is stupid and I hate it
+  res <- expect_silent(vapply(sdf$path, function(pth) section_div_at_path(tbl, pth, labelrow = TRUE), ""))
+  expect_true(all(is.na(res)))
+  expect_equal(
+    section_div_at_path(tbl, c("cat", "re")),
+    "~"
+  )
+  expect_equal(
+    section_div_at_path(tbl, c("cat", "re", "value")),
+    " "
+  )
+  expect_error(section_div_at_path(tbl, c("*", "*", "*", "*", "*")),
+    "Paths including '*' wildcards are not currently supported",
+    fixed = TRUE
+  )
+  expect_error(
+    section_div_at_path(tbl, c("cat", "lol")),
+    "Path appears invalid"
+  )
+
   tbl_content <- basic_table() %>%
     split_rows_by("cat", section_div = "~") %>%
     summarize_row_groups() %>% # This makes them not visible
     analyze("value", afun = fast_afun, section_div = " ") %>%
     build_table(df)
+
+  sect_div_info_ok(tbl_content)
 
   val_per_lev <- list(
     "global" = NA_character_,
@@ -298,13 +361,21 @@ test_that("section_div getter and setter works", {
     val_per_lev = val_per_lev
   )
 
-
   # Checks that section div and printing works together
   expect_identical(section_div(tbl), make_row_df(tbl)$trailing_sep)
   expect_identical(section_div(tbl_content), make_row_df(tbl_content)$trailing_sep)
 
   # MAIN assignment setter - this is clean, i.e. is only node base and not real section div
-  section_div(tbl) <- section_div(tbl_content) <- letters[seq_len(nrow(tbl))]
+
+  ## this behavior is changed, but I think the new behavior
+  ## is correct. we now have section_div_at_path (which
+  ## supports * wildcards) to set actual section divs
+  ## and section_div_info to easily determine the path
+  ## an effective div is coming from
+
+  section_div(tbl) <- letters[seq_len(nrow(tbl))]
+  section_div(tbl_content) <- letters[seq_len(nrow(tbl))]
+  sect_div_info_ok(tbl)
 
   val_per_lev <- list(
     "global" = NA_character_,
@@ -315,7 +386,20 @@ test_that("section_div getter and setter works", {
     "contentrow" = NA_character_,
     "content_labelrow" = NA_character_,
     "elem_tbl_labelrow" = NA_character_,
-    "elem_tbl" = "c",
+    "elem_tbl" = NA_character_, # "c",
+    "datarow" = c("b", "c")
+  )
+
+  val_per_lev_cont <- list(
+    "global" = NA_character_,
+    "global_labelrow" = NA_character_,
+    "split" = NA_character_,
+    "split_labelrow" = NA_character_, # "a",
+    "content" = NA_character_,
+    "contentrow" = "a", # NA_character_,
+    "content_labelrow" = NA_character_,
+    "elem_tbl_labelrow" = NA_character_,
+    "elem_tbl" = NA_character_, # "c",
     "datarow" = c("b", "c")
   )
 
@@ -326,7 +410,7 @@ test_that("section_div getter and setter works", {
   )
   test_structure_with_a_getter(tbl_content,
     getter = trailing_section_div,
-    val_per_lev = val_per_lev
+    val_per_lev = val_per_lev_cont
   )
 
   # Checks that section div and printing works together
@@ -337,30 +421,153 @@ test_that("section_div getter and setter works", {
   separators2 <- strsplit(toString(tbl_content, widths = c(4, 10)), "\n")[[1]][c(4, 6, 9, 11, 13)]
   expect_identical(separators, separators2)
 
+  tbla <- tbl
+  expect_warning({
+    section_div(tbla) <- letters
+  })
+  expect_identical(tbl, tbla)
 
-  mapply(separators,
-    FUN = check_pattern,
-    letter = letters[seq_len(nrow(tbl) - 1)], # -1 is the table end
-    len = 17
-  ) %>%
-    all() %>%
-    expect_true()
+  # -1 is the table end
+  expect_true(check_all_patterns(separators, letters[seq_len(nrow(tbl) - 1)], len = 17))
+
+  ## https://github.com/insightsengineering/rtables/issues/1023
+  ## section_div<-, section_div_at_path<-
+  ## 'big', ie non-trivially structured, table
+  big_tbl <- build_table(make_big_lyt(), rawdat)
+  tbl3 <- tbl2 <- big_tbl
+  sect_div_info_ok(tbl2)
+  ltrs <- rep(letters, length.out = NROW(tbl2))
+  section_div(tbl2) <- ltrs
+  sect_div_info_ok(tbl2)
+  txtvec <- strsplit(toString(tbl2), split = "\n")[[1]]
+  sepinds <- seq(from = 6, to = length(txtvec) - 1, by = 2)
+  wid <- nchar(txtvec[6])
+  expect_true(check_all_patterns(txtvec[sepinds], head(ltrs, -1), len = wid))
+
+  ## when full length vector is given, divs are set on individual rows
+  rdf2 <- make_row_df(tbl2)
+  expect_identical(rdf2$trailing_sep, rdf2$self_section_div)
+  ## set subtable section div and have it override existing row div
+  ## also support for wildcard in section_div_at_path<-, including
+  ## ending on a wildcard
+  tbl4 <- tbl2
+  section_div_at_path(tbl4, c("RACE", "*", "FACTOR2", "*", "*")) <- "-"
+  sdf4 <- section_div_info(tbl4)
+  sect_div_info_ok(sdf = sdf4)
+  txtvec4 <- strsplit(toString(tbl4), split = "\n")[[1]]
+
+  ## bad paths of all the various types give informative errors
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "*", "FACTOR2", "*", "*", "@content")) <- "-"
+    },
+    "Unable to resolve * in path",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "feline", "FACTOR2", "*", "*")) <- "-"
+    },
+    "Unable to find child(ren) 'feline'",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "*", "FACTOR2", "*", "*", "*"), labelrow = TRUE) <- "-"
+    },
+    "Unable to resolve * in path",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "BLACK", "FACTOR2", "A", "AGE", "mean", "*")) <- "-"
+    },
+    "Path continues after resolving to individual row"
+  )
+
+  expect_equal(sum(sdf4$trailing_sep == "-"), 8)
+  ltrinds4 <- c(5, 7, 11, 13, 18, 20, 24, 26)
+  modltrs <- ltrs
+  modltrs[ltrinds4] <- "-"
+  expect_true(check_all_patterns(txtvec4[sepinds], head(modltrs, -1), wid))
+  expect_false(identical(sdf4$trailing_sep, sdf4$self_section_div))
+
+  ## crazy people with their crazy ... label and content rows
+  ## both visible
+
+  lytcrazy <- basic_table() |>
+    split_rows_by("ARM", child_labels = "visible") |>
+    summarize_row_groups() |>
+    analyze("AGE")
+
+  ## regression for unreported bug
+  tblcrazy <- build_table(lytcrazy, DM)
+  section_div(tblcrazy) <- letters[seq_len(nrow(tblcrazy))]
+  txtcrazy <- strsplit(toString(tblcrazy), split = "\n")[[1]]
+  expect_true(
+    check_all_patterns(
+      txtcrazy[seq(4, length(txtcrazy), by = 2)],
+      letters[1:(nrow(tblcrazy) - 1)],
+      len = nchar(txtcrazy[2])
+    )
+  )
+
+  expect_error({
+    section_div_at_path(tbl, c("*", "*", "*", "*", "*", "*")) <- " "
+  })
+
+  ## stupid for coverage
+  rws <- collect_leaves(tbl, add.labrows = TRUE)
+  rws2 <- expect_silent(lapply(rws, function(r) {
+    section_div(r) <- "W"
+    r
+  }))
+  expect_equal(
+    vapply(rws2, section_div, "", USE.NAMES = FALSE),
+    rep("W", length(rws))
+  )
 })
 
 test_that("the split only setter works", {
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
-  tbl <- basic_table() %>%
+  tbla <- tbl <- basic_table() %>%
     split_rows_by("ARM", section_div = "=") %>%
     split_rows_by("STRATA1", section_div = "-") %>%
     analyze("BMRKR1") %>%
     build_table(DM)
-
+  sect_div_info_ok(tbl)
   replace_sec_div <- section_div(tbl)
   replace_sec_div[replace_sec_div == "="] <- "a"
   replace_sec_div[replace_sec_div == "-"] <- "b"
+
   section_div(tbl) <- c("a", "b")
+  sdf <- section_div_info(tbl)
   expect_identical(section_div(tbl), replace_sec_div)
+  expect_identical(sdf$trailing_sep, replace_sec_div)
+  ## when only_sep_sections is true, divs are set on the subtable not
+  ## the row
+  expect_true(all(is.na(sdf$self_section_div)))
+
+  sect_div_info_ok(sdf = sdf)
+
+  expect_warning(
+    {
+      section_div(tbla, only_sep_sections = TRUE) <- letters
+    },
+    "Unable to find 4 levels of nesting in table structure."
+  )
+  ## the above is setting "c" on the analysis tables, but that doesn't
+  ## matter since they are perfectly masked by the b's from the
+  ## STRATA1 split facets. That's "probably wrong behavior" (setting
+  ## the invisible 'c' section divs) technically, but it doesn't
+  ## make any difference in practice and I'm not convinced we can make
+  ## the nesting-detection heuristic smart enough to handle that
+  ## successfully.
+  ##
+  ## Their text renderings are identical, though...
+  expect_false(identical(tbl, tbla))
+  expect_identical(toString(tbl), toString(tbla))
 
   # multiple analyze
   tbl <- basic_table(header_section_div = " ") %>%
@@ -372,8 +579,11 @@ test_that("the split only setter works", {
     analyze("AGE") %>%
     build_table(DM)
   tbl2 <- tbl
+  sect_div_info_ok(tbl)
   section_div(tbl) <- c("-", NA_character_)
+  sect_div_info_ok(tbl)
   section_div(tbl2) <- c("-")
+  sect_div_info_ok(tbl2)
   expect_identical(
     section_div(tbl)[seq_len(6)],
     c(NA_character_, "-", NA_character_, "-", NA_character_, NA_character_)

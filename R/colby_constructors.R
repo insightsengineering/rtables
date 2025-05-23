@@ -507,6 +507,7 @@ split_rows_by <- function(lyt,
                           labels_var = var,
                           split_label = var,
                           split_fun = NULL,
+                          parent_name = var,
                           format = NULL,
                           na_str = NA_character_,
                           nested = TRUE,
@@ -529,7 +530,8 @@ split_rows_by <- function(lyt,
     child_labels = child_labels,
     indent_mod = indent_mod,
     page_prefix = if (page_by) page_prefix else NA_character_,
-    section_div = section_div
+    section_div = section_div,
+    split_name = parent_name
   )
 
   pos <- next_rpos(lyt, nested)
@@ -629,6 +631,7 @@ split_rows_by_multivar <- function(lyt,
                                    split_fun = NULL,
                                    split_label = "",
                                    varlabels = vars,
+                                   parent_name = "multivars",
                                    format = NULL,
                                    na_str = NA_character_,
                                    nested = TRUE,
@@ -645,7 +648,8 @@ split_rows_by_multivar <- function(lyt,
     indent_mod = indent_mod,
     split_fun = split_fun,
     section_div = section_div,
-    extra_args = extra_args
+    extra_args = extra_args,
+    split_name = parent_name
   )
   pos <- next_rpos(lyt, nested)
   split_rows(lyt, spl, pos)
@@ -774,6 +778,7 @@ split_cols_by_cuts <- function(lyt, var, cuts,
 split_rows_by_cuts <- function(lyt, var, cuts,
                                cutlabels = NULL,
                                split_label = var,
+                               parent_name = var,
                                format = NULL,
                                na_str = NA_character_,
                                nested = TRUE,
@@ -789,7 +794,8 @@ split_rows_by_cuts <- function(lyt, var, cuts,
     split_na_str = na_str,
     label_pos = label_pos,
     cumulative = cumulative,
-    section_div = section_div
+    section_div = section_div,
+    split_name = parent_name
   )
   ## if(cumulative)
   ##     spl = as(spl, "CumulativeCutSplit")
@@ -864,6 +870,7 @@ split_cols_by_quartiles <- function(lyt, var, split_label = var,
 #' @export
 #' @rdname varcuts
 split_rows_by_quartiles <- function(lyt, var, split_label = var,
+                                    parent_name = var,
                                     format = NULL,
                                     na_str = NA_character_,
                                     nested = TRUE,
@@ -877,6 +884,7 @@ split_rows_by_quartiles <- function(lyt, var, split_label = var,
     lyt = lyt,
     var = var,
     split_label = split_label,
+    parent_name = parent_name,
     format = format,
     na_str = na_str,
     cutfun = qtile_cuts,
@@ -928,6 +936,7 @@ split_rows_by_cutfun <- function(lyt, var,
                                  cutfun = qtile_cuts,
                                  cutlabelfun = function(x) NULL,
                                  split_label = var,
+                                 parent_name = var,
                                  format = NULL,
                                  na_str = NA_character_,
                                  nested = TRUE,
@@ -949,7 +958,8 @@ split_rows_by_cutfun <- function(lyt, var,
     cumulative = cumulative,
     indent_mod = indent_mod,
     label_pos = label_pos,
-    section_div = section_div
+    section_div = section_div,
+    split_name = parent_name
   )
   pos <- next_rpos(lyt, nested)
   split_rows(lyt, spl, pos)
@@ -1109,7 +1119,10 @@ analyze <- function(lyt,
                     vars,
                     afun = simple_analysis,
                     var_labels = vars,
+                    ## really wish I hadn't named this table_names
+                    ## but can't break backwards compat :(
                     table_names = vars,
+                    parent_name = NULL,
                     format = NULL,
                     na_str = NA_character_,
                     nested = TRUE,
@@ -1156,7 +1169,8 @@ analyze <- function(lyt,
     indent_mod = indent_mod,
     child_names = table_names,
     child_labels = show_labels,
-    section_div = section_div
+    section_div = section_div,
+    split_name = parent_name
   )
 
   if (nested && (is(last_rowsplit(lyt), "VAnalyzeSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {
@@ -1247,6 +1261,7 @@ get_acolvar_vars <- function(lyt) {
 #' @export
 analyze_colvars <- function(lyt,
                             afun,
+                            parent_name = get_acolvar_name(lyt),
                             format = NULL,
                             na_str = NA_character_,
                             nested = TRUE,
@@ -1288,7 +1303,7 @@ analyze_colvars <- function(lyt,
     defrowlab = defrowlab,
     split_format = format,
     split_na_str = na_str,
-    split_name = get_acolvar_name(lyt),
+    split_name = parent_name,
     indent_mod = indent_mod,
     extra_args = extra_args,
     inclNAs = inclNAs

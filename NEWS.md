@@ -1,5 +1,25 @@
 ## rtables 0.6.12.9000
 
+### New Features
+ * All elements of a table's row structure are now guaranteed to be pathable. #1024 by @gmbecker
+ * Direct siblings anywhere in a table's tree (row) structure are now guaranteed to have unique names, with a message if de-duplication (by adding "[i]" to duplicates) was required. #1024 by @gmbecker
+ * Added `parent_name` argument to `split_rows_by*` and `analyze*` functions to manually control names of (and thus paths to) the subtables created. #1024 by @gmbecker
+ * Added `tt_row_path_exists`, which determines whether a path exists within a table's row structure, optionally restricted to resolving to a particular type of node (row, table, elementary table). #1024 by @gmbecker
+ * Added `tt_normalize_row_path` which resolves a path including the "*" wild card to all existing paths within a table, optionally restricted to resolving to a particular type. #1024 by @gmbecker
+ * Added documentation of basic pathing concepts (`?pathing`) to the man page for the above functions.
+ * When `make_row_df` is called on a `VTableTree` the returned df now includes new `sect_div_from_path` and `self_section_div` columns. #1024 by @gmbecker
+ * Added `section_div_info` convenience function which returns portions of `make_row_df`'s result relevant to section dividers. #1024 by @gmbecker
+ * Added `section_div_at_path` and `section_div_at_path<-` for getting and setting section dividers for substructures within the table. The latter supports "*" wildcards for flexible usage. #1024 by @gmbecker
+ * Documentation regarding section dividers (`?section_div`) updated and expanded. #1024 by @gmbecker
+ * Updated `as_result_df` to "de-uniqify" names that were altered for pathability when determining group values in the result dataframe/ard. #1024 by @gmbecker
+ * Warning given when `section_div<-` with `only_sep_sections = TRUE` more values than levels of nesting present is now more informative, and occurs regardless of whether `only_sep_sections` was set manually or automatically (`length(value) < nrow(tt)`). #1024 by @gmbecker
+ 
+### Bug Fixes
+ * `section_div<-` now works correctly on tables that include top level siblings in their row structure (e.g., when unnested structure is added via `nested = FALSE` or adding a row splitting after an `analyze` call). #1024 by @gmbecker
+ * `section_div<-` with `only_sep_sections = FALSE` is now consistent regarding which value is set when `analyze` calls occur at different levels of nesting within the corresponding layout, particularly as top-level non-nested siblings. #1024 by @gmbecker
+ * `section_div<-` no longer sets a section div on non-visible label rows when setting a section divider for a content row on the same group. #1024 by @gmbecker
+ * `section_div<-` when given a full-length (`nrow(tt)`) vector now sets 'section dividers' on label rows and content rows correctly when both are visible for the same facet. #1024 by @gmbecker
+ 
 ## rtables 0.6.12
 
 ### New Features

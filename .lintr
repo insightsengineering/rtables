@@ -3,6 +3,5 @@ linters: linters_with_defaults(
   commented_code_linter = NULL,
   object_name_linter = NULL,
   object_length_linter = NULL,
-  object_usage_linter = NULL,
-  cyclocomp_linter = NULL
+  object_usage_linter = NULL
   )
