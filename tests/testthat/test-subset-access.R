@@ -581,6 +581,9 @@ test_that("bracket methods all work", {
     ]
   )
 
+  tbl_sub2 <- tbl[rep(c(TRUE, FALSE), c(25, nrtot - 25)), c(1, 4, 6)]
+  expect_identical(tbl_sub1, tbl_sub2)
+
   expect_identical(
     tbl[, c(1, 4, 6)],
     tbl[, c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE)]
@@ -682,20 +685,30 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
   lyt <- basic_table() |>
     split_rows_by("ARM") |>
     split_rows_by("STRATA1") |>
+    summarize_row_groups() |>
     analyze("SEX") |>
     analyze("SEX", nested = FALSE)
   tbl <- build_table(lyt, DM)
+  ## expect TRUE
   expect_true(tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "SEX"))) # TRUE
+  expect_true(tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "*"))) # TRUE
+  expect_true(tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "*"), tt_type = "table")) # TRUE
   expect_true(tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX"))) # TRUE
-  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX"))) # FALSE
-  expect_false(tt_row_path_exists(tbl, "FAKE")) # FALSE
   expect_true(tt_row_path_exists(tbl, c("ARM", "*", "STRATA1", "*", "SEX"))) # TRUE
-  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX"))) # FALSE
   expect_true(tt_row_path_exists(tbl, "SEX")) # TRUE
   expect_true(tt_row_path_exists(tbl, "SEX", tt_type = "table")) # TRUE
   expect_true(tt_row_path_exists(tbl, "SEX", tt_type = "elemtable")) # TRUE
-  expect_false(tt_row_path_exists(tbl, "SEX", tt_type = "row")) # FALSE
   expect_true(tt_row_path_exists(tbl, c("SEX", "*"))) # TRUE
+  expect_true(tt_row_path_exists(tbl, c("ARM", "A: Drug X"), tt_type = "table"))
+
+  ## expect FALSE
+  expect_false(tt_row_path_exists(tbl, c("root", "ARM", "*", "*", "*", "*"), tt_type = "row")) # FALSE
+  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "*", "*", "SEX"), tt_type = "row")) # FALSE
+  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "*", "SEX"))) # FALSE
+  expect_false(tt_row_path_exists(tbl, "FAKE")) # FALSE
+  expect_false(tt_row_path_exists(tbl, c("ARM", "*", "STRATA", "*", "SEX"))) # FALSE
+  expect_false(tt_row_path_exists(tbl, "SEX", tt_type = "row")) # FALSE
+  expect_false(tt_row_path_exists(tbl, c("ARM", "A: Drug X"), tt_type = "elemtable"))
 
   ## more complicated
   lyt2 <- basic_table() |>
@@ -710,9 +723,9 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
   expect_true(tt_row_path_exists(tbl2, c("*", "*", "*", "*", "AGE")))
   expect_true(tt_row_path_exists(tbl2, c("*", "*", "*", "*", "AGE"), tt_type = "elemtable"))
   expect_true(tt_row_path_exists(tbl2, c("*", "*", "*", "*", "SEX"), tt_type = "elemtable"))
-  expect_false(tt_row_path_exists(tbl2, c("RACE", "*", "*", "*", "SEX"), tt_type = "elemtable"))
   expect_true(tt_row_path_exists(tbl2, "*", tt_type = "elemtable"))
   expect_false(tt_row_path_exists(tbl2, "AGE", tt_type = "elemtable"))
+  expect_false(tt_row_path_exists(tbl2, c("RACE", "*", "*", "*", "SEX"), tt_type = "elemtable"))
   ## we can resolve specifics after wildcards and it behaves itself
   expect_equal(
     length(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1", "A", "*"), tt_type = "elemtable")),
@@ -743,6 +756,59 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
   expect_false(tt_row_path_exists(tbl2, c("*", "*", "@content")))
   expect_false(tt_row_path_exists(tbl2, c("*", "@content")))
   expect_false(tt_row_path_exists(tbl2, c("*", "*", "*", "@content")))
+  expect_equal(
+    unname(tt_normalize_row_path(tbl2, c("*", "@content"))),
+    list()
+  )
+  expect_equal(
+    unname(tt_normalize_row_path(tbl2, c("*", "*", "@content"))),
+    list()
+  )
+  expect_equal(
+    unname(tt_normalize_row_path(tbl2, c("*", "*", "*", "@content"))),
+    list()
+  )
+  ## handles case where there isn't even technically a content table gracefully
+  expect_equal(
+    unname(tt_normalize_row_path(tbl2, c("SEX", "@content"))),
+    list()
+  )
+
+  ## works ok with a path with no "*" at the end
+  expect_equal(
+    length(tt_normalize_row_path(tbl2, c("*", "*", "STRATA1", "A"), tt_type = "table")),
+    length(levels(DM$ARM)) + length(levels(DM$RACE))
+  )
+
+  ## works ok with fully fixed paths
+  ## use smaller tbl here to avoid redundant checking
+  rdf <- make_row_df(tbl, visible_only = FALSE)
+  allpths <- rdf$path
+  pathok <- vapply(allpths, function(pth) {
+    tt_row_path_exists(tbl, pth) &&
+      identical(unname(tt_normalize_row_path(tbl, pth)), list(pth))
+  }, TRUE)
+  expect_true(all(pathok))
+
+  pathokrow <- vapply(allpths, function(pth) {
+    tt_row_path_exists(tbl, pth, tt_type = "row") &&
+      identical(unname(tt_normalize_row_path(tbl, pth, tt_type = "row")), list(pth))
+  }, TRUE)
+  expect_equal(pathokrow, rdf$node_class %in% c("ContentRow", "DataRow"))
+
+  pathoktbl <- vapply(allpths, function(pth) {
+    tt_row_path_exists(tbl, pth, tt_type = "table") &&
+      identical(unname(tt_normalize_row_path(tbl, pth, tt_type = "table")), list(pth))
+  }, TRUE)
+
+  ## LabelRow has "path" of its table in the rdf. That is wrong, of course but
+  ## it's always been that way and doesn't break anything
+  ## note, again, we can't use that path to actually path to the label row itself, have to
+  ## use tt_labelrow accessor on the relevant table. Could probably generalize pathing to
+  ## fix that.
+  ## XXX TODO
+  expect_equal(pathoktbl, rdf$node_class %in% c("TableTree", "ElementaryTable", "LabelRow"))
+
 
   lyt3 <- basic_table() |>
     split_rows_by("ARM") |>

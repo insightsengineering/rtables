@@ -303,7 +303,32 @@ test_that("section_div getter and setter works", {
     analyze("value", afun = fast_afun, section_div = " ") %>%
     build_table(df)
 
-  sect_div_info_ok(tbl)
+  sdf <- section_div_info(tbl)
+  sect_div_info_ok(sdf = sdf)
+
+  ## basic section_div_at_path checks
+  ## this should have NO section_divs set on individual rows...
+
+  
+  ## label row "pathing" is stupid and I hate it
+  res <- expect_silent(vapply(sdf$path, function(pth) section_div_at_path(tbl, pth, labelrow = TRUE), ""))
+  expect_true(all(is.na(res)))
+  expect_equal(
+    section_div_at_path(tbl, c("cat", "re")),
+    "~"
+  )
+  expect_equal(
+    section_div_at_path(tbl, c("cat", "re", "value")),
+    " "
+  )
+  expect_error(section_div_at_path(tbl, c("*", "*", "*", "*", "*")),
+    "Paths including '*' wildcards are not currently supported",
+    fixed = TRUE
+  )
+  expect_error(
+    section_div_at_path(tbl, c("cat", "lol")),
+    "Path appears invalid"
+  )
 
   tbl_content <- basic_table() %>%
     split_rows_by("cat", section_div = "~") %>%
@@ -396,6 +421,11 @@ test_that("section_div getter and setter works", {
   separators2 <- strsplit(toString(tbl_content, widths = c(4, 10)), "\n")[[1]][c(4, 6, 9, 11, 13)]
   expect_identical(separators, separators2)
 
+  tbla <- tbl
+  expect_warning({
+    section_div(tbla) <- letters
+  })
+  expect_identical(tbl, tbla)
 
   # -1 is the table end
   expect_true(check_all_patterns(separators, letters[seq_len(nrow(tbl) - 1)], len = 17))
@@ -426,6 +456,35 @@ test_that("section_div getter and setter works", {
   sect_div_info_ok(sdf = sdf4)
   txtvec4 <- strsplit(toString(tbl4), split = "\n")[[1]]
 
+  ## bad paths of all the various types give informative errors
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "*", "FACTOR2", "*", "*", "@content")) <- "-"
+    },
+    "Unable to resolve * in path",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "feline", "FACTOR2", "*", "*")) <- "-"
+    },
+    "Unable to find child(ren) 'feline'",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "*", "FACTOR2", "*", "*", "*"), labelrow = TRUE) <- "-"
+    },
+    "Unable to resolve * in path",
+    fixed = TRUE
+  )
+  expect_error(
+    {
+      section_div_at_path(tbl4, c("RACE", "BLACK", "FACTOR2", "A", "AGE", "mean", "*")) <- "-"
+    },
+    "Path continues after resolving to individual row"
+  )
+
   expect_equal(sum(sdf4$trailing_sep == "-"), 8)
   ltrinds4 <- c(5, 7, 11, 13, 18, 20, 24, 26)
   modltrs <- ltrs
@@ -452,6 +511,21 @@ test_that("section_div getter and setter works", {
       len = nchar(txtcrazy[2])
     )
   )
+
+  expect_error({
+    section_div_at_path(tbl, c("*", "*", "*", "*", "*", "*")) <- " "
+  })
+
+  ## stupid for coverage
+  rws <- collect_leaves(tbl, add.labrows = TRUE)
+  rws2 <- expect_silent(lapply(rws, function(r) {
+    section_div(r) <- "W"
+    r
+  }))
+  expect_equal(
+    vapply(rws2, section_div, "", USE.NAMES = FALSE),
+    rep("W", length(rws))
+  )
 })
 
 test_that("the split only setter works", {
@@ -468,12 +542,14 @@ test_that("the split only setter works", {
   replace_sec_div[replace_sec_div == "-"] <- "b"
 
   section_div(tbl) <- c("a", "b")
+  sdf <- section_div_info(tbl)
   expect_identical(section_div(tbl), replace_sec_div)
+  expect_identical(sdf$trailing_sep, replace_sec_div)
   ## when only_sep_sections is true, divs are set on the subtable not
   ## the row
-  expect_true(all(is.na(make_row_df(tbl)$self_section_div)))
+  expect_true(all(is.na(sdf$self_section_div)))
 
-  sect_div_info_ok(tbl)
+  sect_div_info_ok(sdf = sdf)
 
   expect_warning(
     {

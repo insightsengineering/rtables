@@ -34,7 +34,7 @@ with labels assigned to each child (which are based on the data and type of spli
 
 \item{split_fun}{(\code{function} or \code{NULL})\cr custom splitting function. See \link{custom_split_funs}.}
 
-\item{parent_name}{(\code{characgter(1)})\cr Name to assign to the table corresponding
+\item{parent_name}{(\code{character(1)})\cr Name to assign to the table corresponding
 to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
 \verb{analyze*} when analyzing more than one variable, respectively. Ignored when
 analyzing a single variable.}

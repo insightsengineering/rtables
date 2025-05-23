@@ -33,7 +33,7 @@ other parameters which will be populated by the tabulation framework. See Detail
 
 \item{table_names}{(\code{character})\cr names for the tables representing each atomic analysis. Defaults to \code{var}.}
 
-\item{parent_name}{(\code{characgter(1)})\cr Name to assign to the table corresponding
+\item{parent_name}{(\code{character(1)})\cr Name to assign to the table corresponding
 to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
 \verb{analyze*} when analyzing more than one variable, respectively. Ignored when
 analyzing a single variable.}

@@ -32,7 +32,7 @@ with labels assigned to each child (which are based on the data and type of spli
 
 \item{varlabels}{(\code{character})\cr vector of labels for \code{vars}.}
 
-\item{parent_name}{(\code{characgter(1)})\cr Name to assign to the table corresponding
+\item{parent_name}{(\code{character(1)})\cr Name to assign to the table corresponding
 to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
 \verb{analyze*} when analyzing more than one variable, respectively. Ignored when
 analyzing a single variable.}

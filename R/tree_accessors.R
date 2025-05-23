@@ -3975,10 +3975,10 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #'   are repeated to the full width of the printed table. Non-`NA` strings
 #'   will result in a trailing separator at the associated location (see Details);
 #'   values of `NA_character_` result in no visible divider when the table is printed/exported.
-#'   For `section_div<-`, `value`'s length should be 1 or the number of rows in `obj`,
-#'   or the number of when
-#'   `only_sep_sections` is `FALSE` or
-#'   should reflect the number of rows, or be between 1 and the number of splits/levels.
+#'   For `section_div<-`, `value`'s length should the number of rows in `obj`,
+#'   when    `only_sep_sections` is `FALSE` and should be less than or equal to
+#'   the maximum number of nested split/analyze steps anywhere in the
+#'   layout corresponding to the table when `only_sep_sections` is `TRUE`.
 #'   See the Details section below for more information.
 #'
 #' @return The section divider string. Each line that does not have a trailing separator
@@ -4026,14 +4026,19 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #'   "section" dividers will be set for each row in the table
 #'   *including content and label rows*.
 #'
-#' In `section_div<-`, when `only_sep_sections` is `FALSE` (by passing the
-#'   argument or by providing a vector of values with length `<nrow(obj)`),
+#' In `section_div<-`, when `only_sep_sections` is `FALSE`
 #'   *all higher order section divs are removed, even when new value
 #'   for a row that they would apply to is `NA`*.
 #'
 #' @note Section dividers which would appear after the last row of the
 #'     table (ie those on the last row or last elementary subtable in
 #'     the table) are never printed when rendering the table.
+#'
+#' @note when called on an individual row object, `section_div` and
+#'   `section_div<-` get and set the trialing divider for that row.
+#'   In generally this is to be avoided; when manually constructing
+#'   row objects, the `trailing_section_div` argument can set the
+#'   trailing divider directly during creation.
 #'
 #' @examples
 #' # Data
@@ -4072,6 +4077,10 @@ setGeneric("section_div", function(obj) standardGeneric("section_div"))
 #' @rdname section_div
 #' @aliases section_div,VTableTree-method
 setMethod("section_div", "VTableTree", function(obj) {
+  ## simpler but slower because it currently calls make_row_df then subsets
+  ## section_div_info(obj)$trailing_sep
+  ## TODO reimplement section_div_info based on logic here then
+  ## replace code below with single call above
   content_row_tbl <- content_table(obj)
   is_content_table <- isS4(content_row_tbl) && nrow(content_row_tbl) > 0 # otherwise NA or NULL
   if (labelrow_visible(obj)) {
@@ -4120,6 +4129,7 @@ setGeneric("section_div<-", function(obj, only_sep_sections = FALSE, value) {
 #' @aliases section_div<-,VTableTree-method
 setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE, value) {
   sdf <- section_div_info(obj)
+  value <- as.character(value)
   pths <- sdf$path
   if (length(value) < length(pths)) {
     only_sep_sections <- TRUE
@@ -4155,16 +4165,14 @@ setMethod("section_div<-", "VTableTree", function(obj, only_sep_sections = FALSE
       }
       curpth <- c(curpth, "*", "*") ## add another split/value pair level of nesting
     }
-  } else {
-    if (length(value) > 1 && length(pths) %% length(value) != 0) {
-      stop(
-        "Number of values (",
-        length(value),
-        ") does not divide evenly into number of elements (",
-        length(pths), ")."
+  } else { ## guaranteed length(value) >= nrow(obj)
+    if (length(value) > nrow(obj)) {
+      warning(
+        "Got more section_div values than rows. Ignoring ",
+        nrow(obj) - length(value), " values."
       )
+      value <- value[seq_len(nrow(obj))]
     }
-    value <- rep(value, length.out = length(pths))
     ## clear out the structural (ie from layout) section divs so all
     ## the row divs take effect. Not sure this is right but its the existing behavior
     obj <- clear_subtable_sectdivs(obj)
@@ -4181,24 +4189,6 @@ setMethod("section_div<-", "TableRow", function(obj, only_sep_sections = FALSE, 
   trailing_section_div(obj) <- value
   obj
 })
-
-# Helper check function
-.check_char_vector_for_section_div <- function(char_v, min_splits, max) {
-  lcv <- length(char_v)
-  if (lcv < 1 || lcv > max) {
-    stop("section_div must be a vector of length between 1 and numer of table rows.")
-  }
-  if (lcv > min_splits && lcv < max) {
-    warning(
-      "section_div will be truncated to the number of splits (", min_splits, ")",
-      " because it is shorter than the number of rows (", max, ")."
-    )
-  }
-  nchar_check_v <- nchar(char_v)
-  if (any(nchar_check_v > 1, na.rm = TRUE)) {
-    stop("section_div must be a vector of single characters or NAs")
-  }
-}
 
 #' @rdname section_div
 #' @export
@@ -4284,12 +4274,20 @@ setMethod(
 #'     `analyze(.,section_div=)`) after the table has been built. In
 #'     that case a row 'inherits' its section divider behavior from
 #'     the largest subtable that has a section divider set and for
-#'     which it is the final row.  `section_div` returns the vector of
-#'     these inherited *effective section dividers* for each row;
-#'     `section_div<-` (when given a vector of length `nrow(obj)`),
-#'     meanwhile, sets section dividers *on the rows themselves*, thus
-#'     not changing the effective section divider used when rendering
-#'     the table.
+#'     which it is the final row. Instead it clears the higher-order
+#'     section dividers and sets an individual divider on each row
+#'     (setting `NA_character_` for rows that had no divider after them
+#'     when rendering). This means that if pruning is done after
+#'     the above process and the last row in a "section" is pruned,
+#'     the last remaining row *will not inherit the section's divider*
+#'     the way it would before the modification by `section_div<-`.
+#'
+#' Generally it is advisable to use `section_div_at_path<-` - often
+#'    with `"*"` wildcards in the path - to modify
+#'    dividers declared in the layout instead of `section_div<-`.
+#'    Alternatively, pruning should be done *before* calling
+#'    `section_div<-` (when passing a a vector of length `nrow(tt)`),
+#'    when a script or function will do both operations on a table.
 #'
 #' Setting section_dividers for rows which do not currently inherit
 #'     section divider behavior from a containing subtable will work
@@ -4309,6 +4307,7 @@ setMethod(
 #'     `NA_character_` for label rows, which are not pathable).
 #' @export
 section_div_info <- function(obj) {
+  ## default fontspec is already NULL so no speedup here
   make_row_df(obj)[, c(
     "label",
     "name",
@@ -4327,7 +4326,8 @@ section_div_info <- function(obj) {
 #' @param labelrow (`logical(1)`)\cr For `section_div_at_path`,
 #' when `path` leads to a subtable, indicates whether the section
 #' div be set/retrieved for the subtable (`FALSE`, the default) or the
-#' subtable's label row (`TRUE`).
+#' subtable's label row (`TRUE`). Ignored when `path` resolves to an
+#' individual row.
 #' @export
 section_div_at_path <- function(obj, path, labelrow = FALSE) {
   tt <- tt_at_path(obj, path)
@@ -4355,8 +4355,12 @@ clear_subtable_sectdivs <- function(obj) {
                                     labelrow = FALSE,
                                     tt_type = c("any", "row", "table", "elemtable"),
                                     value = " ") {
+  tt_type <- match.arg(tt_type)
+  if (labelrow && tt_type == "any") {
+    tt_type <- "table"
+  }
   if (NROW(obj) == 0) {
-    return(obj)
+    return(character())
   }
 
   if (path[1] == "root") {
@@ -4375,6 +4379,16 @@ clear_subtable_sectdivs <- function(obj) {
   count <- 0
   while (length(curpath) > 0) {
     curname <- curpath[1]
+    if (!is(subtree, "VTableTree")) {
+      stop(
+        "Path continues after resolving to individual row.\n\tOccurred at path: ",
+        paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
+        "\n\tRemaining unresolved path: ",
+        paste(tail(path, -1 * count), collapse = "->"),
+        "\nUse 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+        "'table_structure(obj)' to explore valid paths."
+      )
+    }
     oldkids <- tree_children(subtree)
     if (curname == "*") {
       oldnames <- vapply(oldkids, obj_name, "")
@@ -4384,9 +4398,11 @@ clear_subtable_sectdivs <- function(obj) {
         kidmatches <- which(vapply(oldkids, tt_row_path_exists, TRUE, path = curpath[-1], tt_type = tt_type))
         if (length(kidmatches) == 0) {
           stop(
-            "Unable to resolve path step involving * \n\t occurred at path: ",
-            paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-            "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+            "Unable to resolve * in path. \n\tOccurred at path: ",
+            paste(c(.prev_path, path[seq_len(count + 1)]), collapse = " -> "),
+            "\n\tLookahead found no matches (type ", tt_type, ") for the remaining path: ",
+            paste(path[-1 * seq_len(count + 1)], collapse = "->"),
+            "\nUse 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
             "'table_structure(obj)' to explore valid paths."
           )
         }
@@ -4432,7 +4448,7 @@ clear_subtable_sectdivs <- function(obj) {
         stop(
           "Unable to resolve path step involving @content \n\t occurred at path: ",
           paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
-          "\n  Use 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
+          "\nUse 'make_row_df(obj, visible_only = TRUE)[, c(\"label\", \"path\", \"node_class\")]' or \n",
           "'table_structure(obj)' to explore valid paths."
         )
       }
@@ -4464,22 +4480,21 @@ clear_subtable_sectdivs <- function(obj) {
   ##
   if (!tt_type_ok(subtree, tt_type) &&
     ## womp womp. tt_type_ok fails for subtables when we want their label row.
-    !(labelrow && is(subtree, "VTableTree"))) {
+    !(labelrow && is(subtree, "VTableTree") && tt_type == "row")) {
     stop(
       "Path ",
       paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),
       " lead to an element of the wrong tt_type (got ", class(subtree),
       " expected ", tt_type
     )
-  } else if (is(subtree, "TableRow") ||
-    (is(subtree, "VTableTree") && !labelrow)) {
+  } else if (is(subtree, "TableRow") || !labelrow) {
     ## rows can only set it on themselves
     ## if its a table (and tables are allowed by tt_type) it sets it on
     ## itself iff labelrow is FALSE
 
     trailing_section_div(subtree) <- value
     newtree <- subtree
-  } else if (labelrow) {
+  } else if (labelrow && is(subtree, "VTableTree")) {
     lr <- tt_labelrow(subtree)
     trailing_section_div(lr) <- value
     tt_labelrow(subtree) <- lr

@@ -24,7 +24,7 @@ will be repped out as needed and matched by position with the columns during tab
 accepts the same parameters as \code{\link[=analyze]{analyze()}} like \code{afun} and \code{format}. For further information see
 \link{additional_fun_params}.}
 
-\item{parent_name}{(\code{characgter(1)})\cr Name to assign to the table corresponding
+\item{parent_name}{(\code{character(1)})\cr Name to assign to the table corresponding
 to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
 \verb{analyze*} when analyzing more than one variable, respectively. Ignored when
 analyzing a single variable.}

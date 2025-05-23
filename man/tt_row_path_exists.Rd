@@ -87,7 +87,7 @@ generated from the non-nested analyze on \code{AGE}. These can be be
 each value for \code{ARM} can be pathed to via, e.g.,  \code{c("ARM", "A: Drug X")}
 or more generally using the pathing wildcard \code{"*"} at \code{c("ARM", "*")}.
 
-The a particular \code{SEX} analysis subtable, then, would be pathed to via the
+A particular \code{SEX} analysis subtable, then, would be pathed to via the
 (row) path \code{c("ARM", "*", "RACE", "*", "SEX")}, e.g.
 \code{c("ARM", "B: Placebo", "RACE", "ASIAN", "SEX")}. The group-summary for
 Asians within the placebo group would be pathed to via

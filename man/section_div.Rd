@@ -84,10 +84,10 @@ be set for all rows of the table.}
 are repeated to the full width of the printed table. Non-\code{NA} strings
 will result in a trailing separator at the associated location (see Details);
 values of \code{NA_character_} result in no visible divider when the table is printed/exported.
-For \verb{section_div<-}, \code{value}'s length should be 1 or the number of rows in \code{obj},
-or the number of when
-\code{only_sep_sections} is \code{FALSE} or
-should reflect the number of rows, or be between 1 and the number of splits/levels.
+For \verb{section_div<-}, \code{value}'s length should the number of rows in \code{obj},
+when    \code{only_sep_sections} is \code{FALSE} and should be less than or equal to
+the maximum number of nested split/analyze steps anywhere in the
+layout corresponding to the table when \code{only_sep_sections} is \code{TRUE}.
 See the Details section below for more information.}
 
 \item{path}{(\code{character})\cr The path of the element(s) to
@@ -97,7 +97,8 @@ set section_div(s) on. Can include \code{'*'} wildcards for
 \item{labelrow}{(\code{logical(1)})\cr For \code{section_div_at_path},
 when \code{path} leads to a subtable, indicates whether the section
 div be set/retrieved for the subtable (\code{FALSE}, the default) or the
-subtable's label row (\code{TRUE}).}
+subtable's label row (\code{TRUE}). Ignored when \code{path} resolves to an
+individual row.}
 
 \item{.prev_path}{(\code{character})\cr Internal detail, do not manually set.}
 
@@ -167,8 +168,7 @@ with \code{header_section_div} in \code{\link[=basic_table]{basic_table()}} or, 
 "section" dividers will be set for each row in the table
 \emph{including content and label rows}.
 
-In \verb{section_div<-}, when \code{only_sep_sections} is \code{FALSE} (by passing the
-argument or by providing a vector of values with length \verb{<nrow(obj)}),
+In \verb{section_div<-}, when \code{only_sep_sections} is \code{FALSE}
 \emph{all higher order section divs are removed, even when new value
 for a row that they would apply to is \code{NA}}.
 
@@ -178,12 +178,20 @@ with \verb{split_rows_by*(., section_div=)} or
 \code{analyze(.,section_div=)}) after the table has been built. In
 that case a row 'inherits' its section divider behavior from
 the largest subtable that has a section divider set and for
-which it is the final row.  \code{section_div} returns the vector of
-these inherited \emph{effective section dividers} for each row;
-\verb{section_div<-} (when given a vector of length \code{nrow(obj)}),
-meanwhile, sets section dividers \emph{on the rows themselves}, thus
-not changing the effective section divider used when rendering
-the table.
+which it is the final row. Instead it clears the higher-order
+section dividers and sets an individual divider on each row
+(setting \code{NA_character_} for rows that had no divider after them
+when rendering). This means that if pruning is done after
+the above process and the last row in a "section" is pruned,
+the last remaining row \emph{will not inherit the section's divider}
+the way it would before the modification by \verb{section_div<-}.
+
+Generally it is advisable to use \verb{section_div_at_path<-} - often
+with \code{"*"} wildcards in the path - to modify
+dividers declared in the layout instead of \verb{section_div<-}.
+Alternatively, pruning should be done \emph{before} calling
+\verb{section_div<-} (when passing a a vector of length \code{nrow(tt)}),
+when a script or function will do both operations on a table.
 
 Setting section_dividers for rows which do not currently inherit
 section divider behavior from a containing subtable will work
@@ -200,6 +208,12 @@ which will be attached to subtables, rather than rows).
 Section dividers which would appear after the last row of the
 table (ie those on the last row or last elementary subtable in
 the table) are never printed when rendering the table.
+
+when called on an individual row object, \code{section_div} and
+\verb{section_div<-} get and set the trialing divider for that row.
+In generally this is to be avoided; when manually constructing
+row objects, the \code{trailing_section_div} argument can set the
+trailing divider directly during creation.
 }
 \examples{
 # Data

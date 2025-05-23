@@ -205,6 +205,8 @@ setMethod(
     tt
   }
 )
+
+# nocov start
 #' @rdname insert_row_at_path
 setMethod(
   "insert_row_at_path", c("VTableTree", "ANY"),
@@ -216,6 +218,8 @@ setMethod(
     )
   }
 )
+
+# nocov end
 
 #' Label at path
 #'
@@ -302,6 +306,8 @@ setMethod(
 )
 
 # Recursive helper function to retrieve sub-tables from the tree
+## need to generalize this if we ever use it in a place other than tt_at_path
+## currently tt_at_path doesn't support "*"
 .extract_through_path <- function(cur_tbl, cur_path, no_stop = FALSE) {
   while (length(cur_path > 0)) {
     kids <- tree_children(cur_tbl)
@@ -310,20 +316,10 @@ setMethod(
     if (curname == "@content") {
       cur_tbl <- content_table(cur_tbl)
     } else if (curname %in% kids_names) {
-      cur_tbl <- kids[kids_names == curname]
-
-      # Case where there are more than one tree sub node with identical names
-      if (length(cur_tbl) > 1 && length(cur_path) > 1) {
-        cur_tbl <- sapply(cur_tbl, function(cti) .extract_through_path(cti, cur_path[-1], no_stop = TRUE))
-        found_values <- !sapply(cur_tbl, is.null)
-        cur_tbl <- cur_tbl[found_values]
-        if (sum(found_values) == 1) {
-          cur_tbl <- cur_tbl[[1]]
-        }
-        cur_path <- cur_path[1]
-      } else {
-        cur_tbl <- cur_tbl[[1]] # Usual case (only one matching value)
-      }
+      ## we're now guarnateed that there will only be one match
+      cur_tbl <- kids[kids_names == curname][[1]]
+    } else if (!no_stop && curname == "*") {
+      stop("Paths including '*' wildcards are not currently supported by tt_at_path.")
     } else if (!no_stop) {
       stop(
         "Path appears invalid for this tree at step '", curname, "'. Please use only",
@@ -382,7 +378,7 @@ tt_type_ok <- function(obj, type) {
 #'   each value for `ARM` can be pathed to via, e.g.,  `c("ARM", "A: Drug X")`
 #'   or more generally using the pathing wildcard `"*"` at `c("ARM", "*")`.
 #'
-#' The a particular `SEX` analysis subtable, then, would be pathed to via the
+#' A particular `SEX` analysis subtable, then, would be pathed to via the
 #'   (row) path `c("ARM", "*", "RACE", "*", "SEX")`, e.g.
 #'   `c("ARM", "B: Placebo", "RACE", "ASIAN", "SEX")`. The group-summary for
 #'   Asians within the placebo group would be pathed to via
@@ -439,8 +435,14 @@ tt_row_path_exists <- function(obj, path, tt_type = c("any", "row", "table", "el
   if (path[1] == "root") {
     path <- path[-1]
   }
-  if (path[1] == obj_name(obj)) {
+  if (length(path) > 0 && path[1] == obj_name(obj)) {
     path <- path[-1] ## character()[-1] is just character() again so this is ok
+  }
+
+  ## annoying we have to do this again :-/
+  if (length(path) == 0) {
+    ## we matched everything and called it again, evaluate type condition and return answer
+    return(tt_type_ok(obj, tt_type))
   }
   kids <- tree_children(obj)
   kidnms <- vapply(kids, obj_name, "")
