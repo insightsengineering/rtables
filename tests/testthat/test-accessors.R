@@ -309,7 +309,7 @@ test_that("section_div getter and setter works", {
   ## basic section_div_at_path checks
   ## this should have NO section_divs set on individual rows...
 
-  
+
   ## label row "pathing" is stupid and I hate it
   res <- expect_silent(vapply(sdf$path, function(pth) section_div_at_path(tbl, pth, labelrow = TRUE), ""))
   expect_true(all(is.na(res)))
