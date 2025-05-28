@@ -4478,9 +4478,8 @@ clear_subtable_sectdivs <- function(obj) {
   ## case), or tree, where we set trailing div
   ## **on the subtable itself**
   ##
-  if (!tt_type_ok(subtree, tt_type) &&
-    ## womp womp. tt_type_ok fails for subtables when we want their label row.
-    !(labelrow && is(subtree, "VTableTree") && tt_type == "row")) {
+  ## womp womp. tt_type_ok fails for subtables when we want their label row.
+  if (!tt_type_ok(subtree, tt_type) && !(labelrow && is(subtree, "VTableTree") && tt_type == "row")) {
     stop(
       "Path ",
       paste(c(.prev_path, path[seq_len(count)]), collapse = " -> "),

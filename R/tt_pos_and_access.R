@@ -426,8 +426,7 @@ tt_row_path_exists <- function(obj, path, tt_type = c("any", "row", "table", "el
   if (length(path) == 0) {
     ## we matched everything and called it again, evaluate type condition and return answer
     return(tt_type_ok(obj, tt_type))
-  } else if (length(path) > 1 &&
-    (is.null(obj) || is(obj, "TableRow"))) {
+  } else if (length(path) > 1 && (is.null(obj) || is(obj, "TableRow"))) {
     ## we got to a leaf node but still have >1 step remaining, path doesn't exist
     return(FALSE)
   }
