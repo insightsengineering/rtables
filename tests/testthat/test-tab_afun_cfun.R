@@ -173,7 +173,7 @@ test_that(".spl_context and afun extra parameters contain information about comb
   tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
 
   expect_silent(cbind_rtables(tbl, tbl))
-  expect_silent(rbind(tbl, tbl))
+  expect_message(rbind(tbl, tbl)) # uniqify message
 
   spl_ctx_cnt <- lapply(seq(8, nrow(tbl), 5), function(x) tbl[x, 2, drop = TRUE])
 

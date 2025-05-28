@@ -32,6 +32,13 @@
 #' @seealso [df_to_tt()] when using `simplify = TRUE` and [formatters::make_row_df()] to have a
 #'   comprehensive view of the hierarchical structure of the rows.
 #'
+#' @note When `parent_name` is used when constructing a layout to directly control
+#'   the name of subtables in a table, that will be reflected in the 'group' values
+#'   returned in the result dataframe/ard. When automatic de-duplication of sibling names
+#'   is performed by `rtables`, that is automatically undone during the result
+#'   df creation process, so the group values will be as if the relevant siblings
+#'   had identical names.
+#'
 #' @examples
 #' lyt <- basic_table() %>%
 #'   split_cols_by("ARM") %>%
@@ -152,7 +159,7 @@ as_result_df <- function(tt, spec = NULL,
 
     df <- rdf[, c("name", "label", "abs_rownumber", "path", "reprint_inds", "node_class")]
     # Removing initial root elements from path (out of the loop -> right maxlen)
-    df$path <- lapply(df$path, .remove_root_elems_from_path,
+    df$path <- lapply(df$path, .fix_raw_row_path,
       which_root_name = c("root", "rbind_root"),
       all = TRUE
     )
@@ -576,7 +583,12 @@ do_data_row <- function(rdfrow, maxlen, add_tbl_name_split = FALSE) {
   )
 }
 
-.remove_root_elems_from_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
+deuniqify_path_elements <- function(path) {
+  gsub("\\[[[:digit:]]+\\]$", "", path)
+}
+
+.fix_raw_row_path <- function(path, which_root_name = c("root", "rbind_root"), all = TRUE) {
+  path <- deuniqify_path_elements(path)
   any_root_paths <- path[1] %in% which_root_name
   if (any_root_paths) {
     if (isTRUE(all)) {

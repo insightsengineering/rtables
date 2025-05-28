@@ -1700,3 +1700,70 @@ test_that("No superfluous warning when ref group is set with custom split fun", 
     analyze("Sepal.Length")
   expect_silent(build_table(lyt, iris))
 })
+
+
+test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
+  build_and_check_row_paths <- function(lyt, expect_message = TRUE, data = ex_adsl) {
+    if (expect_message) {
+      tbl <- expect_message(build_table(lyt, data), "Modifying subtable (or row) names", fixed = TRUE)
+    } else {
+      tbl <- expect_silent(build_table(lyt, data))
+    }
+
+    rdf <- make_row_df(tbl, visible_only = FALSE)
+    rdf <- subset(rdf, node_class != "LabelRow") ## these are duplciate paths with their tables
+    paths <- rdf$path
+    pathkeys <- vapply(paths, paste, collapse = "xXx.xXx", "")
+    expect_true(!any(duplicated(pathkeys)))
+    expect_silent(lapply(paths, function(pth) tt_at_path(tbl, pth)))
+    tbl
+  }
+
+  ## analyze and then split on same variable
+  lyt1 <- basic_table() %>%
+    analyze("STRATA1") %>%
+    split_rows_by("STRATA1") %>%
+    analyze("AGE") %>%
+    analyze("STRATA1", nested = FALSE)
+
+  tbl1 <- build_and_check_row_paths(lyt1, TRUE)
+
+  lyt1b <- basic_table() %>%
+    analyze("STRATA1") %>%
+    split_rows_by("STRATA1", parent_name = "STRATA1[2]") %>%
+    analyze("AGE") %>%
+    analyze("STRATA1", table_names = "STRATA1[3]", nested = FALSE)
+
+  tbl1b <- build_and_check_row_paths(lyt1b, FALSE)
+  expect_identical(tbl1, tbl1b)
+
+  ## badly designed a/cfun
+  bad_acfun <- function(x, labelstr = NULL, ...) {
+    list(
+      rcell("haha", label = "bad name"),
+      rcell("haha", label = "bad name")
+    )
+  }
+
+  lyt2 <- basic_table() %>%
+    analyze("AGE", afun = bad_acfun)
+
+  tbl2 <- build_and_check_row_paths(lyt2, TRUE)
+
+  ## duplicate multivar analyzes (for completeness this is silly in practice)
+  ## this has named content tables (even though they're empty) in the multi-var
+  ## containing table, probably shouldn't because generally content tables aren't
+  ## named, since you use the @content path element to get them, but for now
+  ## we leave this behavior and match it in the uniqify case.
+  lyt3 <- basic_table() %>%
+    analyze(c("STRATA1", "AGE")) %>%
+    analyze(c("STRATA1", "AGE"), nested = FALSE)
+
+  tbl3 <- build_and_check_row_paths(lyt3, TRUE)
+
+  lyt3b <- basic_table() %>%
+    analyze(c("STRATA1", "AGE")) %>%
+    analyze(c("STRATA1", "AGE"), nested = FALSE, parent_name = "ma_STRATA1_AGE[2]")
+  tbl3b <- build_and_check_row_paths(lyt3b, FALSE)
+  expect_identical(tbl3, tbl3b)
+})
