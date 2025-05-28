@@ -1,4 +1,4 @@
-## rtables 0.6.12.9000
+## rtables 0.6.12.9001
 
 ### New Features
  * All elements of a table's row structure are now guaranteed to be pathable. #1024 by @gmbecker
