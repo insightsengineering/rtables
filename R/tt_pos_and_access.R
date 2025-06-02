@@ -843,7 +843,33 @@ setMethod(
 
 ## we have two options here: path like we do with rows and positional
 ## in leaf space.
-
+#' Subset a table or row to particular columns
+#' @inheritParams gen_args
+#' @inheritParams brackets
+#' @inheritParams head
+#' @param j (`integer`, `logical` or `character`)\cr The column(s) to subset `tt`
+#'   down to. Character vectors are intepreted as a *column path*, not as names.
+#'   Path can include `"*"` wildcards.
+#' @param newcinfo (`NULL` or `InstantiatedColumnInfo`)\cr The new column info,
+#'   if precomputed. Generally should not be manually set by users.
+#' @param ... Ignored.
+#'
+#' @examples
+#' lyt <- basic_table(
+#'   title = "Title",
+#'   subtitles = c("Sub", "titles"),
+#'   prov_footer = "prov footer",
+#'   main_footer = "main footer"
+#' ) %>%
+#'   split_cols_by("ARM") %>%
+#'   split_cols_by("SEX") %>%
+#'   analyze(c("AGE"))
+#'
+#' tbl <- build_table(lyt, DM)
+#'
+#' subset_cols(tbl, c(1, 3))
+#' subset_cols(tbl, c("ARM", "*", "SEX", "F"))
+#' @export
 setGeneric(
   "subset_cols",
   function(tt,
@@ -857,6 +883,8 @@ setGeneric(
   }
 )
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("TableTree", "numeric"),
   function(tt, j, newcinfo = NULL,
@@ -889,6 +917,8 @@ setMethod(
   }
 )
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("ElementaryTable", "numeric"),
   function(tt, j, newcinfo = NULL,
@@ -1021,6 +1051,8 @@ select_cells_j <- function(cells, j) {
   }, cl = retcells, sp = newspans, SIMPLIFY = FALSE)
 }
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("ANY", "character"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
@@ -1029,6 +1061,8 @@ setMethod(
   }
 )
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("TableRow", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
@@ -1048,6 +1082,8 @@ setMethod(
   }
 )
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("LabelRow", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
@@ -1061,6 +1097,8 @@ setMethod(
   }
 )
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("InstantiatedColumnInfo", "numeric"),
   function(tt, j, newcinfo = NULL, keep_topleft = TRUE, ...) {
@@ -1085,6 +1123,8 @@ setMethod(
   }
 )
 
+#' @exportMethod subset_cols
+#' @rdname subset_cols
 setMethod(
   "subset_cols", c("LayoutColTree", "numeric"),
   function(tt, j, newcinfo = NULL, ...) {

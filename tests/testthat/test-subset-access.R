@@ -829,3 +829,51 @@ test_that("tt_row_path_exists and tt_normalize_row_path work", {
     strip_root_els(rdf3$path[rdf3$node_class == "ContentRow"])
   )
 })
+
+test_that("subset_cols works as intended", {
+  lyt <- basic_table(title = "Title",
+                     subtitles = c("Sub", "titles"),
+                     prov_footer = "prov footer",
+                     main_footer = "main footer") %>%
+    split_cols_by("ARM") %>%
+    split_cols_by("SEX") %>%
+    add_overall_col("All Patients") %>%
+    split_rows_by("STRATA1") %>%
+    summarize_row_groups() %>%
+    analyze(c("AGE"))
+
+  tbl <- build_table(lyt, DM)
+  stbl1 <- subset_cols(tbl, 1)
+  stbl1b <- subset_cols(tbl, c("ARM", "A: Drug X", "SEX", "F"))
+  expect_equal(ncol(stbl1), 1)
+  expect_identical(stbl1, stbl1b)
+  expect_identical(all_titles(tbl),
+                   all_titles(stbl1))
+  expect_identical(all_footers(tbl),
+                   all_footers(stbl1))
+
+  ## grab elementary table "for teh covrs"
+  ctab <- tt_at_path(tbl, c("STRATA1", "A", "@content"))
+  expect_identical(subset_cols(ctab, j = 1),
+                   tt_at_path(stbl1, c("STRATA1", "A", "@content")))
+
+  stbl2 <- subset_cols(tbl, c(2, 6, 10))
+  stbl2b <- subset_cols(tbl, c("*", "*", "*", "M"))
+  expect_equal(ncol(stbl2), 3)
+  expect_identical(stbl2, stbl2b)
+
+  stbl3 <- subset_cols(tbl, c("All Patients"))
+  stbl3b <- subset_cols(tbl, 13)
+
+  expect_equal(ncol(stbl3), 1)
+  expect_identical(stbl3, stbl3b)
+
+  ## exercise direct-on-row column subsetting
+  ## contains all types of rows
+  rws <- collect_leaves(tbl, add.labrows = TRUE)
+  expect_identical(lapply(rws, subset_cols, j = 1),
+                   collect_leaves(stbl1, add.labrows = TRUE))
+
+  expect_identical(lapply(rws, subset_cols, j = c("*", "*", "*", "M")),
+                   collect_leaves(stbl2, add.labrows = TRUE))
+})

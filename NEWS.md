@@ -20,6 +20,10 @@
  * `section_div<-` no longer sets a section div on non-visible label rows when setting a section divider for a content row on the same group. #1024 by @gmbecker
  * `section_div<-` when given a full-length (`nrow(tt)`) vector now sets 'section dividers' on label rows and content rows correctly when both are visible for the same facet. #1024 by @gmbecker
  
+### Miscellaneous
+ * `subset_cols` generic and methods are now exported.
+ * `has_force_pag` generic and methods are now exported.
+ 
 ## rtables 0.6.12
 
 ### New Features
