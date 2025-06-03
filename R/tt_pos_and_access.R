@@ -848,7 +848,7 @@ setMethod(
 #' @inheritParams brackets
 #' @inheritParams head
 #' @param j (`integer`, `logical` or `character`)\cr The column(s) to subset `tt`
-#'   down to. Character vectors are intepreted as a *column path*, not as names.
+#'   down to. Character vectors are interpreted as a *column path*, not as names.
 #'   Path can include `"*"` wildcards.
 #' @param newcinfo (`NULL` or `InstantiatedColumnInfo`)\cr The new column info,
 #'   if precomputed. Generally should not be manually set by users.
