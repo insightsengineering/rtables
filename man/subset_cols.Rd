@@ -95,7 +95,7 @@ subset_cols(
 \item{tt}{(\code{TableTree} or related class)\cr a \code{TableTree} object representing a populated table.}
 
 \item{j}{(\code{integer}, \code{logical} or \code{character})\cr The column(s) to subset \code{tt}
-down to. Character vectors are intepreted as a \emph{column path}, not as names.
+down to. Character vectors are interpreted as a \emph{column path}, not as names.
 Path can include \code{"*"} wildcards.}
 
 \item{newcinfo}{(\code{NULL} or \code{InstantiatedColumnInfo})\cr The new column info,
