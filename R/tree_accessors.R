@@ -3835,12 +3835,20 @@ setMethod(
   }
 )
 
+#' @export
+#' @rdname int_methods
 setGeneric("has_force_pag", function(obj) standardGeneric("has_force_pag"))
 
+#' @exportMethod has_force_pag
+#' @rdname int_methods
 setMethod("has_force_pag", "TableTree", function(obj) !is.na(ptitle_prefix(obj)))
 
+#' @exportMethod has_force_pag
+#' @rdname int_methods
 setMethod("has_force_pag", "Split", function(obj) !is.na(ptitle_prefix(obj)))
 
+#' @exportMethod has_force_pag
+#' @rdname int_methods
 setMethod("has_force_pag", "VTableNodeInfo", function(obj) FALSE)
 
 setGeneric("ptitle_prefix", function(obj) standardGeneric("ptitle_prefix"))

@@ -7,8 +7,15 @@ test_that("Page by splitting works", {
     analyze("AGE")
 
   tt <- build_table(lyt, DM)
+  expect_true(has_force_pag(tt))
+
+  expect_false(any(vapply(collect_leaves(tt, add.labrows = TRUE), has_force_pag, NA)))
+
+  expect_false(has_force_pag(VarLevelSplit("AGE", "Age")))
+  expect_true(has_force_pag(VarLevelSplit("AGE", "Age", page_prefix = "hi")))
 
   ttlst <- paginate_table(tt)
+  expect_false(any(vapply(ttlst, has_force_pag, NA)))
 
   expect_identical(
     names(ttlst),

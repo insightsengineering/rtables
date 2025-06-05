@@ -199,6 +199,7 @@ reference:
     - cbind_rtables
     - asvec
     - brackets
+    - subset_cols
     - clear_indent_mods
     - head
     - section_div

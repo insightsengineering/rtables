@@ -351,6 +351,10 @@
 \alias{ref_msg,RefFootnote-method}
 \alias{fnotes_at_path<-,VTableTree,character-method}
 \alias{fnotes_at_path<-,VTableTree,NULL-method}
+\alias{has_force_pag}
+\alias{has_force_pag,TableTree-method}
+\alias{has_force_pag,Split-method}
+\alias{has_force_pag,VTableNodeInfo-method}
 \alias{obj_stat_names}
 \alias{obj_stat_names<-}
 \alias{obj_stat_names<-,CellValue-method}
@@ -1122,6 +1126,14 @@ spl_varnames(object) <- value
 \S4method{fnotes_at_path}{VTableTree,character}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 \S4method{fnotes_at_path}{VTableTree,NULL}(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
+
+has_force_pag(obj)
+
+\S4method{has_force_pag}{TableTree}(obj)
+
+\S4method{has_force_pag}{Split}(obj)
+
+\S4method{has_force_pag}{VTableNodeInfo}(obj)
 
 obj_stat_names(obj)
 
