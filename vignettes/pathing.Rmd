@@ -28,8 +28,10 @@ library(rtables)
 keep_rc <- c("ASIAN", "WHITE") ## chosen for brevity
 
 afun <- function(x) {
-  list(Mean = rcell(mean(x), format = "xx.x"),
-       Median = rcell(median(x), format = "xx.x"))
+  list(
+    Mean = rcell(mean(x), format = "xx.x"),
+    Median = rcell(median(x), format = "xx.x")
+  )
 }
 
 lyt <- basic_table() |>
@@ -56,7 +58,6 @@ table_structure(tbl)
 
 ```{r}
 col_info(tbl)
-
 ```
 
 We can use paths to declare intuitive substructures of our table. We illustrate
@@ -97,7 +98,6 @@ Similarly we can get the groups summary and row for strata B of Caucasian patien
 
 
 ```{r}
-
 tbl[c("RACE", "WHITE", "STRATA1", "B"), ]
 ```
 
@@ -192,8 +192,7 @@ multiple matches. Note `"*"` will never behave as the `"@content"` directive, wh
 must always be used explicitly.
 
 ```{r}
-tbl[c("RACE", "*", "STRATA1", "B", "AGE",  "Median"), ]
-
+tbl[c("RACE", "*", "STRATA1", "B", "AGE", "Median"), ]
 ```
 
 
@@ -202,7 +201,7 @@ within the full combined set of matches from all wildcards earlier in the path.
 
 
 ```{r}
-tbl[c("RACE", "*", "STRATA1", "*", "AGE",  "Median"), ]
+tbl[c("RACE", "*", "STRATA1", "*", "AGE", "Median"), ]
 ```
 
 
@@ -217,21 +216,18 @@ wildcards into a set of fully specified paths that match the path in our table
 using the `tt_normalize_row_path` utility function
 
 ```{r}
-tt_normalize_row_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE",  "Median"))
-
+tt_normalize_row_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE", "Median"))
 ```
 
 We can also test whether a row path (including those containing wildcards) exists
 in our table with `tt_row_path_exists`
 
 ```{r}
-tt_row_path_exists(tbl, c("RACE", "*", "STRATA1", "*", "AGE",  "Median"))
-
+tt_row_path_exists(tbl, c("RACE", "*", "STRATA1", "*", "AGE", "Median"))
 ```
 
 ```{r}
-tt_row_path_exists(tbl, c("RACE", "*", "STRATA1", "*", "FAKEFAKEFAKE",  "Median"))
-
+tt_row_path_exists(tbl, c("RACE", "*", "STRATA1", "*", "FAKEFAKEFAKE", "Median"))
 ```
 
 

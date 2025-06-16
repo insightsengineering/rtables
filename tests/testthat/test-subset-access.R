@@ -250,8 +250,10 @@ visible_only and not"
   tab2 <- expect_warning(expect_message(build_table(l2, DM)))
   tab2b <- expect_silent(build_table(l2b, DM))
   expect_false(identical(tab2, tab2b))
-  expect_identical(unname(unlist(cell_values(tab2))),
-                   unname(unlist(cell_values(tab2b))))
+  expect_identical(
+    unname(unlist(cell_values(tab2))),
+    unname(unlist(cell_values(tab2b)))
+  )
   test_colpaths(tab2)
   cdf2 <- make_col_df(tab2)
   rdf2 <- make_row_df(tab2, visible_only = FALSE)
