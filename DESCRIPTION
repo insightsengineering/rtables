@@ -36,7 +36,7 @@ Depends:
     formatters (>= 0.5.11),
     magrittr (>= 1.5),
     methods,
-    R (>= 3.3)
+    R (>= 4.1)
 Imports:
     checkmate (>= 2.1.0),
     htmltools (>= 0.5.4),
