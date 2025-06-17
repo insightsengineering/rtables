@@ -28,5 +28,5 @@ articles:
   title_footer: title_footer.html
 last_built: 2025-04-14T07:38Z
 urls:
-  reference: https://insightsengineering.github.io/rtables/latest-release/reference
-  article: https://insightsengineering.github.io/rtables/latest-release/articles
+  reference: https://insightsengineering.github.io/rtables/latest-tag/reference
+  article: https://insightsengineering.github.io/rtables/latest-tag/articles
