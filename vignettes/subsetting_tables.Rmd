@@ -203,7 +203,8 @@ tbl[1:3, keep_titles = TRUE, keep_footers = FALSE]
 
 ## Path Based Cell Value Accessing:
 Tables can be subset or modified in a structurally aware manner via
-*pathing*.
+*pathing*. See the [pathing vignette](pathing.html) for a more
+expansive discussion of pathing, though we reiterate the basics below.
 
 Paths define semantically meaningful positions within a constructed
 table that correspond to the logic of the layout used to create it.

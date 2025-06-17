@@ -40,6 +40,7 @@ afun
 amongst
 ard
 charset
+colcount
 combinatorial
 customizations
 de
@@ -59,11 +60,13 @@ getter
 getters
 ie
 iec
+indicies
 ing
 initializer
 labelled
 layouting
 mandatorily
+modelled
 monospace
 multivariable
 orderable
@@ -95,11 +98,12 @@ truetype
 unaggregated
 unicode
 uniqify
+uniquification
 univariable
 unnested
 unpruned
 unstratified
 useR
+visibilities
 visibilty
-visiblities
 xtable
