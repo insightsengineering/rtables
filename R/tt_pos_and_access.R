@@ -961,8 +961,11 @@ setMethod(
 
 path_collapse_sep <- "`"
 escape_name_padding <- function(x) {
-  ret <- gsub("._[[", "\\._\\[\\[", x, fixed = TRUE)
-  ret <- gsub("]]_.", "\\]\\]_\\.", ret, fixed = TRUE)
+  ##  ret <- gsub("._[[", "\\._\\[\\[", x, fixed = TRUE)
+  ##  ret <- gsub("]]_.", "\\]\\]_\\.", ret, fixed = TRUE)
+  ret <- gsub("[", "\\[", x, fixed = TRUE)
+  ret <- gsub("]", "\\]", ret, fixed = TRUE)
+  ret <- gsub(".", "\\.", ret, fixed = TRUE)
   ret
 }
 path_to_regex <- function(path) {
@@ -1348,6 +1351,20 @@ setMethod(
     x[i = i, j = j, ..., drop = drop]
   }
 )
+
+#' @exportMethod [
+#' @rdname int_methods
+#' @keywords internal
+setMethod(
+  "[", c("VTableTree", "character", "missing"),
+  function(x, i, j, ..., drop = FALSE) {
+    ## i <- .path_to_pos(i, seq_len(nrow(x)), x, NROW)
+    j <- seq_len(ncol(x))
+    i <- .path_to_pos(i, x)
+    x[i = i, j = j, ..., drop = drop]
+  }
+)
+
 
 ## to avoid dispatch ambiguity. Not necessary, possibly not a good idea at all
 #' @exportMethod [
