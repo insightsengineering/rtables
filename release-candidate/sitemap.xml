@@ -22,6 +22,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/articles/index.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/introspecting_tables.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/manual_table_construction.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/articles/pathing.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/rtables.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/sorting_pruning.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/articles/split_functions.html</loc></url>
@@ -133,6 +134,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/split_funcs.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/split_rows_by.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/split_rows_by_multivar.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/reference/subset_cols.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/summarize_row_groups.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/tabclasses.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/table_shell.html</loc></url>
@@ -145,6 +147,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/trim_prune_funs.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/trim_rows.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/tsv_io.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/reference/tt_row_path_exists.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/ttap.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/update_ref_indexing.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/validate_table_struct.html</loc></url>
