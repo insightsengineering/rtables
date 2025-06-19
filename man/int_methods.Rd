@@ -373,6 +373,7 @@
 \alias{[,VTableTree,missing,ANY-method}
 \alias{[,VTableTree,ANY,character-method}
 \alias{[,VTableTree,character,ANY-method}
+\alias{[,VTableTree,character,missing-method}
 \alias{[,VTableTree,character,character-method}
 \alias{[,VTableTree,missing,numeric-method}
 \alias{[,VTableTree,numeric,numeric-method}
@@ -1170,6 +1171,8 @@ obj_stat_names(obj) <- value
 \S4method{[}{VTableTree,ANY,character}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{VTableTree,character,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{[}{VTableTree,character,missing}(x, i, j, ..., drop = FALSE)
 
 \S4method{[}{VTableTree,character,character}(x, i, j, ..., drop = FALSE)
 

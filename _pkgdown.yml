@@ -78,6 +78,7 @@ articles:
 
   - title: \{rtables\} Concepts
     contents:
+    - pathing
     - subsetting_tables
     - split_functions
     - format_precedence

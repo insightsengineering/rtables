@@ -230,12 +230,37 @@ visible_only and not"
     ) %>%
     analyze(c("AGE", "AGE"),
       afun = list(mean, range),
-      show_labels = "hidden", table_names = c("AGE mean", "AGE range")
+      show_labels = "hidden",
     )
 
-  tab2 <- build_table(l2, DM)
+  l2b <- basic_table(show_colcounts = TRUE) %>%
+    split_cols_by(
+      "ARM",
+      split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C"))
+    ) %>%
+    analyze(c("AGE", "AGE"),
+      afun = list(mean, range),
+      show_labels = "hidden",
+      table_names = c("AGE mean", "AGE range")
+    )
+
+
+  ## warning from analyses so it tries using labels, but those are the same too
+  ## so we get the new message and uniquification
+  tab2 <- expect_warning(expect_message(build_table(l2, DM)))
+  tab2b <- expect_silent(build_table(l2b, DM))
+  expect_false(identical(tab2, tab2b))
+  expect_identical(
+    unname(unlist(cell_values(tab2))),
+    unname(unlist(cell_values(tab2b)))
+  )
   test_colpaths(tab2)
   cdf2 <- make_col_df(tab2)
+  rdf2 <- make_row_df(tab2, visible_only = FALSE)
+  ## don't need to check values, just make sure all the paths work
+  ## after the uniquification
+  resnull <- expect_silent(lapply(rdf2$path, function(pth) tab2[pth, ]))
+  expect_error(tab2[c("ma_AGE_AGE", "AGE[3]"), ]) ## there are only 2
   ## res5 <- lapply(cdf2$path, function(pth) subset)cols
 })
 

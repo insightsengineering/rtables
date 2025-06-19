@@ -78,7 +78,10 @@ removed, and all others will be retained.
 **NOTE**: Each row is kept or removed completely independently, with
 no awareness of the surrounding structure. This means, for example,
 that a subtree could have all its analysis rows removed and not be
-removed itself. For structure-aware filtering of a table, we will use
+removed itself. This can easily result in a *degenerate table* which
+has an invalid structure (see `?validate_table_struct`); for this
+reason trimming is generally not suggested for tables with non-trivial
+row structures.  For structure-aware filtering of a table, we will use
 *pruning* described in the next section.
 
 A *trimming function* accepts a `TableRow` object and returns `TRUE`
@@ -208,7 +211,8 @@ the *direct children* of the element at that path will be
 reordered. This occurs whether those children are subtables
 themselves, or individual rows.  Sorting is done via the
 `sort_at_path()` function, which accepts both a (row) path and a
-scoring function.
+scoring function. See the [pathing vignette](pathing.html) for details
+about paths.
 
 A *score function* accepts a subtree or `TableRow` and returns a
 single orderable (typically numeric) value. Within the subtable
@@ -243,8 +247,8 @@ sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_all
 
 ### Wildcards in Sort Paths
 
- Unlike other uses of pathing (currently), a sorting path can contain
- "*". This indicates that the children of each subtable matching he
+ A sorting path can contain one or more instances of the "*" wildcard.
+ Each of these indicates that the children of each subtable matching this
  `*` element of the path should be sorted **separately** as indicated
  by the remainder of the path after the `*` and the score function.
 

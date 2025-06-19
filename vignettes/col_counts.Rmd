@@ -193,7 +193,7 @@ Currently paths with `"*"` in them do not work within
 in future releases.
 
 `colcount_visible` getters and setters do also exist which retrieve and set
-individual column counts' visiblities, but these are largely an internal detail
+individual column counts' visibilities, but these are largely an internal detail
 and in virtually all cases end users should avoid calling them directly.
 
 ```{r, eval = FALSE}
@@ -217,7 +217,7 @@ Note currently this restriction is currently only enforced for leaf
 columns due to technical implementation details but how a table
 renders should be considered undefined behavior when it contains
 a group of sibling column facets arising from the same
-layout instruction whose column count visiblities disagree. That may
+layout instruction whose column count visibilities disagree. That may
 become an error in future versions without warning.
 
 ### Advanced Settings
