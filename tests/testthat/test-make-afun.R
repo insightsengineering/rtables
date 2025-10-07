@@ -132,7 +132,7 @@ test_that("make_afun works for df functions", {
 
   a_foo2 <- make_afun(a_foo, .labels = c(nrow_df = "Number of Rows"))
   ares2 <- a_foo2(iris, .N_col = 40, b = 6)
-  expect(unlist(ares2$b), 6)
+  expect_equal(unlist(ares2$b), 6)
   expect_identical(
     unlist(unname(value_labels(ares2))),
     c("Number of Rows", "n in cols", "a value", "b value")

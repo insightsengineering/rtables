@@ -10,8 +10,6 @@ test_that("summarize_row_groups works with provided funcs", {
 
   tb1 <- build_table(l1, DM)
   tbl_str <- toString(tb1)
-
-  expect(TRUE, "succeeded")
 })
 
 
@@ -936,9 +934,8 @@ test_that("analyze_colvars works generally", {
   tab5 <- build_table(l5, DM)
   toString(tab5)
   rws5 <- collect_leaves(tab5, TRUE, TRUE)
-  expect(
-    all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA)),
-    "Multiple content functions didn't recycle properly in nested context"
+  expect_true(
+    all(vapply(rws5, function(x) identical(x, rws5[[1]]), NA))
   )
   expect_identical(
     unname(cell_values(tab5)[[1]]),
