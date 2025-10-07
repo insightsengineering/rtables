@@ -78,7 +78,7 @@ lyt2
 tbl2 <- build_table(lyt2, DM)
 tbl2
 
-\dontshow{if (require(tibble)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(tibble)) withAutoprint(\{ # examplesIf}
 
 library(tibble)
 combodf <- tribble(

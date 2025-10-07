@@ -50,7 +50,7 @@ The formatted print-strings for all (body) cells in \code{obj}.
 Get formatted cells
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
