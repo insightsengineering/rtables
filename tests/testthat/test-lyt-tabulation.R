@@ -8,7 +8,9 @@ test_that("summarize_row_groups works with provided funcs", {
     summarize_row_groups() %>%
     analyze("AGE", mean)
 
-  tb1 <- build_table(l1, DM)
+  expect_silent(
+    tb1 <- build_table(l1, DM)
+  )
   tbl_str <- toString(tb1)
 })
 
