@@ -57,7 +57,7 @@ A \code{PreDataTableLayouts} object suitable for passing to further layouting fu
 Generate rows analyzing different variables across columns
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
