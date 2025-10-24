@@ -26,7 +26,7 @@ editor_options:
 The first - and often largest - hurdle to creating a table via
 `rtables` is translating the desired table structure (typically in the
 form of a *table shell*) into an `rtables` *layout*. We will cover
-this translation step here.
+that translation process in this vignette.
 
 ## A Table Shell
 
