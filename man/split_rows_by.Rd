@@ -146,7 +146,7 @@ lyt3 <- basic_table() \%>\%
 
 lyt3
 
-\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 DM2 <- DM \%>\%

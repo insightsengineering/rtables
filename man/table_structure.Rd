@@ -18,7 +18,7 @@ No return value. Called for the side-effect of printing a row- or subtable-struc
 Summarize table
 }
 \examples{
-\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%

@@ -60,7 +60,7 @@ values are determined using \code{get_formatted_cells}. (Column labels are calcu
 function.
 }
 \examples{
-\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%

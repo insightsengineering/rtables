@@ -54,7 +54,7 @@ A table shell is a rendering of the table which maintains the structure, but doe
 displaying the formatting instructions for each cell.
 }
 \examples{
-\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%

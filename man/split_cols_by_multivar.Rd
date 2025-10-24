@@ -53,7 +53,7 @@ When we need columns to reflect different variables entirely, rather than differ
 variable, we use \code{split_cols_by_multivar}.
 }
 \examples{
-\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
+\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 
 ANL <- DM \%>\% mutate(value = rnorm(n()), pctdiff = runif(n()))
