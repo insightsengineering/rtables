@@ -31,7 +31,7 @@ the actual splitting keywords. This may change in the future.
 This function is experimental, its name and the details of its behavior are subject to change in future versions.
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 DM2 <- DM \%>\% mutate(RACE = factor(RACE), SEX = factor(SEX))
