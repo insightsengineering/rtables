@@ -35,8 +35,8 @@ shell which is essentially the entire table with desired formatting
 indicated instead of values:
 
 ```{r init, echo = FALSE, results = "hidden"}
-library(rtables)
-library(dplyr)
+suppressPackageStartupMessages(library(rtables))
+suppressPackageStartupMessages(library(dplyr))
 
 fixed_shell <- function(tt) {
   mystr <- table_shell_str(tt)
