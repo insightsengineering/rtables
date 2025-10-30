@@ -1,5 +1,9 @@
 ## rtables 0.6.13.9002
 
+### New Features
+ * Added vignette: Guided Tour (Intermediate) - Translating Shells To Layouts @gmbecker
+ * Added vignette: Guided Tour (Intermediate) - Identifying Required Analysis Behavior @gmbecker
+
 ## rtables 0.6.13
 
 ### New Features

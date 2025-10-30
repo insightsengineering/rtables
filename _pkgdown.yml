@@ -61,6 +61,7 @@ articles:
     - rtables
     - exploratory_analysis
     - guided_intermediate_translating_shells
+    - guided_intermediate_afun_reqs
 
   - title: Clinical Trials
     navbar: Clinical Trials
