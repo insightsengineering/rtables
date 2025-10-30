@@ -52,7 +52,7 @@ Suggests:
     r2rtf (>= 0.3.2),
     rmarkdown (>= 2.23),
     survival (>= 3.3-1),
-    testthat (>= 3.2.1),
+    testthat (>= 3.3.0),
     tibble (>= 3.2.1),
     tidyr (>= 1.1.3),
     withr (>= 2.0.0),
