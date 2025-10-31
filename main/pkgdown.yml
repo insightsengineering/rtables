@@ -17,6 +17,7 @@ articles:
   example_analysis_coxreg: example_analysis_coxreg.html
   exploratory_analysis: exploratory_analysis.html
   format_precedence: format_precedence.html
+  guided_intermediate_afun_reqs: guided_intermediate_afun_reqs.html
   guided_intermediate_translating_shells: guided_intermediate_translating_shells.html
   introspecting_tables: introspecting_tables.html
   manual_table_construction: manual_table_construction.html
@@ -28,7 +29,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2025-10-27T07:37Z
+last_built: 2025-10-30T23:57Z
 urls:
   reference: https://insightsengineering.github.io/rtables/reference
   article: https://insightsengineering.github.io/rtables/articles
