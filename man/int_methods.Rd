@@ -1302,7 +1302,7 @@ These are internal methods that are documented only to satisfy \verb{R CMD check
 attention to this documentation.
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%

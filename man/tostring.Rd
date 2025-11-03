@@ -69,7 +69,7 @@ undefined wrapping behavior. Passing vectors of already split strings remains su
 case each string is word-wrapped separately with the behavior described above.
 }
 \examples{
-\dontshow{if (require(dplyr)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
 iris2 <- iris \%>\%
