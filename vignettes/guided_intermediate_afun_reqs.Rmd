@@ -12,6 +12,7 @@ output:
         toc: true
         toc_float: true
         code_folding: show
+        after_body: '`r 
 vignette: >
   %\VignetteIndexEntry{Intermediate rtables - Identifying Required Analysis Behavior}
   %\VignetteEngine{knitr::rmarkdown}
