@@ -29,7 +29,7 @@ build up intuition for how to leverage `rtables`' flexibility to
 create table outputs that go beyond simple straightforward structures.
 
 This portion of the guide is intended for users with a reasonable
-grasp of what the individual layouting instructions do by default that
+grasp of what the individual layouting instructions do by default who
 want to learn how to combine and customize their behavior to achieve
 complex structured tables when a library of suitable analysis, group
 summary, and split functions is already available. It is a good fit
