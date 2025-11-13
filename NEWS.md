@@ -1,7 +1,7 @@
 ## rtables 0.6.13.9004
 
 ### New Features
- * Added Guided Tour section to the pkgdown site
+ * Added Guided Tour section to the `pkgdown` site
  * Added vignette: Guided Tour (Intermediate)
  * Added vignette: Guided Tour (Intermediate) - Translating Shells To Layouts @gmbecker
  * Added vignette: Guided Tour (Intermediate) - Identifying Required Analysis Behavior @gmbecker
