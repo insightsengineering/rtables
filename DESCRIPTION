@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.13.9003
-Date: 2025-10-30
+Version: 0.6.13.9004
+Date: 2025-11-13
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -52,7 +52,7 @@ Suggests:
     r2rtf (>= 0.3.2),
     rmarkdown (>= 2.23),
     survival (>= 3.3-1),
-    testthat (>= 3.2.1),
+    testthat (>= 3.3.0),
     tibble (>= 3.2.1),
     tidyr (>= 1.1.3),
     withr (>= 2.0.0),

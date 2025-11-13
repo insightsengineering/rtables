@@ -1,4 +1,4 @@
-## rtables 0.6.13.9003
+## rtables 0.6.13.9004
 
 ### New Features
  * Added Guided Tour section to the pkgdown site
