@@ -1,4 +1,4 @@
-## rtables 0.6.13.9003
+## rtables 0.6.13.9004
 
 ### New Features
  * Added vignette: Guided Tour (Intermediate) - Translating Shells To Layouts @gmbecker
