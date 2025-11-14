@@ -75,7 +75,7 @@ knitr::opts_chunk$set(comment = "")
 ```
 
 
-```{r, eval = TRUE, echo = FALSE, result = "asis"}
+```{r, echo = FALSE, result = "asis"}
 adsl <- ex_adsl %>%
   filter(SEX %in% c("M", "F") & RACE %in% c("ASIAN", "BLACK OR AFRICAN AMERICAN", "WHITE")) %>%
   mutate(
@@ -161,7 +161,7 @@ table.
 
 Our shell gives us the following to indicate column structure:
 
-```{r, eval = TRUE, echo = FALSE, result="asis"}
+```{r, echo = FALSE, result="asis"}
 fixed_shell(result[0, ])
 ```
 
