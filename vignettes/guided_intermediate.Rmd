@@ -13,13 +13,32 @@ output:
         toc_float: true
 vignette: >
   %\VignetteIndexEntry{A Guided Tour of rtables - Intermediate}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options:
   markdown:
       wrap: 72
   chunk_output_type: console
 ---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
 
 # Scope and Audience
 

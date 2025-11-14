@@ -14,13 +14,27 @@ output:
         code_folding: show
 vignette: >
   %\VignetteIndexEntry{Intermediate rtables - Identifying Required Faceting Behavior}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options:
   markdown:
       wrap: 72
   chunk_output_type: console
 ---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
 
 # Introduction
 

@@ -13,13 +13,32 @@ output:
         toc_float: true
 vignette: >
   %\VignetteIndexEntry{Intermediate rtables - Translating Shells To Layouts}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options:
   markdown:
       wrap: 72
   chunk_output_type: console
 ---
+
+```{r, include = FALSE}
+suggested_dependent_pkgs <- c("dplyr")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = all(vapply(
+    suggested_dependent_pkgs,
+    requireNamespace,
+    logical(1),
+    quietly = TRUE
+  ))
+)
+```
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(comment = "#")
+```
+
 
 # Introduction
 
@@ -56,7 +75,7 @@ knitr::opts_chunk$set(comment = "")
 ```
 
 
-```{r, eval = TRUE, echo = FALSE, result = "asis"}
+```{r, echo = FALSE, result = "asis"}
 adsl <- ex_adsl %>%
   filter(SEX %in% c("M", "F") & RACE %in% c("ASIAN", "BLACK OR AFRICAN AMERICAN", "WHITE")) %>%
   mutate(
@@ -142,7 +161,7 @@ table.
 
 Our shell gives us the following to indicate column structure:
 
-```{r, eval = TRUE, echo = FALSE, result="asis"}
+```{r, echo = FALSE, result="asis"}
 fixed_shell(result[0, ])
 ```
 
