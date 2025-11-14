@@ -60,8 +60,14 @@ articles:
     contents:
     - rtables
     - exploratory_analysis
+
+  - title: Guided Tour
+    navbar: Guided Tour
+    contents:
+    - guided_intermediate
     - guided_intermediate_translating_shells
     - guided_intermediate_afun_reqs
+    - guided_intermediate_split_reqs
 
   - title: Clinical Trials
     navbar: Clinical Trials
