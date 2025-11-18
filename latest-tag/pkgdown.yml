@@ -1,4 +1,4 @@
-pandoc: 3.6.4
+pandoc: 3.7.0.2
 pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
@@ -17,6 +17,10 @@ articles:
   example_analysis_coxreg: example_analysis_coxreg.html
   exploratory_analysis: exploratory_analysis.html
   format_precedence: format_precedence.html
+  guided_intermediate_afun_reqs: guided_intermediate_afun_reqs.html
+  guided_intermediate_split_reqs: guided_intermediate_split_reqs.html
+  guided_intermediate_translating_shells: guided_intermediate_translating_shells.html
+  guided_intermediate: guided_intermediate.html
   introspecting_tables: introspecting_tables.html
   manual_table_construction: manual_table_construction.html
   pathing: pathing.html
@@ -27,7 +31,7 @@ articles:
   tabulation_concepts: tabulation_concepts.html
   tabulation_dplyr: tabulation_dplyr.html
   title_footer: title_footer.html
-last_built: 2025-06-20T08:42Z
+last_built: 2025-11-18T06:32Z
 urls:
   reference: https://insightsengineering.github.io/rtables/reference
   article: https://insightsengineering.github.io/rtables/articles

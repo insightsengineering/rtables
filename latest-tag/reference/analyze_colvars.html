@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,12 @@
 <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Getting Started</h6></li>
     <li><a class="dropdown-item" href="../articles/exploratory_analysis.html">Exploratory Analysis</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><h6 class="dropdown-header" data-toc-skip>Guided Tour</h6></li>
+    <li><a class="dropdown-item" href="../articles/guided_intermediate.html">A Guided Tour of rtables - Intermediate</a></li>
+    <li><a class="dropdown-item" href="../articles/guided_intermediate_translating_shells.html">Intermediate rtables - Translating Shells To Layouts</a></li>
+    <li><a class="dropdown-item" href="../articles/guided_intermediate_afun_reqs.html">Intermediate rtables - Identifying Required Analysis Behavior</a></li>
+    <li><a class="dropdown-item" href="../articles/guided_intermediate_split_reqs.html">Intermediate rtables - Identifying Required Faceting Behavior</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Clinical Trials</h6></li>
     <li><a class="dropdown-item" href="../articles/clinical_trials.html">Example Clinical Trials Tables</a></li>
@@ -87,7 +93,8 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc2">v0.6.13-rc2</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc1">v0.6.13-rc1</a>
@@ -269,11 +276,11 @@ the analysis. Defaults to <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                               value       pctdiff       value       pctdiff       value       pctdiff  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ———————————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ASIAN                       79 (65.3%)   79 (65.3%)   68 (64.2%)   68 (64.2%)   84 (65.1%)   84 (65.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.0           32          0.2           28          0.1           42    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.2           39          0.1           39          -0.0          37    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> BLACK OR AFRICAN AMERICAN   28 (23.1%)   28 (23.1%)   24 (22.6%)   24 (22.6%)   27 (20.9%)   27 (20.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                -0.0          15          0.1           9           0.1           15    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                0.2           9           0.1           9           0.3           18    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                       14 (11.6%)   14 (11.6%)   14 (13.2%)   14 (13.2%)   18 (14.0%)   18 (14.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                -0.2          10          0.3           7           -0.3          12    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                -0.0          8           0.3           5           -0.1          9     </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">lyt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="basic_table.html">basic_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="split_cols_by.html">split_cols_by</a></span><span class="op">(</span><span class="st">"ARM"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -293,11 +300,11 @@ the analysis. Defaults to <code>FALSE</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                             Measurement    Pct Diff    Measurement    Pct Diff    Measurement    Pct Diff </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ——————————————————————————————————————————————————————————————————————————————————————————————————————————</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ASIAN                       79 (65.3%)    79 (65.3%)   68 (64.2%)    68 (64.2%)   84 (65.1%)    84 (65.1%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.04          0.45         0.19          0.44         0.14          0.51   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.18          0.52         0.08          0.54         -0.02         0.45   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> BLACK OR AFRICAN AMERICAN   28 (23.1%)    28 (23.1%)   24 (22.6%)    24 (22.6%)   27 (20.9%)    27 (20.9%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.04         0.53         0.13          0.46         0.06          0.57   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         0.21          0.42         0.12          0.41         0.26          0.56   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> WHITE                       14 (11.6%)    14 (11.6%)   14 (13.2%)    14 (13.2%)   18 (14.0%)    18 (14.0%)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.19         0.61         0.33          0.48         -0.27         0.55   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   mean                         -0.01         0.56         0.29          0.42         -0.10         0.51   </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
