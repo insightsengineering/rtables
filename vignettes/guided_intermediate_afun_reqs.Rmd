@@ -58,7 +58,7 @@ our resulting tables contain the correct statistics.
 While the diversity of tables is such that custom analysis functions
 will inevitably be needed in some cases, we will not address the
 *creation* of analysis functions in detail here; that is covered in
-within the [advanced](guided_advanced_afun_design.html) portion of
+within the [advanced](./advanced_usage.html) portion of
 this guided tour. Here we will focus on *selecting* analysis functions
 and the reasoning that goes into that choice. While this might seem
 like a strange distinction at first glance, this is in fact how most

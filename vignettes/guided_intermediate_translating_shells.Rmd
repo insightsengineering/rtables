@@ -910,10 +910,7 @@ summary rows are direct siblings is not currently supported by the
 supported when created via, e.g., trimming rows of a created table.
 
 The above said, we can arrive at a table which renders as desired
-using the *two-tier analysis function* strategy. A
-[vignette](variable_nesting_depth.html) discussing this is in detail
-is included with `rtables`; for completeness of the training
-curriculum we will briefly reiterate here.
+using the *two-tier analysis function* strategy.
 
 The key to the two-tier analysis function strategy is to generate both
 levels of row in the same analysis function and simply use indent
