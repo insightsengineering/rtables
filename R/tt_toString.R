@@ -209,6 +209,12 @@ setMethod(
            fontspec = NULL,
            col_gap = 3L,
            round_type = c("iec", "sas")) {
+    
+    new_dev <- open_font_dev(fontspec)
+    if (new_dev) {
+      on.exit(close_font_dev())
+    }
+    
     stopifnot(is(obj, "VTableTree"))
     check_ccount_vis_ok(obj)
     header_content <- .tbl_header_mat(obj) # first col are for row.names

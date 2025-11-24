@@ -237,6 +237,12 @@ setMethod(
            max_width = NULL,
            fontspec = NULL,
            col_gap = 3) {
+    
+    new_dev <- open_font_dev(fontspec)
+    if (new_dev) {
+      on.exit(close_font_dev())
+    }
+    
     indent <- indent + indent_mod(tt)
     ## retained for debugging info
     orig_rownum <- rownum # nolint
