@@ -39,7 +39,7 @@ Depends:
     R (>= 4.1)
 Imports:
     checkmate (>= 2.1.0),
-    htmltools (>= 0.5.4),
+    htmltools (>= 0.5.8.1),
     lifecycle (>= 0.2.0),
     stats,
     stringi (>= 1.6)
