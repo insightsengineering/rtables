@@ -34,17 +34,17 @@ URL: https://github.com/insightsengineering/rtables,
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
     formatters (>= 0.5.11),
-    magrittr (>= 1.5),
+    magrittr (>= 2.0.3),
     methods,
     R (>= 4.1)
 Imports:
     checkmate (>= 2.1.0),
     htmltools (>= 0.5.8.1),
-    lifecycle (>= 0.2.0),
+    lifecycle (>= 1.0.4),
     stats,
-    stringi (>= 1.6)
+    stringi (>= 1.8.4)
 Suggests:
-    broom (>= 1.0.5),
+    broom (>= 1.0.8),
     car (>= 3.0-13),
     dplyr (>= 1.0.5),
     knitr (>= 1.42),
