@@ -316,7 +316,12 @@ test_that("test round_type in rtable", {
   obj_round_type(t2) <- "sas"
   expect_identical(obj_round_type(t2), "sas")
 
-  t3 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals_round_type[1], vals_round_type[2]), round_type = "sas")
+  t3 <- rtable(
+    header = c("A", "B"),
+    format = "xx.xx",
+    rrow("row 1", vals_round_type[1], vals_round_type[2]),
+    round_type = "sas"
+  )
   expect_identical(t2, t3)
 })
 
