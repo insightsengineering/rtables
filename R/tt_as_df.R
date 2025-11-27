@@ -58,6 +58,7 @@ as_result_df <- function(tt, spec = NULL,
                          add_tbl_name_split = FALSE,
                          simplify = FALSE,
                          verbose = FALSE,
+                         round_type = obj_round_type(tt),
                          ...) {
   data_format <- data_format[[1]]
   checkmate::assert_class(tt, "VTableTree")
@@ -87,7 +88,7 @@ as_result_df <- function(tt, spec = NULL,
 
     if (data_format %in% c("strings", "numeric")) {
       # we keep previous calculations to check the format of the data
-      mf_tt <- matrix_form(tt)
+      mf_tt <- matrix_form(tt, round_type = round_type)
       mf_result_chars <- mf_strings(mf_tt)[-seq_len(mf_nlheader(mf_tt)), -1, drop = FALSE]
       is_not_label_rows <- make_row_df(tt)$node_class != "LabelRow"
       mf_result_chars <- .remove_empty_elements(mf_result_chars, is_not_label_rows)

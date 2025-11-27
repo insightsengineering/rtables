@@ -4621,3 +4621,75 @@ setMethod(
   "obj_stat_names", "RowsVerticalSection",
   function(obj) lapply(obj, obj_stat_names)
 )
+
+# obj_round_type getter ---------------------------------------------------------------
+
+#' @exportMethod obj_round_type
+setMethod("obj_round_type", "ANY", function(obj) attr(obj, "round_type", exact = TRUE))
+
+#' generics and methods for obj_round_type
+#'
+#' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no
+#' attention to this documentation, except for the few exported methods.
+#' 
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type
+#' @export
+setMethod("obj_round_type", "PreDataTableLayouts", function(obj) obj@round_type)
+
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type
+#' @export
+setMethod("obj_round_type", "VTableTree", function(obj) obj@round_type)
+
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type
+setMethod("obj_round_type", "TableRow", function(obj) obj@round_type)
+
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type
+setMethod("obj_round_type", "CellValue", function(obj) attr(obj, "round_type", exact = TRUE))
+
+# obj_round_type setter ---------------------------------------------------------------
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type<-
+#' @export
+setMethod("obj_round_type<-", "VTableTree", function(obj, value) {
+  stopifnot(length(value) == 1)
+  checkmate::assert_subset(value, valid_round_type)
+  obj@round_type <- value
+  # also set round_type to slot in children class
+  tree_children(obj) <- lapply(tree_children(obj), `obj_round_type<-`, value = value)
+  if (!is.null(content_table(obj))) {
+    ctab <- content_table(obj)
+    obj_round_type(ctab) <- value
+  }
+  obj
+})
+
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type<-
+# not useful for end user, needed for recursive approach
+setMethod("obj_round_type<-", "TableRow", function(obj, value) {
+  obj@round_type <- value
+  row_cells(obj) <- lapply(row_cells(obj), `obj_round_type<-`, value = value)
+  obj
+})
+
+
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type<-
+# not useful for end user, needed for recursive approach
+setMethod("obj_round_type<-", "LabelRow", function(obj, value) {
+  obj
+})
+
+
+#' @rdname obj_round_type
+#' @exportMethod obj_round_type<-
+setMethod("obj_round_type<-", "CellValue", function(obj, value) {
+  attr(obj, "round_type") <- value
+  obj
+})
+
+
