@@ -13,7 +13,8 @@ CellValue(
   footnotes = NULL,
   align = NULL,
   format_na_str = NULL,
-  stat_names = NA_character_
+  stat_names = NA_character_,
+  round_type = valid_round_type
 )
 }
 \arguments{
@@ -41,6 +42,9 @@ are all \code{NA}.}
 
 \item{stat_names}{(\code{character} or \code{NA})\cr names for the statistics in the cell. It can be a vector of strings.
 If \code{NA}, statistic names are not specified.}
+
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 }
 \value{
 An object representing the value within a single cell within a populated table. The underlying structure

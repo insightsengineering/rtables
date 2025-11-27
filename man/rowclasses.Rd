@@ -19,7 +19,8 @@ LabelRow(
   cinfo = EmptyColInfo,
   indent_mod = 0L,
   table_inset = 0L,
-  trailing_section_div = NA_character_
+  trailing_section_div = NA_character_,
+  round_type = valid_round_type
 )
 
 .tablerow(
@@ -36,7 +37,8 @@ LabelRow(
   indent_mod = 0L,
   footnotes = list(),
   table_inset = 0L,
-  trailing_section_div = NA_character_
+  trailing_section_div = NA_character_,
+  round_type = valid_round_type
 )
 
 DataRow(...)

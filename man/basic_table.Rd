@@ -13,7 +13,8 @@ basic_table(
   colcount_format = "(N=xx)",
   header_section_div = NA_character_,
   top_level_section_div = NA_character_,
-  inset = 0L
+  inset = 0L,
+  round_type = valid_round_type
 )
 }
 \arguments{
@@ -49,6 +50,9 @@ information.}
 
 \item{inset}{(\code{numeric(1)})\cr number of spaces to inset the table header, table body, referential footnotes, and
 main_footer, as compared to alignment of title, subtitle, and provenance footer. Defaults to 0 (no inset).}
+
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 }
 \value{
 A \code{PreDataTableLayouts} object suitable for passing to further layouting functions, and to \code{\link[=build_table]{build_table()}}.
