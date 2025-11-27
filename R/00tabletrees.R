@@ -1590,7 +1590,7 @@ uniqify_child_names <- function(kidlst) {
       ## continue with default value iec
       round_type <- valid_round_type[1] # iec
     }
-  } 
+  }
   round_type
 }
 
@@ -1738,14 +1738,14 @@ TableTree <- function(kids = list(),
                       round_type = NULL) {
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
-  
+
   # derive appropriate round_type to use
   # either from input or retrieved from kids
   round_type <- .determine_round_type(round_type, kids)
   # also set this round_type to direct kids
   # note that (some/most) obj_round_type setters will also set round_type of kids
   # this will ensure only 1 round_type is present on all slots in the resulting tabletree
-  kids <- lapply(kids, `obj_round_type<-`, value = round_type)  
+  kids <- lapply(kids, `obj_round_type<-`, value = round_type)
 
   kids <- .enforce_valid_kids(kids, cinfo)
   if (isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0) {

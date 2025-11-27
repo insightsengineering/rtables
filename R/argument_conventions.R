@@ -47,7 +47,7 @@
 #'   wild-card path but resolve to an individual row will not be considered matching.
 #'   The value "elemtable" indicates an Elementary table, i.e., one representing a
 #'   single variable within an `analyze` call.
-#' @param round_type (`"iec"` (default), `"iec_mod"` or `"sas"`)\cr the type of rounding to perform. 
+#' @param round_type (`"iec"` (default), `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
 #' See [formatters::format_value()] for details.
 #'
 #'

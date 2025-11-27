@@ -406,8 +406,6 @@ setMethod(
 )
 
 
-
-
 #' @rdname int_methods
 setGeneric("pos_splvals", function(obj) standardGeneric("pos_splvals"))
 
@@ -2864,7 +2862,6 @@ setMethod(
 )
 
 
-
 #' @rdname int_methods
 #' @export
 setGeneric(
@@ -4124,8 +4121,6 @@ setMethod("section_div", "TableRow", function(obj) {
 })
 
 
-
-
 # section_div setter from table object
 #' @rdname section_div
 #' @export
@@ -4631,7 +4626,7 @@ setMethod("obj_round_type", "ANY", function(obj) attr(obj, "round_type", exact =
 #'
 #' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no
 #' attention to this documentation, except for the few exported methods.
-#' 
+#'
 #' @rdname obj_round_type
 #' @exportMethod obj_round_type
 #' @export
@@ -4691,5 +4686,3 @@ setMethod("obj_round_type<-", "CellValue", function(obj, value) {
   attr(obj, "round_type") <- value
   obj
 })
-
-

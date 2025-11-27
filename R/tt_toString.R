@@ -208,7 +208,6 @@ setMethod(
            fontspec = NULL,
            col_gap = 3L,
            round_type = obj_round_type(obj)) {
-    
     new_dev <- open_font_dev(fontspec)
     if (new_dev) {
       on.exit(close_font_dev())

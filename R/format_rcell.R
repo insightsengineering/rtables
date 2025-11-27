@@ -40,12 +40,12 @@ format_rcell <- function(x, format,
   if (is.null(format) && !is.null(pr_row_format)) {
     format <- pr_row_format
   }
-  if (missing(round_type) && !is.null(obj_round_type(x))){
+  if (missing(round_type) && !is.null(obj_round_type(x))) {
     round_type <- obj_round_type(x)
   }
-  if (missing(round_type) && is.null(obj_round_type(x))){
+  if (missing(round_type) && is.null(obj_round_type(x))) {
     round_type <- valid_round_type[1]
-  }  
+  }
   # Check for na_str from parent
   if (is.null(obj_na_str(x)) && !is.null(pr_row_na_str)) {
     na_str <- pr_row_na_str

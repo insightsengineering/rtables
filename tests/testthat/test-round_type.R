@@ -38,7 +38,7 @@ test_that("round_type can be set on basic_table", {
     obj_round_type(tbl_iec),
     "iec"
   )
-  
+
   # disallowed rounding method will give error
   tbl_fake <- tbl_sas
   expect_error(obj_round_type(tbl_fake) <- "fake")
@@ -197,7 +197,7 @@ test_that("test for get_formatted_cells", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  tbl_sas  <- tt_to_test_round_type(round_type = "sas")
+  tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
   form_cells <- get_formatted_cells(tbl_sas)
 
@@ -250,7 +250,7 @@ test_that("test for round_type and tt_at_path", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  tbl_sas <- tt_to_test_round_type2(round_type = "sas")  
+  tbl_sas <- tt_to_test_round_type2(round_type = "sas")
 
   expect_identical(
     obj_round_type(tbl_sas),
@@ -267,81 +267,77 @@ test_that("test for round_type and tt_at_path", {
 test_that("test for obj_round_type setter", {
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
-  
+
   tbl <- tt_to_export()
-  
+
   kids <- tree_children(tbl)
-  round_type_kids <- vapply(kids, obj_round_type, "") 
+  round_type_kids <- vapply(kids, obj_round_type, "")
   expect_identical(
     unname(round_type_kids),
     rep("iec", 3)
   )
-  
+
   gkids <- tree_children(kids[[1]])
-  round_type_gkids <- vapply(gkids, obj_round_type, "") 
+  round_type_gkids <- vapply(gkids, obj_round_type, "")
   expect_identical(
     unname(round_type_gkids),
     rep("iec", 1)
-  )    
-  
+  )
+
   # now modify the round_type using obj_round_type setter on table
   # all children/grand_children will be updated
   tbl_sas <- tbl
   obj_round_type(tbl_sas) <- "sas"
-  expect_identical(obj_round_type(tbl_sas),
-                   "sas")
-  
+  expect_identical(
+    obj_round_type(tbl_sas),
+    "sas"
+  )
+
   kids <- tree_children(tbl_sas)
-  round_type_kids <- vapply(kids, obj_round_type, "") 
+  round_type_kids <- vapply(kids, obj_round_type, "")
   expect_identical(
     unname(round_type_kids),
     rep("sas", 3)
-  )  
-  
+  )
+
   gkids <- tree_children(kids[[1]])
-  round_type_gkids <- vapply(gkids, obj_round_type, "") 
+  round_type_gkids <- vapply(gkids, obj_round_type, "")
   expect_identical(
     unname(round_type_gkids),
     rep("sas", 1)
-  )  
-  
+  )
 })
 
 test_that("test round_type in rtable", {
-
   t1 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals_round_type[1], vals_round_type[2]))
   expect_identical(obj_round_type(t1), "iec")
-  
+
   t2 <- t1
   obj_round_type(t2) <- "sas"
   expect_identical(obj_round_type(t2), "sas")
- 
+
   t3 <- rtable(header = c("A", "B"), format = "xx.xx", rrow("row 1", vals_round_type[1], vals_round_type[2]), round_type = "sas")
   expect_identical(t2, t3)
-  
 })
 
 test_that("test round_type in rrow and rrowl", {
-  
   rrw1 <- rrow("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx")
   expect_identical(obj_round_type(rrw1), "iec")
-  
+
   rrw2 <- rrw1
   obj_round_type(rrw2) <- "sas"
   expect_identical(obj_round_type(rrw2), "sas")
-  
+
   rrw3 <- rrow("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx", round_type = "sas")
   expect_identical(rrw2, rrw3)
 
   rrwl1 <- rrowl("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx")
   expect_identical(obj_round_type(rrwl1), "iec")
-  
+
   rrwl2 <- rrwl1
   obj_round_type(rrwl2) <- "sas"
   expect_identical(obj_round_type(rrwl2), "sas")
-  
-  rrwl3 <- rrowl("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx", round_type = "sas")
-  expect_identical(rrwl2, rrwl3)  
-  
-})
 
+  rrwl3 <- rrowl("row 1", vals_round_type[1], vals_round_type[2], format = "xx.xx", round_type = "sas")
+  expect_identical(rrwl2, rrwl3)
+})

@@ -28,7 +28,6 @@ makefakedat <- function(n = 1000) {
 }
 
 
-
 makefakedat2 <- function(n = 1000) {
   if (n %% 4 != 0) {
     stop("n not multiple of 4")
@@ -237,27 +236,27 @@ check_all_patterns <- function(elements, letters, len) {
 
 vals_round_type <- c(1.865, 2.985, 3.457)
 
-vals_round_type_fmt <- function(vals = vals_round_type, round_type = "sas"){
+vals_round_type_fmt <- function(vals = vals_round_type, round_type = "sas") {
   mapply(format_value, x = vals, format = "xx.xx", round_type = round_type)
 }
 
-tt_to_test_round_type <- function(vals = vals_round_type, round_type = "iec", round_type_tbl = round_type){
+tt_to_test_round_type <- function(vals = vals_round_type, round_type = "iec", round_type_tbl = round_type) {
   require(dplyr, quietly = TRUE)
   txtvals_iec <- vals_round_type_fmt(vals = vals, round_type = "iec")
   txtvals_sas <- vals_round_type_fmt(vals = vals, round_type = "sas")
-  
+
   # confirmation that at least one of the values result in different format presentation
-  expect_true(any(txtvals_iec != txtvals_sas))  
-  
+  expect_true(any(txtvals_iec != txtvals_sas))
+
   adsl <- ex_adsl
-  
+
   adsl <- adsl %>%
     mutate(new_var = case_when(
       ARMCD == "ARM A" ~ vals[1],
       ARMCD == "ARM B" ~ vals[2],
       ARMCD == "ARM C" ~ vals[3]
     ))
-  
+
   lyt <- basic_table(show_colcounts = FALSE, round_type = round_type) %>%
     split_cols_by("ARMCD") %>%
     analyze(c("new_var"), function(x) {
@@ -267,16 +266,16 @@ tt_to_test_round_type <- function(vals = vals_round_type, round_type = "iec", ro
         .labels = c("Mean")
       )
     })
-  
+
   tbl <- build_table(lyt, adsl, round_type = round_type_tbl)
 }
 
-tt_to_test_round_type2 <- function(round_type = "iec", round_type_tbl = round_type){
+tt_to_test_round_type2 <- function(round_type = "iec", round_type_tbl = round_type) {
   require(dplyr, quietly = TRUE)
 
   adsl <- ex_adsl %>%
     filter(SEX %in% c("F", "M"))
-  
+
   lyt <- basic_table(show_colcounts = FALSE, round_type = round_type) %>%
     split_cols_by("ARMCD") %>%
     split_rows_by("SEX", split_fun = drop_split_levels) %>%
@@ -287,6 +286,6 @@ tt_to_test_round_type2 <- function(round_type = "iec", round_type_tbl = round_ty
         .labels = c("Mean")
       )
     })
-  
-    tbl <- build_table(lyt, adsl, round_type = round_type_tbl)
-  }
+
+  tbl <- build_table(lyt, adsl, round_type = round_type_tbl)
+}
