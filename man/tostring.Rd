@@ -47,12 +47,8 @@ calculating string widths and heights, as returned by \code{\link[formatters:fon
 allowed via \code{fontspec}. Defaults to \code{FALSE}. This parameter is primarily
 for internal testing and generally should not be set by end users.}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform. iec,
-the default, and iec_mod peforms rounding compliant with IEC 60559 (see notes in \code{\link[formatters:round_fmt]{round_fmt()}}), while
-sas performs nearest-value rounding consistent with rounding within SAS.\cr
-In addition, the rounding of a negative number that rounds to zero will be presented as 0
-(with the appropriate number of trailing zeros) for both \code{sas} and \code{iec_mod},
-while for \code{iec}, it will be presented as -0 (with the appropriate number of trailing zeros).}
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:round_fmt]{round_fmt()}} for details.}
 }
 \value{
 A string representation of \code{x} as it appears when printed.
