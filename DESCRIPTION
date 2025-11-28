@@ -60,6 +60,8 @@ Suggests:
 VignetteBuilder:
     knitr,
     rmarkdown
+Remotes:
+    insightsengineering/formatters@1040_rtables_round_type
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
