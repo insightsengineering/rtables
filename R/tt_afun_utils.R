@@ -4,6 +4,7 @@
 #'
 #' @inheritParams compat_args
 #' @inheritParams lyt_args
+#' @inheritParams gen_args
 #' @param x (`ANY`)\cr cell value.
 #' @param format (`string` or `function`)\cr the format label (string) or `formatters` function to apply to `x`.
 #'   See [formatters::list_valid_format_labels()] for currently supported format labels.
@@ -32,7 +33,9 @@ rcell <- function(x,
                   footnotes = NULL,
                   align = NULL,
                   format_na_str = NULL,
-                  stat_names = NULL) {
+                  stat_names = NULL,
+                  round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   checkmate::assert_character(stat_names, null.ok = TRUE)
   if (!is.null(align)) {
     check_aligns(align)
@@ -79,7 +82,8 @@ rcell <- function(x,
       indent_mod = indent_mod,
       footnotes = footnotes,
       format_na_str = format_na_str,
-      stat_names = stat_names %||% NA_character_
+      stat_names = stat_names %||% NA_character_,
+      round_type = round_type
     ) # RefFootnote(footnote))
   }
   if (!is.null(align)) {

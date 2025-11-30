@@ -11,7 +11,8 @@
 #'
 #' @family compatibility
 #' @export
-rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
+rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L, round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   vals <- list(...)
   if (is.null(row.name)) {
     row.name <- ""
@@ -41,7 +42,8 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
       name = row.name, ## XXX TODO
       cspan = csps,
       format = format,
-      table_inset = as.integer(inset)
+      table_inset = as.integer(inset),
+      round_type = round_type
     )
   }
 }
@@ -71,11 +73,12 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L) {
 #'
 #' @family compatibility
 #' @export
-rrowl <- function(row.name, ..., format = NULL, indent = 0, inset = 0L) {
+rrowl <- function(row.name, ..., format = NULL, indent = 0, inset = 0L, round_type = valid_round_type) {
   dots <- list(...)
   args_list <- c(list(
     row.name = row.name, format = format,
-    indent = indent, inset = inset
+    indent = indent, inset = inset,
+    round_type = round_type
   ), val = unlist(lapply(dots, as.list), recursive = FALSE))
   do.call(rrow, args_list)
 }
@@ -309,7 +312,8 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' @family compatibility
 #' @export
 rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
-                   inset = 0L) {
+                   inset = 0L, round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   if (is.character(header)) {
     header <- .char_to_hrows(header)
   } # list(rrowl(NULL, header))
@@ -342,7 +346,7 @@ rtable <- function(header, ..., format = NULL, hsep = default_hsep(),
   TableTree(
     kids = body, format = format, cinfo = colinfo,
     labelrow = LabelRow(lev = 0L, label = "", vis = FALSE),
-    hsep = hsep, inset = inset
+    hsep = hsep, inset = inset, round_type = round_type
   )
 }
 

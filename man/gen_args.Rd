@@ -30,6 +30,7 @@ gen_args(
   inset,
   table_inset,
   tt_type = c("any", "row", "table", "elemtable"),
+  round_type = valid_round_type,
   ...
 )
 }
@@ -102,6 +103,9 @@ E.g., for "table", possible paths which match the structure of the
 wild-card path but resolve to an individual row will not be considered matching.
 The value "elemtable" indicates an Elementary table, i.e., one representing a
 single variable within an \code{analyze} call.}
+
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{...}{additional parameters passed to methods or tabulation functions.}
 }

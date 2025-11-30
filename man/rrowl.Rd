@@ -4,7 +4,14 @@
 \alias{rrowl}
 \title{Create an \code{rtable} row from a vector or list of values}
 \usage{
-rrowl(row.name, ..., format = NULL, indent = 0, inset = 0L)
+rrowl(
+  row.name,
+  ...,
+  format = NULL,
+  indent = 0,
+  inset = 0L,
+  round_type = valid_round_type
+)
 }
 \arguments{
 \item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the

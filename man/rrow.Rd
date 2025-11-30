@@ -4,7 +4,14 @@
 \alias{rrow}
 \title{Create an \code{rtable} row}
 \usage{
-rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
+rrow(
+  row.name = "",
+  ...,
+  format = NULL,
+  indent = 0,
+  inset = 0L,
+  round_type = valid_round_type
+)
 }
 \arguments{
 \item{row.name}{(\code{string} or \code{NULL})\cr row name. If \code{NULL}, an empty string is used as \code{row.name} of the
