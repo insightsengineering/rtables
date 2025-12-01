@@ -56,7 +56,7 @@ rrow <- function(row.name = "", ..., format = NULL, indent = 0, inset = 0L, roun
 #' @param ... values in vector/list form.
 #' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
 #' See [round_fmt()] for details.
-#' 
+#'
 #' @inherit rrow return
 #'
 #' @examples
@@ -231,7 +231,7 @@ rheader <- function(..., format = "xx", .lst = NULL) {
 #' @param ... rows to place in the table.
 #' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
 #' See [round_fmt()] for details.
-#' 
+#'
 #' @return A formal table object of the appropriate type (`ElementaryTable` or `TableTree`).
 #'
 #' @examples
