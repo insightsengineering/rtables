@@ -1314,7 +1314,8 @@ setClass("TableRow",
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
 #' @param vis (`flag`)\cr whether the row should be visible (`LabelRow` only).
-#'
+#' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
+#' See [round_fmt()] for details.
 #' @return A formal object representing a table row of the constructed type.
 #'
 #' @author Gabriel Becker

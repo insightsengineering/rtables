@@ -69,6 +69,9 @@ of the last row contained in this (sub)table, unless that row is also the last t
 or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
 \code{section_div} of the split under which this table represents a single facet.}
 
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:round_fmt]{formatters::round_fmt()}} for details.}
+
 \item{vals}{(\code{list})\cr cell values for the row.}
 
 \item{cspan}{(\code{integer})\cr column span. \code{1} indicates no spanning.}

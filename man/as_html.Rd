@@ -44,6 +44,9 @@ to \code{FALSE}.}
 
 \item{expand_newlines}{(\code{flag})\cr Defaults to \code{FALSE}, relying on \code{html} output to solve newline characters (\verb{\\n}).
 Doing this keeps the structure of the cells but may depend on the output device.}
+
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:round_fmt]{formatters::round_fmt()}} for details.}
 }
 \value{
 A \code{shiny.tag} object representing \code{x} in HTML.

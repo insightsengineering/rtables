@@ -34,8 +34,8 @@ information.}
 \item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
 \code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
 
-\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
-See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:round_fmt]{formatters::round_fmt()}} for details.}
 }
 \value{
 A formal table object of the appropriate type (\code{ElementaryTable} or \code{TableTree}).

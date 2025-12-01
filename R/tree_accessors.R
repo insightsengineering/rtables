@@ -4618,7 +4618,7 @@ setMethod(
 )
 
 # obj_round_type getter ---------------------------------------------------------------
-
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type
 setMethod("obj_round_type", "ANY", function(obj) attr(obj, "round_type", exact = TRUE))
 
@@ -4627,26 +4627,26 @@ setMethod("obj_round_type", "ANY", function(obj) attr(obj, "round_type", exact =
 #' These are internal methods that are documented only to satisfy `R CMD check`. End users should pay no
 #' attention to this documentation, except for the few exported methods.
 #'
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type
 #' @export
 setMethod("obj_round_type", "PreDataTableLayouts", function(obj) obj@round_type)
 
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type
 #' @export
 setMethod("obj_round_type", "VTableTree", function(obj) obj@round_type)
 
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type
 setMethod("obj_round_type", "TableRow", function(obj) obj@round_type)
 
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type
 setMethod("obj_round_type", "CellValue", function(obj) attr(obj, "round_type", exact = TRUE))
 
 # obj_round_type setter ---------------------------------------------------------------
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type<-
 #' @export
 setMethod("obj_round_type<-", "VTableTree", function(obj, value) {
@@ -4662,7 +4662,7 @@ setMethod("obj_round_type<-", "VTableTree", function(obj, value) {
   obj
 })
 
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type<-
 # not useful for end user, needed for recursive approach
 setMethod("obj_round_type<-", "TableRow", function(obj, value) {
@@ -4672,7 +4672,7 @@ setMethod("obj_round_type<-", "TableRow", function(obj, value) {
 })
 
 
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type<-
 # not useful for end user, needed for recursive approach
 setMethod("obj_round_type<-", "LabelRow", function(obj, value) {
@@ -4680,7 +4680,7 @@ setMethod("obj_round_type<-", "LabelRow", function(obj, value) {
 })
 
 
-#' @rdname obj_round_type
+#' @rdname formatters_methods
 #' @exportMethod obj_round_type<-
 setMethod("obj_round_type<-", "CellValue", function(obj, value) {
   attr(obj, "round_type") <- value

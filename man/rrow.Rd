@@ -26,6 +26,9 @@ cell values passed via \code{...}. See \code{\link[formatters:list_formats]{form
 
 \item{inset}{(\code{integer(1)})\cr the table inset for the row or table being constructed. See
 \code{\link[formatters:table_inset]{formatters::table_inset()}} for details.}
+
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:round_fmt]{formatters::round_fmt()}} for details.}
 }
 \value{
 A row object of the context-appropriate type (label or data).

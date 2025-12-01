@@ -38,7 +38,9 @@ div_helper <- function(lst, class) {
 #'   to `FALSE`.
 #' @param expand_newlines (`flag`)\cr Defaults to `FALSE`, relying on `html` output to solve newline characters (`\n`).
 #'   Doing this keeps the structure of the cells but may depend on the output device.
-#'
+#' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
+#' See [round_fmt()] for details.
+#' 
 #' @importFrom htmltools tags
 #'
 #' @return A `shiny.tag` object representing `x` in HTML.

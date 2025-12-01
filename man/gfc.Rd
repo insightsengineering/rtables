@@ -13,7 +13,7 @@
 \alias{get_cell_aligns,LabelRow-method}
 \title{Get formatted cells}
 \usage{
-get_formatted_cells(obj, shell = FALSE, round_type = valid_round_type)
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 \S4method{get_formatted_cells}{TableTree}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
@@ -21,7 +21,7 @@ get_formatted_cells(obj, shell = FALSE, round_type = valid_round_type)
 
 \S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
-\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE, round_type = valid_round_type)
+\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 get_cell_aligns(obj)
 

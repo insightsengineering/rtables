@@ -677,7 +677,7 @@ get_formatted_fnotes <- function(tt) {
 #' @rdname gfc
 setGeneric(
   "get_formatted_cells",
-  function(obj, shell = FALSE, round_type = valid_round_type) standardGeneric("get_formatted_cells")
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) standardGeneric("get_formatted_cells")
 )
 
 #' @rdname gfc
@@ -741,8 +741,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "LabelRow",
-  function(obj, shell = FALSE, round_type = valid_round_type) {
-    round_type <- match.arg(round_type)
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
     vstr <- if (shell) "-" else ""
     if (labelrow_visible(obj)) {
