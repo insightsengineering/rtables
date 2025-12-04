@@ -14,7 +14,8 @@ rcell(
   footnotes = NULL,
   align = NULL,
   format_na_str = NULL,
-  stat_names = NULL
+  stat_names = NULL,
+  round_type = valid_round_type
 )
 
 non_ref_rcell(
@@ -53,6 +54,9 @@ are all \code{NA}.}
 
 \item{stat_names}{(\code{character} or \code{NA})\cr names for the statistics in the cell. It can be a vector of strings.
 If \code{NA}, statistic names are not specified.}
+
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 
 \item{is_ref}{(\code{flag})\cr whether function is being used in the reference column (i.e. \code{.in_ref_col} should be
 passed to this argument).}

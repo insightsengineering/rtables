@@ -1290,7 +1290,8 @@ setClass("VTableNodeInfo",
     format = "FormatSpec",
     na_str = "character",
     indent_modifier = "integer",
-    table_inset = "integer"
+    table_inset = "integer",
+    round_type = "character"
   )
 )
 
@@ -1313,7 +1314,8 @@ setClass("TableRow",
 #' @inheritParams constr_args
 #' @inheritParams lyt_args
 #' @param vis (`flag`)\cr whether the row should be visible (`LabelRow` only).
-#'
+#' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
+#' See [round_fmt()] for details.
 #' @return A formal object representing a table row of the constructed type.
 #'
 #' @author Gabriel Becker
@@ -1326,7 +1328,9 @@ LabelRow <- function(lev = 1L,
                      cinfo = EmptyColInfo,
                      indent_mod = 0L,
                      table_inset = 0L,
-                     trailing_section_div = NA_character_) {
+                     trailing_section_div = NA_character_,
+                     round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   check_ok_label(label)
   new("LabelRow",
     leaf_value = list(),
@@ -1340,7 +1344,8 @@ LabelRow <- function(lev = 1L,
     visible = vis,
     indent_modifier = as.integer(indent_mod),
     table_inset = as.integer(table_inset),
-    trailing_section_div = trailing_section_div
+    trailing_section_div = trailing_section_div,
+    round_type = round_type
   )
 }
 
@@ -1394,11 +1399,13 @@ setClass("LabelRow",
                       indent_mod = 0L,
                       footnotes = list(),
                       table_inset = 0L,
-                      trailing_section_div = NA_character_) {
+                      trailing_section_div = NA_character_,
+                      round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   if ((missing(name) || is.null(name) || is.na(name) || nchar(name) == 0) && !missing(label)) {
     name <- label
   }
-  vals <- lapply(vals, rcell)
+  vals <- lapply(vals, rcell, round_type = round_type)
   rlabels <- unique(unlist(lapply(vals, obj_label)))
   if ((missing(label) || is.null(label) || identical(label, "")) && sum(nzchar(rlabels)) == 1) {
     label <- rlabels[nzchar(rlabels)]
@@ -1422,7 +1429,8 @@ setClass("LabelRow",
     indent_modifier = indent_mod,
     row_footnotes = footnotes,
     table_inset = table_inset,
-    trailing_section_div = trailing_section_div
+    trailing_section_div = trailing_section_div,
+    round_type = round_type
   )
   rw <- set_format_recursive(rw, format, na_str, FALSE)
   rw
@@ -1571,6 +1579,22 @@ uniqify_child_names <- function(kidlst) {
   kidlst
 }
 
+# if input round_type is not defined (length 0) retrieve round_type from kids
+# and check all kids have the same round_type
+.determine_round_type <- function(round_type, kids) {
+  if (length(round_type) == 0) {
+    if ((length(kids) > 0)) {
+      round_type <- unique(vapply(kids, obj_round_type, ""))
+      stopifnot(length(round_type) == 1)
+    } else {
+      # no kids and round_type not set
+      ## continue with default value iec
+      round_type <- valid_round_type[1] # iec
+    }
+  }
+  round_type
+}
+
 
 #' Table constructors and classes
 #'
@@ -1607,7 +1631,9 @@ ElementaryTable <- function(kids = list(),
                             header_section_div = NA_character_,
                             hsep = default_hsep(),
                             trailing_section_div = NA_character_,
-                            inset = 0L) {
+                            inset = 0L,
+                            round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   check_ok_label(label)
   if (is.null(cinfo)) {
     if (length(kids) > 0) {
@@ -1641,7 +1667,8 @@ ElementaryTable <- function(kids = list(),
     provenance_footer = prov_footer,
     horizontal_sep = hsep,
     header_section_div = header_section_div,
-    trailing_section_div = trailing_section_div
+    trailing_section_div = trailing_section_div,
+    round_type = round_type
   )
   tab <- set_format_recursive(tab, format, na_str, FALSE)
   table_inset(tab) <- as.integer(inset)
@@ -1708,9 +1735,18 @@ TableTree <- function(kids = list(),
                       hsep = default_hsep(),
                       header_section_div = NA_character_,
                       trailing_section_div = NA_character_,
-                      inset = 0L) {
+                      inset = 0L,
+                      round_type = NULL) {
   check_ok_label(label)
   cinfo <- .calc_cinfo(cinfo, cont, kids)
+
+  # derive appropriate round_type to use
+  # either from input or retrieved from kids
+  round_type <- .determine_round_type(round_type, kids)
+  # also set this round_type to direct kids
+  # note that (some/most) obj_round_type setters will also set round_type of kids
+  # this will ensure only 1 round_type is present on all slots in the resulting tabletree
+  kids <- lapply(kids, `obj_round_type<-`, value = round_type)
 
   kids <- .enforce_valid_kids(kids, cinfo)
   if (isTRUE(iscontent) && !is.null(cont) && nrow(cont) > 0) {
@@ -1742,7 +1778,8 @@ TableTree <- function(kids = list(),
       hsep = hsep,
       header_section_div = header_section_div,
       trailing_section_div = trailing_section_div,
-      inset = inset
+      inset = inset,
+      round_type = round_type
     )
   } else {
     tab <- new("TableTree",
@@ -1764,7 +1801,8 @@ TableTree <- function(kids = list(),
       page_title_prefix = page_title,
       horizontal_sep = "-",
       header_section_div = header_section_div,
-      trailing_section_div = trailing_section_div
+      trailing_section_div = trailing_section_div,
+      round_type = round_type
     ) ## this is overridden below to get recursiveness
     tab <- set_format_recursive(tab, format, na_str, FALSE)
 
@@ -1878,7 +1916,8 @@ setClass("PreDataTableLayouts",
     top_left = "character",
     header_section_div = "character",
     top_level_section_div = "character",
-    table_inset = "integer"
+    table_inset = "integer",
+    round_type = "character"
   )
 )
 
@@ -1891,7 +1930,9 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
                                 prov_footer = character(),
                                 header_section_div = NA_character_,
                                 top_level_section_div = NA_character_,
-                                table_inset = 0L) {
+                                table_inset = 0L,
+                                round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   new("PreDataTableLayouts",
     row_layout = rlayout,
     col_layout = clayout,
@@ -1902,7 +1943,8 @@ PreDataTableLayouts <- function(rlayout = PreDataRowLayout(),
     provenance_footer = prov_footer,
     header_section_div = header_section_div,
     top_level_section_div = top_level_section_div,
-    table_inset = table_inset
+    table_inset = table_inset,
+    round_type = round_type
   )
 }
 
@@ -1958,6 +2000,7 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 #'
 #' @inheritParams lyt_args
 #' @inheritParams rcell
+#' @inheritParams gen_args
 #' @param val (`ANY`)\cr value in the cell exactly as it should be passed to a formatter or returned when extracted.
 #'
 #' @return An object representing the value within a single cell within a populated table. The underlying structure
@@ -1973,7 +2016,9 @@ RefFootnote <- function(note, index = NA_integer_, symbol = NA_character_) {
 ## indent_mod: indent modifier to be used for parent row
 CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
                       indent_mod = NULL, footnotes = NULL,
-                      align = NULL, format_na_str = NULL, stat_names = NA_character_) {
+                      align = NULL, format_na_str = NULL, stat_names = NA_character_,
+                      round_type = valid_round_type) {
+  round_type <- match.arg(round_type)
   if (is.null(colspan)) {
     colspan <- 1L
   }
@@ -1998,6 +2043,7 @@ CellValue <- function(val, format = NULL, colspan = 1L, label = NULL,
     align = align,
     format_na_str = format_na_str,
     stat_names = stat_names,
+    round_type = round_type,
     class = "CellValue"
   )
   ret

@@ -38,6 +38,15 @@
 \alias{table_inset<-,VTableNodeInfo-method}
 \alias{table_inset<-,PreDataTableLayouts-method}
 \alias{table_inset<-,InstantiatedColumnInfo-method}
+\alias{obj_round_type,ANY-method}
+\alias{obj_round_type,PreDataTableLayouts-method}
+\alias{obj_round_type,VTableTree-method}
+\alias{obj_round_type,TableRow-method}
+\alias{obj_round_type,CellValue-method}
+\alias{obj_round_type<-,VTableTree-method}
+\alias{obj_round_type<-,TableRow-method}
+\alias{obj_round_type<-,LabelRow-method}
+\alias{obj_round_type<-,CellValue-method}
 \alias{nlines,TableRow-method}
 \alias{nlines,LabelRow-method}
 \alias{nlines,RefFootnote-method}
@@ -118,6 +127,24 @@
 \S4method{table_inset}{PreDataTableLayouts}(obj) <- value
 
 \S4method{table_inset}{InstantiatedColumnInfo}(obj) <- value
+
+\S4method{obj_round_type}{ANY}(obj)
+
+\S4method{obj_round_type}{PreDataTableLayouts}(obj)
+
+\S4method{obj_round_type}{VTableTree}(obj)
+
+\S4method{obj_round_type}{TableRow}(obj)
+
+\S4method{obj_round_type}{CellValue}(obj)
+
+\S4method{obj_round_type}{VTableTree}(obj) <- value
+
+\S4method{obj_round_type}{TableRow}(obj) <- value
+
+\S4method{obj_round_type}{LabelRow}(obj) <- value
+
+\S4method{obj_round_type}{CellValue}(obj) <- value
 
 \S4method{nlines}{TableRow}(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)
 
@@ -232,6 +259,9 @@ represents a subsequent choice amongst the children of the previous choice.}
 }
 \description{
 See the \code{formatters} documentation for descriptions of these generics.
+
+These are internal methods that are documented only to satisfy \verb{R CMD check}. End users should pay no
+attention to this documentation, except for the few exported methods.
 }
 \details{
 When \code{visible_only} is \code{TRUE} (the default), methods should return a \code{data.frame} with exactly one

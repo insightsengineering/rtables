@@ -13,15 +13,15 @@
 \alias{get_cell_aligns,LabelRow-method}
 \title{Get formatted cells}
 \usage{
-get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
-\S4method{get_formatted_cells}{TableTree}(obj, shell = FALSE, round_type = c("iec", "sas"))
+\S4method{get_formatted_cells}{TableTree}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
-\S4method{get_formatted_cells}{ElementaryTable}(obj, shell = FALSE, round_type = c("iec", "sas"))
+\S4method{get_formatted_cells}{ElementaryTable}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
-\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE, round_type = c("iec", "sas"))
+\S4method{get_formatted_cells}{TableRow}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
-\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE, round_type = c("iec", "sas"))
+\S4method{get_formatted_cells}{LabelRow}(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 get_cell_aligns(obj)
 
@@ -39,9 +39,8 @@ get_cell_aligns(obj)
 \item{shell}{(\code{flag})\cr whether the formats themselves should be returned instead of the values with formats
 applied. Defaults to \code{FALSE}.}
 
-\item{round_type}{(\code{"iec"} or \code{"sas"})\cr the type of rounding to perform. iec,
-the default, peforms rounding compliant with IEC 60559 (see details), while
-sas performs nearest-value rounding consistent with rounding within SAS.}
+\item{round_type}{(\code{"iec"} (default), \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:format_value]{formatters::format_value()}} for details.}
 }
 \value{
 The formatted print-strings for all (body) cells in \code{obj}.
