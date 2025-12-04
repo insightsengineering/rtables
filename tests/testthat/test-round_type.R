@@ -2,7 +2,15 @@ context("Printing tables with proper round_type")
 
 prep_exp_str <- function(colheader, txtvals, txt, totl = 28, len = 6) {
   colheader <- substr(paste(strrep(" ", len), paste(sprintf("%-7s", colheader), collapse = " ")), 1, totl)
-  txtvals <- paste(substr(paste(txt, paste(sprintf("%-7s", txtvals), collapse = " ")), 1, totl - 1), "\n")
+  n_neg <- sum(lengths(regmatches(txtvals, gregexpr("-", txtvals))))
+  if (n_neg > 1) {
+    stop("need to revise function prep_exp_str")
+  }
+  if (n_neg == 0) {
+    txtvals <- paste(substr(paste(txt, paste(sprintf("%-7s", txtvals), collapse = " ")), 1, totl - 1), "\n")
+  } else {
+    txtvals <- paste0(substr(paste(txt, paste(sprintf("%-7s", txtvals), collapse = " ")), 1, totl - 1 + n_neg), "\n")
+  }
 
   expstr_lns <- c(
     colheader,
@@ -16,13 +24,16 @@ prep_exp_str <- function(colheader, txtvals, txt, totl = 28, len = 6) {
 
 txtvals_iec <- vals_round_type_fmt(vals = vals_round_type, round_type = "iec")
 txtvals_sas <- vals_round_type_fmt(vals = vals_round_type, round_type = "sas")
+txtvals_iec_mod <- vals_round_type_fmt(vals = vals_round_type, round_type = "iec_mod")
 
-# confirm that at least one value is different
+# all values in vals_round_type have different result for round_type iec vs sas
 expect_true(any(txtvals_iec != txtvals_sas))
+# first 2 values have different result for iec_mod vs sas
+expect_true(any(txtvals_iec_mod != txtvals_sas))
+# last (3rd) value has different result for iec_mod vs iec
+expect_true(any(txtvals_iec_mod != txtvals_iec))
 
 test_that("round_type can be set on basic_table", {
-  skip_if_not_installed("dplyr")
-
   tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
   expect_identical(
@@ -47,9 +58,11 @@ test_that("round_type can be set on basic_table", {
   colheader <- c("ARM A", "ARM B", "ARM C")
   names(txtvals_iec) <- colheader
   names(txtvals_sas) <- colheader
+  names(txtvals_iec_mod) <- colheader
 
   exp_str_iec <- prep_exp_str(colheader, txtvals_iec, "Mean  ")
   exp_str_sas <- prep_exp_str(colheader, txtvals_sas, "Mean  ")
+  exp_str_iec_mod <- prep_exp_str(colheader, txtvals_iec_mod, "Mean  ")
 
   expect_identical(
     toString(tbl_iec),
@@ -60,13 +73,19 @@ test_that("round_type can be set on basic_table", {
     toString(tbl_sas),
     exp_str_sas
   )
+
+  expect_identical(
+    toString(tbl_iec, round_type = "iec_mod"),
+    exp_str_iec_mod
+  )
+
+  expect_true(
+    exp_str_iec != exp_str_iec_mod
+  )
 })
 
 
-test_that("toString method works correctly with user defined round_type", {
-  skip_if_not_installed("dplyr")
-  require(dplyr, quietly = TRUE)
-
+test_that("toString method works correctly with round_type explicitely passed as argument", {
   tbl_sas <- tt_to_test_round_type(round_type = "sas")
   tbl_iec <- tt_to_test_round_type(round_type_tbl = "iec")
 
@@ -175,6 +194,45 @@ test_that("toString method works correctly with user defined round_type", {
   )
 })
 
+test_that("test for export_as_txt with argument round_type", {
+  tbl_sas <- tt_to_test_round_type(round_type = "sas")
+
+  expect_identical(
+    toString(tbl_sas),
+    export_as_txt(tbl_sas,
+      file = NULL,
+      paginate = FALSE,
+      round_type = "sas"
+    )
+  )
+
+  expect_identical(
+    toString(tbl_sas, round_type = "iec"),
+    export_as_txt(tbl_sas,
+      file = NULL,
+      paginate = FALSE,
+      round_type = "iec"
+    )
+  )
+
+  expect_true(
+    toString(tbl_sas, round_type = "iec") != toString(tbl_sas)
+  )
+
+  expect_identical(
+    toString(tbl_sas, round_type = "iec_mod"),
+    export_as_txt(tbl_sas,
+      file = NULL,
+      paginate = FALSE,
+      round_type = "iec_mod"
+    )
+  )
+
+  expect_true(
+    toString(tbl_sas, round_type = "iec_mod") != toString(tbl_sas, round_type = "iec")
+  )
+})
+
 test_that("round_type still available on subtable", {
   tbl_iec <- tt_to_test_round_type2(round_type = "iec")
   tbl_sas <- tt_to_test_round_type2(round_type = "sas")
@@ -194,9 +252,6 @@ test_that("round_type still available on subtable", {
 
 
 test_that("test for get_formatted_cells", {
-  skip_if_not_installed("dplyr")
-  require(dplyr, quietly = TRUE)
-
   tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
   form_cells <- get_formatted_cells(tbl_sas)
@@ -215,16 +270,13 @@ test_that("test for get_formatted_cells", {
 })
 
 test_that("test for matrix_form", {
-  skip_if_not_installed("dplyr")
-  require(dplyr, quietly = TRUE)
-
   tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
   # when round_type is not specified, the round_type attribute from the table will be used
   mpf <- matrix_form(tbl_sas)
 
   expect_identical(
-    mpf$round_type,
+    obj_round_type(mpf),
     "sas"
   )
 
@@ -236,7 +288,7 @@ test_that("test for matrix_form", {
   # when round_type is specified, this round_type will be used
   mpf_iec <- matrix_form(tbl_sas, round_type = "iec")
   expect_identical(
-    mpf_iec$round_type,
+    obj_round_type(mpf_iec),
     "iec"
   )
 
@@ -247,9 +299,6 @@ test_that("test for matrix_form", {
 })
 
 test_that("test for round_type and tt_at_path", {
-  skip_if_not_installed("dplyr")
-  require(dplyr, quietly = TRUE)
-
   tbl_sas <- tt_to_test_round_type2(round_type = "sas")
 
   expect_identical(
@@ -265,22 +314,24 @@ test_that("test for round_type and tt_at_path", {
 })
 
 test_that("test for obj_round_type setter", {
-  skip_if_not_installed("dplyr")
-  require(dplyr, quietly = TRUE)
-
   tbl <- tt_to_export()
 
-  kids <- tree_children(tbl)
-  round_type_kids <- vapply(kids, obj_round_type, "")
+  get_round_type_kids <- function(tbl, lvl = c("0", "1")) {
+    lvl <- match.arg(lvl)
+    kids <- tree_children(tbl)
+    if (lvl == "1") {
+      kids <- tree_children(kids[[1]])
+    }
+    round_type_kids <- unname(vapply(kids, obj_round_type, ""))
+  }
+
   expect_identical(
-    unname(round_type_kids),
+    get_round_type_kids(tbl),
     rep("iec", 3)
   )
 
-  gkids <- tree_children(kids[[1]])
-  round_type_gkids <- vapply(gkids, obj_round_type, "")
   expect_identical(
-    unname(round_type_gkids),
+    get_round_type_kids(tbl, lvl = "1"),
     rep("iec", 1)
   )
 
@@ -293,17 +344,13 @@ test_that("test for obj_round_type setter", {
     "sas"
   )
 
-  kids <- tree_children(tbl_sas)
-  round_type_kids <- vapply(kids, obj_round_type, "")
   expect_identical(
-    unname(round_type_kids),
+    get_round_type_kids(tbl_sas),
     rep("sas", 3)
   )
 
-  gkids <- tree_children(kids[[1]])
-  round_type_gkids <- vapply(gkids, obj_round_type, "")
   expect_identical(
-    unname(round_type_gkids),
+    get_round_type_kids(tbl_sas, lvl = "1"),
     rep("sas", 1)
   )
 })

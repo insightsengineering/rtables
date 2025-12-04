@@ -234,7 +234,9 @@ check_all_patterns <- function(elements, letters, len) {
   all(res)
 }
 
-vals_round_type <- c(1.865, 2.985, 3.457)
+# all elements result in different rounding sas vs iec with format xx.xx
+# third element only results in different rounding iec_mod vs iec with format xx.xx
+vals_round_type <- c(1.865, 2.985, -0.001)
 
 vals_round_type_fmt <- function(vals = vals_round_type, round_type = "sas") {
   mapply(format_value, x = vals, format = "xx.xx", round_type = round_type)
