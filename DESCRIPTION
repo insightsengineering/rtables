@@ -33,7 +33,7 @@ URL: https://github.com/insightsengineering/rtables,
     https://insightsengineering.github.io/rtables/
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
-    formatters (>= 0.5.11),
+    formatters (>= 0.5.12),
     magrittr (>= 2.0.3),
     methods,
     R (>= 4.1)
@@ -60,8 +60,6 @@ Suggests:
 VignetteBuilder:
     knitr,
     rmarkdown
-Remotes:
-    insightsengineering/formatters@1040_rtables_round_type
 Config/Needs/verdepcheck: insightsengineering/formatters,
     tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
