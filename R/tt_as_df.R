@@ -207,7 +207,7 @@ as_result_df <- function(tt, spec = NULL,
       for (crow_i in where_to) {
         # For each Content row, extract the row split that is used as analysis variable
         tmp_tbl <- ret[crow_i, , drop = FALSE]
-        na_labels <- lapply(tmp_tbl, is.na) %>% unlist(use.names = FALSE)
+        na_labels <- lapply(tmp_tbl, is.na) |> unlist(use.names = FALSE)
         group_to_take <- colnames(tmp_tbl[, !na_labels])
         group_to_take <- group_to_take[grep("^group[0-9]+$", group_to_take)]
 
@@ -264,7 +264,7 @@ as_result_df <- function(tt, spec = NULL,
         } else {
           0 # Return 0 if no "group" is found
         }
-      }) %>%
+      }) |>
         max()
 
       # Indexes of real columns (visible in the output, but no row names)

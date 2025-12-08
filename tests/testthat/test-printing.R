@@ -1,8 +1,8 @@
 context("Printing tables")
 
 test_that("toString method works correclty", {
-  tbl <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("Species") %>%
+  tbl <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("Species") |>
     analyze(c("Sepal.Length", "Petal.Width"), function(x) {
       in_rows(
         mean_sd = c(mean(x), sd(x)),
@@ -11,7 +11,7 @@ test_that("toString method works correclty", {
         .formats = c("xx.xx (xx.xx)", "xx.xxx", "xx.x - xx.x"),
         .labels = c("Mean (sd)", "Variance", "Min - Max")
       )
-    }) %>%
+    }) |>
     build_table(iris, hsep = "=")
 
   capture.output(print(tbl))
@@ -39,9 +39,9 @@ test_that("toString method works correclty", {
 })
 
 test_that("labels correctly used for columns rather than names", {
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX", "Gender", labels_var = "gend_label") |>
     analyze("AGE")
 
   tbl <- build_table(lyt, rawdat)
@@ -79,12 +79,12 @@ test_that("labels correctly used for columns rather than names", {
   )
 
   ## multivarsplit varlabels work correctly
-  tbl2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by_multivar(c("VALUE", "PCTDIFF"), varlabels = c("Measurement", "Pct Diff")) %>%
-    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) %>%
-    summarize_row_groups() %>%
-    analyze_colvars(afun = mean, format = "xx.xx") %>%
+  tbl2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by_multivar(c("VALUE", "PCTDIFF"), varlabels = c("Measurement", "Pct Diff")) |>
+    split_rows_by("RACE", split_label = "ethnicity", split_fun = drop_split_levels) |>
+    summarize_row_groups() |>
+    analyze_colvars(afun = mean, format = "xx.xx") |>
     build_table(rawdat2)
 
   matform2 <- matrix_form(tbl2)
@@ -102,10 +102,10 @@ test_that("labels correctly used for columns rather than names", {
 
   ## same var different labels in split_by_multivar
   vlabs <- c("Age", "SecondAge", "Gender", "Age Redux")
-  lyt3 <- basic_table() %>%
+  lyt3 <- basic_table() |>
     split_cols_by_multivar(c("AGE", "AGE", "SEX", "AGE"),
       varlabels = vlabs
-    ) %>%
+    ) |>
     analyze_colvars(list(mean, median, function(x, ...) max(table(x)), sd))
 
   tbl3 <- build_table(lyt3, rawdat)
@@ -122,9 +122,9 @@ test_that("nested identical labels work ok", {
     x = factor(c("<Missing>"))
   )
 
-  t2 <- basic_table() %>%
-    split_rows_by("h2") %>%
-    analyze("x") %>%
+  t2 <- basic_table() |>
+    split_rows_by("h2") |>
+    analyze("x") |>
     build_table(df)
   mat <- matrix_form(t2)
   expect_identical(mat$strings[, 1], c("", "<Missing>", "<Missing>"))
@@ -137,8 +137,8 @@ test_that("newline in column names and possibly cell values work", {
     median = 10
   )
 
-  lyt <- basic_table() %>%
-    split_cols_by_multivar(vars = c("n", "median"), varlabels = c("N", "Median\n(Days)")) %>%
+  lyt <- basic_table() |>
+    split_cols_by_multivar(vars = c("n", "median"), varlabels = c("N", "Median\n(Days)")) |>
     analyze_colvars(afun = mean)
   tbl <- build_table(lyt, df)
 
@@ -158,15 +158,15 @@ test_that("newline in column names and possibly cell values work", {
   rawdat2 <- rawdat
   rawdat2$arm_label <- ifelse(rawdat2$ARM == "ARM1", "Arm\n 1 ", "Arm\n 2 ")
 
-  lyt2 <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", labels_var = "arm_label") %>%
-    split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") %>%
+  lyt2 <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", labels_var = "arm_label") |>
+    split_cols_by("SEX", "Gender", labels_var = "gend_label") |>
+    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "topleft") |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       label_pos = "topleft"
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -190,9 +190,9 @@ test_that("newline in column names and possibly cell values work", {
 
   ## cell has \n
 
-  lyt3 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
+  lyt3 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
     analyze("AGE", afun = function(x) {
       mn <- round(mean(x), 2)
       if (!is.nan(mn) && mn > mean(DM$AGE)) {
@@ -230,7 +230,7 @@ test_that("newline in column names and possibly cell values work", {
 
 
 test_that("alignment works", {
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     analyze("AGE", function(x) {
       in_rows(
         left = rcell("l", align = "left"),
@@ -258,7 +258,7 @@ test_that("alignment works", {
     )
   )
 
-  lyt2 <- basic_table() %>%
+  lyt2 <- basic_table() |>
     analyze("AGE", function(x) {
       in_rows(
         .list = list(left = "l", right = "r", center = "c"),
@@ -278,8 +278,8 @@ test_that("Decimal alignment works", {
     stringsAsFactors = FALSE
   )
 
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
     analyze("AETOXGR", afun = function(x, .spl_context, .var) {
       form_v <- list_valid_format_labels()[[1]]
       num_v <- as.list(rep(11.11111, length(form_v)))
@@ -386,9 +386,9 @@ test_that("Various Printing things work", {
 
 
 test_that("section_div works throughout", {
-  lyt <- basic_table() %>%
-    split_rows_by("ARM", section_div = "-") %>%
-    split_rows_by("STRATA1", section_div = " ") %>%
+  lyt <- basic_table() |>
+    split_rows_by("ARM", section_div = "-") |>
+    split_rows_by("STRATA1", section_div = " ") |>
     analyze("AGE")
 
   tbl <- build_table(lyt, DM)
@@ -398,9 +398,9 @@ test_that("section_div works throughout", {
   expect_identical(mylns[12], "------------------------")
   expect_identical(length(mylns), 31L) ## sect div not printed for last one
 
-  lyt2 <- basic_table() %>%
-    split_rows_by("ARM", section_div = "-") %>%
-    split_rows_by("STRATA1") %>%
+  lyt2 <- basic_table() |>
+    split_rows_by("ARM", section_div = "-") |>
+    split_rows_by("STRATA1") |>
     analyze("AGE")
 
   tbl2 <- build_table(lyt2, DM)
@@ -410,8 +410,8 @@ test_that("section_div works throughout", {
 
 test_that("section_div works when analyzing multiple variables", {
   # Regression test for #835
-  lyt <- basic_table() %>%
-    split_rows_by("Species", section_div = "|") %>%
+  lyt <- basic_table() |>
+    split_rows_by("Species", section_div = "|") |>
     analyze(c("Petal.Width", "Petal.Length"),
       afun = function(x) list("m" = mean(x), "sd" = sd(x)), section_div = "-"
     )
@@ -425,8 +425,8 @@ test_that("section_div works when analyzing multiple variables", {
 
 ## section_div passed to analyze works correctly in all cases #863
 test_that("analyze section_div works correctly", {
-  lyt1 <- basic_table() %>%
-    split_rows_by("STRATA1") %>%
+  lyt1 <- basic_table() |>
+    split_rows_by("STRATA1") |>
     analyze("SEX", section_div = " ")
   tbl1 <- build_table(lyt1, ex_adsl)
   lns <- capture.output(print(tbl1))
@@ -435,31 +435,31 @@ test_that("analyze section_div works correctly", {
   ## analyze section_divs do NOT override split section_divs
   ## this is so users can specify a divider between multi-analyze blocks
   ## that is different than one they want between split sections
-  lyt2 <- basic_table() %>%
-    split_rows_by("STRATA1", section_div = "*") %>%
+  lyt2 <- basic_table() |>
+    split_rows_by("STRATA1", section_div = "*") |>
     analyze("SEX", section_div = " ")
   tbl2 <- build_table(lyt2, ex_adsl)
   lns2 <- capture.output(print(tbl2))
   expect_equal(grep("^[*]*$", lns2), c(8, 14))
 
-  lyt3 <- basic_table() %>%
-    analyze("SEX", section_div = " ") %>%
+  lyt3 <- basic_table() |>
+    analyze("SEX", section_div = " ") |>
     analyze("STRATA1")
   tbl3 <- build_table(lyt3, ex_adsl)
   lns3 <- capture.output(print(tbl3))
   expect_equal(grep("^[ ]*$", lns3), 8)
 
-  lyt4 <- basic_table() %>%
-    split_rows_by("STRATA1", section_div = "*") %>%
-    analyze("SEX", section_div = " ") %>%
+  lyt4 <- basic_table() |>
+    split_rows_by("STRATA1", section_div = "*") |>
+    analyze("SEX", section_div = " ") |>
     analyze("STRATA1")
   tbl4 <- build_table(lyt4, ex_adsl)
   lns4 <- capture.output(print(tbl4))
   expect_equal(grep("^[[:space:]]*$", lns4), c(9, 21, 33))
   expect_equal(grep("^[*]*$", lns4), c(14, 26))
 
-  lyt5 <- basic_table() %>%
-    split_rows_by("STRATA1", section_div = "*") %>%
+  lyt5 <- basic_table() |>
+    split_rows_by("STRATA1", section_div = "*") |>
     analyze(c("SEX", "STRATA1"), section_div = " ")
   tbl5 <- build_table(lyt5, ex_adsl)
   lns5 <- capture.output(print(tbl5))
@@ -476,8 +476,8 @@ test_that("Inset works for table, ref_footnotes, and main footer", {
     prov_footer = paste0("Very ", paste0(rep("very", 15), collapse = " "), " prov footer"),
     show_colcounts = TRUE,
     inset = 2
-  ) %>%
-    split_rows_by("SEX", page_by = TRUE) %>%
+  ) |>
+    split_rows_by("SEX", page_by = TRUE) |>
     analyze("AGE")
 
   # Building the table and trimming NAs
@@ -576,8 +576,8 @@ test_that("Cell and column label wrapping works in printing", {
   expect_identical(splitted_res2[8:10], expected)
 
   # Test if it works with numeric values
-  tt_simple <- basic_table() %>%
-    analyze("AGE", format = "xx.xxxx") %>%
+  tt_simple <- basic_table() |>
+    analyze("AGE", format = "xx.xxxx") |>
     build_table(ex_adsl)
   result <- toString(matrix_form(tt_simple, TRUE),
     widths = c(2, 3),
@@ -598,8 +598,8 @@ test_that("row label indentation is kept even if there are newline characters", 
   skip_if_not_installed("dplyr")
   require(dplyr, quietly = TRUE)
 
-  ANL <- DM %>%
-    mutate(value = rnorm(n()), pctdiff = runif(n())) %>%
+  ANL <- DM |>
+    mutate(value = rnorm(n()), pctdiff = runif(n())) |>
     filter(ARM == "A: Drug X")
   ANL$ARM <- factor(ANL$ARM)
 
@@ -610,20 +610,20 @@ test_that("row label indentation is kept even if there are newline characters", 
     function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
   )
 
-  tbl_a <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "def")) %>%
+  tbl_a <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "def")) |>
     split_rows_by("RACE",
       split_label = "Ethnicity",
       split_fun = drop_split_levels,
       label_pos = "topleft"
-    ) %>%
-    summarize_row_groups(indent_mod = 2) %>%
+    ) |>
+    summarize_row_groups(indent_mod = 2) |>
     split_rows_by("SEX",
       split_label = "Sex", label_pos = "topleft",
       split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))
-    ) %>%
-    analyze_colvars(afun = colfuns, indent_mod = 4) %>%
+    ) |>
+    analyze_colvars(afun = colfuns, indent_mod = 4) |>
     build_table(ANL)
 
   # Decorating
@@ -665,19 +665,19 @@ test_that("row label indentation is kept even if there are newline characters", 
   ind_tbl_v2 <- strsplit(toString(tbl_a, indent_size = 3), "\n")[[1]]
   expect_equal(ind_tbl_v1, ind_tbl_v2)
 
-  tbl_b <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) %>%
+  tbl_b <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by_multivar(c("value", "pctdiff"), varlabels = c("abc", "de\nf")) |>
     split_rows_by("RACE",
       split_label = "Ethnicity",
       label_pos = "topleft"
-    ) %>%
-    summarize_row_groups(indent_mod = 2) %>%
+    ) |>
+    summarize_row_groups(indent_mod = 2) |>
     split_rows_by("SEX",
       split_label = "Sex", label_pos = "topleft",
       split_fun = drop_and_remove_levels(c("UNDIFFERENTIATED", "U"))
-    ) %>%
-    analyze_colvars(afun = colfuns, indent_mod = 4) %>%
+    ) |>
+    analyze_colvars(afun = colfuns, indent_mod = 4) |>
     build_table(ANL)
 
   # Decorating
@@ -773,14 +773,14 @@ test_that("Separators and wrapping work together with getter and setters", {
   )
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by("cat", section_div = "~")
 
-  lyt1 <- lyt %>%
+  lyt1 <- lyt |>
     analyze("value", afun = fast_afun, section_div = " ")
 
-  lyt2 <- lyt %>%
-    summarize_row_groups() %>%
+  lyt2 <- lyt |>
+    summarize_row_groups() |>
     analyze("value", afun = fast_afun, section_div = " ")
 
   tbl1 <- build_table(lyt1, df)
@@ -821,8 +821,8 @@ test_that("Separators and wrapping work together with getter and setters", {
 
 test_that("horizontal separator is propagated from table to print and export", {
   # GitHub error #778
-  lyt <- basic_table() %>%
-    split_cols_by("Species") %>%
+  lyt <- basic_table() |>
+    split_cols_by("Species") |>
     analyze("Sepal.Length", afun = function(x) {
       list(
         "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -851,10 +851,10 @@ test_that("showing higher-level ncols works", {
     )
   )
 
-  lyt <- basic_table() %>%
-    split_cols_by("ARM", show_colcounts = TRUE) %>%
-    split_cols_by("SEX2", show_colcounts = TRUE) %>%
-    split_cols_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM", show_colcounts = TRUE) |>
+    split_cols_by("SEX2", show_colcounts = TRUE) |>
+    split_cols_by("STRATA1") |>
     analyze("AGE")
 
   tbl <- build_table(lyt, mydat)
@@ -885,10 +885,10 @@ test_that("showing higher-level ncols works", {
 
   ## does the old accessor still work ok
 
-  lyt2 <- basic_table() %>%
-    split_cols_by("ARM", show_colcounts = TRUE) %>%
-    split_cols_by("SEX2", show_colcounts = TRUE) %>%
-    split_cols_by("STRATA1", show_colcounts = TRUE) %>%
+  lyt2 <- basic_table() |>
+    split_cols_by("ARM", show_colcounts = TRUE) |>
+    split_cols_by("SEX2", show_colcounts = TRUE) |>
+    split_cols_by("STRATA1", show_colcounts = TRUE) |>
     analyze("AGE")
 
   tbl2 <- build_table(lyt2, mydat)
@@ -930,11 +930,11 @@ test_that("showing higher-level ncols works", {
     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()
   )
 
-  lyt5 <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) %>%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
-    split_cols_by("rr_header", nested = FALSE) %>%
-    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "C: Combination"))) %>%
+  lyt5 <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) |>
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
+    split_cols_by("rr_header", nested = FALSE) |>
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "C: Combination"))) |>
     analyze("AGE")
 
   tbl5 <- build_table(lyt5, adsl)
@@ -955,21 +955,21 @@ test_that("showing higher-level ncols works", {
     mf_strings(mpf5b)[3, 7:8],
     c("A: Drug X", "C: Combination")
   )
-  lyt6 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-    split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) %>%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf), show_colcounts = TRUE, colcount_format = "(N=xx)") %>%
-    split_cols_by("rr_header", nested = FALSE) %>%
-    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "C: Combination"))) %>%
+  lyt6 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") |>
+    split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) |>
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf), show_colcounts = TRUE, colcount_format = "(N=xx)") |>
+    split_cols_by("rr_header", nested = FALSE) |>
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "C: Combination"))) |>
     analyze("AGE")
 
   tbl6 <- build_table(lyt6, adsl)
 
-  lyt7 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-    split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) %>%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf), show_colcounts = TRUE, colcount_format = "(N=xx)") %>%
-    split_cols_by("STRATA1") %>%
-    split_cols_by("rr_header", nested = FALSE) %>%
-    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "C: Combination"))) %>%
+  lyt7 <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") |>
+    split_cols_by("active_trt", split_fun = trim_levels_in_group("ARM")) |>
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf), show_colcounts = TRUE, colcount_format = "(N=xx)") |>
+    split_cols_by("STRATA1") |>
+    split_cols_by("rr_header", nested = FALSE) |>
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "C: Combination"))) |>
     analyze("AGE")
 
   tbl7 <- build_table(lyt7, adsl)

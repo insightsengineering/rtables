@@ -502,7 +502,7 @@ get_formatted_fnotes <- function(tt) {
   }
   chunks <- .pad_tops(chunks)
   lapply(
-    seq_len(length(chunks[[1]])),
+    seq_along(chunks[[1]]),
     function(i) {
       DataRow(unlist(lapply(chunks, `[[`, i), recursive = FALSE))
     }
