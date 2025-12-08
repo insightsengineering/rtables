@@ -12,7 +12,9 @@ analyze(
   table_names = vars,
   parent_name = NULL,
   format = NULL,
+  formats_var = NULL,
   na_str = NA_character_,
+  na_strs_var = NULL,
   nested = TRUE,
   inclNAs = FALSE,
   extra_args = list(),
@@ -41,6 +43,8 @@ analyzing a single variable.}
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
 functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+
+\item{formats_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default formats to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun. Cannot be used simultaneously with \code{format}.}
 
 \item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 

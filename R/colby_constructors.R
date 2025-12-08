@@ -1124,7 +1124,9 @@ analyze <- function(lyt,
                     table_names = vars,
                     parent_name = NULL,
                     format = NULL,
+                    formats_var = NULL,
                     na_str = NA_character_,
+                    na_strs_var = NULL,
                     nested = TRUE,
                     ## can't name this na_rm symbol conflict with possible afuns!!
                     inclNAs = FALSE,
@@ -1134,6 +1136,15 @@ analyze <- function(lyt,
                     section_div = NA_character_) {
   show_labels <- match.arg(show_labels)
   subafun <- substitute(afun)
+  if (!is.null(format) && !is.null(formats_var)) {
+    stop("Cannot use 'format' and 'formats_var' arguments at ",
+         "the same time. Please choose one method for specifying ",
+         "default formatting.")
+  } else if (is.null(formats_var) && !is.null(na_strs_var)) {
+    stop("Cannot use 'na_strs_var' (got ",
+         na_strs_var,
+         ") without using 'formats_var'.")
+  }
   # R treats a single NA value as a logical atomic. The below
   # maps all the NAs in `var_labels` to NA_character_ required by `Split`
   # and avoids the error when `var_labels` is just c(NA).
@@ -1170,7 +1181,9 @@ analyze <- function(lyt,
     child_names = table_names,
     child_labels = show_labels,
     section_div = section_div,
-    split_name = parent_name
+    split_name = parent_name,
+    formats_var = formats_var,
+    na_strs_var = na_strs_var
   )
 
   if (nested && (is(last_rowsplit(lyt), "VAnalyzeSplit") || is(last_rowsplit(lyt), "AnalyzeMultiVars"))) {

@@ -1766,3 +1766,129 @@ test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
   tbl3b <- build_and_check_row_paths(lyt3b, FALSE)
   expect_identical(tbl3, tbl3b)
 })
+
+
+test_that("formats_var works in analyze()", {
+  adlb <- ex_adlb
+  alt_fmts <-   list(list(median = "xx.x",
+                          "mean (sd)" = "xx.xx (xx.xxx)",
+                          missing_val = "xx"))
+
+  crp_fmts <- list(list(median = "xx.",
+                        "mean (sd)" = "xx.x (xx.xx)",
+                        missing_val = "xx"))
+
+  iga_fmts <-  list(list(median = "xx.xx",
+                         "mean (sd)" = "xx. (xx.x)",
+                         missing_val = "xx"))
+  
+
+  adlb$formats <- alt_fmts
+  adlb$formats[adlb$PARAMCD == "CRP"] <- crp_fmts
+  
+  adlb$formats[adlb$PARAMCD == "IGA"] <- iga_fmts
+
+  adlb$na_strs <- list(list())
+  adlb$na_strs[adlb$PARAMCD == "CRP"] <- list(list(missing_val = "n/a"))
+  adlb$na_strs[adlb$PARAMCD == "IGA"] <- list(list(missing_val = "-"))
+                                              
+  fmts_afun <- function(x, .formats = NULL) {
+      in_rows(n = sum(!is.na(x)),
+              median = median(x, na.rm = TRUE),
+              "mean (sd)" = c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)),
+              "missing_val" = NA,
+              .formats = .formats)
+  }
+
+  ## works without also specifying na_strs_var
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("AVAL", fmts_afun, formats_var = "formats")
+
+  tbl <- build_table(lyt, adlb)
+
+  mpf <- matrix_form(tbl)
+
+  mpf_fmts_real <- mf_formats(mpf)[-1, -1] # no row labs, no col labs
+
+  mpf_fmts_exp <- matrix(c("-", "xx", unlist(alt_fmts),
+                           "-", "xx", unlist(crp_fmts),
+                           "-", "xx", unlist(iga_fmts)),
+                         nrow = nrow(mpf_fmts_real),
+                         ncol = ncol(mpf_fmts_real))
+
+  expect_identical(mpf_fmts_real,
+                   mpf_fmts_exp)
+
+  fmtcells <- get_formatted_cells(tbl)
+
+  expect_equal(fmtcells[c(3:4, 8:9, 13:14),1],
+               c("49.6", "49.91 (8.098)",
+                 "50", "50.2 (8.61)",
+                 "49.69", "50 (7.8)"))
+                   
+
+  ## works when also specifying na_strs_var
+  lyt2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("AVAL", fmts_afun, formats_var = "formats", na_strs_var = "na_strs")
+
+  tbl2 <- build_table(lyt2, adlb)
+
+  ## precendence and interaction with .formats use in in_rows
+
+  lyt3 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("AVAL", fmts_afun, formats_var = "formats",
+            extra_args = list(
+              .formats = list(
+                n = "xx",
+                median = "xx.xxx",
+                "mean (sd)" = "xx.x - xx.x",
+                missing_val = "xx"
+              )
+            ))
+
+  tbl3 <- build_table(lyt3, adlb)
+
+  lyt3b <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("AVAL", fmts_afun,
+            extra_args = list(
+              .formats = list(
+                n = "xx",
+                median = "xx.xxx",
+                "mean (sd)" = "xx.x - xx.x",
+                missing_val = "xx"
+              )
+            ))
+
+  tbl3b <- build_table(lyt3, adlb)
+
+  expect_identical(tbl3, tbl3b)
+
+  lyt3c <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("AVAL", fmts_afun, formats_var = "formats",
+            extra_args = list(
+              .formats = list(
+                n = "default",
+                median = "default",
+                "mean (sd)" = "default",
+                missing_val = "default"
+              )
+            ))
+
+  tbl3c <- build_table(lyt3c, adlb)
+
+  expect_identical(get_formatted_cells(tbl), get_formatted_cells(tbl3c))
+
+
+  
+
+})

@@ -493,6 +493,18 @@ setMethod("spl_label_var", "VarLevelSplit", function(obj) obj@value_label_var)
 #' @rdname int_methods
 setMethod("spl_label_var", "Split", function(obj) NULL)
 
+#' @rdname int_methods
+setGeneric("spl_formats_var", function(obj) standardGeneric("spl_formats_var"))
+
+#' @rdname int_methods
+setMethod("spl_formats_var", "VAnalyzeSplit", function(obj) obj@row_formats_var)
+
+#' @rdname int_methods
+setGeneric("spl_na_strs_var", function(obj) standardGeneric("spl_na_strs_var"))
+
+#' @rdname int_methods
+setMethod("spl_na_strs_var", "VAnalyzeSplit", function(obj) obj@row_na_strs_var)
+
 ### name related things
 # #' @inherit formatters::formatter_methods
 #' Methods for generics in the `formatters` package
@@ -1203,6 +1215,10 @@ setGeneric("set_format_recursive", function(obj, format, na_str, override = FALS
   standardGeneric("set_format_recursive")
 })
 
+fmt_can_inherit <- function(obj, fmt = obj_format(obj)) {
+  is.null(fmt) || identical(fmt, "default")
+}
+
 #' @param override (`flag`)\cr whether to override attribute.
 #'
 #' @rdname int_methods
@@ -1213,7 +1229,7 @@ setMethod(
       return(obj)
     }
 
-    if ((is.null(obj_format(obj)) && !is.null(format)) || override) {
+    if ((fmt_can_inherit(obj) && !is.null(format)) || override) {
       obj_format(obj) <- format
     }
     if ((.no_na_str(obj) && !.no_na_str(na_str)) || override) {
@@ -1221,7 +1237,7 @@ setMethod(
     }
     lcells <- row_cells(obj)
     lvals <- lapply(lcells, function(x) {
-      if (!is.null(x) && (override || is.null(obj_format(x)))) {
+      if (!is.null(x) && (override || fmt_can_inherit(x))) {
         obj_format(x) <- obj_format(obj)
       }
       if (!is.null(x) && (override || .no_na_str(x))) {
@@ -1248,7 +1264,7 @@ setMethod(
       return(obj)
     }
 
-    if ((is.null(obj_format(obj)) && !is.null(format)) || override) {
+    if ((fmt_can_inherit(obj) && !is.null(format)) || override) {
       obj_format(obj) <- format
     }
     if ((.no_na_str(obj) && !.no_na_str(na_str)) || override) {

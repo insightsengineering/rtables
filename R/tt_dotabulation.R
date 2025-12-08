@@ -550,6 +550,36 @@ gen_rowvalues <- function(dfpart,
   ctab
 }
 
+
+.apply_default_formats <- function(kidlst, fmtlst, nastrlst = character()) {
+
+  if (is.null(names(kidlst))) {
+    names(kidlst) <- vapply(kidlst, obj_name, "")
+  }
+
+  missing_nastrs <- setdiff(names(fmtlst), names(nastrlst))
+  if (length(missing_nastrs) > 0) {
+    nastrlst[missing_nastrs] <- NA_character_
+  }
+
+  ## pmatch checks for exact matches first then partial matches
+  fmt_match <- pmatch(names(kidlst), names(fmtlst))
+  toset <- which(!is.na(fmt_match))
+
+  fmts <- fmtlst[fmt_match[toset]]
+  na_strs <- nastrlst[names(fmts)]  
+    
+  kidlst[toset] <- mapply(function(kid, fmt, na_str) {
+    if (fmt_can_inherit(kid)) {
+      kid <- set_format_recursive(kid, fmt, na_str, override = FALSE)
+    }
+    kid
+  }, kid = kidlst[toset], fmt = fmts, na_str = na_strs, SIMPLIFY = FALSE)
+    
+  kidlst
+}
+
+
 .make_analyzed_tab <- function(df,
                                alt_df,
                                alt_df_full,
@@ -595,6 +625,20 @@ gen_rowvalues <- function(dfpart,
       call. = FALSE
     )
   }
+
+  if (!is.null(spl_formats_var(spl))) {
+    if (is.null(spl_na_strs_var(spl))) {
+      na_strs <- character() ## case handled in .apply_default_formats
+    } else {
+      na_strs <- df[[spl_na_strs_var(spl)]][[1]]
+    }
+    kids <- .apply_default_formats(
+      kids,
+      df[[spl_formats_var(spl)]][[1]],
+      na_strs
+    )
+  }
+  
   lab <- obj_label(spl)
   ret <- TableTree(
     kids = kids,

@@ -633,7 +633,9 @@ setClass("VAnalyzeSplit",
   representation(
     default_rowlabel = "character",
     include_NAs = "logical",
-    var_label_position = "character"
+    var_label_position = "character",
+    row_formats_var = "characterOrNULL",
+    row_na_strs_var = "characterOrNULL"
   )
 )
 
@@ -672,7 +674,9 @@ AnalyzeVarSplit <- function(var,
                             indent_mod = 0L,
                             label_pos = "default",
                             cvar = "",
-                            section_div = NA_character_) {
+                            section_div = NA_character_,
+                            formats_var = NULL,
+                            na_strs_var = NULL) {
   check_ok_label(split_label)
   label_pos <- match.arg(label_pos, c("default", label_pos_values))
   if (!any(nzchar(defrowlab))) {
@@ -701,7 +705,9 @@ AnalyzeVarSplit <- function(var,
     page_title_prefix = NA_character_,
     child_section_div = section_div,
     child_show_colcounts = FALSE,
-    child_colcount_format = NA_character_
+    child_colcount_format = NA_character_,
+    row_formats_var = formats_var,
+    row_na_strs_var = na_strs_var
   ) ## no content_extra_args
 }
 
@@ -823,7 +829,9 @@ AnalyzeMultiVars <- function(var,
                              child_labels = c("default", "topleft", "visible", "hidden"),
                              child_names = var,
                              cvar = "",
-                             section_div = NA_character_) {
+                             section_div = NA_character_,
+                             formats_var = NULL,
+                             na_strs_var = NULL) {
   ## NB we used to resolve to strict TRUE/FALSE for label visibillity
   ## in this function but that was too greedy for repeated
   ## analyze calls, so that now occurs in the tabulation machinery
@@ -858,7 +866,9 @@ AnalyzeMultiVars <- function(var,
         label_pos = show_kidlabs,
         split_format = split_format,
         split_na_str = split_na_str,
-        section_div = section_div_if_multivar
+        section_div = section_div_if_multivar,
+        formats_var = formats_var,
+        na_strs_var = na_strs_var
       ), ## rvis),
       SIMPLIFY = FALSE
     )

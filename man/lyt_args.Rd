@@ -187,6 +187,8 @@ this split. Defaults to \code{"(N=xx)"}.}
 to the \emph{split} or \emph{group of sibling analyses}, for \verb{split_rows_by*} and
 \verb{analyze*} when analyzing more than one variable, respectively. Ignored when
 analyzing a single variable.}
+
+\item{formats_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default formats to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun. Cannot be used simultaneously with \code{format}.}
 }
 \value{
 No return value.
