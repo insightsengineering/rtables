@@ -47,7 +47,8 @@ calculating string widths and heights, as returned by \code{\link[formatters:fon
 allowed via \code{fontspec}. Defaults to \code{FALSE}. This parameter is primarily
 for internal testing and generally should not be set by end users.}
 
-\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+\item{round_type}{(\code{string})\cr
+The type of rounding to perform. Allowed values: (\code{"iec"}, \code{"iec_mod"} or \code{"sas"})
 See \code{\link[formatters:round_fmt]{round_fmt()}} for details.}
 }
 \value{
