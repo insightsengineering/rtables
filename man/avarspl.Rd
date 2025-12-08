@@ -110,6 +110,8 @@ by this split instruction, or \code{NA_character_} (the default) for no section 
 
 \item{formats_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default formats to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun. Cannot be used simultaneously with \code{format}.}
 
+\item{na_strs_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default NA strings to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun. Cannot be used simultaneously with \code{format}. Cannot be used if \code{formats_var} is \code{NULL}.}
+
 \item{.payload}{(\code{list})\cr used internally, not intended to be set by end users.}
 
 \item{child_labels}{(\code{string})\cr the display behavior for the labels (i.e. label rows) of the children of this

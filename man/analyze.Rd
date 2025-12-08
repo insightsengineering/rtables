@@ -48,6 +48,8 @@ functions. See \code{\link[formatters:list_formats]{formatters::list_valid_forma
 
 \item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 
+\item{na_strs_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default NA strings to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun. Cannot be used simultaneously with \code{format}. Cannot be used if \code{formats_var} is \code{NULL}.}
+
 \item{nested}{(\code{logical})\cr whether this layout instruction should be applied within the existing layout structure
 \emph{if possible} (\code{TRUE}, the default) or as a new top-level element (\code{FALSE}). Ignored if it would nest a split
 underneath analyses, which is not allowed.}

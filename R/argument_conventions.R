@@ -99,6 +99,7 @@ gen_args <- function(df, alt_counts_df, spl, pos, tt, tr, verbose, colwidths, ob
 #' @param format_na_str (`string`)\cr string which should be displayed when formatted if this cell's value(s)
 #'   are all `NA`.
 #' @param formats_var (`string` or `NULL`)\cr `NULL` (the default) or the name of the list column containing named lists of default formats to use. These will be applied with the same precedence as the `format` argument; i.e., they will not override formats (other than `"default"`) set within the afun. Cannot be used simultaneously with `format`.
+#' @param na_strs_var (`string` or `NULL`)\cr `NULL` (the default) or the name of the list column containing named lists of default NA strings to use. These will be applied with the same precedence as the `format` argument; i.e., they will not override formats (other than `"default"`) set within the afun. Cannot be used simultaneously with `format`. Cannot be used if `formats_var` is `NULL`.
 #' @param indent_mod (`numeric`)\cr modifier for the default indent position for the structure created by this
 #'   function (subtable, content table, or row) *and all of that structure's children*. Defaults to 0, which
 #'   corresponds to the unmodified default behavior.
@@ -158,7 +159,7 @@ lyt_args <- function(lyt, var, vars, label, labels_var, varlabels, varnames, spl
                      var_labels, cvar,
                      table_names, topleft, align, page_by, page_prefix,
                      format_na_str, section_div, na_str, show_colcounts,
-                     colcount_format, parent_name) {
+                     colcount_format, parent_name, formats_var, na_strs_var) {
   NULL
 }
 
