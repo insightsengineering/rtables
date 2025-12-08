@@ -19,7 +19,8 @@ LabelRow(
   cinfo = EmptyColInfo,
   indent_mod = 0L,
   table_inset = 0L,
-  trailing_section_div = NA_character_
+  trailing_section_div = NA_character_,
+  round_type = valid_round_type
 )
 
 .tablerow(
@@ -36,7 +37,8 @@ LabelRow(
   indent_mod = 0L,
   footnotes = list(),
   table_inset = 0L,
-  trailing_section_div = NA_character_
+  trailing_section_div = NA_character_,
+  round_type = valid_round_type
 )
 
 DataRow(...)
@@ -66,6 +68,9 @@ and main footer, as compared to alignment of title, subtitles, and provenance fo
 of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
 or \code{NA_character_} for none (the default). When generated via layouting, this would correspond to the
 \code{section_div} of the split under which this table represents a single facet.}
+
+\item{round_type}{(\code{"iec"}, \code{"iec_mod"} or \code{"sas"})\cr the type of rounding to perform.
+See \code{\link[formatters:round_fmt]{formatters::round_fmt()}} for details.}
 
 \item{vals}{(\code{list})\cr cell values for the row.}
 

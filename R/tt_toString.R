@@ -50,7 +50,7 @@ setMethod("toString", "VTableTree", function(x,
                                              max_width = NULL,
                                              fontspec = font_spec(),
                                              ttype_ok = FALSE,
-                                             round_type = c("iec", "sas")) {
+                                             round_type = obj_round_type(x)) {
   toString(
     matrix_form(x,
       indent_rownames = TRUE,
@@ -64,8 +64,7 @@ setMethod("toString", "VTableTree", function(x,
     tf_wrap = tf_wrap,
     max_width = max_width,
     fontspec = fontspec,
-    ttype_ok = ttype_ok,
-    round_type = round_type
+    ttype_ok = ttype_ok
   )
 })
 
@@ -208,8 +207,7 @@ setMethod(
            indent_size = 2,
            fontspec = NULL,
            col_gap = 3L,
-           round_type = c("iec", "sas")) {
-
+           round_type = obj_round_type(obj)) {
     new_dev <- open_font_dev(fontspec)
     if (new_dev) {
       on.exit(close_font_dev())
@@ -337,7 +335,8 @@ setMethod(
       horizontal_sep = horizontal_sep(obj),
       indent_size = indent_size,
       fontspec = fontspec,
-      col_gap = col_gap
+      col_gap = col_gap,
+      round_type = round_type
     )
   }
 )
@@ -503,7 +502,7 @@ get_formatted_fnotes <- function(tt) {
   }
   chunks <- .pad_tops(chunks)
   lapply(
-    seq_len(length(chunks[[1]])),
+    seq_along(chunks[[1]]),
     function(i) {
       DataRow(unlist(lapply(chunks, `[[`, i), recursive = FALSE))
     }
@@ -678,13 +677,13 @@ get_formatted_fnotes <- function(tt) {
 #' @rdname gfc
 setGeneric(
   "get_formatted_cells",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) standardGeneric("get_formatted_cells")
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) standardGeneric("get_formatted_cells")
 )
 
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableTree",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
 
     ct <- get_formatted_cells(content_table(obj), shell = shell, round_type = round_type)
@@ -703,7 +702,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "ElementaryTable",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     lr <- get_formatted_cells(tt_labelrow(obj), shell = shell, round_type = round_type)
     els <- lapply(tree_children(obj), get_formatted_cells, shell = shell, round_type = round_type)
     do.call(rbind, c(list(lr), els))
@@ -713,7 +712,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "TableRow",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     # Parent row format and na_str
     pr_row_format <- if (is.null(obj_format(obj))) "xx" else obj_format(obj)
     pr_row_na_str <- obj_na_str(obj) %||% "NA"
@@ -742,7 +741,7 @@ setMethod(
 #' @rdname gfc
 setMethod(
   "get_formatted_cells", "LabelRow",
-  function(obj, shell = FALSE, round_type = c("iec", "sas")) {
+  function(obj, shell = FALSE, round_type = obj_round_type(obj)) {
     nc <- ncol(obj) # TODO note rrow() or rrow("label") has the wrong ncol
     vstr <- if (shell) "-" else ""
     if (labelrow_visible(obj)) {

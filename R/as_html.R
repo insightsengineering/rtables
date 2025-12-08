@@ -38,6 +38,8 @@ div_helper <- function(lst, class) {
 #'   to `FALSE`.
 #' @param expand_newlines (`flag`)\cr Defaults to `FALSE`, relying on `html` output to solve newline characters (`\n`).
 #'   Doing this keeps the structure of the cells but may depend on the output device.
+#' @param round_type (`"iec"`, `"iec_mod"` or `"sas"`)\cr the type of rounding to perform.
+#' See [round_fmt()] for details.
 #'
 #' @importFrom htmltools tags
 #'
@@ -72,14 +74,15 @@ as_html <- function(x,
                     bold = c("header"),
                     header_sep_line = TRUE,
                     no_spaces_between_cells = FALSE,
-                    expand_newlines = FALSE) {
+                    expand_newlines = FALSE,
+                    round_type = if (is(x, "VTableTree")) obj_round_type(x) else valid_round_type) {
   if (is.null(x)) {
     return(tags$p("Empty Table"))
   }
 
   stopifnot(is(x, "VTableTree"))
 
-  mat <- matrix_form(x, indent_rownames = TRUE, expand_newlines = expand_newlines)
+  mat <- matrix_form(x, indent_rownames = TRUE, expand_newlines = expand_newlines, round_type = round_type)
 
   nlh <- mf_nlheader(mat)
   nc <- ncol(x) + 1

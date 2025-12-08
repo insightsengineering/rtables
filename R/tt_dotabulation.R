@@ -1239,6 +1239,7 @@ build_table <- function(lyt, df,
                         col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
                         topleft = NULL,
                         hsep = default_hsep(),
+                        round_type = if (is(lyt, "PreDataTableLayouts")) obj_round_type(lyt) else valid_round_type,
                         ...) {
   if (!is(lyt, "PreDataTableLayouts")) {
     stop(
@@ -1356,6 +1357,7 @@ build_table <- function(lyt, df,
     main_footer(tab) <- main_footer(lyt)
     prov_footer(tab) <- prov_footer(lyt)
     header_section_div(tab) <- header_section_div(lyt)
+    obj_round_type(tab) <- round_type
   } else {
     tab <- TableTree(
       cont = ctab,
@@ -1371,7 +1373,8 @@ build_table <- function(lyt, df,
       subtitles = subtitles(lyt),
       main_footer = main_footer(lyt),
       prov_footer = prov_footer(lyt),
-      header_section_div = header_section_div(lyt)
+      header_section_div = header_section_div(lyt),
+      round_type = round_type
     )
   }
 

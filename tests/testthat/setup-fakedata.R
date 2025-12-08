@@ -28,7 +28,6 @@ makefakedat <- function(n = 1000) {
 }
 
 
-
 makefakedat2 <- function(n = 1000) {
   if (n %% 4 != 0) {
     stop("n not multiple of 4")
@@ -92,17 +91,17 @@ complx_lyt_rnames <- c(
 
 
 make_big_lyt <- function() {
-  lyt <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM") |>
     ## add nested column split on SEX with value lables from gend_label
-    split_cols_by("SEX", "Gender", labels_var = "gend_label") %>%
+    split_cols_by("SEX", "Gender", labels_var = "gend_label") |>
     ## No row splits have been introduced, so this adds
     ## a root split and puts summary content on it labelled Overall (N)
-    ## add_colby_total(label = "All") %>%
-    ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") %>%
+    ## add_colby_total(label = "All") |>
+    ##    summarize_row_groups(label = "Overall (N)", format = "(N=xx)") |>
     ## add a new subtable that splits on RACE, value labels from ethn_label
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "hidden") %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", label_pos = "hidden") |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)") |>
     ##
     ## Add nested row split within Race categories for FACTOR2
     ## using a split function that excludes level C
@@ -111,9 +110,9 @@ make_big_lyt <- function() {
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       label_pos = "hidden"
-    ) %>%
+    ) |>
     ## Add count summary within FACTOR2 categories
-    summarize_row_groups("FACTOR2") %>%
+    summarize_row_groups("FACTOR2") |>
     ## Add analysis/data rows by analyzing AGE variable
     ## Note afun is a function that returns 2 values in a named list
     ## this will create 2 data rows
@@ -121,7 +120,7 @@ make_big_lyt <- function() {
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
       format = "xx.xx"
-    ) %>%
+    ) |>
     ## adding more analysis vars "compounds them", placing them at the same
     ## level of nesting as all previous analysis blocks, rather than
     ## attempting to further nest them
@@ -130,7 +129,7 @@ make_big_lyt <- function() {
       afun = range,
       format = "xx.x - xx.x",
       table_names = "AgeRedux"
-    ) %>%
+    ) |>
     ## Note nested=FALSE, this creates a NEW subtable directly under the
     ## root split
     ## afun of table() gives us k count rows, where k is the number of
@@ -143,12 +142,12 @@ export_fact <- function() {
   tbl2 <- NULL
   function() {
     if (is.null(tbl2)) {
-      lyt <- basic_table() %>%
-        split_cols_by("ARM") %>%
-        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) %>%
-        split_rows_by("STRATA1") %>%
-        summarize_row_groups() %>%
-        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) %>%
+      lyt <- basic_table() |>
+        split_cols_by("ARM") |>
+        split_cols_by("SEX", split_fun = keep_split_levels(c("M", "F"))) |>
+        split_rows_by("STRATA1") |>
+        summarize_row_groups() |>
+        split_rows_by("RACE", split_fun = keep_split_levels(c("WHITE", "ASIAN"))) |>
         analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
       tbl2 <<- build_table(lyt, ex_adsl)
@@ -169,13 +168,13 @@ tt_to_test_wrapping <- function() {
   basic_table(
     title = "Enough long title to be probably wider than expected",
     main_footer = "Also this seems quite wider than expected initially."
-  ) %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE", split_fun = drop_split_levels) %>%
+  ) |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE", split_fun = drop_split_levels) |>
     analyze(c("AGE", "EOSDY"),
       na_str = "A very long content to_be_wrapped_and_splitted",
       inclNAs = TRUE
-    ) %>%
+    ) |>
     build_table(trimmed_data)
 }
 
@@ -189,14 +188,14 @@ tt_to_test_newline_chars <- function() {
     replace = TRUE, nrow(DM)
   ) # last \n is eaten up if no empty space
   levels(DM_trick$SEX)[3] <- "U\nN\nD\n"
-  tbl <- basic_table() %>%
+  tbl <- basic_table() |>
     split_rows_by("SEX",
       split_label = "m\nannaggia\nsda\n",
       label_pos = "visible"
-    ) %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("ARM2", split_label = "sda") %>%
-    analyze("BMRKR1", na_str = "asd\nasd") %>%
+    ) |>
+    split_cols_by("ARM") |>
+    split_cols_by("ARM2", split_label = "sda") |>
+    analyze("BMRKR1", na_str = "asd\nasd") |>
     build_table(DM_trick)
 
   main_footer(tbl) <- c("main_footer: This", "is\na\n\nweird one\n")
@@ -233,4 +232,62 @@ check_all_patterns <- function(elements, letters, len) {
     MoreArgs = list(len = len)
   )
   all(res)
+}
+
+# all elements result in different rounding sas vs iec with format xx.xx
+# third element only results in different rounding iec_mod vs iec with format xx.xx
+vals_round_type <- c(1.865, 2.985, -0.001)
+
+vals_round_type_fmt <- function(vals = vals_round_type, round_type = "sas") {
+  mapply(format_value, x = vals, format = "xx.xx", round_type = round_type)
+}
+
+tt_to_test_round_type <- function(vals = vals_round_type, round_type = "iec", round_type_tbl = round_type) {
+  require(dplyr, quietly = TRUE)
+  txtvals_iec <- vals_round_type_fmt(vals = vals, round_type = "iec")
+  txtvals_sas <- vals_round_type_fmt(vals = vals, round_type = "sas")
+
+  # confirmation that at least one of the values result in different format presentation
+  expect_true(any(txtvals_iec != txtvals_sas))
+
+  adsl <- ex_adsl
+
+  adsl <- adsl |>
+    mutate(new_var = case_when(
+      ARMCD == "ARM A" ~ vals[1],
+      ARMCD == "ARM B" ~ vals[2],
+      ARMCD == "ARM C" ~ vals[3]
+    ))
+
+  lyt <- basic_table(show_colcounts = FALSE, round_type = round_type) |>
+    split_cols_by("ARMCD") |>
+    analyze(c("new_var"), function(x) {
+      in_rows(
+        mean = mean(x),
+        .formats = c("xx.xx"),
+        .labels = c("Mean")
+      )
+    })
+
+  tbl <- build_table(lyt, adsl, round_type = round_type_tbl)
+}
+
+tt_to_test_round_type2 <- function(round_type = "iec", round_type_tbl = round_type) {
+  require(dplyr, quietly = TRUE)
+
+  adsl <- ex_adsl |>
+    filter(SEX %in% c("F", "M"))
+
+  lyt <- basic_table(show_colcounts = FALSE, round_type = round_type) |>
+    split_cols_by("ARMCD") |>
+    split_rows_by("SEX", split_fun = drop_split_levels) |>
+    analyze(c("AGE"), function(x) {
+      in_rows(
+        mean = mean(x),
+        .formats = c("xx.xx"),
+        .labels = c("Mean")
+      )
+    })
+
+  tbl <- build_table(lyt, adsl, round_type = round_type_tbl)
 }
