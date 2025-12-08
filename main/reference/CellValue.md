@@ -14,7 +14,8 @@ CellValue(
   footnotes = NULL,
   align = NULL,
   format_na_str = NULL,
-  stat_names = NA_character_
+  stat_names = NA_character_,
+  round_type = valid_round_type
 )
 ```
 
@@ -77,6 +78,13 @@ CellValue(
   (`character` or `NA`)  
   names for the statistics in the cell. It can be a vector of strings.
   If `NA`, statistic names are not specified.
+
+- round_type:
+
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 ## Value
 

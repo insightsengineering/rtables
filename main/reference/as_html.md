@@ -16,7 +16,8 @@ as_html(
   bold = c("header"),
   header_sep_line = TRUE,
   no_spaces_between_cells = FALSE,
-  expand_newlines = FALSE
+  expand_newlines = FALSE,
+  round_type = if (is(x, "VTableTree")) obj_round_type(x) else valid_round_type
 )
 ```
 
@@ -80,6 +81,13 @@ as_html(
   Defaults to `FALSE`, relying on `html` output to solve newline
   characters (`\n`). Doing this keeps the structure of the cells but may
   depend on the output device.
+
+- round_type:
+
+  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
+  for details.
 
 ## Value
 

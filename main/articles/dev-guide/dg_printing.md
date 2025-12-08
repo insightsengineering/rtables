@@ -123,11 +123,11 @@ methods(class = "PreDataTableLayouts")
     #  [4] col_exprs               colcount_format         colcount_format<-      
     #  [7] coltree                 header_section_div      header_section_div<-   
     # [10] main_footer             main_footer<-           main_title             
-    # [13] main_title<-            prov_footer             prov_footer<-          
-    # [16] show                    subtitles               subtitles<-            
-    # [19] table_inset             table_inset<-           top_left               
-    # [22] top_left<-              top_level_section_div   top_level_section_div<-
-    # [25] vars_in_layout         
+    # [13] main_title<-            obj_round_type          prov_footer            
+    # [16] prov_footer<-           show                    subtitles              
+    # [19] subtitles<-             table_inset             table_inset<-          
+    # [22] top_left                top_left<-              top_level_section_div  
+    # [25] top_level_section_div<- vars_in_layout         
     # see '?methods' for accessing help and source code
 
 Now, lets see the same for our result table `tbl`:
@@ -160,14 +160,14 @@ getClass("TableTree") %>% print() # Main object representing a table in {rtables
     # Name:                col_info                 format                 na_str
     # Class: InstantiatedColumnInfo             FormatSpec              character
     #                                                                            
-    # Name:         indent_modifier            table_inset                  level
-    # Class:                integer                integer                integer
+    # Name:         indent_modifier            table_inset             round_type
+    # Class:                integer                integer              character
     #                                                                            
-    # Name:                    name             main_title              subtitles
+    # Name:                   level                   name             main_title
+    # Class:                integer              character              character
+    #                                                                            
+    # Name:               subtitles            main_footer      provenance_footer
     # Class:              character              character              character
-    #                                                     
-    # Name:             main_footer      provenance_footer
-    # Class:              character              character
     # 
     # Extends: 
     # Class "VTableTree", directly
@@ -199,16 +199,16 @@ methods(class = "TableTree") %>% print() # more than 70 methods but no print met
     # [49] nrow                 obj_format           obj_format<-        
     # [52] obj_label            obj_label<-          obj_na_str          
     # [55] obj_na_str<-         obj_name             obj_name<-          
-    # [58] page_titles          page_titles<-        prov_footer         
-    # [61] prov_footer<-        rbind                rbind2              
-    # [64] rm_all_colcounts     row_footnotes        row.names           
-    # [67] section_div          section_div<-        show                
-    # [70] str                  subset_cols          subtitles           
-    # [73] subtitles<-          table_inset          table_inset<-       
-    # [76] tail                 top_left             top_left<-          
-    # [79] toString             tree_children        tree_children<-     
-    # [82] tt_at_path           tt_at_path<-         value_at            
-    # [85] value_formats       
+    # [58] obj_round_type       obj_round_type<-     page_titles         
+    # [61] page_titles<-        prov_footer          prov_footer<-       
+    # [64] rbind                rbind2               rm_all_colcounts    
+    # [67] row_footnotes        row.names            section_div         
+    # [70] section_div<-        show                 str                 
+    # [73] subset_cols          subtitles            subtitles<-         
+    # [76] table_inset          table_inset<-        tail                
+    # [79] top_left             top_left<-           toString            
+    # [82] tree_children        tree_children<-      tt_at_path          
+    # [85] tt_at_path<-         value_at             value_formats       
     # see '?methods' for accessing help and source code
 
 Again, the class itself has only the `show` method. Nonetheless, if you
@@ -604,11 +604,11 @@ setdiff(mpf_methods, tbl_methods) # much less unique methods
 intersect(tbl_methods, mpf_methods) # interesting to discover the different behaviors of same functions
 ```
 
-    #  [1] "[<-"           "main_footer"   "main_footer<-" "main_title"   
-    #  [5] "main_title<-"  "make_row_df"   "matrix_form"   "ncol"         
-    #  [9] "page_titles"   "page_titles<-" "prov_footer"   "prov_footer<-"
-    # [13] "section_div"   "subtitles"     "subtitles<-"   "table_inset"  
-    # [17] "table_inset<-" "toString"
+    #  [1] "[<-"              "main_footer"      "main_footer<-"    "main_title"      
+    #  [5] "main_title<-"     "make_row_df"      "matrix_form"      "ncol"            
+    #  [9] "obj_round_type"   "obj_round_type<-" "page_titles"      "page_titles<-"   
+    # [13] "prov_footer"      "prov_footer<-"    "section_div"      "subtitles"       
+    # [17] "subtitles<-"      "table_inset"      "table_inset<-"    "toString"
 
 Let’s now take a look at the final function of all this: `toString` from
 `formatters`:

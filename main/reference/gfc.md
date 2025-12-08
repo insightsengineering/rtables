@@ -5,19 +5,19 @@ Get formatted cells
 ## Usage
 
 ``` r
-get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 # S4 method for class 'TableTree'
-get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 # S4 method for class 'ElementaryTable'
-get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 # S4 method for class 'TableRow'
-get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 # S4 method for class 'LabelRow'
-get_formatted_cells(obj, shell = FALSE, round_type = c("iec", "sas"))
+get_formatted_cells(obj, shell = FALSE, round_type = obj_round_type(obj))
 
 get_cell_aligns(obj)
 
@@ -49,10 +49,10 @@ get_cell_aligns(obj)
 
 - round_type:
 
-  (`"iec"` or `"sas"`)  
-  the type of rounding to perform. iec, the default, peforms rounding
-  compliant with IEC 60559 (see details), while sas performs
-  nearest-value rounding consistent with rounding within SAS.
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 ## Value
 

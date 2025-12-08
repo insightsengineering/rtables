@@ -5,7 +5,14 @@ Create an `rtable` row
 ## Usage
 
 ``` r
-rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
+rrow(
+  row.name = "",
+  ...,
+  format = NULL,
+  indent = 0,
+  inset = 0L,
+  round_type = valid_round_type
+)
 ```
 
 ## Arguments
@@ -37,6 +44,13 @@ rrow(row.name = "", ..., format = NULL, indent = 0, inset = 0L)
   (`integer(1)`)  
   the table inset for the row or table being constructed. See
   [`formatters::table_inset()`](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
+  for details.
+
+- round_type:
+
+  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
   for details.
 
 ## Value

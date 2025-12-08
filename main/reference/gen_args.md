@@ -31,6 +31,7 @@ gen_args(
   inset,
   table_inset,
   tt_type = c("any", "row", "table", "elemtable"),
+  round_type = valid_round_type,
   ...
 )
 ```
@@ -194,6 +195,13 @@ gen_args(
   an individual row will not be considered matching. The value
   "elemtable" indicates an Elementary table, i.e., one representing a
   single variable within an `analyze` call.
+
+- round_type:
+
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 - ...:
 

@@ -14,6 +14,8 @@ build_table(
   col_total = if (is.null(alt_counts_df)) nrow(df) else nrow(alt_counts_df),
   topleft = NULL,
   hsep = default_hsep(),
+  round_type = if (is(lyt, "PreDataTableLayouts")) obj_round_type(lyt) else
+    valid_round_type,
   ...
 )
 ```
@@ -65,6 +67,13 @@ build_table(
   to `-` elsewhere (with a once per session warning). See
   [`formatters::set_default_hsep()`](https://insightsengineering.github.io/formatters/latest-tag/reference/default_horizontal_sep.html)
   for further information.
+
+- round_type:
+
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 - ...:
 

@@ -14,7 +14,8 @@ basic_table(
   colcount_format = "(N=xx)",
   header_section_div = NA_character_,
   top_level_section_div = NA_character_,
-  inset = 0L
+  inset = 0L,
+  round_type = valid_round_type
 )
 ```
 
@@ -94,6 +95,13 @@ basic_table(
   footnotes, and main_footer, as compared to alignment of title,
   subtitle, and provenance footer. Defaults to 0 (no inset).
 
+- round_type:
+
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
+
 ## Value
 
 A `PreDataTableLayouts` object suitable for passing to further layouting
@@ -168,7 +176,7 @@ tbl2
 #> 
 #> test footer
 #> 
-#> test.R program, executed at 2025-11-26 14:52:32.894964
+#> test.R program, executed at 2025-12-08 22:14:51.417916
 
 lyt3 <- basic_table(
   show_colcounts = TRUE,

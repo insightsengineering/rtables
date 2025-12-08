@@ -2,6 +2,10 @@
 
 See the `formatters` documentation for descriptions of these generics.
 
+These are internal methods that are documented only to satisfy
+`R CMD check`. End users should pay no attention to this documentation,
+except for the few exported methods.
+
 ## Usage
 
 ``` r
@@ -112,6 +116,33 @@ table_inset(obj) <- value
 
 # S4 method for class 'InstantiatedColumnInfo'
 table_inset(obj) <- value
+
+# S4 method for class 'ANY'
+obj_round_type(obj)
+
+# S4 method for class 'PreDataTableLayouts'
+obj_round_type(obj)
+
+# S4 method for class 'VTableTree'
+obj_round_type(obj)
+
+# S4 method for class 'TableRow'
+obj_round_type(obj)
+
+# S4 method for class 'CellValue'
+obj_round_type(obj)
+
+# S4 method for class 'VTableTree'
+obj_round_type(obj) <- value
+
+# S4 method for class 'TableRow'
+obj_round_type(obj) <- value
+
+# S4 method for class 'LabelRow'
+obj_round_type(obj) <- value
+
+# S4 method for class 'CellValue'
+obj_round_type(obj) <- value
 
 # S4 method for class 'TableRow'
 nlines(x, colwidths = NULL, max_width = NULL, fontspec, col_gap = 3)

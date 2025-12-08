@@ -15,7 +15,8 @@ LabelRow(
   cinfo = EmptyColInfo,
   indent_mod = 0L,
   table_inset = 0L,
-  trailing_section_div = NA_character_
+  trailing_section_div = NA_character_,
+  round_type = valid_round_type
 )
 
 .tablerow(
@@ -32,7 +33,8 @@ LabelRow(
   indent_mod = 0L,
   footnotes = list(),
   table_inset = 0L,
-  trailing_section_div = NA_character_
+  trailing_section_div = NA_character_,
+  round_type = valid_round_type
 )
 
 DataRow(...)
@@ -92,6 +94,13 @@ ContentRow(...)
   default). When generated via layouting, this would correspond to the
   `section_div` of the split under which this table represents a single
   facet.
+
+- round_type:
+
+  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
+  for details.
 
 - vals:
 

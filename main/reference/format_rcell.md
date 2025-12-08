@@ -14,7 +14,7 @@ format_rcell(
   na_str = obj_na_str(x) %||% "NA",
   pr_row_format = NULL,
   pr_row_na_str = NULL,
-  round_type = c("iec", "sas"),
+  round_type,
   shell = FALSE
 )
 ```
@@ -54,10 +54,10 @@ format_rcell(
 
 - round_type:
 
-  (`"iec"` or `"sas"`)  
-  the type of rounding to perform. iec, the default, peforms rounding
-  compliant with IEC 60559 (see details), while sas performs
-  nearest-value rounding consistent with rounding within SAS.
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 - shell:
 

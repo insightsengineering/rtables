@@ -15,7 +15,7 @@ matrix_form(
   indent_size = 2,
   fontspec = NULL,
   col_gap = 3L,
-  round_type = c("iec", "sas")
+  round_type = obj_round_type(obj)
 )
 ```
 
@@ -59,10 +59,10 @@ matrix_form(
 
 - round_type:
 
-  (`"iec"` or `"sas"`)  
-  the type of rounding to perform. iec, the default, peforms rounding
-  compliant with IEC 60559 (see details), while sas performs
-  nearest-value rounding consistent with rounding within SAS.
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 ## Value
 
@@ -371,6 +371,9 @@ matrix_form(tbl)
 #> 
 #> $num_rep_cols
 #> [1] 0
+#> 
+#> $round_type
+#> [1] "iec"
 #> 
 #> $ref_fnote_df
 #> [1] row_path  col_path  row       col       symbol    ref_index msg      

@@ -28,7 +28,8 @@ ElementaryTable(
   header_section_div = NA_character_,
   hsep = default_hsep(),
   trailing_section_div = NA_character_,
-  inset = 0L
+  inset = 0L,
+  round_type = valid_round_type
 )
 
 TableTree(
@@ -54,7 +55,8 @@ TableTree(
   hsep = default_hsep(),
   header_section_div = NA_character_,
   trailing_section_div = NA_character_,
-  inset = 0L
+  inset = 0L,
+  round_type = NULL
 )
 ```
 
@@ -198,6 +200,13 @@ TableTree(
   number of spaces to inset the table header, table body, referential
   footnotes, and main_footer, as compared to alignment of title,
   subtitle, and provenance footer. Defaults to 0 (no inset).
+
+- round_type:
+
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 - cont:
 

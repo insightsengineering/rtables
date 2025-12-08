@@ -5,7 +5,14 @@ Create a table
 ## Usage
 
 ``` r
-rtable(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
+rtable(
+  header,
+  ...,
+  format = NULL,
+  hsep = default_hsep(),
+  inset = 0L,
+  round_type = valid_round_type
+)
 
 rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 ```
@@ -46,6 +53,13 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
   (`integer(1)`)  
   the table inset for the row or table being constructed. See
   [`formatters::table_inset()`](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
+  for details.
+
+- round_type:
+
+  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
   for details.
 
 ## Value

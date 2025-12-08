@@ -99,14 +99,14 @@ getClass("TableTree")
     ## Name:                col_info                 format                 na_str
     ## Class: InstantiatedColumnInfo             FormatSpec              character
     ##                                                                            
-    ## Name:         indent_modifier            table_inset                  level
-    ## Class:                integer                integer                integer
+    ## Name:         indent_modifier            table_inset             round_type
+    ## Class:                integer                integer              character
     ##                                                                            
-    ## Name:                    name             main_title              subtitles
+    ## Name:                   level                   name             main_title
+    ## Class:                integer              character              character
+    ##                                                                            
+    ## Name:               subtitles            main_footer      provenance_footer
     ## Class:              character              character              character
-    ##                                                     
-    ## Name:             main_footer      provenance_footer
-    ## Class:              character              character
     ## 
     ## Extends: 
     ## Class "VTableTree", directly
@@ -136,12 +136,12 @@ tt <- build_table(lyt, DM)
 str(tt, max.level = 2)
 ```
 
-    ## Formal class 'TableTree' [package "rtables"] with 20 slots
-    ##   ..@ content             :Formal class 'ElementaryTable' [package "rtables"] with 19 slots
+    ## Formal class 'TableTree' [package "rtables"] with 21 slots
+    ##   ..@ content             :Formal class 'ElementaryTable' [package "rtables"] with 20 slots
     ##   ..@ page_title_prefix   : chr "SEX"
     ##   ..@ children            :List of 4
     ##   ..@ rowspans            :'data.frame': 0 obs. of  0 variables
-    ##   ..@ labelrow            :Formal class 'LabelRow' [package "rtables"] with 13 slots
+    ##   ..@ labelrow            :Formal class 'LabelRow' [package "rtables"] with 14 slots
     ##   ..@ page_titles         : chr(0) 
     ##   ..@ horizontal_sep      : chr "—"
     ##   ..@ header_section_div  : chr NA
@@ -151,6 +151,7 @@ str(tt, max.level = 2)
     ##   ..@ na_str              : chr NA
     ##   ..@ indent_modifier     : int 0
     ##   ..@ table_inset         : int 0
+    ##   ..@ round_type          : chr "iec"
     ##   ..@ level               : int 1
     ##   ..@ name                : chr "SEX"
     ##   ..@ main_title          : chr "big title"

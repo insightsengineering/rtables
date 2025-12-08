@@ -16,6 +16,7 @@ as_result_df(
   add_tbl_name_split = FALSE,
   simplify = FALSE,
   verbose = FALSE,
+  round_type = obj_round_type(tt),
   ...
 )
 
@@ -82,6 +83,13 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
   (`flag`)  
   when `TRUE`, the function will print additional information for
   `data_format != "full_precision"`.
+
+- round_type:
+
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  the type of rounding to perform. See
+  [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
+  for details.
 
 - ...:
 

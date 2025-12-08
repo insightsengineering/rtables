@@ -133,6 +133,9 @@ getClass("TableRow")
     ##                                                                            
     ## Name:                  na_str        indent_modifier            table_inset
     ## Class:              character                integer                integer
+    ##                              
+    ## Name:              round_type
+    ## Class:              character
     ## 
     ## Extends: 
     ## Class "VLeaf", directly
@@ -168,11 +171,14 @@ getClass("VTableTree")
     ## Name:                  na_str        indent_modifier            table_inset
     ## Class:              character                integer                integer
     ##                                                                            
-    ## Name:                   level                   name             main_title
-    ## Class:                integer              character              character
+    ## Name:              round_type                  level                   name
+    ## Class:              character                integer              character
     ##                                                                            
-    ## Name:               subtitles            main_footer      provenance_footer
+    ## Name:              main_title              subtitles            main_footer
     ## Class:              character              character              character
+    ##                              
+    ## Name:       provenance_footer
+    ## Class:              character
     ## 
     ## Extends: 
     ## Class "VTableNodeInfo", directly
