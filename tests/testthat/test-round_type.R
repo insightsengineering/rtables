@@ -27,11 +27,17 @@ txtvals_sas <- vals_round_type_fmt(vals = vals_round_type, round_type = "sas")
 txtvals_iec_mod <- vals_round_type_fmt(vals = vals_round_type, round_type = "iec_mod")
 
 # all values in vals_round_type have different result for round_type iec vs sas
-expect_true(any(txtvals_iec != txtvals_sas))
+expect_true(all(txtvals_iec != txtvals_sas))
 # first 2 values have different result for iec_mod vs sas
-expect_true(any(txtvals_iec_mod != txtvals_sas))
+expect_equal(
+  which(txtvals_iec_mod != txtvals_sas),
+  c(1, 2)
+)
 # last (3rd) value has different result for iec_mod vs iec
-expect_true(any(txtvals_iec_mod != txtvals_iec))
+expect_equal(
+  which(txtvals_iec_mod != txtvals_iec),
+  3
+)
 
 test_that("round_type can be set on basic_table", {
   tbl_sas <- tt_to_test_round_type(round_type = "sas")
@@ -40,6 +46,12 @@ test_that("round_type can be set on basic_table", {
     obj_round_type(tbl_sas),
     "sas"
   )
+
+  expect_identical(
+    obj_round_type(matrix_form(tbl_sas)),
+    "sas"
+  )
+
 
   # rounding method can be changed without the need to rebuild the table
   tbl_iec <- tbl_sas
@@ -197,12 +209,15 @@ test_that("toString method works correctly with round_type explicitely passed as
 test_that("test for export_as_txt with argument round_type", {
   tbl_sas <- tt_to_test_round_type(round_type = "sas")
 
+  expect_true(
+    toString(tbl_sas, round_type = "iec") != toString(tbl_sas)
+  )
+
   expect_identical(
     toString(tbl_sas),
     export_as_txt(tbl_sas,
       file = NULL,
-      paginate = FALSE,
-      round_type = "sas"
+      paginate = FALSE
     )
   )
 
@@ -213,10 +228,6 @@ test_that("test for export_as_txt with argument round_type", {
       paginate = FALSE,
       round_type = "iec"
     )
-  )
-
-  expect_true(
-    toString(tbl_sas, round_type = "iec") != toString(tbl_sas)
   )
 
   expect_identical(
@@ -233,21 +244,36 @@ test_that("test for export_as_txt with argument round_type", {
   )
 })
 
-test_that("round_type still available on subtable", {
+test_that("round_type still available after various subsetting", {
   tbl_iec <- tt_to_test_round_type2(round_type = "iec")
   tbl_sas <- tt_to_test_round_type2(round_type = "sas")
-
-  sub_tbl <- tbl_sas[c("SEX", "F"), ]
-  expect_identical(
-    obj_round_type(sub_tbl),
-    "sas"
-  )
 
   sub_tbl_iec <- tbl_iec[c("SEX", "F"), ]
   expect_identical(
     obj_round_type(sub_tbl_iec),
     "iec"
   )
+
+  full_pth <- c("SEX", "F", "AGE", "mean")
+
+  ## row subsetting ([ and tt_at_path)
+  lapply(
+    1:4,
+    function(i) {
+      subpth <- full_pth[seq_len(i)]
+      expect_identical(
+        obj_round_type(tt_at_path(tbl_sas, subpth)),
+        "sas"
+      )
+      expect_identical(
+        obj_round_type(tbl_sas[subpth, ]),
+        "sas"
+      )
+    }
+  )
+
+  ## column subsetting
+  expect_identical(obj_round_type(tbl_sas[, 1:2]), "sas")
 })
 
 
@@ -295,21 +321,6 @@ test_that("test for matrix_form", {
   expect_identical(
     mpf_iec$strings[2, 2:4],
     txtvals_iec
-  )
-})
-
-test_that("test for round_type and tt_at_path", {
-  tbl_sas <- tt_to_test_round_type2(round_type = "sas")
-
-  expect_identical(
-    obj_round_type(tbl_sas),
-    "sas"
-  )
-
-  sub_tbl <- tt_at_path(tbl_sas, path = c("SEX", "F"))
-  expect_identical(
-    obj_round_type(sub_tbl),
-    "sas"
   )
 })
 
