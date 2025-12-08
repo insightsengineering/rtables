@@ -1,4 +1,4 @@
-## rtables 0.6.14.9002
+## rtables 0.6.14.9003
 
 ### New Features
  * Allow table objects to have `round_type` instead of needing to specify on export #1040
