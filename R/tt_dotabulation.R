@@ -550,6 +550,19 @@ gen_rowvalues <- function(dfpart,
   ctab
 }
 
+inv_pmatch <- function(str, tbl) {
+  inds <- pmatch(tbl, str)
+  found_inds <- which(!is.na(inds))
+  ret <- NA_integer_
+  if (length(found_inds) == 1) {
+    ret <- found_inds
+  } else if (length(found_inds) > 1) {
+    ncs <- nchar(tbl[found_inds])
+    chosen <- which.max(ncs)
+    ret <- found_inds[chosen]
+  }
+  ret
+}
 
 .apply_default_formats <- function(kidlst, fmtlst, nastrlst = character()) {
 
@@ -562,8 +575,16 @@ gen_rowvalues <- function(dfpart,
     nastrlst[missing_nastrs] <- NA_character_
   }
 
-  ## pmatch checks for exact matches first then partial matches
-  fmt_match <- pmatch(names(kidlst), names(fmtlst))
+  ## checks for exact matches first then partial matches
+  fmt_match <- match(names(kidlst), names(fmtlst))
+  no_exact_inds <- which(is.na(fmt_match))
+  fmt_match[no_exact_inds] <- vapply(
+    names(kidlst)[no_exact_inds],
+    inv_pmatch,
+    tbl = names(fmtlst),
+    1L
+  )
+    
   toset <- which(!is.na(fmt_match))
 
   fmts <- fmtlst[fmt_match[toset]]

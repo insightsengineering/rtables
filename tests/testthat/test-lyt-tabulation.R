@@ -1772,15 +1772,18 @@ test_that("formats_var works in analyze()", {
   adlb <- ex_adlb
   alt_fmts <-   list(list(median = "xx.x",
                           "mean (sd)" = "xx.xx (xx.xxx)",
-                          missing_val = "xx"))
+                          missing_val = "xx",
+                          STRATA1 = "xx"))
 
   crp_fmts <- list(list(median = "xx.",
                         "mean (sd)" = "xx.x (xx.xx)",
-                        missing_val = "xx"))
+                        missing_val = "xx",
+                        STRATA1 = "N=xx"))
 
   iga_fmts <-  list(list(median = "xx.xx",
                          "mean (sd)" = "xx. (xx.x)",
-                         missing_val = "xx"))
+                         missing_val = "xx",
+                         STRATA1 = "xx.x"))
   
 
   adlb$formats <- alt_fmts
@@ -1812,9 +1815,9 @@ test_that("formats_var works in analyze()", {
 
   mpf_fmts_real <- mf_formats(mpf)[-1, -1] # no row labs, no col labs
 
-  mpf_fmts_exp <- matrix(c("-", "xx", unlist(alt_fmts),
-                           "-", "xx", unlist(crp_fmts),
-                           "-", "xx", unlist(iga_fmts)),
+  mpf_fmts_exp <- matrix(c("-", "xx", unlist(alt_fmts[[1]][1:3]), ## no STRATA1 here and below
+                           "-", "xx", unlist(crp_fmts[[1]][1:3]),
+                           "-", "xx", unlist(iga_fmts[[1]][1:3])),
                          nrow = nrow(mpf_fmts_real),
                          ncol = ncol(mpf_fmts_real))
 
@@ -1888,7 +1891,37 @@ test_that("formats_var works in analyze()", {
 
   expect_identical(get_formatted_cells(tbl), get_formatted_cells(tbl3c))
 
+  ## tern style row naming partial match support
+  factor_count_prepend_var <- function(x, .var) {
+    stopifnot(is.factor(x))
+    vals <- as.list(table(x))
 
+    in_rows(.list = vals, .names = paste0(.var, names(vals)), .labels = levels(x))
+  }
+
+  lyt4 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("STRATA1", factor_count_prepend_var, formats_var = "formats")
+
+  tbl4 <- build_table(lyt4, adlb)
+
+  fmtcells4 <- get_formatted_cells(tbl4)
+
+  alt_a_cnt <- with(adlb, sum(ARM == "A: Drug X" & PARAMCD == "ALT" & STRATA1 == "A"))
+  crp_b_cnt <- with(adlb, sum(ARM == "B: Placebo" & PARAMCD == "CRP" & STRATA1 == "B"))
+  iga_c_cnt <- with(adlb, sum(ARM == "C: Combination" & PARAMCD == "IGA" & STRATA1 == "C"))
+  expect_identical(fmtcells4[2, 1], format_value(alt_a_cnt, "xx"))
+  expect_identical(fmtcells4[7, 2], format_value(crp_b_cnt, "N=xx"))
+  expect_identical(fmtcells4[12, 3], format_value(iga_c_cnt, "xx.x"))
   
 
+  ## most specific for multiple partial matches
+
+  adlb2 <- adlb
+  ## This should do nothing because STRATA1 is a more specific partial match than STRAT
+  adlb2$formats <- lapply(adlb2$formats, function(x) c(x, list(STRAT = "xx.xxx")))
+
+  tbl4b <- build_table(lyt4, adlb2)
+  expect_identical(tbl4, tbl4b)
 })
