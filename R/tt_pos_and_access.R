@@ -965,7 +965,7 @@ escape_name_padding <- function(x) {
   ## ret <- gsub("]", "\\]", ret, fixed = TRUE)
   ## ret <- gsub(".", "\\.", ret, fixed = TRUE)
   chars <- strsplit(x, "")[[1]]
-  ret <- paste0("[", chars, "]", collapse = "")  
+  ret <- paste0("[", chars, "]", collapse = "")
   ret
 }
 

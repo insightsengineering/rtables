@@ -43,7 +43,6 @@ test_that("cell_values function works as desired", {
   )
 
 
-
   cvres2 <- cell_values(
     tbl, c("RACE", "ASIAN", "STRATA1"),
     c("ARM", "A: Drug X", "SEX", "M")
@@ -155,7 +154,6 @@ test_rowpaths <- function(tt, visonly = TRUE) {
 }
 
 
-
 test_that("make_row_df, make_col_df give paths which all work", {
   skip_if_not_installed("tibble")
   require(tibble, quietly = TRUE)
@@ -213,8 +211,6 @@ visible_only and not"
   ) ## black compare DataRow
 
   test_colpaths(tab)
-
-
 
 
   combodf <- tribble(
@@ -924,7 +920,8 @@ test_that("cell_values(colpath=) does not choke on regex chars in path", {
   data <- DM
 
   data$scary_fac <- factor(sample(bad_levs, nrow(data), replace = TRUE),
-                           levels = bad_levs)
+    levels = bad_levs
+  )
 
   lyt <- basic_table() |>
     split_cols_by("ARM", split_fun = keep_split_levels(levels(DM$ARM)[1:2])) |>
