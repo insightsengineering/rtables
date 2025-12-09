@@ -30,7 +30,7 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Daniel Saban<U+00E9>s Bov<U+00E9> \email{daniel.sabanes_bove@roche.com} [contributor]
+  \item Daniel Sabanés Bové \email{daniel.sabanes_bove@roche.com} [contributor]
   \item Maximilian Mordig \email{maximilian_oliver.mordig@roche.com} [contributor]
   \item Abinaya Yogasekaram \email{abinaya.yogasekaram@contractors.roche.com} (\href{https://orcid.org/0009-0005-2083-1105}{ORCID}) [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
