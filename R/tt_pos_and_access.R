@@ -961,13 +961,14 @@ setMethod(
 
 path_collapse_sep <- "`"
 escape_name_padding <- function(x) {
-  ##  ret <- gsub("._[[", "\\._\\[\\[", x, fixed = TRUE)
-  ##  ret <- gsub("]]_.", "\\]\\]_\\.", ret, fixed = TRUE)
-  ret <- gsub("[", "\\[", x, fixed = TRUE)
-  ret <- gsub("]", "\\]", ret, fixed = TRUE)
-  ret <- gsub(".", "\\.", ret, fixed = TRUE)
+  ## ret <- gsub("[", "\\[", x, fixed = TRUE)
+  ## ret <- gsub("]", "\\]", ret, fixed = TRUE)
+  ## ret <- gsub(".", "\\.", ret, fixed = TRUE)
+  chars <- strsplit(x, "")[[1]]
+  ret <- paste0("[", chars, "]", collapse = "")  
   ret
 }
+
 path_to_regex <- function(path) {
   paste(vapply(path, function(x) {
     if (identical(x, "*")) {

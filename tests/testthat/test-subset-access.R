@@ -914,3 +914,46 @@ test_that("subset_cols works as intended", {
     collect_leaves(stbl2, add.labrows = TRUE)
   )
 })
+
+## https://github.com/insightsengineering/rtables/issues/1058
+test_that("cell_values(colpath=) does not choke on regex chars in path", {
+  ## intentionally not valid regexs but using all metachars other than {}
+  ## which are already disallowed in labels due to footnote stuff
+  bad_levs <- c("^][.$+", ")(\\|?<>")
+
+  data <- DM
+
+  data$scary_fac <- factor(sample(bad_levs, nrow(data), replace = TRUE),
+                           levels = bad_levs)
+
+  lyt <- basic_table() |>
+    split_cols_by("ARM", split_fun = keep_split_levels(levels(DM$ARM)[1:2])) |>
+    split_cols_by("scary_fac") |>
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+    analyze("AGE")
+
+  tbl <- build_table(lyt, data)
+
+  cpaths <- col_paths(tbl)
+
+  add_wildcard_paths <- function(path) {
+    c(
+      list(path),
+      lapply(
+        seq_along(path),
+        function(i) {
+          pthi <- path
+          pthi[i] <- "*"
+          pthi
+        }
+      )
+    )
+  }
+
+  do_cell_values_colpath <- function(path, tt) {
+    all_pths <- add_wildcard_paths(path)
+    res <- lapply(all_pths, function(pthi) cell_values(tt, colpath = pthi))
+  }
+
+  expect_silent(lapply(cpaths, do_cell_values_colpath, tt = tbl))
+})
