@@ -1235,8 +1235,8 @@ subset_by_rownum <- function(tt,
       kids <- kids[sapply(kids, function(x) NROW(x) > 0)]
     }
     if (length(kids) == 0 &&
-          NROW(content_table(x)) == 0 &&
-          !labelrow_visible(x)) {
+      NROW(content_table(x)) == 0 &&
+      !labelrow_visible(x)) {
       valifnone
     } else {
       tree_children(x) <- kids
