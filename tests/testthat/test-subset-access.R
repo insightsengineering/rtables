@@ -1,12 +1,12 @@
 context("Accessing and subsetting tables")
 
 test_that("cell_values function works as desired", {
-  l <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX") %>%
-    split_rows_by("RACE") %>%
-    summarize_row_groups() %>%
-    split_rows_by("STRATA1") %>%
+  l <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX") |>
+    split_rows_by("RACE") |>
+    summarize_row_groups() |>
+    split_rows_by("STRATA1") |>
     analyze("AGE", afun = function(x, .N_col, .N_row) rcell(c(.N_row, .N_col), format = "(xx.x, xx.x)"))
 
   ourdat <- DM
@@ -41,7 +41,6 @@ test_that("cell_values function works as desired", {
       ))
     )
   )
-
 
 
   cvres2 <- cell_values(
@@ -114,8 +113,8 @@ test_that("cell_values function works as desired", {
 
 test_that("Subsetting by integer(0) keeps decorations", {
   # Regression #870
-  test_tbl <- basic_table(title = "t", subtitles = "s", main_footer = "mf", prov_footer = "pf") %>%
-    analyze("BMRKR1") %>%
+  test_tbl <- basic_table(title = "t", subtitles = "s", main_footer = "mf", prov_footer = "pf") |>
+    analyze("BMRKR1") |>
     build_table(DM)
 
   expect_equal(main_title(test_tbl), main_title(test_tbl[integer(), , keep_titles = TRUE]))
@@ -155,21 +154,20 @@ test_rowpaths <- function(tt, visonly = TRUE) {
 }
 
 
-
 test_that("make_row_df, make_col_df give paths which all work", {
   skip_if_not_installed("tibble")
   require(tibble, quietly = TRUE)
 
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX", ref_group = "F") %>%
-    analyze("AGE", mean, show_labels = "hidden") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX", ref_group = "F") |>
+    analyze("AGE", mean, show_labels = "hidden") |>
     analyze("AGE", refcompmean,
       show_labels = "hidden",
       table_names = "AGE2a"
-    ) %>%
-    split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
-    analyze("AGE", mean, show_labels = "hidden") %>%
+    ) |>
+    split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) |>
+    analyze("AGE", mean, show_labels = "hidden") |>
     analyze("AGE", refcompmean, show_labels = "hidden", table_names = "AGE2b")
 
 
@@ -215,29 +213,27 @@ visible_only and not"
   test_colpaths(tab)
 
 
-
-
   combodf <- tribble(
     ~valname, ~label, ~levelcombo, ~exargs,
     "A_", "Arm 1", c("A: Drug X"), list(),
     "B_C", "Arms B & C", c("B: Placebo", "C: Combination"), list()
   )
 
-  l2 <- basic_table(show_colcounts = TRUE) %>%
+  l2 <- basic_table(show_colcounts = TRUE) |>
     split_cols_by(
       "ARM",
       split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C"))
-    ) %>%
+    ) |>
     analyze(c("AGE", "AGE"),
       afun = list(mean, range),
       show_labels = "hidden",
     )
 
-  l2b <- basic_table(show_colcounts = TRUE) %>%
+  l2b <- basic_table(show_colcounts = TRUE) |>
     split_cols_by(
       "ARM",
       split_fun = add_combo_levels(combodf, keep_levels = c("A_", "B_C"))
-    ) %>%
+    ) |>
     analyze(c("AGE", "AGE"),
       afun = list(mean, range),
       show_labels = "hidden",
@@ -266,8 +262,8 @@ visible_only and not"
 
 
 test_that("Duplicate colvars path correctly", {
-  l <- basic_table() %>%
-    split_cols_by_multivar(c("AGE", "BMRKR1", "AGE"), varlabels = c("Age", "Biomarker 1", "Second Age")) %>%
+  l <- basic_table() |>
+    split_cols_by_multivar(c("AGE", "BMRKR1", "AGE"), varlabels = c("Age", "Biomarker 1", "Second Age")) |>
     analyze_colvars(mean)
 
   tbl <- build_table(l, DM)
@@ -307,10 +303,10 @@ test_that("top_left, title, footers retention behaviors are correct across all s
   lyt <- basic_table(
     title = ti, subtitles = sti,
     main_footer = mf, prov_footer = pf
-  ) %>%
-    split_cols_by("ARM") %>%
-    append_topleft(tlval) %>%
-    split_rows_by("SEX") %>%
+  ) |>
+    split_cols_by("ARM") |>
+    append_topleft(tlval) |>
+    split_rows_by("SEX") |>
     analyze("AGE", mean)
   tbl <- build_table(lyt, DM)
   fnotes_at_path(tbl, rowpath = c("SEX", "F", "AGE", "mean")) <- rf
@@ -358,15 +354,15 @@ test_that("top_left, title, footers retention behaviors are correct across all s
   expect_identical(prov_footer(tbl[1, 1, keep_footers = TRUE]), pf)
 
   # Further testing drop = TRUE
-  tbl1 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
-    analyze("AGE", function(x) list("m (sd)" = c(mean(x), sd(x)))) %>%
+  tbl1 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
+    analyze("AGE", function(x) list("m (sd)" = c(mean(x), sd(x)))) |>
     build_table(DM)
-  tbl2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", child_labels = "hidden") %>%
-    analyze("AGE", mean) %>%
+  tbl2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX", child_labels = "hidden") |>
+    analyze("AGE", mean) |>
     build_table(DM)
   # row with only numbers -> warning
   expect_warning(tbl[4, , drop = TRUE])
@@ -380,10 +376,10 @@ test_that("top_left, title, footers retention behaviors are correct across all s
 
 test_that("setters work ok", {
   tlval <- "hi"
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
-    summarize_row_groups() %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
+    summarize_row_groups() |>
     analyze("AGE", mean)
   tbl <- build_table(lyt, DM)
 
@@ -406,9 +402,9 @@ test_that("setters work ok", {
   tt_at_path(tbl3, c("SEX", "UNDIFFERENTIATED", "AGE", "mean")) <- NULL
   expect_equal(nrow(tbl3), 7)
 
-  lyt4 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
+  lyt4 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
     analyze("AGE", mean)
   tbl4 <- build_table(lyt4, DM)
 
@@ -448,10 +444,10 @@ test_that("setters work ok", {
 })
 
 test_that("cell_values and value_at work on row objects", {
-  tbl <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA2") %>%
-    analyze("AEDECOD") %>%
+  tbl <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA2") |>
+    analyze("AEDECOD") |>
     build_table(ex_adae, ex_adsl)
 
   first_row <- collect_leaves(tbl)[[1]]
@@ -511,9 +507,9 @@ test_that("label_at_path works", {
 })
 
 test_that("insert_row_at_path works", {
-  lyt <- basic_table() %>%
-    split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
-    summarize_row_groups() %>%
+  lyt <- basic_table() |>
+    split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
+    summarize_row_groups() |>
     analyze("AGE")
 
   tab <- build_table(lyt, DM)
@@ -554,8 +550,8 @@ test_that("insert_row_at_path works", {
   expect_error(insert_row_at_path(tab, c("root", "COUNTRY", "CHN", "AGE"), myrow), msg)
   expect_error(insert_row_at_path(tab, rps[[1]], myrow), msg)
 
-  lyt4 <- basic_table() %>%
-    split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+  lyt4 <- basic_table() |>
+    split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
     analyze("AGE")
 
   tab4 <- build_table(lyt4, DM)
@@ -617,10 +613,10 @@ test_that("bracket methods all work", {
 
 test_that("tt_at_path and cell_values work with values even if they differ in naming", {
   # see issue #794
-  tbl <- basic_table() %>%
-    split_cols_by(var = "ARM", split_label = "asdar") %>%
-    # split_rows_by(var = "SEX") %>%
-    add_colcounts() %>%
+  tbl <- basic_table() |>
+    split_cols_by(var = "ARM", split_label = "asdar") |>
+    # split_rows_by(var = "SEX") |>
+    add_colcounts() |>
     analyze("AGE",
       afun = function(x) {
         out_list <- list(a = mean(x), b = 3)
@@ -630,7 +626,7 @@ test_that("tt_at_path and cell_values work with values even if they differ in na
         in_rows(.list = out_list, .labels = labs, .names = labs)
       },
       show_labels = "visible", table_names = "nope"
-    ) %>%
+    ) |>
     build_table(df = DM)
 
   rdf <- make_row_df(tbl)
@@ -648,10 +644,10 @@ test_that("tt_at_path works with identical split names", {
 
   afun <- function(x, ...) rcell(label = "Flagged Pop. Count", sum(x == "Y"))
 
-  lyt <- basic_table() %>%
-    analyze("flag", afun = afun) %>%
-    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden") %>%
-    split_rows_by("SEX") %>%
+  lyt <- basic_table() |>
+    analyze("flag", afun = afun) |>
+    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden") |>
+    split_rows_by("SEX") |>
     analyze("BMRKR1")
 
   tbl <- expect_message(build_table(lyt, adsl), "[flag  -> { flag, flag[2] }]", fixed = TRUE)
@@ -662,12 +658,12 @@ test_that("tt_at_path works with identical split names", {
   )
 
   # Even with deeper branching
-  lyt <- basic_table() %>%
-    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden") %>%
-    split_rows_by("SEX", split_fun = keep_split_levels("U")) %>%
-    analyze("BMRKR1") %>%
-    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden") %>%
-    split_rows_by("SEX", split_fun = keep_split_levels("U")) %>%
+  lyt <- basic_table() |>
+    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden") |>
+    split_rows_by("SEX", split_fun = keep_split_levels("U")) |>
+    analyze("BMRKR1") |>
+    split_rows_by("flag", split_fun = keep_split_levels("Y"), child_labels = "hidden") |>
+    split_rows_by("SEX", split_fun = keep_split_levels("U")) |>
     analyze("AGE")
 
   tbl <- expect_message(build_table(lyt, adsl), "[flag  -> { flag, flag[2] }]", fixed = TRUE)
@@ -682,9 +678,9 @@ test_that("tt_at_path gives an informative error when labels are used instead of
   # Issue #1004
   adsl <- ex_adsl
 
-  out <- basic_table() %>%
-    split_rows_by("ARM") %>%
-    analyze("BMRKR1", afun = mean, show_labels = "visible", var_labels = "An error may occur") %>%
+  out <- basic_table() |>
+    split_rows_by("ARM") |>
+    analyze("BMRKR1", afun = mean, show_labels = "visible", var_labels = "An error may occur") |>
     build_table(adsl)
 
   real_path <- row_paths(out)[[3]]
@@ -861,12 +857,12 @@ test_that("subset_cols works as intended", {
     subtitles = c("Sub", "titles"),
     prov_footer = "prov footer",
     main_footer = "main footer"
-  ) %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX") %>%
-    add_overall_col("All Patients") %>%
-    split_rows_by("STRATA1") %>%
-    summarize_row_groups() %>%
+  ) |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX") |>
+    add_overall_col("All Patients") |>
+    split_rows_by("STRATA1") |>
+    summarize_row_groups() |>
     analyze(c("AGE"))
 
   tbl <- build_table(lyt, DM)
@@ -913,4 +909,48 @@ test_that("subset_cols works as intended", {
     lapply(rws, subset_cols, j = c("*", "*", "*", "M")),
     collect_leaves(stbl2, add.labrows = TRUE)
   )
+})
+
+## https://github.com/insightsengineering/rtables/issues/1058
+test_that("cell_values(colpath=) does not choke on regex chars in path", {
+  ## intentionally not valid regexs but using all metachars other than {}
+  ## which are already disallowed in labels due to footnote stuff
+  bad_levs <- c("^][.$+", ")(\\|?<>")
+
+  data <- DM
+
+  data$scary_fac <- factor(sample(bad_levs, nrow(data), replace = TRUE),
+    levels = bad_levs
+  )
+
+  lyt <- basic_table() |>
+    split_cols_by("ARM", split_fun = keep_split_levels(levels(DM$ARM)[1:2])) |>
+    split_cols_by("scary_fac") |>
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+    analyze("AGE")
+
+  tbl <- build_table(lyt, data)
+
+  cpaths <- col_paths(tbl)
+
+  add_wildcard_paths <- function(path) {
+    c(
+      list(path),
+      lapply(
+        seq_along(path),
+        function(i) {
+          pthi <- path
+          pthi[i] <- "*"
+          pthi
+        }
+      )
+    )
+  }
+
+  do_cell_values_colpath <- function(path, tt) {
+    all_pths <- add_wildcard_paths(path)
+    res <- lapply(all_pths, function(pthi) cell_values(tt, colpath = pthi))
+  }
+
+  expect_silent(lapply(cpaths, do_cell_values_colpath, tt = tbl))
 })

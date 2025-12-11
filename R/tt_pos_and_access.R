@@ -961,13 +961,14 @@ setMethod(
 
 path_collapse_sep <- "`"
 escape_name_padding <- function(x) {
-  ##  ret <- gsub("._[[", "\\._\\[\\[", x, fixed = TRUE)
-  ##  ret <- gsub("]]_.", "\\]\\]_\\.", ret, fixed = TRUE)
-  ret <- gsub("[", "\\[", x, fixed = TRUE)
-  ret <- gsub("]", "\\]", ret, fixed = TRUE)
-  ret <- gsub(".", "\\.", ret, fixed = TRUE)
+  ## ret <- gsub("[", "\\[", x, fixed = TRUE)
+  ## ret <- gsub("]", "\\]", ret, fixed = TRUE)
+  ## ret <- gsub(".", "\\.", ret, fixed = TRUE)
+  chars <- strsplit(x, "")[[1]]
+  ret <- paste0("[", chars, "]", collapse = "")
   ret
 }
+
 path_to_regex <- function(path) {
   paste(vapply(path, function(x) {
     if (identical(x, "*")) {
@@ -1233,21 +1234,16 @@ subset_by_rownum <- function(tt,
       }
       kids <- kids[sapply(kids, function(x) NROW(x) > 0)]
     }
-    if (length(kids) == 0 && NROW(content_table(x)) == 0 && !labelrow_visible(x)) {
-      return(valifnone)
+    ## avoid lintr styler disagreement
+    nokids <- length(kids) == 0 &&
+      NROW(content_table(x)) == 0 &&
+      !labelrow_visible(x)
+    if (nokids) {
+      valifnone
     } else {
       tree_children(x) <- kids
       x
     }
-    ## ## if(length(kids) == 0) {
-    ## ##     if(!is(x, "TableTree"))
-    ## ##         return(valifnone)
-    ## ## }
-    ## if(is(x, "VTableTree") && nrow(x) > 0) {
-    ##     x
-    ## } else {
-    ##     valifnone
-    ## }
   }
   ret <- prune_rowsbynum(tt, i)
 
