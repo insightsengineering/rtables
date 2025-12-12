@@ -550,6 +550,8 @@ gen_rowvalues <- function(dfpart,
   ctab
 }
 
+## return index in tbl that has best partial match to str
+## or NA_integer_ if none do
 inv_pmatch <- function(str, tbl) {
   inds <- pmatch(tbl, str)
   found_inds <- which(!is.na(inds))
@@ -566,16 +568,36 @@ inv_pmatch <- function(str, tbl) {
 
 .apply_default_formats <- function(kidlst, fmtlst, nastrlst = character()) {
 
+  if (length(fmtlst) == 0 && length(nastrlst) == 0) {
+    return(kidlst)
+  }
+
   if (is.null(names(kidlst))) {
     names(kidlst) <- vapply(kidlst, obj_name, "")
+  }
+
+  if (identical(nastrlst, character())) {
+    nastrlst <- NA_character_
+  }
+
+  if (is.character(nastrlst) && length(nastrlst) >= 1) {
+    nastrlst <- replicate(length(kidlst), list(nastrlst), simplify = FALSE)
+    names(nastrlst) <- names(kidlst)
   }
 
   missing_nastrs <- setdiff(names(fmtlst), names(nastrlst))
   if (length(missing_nastrs) > 0) {
     nastrlst[missing_nastrs] <- NA_character_
   }
+  missing_fmts <- setdiff(names(nastrlst), names(fmtlst))
+  if (length(missing_fmts) > 0) {
+    fmtlst[missing_fmts] <- list(NULL)
+  }
+  ## they may be in different orders, if so fix it
+  stopifnot(intersect(names(fmtlst), names(nastrlst)) == names(fmtlst))
+  nastrlst <- nastrlst[names(fmtlst)]  
 
-  ## checks for exact matches first then partial matches
+  ## checks for exact matches first then (inverse) partial matches
   fmt_match <- match(names(kidlst), names(fmtlst))
   no_exact_inds <- which(is.na(fmt_match))
   fmt_match[no_exact_inds] <- vapply(
@@ -617,6 +639,20 @@ inv_pmatch <- function(str, tbl) {
   if (nchar(defrlabel) == 0 && !missing(partlabel) && nchar(partlabel) > 0) {
     defrlabel <- partlabel
   }
+
+  fmt <- obj_format(spl)
+  have_fmt_lst <- FALSE
+  if (is(fmt, "FormatList")) {
+    ## list for diff vars but each has one format case
+    if (length(fmt) == 1 && is.null(names(fmt))) {
+      fmt <- unlist(fmt)
+      stopifnot(is(fmt, "FormatSpec"))
+    } else { ## real format list case
+      fmt <- NULL
+      have_fmt_lst <- TRUE  
+    }
+  }
+  
   kids <- tryCatch(
     .make_tablerows(df,
       func = analysis_fun(spl),
@@ -624,7 +660,7 @@ inv_pmatch <- function(str, tbl) {
       cinfo = cinfo,
       datcol = spl_payload(spl),
       lev = lvl + 1L,
-      format = obj_format(spl),
+      format = fmt, #obj_format(spl),
       splextra = split_exargs(spl),
       baselines = baselines,
       alt_dfpart = alt_df,
@@ -647,28 +683,45 @@ inv_pmatch <- function(str, tbl) {
     )
   }
 
+  fmtlist <- NULL
   if (!is.null(spl_formats_var(spl))) {
     if (is.null(spl_na_strs_var(spl))) {
       na_strs <- character() ## case handled in .apply_default_formats
     } else {
       na_strs <- df[[spl_na_strs_var(spl)]][[1]]
     }
+    fmtlist <- df[[spl_formats_var(spl)]][[1]]
+  } else if (have_fmt_lst) {
+    fmtlist <- obj_format(spl)
+    na_strs <- obj_na_str(spl)
+    if (is.character(na_strs)) {
+      na_strs <- lapply(fmtlist, function(nm) na_strs)
+      names(na_strs) <- names(fmtlist)
+    }
+  }
+
+  if (!is.null(fmtlist)) {
     kids <- .apply_default_formats(
       kids,
-      df[[spl_formats_var(spl)]][[1]],
+      fmtlist,
       na_strs
     )
   }
-  
+
   lab <- obj_label(spl)
+  if (is.character(obj_na_str(spl))) {
+    final_na_str <- obj_na_str(spl)
+  } else {
+    final_na_str <- NA_character_
+  }
   ret <- TableTree(
     kids = kids,
     name = obj_name(spl),
     label = lab,
     lev = lvl,
     cinfo = cinfo,
-    format = obj_format(spl),
-    na_str = obj_na_str(spl),
+    format = if (is.null(fmtlist)) obj_format(spl) else NULL,
+    na_str = final_na_str,
     indent_mod = indent_mod(spl),
     trailing_section_div = spl_section_div(spl)
   )

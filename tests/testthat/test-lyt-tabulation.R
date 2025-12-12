@@ -1830,7 +1830,21 @@ test_that("formats_var works in analyze()", {
                c("49.6", "49.91 (8.098)",
                  "50", "50.2 (8.61)",
                  "49.69", "50 (7.8)"))
-                   
+
+  ## can use formats_var with na_str specified the old way
+  lyta <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("PARAMCD") |>
+    analyze("AVAL",
+            fmts_afun,
+            formats_var = "formats",
+            na_str = "global na cha cha cha")
+
+  tbla <- build_table(lyta, adlb)
+
+  expect_true(
+    all(get_formatted_cells(tbla)[c(5, 10, 15), ] ==  "global na cha cha cha")
+  )
 
   ## works when also specifying na_strs_var
   lyt2 <- basic_table() |>
@@ -1924,4 +1938,86 @@ test_that("formats_var works in analyze()", {
 
   tbl4b <- build_table(lyt4, adlb2)
   expect_identical(tbl4, tbl4b)
+})
+
+test_that("New format as list of formats for diff vars in analyze works", {
+
+  ## ugh apparently simple_analysis applies a format!!!!!!!!!!!! x.x
+
+  my_stupid_afun <- function(x) {
+    if (is.factor(x)) {
+      vallst <- lapply(table(x), rcell)
+      names(vallst) <- levels(x)  
+    } else if(is(x, "numeric")) {
+      vallst <- list(Mean = rcell(mean(x, na.rm = TRUE)))
+    } else {
+      stop("no")
+    }
+    in_rows(.list = vallst)
+  }
+
+  ## basic case: list of individual formats, one for each var
+  lyt <- basic_table() |>
+    analyze(c("AGE", "BMRKR1", "STRATA1"),
+            afun = my_stupid_afun,
+            format = list(AGE = "xx.x",
+                          BMRKR1 = "xx.xx",
+                          STRATA1 = "N=xx"))
+             
+  tbl <- build_table(lyt, ex_adsl)
+
+  age_mean <- mean(ex_adsl$AGE, na.rm = TRUE)
+  bmrkr1_mean <- mean(ex_adsl$BMRKR1, na.rm = TRUE)
+  strata1_counts <- table(ex_adsl$STRATA1)
+  sex_counts <- table(ex_adsl$SEX)  
+  exp <- matrix(
+    c(
+      "",
+      format_value(age_mean, "xx.x"),
+      "",
+      format_value(bmrkr1_mean, "xx.xx"),
+      "",
+      vapply(strata1_counts, format_value, format = "N=xx", "")
+    ),
+    ncol = 1
+  )
+
+  expect_equal(get_formatted_cells(tbl), exp)
+
+  ## preserve old stanky behavior I for some reason thought was a good idea
+  ## list of formats applied to analysis of all vars and taken in order
+  ## with recycling (!!!!)
+  ## ... Past me was a genius of unparalleled insight /s
+
+  lyt_old <- basic_table() |>
+    analyze(c("AGE", "BMRKR1", "STRATA1", "SEX"),
+            afun = my_stupid_afun,
+            format = list("xx.x",
+                          "xx.xx",
+                          "N=xx"))
+
+  tbl_old <- build_table(lyt_old, ex_adsl)
+
+  fmtvec <- c("xx.x", "xx.xx", "N=xx")
+  ## supppress **very reasonable** warnings about bad recycling
+  exp_old <- suppressWarnings(matrix(
+    ncol = 1,
+    c(
+      "",
+      format_value(age_mean, "xx.x"),
+      "",
+      format_value(bmrkr1_mean, "xx.x"),
+      "",
+      mapply(format_value,
+             x = strata1_counts,
+             format = fmtvec),
+      "",
+      mapply(format_value,
+             x = sex_counts,
+             format = fmtvec) # !! insane recycling behavior. what?!?
+    )
+  ))
+      
+                   
+
 })

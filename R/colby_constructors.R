@@ -1170,6 +1170,17 @@ analyze <- function(lyt,
     defrowlab <- var_labels
   }
 
+  ## hook up the new hotness
+  var_format_lists <- length(vars) > 1 &&
+    is.list(format) &&
+    all(vars %in% names(format))      
+
+  if (var_format_lists) {
+    format <- lapply(format, function(x) FormatList(.list = x))
+    if (is.character(na_str)) {
+      na_str <- lapply(format, function(x) na_str)
+    }
+  }
   spl <- AnalyzeMultiVars(vars, var_labels,
     afun = afun,
     split_format = format,
