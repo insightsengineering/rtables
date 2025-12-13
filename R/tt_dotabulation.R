@@ -581,17 +581,31 @@ inv_pmatch <- function(str, tbl) {
   }
 
   if (is.character(nastrlst) && length(nastrlst) >= 1) {
-    nastrlst <- replicate(length(kidlst), list(nastrlst), simplify = FALSE)
-    names(nastrlst) <- names(kidlst)
+    missing_nastr_val <- nastrlst
+    nastrlst <- list()
+  } else {
+    missing_nastr_val <- NA_character_
+  }
+
+  if (!is.list(fmtlst)) {
+      missing_fmt_val <- fmtlst
+      fmtlst <- list()
+  } else if (length(fmtlst) == 1 &&
+       is.null(names(fmtlst)) &&
+       is(fmtlst[[1]], "FormatSpec")) {
+    missing_fmt_val <- fmtlst[[1]]
+    fmtlst <- list()  
+  } else {
+    missing_fmt_val <- NULL
   }
 
   missing_nastrs <- setdiff(names(fmtlst), names(nastrlst))
   if (length(missing_nastrs) > 0) {
-    nastrlst[missing_nastrs] <- NA_character_
+    nastrlst[missing_nastrs] <- missing_nastr_val
   }
   missing_fmts <- setdiff(names(nastrlst), names(fmtlst))
   if (length(missing_fmts) > 0) {
-    fmtlst[missing_fmts] <- list(NULL)
+    fmtlst[missing_fmts] <- list(missing_fmt_val)
   }
   ## they may be in different orders, if so fix it
   stopifnot(intersect(names(fmtlst), names(nastrlst)) == names(fmtlst))

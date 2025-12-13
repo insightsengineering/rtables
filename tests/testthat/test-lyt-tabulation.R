@@ -1768,23 +1768,44 @@ test_that("path uniqueness/sibling name uniqueness is enforced correctly", {
 })
 
 
+## used in both formats_var and format var list test sets below
+fmts_afun <- function(x, .formats = NULL) {
+  in_rows(n = sum(!is.na(x)),
+          median = median(x, na.rm = TRUE),
+          "mean (sd)" = c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)),
+          "missing_val" = NA,
+          .formats = .formats)
+}
+
+
+
+  ## tern style row naming partial match support
+factor_count_prepend_var <- function(x, .var) {
+  stopifnot(is.factor(x))
+  vals <- as.list(table(x))
+
+  in_rows(.list = vals, .names = paste0(.var, names(vals)), .labels = levels(x))
+}
+
+alt_fmts <-   list(list(median = "xx.x",
+                        "mean (sd)" = "xx.xx (xx.xxx)",
+                        missing_val = "xx",
+                        STRATA1 = "xx"))
+
+crp_fmts <- list(list(median = "xx.",
+                      "mean (sd)" = "xx.x (xx.xx)",
+                      missing_val = "xx",
+                      STRATA1 = "N=xx"))
+
+iga_fmts <-  list(list(median = "xx.xx",
+                       "mean (sd)" = "xx. (xx.x)",
+                       missing_val = "xx",
+                       STRATA1 = "xx.x"))
+
+
+
 test_that("formats_var works in analyze()", {
   adlb <- ex_adlb
-  alt_fmts <-   list(list(median = "xx.x",
-                          "mean (sd)" = "xx.xx (xx.xxx)",
-                          missing_val = "xx",
-                          STRATA1 = "xx"))
-
-  crp_fmts <- list(list(median = "xx.",
-                        "mean (sd)" = "xx.x (xx.xx)",
-                        missing_val = "xx",
-                        STRATA1 = "N=xx"))
-
-  iga_fmts <-  list(list(median = "xx.xx",
-                         "mean (sd)" = "xx. (xx.x)",
-                         missing_val = "xx",
-                         STRATA1 = "xx.x"))
-  
 
   adlb$formats <- alt_fmts
   adlb$formats[adlb$PARAMCD == "CRP"] <- crp_fmts
@@ -1795,13 +1816,7 @@ test_that("formats_var works in analyze()", {
   adlb$na_strs[adlb$PARAMCD == "CRP"] <- list(list(missing_val = "n/a"))
   adlb$na_strs[adlb$PARAMCD == "IGA"] <- list(list(missing_val = "-"))
                                               
-  fmts_afun <- function(x, .formats = NULL) {
-      in_rows(n = sum(!is.na(x)),
-              median = median(x, na.rm = TRUE),
-              "mean (sd)" = c(mean(x, na.rm = TRUE), sd(x, na.rm = TRUE)),
-              "missing_val" = NA,
-              .formats = .formats)
-  }
+ 
 
   ## works without also specifying na_strs_var
   lyt <- basic_table() |>
@@ -1854,6 +1869,11 @@ test_that("formats_var works in analyze()", {
 
   tbl2 <- build_table(lyt2, adlb)
 
+  fmtcells2 <- get_formatted_cells(tbl2)
+  expect_true(all(fmtcells2[5, ] == "NA") &&
+              all(fmtcells2[10, ] == "n/a") &&
+              all(fmtcells2[15, ] == "-"))
+
   ## precendence and interaction with .formats use in in_rows
 
   lyt3 <- basic_table() |>
@@ -1905,13 +1925,6 @@ test_that("formats_var works in analyze()", {
 
   expect_identical(get_formatted_cells(tbl), get_formatted_cells(tbl3c))
 
-  ## tern style row naming partial match support
-  factor_count_prepend_var <- function(x, .var) {
-    stopifnot(is.factor(x))
-    vals <- as.list(table(x))
-
-    in_rows(.list = vals, .names = paste0(.var, names(vals)), .labels = levels(x))
-  }
 
   lyt4 <- basic_table() |>
     split_cols_by("ARM") |>
@@ -2017,7 +2030,119 @@ test_that("New format as list of formats for diff vars in analyze works", {
              format = fmtvec) # !! insane recycling behavior. what?!?
     )
   ))
-      
-                   
 
+  ## confirmed this behavior on main before merge. ugh
+  expect_identical(get_formatted_cells(tbl_old), exp_old)
+
+
+  ## even newer extra hotness: list of formats for each var
+
+  ## beware extra layer of listiness between list column case and this one!
+  varfmts <- list(AGE = alt_fmts[[1]],
+                  BMRKR1 = crp_fmts[[1]],
+                  STRATA1 = crp_fmts[[1]],
+                  SEX = iga_fmts[[1]])
+
+  ## part one, single afun exact matches
+
+  lyt2 <- basic_table() |>
+    analyze(c("AGE", "BMRKR1"),
+            afun = fmts_afun,
+            format = varfmts)
+
+  tbl2 <- build_table(lyt2, ex_adsl)
+
+  fmtcells2 <- get_formatted_cells(tbl2)
+
+  expect_identical(
+    fmtcells2,
+    matrix(
+      ncol = 1,
+      c(
+        "",
+        format_value(sum(!is.na(ex_adsl$AGE)), "xx"),
+        format_value(median(ex_adsl$AGE), "xx.x"),
+        format_value(c(mean(ex_adsl$AGE), sd(ex_adsl$AGE)), "xx.xx (xx.xxx)"),
+        "NA",
+        "",
+        format_value(sum(!is.na(ex_adsl$BMRKR1)), "xx"),
+        format_value(median(ex_adsl$BMRKR1), "xx."),
+        format_value(c(mean(ex_adsl$BMRKR1), sd(ex_adsl$BMRKR1)),
+                     "xx.x (xx.xx)"),
+        "NA"
+      )
+    )
+  )
+      
+  ## part two, single afun partial matches
+
+  lyt3 <- basic_table() |>
+    analyze(c("STRATA1", "SEX"),
+            afun = factor_count_prepend_var,
+            format = varfmts)
+
+  tbl3 <- build_table(lyt3, ex_adsl)
+  fmtcells3 <- get_formatted_cells(tbl3)
+
+  expect_identical(
+    fmtcells3,
+    matrix(
+      ncol = 1,
+      c(
+        "",
+        vapply(strata1_counts, format_value, format = "N=xx", ""),
+        "",
+        vapply(sex_counts, format_value, format = "xx", "")
+      )
+    )
+  )
+
+  ## part 3 multiple afuns
+
+  lyt4 <- basic_table() |>
+    analyze(c("AGE", "BMRKR1", "STRATA1", "SEX"),
+            afun = list(fmts_afun,
+                        fmts_afun,
+                        factor_count_prepend_var,
+                        factor_count_prepend_var),
+            format = varfmts)
+
+  tbl4 <- build_table(lyt4, ex_adsl)
+
+  fmtcells4 <- get_formatted_cells(tbl4)
+
+  expect_identical(fmtcells4,
+                   rbind(fmtcells2, fmtcells3))
+
+  ## does it work with "the functions"?
+
+  bad_fmt_factory <- function(val) function(x, ...) val
+
+  lyt5 <- basic_table() |>
+    analyze(c("AGE", "BMRKR1", "STRATA1", "SEX"),
+            afun = list(fmts_afun,
+                        fmts_afun,
+                        factor_count_prepend_var,
+                        factor_count_prepend_var),
+            format = list(AGE = bad_fmt_factory("AGE"),
+                          BMRKR1 = bad_fmt_factory("BMRKR1"),
+                          STRATA1 = bad_fmt_factory("STRATA1"),
+                          SEX = bad_fmt_factory("SEX")))
+
+  tbl5 <- build_table(lyt5, ex_adsl)
+
+  fmtcells5 <- get_formatted_cells(tbl5)
+
+  expect_identical(
+    fmtcells5,
+    matrix(
+      ncol = 1,
+      c(
+        c("", rep("AGE", 3), "NA"),
+        c("", rep("BMRKR1", 3), "NA"),  
+        c("", rep("STRATA1", 3)),
+        c("", rep("SEX", 4))
+      )
+    )
+  )
 })
