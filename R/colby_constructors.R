@@ -1137,13 +1137,17 @@ analyze <- function(lyt,
   show_labels <- match.arg(show_labels)
   subafun <- substitute(afun)
   if (!is.null(format) && !is.null(formats_var)) {
-    stop("Cannot use 'format' and 'formats_var' arguments at ",
-         "the same time. Please choose one method for specifying ",
-         "default formatting.")
+    stop(
+      "Cannot use 'format' and 'formats_var' arguments at ",
+      "the same time. Please choose one method for specifying ",
+      "default formatting."
+    )
   } else if (is.null(formats_var) && !is.null(na_strs_var)) {
-    stop("Cannot use 'na_strs_var' (got ",
-         na_strs_var,
-         ") without using 'formats_var'.")
+    stop(
+      "Cannot use 'na_strs_var' (got ",
+      na_strs_var,
+      ") without using 'formats_var'."
+    )
   }
   # R treats a single NA value as a logical atomic. The below
   # maps all the NAs in `var_labels` to NA_character_ required by `Split`
@@ -1173,7 +1177,7 @@ analyze <- function(lyt,
   ## hook up the new hotness
   var_format_lists <- length(vars) > 1 &&
     is.list(format) &&
-    all(vars %in% names(format))      
+    all(vars %in% names(format))
 
   if (var_format_lists) {
     format <- lapply(format, function(x) FormatList(.list = x))

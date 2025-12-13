@@ -567,7 +567,6 @@ inv_pmatch <- function(str, tbl) {
 }
 
 .apply_default_formats <- function(kidlst, fmtlst, nastrlst = character()) {
-
   if (length(fmtlst) == 0 && length(nastrlst) == 0) {
     return(kidlst)
   }
@@ -588,13 +587,13 @@ inv_pmatch <- function(str, tbl) {
   }
 
   if (!is.list(fmtlst)) {
-      missing_fmt_val <- fmtlst
-      fmtlst <- list()
+    missing_fmt_val <- fmtlst
+    fmtlst <- list()
   } else if (length(fmtlst) == 1 &&
-       is.null(names(fmtlst)) &&
-       is(fmtlst[[1]], "FormatSpec")) {
+    is.null(names(fmtlst)) &&
+    is(fmtlst[[1]], "FormatSpec")) {
     missing_fmt_val <- fmtlst[[1]]
-    fmtlst <- list()  
+    fmtlst <- list()
   } else {
     missing_fmt_val <- NULL
   }
@@ -609,7 +608,7 @@ inv_pmatch <- function(str, tbl) {
   }
   ## they may be in different orders, if so fix it
   stopifnot(intersect(names(fmtlst), names(nastrlst)) == names(fmtlst))
-  nastrlst <- nastrlst[names(fmtlst)]  
+  nastrlst <- nastrlst[names(fmtlst)]
 
   ## checks for exact matches first then (inverse) partial matches
   fmt_match <- match(names(kidlst), names(fmtlst))
@@ -620,19 +619,19 @@ inv_pmatch <- function(str, tbl) {
     tbl = names(fmtlst),
     1L
   )
-    
+
   toset <- which(!is.na(fmt_match))
 
   fmts <- fmtlst[fmt_match[toset]]
-  na_strs <- nastrlst[names(fmts)]  
-    
+  na_strs <- nastrlst[names(fmts)]
+
   kidlst[toset] <- mapply(function(kid, fmt, na_str) {
     if (fmt_can_inherit(kid)) {
       kid <- set_format_recursive(kid, fmt, na_str, override = FALSE)
     }
     kid
   }, kid = kidlst[toset], fmt = fmts, na_str = na_strs, SIMPLIFY = FALSE)
-    
+
   kidlst
 }
 
@@ -663,10 +662,10 @@ inv_pmatch <- function(str, tbl) {
       stopifnot(is(fmt, "FormatSpec"))
     } else { ## real format list case
       fmt <- NULL
-      have_fmt_lst <- TRUE  
+      have_fmt_lst <- TRUE
     }
   }
-  
+
   kids <- tryCatch(
     .make_tablerows(df,
       func = analysis_fun(spl),
@@ -674,7 +673,7 @@ inv_pmatch <- function(str, tbl) {
       cinfo = cinfo,
       datcol = spl_payload(spl),
       lev = lvl + 1L,
-      format = fmt, #obj_format(spl),
+      format = fmt, # obj_format(spl),
       splextra = split_exargs(spl),
       baselines = baselines,
       alt_dfpart = alt_df,

@@ -64,13 +64,16 @@ validity = function(object) {
 setOldClass(c("FormatList", "list"))
 
 FormatList <- function(..., .list = list(...)) {
-  if (!is.list(.list))
+  if (!is.list(.list)) {
     .list <- list(.list)
+  }
   valid <- vapply(.list, is, class2 = "FormatSpec", TRUE)
   if (!are(.list, "FormatSpec")) {
-    stop("Attempted to construct FormatList with elements that are not ",
-         "FormatSpec compatible. This should not happen, please contact ",
-         "the maintainers.")
+    stop(
+      "Attempted to construct FormatList with elements that are not ",
+      "FormatSpec compatible. This should not happen, please contact ",
+      "the maintainers."
+    )
   }
 
   class(.list) <- c("FormatList", "list")
@@ -912,7 +915,6 @@ AnalyzeMultiVars <- function(var,
         MoreArgs = c(moreargs, list(split_format = split_format)), ## rvis),
         SIMPLIFY = FALSE
       )
-
     }
   } else {
     ## we're combining existing splits here
