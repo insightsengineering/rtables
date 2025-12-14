@@ -104,6 +104,10 @@
 \alias{spl_label_var}
 \alias{spl_label_var,VarLevelSplit-method}
 \alias{spl_label_var,Split-method}
+\alias{spl_formats_var}
+\alias{spl_formats_var,VAnalyzeSplit-method}
+\alias{spl_na_strs_var}
+\alias{spl_na_strs_var,VAnalyzeSplit-method}
 \alias{tt_labelrow}
 \alias{tt_labelrow,VTableTree-method}
 \alias{tt_labelrow<-}
@@ -633,6 +637,14 @@ spl_label_var(obj)
 \S4method{spl_label_var}{VarLevelSplit}(obj)
 
 \S4method{spl_label_var}{Split}(obj)
+
+spl_formats_var(obj)
+
+\S4method{spl_formats_var}{VAnalyzeSplit}(obj)
+
+spl_na_strs_var(obj)
+
+\S4method{spl_na_strs_var}{VAnalyzeSplit}(obj)
 
 tt_labelrow(obj)
 
