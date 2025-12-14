@@ -22,7 +22,9 @@ AnalyzeVarSplit(
   indent_mod = 0L,
   label_pos = "default",
   cvar = "",
-  section_div = NA_character_
+  section_div = NA_character_,
+  formats_var = NULL,
+  na_strs_var = NULL
 )
 
 AnalyzeColVarSplit(
@@ -58,7 +60,9 @@ AnalyzeMultiVars(
   child_labels = c("default", "topleft", "visible", "hidden"),
   child_names = var,
   cvar = "",
-  section_div = NA_character_
+  section_div = NA_character_,
+  formats_var = NULL,
+  na_strs_var = NULL
 )
 ```
 
@@ -162,6 +166,25 @@ AnalyzeMultiVars(
   string which should be repeated as a section divider after each group
   defined by this split instruction, or `NA_character_` (the default)
   for no section divider.
+
+- formats_var:
+
+  (`string` or `NULL`)  
+  `NULL` (the default) or the name of the list column containing named
+  lists of default formats to use. These will be applied with the same
+  precedence as the `format` argument; i.e., they will not override
+  formats (other than `"default"`) set within the afun. Cannot be used
+  simultaneously with `format`.
+
+- na_strs_var:
+
+  (`string` or `NULL`)  
+  `NULL` (the default) or the name of the list column containing named
+  lists of default NA strings to use. These will be applied with the
+  same precedence as the `format` argument; i.e., they will not override
+  formats (other than `"default"`) set within the afun. Cannot be used
+  simultaneously with `format`. Cannot be used if `formats_var` is
+  `NULL`.
 
 - .payload:
 

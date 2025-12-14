@@ -52,7 +52,9 @@ lyt_args(
   na_str,
   show_colcounts,
   colcount_format,
-  parent_name
+  parent_name,
+  formats_var,
+  na_strs_var
 )
 ```
 
@@ -357,6 +359,25 @@ lyt_args(
   sibling analyses*, for `split_rows_by*` and `analyze*` when analyzing
   more than one variable, respectively. Ignored when analyzing a single
   variable.
+
+- formats_var:
+
+  (`string` or `NULL`)  
+  `NULL` (the default) or the name of the list column containing named
+  lists of default formats to use. These will be applied with the same
+  precedence as the `format` argument; i.e., they will not override
+  formats (other than `"default"`) set within the afun. Cannot be used
+  simultaneously with `format`.
+
+- na_strs_var:
+
+  (`string` or `NULL`)  
+  `NULL` (the default) or the name of the list column containing named
+  lists of default NA strings to use. These will be applied with the
+  same precedence as the `format` argument; i.e., they will not override
+  formats (other than `"default"`) set within the afun. Cannot be used
+  simultaneously with `format`. Cannot be used if `formats_var` is
+  `NULL`.
 
 ## Value
 

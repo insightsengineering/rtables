@@ -329,6 +329,16 @@ spl_label_var(obj)
 # S4 method for class 'Split'
 spl_label_var(obj)
 
+spl_formats_var(obj)
+
+# S4 method for class 'VAnalyzeSplit'
+spl_formats_var(obj)
+
+spl_na_strs_var(obj)
+
+# S4 method for class 'VAnalyzeSplit'
+spl_na_strs_var(obj)
+
 tt_labelrow(obj)
 
 # S4 method for class 'VTableTree'

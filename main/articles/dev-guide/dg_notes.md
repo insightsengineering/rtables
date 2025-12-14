@@ -50,7 +50,7 @@ getClass("Split")
     ## Class:                     ANY               character               character
     ##                                                                               
     ## Name:             split_format            split_na_str    split_label_position
-    ## Class:              FormatSpec               character               character
+    ## Class:              FormatSpec         characterOrList               character
     ##                                                                               
     ## Name:              content_fun          content_format          content_na_str
     ## Class:              listOrNULL              FormatSpec               character
