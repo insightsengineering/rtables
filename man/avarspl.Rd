@@ -108,10 +108,14 @@ analyzed at the same level of nesting.}
 \item{section_div}{(\code{string})\cr string which should be repeated as a section divider after each group defined
 by this split instruction, or \code{NA_character_} (the default) for no section divider.}
 
-\item{formats_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default formats to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun.
+\item{formats_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named
+lists of default formats to use. These will be applied with the same precedence as the \code{format} argument; i.e.,
+they will not override formats (other than \code{"default"}) set within the afun.
 Cannot be used simultaneously with \code{format}.}
 
-\item{na_strs_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named lists of default NA strings to use. These will be applied with the same precedence as the \code{format} argument; i.e., they will not override formats (other than \code{"default"}) set within the afun.
+\item{na_strs_var}{(\code{string} or \code{NULL})\cr \code{NULL} (the default) or the name of the list column containing named
+lists of default NA strings to use. These will be applied with the same precedence as the \code{format} argument; i.e.,
+they will not override formats (other than \code{"default"}) set within the afun.
 Cannot be used simultaneously with \code{format}. Cannot be used if \code{formats_var} is \code{NULL}.}
 
 \item{.payload}{(\code{list})\cr used internally, not intended to be set by end users.}
