@@ -913,9 +913,13 @@ AnalyzeMultiVars <- function(var,
         cfun = cfun,
         cformat = cformat,
         inclNAs = inclNAs,
-        MoreArgs = c(moreargs,
-                     list(split_format = split_format,
-                          split_na_str = split_na_str)), ## rvis),
+        MoreArgs = c(
+          moreargs,
+          list(
+            split_format = split_format,
+            split_na_str = split_na_str
+          )
+        ), ## rvis),
         SIMPLIFY = FALSE
       )
     }

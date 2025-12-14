@@ -1893,14 +1893,18 @@ test_that("formats_var works in analyze()", {
 
   adlb_b <- adlb
   adlb_b$na_strs <- ifelse(adlb_b$PARAMCD == "ALT", list(list("NA")),
-                           ifelse(adlb_b$PARAMCD == "CRP",
-                                  list(list("n/a")),
-                                  list(list("-"))))
+    ifelse(adlb_b$PARAMCD == "CRP",
+      list(list("n/a")),
+      list(list("-"))
+    )
+  )
 
   tbl2b <- build_table(lyt2, adlb_b)
   ## tabletree objects not identical for some reason but...
-  expect_identical(get_formatted_cells(tbl2),
-                   get_formatted_cells(tbl2b))
+  expect_identical(
+    get_formatted_cells(tbl2),
+    get_formatted_cells(tbl2b)
+  )
 
   ## precendence and interaction with .formats use in in_rows
 
@@ -1988,13 +1992,13 @@ test_that("formats_var works in analyze()", {
   ## remove perfect match to make sure partial match kicks in
   adlb3 <- adlb2
   adlb3$formats <- lapply(adlb2$formats, function(x) {
-      x[["STRATA1"]] <- NULL
-      x$STRAT = "xx.x"
-      x
+    x[["STRATA1"]] <- NULL
+    x$STRAT <- "xx.x"
+    x
   })
   tbl4c <- build_table(lyt4, adlb3)
   expect_equal(
-    get_formatted_cells(tbl4c[-c(1, 5, 9),]),
+    get_formatted_cells(tbl4c[-c(1, 5, 9), ]),
     matrix(
       vapply(
         unlist(cell_values(tbl4c)),
@@ -2019,7 +2023,7 @@ test_that("formats_var works in analyze()", {
   tbl4e <- build_table(lyt4, adlb5)
   fmtcells4e <- get_formatted_cells(tbl4e)
   expect_equal(
-    get_formatted_cells(tbl4e[-c(1, 5, 9),]),
+    get_formatted_cells(tbl4e[-c(1, 5, 9), ]),
     matrix(
       vapply(
         unlist(cell_values(tbl4e)),
@@ -2189,10 +2193,14 @@ test_that("New format as list of formats for diff vars in analyze works", {
     analyze(
       c("AGE", "BMRKR1"),
       afun = fmts_afun,
-      format = list(AGE = function(x, ...) "what?",
-                    BMRKR1 = function(x, ...) "nah"),
-      na_str = list(AGE = "-",
-                    BMRKR1 = "X")
+      format = list(
+        AGE = function(x, ...) "what?",
+        BMRKR1 = function(x, ...) "nah"
+      ),
+      na_str = list(
+        AGE = "-",
+        BMRKR1 = "X"
+      )
     )
 
   tbl2b <- build_table(lyt2b, ex_adsl)
@@ -2217,14 +2225,18 @@ test_that("New format as list of formats for diff vars in analyze works", {
     analyze(
       c("AGE", "BMRKR1"),
       afun = fmts_afun,
-      format = list(AGE = list(function(x, ...) "what?"),
-                    BMRKR1 = list(function(x, ...) "nah")),
-      na_str = list(AGE = "-",
-                    BMRKR1 = "X")
+      format = list(
+        AGE = list(function(x, ...) "what?"),
+        BMRKR1 = list(function(x, ...) "nah")
+      ),
+      na_str = list(
+        AGE = "-",
+        BMRKR1 = "X"
+      )
     )
 
   tbl2c <- build_table(lyt2c, ex_adsl)
-  expect_identical(tbl2b, tbl2c)  
+  expect_identical(tbl2b, tbl2c)
 
   ## part two, single afun partial matches
 
