@@ -46,6 +46,7 @@ setClassUnion("SubsetDef", c("expression", "logical", "integer", "numeric"))
 
 setClassUnion("integerOrNULL", c("NULL", "integer"))
 setClassUnion("characterOrNULL", c("NULL", "character"))
+setClassUnion("characterOrList", c("list", "character"))
 
 ## should XXX [splits, s_values, sval_labels, subset(?)] be a data.frame?
 setClass("TreePos", representation(
@@ -60,10 +61,29 @@ validity = function(object) {
 }
 )
 
+setOldClass(c("FormatList", "list"))
+
+FormatList <- function(..., .list = list(...)) {
+  if (!is.list(.list)) {
+    .list <- list(.list)
+  }
+  valid <- vapply(.list, is, class2 = "FormatSpec", TRUE)
+  if (!are(.list, "FormatSpec")) {
+    stop(
+      "Attempted to construct FormatList with elements that are not ",
+      "FormatSpec compatible. This should not happen, please contact ",
+      "the maintainers."
+    )
+  }
+
+  class(.list) <- c("FormatList", "list")
+  .list
+}
+
 setClassUnion("functionOrNULL", c("NULL", "function"))
 setClassUnion("listOrNULL", c("NULL", "list"))
 ## TODO (?) make "list" more specific, e.g FormatList, or FunctionList?
-setClassUnion("FormatSpec", c("NULL", "character", "function", "list"))
+setClassUnion("FormatSpec", c("NULL", "character", "function", "list", "FormatList"))
 setClassUnion("ExprOrNULL", c("NULL", "expression"))
 
 setClass("ValueWrapper", representation(
@@ -133,7 +153,7 @@ setClass("Split",
     name = "character",
     split_label = "character",
     split_format = "FormatSpec",
-    split_na_str = "character",
+    split_na_str = "characterOrList",
     split_label_position = "character",
     ## NB this is the function which is applied to
     ## get the content rows for the CHILDREN of this
@@ -633,7 +653,9 @@ setClass("VAnalyzeSplit",
   representation(
     default_rowlabel = "character",
     include_NAs = "logical",
-    var_label_position = "character"
+    var_label_position = "character",
+    row_formats_var = "characterOrNULL",
+    row_na_strs_var = "characterOrNULL"
   )
 )
 
@@ -672,7 +694,9 @@ AnalyzeVarSplit <- function(var,
                             indent_mod = 0L,
                             label_pos = "default",
                             cvar = "",
-                            section_div = NA_character_) {
+                            section_div = NA_character_,
+                            formats_var = NULL,
+                            na_strs_var = NULL) {
   check_ok_label(split_label)
   label_pos <- match.arg(label_pos, c("default", label_pos_values))
   if (!any(nzchar(defrowlab))) {
@@ -701,7 +725,9 @@ AnalyzeVarSplit <- function(var,
     page_title_prefix = NA_character_,
     child_section_div = section_div,
     child_show_colcounts = FALSE,
-    child_colcount_format = NA_character_
+    child_colcount_format = NA_character_,
+    row_formats_var = formats_var,
+    row_na_strs_var = na_strs_var
   ) ## no content_extra_args
 }
 
@@ -823,7 +849,9 @@ AnalyzeMultiVars <- function(var,
                              child_labels = c("default", "topleft", "visible", "hidden"),
                              child_names = var,
                              cvar = "",
-                             section_div = NA_character_) {
+                             section_div = NA_character_,
+                             formats_var = NULL,
+                             na_strs_var = NULL) {
   ## NB we used to resolve to strict TRUE/FALSE for label visibillity
   ## in this function but that was too greedy for repeated
   ## analyze calls, so that now occurs in the tabulation machinery
@@ -842,26 +870,59 @@ AnalyzeMultiVars <- function(var,
     ##        split_format = .repoutlst(split_format, nv)
     inclNAs <- .repoutlst(inclNAs, nv)
     section_div_if_multivar <- if (length(var) > 1) NA_character_ else section_div
-    pld <- mapply(AnalyzeVarSplit,
-      var = var,
-      split_name = child_names,
-      split_label = split_label,
-      afun = afun,
-      defrowlab = defrowlab,
-      cfun = cfun,
-      cformat = cformat,
-      ##                     split_format = split_format,
-      inclNAs = inclNAs,
-      MoreArgs = list(
-        extra_args = extra_args,
-        indent_mod = indent_mod,
-        label_pos = show_kidlabs,
-        split_format = split_format,
-        split_na_str = split_na_str,
-        section_div = section_div_if_multivar
-      ), ## rvis),
-      SIMPLIFY = FALSE
+
+    moreargs <- list(
+      extra_args = extra_args,
+      indent_mod = indent_mod,
+      label_pos = show_kidlabs,
+      section_div = section_div_if_multivar,
+      formats_var = formats_var,
+      na_strs_var = na_strs_var
     )
+    mv_list_case <- is.list(split_format) &&
+      all(var %in% names(split_format)) &&
+      all(vapply(split_format, is, class2 = "FormatList", TRUE))
+    if (mv_list_case) { # diff format list for each var
+      stopifnot(all(var %in% names(split_na_str)))
+      ## split_value does *not* go  in more args, not constant across vars
+      pld <- mapply(
+        AnalyzeVarSplit,
+        var = var,
+        split_name = child_names,
+        split_label = split_label,
+        afun = afun,
+        defrowlab = defrowlab,
+        cfun = cfun,
+        cformat = cformat,
+        ## in case they're in the wrong order for some insane reason
+        split_format = split_format[var],
+        split_na_str = split_na_str[var],
+        inclNAs = inclNAs,
+        MoreArgs = moreargs, ## rvis),
+        SIMPLIFY = FALSE
+      )
+    } else { # not diff lists for each var
+      ## split format goes in more args because its constant across vars
+      pld <- mapply(
+        AnalyzeVarSplit,
+        var = var,
+        split_name = child_names,
+        split_label = split_label,
+        afun = afun,
+        defrowlab = defrowlab,
+        cfun = cfun,
+        cformat = cformat,
+        inclNAs = inclNAs,
+        MoreArgs = c(
+          moreargs,
+          list(
+            split_format = split_format,
+            split_na_str = split_na_str
+          )
+        ), ## rvis),
+        SIMPLIFY = FALSE
+      )
+    }
   } else {
     ## we're combining existing splits here
     pld <- unlist(lapply(.payload, .uncompound))
