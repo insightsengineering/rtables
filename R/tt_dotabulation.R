@@ -553,7 +553,7 @@ gen_rowvalues <- function(dfpart,
 ## return index in tbl that has best partial match to str
 ## or NA_integer_ if none do
 inv_pmatch <- function(str, tbl) {
-  inds <- pmatch(tbl, str)
+  inds <- pmatch(tbl, str, duplicates.ok = TRUE)
   found_inds <- which(!is.na(inds))
   ret <- NA_integer_
   if (length(found_inds) == 1) {
@@ -566,6 +566,9 @@ inv_pmatch <- function(str, tbl) {
   ret
 }
 
+.got_noname_single <- function(lst) {
+  is.list(lst) && length(lst) == 1 && is.null(names(lst))
+}
 .apply_default_formats <- function(kidlst, fmtlst, nastrlst = character()) {
   if (length(fmtlst) == 0 && length(nastrlst) == 0) {
     return(kidlst)
@@ -582,30 +585,39 @@ inv_pmatch <- function(str, tbl) {
   if (is.character(nastrlst) && length(nastrlst) >= 1) {
     missing_nastr_val <- nastrlst
     nastrlst <- list()
+  } else if (.got_noname_single(nastrlst)) {
+    missing_nastr_val <- nastrlst[[1]]
+    natsrlst <- list()
   } else {
     missing_nastr_val <- NA_character_
   }
 
-  if (!is.list(fmtlst)) {
+  if (!is.list(fmtlst)) { ## appears impossible??
     missing_fmt_val <- fmtlst
     fmtlst <- list()
-  } else if (length(fmtlst) == 1 &&
-    is.null(names(fmtlst)) &&
-    is(fmtlst[[1]], "FormatSpec")) {
+  } else if (.got_noname_single(fmtlst)) {
+    stopifnot(is(fmtlst[[1]], "FormatSpec"))
     missing_fmt_val <- fmtlst[[1]]
     fmtlst <- list()
   } else {
     missing_fmt_val <- NULL
   }
 
-  missing_nastrs <- setdiff(names(fmtlst), names(nastrlst))
+  if (length(names(fmtlst)) > 0 || length(names(nastrlst)) > 0) {
+    missing_nastrs <- setdiff(names(fmtlst), names(nastrlst))
+    missing_fmts <- setdiff(names(nastrlst), names(fmtlst))
+  } else {
+    missing_nastrs <- names(kidlst)
+    missing_fmts <- names(kidlst)
+  }
+
   if (length(missing_nastrs) > 0) {
     nastrlst[missing_nastrs] <- missing_nastr_val
   }
-  missing_fmts <- setdiff(names(nastrlst), names(fmtlst))
   if (length(missing_fmts) > 0) {
     fmtlst[missing_fmts] <- list(missing_fmt_val)
   }
+
   ## they may be in different orders, if so fix it
   stopifnot(intersect(names(fmtlst), names(nastrlst)) == names(fmtlst))
   nastrlst <- nastrlst[names(fmtlst)]

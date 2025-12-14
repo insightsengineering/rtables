@@ -875,7 +875,6 @@ AnalyzeMultiVars <- function(var,
       extra_args = extra_args,
       indent_mod = indent_mod,
       label_pos = show_kidlabs,
-      split_na_str = split_na_str,
       section_div = section_div_if_multivar,
       formats_var = formats_var,
       na_strs_var = na_strs_var
@@ -884,6 +883,7 @@ AnalyzeMultiVars <- function(var,
       all(var %in% names(split_format)) &&
       all(vapply(split_format, is, class2 = "FormatList", TRUE))
     if (mv_list_case) { # diff format list for each var
+      stopifnot(all(var %in% names(split_na_str)))
       ## split_value does *not* go  in more args, not constant across vars
       pld <- mapply(
         AnalyzeVarSplit,
@@ -896,6 +896,7 @@ AnalyzeMultiVars <- function(var,
         cformat = cformat,
         ## in case they're in the wrong order for some insane reason
         split_format = split_format[var],
+        split_na_str = split_na_str[var],
         inclNAs = inclNAs,
         MoreArgs = moreargs, ## rvis),
         SIMPLIFY = FALSE
@@ -912,7 +913,9 @@ AnalyzeMultiVars <- function(var,
         cfun = cfun,
         cformat = cformat,
         inclNAs = inclNAs,
-        MoreArgs = c(moreargs, list(split_format = split_format)), ## rvis),
+        MoreArgs = c(moreargs,
+                     list(split_format = split_format,
+                          split_na_str = split_na_str)), ## rvis),
         SIMPLIFY = FALSE
       )
     }
