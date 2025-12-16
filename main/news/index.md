@@ -1,6 +1,8 @@
 # Changelog
 
-## rtables 0.6.14.9005
+## rtables 0.6.15
+
+CRAN release: 2025-12-14
 
 ### New Features
 
