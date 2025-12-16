@@ -33,7 +33,7 @@ Row constructors and classes">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.15</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,6 +96,7 @@ Row constructors and classes">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.15">v0.6.15</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc2">v0.6.13-rc2</a>
@@ -152,7 +153,8 @@ Row constructors and classes">
 <span>  cinfo <span class="op">=</span> <span class="va">EmptyColInfo</span>,</span>
 <span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
 <span>  table_inset <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  trailing_section_div <span class="op">=</span> <span class="cn">NA_character_</span></span>
+<span>  trailing_section_div <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  round_type <span class="op">=</span> <span class="va">valid_round_type</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">.tablerow</span><span class="op">(</span></span>
@@ -169,7 +171,8 @@ Row constructors and classes">
 <span>  indent_mod <span class="op">=</span> <span class="fl">0L</span>,</span>
 <span>  footnotes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  table_inset <span class="op">=</span> <span class="fl">0L</span>,</span>
-<span>  trailing_section_div <span class="op">=</span> <span class="cn">NA_character_</span></span>
+<span>  trailing_section_div <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  round_type <span class="op">=</span> <span class="va">valid_round_type</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">DataRow</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
@@ -228,6 +231,12 @@ and main footer, as compared to alignment of title, subtitles, and provenance fo
 of the last row contained in this (sub)table, unless that row is also the last table row to be printed overall,
 or <code>NA_character_</code> for none (the default). When generated via layouting, this would correspond to the
 <code>section_div</code> of the split under which this table represents a single facet.</p></dd>
+
+
+<dt id="arg-round-type">round_type<a class="anchor" aria-label="anchor" href="#arg-round-type"></a>
+</dt>
+<dd><p>(<code>"iec"</code>, <code>"iec_mod"</code> or <code>"sas"</code>)<br> the type of rounding to perform.
+See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html" class="external-link">formatters::round_fmt()</a></code> for details.</p></dd>
 
 
 <dt id="arg-vals">vals<a class="anchor" aria-label="anchor" href="#arg-vals"></a>

@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.15</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,6 +91,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.15">v0.6.15</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc2">v0.6.13-rc2</a>
@@ -134,7 +135,7 @@
                         <h4 data-toc-skip class="author">Davide
 Garolini</h4>
             
-            <h4 data-toc-skip class="date">2025-11-18</h4>
+            <h4 data-toc-skip class="date">2025-12-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/dev-guide/dg_notes.Rmd" class="external-link"><code>vignettes/dev-guide/dg_notes.Rmd</code></a></small>
       <div class="d-none name"><code>dg_notes.Rmd</code></div>
@@ -185,7 +186,7 @@ than <code>NA_character</code>, and <code>"NX"</code> otherwise.</p>
 <span><span class="co">## Class:                     ANY               character               character</span></span>
 <span><span class="co">##                                                                               </span></span>
 <span><span class="co">## Name:             split_format            split_na_str    split_label_position</span></span>
-<span><span class="co">## Class:              FormatSpec               character               character</span></span>
+<span><span class="co">## Class:              FormatSpec         characterOrList               character</span></span>
 <span><span class="co">##                                                                               </span></span>
 <span><span class="co">## Name:              content_fun          content_format          content_na_str</span></span>
 <span><span class="co">## Class:              listOrNULL              FormatSpec               character</span></span>
@@ -264,6 +265,9 @@ makes `trailing_section_div:</p>
 <span><span class="co">##                                                                            </span></span>
 <span><span class="co">## Name:                  na_str        indent_modifier            table_inset</span></span>
 <span><span class="co">## Class:              character                integer                integer</span></span>
+<span><span class="co">##                              </span></span>
+<span><span class="co">## Name:              round_type</span></span>
+<span><span class="co">## Class:              character</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Extends: </span></span>
 <span><span class="co">## Class "VLeaf", directly</span></span>
@@ -296,11 +300,14 @@ makes `trailing_section_div:</p>
 <span><span class="co">## Name:                  na_str        indent_modifier            table_inset</span></span>
 <span><span class="co">## Class:              character                integer                integer</span></span>
 <span><span class="co">##                                                                            </span></span>
-<span><span class="co">## Name:                   level                   name             main_title</span></span>
-<span><span class="co">## Class:                integer              character              character</span></span>
+<span><span class="co">## Name:              round_type                  level                   name</span></span>
+<span><span class="co">## Class:              character                integer              character</span></span>
 <span><span class="co">##                                                                            </span></span>
-<span><span class="co">## Name:               subtitles            main_footer      provenance_footer</span></span>
+<span><span class="co">## Name:              main_title              subtitles            main_footer</span></span>
 <span><span class="co">## Class:              character              character              character</span></span>
+<span><span class="co">##                              </span></span>
+<span><span class="co">## Name:       provenance_footer</span></span>
+<span><span class="co">## Class:              character</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Extends: </span></span>
 <span><span class="co">## Class "VTableNodeInfo", directly</span></span>

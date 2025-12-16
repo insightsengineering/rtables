@@ -33,7 +33,7 @@ using a layout and a dataset.">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.15</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,6 +96,7 @@ using a layout and a dataset.">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.15">v0.6.15</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc2">v0.6.13-rc2</a>
@@ -152,6 +153,8 @@ using a layout and a dataset.</p>
 <span>  col_total <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">alt_counts_df</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="kw">else</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">alt_counts_df</span><span class="op">)</span>,</span>
 <span>  topleft <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  hsep <span class="op">=</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/default_horizontal_sep.html" class="external-link">default_hsep</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  round_type <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">lyt</span>, <span class="st">"PreDataTableLayouts"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/obj_round_type.html" class="external-link">obj_round_type</a></span><span class="op">(</span><span class="va">lyt</span><span class="op">)</span> <span class="kw">else</span></span>
+<span>    <span class="va">valid_round_type</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -202,6 +205,12 @@ calculated counts. Turns on display of leaf-column counts when non-<code>NULL</c
 the table when rendered as text. Defaults to a connected horizontal line (unicode 2014) in locals that use a UTF
 charset, and to <code>-</code> elsewhere (with a once per session warning). See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/default_horizontal_sep.html" class="external-link">formatters::set_default_hsep()</a></code> for further
 information.</p></dd>
+
+
+<dt id="arg-round-type">round_type<a class="anchor" aria-label="anchor" href="#arg-round-type"></a>
+</dt>
+<dd><p>(<code>"iec"</code> (default), <code>"iec_mod"</code> or <code>"sas"</code>)<br> the type of rounding to perform.
+See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html" class="external-link">formatters::format_value()</a></code> for details.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a>

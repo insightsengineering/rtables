@@ -35,7 +35,7 @@ the tabulation will occur at the current/next level of nesting by default.">
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.15</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,6 +98,7 @@ the tabulation will occur at the current/next level of nesting by default.">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.15">v0.6.15</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc2">v0.6.13-rc2</a>
@@ -155,7 +156,9 @@ the tabulation will occur at the current/next level of nesting by default.</p>
 <span>  table_names <span class="op">=</span> <span class="va">vars</span>,</span>
 <span>  parent_name <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  formats_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  na_str <span class="op">=</span> <span class="cn">NA_character_</span>,</span>
+<span>  na_strs_var <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nested <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  inclNAs <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  extra_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -212,9 +215,25 @@ strings (<code>"xx.x"</code>) or function. In cases such as <code>analyze</code>
 functions. See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code> for a list of all available format strings.</p></dd>
 
 
+<dt id="arg-formats-var">formats_var<a class="anchor" aria-label="anchor" href="#arg-formats-var"></a>
+</dt>
+<dd><p>(<code>string</code> or <code>NULL</code>)<br><code>NULL</code> (the default) or the name of the list column containing named
+lists of default formats to use. These will be applied with the same precedence as the <code>format</code> argument; i.e.,
+they will not override formats (other than <code>"default"</code>) set within the afun.
+Cannot be used simultaneously with <code>format</code>.</p></dd>
+
+
 <dt id="arg-na-str">na_str<a class="anchor" aria-label="anchor" href="#arg-na-str"></a>
 </dt>
 <dd><p>(<code>string</code>)<br> string that should be displayed when the value of <code>x</code> is missing. Defaults to <code>"NA"</code>.</p></dd>
+
+
+<dt id="arg-na-strs-var">na_strs_var<a class="anchor" aria-label="anchor" href="#arg-na-strs-var"></a>
+</dt>
+<dd><p>(<code>string</code> or <code>NULL</code>)<br><code>NULL</code> (the default) or the name of the list column containing named
+lists of default NA strings to use. These will be applied with the same precedence as the <code>format</code> argument; i.e.,
+they will not override formats (other than <code>"default"</code>) set within the afun.
+Cannot be used simultaneously with <code>format</code>. Cannot be used if <code>formats_var</code> is <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-nested">nested<a class="anchor" aria-label="anchor" href="#arg-nested"></a>
@@ -268,10 +287,87 @@ both apply to the same position in the rendered output.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a>
 </h2>
-    <p>When non-<code>NULL</code>, <code>format</code> is used to specify formats for all generated rows, and can be a character vector, a
-function, or a list of functions. It will be repped out to the number of rows once this is calculated during the
-tabulation process, but will be overridden by formats specified within <code>rcell</code> calls in <code>afun</code>.</p>
-<p>The analysis function (<code>afun</code>) should take as its first parameter either <code>x</code> or <code>df</code>. Whichever of these the
+    <p>When <code>length(vars) &gt; 1</code> and when two calls to <code>analyze</code>
+are done in sequence (the second with the default <code>nested = TRUE</code>), the analyses will be combined into a multi-variable
+analysis that will be reflected in the row structure of the
+resulting table. In these cases, the default is to show the
+label describing the variable analyzed for each of the
+resulting subtables, while that is hidden by default in
+one-variable cases.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a>
+</h2>
+    <p>None of the arguments described in <a href="additional_fun_params.html">additional_fun_params</a> can be overridden via <code>extra_args</code> or when calling
+<code><a href="make_afun.html">make_afun()</a></code>. <code>.N_col</code> and <code>.N_total</code> can be overridden via the <code>col_counts</code> argument to <code><a href="build_table.html">build_table()</a></code>.
+Alternative values for the others must be calculated within <code>afun</code> based on a combination of extra arguments and
+the unmodified values provided by the tabulation framework.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="specifying-default-formatting-behavior">Specifying Default Formatting Behavior<a class="anchor" aria-label="anchor" href="#specifying-default-formatting-behavior"></a>
+</h2>
+    <p><em>Default</em> formatting behavior for rows generated by <code>afun</code> can be
+specified by one of <code>format</code> or <code>formats_var</code>. In both cases, these
+default formatting instructions <em>will not</em> supersede formatting
+specified from within <code>afun</code> at either the <code>rcell</code> or <code>in_rows</code>
+call levels; They will only apply to rows/cells whose formatting as
+returned by <code>afun</code> is either <code>NULL</code> or <code>"default"</code>.  When
+non-<code>NULL</code>, <code>format</code> is used to specify formats for all generated
+rows, and can be a character vector, a function, or a list of
+functions. It will be repped out to the number of rows once this is
+calculated during the tabulation process, but will be overridden by
+formats specified within <code>rcell</code> calls in <code>afun</code>.</p>
+<p><code>format</code> can accept a format label string (see
+<code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html" class="external-link">formatters::list_valid_format_labels()</a></code>), a formatting function, an
+unnamed list, or a named list.</p>
+<p>When <code>format</code> is an unnamed list - or a named list where not all
+values of <code>vars</code> appear in the names - its elements will be repped
+out to the number of rows generated by <code>afun</code> (separately) within
+each row facet <code>afun</code> is applied within. <strong>This includes recycling
+behavior, even in the case where the number of rows is not cleanly
+divisible by the number of specified formats</strong>. This behavior is
+retained largely for legacy reasons and switching to the new
+named-list behavior is advised where applicable.</p>
+<p>When <code>format</code> is a named list whose names contain all values in
+<code>vars</code>, the elements of <code>format</code> are taken to be specific to the
+analysis of the corresponding variable; this allows us to specify a
+multi-variable analysis where e.g., the different variables are
+analyzed by the same <code>afun</code> but have different levels of
+measurement precision (and thus different formatting needs). In
+this case the var-specific formatting can be a single format (label
+string or function) or can be a named list whose names will be
+matched up to those of the rows generated by applying <code>afun</code> in
+each row facet. Matching of formats to rows is performed the same
+as in the <code>formats_var</code> case and is described below.</p>
+<p>When <code>formats_var</code> is non-<code>NULL</code>, it specifies the name of a list
+column containing formatting instructions for one or more rows
+<code>afun</code> will generate when applied within a row facet. This can be
+used when the analysis results for a single variable (e.g., <code>value</code>
+or <code>AVAL</code> in long-form data) should be formatted differently within
+different row facets (e.g., when faceting on <code>statistic</code> or
+<code>PARAMCD</code>). The value of <code>df[[formats_var]]</code> is assumed without
+verification to be constant within each row facet <code>afun</code> is applied
+within, and the first (list) value of the column within the row
+facet data will be used.</p>
+<p>In the <code>formats_var</code> case as well as the case of <code>format</code> being a
+named list containing the values of <code>vars</code>, after rows are created
+during tabulation, the default formats are matched and applied to
+them as follows:</p>
+<ol>
+<li><p>When the generated row's name (as given by <code>obj_name</code>) matches
+a name in the list, the corresponding default format is applied,</p></li>
+<li><p>for those without exact matches, the default format whose name
+provides <em>the best partial match</em> to each row name is applied,</p></li>
+<li><p>For those without default format names that partially match
+the row name, no default format is applied.</p></li>
+</ol>
+<p>Note carefully that in (2), it is the names of the list of formats
+that are partially matching the row names not the other way around.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="the-analysis-function">The Analysis Function<a class="anchor" aria-label="anchor" href="#the-analysis-function"></a>
+</h2>
+    <p>The analysis function (<code>afun</code>) should take as its first parameter either <code>x</code> or <code>df</code>. Whichever of these the
 function accepts will change the behavior when tabulation is performed as follows:</p>
 <ul>
 <li><p>If <code>afun</code>'s first parameter is <code>x</code>, it will receive the corresponding subset <em>vector</em> of data from the relevant
@@ -282,14 +378,6 @@ the raw data being tabulated.</p></li>
 <p>In addition to differentiation on the first argument, the analysis function can optionally accept a number of
 other parameters which, <em>if and only if</em> present in the formals, will be passed to the function by the tabulation
 machinery. These are listed and described in <a href="additional_fun_params.html">additional_fun_params</a>.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a>
-</h2>
-    <p>None of the arguments described in <a href="additional_fun_params.html">additional_fun_params</a> can be overridden via <code>extra_args</code> or when calling
-<code><a href="make_afun.html">make_afun()</a></code>. <code>.N_col</code> and <code>.N_total</code> can be overridden via the <code>col_counts</code> argument to <code><a href="build_table.html">build_table()</a></code>.
-Alternative values for the others must be calculated within <code>afun</code> based on a combination of extra arguments and
-the unmodified values provided by the tabulation framework.</p>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a>

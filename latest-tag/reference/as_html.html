@@ -31,7 +31,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.15</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,6 +94,7 @@
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.15">v0.6.15</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13-rc2">v0.6.13-rc2</a>
@@ -151,7 +152,8 @@
 <span>  bold <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"header"</span><span class="op">)</span>,</span>
 <span>  header_sep_line <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  no_spaces_between_cells <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  expand_newlines <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  expand_newlines <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  round_type <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/methods/is.html" class="external-link">is</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"VTableTree"</span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/obj_round_type.html" class="external-link">obj_round_type</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="kw">else</span> <span class="va">valid_round_type</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -215,6 +217,12 @@ to <code>FALSE</code>.</p></dd>
 </dt>
 <dd><p>(<code>flag</code>)<br> Defaults to <code>FALSE</code>, relying on <code>html</code> output to solve newline characters (<code>\n</code>).
 Doing this keeps the structure of the cells but may depend on the output device.</p></dd>
+
+
+<dt id="arg-round-type">round_type<a class="anchor" aria-label="anchor" href="#arg-round-type"></a>
+</dt>
+<dd><p>(<code>"iec"</code>, <code>"iec_mod"</code> or <code>"sas"</code>)<br> the type of rounding to perform.
+See <code><a href="https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html" class="external-link">formatters::round_fmt()</a></code> for details.</p></dd>
 
 </dl>
 </div>
