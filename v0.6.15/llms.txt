@@ -1,0 +1,883 @@
+# rtables
+
+[![Check
+🛠](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/rtables/actions/workflows/check.yaml)
+[![Docs
+📚](https://github.com/insightsengineering/rtables/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/rtables/)
+[![Code Coverage
+📔](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/rtables/_xml_coverage_reports/data/main/coverage.xml)
+
+![GitHub
+forks](https://img.shields.io/github/forks/insightsengineering/rtables?style=social)![GitHub
+repo
+stars](https://img.shields.io/github/stars/insightsengineering/rtables?style=social)
+
+![GitHub commit
+activity](https://img.shields.io/github/commit-activity/m/insightsengineering/rtables)![GitHub
+contributors](https://img.shields.io/github/contributors/insightsengineering/rtables)![GitHub
+last
+commit](https://img.shields.io/github/last-commit/insightsengineering/rtables)![GitHub
+pull
+requests](https://img.shields.io/github/issues-pr/insightsengineering/rtables)![GitHub
+repo
+size](https://img.shields.io/github/repo-size/insightsengineering/rtables)![GitHub
+language
+count](https://img.shields.io/github/languages/count/insightsengineering/rtables)[![Project
+Status: Active – The project has reached a stable, usable state and is
+being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Open
+Issues](https://img.shields.io/github/issues-raw/insightsengineering/rtables?color=red&label=open%20issues)](https://github.com/insightsengineering/rtables/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+
+[![CRAN
+Version](https://www.r-pkg.org/badges/version/rtables)](https://CRAN.R-project.org/package=rtables)
+[![Current
+Version](https://img.shields.io/github/r-package/v/insightsengineering/rtables/main?color=purple&label=Development%20Version)](https://github.com/insightsengineering/rtables/tree/main)
+
+## Reporting Tables with R
+
+The `rtables` R package was designed to create and display complex
+tables with R. The cells in an `rtable` may contain any high-dimensional
+data structure which can then be displayed with cell-specific formatting
+instructions. Currently, `rtables` can be outputted in `ascii` `html`,
+and `pdf`, as well Power Point (via conversion to `flextable` objects).
+`rtf` support is in development and will be in a future release.
+
+`rtables` is developed and copy written by `F. Hoffmann-La Roche` and it
+is released open source under Apache License Version 2.
+
+`rtables` development is driven by the need to create regulatory ready
+tables for health authority review. Some of the key requirements for
+this undertaking are listed below:
+
+- cell values and their visualization separate (i.e. no string based
+  tables)
+  - values need to be programmatically accessible in their non-rounded
+    state for cross-checking
+- multiple values displayed within a cell
+- flexible tabulation framework
+- flexible formatting (cell spans, rounding, alignment, etc.)
+- multiple output formats (html, ascii, latex, pdf, xml)
+- flexible pagination in both horizontal and vertical directions
+- distinguish between name and label in the data structure to work with
+  `CDISC` standards
+- title, footnotes, cell cell/row/column references
+
+`rtables` currently covers virtually all of these requirements, and
+further advances remain under active development.
+
+## Installation
+
+`rtables` is available on CRAN and you can install the latest released
+version with:
+
+``` r
+install.packages("rtables")
+```
+
+or you can install the latest development version directly from GitHub
+with:
+
+``` r
+# install.packages("pak")
+pak::pak("insightsengineering/rtables")
+```
+
+Packaged releases (both those on CRAN and those between official CRAN
+releases) can be found in the [releases
+list](https://github.com/insightsengineering/rtables/releases).
+
+To understand how to use this package, please refer to the [Introduction
+to
+`rtables`](https://insightsengineering.github.io/rtables/main/articles/rtables.html)
+article, which provides multiple examples of code implementation.
+
+## Cheatsheet
+
+[![](https://raw.githubusercontent.com/insightsengineering/rtables/main/inst/cheatsheet/rtables_cheatsheet_01-24_thumbs.png)](https://github.com/insightsengineering/rtables/blob/main/inst/cheatsheet/rtables_cheatsheet_01-24.pdf)
+
+## Usage
+
+We first demonstrate with a demographic table-like example and then show
+the creation of a more complex table.
+
+``` r
+library(rtables)
+
+lyt <- basic_table() %>%
+  split_cols_by("ARM") %>%
+  analyze(c("AGE", "BMRKR1", "BMRKR2"), function(x, ...) {
+    if (is.numeric(x)) {
+      in_rows(
+        "Mean (sd)" = c(mean(x), sd(x)),
+        "Median" = median(x),
+        "Min - Max" = range(x),
+        .formats = c("xx.xx (xx.xx)", "xx.xx", "xx.xx - xx.xx")
+      )
+    } else if (is.factor(x) || is.character(x)) {
+      in_rows(.list = list_wrap_x(table)(x))
+    } else {
+      stop("type not supported")
+    }
+  })
+
+build_table(lyt, ex_adsl)
+#>                 A: Drug X      B: Placebo     C: Combination
+#> ————————————————————————————————————————————————————————————
+#> AGE                                                         
+#>   Mean (sd)   33.77 (6.55)    35.43 (7.90)     35.43 (7.72) 
+#>   Median          33.00           35.00           35.00     
+#>   Min - Max   21.00 - 50.00   21.00 - 62.00   20.00 - 69.00 
+#> BMRKR1                                                      
+#>   Mean (sd)    5.97 (3.55)     5.70 (3.31)     5.62 (3.49)  
+#>   Median          5.39            4.81             4.61     
+#>   Min - Max   0.41 - 17.67    0.65 - 14.24     0.17 - 21.39 
+#> BMRKR2                                                      
+#>   LOW              50              45               40      
+#>   MEDIUM           37              56               42      
+#>   HIGH             47              33               50
+```
+
+``` r
+library(rtables)
+library(dplyr)
+
+## for simplicity grab non-sparse subset
+ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
+
+biomarker_ave <- function(x, ...) {
+  val <- if (length(x) > 0) round(mean(x), 2) else "no data"
+  in_rows(
+    "Biomarker 1 (mean)" = rcell(val)
+  )
+}
+
+basic_table(show_colcounts = TRUE) %>%
+  split_cols_by("ARM") %>%
+  split_cols_by("BMRKR2") %>%
+  split_rows_by("RACE", split_fun = trim_levels_in_group("SEX")) %>%
+  split_rows_by("SEX") %>%
+  summarize_row_groups() %>%
+  analyze("BMRKR1", biomarker_ave) %>%
+  build_table(ADSL)
+#>                                          A: Drug X                            B: Placebo                           C: Combination           
+#>                                LOW        MEDIUM        HIGH         LOW         MEDIUM       HIGH         LOW         MEDIUM        HIGH   
+#>                               (N=45)      (N=35)       (N=46)       (N=42)       (N=48)      (N=31)       (N=40)       (N=39)       (N=47)  
+#> ————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+#> ASIAN                                                                                                                                       
+#>   F                         13 (28.9%)   9 (25.7%)   19 (41.3%)   9 (21.4%)    18 (37.5%)   9 (29.0%)   13 (32.5%)   9 (23.1%)    17 (36.2%)
+#>     Biomarker 1 (mean)         5.23        6.17         5.38         5.64         5.55        4.33         5.46         5.48         5.19   
+#>   M                         8 (17.8%)    7 (20.0%)   10 (21.7%)   12 (28.6%)   10 (20.8%)   8 (25.8%)   5 (12.5%)    11 (28.2%)   16 (34.0%)
+#>     Biomarker 1 (mean)         6.77        6.06         5.54         4.9          4.98        6.81         6.53         5.47         4.98   
+#>   U                          1 (2.2%)    1 (2.9%)     0 (0.0%)     0 (0.0%)     0 (0.0%)    1 (3.2%)     0 (0.0%)     1 (2.6%)     1 (2.1%) 
+#>     Biomarker 1 (mean)         4.68         7.7       no data      no data      no data       6.97       no data       11.93         9.01   
+#> BLACK OR AFRICAN AMERICAN                                                                                                                   
+#>   F                         6 (13.3%)    3 (8.6%)    9 (19.6%)    6 (14.3%)    8 (16.7%)    2 (6.5%)    7 (17.5%)    4 (10.3%)     3 (6.4%) 
+#>     Biomarker 1 (mean)         5.01         7.2         6.79         6.15         5.26        8.57         5.72         5.76         4.58   
+#>   M                         5 (11.1%)    5 (14.3%)    2 (4.3%)     3 (7.1%)    5 (10.4%)    4 (12.9%)   4 (10.0%)    5 (12.8%)    5 (10.6%) 
+#>     Biomarker 1 (mean)         6.92        5.82        11.66         4.46         6.14        8.47         6.16         5.25         4.83   
+#>   U                          0 (0.0%)    0 (0.0%)     0 (0.0%)     0 (0.0%)     0 (0.0%)    0 (0.0%)     1 (2.5%)     1 (2.6%)     0 (0.0%) 
+#>     Biomarker 1 (mean)       no data      no data     no data      no data      no data      no data       2.79         9.82       no data  
+#>   UNDIFFERENTIATED           1 (2.2%)    0 (0.0%)     0 (0.0%)     0 (0.0%)     0 (0.0%)    0 (0.0%)     2 (5.0%)     0 (0.0%)     0 (0.0%) 
+#>     Biomarker 1 (mean)         9.48       no data     no data      no data      no data      no data       6.46       no data      no data  
+#> WHITE                                                                                                                                       
+#>   F                         6 (13.3%)    7 (20.0%)    4 (8.7%)    5 (11.9%)    6 (12.5%)    6 (19.4%)   6 (15.0%)     3 (7.7%)     2 (4.3%) 
+#>     Biomarker 1 (mean)         4.43        7.83         4.52         6.42         5.07        7.83         6.71         5.87         10.7   
+#>   M                          4 (8.9%)    3 (8.6%)     2 (4.3%)    6 (14.3%)     1 (2.1%)    1 (3.2%)     2 (5.0%)    5 (12.8%)     3 (6.4%) 
+#>     Biomarker 1 (mean)         5.81        7.23         1.39         4.72         4.58        12.87        2.3          5.1          5.98   
+#>   U                          1 (2.2%)    0 (0.0%)     0 (0.0%)     1 (2.4%)     0 (0.0%)    0 (0.0%)     0 (0.0%)     0 (0.0%)     0 (0.0%) 
+#>     Biomarker 1 (mean)         3.94       no data     no data        3.77       no data      no data     no data      no data      no data
+```
+
+# Acknowledgments
+
+We would like to thank everyone who has made `rtables` a better project
+by providing feedback and improving examples & vignettes. The following
+list of contributors is alphabetical:
+
+Maximo Carreras, Francois Collins, Saibah Chohan, Tadeusz Lewandowski,
+Nick Paszty, Nina Qi, Jana Stoilova, Heng Wang, Godwin Yung
+
+## Presentations
+
+- R in Pharma 2023
+  - Generating Tables, Listings, and Graphs using NEST /
+    [cardinal](https://pharmaverse.github.io/cardinal/)
+    \[[Video](https://www.youtube.com/watch?v=YPmbLPSYFYM)\]
+  - BBS Session on Regulatory Submissions of Clinical Trials
+    \[[Video](https://www.youtube.com/watch?v=yZS4OBuJe_Q)\]
+- R Medicine Virtual Conference 2023
+  \[[Video](https://www.youtube.com/watch?v=sxFsavKI7s4)\]
+- Advanced rtables Training 2023 \[[Part 1
+  Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advanced_rtables_part1.pdf)\]
+  \[[Part 2
+  Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Advances_rtables_part2.pdf)\]
+- R in Pharma 2022 - Creating Submission-Quality Clinical Trial
+  Reporting Tables in R with rtables
+  \[[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/Clinical_Trial_Reporting_Tables_in_R.pdf)\]
+  \[[Video](https://www.youtube.com/watch?v=zBm_NZ0VtKs)\]
+- R Consortium 2022
+  - R Adoption Series - Reporting Table Creation in R
+    \[[Video](https://www.youtube.com/watch?v=1i6vOId2h4A)\]
+    \[[Slides](https://github.com/insightsengineering/rtables/blob/main/inst/extdata/r_adoption_slides.pdf)\]
+  - Tables in Clinical Trials with R
+    \[[Book](https://rconsortium.github.io/rtrs-wg/)\]
+- useR! 2020 - rtables Layouting and Tabulation Framework
+  \[[Video](https://www.youtube.com/watch?v=CBQzZ8ZhXLA)\]
+
+# Package index
+
+## Argument Conventions
+
+The following dummy functions are unexported and used to document
+argument conventions in the framework.
+
+- [`lyt_args()`](https://insightsengineering.github.io/rtables/reference/lyt_args.md)
+  : Layouting function argument conventions
+- [`constr_args()`](https://insightsengineering.github.io/rtables/reference/constr_args.md)
+  : Constructor argument conventions
+- [`compat_args()`](https://insightsengineering.github.io/rtables/reference/compat_args.md)
+  : Compatibility argument conventions
+- [`gen_args()`](https://insightsengineering.github.io/rtables/reference/gen_args.md)
+  : General argument conventions
+- [`sf_args()`](https://insightsengineering.github.io/rtables/reference/sf_args.md)
+  : Split function argument conventions
+
+## Layout and Tabulation
+
+Functions for declaring layout and tabulation
+
+- [`qtable_layout()`](https://insightsengineering.github.io/rtables/reference/qtable_layout.md)
+  [`qtable()`](https://insightsengineering.github.io/rtables/reference/qtable_layout.md)
+  : Generalized frequency table
+- [`build_table()`](https://insightsengineering.github.io/rtables/reference/build_table.md)
+  : Create a table from a layout and data
+- [`basic_table()`](https://insightsengineering.github.io/rtables/reference/basic_table.md)
+  : Layout with 1 column and zero rows
+- [`analyze()`](https://insightsengineering.github.io/rtables/reference/analyze.md)
+  : Generate rows analyzing variables across columns
+- [`append_topleft()`](https://insightsengineering.github.io/rtables/reference/append_topleft.md)
+  : Append a description to the 'top-left' materials for the layout
+- [`split_cols_by()`](https://insightsengineering.github.io/rtables/reference/split_cols_by.md)
+  : Declaring a column-split based on levels of a variable
+- [`add_colcounts()`](https://insightsengineering.github.io/rtables/reference/add_colcounts.md)
+  : Add the column population counts to the header
+- [`split_rows_by()`](https://insightsengineering.github.io/rtables/reference/split_rows_by.md)
+  : Add rows according to levels of a variable
+- [`summarize_row_groups()`](https://insightsengineering.github.io/rtables/reference/summarize_row_groups.md)
+  : Add a content row of summary counts
+- [`split_cols_by_multivar()`](https://insightsengineering.github.io/rtables/reference/split_cols_by_multivar.md)
+  : Associate multiple variables with columns
+- [`split_rows_by_multivar()`](https://insightsengineering.github.io/rtables/reference/split_rows_by_multivar.md)
+  : Associate multiple variables with rows
+- [`analyze_colvars()`](https://insightsengineering.github.io/rtables/reference/analyze_colvars.md)
+  : Generate rows analyzing different variables across columns
+- [`split_cols_by_cuts()`](https://insightsengineering.github.io/rtables/reference/varcuts.md)
+  [`split_rows_by_cuts()`](https://insightsengineering.github.io/rtables/reference/varcuts.md)
+  [`split_cols_by_cutfun()`](https://insightsengineering.github.io/rtables/reference/varcuts.md)
+  [`split_cols_by_quartiles()`](https://insightsengineering.github.io/rtables/reference/varcuts.md)
+  [`split_rows_by_quartiles()`](https://insightsengineering.github.io/rtables/reference/varcuts.md)
+  [`split_rows_by_cutfun()`](https://insightsengineering.github.io/rtables/reference/varcuts.md)
+  : Split on static or dynamic cuts of the data
+- [`add_overall_col()`](https://insightsengineering.github.io/rtables/reference/add_overall_col.md)
+  : Add overall column
+- [`add_existing_table()`](https://insightsengineering.github.io/rtables/reference/add_existing_table.md)
+  : Add an already calculated table to the layout
+- [`table_inset()`](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
+  [`` `table_inset<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
+  : Access or (recursively) set table inset (from formatters)
+
+## Tabulation Utility Functions
+
+Functions that are useful to be used with the `analyze*` functions.
+
+- [`in_rows()`](https://insightsengineering.github.io/rtables/reference/in_rows.md)
+  : Create multiple rows in analysis or summary functions
+
+- [`additional_fun_params`](https://insightsengineering.github.io/rtables/reference/additional_fun_params.md)
+  :
+
+  Additional parameters within analysis and content functions
+  (`afun`/`cfun`)
+
+- [`simple_analysis()`](https://insightsengineering.github.io/rtables/reference/rtinner.md)
+  : Default tabulation
+
+- [`make_afun()`](https://insightsengineering.github.io/rtables/reference/make_afun.md)
+  : Create a custom analysis function wrapping an existing function
+
+- [`list_wrap_x()`](https://insightsengineering.github.io/rtables/reference/list_wrap.md)
+  [`list_wrap_df()`](https://insightsengineering.github.io/rtables/reference/list_wrap.md)
+  : Returns a function that coerces the return values of a function to a
+  list
+
+- [`spl_context`](https://insightsengineering.github.io/rtables/reference/spl_context.md)
+  : .spl_context within analysis and split functions
+
+- [`spl_context_to_disp_path()`](https://insightsengineering.github.io/rtables/reference/spl_context_to_disp_path.md)
+  : Translate spl_context to a path to display in error messages
+
+- [`counts_wpcts()`](https://insightsengineering.github.io/rtables/reference/counts_wpcts.md)
+  : Analysis function to count levels of a factor with percentage of the
+  column total
+
+## Split Functions
+
+- [`add_overall_level()`](https://insightsengineering.github.io/rtables/reference/add_overall_level.md)
+  [`select_all_levels`](https://insightsengineering.github.io/rtables/reference/add_overall_level.md)
+  [`add_combo_levels()`](https://insightsengineering.github.io/rtables/reference/add_overall_level.md)
+  : Add overall or combination levels to split groups
+- [`keep_split_levels()`](https://insightsengineering.github.io/rtables/reference/split_funcs.md)
+  [`remove_split_levels()`](https://insightsengineering.github.io/rtables/reference/split_funcs.md)
+  [`drop_split_levels()`](https://insightsengineering.github.io/rtables/reference/split_funcs.md)
+  [`drop_and_remove_levels()`](https://insightsengineering.github.io/rtables/reference/split_funcs.md)
+  [`reorder_split_levels()`](https://insightsengineering.github.io/rtables/reference/split_funcs.md)
+  [`trim_levels_in_group()`](https://insightsengineering.github.io/rtables/reference/split_funcs.md)
+  : Split functions
+- [`trim_levels_to_map()`](https://insightsengineering.github.io/rtables/reference/trim_levels_to_map.md)
+  : Trim levels to map
+- [`custom_split_funs`](https://insightsengineering.github.io/rtables/reference/custom_split_funs.md)
+  : Custom split functions
+- [`do_base_split()`](https://insightsengineering.github.io/rtables/reference/do_base_split.md)
+  : Apply basic split (for use in custom split functions)
+
+## Custom Split Functions
+
+- [`make_split_fun()`](https://insightsengineering.github.io/rtables/reference/make_split_fun.md)
+  : Create a custom splitting function
+
+- [`drop_facet_levels()`](https://insightsengineering.github.io/rtables/reference/drop_facet_levels.md)
+  :
+
+  Pre-processing function for use in `make_split_fun`
+
+- [`trim_levels_in_facets()`](https://insightsengineering.github.io/rtables/reference/trim_levels_in_facets.md)
+  : Trim levels of another variable from each facet (post-processing
+  split step)
+
+- [`add_combo_facet()`](https://insightsengineering.github.io/rtables/reference/add_combo_facet.md)
+  [`add_overall_facet()`](https://insightsengineering.github.io/rtables/reference/add_combo_facet.md)
+  : Add a combination facet in post-processing
+
+- [`make_split_result()`](https://insightsengineering.github.io/rtables/reference/make_split_result.md)
+  [`add_to_split_result()`](https://insightsengineering.github.io/rtables/reference/make_split_result.md)
+  : Construct split result object
+
+- [`spl_variable()`](https://insightsengineering.github.io/rtables/reference/spl_variable.md)
+  : Variable associated with a split
+
+## Cell Formatting related Functions
+
+cell formatting.
+
+- [`format_rcell()`](https://insightsengineering.github.io/rtables/reference/format_rcell.md)
+  :
+
+  Format `rcell` objects
+
+- [`value_formats()`](https://insightsengineering.github.io/rtables/reference/value_formats.md)
+  : Value formats
+
+## Table Structure Information
+
+- [`nrow(`*`<VTableTree>`*`)`](https://insightsengineering.github.io/rtables/reference/dimensions.md)
+  [`ncol(`*`<VTableNodeInfo>`*`)`](https://insightsengineering.github.io/rtables/reference/dimensions.md)
+  [`dim(`*`<VTableNodeInfo>`*`)`](https://insightsengineering.github.io/rtables/reference/dimensions.md)
+  : Table dimensions
+- [`row_paths()`](https://insightsengineering.github.io/rtables/reference/make_col_row_df.md)
+  [`col_paths()`](https://insightsengineering.github.io/rtables/reference/make_col_row_df.md)
+  : Get a list of table row/column paths
+- [`row_paths_summary()`](https://insightsengineering.github.io/rtables/reference/row_paths_summary.md)
+  [`col_paths_summary()`](https://insightsengineering.github.io/rtables/reference/row_paths_summary.md)
+  : Print row/column paths summary
+- [`table_structure()`](https://insightsengineering.github.io/rtables/reference/table_structure.md)
+  : Summarize table
+- [`table_shell()`](https://insightsengineering.github.io/rtables/reference/table_shell.md)
+  [`table_shell_str()`](https://insightsengineering.github.io/rtables/reference/table_shell.md)
+  : Table shells
+- [`make_row_df()`](https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html)
+  : Make row layout summary data frames for use during pagination (from
+  formatters)
+- [`make_col_df()`](https://insightsengineering.github.io/rtables/reference/make_col_df.md)
+  : Column layout summary
+
+## Layout Structure Information
+
+- [`vars_in_layout()`](https://insightsengineering.github.io/rtables/reference/vil.md)
+  : List variables required by a pre-data table layout
+- [`coltree_structure()`](https://insightsengineering.github.io/rtables/reference/coltree_structure.md)
+  : Display column tree structure
+
+## Access and Modify
+
+- [`cell_values()`](https://insightsengineering.github.io/rtables/reference/cell_values.md)
+  [`value_at()`](https://insightsengineering.github.io/rtables/reference/cell_values.md)
+  : Retrieve cell values by row and column path
+
+- [`top_left()`](https://insightsengineering.github.io/rtables/reference/top_left.md)
+  [`` `top_left<-`() ``](https://insightsengineering.github.io/rtables/reference/top_left.md)
+  : Top left material
+
+- [`rbindl_rtables()`](https://insightsengineering.github.io/rtables/reference/rbind.md)
+  [`rbind(`*`<VTableNodeInfo>`*`)`](https://insightsengineering.github.io/rtables/reference/rbind.md)
+  [`rbind2(`*`<VTableNodeInfo>`*`,`*`<ANY>`*`)`](https://insightsengineering.github.io/rtables/reference/rbind.md)
+  :
+
+  Row-bind `TableTree` and related objects
+
+- [`cbind_rtables()`](https://insightsengineering.github.io/rtables/reference/cbind_rtables.md)
+  :
+
+  Column-bind two `TableTree` objects
+
+- [`as.vector(`*`<VTableTree>`*`)`](https://insightsengineering.github.io/rtables/reference/asvec.md)
+  : Convert to a vector
+
+- [`` `[<-`( ``*`<VTableTree>`*`,`*`<ANY>`*`,`*`<ANY>`*`,`*`<list>`*`)`](https://insightsengineering.github.io/rtables/reference/brackets.md)
+  [`` `[`( ``*`<VTableTree>`*`,`*`<logical>`*`,`*`<logical>`*`)`](https://insightsengineering.github.io/rtables/reference/brackets.md)
+  :
+
+  Retrieve and assign elements of a `TableTree`
+
+- [`subset_cols()`](https://insightsengineering.github.io/rtables/reference/subset_cols.md)
+  : Subset a table or row to particular columns
+
+- [`clear_indent_mods()`](https://insightsengineering.github.io/rtables/reference/clear_imods.md)
+  : Clear all indent modifiers from a table
+
+- [`head()`](https://insightsengineering.github.io/rtables/reference/head_tail.md)
+  [`tail()`](https://insightsengineering.github.io/rtables/reference/head_tail.md)
+  : Head and tail methods
+
+- [`section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `section_div<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`header_section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `header_section_div<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`top_level_section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `top_level_section_div<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`section_div_info()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`section_div_at_path()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `section_div_at_path<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  : Section dividers accessor and setter
+
+- [`colcount_visible()`](https://insightsengineering.github.io/rtables/reference/colcount_visible.md)
+  [`` `colcount_visible<-`() ``](https://insightsengineering.github.io/rtables/reference/colcount_visible.md)
+  : Value and Visibility of specific column counts by path
+
+- [`facet_colcount()`](https://insightsengineering.github.io/rtables/reference/facet_colcount.md)
+  [`` `facet_colcount<-`() ``](https://insightsengineering.github.io/rtables/reference/facet_colcount.md)
+  : Get or set column count for a facet in column space
+
+- [`` `facet_colcounts_visible<-`() ``](https://insightsengineering.github.io/rtables/reference/facet_colcounts_visible-set.md)
+  : Set visibility of column counts for a group of sibling facets
+
+- [`rm_all_colcounts()`](https://insightsengineering.github.io/rtables/reference/rm_all_colcounts.md)
+  : Set all column counts at all levels of nesting to NA
+
+## Validating and Fixing Table Structure
+
+- [`validate_table_struct()`](https://insightsengineering.github.io/rtables/reference/validate_table_struct.md)
+  [`assert_valid_table()`](https://insightsengineering.github.io/rtables/reference/validate_table_struct.md)
+  **\[experimental\]** : Validate and assert valid table structure
+- [`sanitize_table_struct()`](https://insightsengineering.github.io/rtables/reference/sanitize_table_struct.md)
+  **\[experimental\]** : Sanitize degenerate table structures
+- [`find_degen_struct()`](https://insightsengineering.github.io/rtables/reference/find_degen_struct.md)
+  **\[experimental\]** : Find degenerate (sub)structures within a table
+
+## Sorting and Pruning
+
+- [`prune_table()`](https://insightsengineering.github.io/rtables/reference/prune_table.md)
+  :
+
+  Recursively prune a `TableTree`
+
+- [`all_zero_or_na()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md)
+  [`all_zero()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md)
+  [`content_all_zeros_nas()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md)
+  [`prune_empty_level()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md)
+  [`prune_zeros_only()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md)
+  [`low_obs_pruner()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md)
+  : Trimming and pruning criteria
+
+- [`trim_rows()`](https://insightsengineering.github.io/rtables/reference/trim_rows.md)
+  : Trim rows from a populated table without regard for table structure
+
+- [`sort_at_path()`](https://insightsengineering.github.io/rtables/reference/sort_at_path.md)
+  : Sorting a table at a specific path
+
+- [`cont_n_allcols()`](https://insightsengineering.github.io/rtables/reference/score_funs.md)
+  [`cont_n_onecol()`](https://insightsengineering.github.io/rtables/reference/score_funs.md)
+  :
+
+  Score functions for sorting `TableTrees`
+
+## Compatibility Layer
+
+These functions provide some backwards compatibility to the previous
+(pre 2021) `rtables` framework.
+
+- [`rtable()`](https://insightsengineering.github.io/rtables/reference/rtable.md)
+  [`rtablel()`](https://insightsengineering.github.io/rtables/reference/rtable.md)
+  : Create a table
+
+- [`rrow()`](https://insightsengineering.github.io/rtables/reference/rrow.md)
+  :
+
+  Create an `rtable` row
+
+- [`rcell()`](https://insightsengineering.github.io/rtables/reference/rcell.md)
+  [`non_ref_rcell()`](https://insightsengineering.github.io/rtables/reference/rcell.md)
+  : Cell value constructors
+
+- [`rheader()`](https://insightsengineering.github.io/rtables/reference/rheader.md)
+  : Create a header
+
+- [`rrowl()`](https://insightsengineering.github.io/rtables/reference/rrowl.md)
+  :
+
+  Create an `rtable` row from a vector or list of values
+
+- [`indent()`](https://insightsengineering.github.io/rtables/reference/indent.md)
+  :
+
+  Change indentation of all `rrows` in an `rtable`
+
+- [`df_to_tt()`](https://insightsengineering.github.io/rtables/reference/df_to_tt.md)
+  :
+
+  Create an `ElementaryTable` from a `data.frame`
+
+## Output Functions
+
+These functions create ascii or html representations of the table
+
+- [`as_html()`](https://insightsengineering.github.io/rtables/reference/as_html.md)
+  :
+
+  Convert an `rtable` object to a `shiny.tag` HTML object
+
+- [`export_as_tsv()`](https://insightsengineering.github.io/rtables/reference/tsv_io.md)
+  [`import_from_tsv()`](https://insightsengineering.github.io/rtables/reference/tsv_io.md)
+  : Create enriched flat value table with paths
+
+- [`toString(`*`<VTableTree>`*`)`](https://insightsengineering.github.io/rtables/reference/tostring.md)
+  :
+
+  Convert an `rtable` object to a string
+
+- [`get_formatted_cells()`](https://insightsengineering.github.io/rtables/reference/gfc.md)
+  [`get_cell_aligns()`](https://insightsengineering.github.io/rtables/reference/gfc.md)
+  : Get formatted cells
+
+- [`as_result_df()`](https://insightsengineering.github.io/rtables/reference/data.frame_export.md)
+  [`path_enriched_df()`](https://insightsengineering.github.io/rtables/reference/data.frame_export.md)
+  : Generate a result data frame
+
+## Utility Functions
+
+utility functions
+
+- [`Viewer()`](https://insightsengineering.github.io/rtables/reference/Viewer.md)
+  :
+
+  Display an `rtable` object in the Viewer pane in RStudio or in a
+  browser
+
+- [`compare_rtables()`](https://insightsengineering.github.io/rtables/reference/compare_rtables.md)
+  : Compare two rtables
+
+- [`indent_string()`](https://insightsengineering.github.io/rtables/reference/indent_string.md)
+  : Indent strings
+
+- [`is_rtable()`](https://insightsengineering.github.io/rtables/reference/is_rtable.md)
+  :
+
+  Check if an object is a valid `rtable`
+
+## Pagination
+
+Pagination related functionality
+
+- [`pag_tt_indices()`](https://insightsengineering.github.io/rtables/reference/paginate.md)
+  [`paginate_table()`](https://insightsengineering.github.io/rtables/reference/paginate.md)
+  :
+
+  Pagination of a `TableTree`
+
+- [`make_row_df()`](https://insightsengineering.github.io/formatters/latest-tag/reference/make_row_df.html)
+  : Make row layout summary data frames for use during pagination (from
+  formatters)
+
+- [`make_col_df()`](https://insightsengineering.github.io/rtables/reference/make_col_df.md)
+  : Column layout summary
+
+## TableTree Framework Accessor Functions
+
+- [`content_table()`](https://insightsengineering.github.io/rtables/reference/content_table.md)
+  [`` `content_table<-`() ``](https://insightsengineering.github.io/rtables/reference/content_table.md)
+  :
+
+  Retrieve or set content table from a `TableTree`
+
+- [`tree_children()`](https://insightsengineering.github.io/rtables/reference/tree_children.md)
+  [`` `tree_children<-`() ``](https://insightsengineering.github.io/rtables/reference/tree_children.md)
+  : Retrieve or set the direct children of a tree-style object
+
+- [`collect_leaves()`](https://insightsengineering.github.io/rtables/reference/collect_leaves.md)
+  :
+
+  Collect leaves of a `TableTree`
+
+- [`obj_avar()`](https://insightsengineering.github.io/rtables/reference/row_accessors.md)
+  [`row_cells()`](https://insightsengineering.github.io/rtables/reference/row_accessors.md)
+  [`` `row_cells<-`() ``](https://insightsengineering.github.io/rtables/reference/row_accessors.md)
+  [`row_values()`](https://insightsengineering.github.io/rtables/reference/row_accessors.md)
+  [`` `row_values<-`() ``](https://insightsengineering.github.io/rtables/reference/row_accessors.md)
+  : Row attribute accessors
+
+- [`no_colinfo()`](https://insightsengineering.github.io/rtables/reference/no_info.md)
+  :
+
+  Exported for use in `tern`
+
+- [`clayout()`](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`` `clayout<-`() ``](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`col_info()`](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`` `col_info<-`() ``](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`coltree()`](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`col_exprs()`](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`col_counts()`](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`` `col_counts<-`() ``](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`col_total()`](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  [`` `col_total<-`() ``](https://insightsengineering.github.io/rtables/reference/col_accessors.md)
+  : Column information/structure accessors
+
+- [`horizontal_sep()`](https://insightsengineering.github.io/rtables/reference/horizontal_sep.md)
+  [`` `horizontal_sep<-`() ``](https://insightsengineering.github.io/rtables/reference/horizontal_sep.md)
+  : Access or recursively set header-body separator for tables
+
+- [`table_inset()`](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
+  [`` `table_inset<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
+  : Access or (recursively) set table inset (from formatters)
+
+- [`main_title()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`` `main_title<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`subtitles()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`` `subtitles<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`page_titles()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`` `page_titles<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`main_footer()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`` `main_footer<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`prov_footer()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`` `prov_footer<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`all_footers()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  [`all_titles()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)
+  : General title and footer accessors (from formatters)
+
+- [`top_left()`](https://insightsengineering.github.io/rtables/reference/top_left.md)
+  [`` `top_left<-`() ``](https://insightsengineering.github.io/rtables/reference/top_left.md)
+  : Top left material
+
+- [`obj_name()`](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`` `obj_name<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`obj_label()`](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`` `obj_label<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`obj_format()`](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`` `obj_format<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`obj_na_str()`](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`` `obj_na_str<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`obj_align()`](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  [`` `obj_align<-`() ``](https://insightsengineering.github.io/formatters/latest-tag/reference/lab_name.html)
+  : Label, name, and format accessor generics (from formatters)
+
+## TableTree Framework Constructors and S4 Classes
+
+S4 classes and constructors
+
+- [`manual_cols()`](https://insightsengineering.github.io/rtables/reference/manual_cols.md)
+  : Manual column declaration
+
+- [`CellValue()`](https://insightsengineering.github.io/rtables/reference/CellValue.md)
+  : Constructor for Cell Value
+
+- [`EmptyColInfo`](https://insightsengineering.github.io/rtables/reference/EmptyColInfo.md)
+  [`EmptyElTable`](https://insightsengineering.github.io/rtables/reference/EmptyColInfo.md)
+  [`EmptyRootSplit`](https://insightsengineering.github.io/rtables/reference/EmptyColInfo.md)
+  [`EmptyAllSplit`](https://insightsengineering.github.io/rtables/reference/EmptyColInfo.md)
+  : Empty table, column, split objects
+
+- [`ManualSplit()`](https://insightsengineering.github.io/rtables/reference/ManualSplit.md)
+  : Manually defined split
+
+- [`MultiVarSplit()`](https://insightsengineering.github.io/rtables/reference/MultiVarSplit.md)
+  : Split between two or more different variables
+
+- [`VarLevelSplit()`](https://insightsengineering.github.io/rtables/reference/VarLevelSplit.md)
+  [`VarLevWBaselineSplit()`](https://insightsengineering.github.io/rtables/reference/VarLevelSplit.md)
+  : Split on levels within a variable
+
+- [`AnalyzeVarSplit()`](https://insightsengineering.github.io/rtables/reference/avarspl.md)
+  [`AnalyzeColVarSplit()`](https://insightsengineering.github.io/rtables/reference/avarspl.md)
+  [`AnalyzeMultiVars()`](https://insightsengineering.github.io/rtables/reference/avarspl.md)
+  : Define a subset tabulation/analysis
+
+- [`make_static_cut_split()`](https://insightsengineering.github.io/rtables/reference/cutsplits.md)
+  [`VarDynCutSplit()`](https://insightsengineering.github.io/rtables/reference/cutsplits.md)
+  : Splits for cutting by values of a numeric variable
+
+- [`InstantiatedColumnInfo()`](https://insightsengineering.github.io/rtables/reference/cinfo.md)
+  : Instantiated column info
+
+- [`LabelRow()`](https://insightsengineering.github.io/rtables/reference/rowclasses.md)
+  [`.tablerow()`](https://insightsengineering.github.io/rtables/reference/rowclasses.md)
+  [`DataRow()`](https://insightsengineering.github.io/rtables/reference/rowclasses.md)
+  [`ContentRow()`](https://insightsengineering.github.io/rtables/reference/rowclasses.md)
+  : Row classes and constructors
+
+- [`ElementaryTable()`](https://insightsengineering.github.io/rtables/reference/tabclasses.md)
+  [`TableTree()`](https://insightsengineering.github.io/rtables/reference/tabclasses.md)
+  :
+
+  `TableTree` classes
+
+## Pathing Related Functions
+
+Pathing and insertion related functions
+
+- [`label_at_path()`](https://insightsengineering.github.io/rtables/reference/label_at_path.md)
+  [`` `label_at_path<-`() ``](https://insightsengineering.github.io/rtables/reference/label_at_path.md)
+  : Label at path
+- [`tt_at_path()`](https://insightsengineering.github.io/rtables/reference/ttap.md)
+  [`` `tt_at_path<-`() ``](https://insightsengineering.github.io/rtables/reference/ttap.md)
+  : Access or set table elements at specified path
+- [`insert_row_at_path()`](https://insightsengineering.github.io/rtables/reference/insert_row_at_path.md)
+  : Insert row at path
+- [`section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `section_div<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`header_section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `header_section_div<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`top_level_section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `top_level_section_div<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`section_div_info()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`section_div_at_path()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  [`` `section_div_at_path<-`() ``](https://insightsengineering.github.io/rtables/reference/section_div.md)
+  : Section dividers accessor and setter
+- [`tt_row_path_exists()`](https://insightsengineering.github.io/rtables/reference/tt_row_path_exists.md)
+  [`tt_normalize_row_path()`](https://insightsengineering.github.io/rtables/reference/tt_row_path_exists.md)
+  : Pathing
+
+## Referential Footnotes
+
+Functions related to referential footnotes
+
+- [`row_footnotes()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `row_footnotes<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`cell_footnotes()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `cell_footnotes<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`col_fnotes_here()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `col_fnotes_here<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`col_footnotes()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `col_footnotes<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`ref_index()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `ref_index<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`ref_symbol()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `ref_symbol<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`ref_msg()`](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  [`` `fnotes_at_path<-`() ``](https://insightsengineering.github.io/rtables/reference/ref_fnotes.md)
+  : Referential footnote accessors
+- [`update_ref_indexing()`](https://insightsengineering.github.io/rtables/reference/update_ref_indexing.md)
+  : Update footnote indices on a built table
+
+## Result Data Frame Functions
+
+Functions for generating result data frames from rtables TableTree
+objects
+
+- [`as_result_df()`](https://insightsengineering.github.io/rtables/reference/data.frame_export.md)
+  [`path_enriched_df()`](https://insightsengineering.github.io/rtables/reference/data.frame_export.md)
+  : Generate a result data frame
+
+# Articles
+
+### Getting Started
+
+- [Introduction to
+  {rtables}](https://insightsengineering.github.io/rtables/articles/rtables.md):
+- [Exploratory
+  Analysis](https://insightsengineering.github.io/rtables/articles/exploratory_analysis.md):
+
+### Guided Tour
+
+- [A Guided Tour of rtables -
+  Intermediate](https://insightsengineering.github.io/rtables/articles/guided_intermediate.md):
+- [Intermediate rtables - Translating Shells To
+  Layouts](https://insightsengineering.github.io/rtables/articles/guided_intermediate_translating_shells.md):
+- [Intermediate rtables - Identifying Required Analysis
+  Behavior](https://insightsengineering.github.io/rtables/articles/guided_intermediate_afun_reqs.md):
+- [Intermediate rtables - Identifying Required Faceting
+  Behavior](https://insightsengineering.github.io/rtables/articles/guided_intermediate_split_reqs.md):
+
+### Clinical Trials
+
+- [Example Clinical Trials
+  Tables](https://insightsengineering.github.io/rtables/articles/clinical_trials.md):
+- [Comparing Against Baselines or
+  Control](https://insightsengineering.github.io/rtables/articles/baseline.md):
+- [Generating QC-Ready Result Data Frames (ARDs) from
+  Tables](https://insightsengineering.github.io/rtables/articles/ard_how_to.md):
+
+### Table Customization
+
+- [Customizing
+  Appearance](https://insightsengineering.github.io/rtables/articles/custom_appearance.md):
+- [Titles, Footers, and Referential
+  Footnotes](https://insightsengineering.github.io/rtables/articles/title_footer.md):
+- [Pruning and Sorting
+  Tables](https://insightsengineering.github.io/rtables/articles/sorting_pruning.md):
+- [Column Counts and
+  Formats](https://insightsengineering.github.io/rtables/articles/col_counts.md):
+
+### {rtables} Concepts
+
+- [Pathing and Table
+  Structure](https://insightsengineering.github.io/rtables/articles/pathing.md):
+- [Subsetting and Manipulating Table
+  Contents](https://insightsengineering.github.io/rtables/articles/subsetting_tables.md):
+- [Controlling Splitting
+  Behavior](https://insightsengineering.github.io/rtables/articles/split_functions.md):
+- [Format Precedence and NA
+  Handling](https://insightsengineering.github.io/rtables/articles/format_precedence.md):
+- [Tabulation
+  Concepts](https://insightsengineering.github.io/rtables/articles/tabulation_concepts.md):
+- [Introspecting
+  Tables](https://insightsengineering.github.io/rtables/articles/introspecting_tables.md):
+
+### Advanced Usage
+
+- [{rtables} Advanced
+  Usage](https://insightsengineering.github.io/rtables/articles/advanced_usage.md):
+- [Example Complex Analysis Function: Modelling Cox
+  Regression](https://insightsengineering.github.io/rtables/articles/example_analysis_coxreg.md):
+
+### Other
+
+- [Constructing rtables
+  Manually](https://insightsengineering.github.io/rtables/articles/manual_table_construction.md):
+- [Comparison with dplyr
+  Tabulation](https://insightsengineering.github.io/rtables/articles/tabulation_dplyr.md):
+
+### Developer Guide
+
+Articles intended for developer use only.
+
+- [Split
+  Machinery](https://insightsengineering.github.io/rtables/articles/dev-guide/dg_split_machinery.md):
+- [Tabulation](https://insightsengineering.github.io/rtables/articles/dev-guide/dg_tabulation.md):
+- [Table
+  Hierarchy](https://insightsengineering.github.io/rtables/articles/dev-guide/dg_table_hierarchy.md):
+- [Printing
+  Machinery](https://insightsengineering.github.io/rtables/articles/dev-guide/dg_printing.md):
+- [Debugging in {rtables} and
+  Beyond](https://insightsengineering.github.io/rtables/articles/dev-guide/dg_debug_rtables.md):
+- [Sparse Notes on {rtables}
+  Internals](https://insightsengineering.github.io/rtables/articles/dev-guide/dg_notes.md):
