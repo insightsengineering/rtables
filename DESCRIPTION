@@ -12,7 +12,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-1445-1369")),
     person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "aut",
            comment = c(ORCID = "0009-0000-8738-5561")),
-    person("Abinaya", "Yogasekaram", , "abinaya.yogasekaram@contractors.roche.com", role = "ctb",
+    person("Abinaya", "Yogasekaram", , "ayogasek@gmail.com", role = "ctb",
            comment = c(ORCID = "0009-0005-2083-1105")),
     person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7566-2787")),
