@@ -25,12 +25,12 @@ Authors:
   \item Gabriel Becker \email{gabembecker@gmail.com} (Original creator of the package)
   \item Adrian Waddell \email{adrian.waddell@gene.com}
   \item Davide Garolini \email{davide.garolini@roche.com} (\href{https://orcid.org/0000-0002-1445-1369}{ORCID})
-  \item Emily de la Rua \email{emily.de_la_rua@contractors.roche.com} (\href{https://orcid.org/0009-0000-8738-5561}{ORCID})
+  \item Emily de la Rua \email{emilydelarua@gmail.com} (\href{https://orcid.org/0009-0000-8738-5561}{ORCID})
 }
 
 Other contributors:
 \itemize{
-  \item Daniel Sabanés Bové \email{daniel.sabanes_bove@roche.com} [contributor]
+  \item Daniel Sabanés Bové \email{daniel.sabanes_bove@rconis.com} [contributor]
   \item Maximilian Mordig \email{maximilian_oliver.mordig@roche.com} [contributor]
   \item Abinaya Yogasekaram \email{ayogasek@gmail.com} (\href{https://orcid.org/0009-0005-2083-1105}{ORCID}) [contributor]
   \item F. Hoffmann-La Roche AG [copyright holder, funder]
