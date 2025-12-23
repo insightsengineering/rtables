@@ -10,7 +10,7 @@ Authors@R: c(
     person("Maximilian", "Mordig", , "maximilian_oliver.mordig@roche.com", role = "ctb"),
     person("Davide", "Garolini", , "davide.garolini@roche.com", role = "aut",
            comment = c(ORCID = "0000-0002-1445-1369")),
-    person("Emily", "de la Rua", , "emily.de_la_rua@contractors.roche.com", role = "aut",
+    person("Emily", "de la Rua", , "emilydelarua@gmail.com", role = "aut",
            comment = c(ORCID = "0009-0000-8738-5561")),
     person("Abinaya", "Yogasekaram", , "ayogasek@gmail.com", role = "ctb",
            comment = c(ORCID = "0009-0005-2083-1105")),
