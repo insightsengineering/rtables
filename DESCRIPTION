@@ -50,7 +50,7 @@ Suggests:
     knitr (>= 1.42),
     lme4 (>= 1.1-35.5),
     r2rtf (>= 0.3.2),
-    rmarkdown (>= 2.23),
+    rmarkdown (>= 2.28),
     survival (>= 3.3-1),
     testthat (>= 3.3.0),
     tibble (>= 3.2.1),
