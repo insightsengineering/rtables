@@ -31,7 +31,7 @@ Authors:
 - Gabriel Becker <gabembecker@gmail.com> (Original creator of the
   package)
 
-- Adrian Waddell <adrian.waddell@gene.com>
+- Adrian Waddell <adrian.waddell@gmail.com>
 
 - Davide Garolini <davide.garolini@roche.com>
   ([ORCID](https://orcid.org/0000-0002-1445-1369))

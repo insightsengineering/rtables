@@ -33,14 +33,14 @@ Page](https://insightsengineering.github.io/rtables/).
 Source:
 [`DESCRIPTION`](https://github.com/insightsengineering/rtables/blob/main/DESCRIPTION)
 
-Becker G, Waddell A, Garolini D, de la Rua E, Zhu J (2025). *rtables:
-Reporting Tables*. R package version 0.6.15.9002,
+Becker G, Waddell A, Garolini D, de la Rua E, Zhu J (2026). *rtables:
+Reporting Tables*. R package version 0.6.15.9003,
 <https://github.com/insightsengineering/rtables>.
 
     @Manual{,
       title = {rtables: Reporting Tables},
       author = {Gabriel Becker and Adrian Waddell and Davide Garolini and Emily {de la Rua} and Joe Zhu},
-      year = {2025},
-      note = {R package version 0.6.15.9002},
+      year = {2026},
+      note = {R package version 0.6.15.9003},
       url = {https://github.com/insightsengineering/rtables},
     }
