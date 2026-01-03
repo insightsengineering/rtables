@@ -23,7 +23,7 @@ Useful links:
 Authors:
 \itemize{
   \item Gabriel Becker \email{gabembecker@gmail.com} (Original creator of the package)
-  \item Adrian Waddell \email{adrian.waddell@gene.com}
+  \item Adrian Waddell \email{adrian.waddell@gmail.com}
   \item Davide Garolini \email{davide.garolini@roche.com} (\href{https://orcid.org/0000-0002-1445-1369}{ORCID})
   \item Emily de la Rua \email{emilydelarua@gmail.com} (\href{https://orcid.org/0009-0000-8738-5561}{ORCID})
 }
