@@ -255,7 +255,6 @@ test_that("spl_variable works", {
 })
 
 test_that("restrict_facets works", {
-
   mflevs <- c("M", "F")
   keep_reord <- restrict_facets(mflevs)
   splfun <- make_split_fun(post = list(keep_reord))
@@ -266,11 +265,15 @@ test_that("restrict_facets works", {
 
   tbl1 <- build_table(lyt, DM)
 
-  expect_equal(unclass(col_paths(tbl1)),
-               list(c("SEX", "M"),
-                    c("SEX", "F")))
+  expect_equal(
+    unclass(col_paths(tbl1)),
+    list(
+      c("SEX", "M"),
+      c("SEX", "F")
+    )
+  )
 
-  keep_noreord <- restrict_facets(mflevs, reorder = FALSE)  
+  keep_noreord <- restrict_facets(mflevs, reorder = FALSE)
   splfun2 <- make_split_fun(post = list(keep_noreord))
 
   lyt2 <- basic_table() |>
@@ -278,9 +281,13 @@ test_that("restrict_facets works", {
     analyze("AGE")
 
   tbl2 <- build_table(lyt2, DM)
-  expect_equal(unclass(col_paths(tbl2)),
-               list(c("SEX", "F"),
-                    c("SEX", "M")))
+  expect_equal(
+    unclass(col_paths(tbl2)),
+    list(
+      c("SEX", "F"),
+      c("SEX", "M")
+    )
+  )
 
   exclude <- restrict_facets(mflevs, op = "exclude")
   splfun3 <- make_split_fun(post = list(exclude))
@@ -289,9 +296,13 @@ test_that("restrict_facets works", {
     analyze("AGE")
   tbl3 <- build_table(lyt3, DM)
 
-  expect_equal(unclass(col_paths(tbl3)),
-               list(c("SEX", "U"),
-                    c("SEX", "UNDIFFERENTIATED")))
+  expect_equal(
+    unclass(col_paths(tbl3)),
+    list(
+      c("SEX", "U"),
+      c("SEX", "UNDIFFERENTIATED")
+    )
+  )
 
   ## check warning and quietly
   badlevs <- c("F", "yo what?")
@@ -303,8 +314,10 @@ test_that("restrict_facets works", {
     split_cols_by("SEX", split_fun = splfun4) |>
     analyze("AGE")
   expect_warning(tbl4 <- build_table(lyt4, DM), regexp = "yo what")
-  expect_identical(unclass(col_paths(tbl4)),
-                   list(c("SEX", "F")))
+  expect_identical(
+    unclass(col_paths(tbl4)),
+    list(c("SEX", "F"))
+  )
 
   bad_keep2 <- restrict_facets(badlevs, quiet = TRUE)
   splfun5 <- make_split_fun(post = list(bad_keep2))
@@ -322,6 +335,8 @@ test_that("restrict_facets works", {
     split_cols_by("SEX", split_fun = splfun6) |>
     analyze("AGE")
   expect_warning(tbl6 <- build_table(lyt6, DM), regexp = "yo what")
-  expect_equal(NCOL(tbl6),
-               3)
+  expect_equal(
+    NCOL(tbl6),
+    3
+  )
 })
