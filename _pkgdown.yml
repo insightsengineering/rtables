@@ -175,9 +175,11 @@ reference:
     - make_split_fun
     - drop_facet_levels
     - trim_levels_in_facets
+    - restrict_facets
     - add_combo_facet
     - make_split_result
     - spl_variable
+    - make_subset_expr
 
   - title: Cell Formatting related Functions
     desc: cell formatting.

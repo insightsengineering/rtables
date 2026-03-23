@@ -253,3 +253,75 @@ test_that("spl_variable works", {
     "Split class MultiVarSplit not associated with a single variable"
   )
 })
+
+test_that("restrict_facets works", {
+
+  mflevs <- c("M", "F")
+  keep_reord <- restrict_facets(mflevs)
+  splfun <- make_split_fun(post = list(keep_reord))
+
+  lyt <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun) |>
+    analyze("AGE")
+
+  tbl1 <- build_table(lyt, DM)
+
+  expect_equal(unclass(col_paths(tbl1)),
+               list(c("SEX", "M"),
+                    c("SEX", "F")))
+
+  keep_noreord <- restrict_facets(mflevs, reorder = FALSE)  
+  splfun2 <- make_split_fun(post = list(keep_noreord))
+
+  lyt2 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun2) |>
+    analyze("AGE")
+
+  tbl2 <- build_table(lyt2, DM)
+  expect_equal(unclass(col_paths(tbl2)),
+               list(c("SEX", "F"),
+                    c("SEX", "M")))
+
+  exclude <- restrict_facets(mflevs, op = "exclude")
+  splfun3 <- make_split_fun(post = list(exclude))
+  lyt3 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun3) |>
+    analyze("AGE")
+  tbl3 <- build_table(lyt3, DM)
+
+  expect_equal(unclass(col_paths(tbl3)),
+               list(c("SEX", "U"),
+                    c("SEX", "UNDIFFERENTIATED")))
+
+  ## check warning and quietly
+  badlevs <- c("F", "yo what?")
+
+  bad_keep1 <- restrict_facets(badlevs)
+  splfun4 <- make_split_fun(post = list(bad_keep1))
+
+  lyt4 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun4) |>
+    analyze("AGE")
+  expect_warning(tbl4 <- build_table(lyt4, DM), regexp = "yo what")
+  expect_identical(unclass(col_paths(tbl4)),
+                   list(c("SEX", "F")))
+
+  bad_keep2 <- restrict_facets(badlevs, quiet = TRUE)
+  splfun5 <- make_split_fun(post = list(bad_keep2))
+
+  lyt5 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun5) |>
+    analyze("AGE")
+  expect_silent(tbl5 <- build_table(lyt5, DM))
+  expect_true(identical(tbl4, tbl5, ignore.environment = TRUE))
+
+  bad_excl <- restrict_facets(badlevs, "exclude")
+  splfun6 <- make_split_fun(post = list(bad_excl))
+
+  lyt6 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun6) |>
+    analyze("AGE")
+  expect_warning(tbl6 <- build_table(lyt6, DM), regexp = "yo what")
+  expect_equal(NCOL(tbl6),
+               3)
+})
