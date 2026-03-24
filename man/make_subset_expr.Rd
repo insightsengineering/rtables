@@ -57,3 +57,8 @@ this is occasionally useful when constructing custom
 splitting behavior which may used for column splitting but
 generally should not be called directly by the end user.
 }
+\examples{
+
+spl <- VarLevelSplit("ARM", split_label = "ARM")
+make_subset_expr(spl, "B: Placebo")
+}

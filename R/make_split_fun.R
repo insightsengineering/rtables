@@ -441,7 +441,7 @@ drop_facet_levels <- function(df, spl, ...) {
 #'     to be (exclusively) kept (the default) or removed.
 #' @param reorder `(flag)`\cr For `op == "keep"`, should the resulting
 #'     facets be reordered to the order they appear in
-#'     `facets`. Defaults to `TRUE`.
+#'     `facets`. Defaults to `TRUE`. Ignored if `op == "exclude"`.
 #' @param quiet `(logical(1))`\cr Whether warnings should be given or
 #'     not (the default) when facets named in `facets` are not found
 #'     in the split result.
@@ -464,9 +464,29 @@ drop_facet_levels <- function(df, spl, ...) {
 #'
 #' The generated function will throw a warning if any of `facets` are
 #' not found in the split result it receives during splitting, unless
-#' it was created with `quietly = FALSE`.
+#' it was created with `quiet = FALSE`.
 #'
 #' @seealso [make_split_fun()]
+#'
+#' @examples
+#'
+#' keep_spl <- make_split_fun(post = list(restrict_facets(c("M", "F"), op = "keep")))
+#'
+#' lyt <- basic_table() |>
+#'   split_cols_by("SEX", split_fun = keep_spl) |>
+#'   analyze("AGE")
+#'
+#' build_table(lyt, ex_adsl)
+#'
+#'
+#' excl_undiff <- restrict_facets("UNDIFFERENTIATED", op = "exclude")
+#' excl_spl <- make_split_fun(post = list(excl_undiff))
+#'
+#' lyt <- basic_table() |>
+#'   split_cols_by("SEX", split_fun = excl_spl) |>
+#'   analyze("AGE")
+#'
+#' build_table(lyt, ex_adsl)
 #'
 #' @family make_custom_split
 #' @export

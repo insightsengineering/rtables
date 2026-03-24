@@ -22,6 +22,11 @@
 #'
 #' @return A subseting expression to be used to restrict data to a
 #'     particular column during tabulation.
+#'
+#' @examples
+#'
+#' spl <- VarLevelSplit("ARM", split_label = "ARM")
+#' make_subset_expr(spl, "B: Placebo")
 #' @export
 
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))

@@ -19,7 +19,7 @@ to be (exclusively) kept (the default) or removed.}
 
 \item{reorder}{\code{(flag)}\cr For \code{op == "keep"}, should the resulting
 facets be reordered to the order they appear in
-\code{facets}. Defaults to \code{TRUE}.}
+\code{facets}. Defaults to \code{TRUE}. Ignored if \code{op == "exclude"}.}
 
 \item{quiet}{\code{(logical(1))}\cr Whether warnings should be given or
 not (the default) when facets named in \code{facets} are not found
@@ -48,7 +48,28 @@ remain.
 
 The generated function will throw a warning if any of \code{facets} are
 not found in the split result it receives during splitting, unless
-it was created with \code{quietly = FALSE}.
+it was created with \code{quiet = FALSE}.
+}
+\examples{
+
+keep_spl <- make_split_fun(post = list(restrict_facets(c("M", "F"), op = "keep")))
+
+lyt <- basic_table() |>
+  split_cols_by("SEX", split_fun = keep_spl) |>
+  analyze("AGE")
+
+build_table(lyt, ex_adsl)
+
+
+excl_undiff <- restrict_facets("UNDIFFERENTIATED", op = "exclude")
+excl_spl <- make_split_fun(post = list(excl_undiff))
+
+lyt <- basic_table() |>
+  split_cols_by("SEX", split_fun = excl_spl) |>
+  analyze("AGE")
+
+build_table(lyt, ex_adsl)
+
 }
 \seealso{
 \code{\link[=make_split_fun]{make_split_fun()}}
