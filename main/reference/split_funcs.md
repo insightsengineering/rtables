@@ -34,65 +34,65 @@ trim_levels_in_group(innervar, drop_outlevs = TRUE)
 
 - only:
 
-  (`character`)  
+  (`character`)\
   levels to retain (all others will be dropped). If none of the levels
   is present an empty table is returned.
 
 - reorder:
 
-  (`flag`)  
+  (`flag`)\
   whether the order of `only` should be used as the order of the
   children of the split. Defaults to `TRUE`.
 
 - excl:
 
-  (`character`)  
+  (`character`)\
   levels to be excluded (they will not be reflected in the resulting
   table structure regardless of presence in the data).
 
 - df:
 
-  (`data.frame` or `tibble`)  
+  (`data.frame` or `tibble`)\
   dataset.
 
 - spl:
 
-  (`Split`)  
+  (`Split`)\
   a `Split` object defining a partitioning or analysis/tabulation of the
   data.
 
 - vals:
 
-  (`ANY`)  
+  (`ANY`)\
   for internal use only.
 
 - labels:
 
-  (`character`)  
+  (`character`)\
   labels to use for the remaining levels instead of the existing ones.
 
 - trim:
 
-  (`flag`)  
+  (`flag`)\
   whether splits corresponding with 0 observations should be kept when
   tabulating.
 
 - neworder:
 
-  (`character`)  
+  (`character`)\
   new order of factor levels. All need to be present in the data. To add
   empty levels, rely on pre-processing or create your
   [custom_split_funs](https://insightsengineering.github.io/rtables/reference/custom_split_funs.md).
 
 - newlabels:
 
-  (`character`)  
+  (`character`)\
   labels for (new order of) factor levels. If named, the levels are
   matched. Otherwise, the order of `neworder` is used.
 
 - drlevels:
 
-  (`flag`)  
+  (`flag`)\
   whether levels that are not in `neworder` should be dropped. Default
   is `TRUE`. Note: `drlevels = TRUE` does not drop levels that are not
   originally in the data. Rely on pre-processing or use a combination of
@@ -102,14 +102,14 @@ trim_levels_in_group(innervar, drop_outlevs = TRUE)
 
 - innervar:
 
-  (`string`)  
+  (`string`)\
   variable whose factor levels should be trimmed (e.g. empty levels
   dropped) *separately within each grouping defined at this point in the
   structure*.
 
 - drop_outlevs:
 
-  (`flag`)  
+  (`flag`)\
   whether empty levels in the variable being split on (i.e. the "outer"
   variable, not `innervar`) should be dropped. Defaults to `TRUE`.
 

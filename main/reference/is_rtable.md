@@ -12,7 +12,7 @@ is_rtable(x)
 
 - x:
 
-  (`ANY`)  
+  (`ANY`)\
   an object.
 
 ## Value

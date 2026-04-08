@@ -30,6 +30,7 @@ Consider a the table with non-trivial structure in both the column and
 row dimensions:
 
 ``` r
+
 library(rtables)
 ```
 
@@ -52,6 +53,7 @@ library(rtables)
     ##     str
 
 ``` r
+
 keep_rc <- c("ASIAN", "WHITE") ## chosen for brevity
 
 afun <- function(x) {
@@ -106,6 +108,7 @@ We can get a first look at the row- and column-structure of our table
 (if in different formats) with `table_structure` and `col_info`.
 
 ``` r
+
 table_structure(tbl)
 ```
 
@@ -130,6 +133,7 @@ table_structure(tbl)
     ##  [ElementaryTable] BMRKR1 (1 x 5)
 
 ``` r
+
 col_info(tbl)
 ```
 
@@ -158,6 +162,7 @@ value which is technically correct but not necessary to include) via
 `row_paths_summary`.
 
 ``` r
+
 rpsummry <- row_paths_summary(tbl)
 ```
 
@@ -192,6 +197,7 @@ accessible form. In particular `path` is a list-valued column whose
 values can be used directly as row paths:
 
 ``` r
+
 head(rpsummry)
 ```
 
@@ -204,6 +210,7 @@ head(rpsummry)
     ## 6   Mean      2    DataRow root, RA....
 
 ``` r
+
 tbl[rpsummry$path[[6]], ]
 ```
 
@@ -217,6 +224,7 @@ table containing all rows that represent analysis on Asian patients. We
 see that we get the expected subtable:
 
 ``` r
+
 tbl[c("RACE", "ASIAN"), ]
 ```
 
@@ -238,6 +246,7 @@ Similarly we can get the groups summary and row for strata B of
 Caucasian patients via
 
 ``` r
+
 tbl[c("RACE", "WHITE", "STRATA1", "B"), ]
 ```
 
@@ -253,6 +262,7 @@ do not get the ethnicity-level group summary here. We can see this
 because our structure and our path now starts with `"B"`:
 
 ``` r
+
 table_structure(tbl[c("RACE", "WHITE", "STRATA1", "B"), ])
 ```
 
@@ -267,6 +277,7 @@ As mentioned above, to “path into” a group summary we use the
 `"@content"` directive:
 
 ``` r
+
 tbl[c("RACE", "ASIAN", "@content"), ]
 ```
 
@@ -280,6 +291,7 @@ name, which unlike other structures tends to be identical to their
 label:
 
 ``` r
+
 tbl[c("RACE", "WHITE", "STRATA1", "B", "AGE"), ]
 ```
 
@@ -290,6 +302,7 @@ tbl[c("RACE", "WHITE", "STRATA1", "B", "AGE"), ]
     ## Median   38.5    44.0    35.0      36.0     38.0
 
 ``` r
+
 tbl[c("RACE", "WHITE", "STRATA1", "B", "AGE", "Median"), ]
 ```
 
@@ -304,6 +317,7 @@ Similar to row paths, we can get information about column paths via
 `col_paths_summary`:
 
 ``` r
+
 col_paths_summary(tbl)
 ```
 
@@ -322,6 +336,7 @@ use `head`, which subsets via absolute position to limit the amount of
 output here):
 
 ``` r
+
 head(tbl[, c("ARM", "A: Drug X")])
 ```
 
@@ -340,6 +355,7 @@ head(tbl[, c("ARM", "A: Drug X")])
     ##     Mean        33.8         34.9
 
 ``` r
+
 head(tbl[, c("ARM", "C: Combination", "SEX", "M")])
 ```
 
@@ -354,6 +370,7 @@ head(tbl[, c("ARM", "C: Combination", "SEX", "M")])
     ##     Mean          35.9
 
 ``` r
+
 head(tbl[, c("All", "All")])
 ```
 
@@ -384,6 +401,7 @@ names. This affects the paths to these substructures[^3], as we see from
 the informative messages below:
 
 ``` r
+
 lytdup <- basic_table() |>
   analyze("STRATA1") |>
   split_rows_by("STRATA1") |>
@@ -397,6 +415,7 @@ tbldup <- build_table(lytdup, DM)
     ##   To control table names use split_rows_by*(, parent_name =.) or  analyze(., table_names = .) when analyzing a single variable, or analyze(., parent_name = .) when analyzing multiple variables in a single call.FALSE
 
 ``` r
+
 tbldup
 ```
 
@@ -413,6 +432,7 @@ tbldup
     ##   Mean    34.79
 
 ``` r
+
 row_paths_summary(tbldup)
 ```
 
@@ -432,6 +452,7 @@ This allows us to path to all elements of the row structure, which was
 not possible in previous (`<0.6.13`) `rtables` versions:
 
 ``` r
+
 tbldup[c("STRATA1", "A"), ]
 ```
 
@@ -440,6 +461,7 @@ tbldup[c("STRATA1", "A"), ]
     ## A     114
 
 ``` r
+
 tbldup[c("STRATA1[2]", "A"), ]
 ```
 
@@ -457,6 +479,7 @@ leading to (potentially) multiple matches. Note `"*"` will never behave
 as the `"@content"` directive, which must always be used explicitly.
 
 ``` r
+
 tbl[c("RACE", "*", "STRATA1", "B", "AGE", "Median"), ]
 ```
 
@@ -471,6 +494,7 @@ recursively within the full combined set of matches from all wildcards
 earlier in the path.
 
 ``` r
+
 tbl[c("RACE", "*", "STRATA1", "*", "AGE", "Median"), ]
 ```
 
@@ -493,6 +517,7 @@ wildcards into a set of fully specified paths that match the path in our
 table using the `tt_normalize_row_path` utility function
 
 ``` r
+
 tt_normalize_row_path(tbl, c("RACE", "*", "STRATA1", "*", "AGE", "Median"))
 ```
 
@@ -518,12 +543,14 @@ We can also test whether a row path (including those containing
 wildcards) exists in our table with `tt_row_path_exists`
 
 ``` r
+
 tt_row_path_exists(tbl, c("RACE", "*", "STRATA1", "*", "AGE", "Median"))
 ```
 
     ## [1] TRUE
 
 ``` r
+
 tt_row_path_exists(tbl, c("RACE", "*", "STRATA1", "*", "FAKEFAKEFAKE", "Median"))
 ```
 
@@ -536,6 +563,7 @@ the relevant (sub)structure.
 Thus we get
 
 ``` r
+
 tt_normalize_row_path(tbl, c("*", "Mean"))
 ```
 
@@ -551,6 +579,7 @@ generally those mechanisms which support wildcards in row space and also
 accept a column path support wildcards for column paths as well:
 
 ``` r
+
 tbl[, c("ARM", "*", "SEX", "F")]
 ```
 
@@ -595,6 +624,7 @@ remedied in a future version) the visibility on *a set of sibling
 facets*.
 
 ``` r
+
 tbl2 <- head(tbl)
 facet_colcounts_visible(tbl2, c("ARM", "A: Drug X", "SEX")) <- TRUE
 tbl2
@@ -621,6 +651,7 @@ We can also get or modify the value of any particular column count (note
 no s here):
 
 ``` r
+
 facet_colcount(tbl2, c("ARM", "A: Drug X", "SEX", "M")) <- 5
 tbl2
 ```
@@ -641,6 +672,7 @@ sibling group the best we can do is setting one to NA, which will leave
 a blank space there:
 
 ``` r
+
 facet_colcount(tbl2, c("ARM", "A: Drug X", "SEX", "F")) <- NA_integer_
 tbl2
 ```
@@ -664,6 +696,7 @@ a table (they are most often, and by default, ” ” to create a blank
 line).
 
 ``` r
+
 tbl3 <- tbl
 
 section_div_at_path(tbl3, c("RACE", "*")) <- "*"
@@ -706,6 +739,153 @@ precedence, with only the least specific applicable section divider
 displayed after any given row. See
 [`?section_div`](https://insightsengineering.github.io/rtables/reference/section_div.md)
 for more details.
+
+In addition to the path specific section dividers, there is also the
+more general section divider function, which can be used to query the
+divider after each row:
+
+``` r
+
+section_div(tbl3)
+```
+
+    ##  [1] NA  NA  NA  NA  NA  NA  "+" NA  NA  "*" NA  NA  NA  NA  NA  NA  "+" NA  NA 
+    ## [20] "*" NA  NA
+
+Together with the corresponding replacement function, this can be used
+to insert a divider after specific rows:
+
+``` r
+
+section_div(tbl3)[1] <- "-"
+tbl3
+```
+
+    ##                     A: Drug X              C: Combination                   
+    ##                  F            M            F            M            All    
+    ## ————————————————————————————————————————————————————————————————————————————
+    ## ASIAN        44 (62.9%)   35 (68.6%)   40 (65.6%)   44 (64.7%)   231 (64.9%)
+    ## ----------------------------------------------------------------------------
+    ##   A          15 (21.4%)   12 (23.5%)   15 (24.6%)   16 (23.5%)   78 (21.9%) 
+    ##     Mean        30.4         34.4         37.4         36.2         34.5    
+    ##     Median      30.0         33.5         38.0         33.0         33.0    
+    ##   B          16 (22.9%)   8 (15.7%)    10 (16.4%)   12 (17.6%)   75 (21.1%) 
+    ##     Mean        33.8         34.9         33.3         35.9         33.3    
+    ##     Median      32.0         34.5         34.0         34.5         33.0    
+    ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ##   C          13 (18.6%)   15 (29.4%)   15 (24.6%)   16 (23.5%)   78 (21.9%) 
+    ##     Mean        36.9         35.6         33.5         31.4         33.9    
+    ##     Median      36.0         37.0         34.0         31.0         34.0    
+    ## ****************************************************************************
+    ## WHITE        8 (11.4%)    6 (11.8%)    8 (13.1%)    10 (14.7%)   46 (12.9%) 
+    ##   A           2 (2.9%)     1 (2.0%)     1 (1.6%)     5 (7.4%)     15 (4.2%) 
+    ##     Mean        34.0         45.0         35.0         32.8         33.3    
+    ##     Median      34.0         45.0         35.0         31.0         31.0    
+    ##   B           4 (5.7%)     3 (5.9%)     3 (4.9%)     1 (1.5%)     16 (4.5%) 
+    ##     Mean        37.0         43.7         34.3         36.0         38.3    
+    ##     Median      38.5         44.0         35.0         36.0         38.0    
+    ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ##   C           2 (2.9%)     2 (3.9%)     4 (6.6%)     4 (5.9%)     15 (4.2%) 
+    ##     Mean        35.5         44.0         38.5         35.0         39.1    
+    ##     Median      35.5         44.0         38.5         32.5         40.0    
+    ## ****************************************************************************
+    ## BMRKR1                                                                      
+    ##   Mean          6.06         5.42         5.83         5.57         5.85
+
+Although here again, the path-specific section divider could come in
+more handy, e.g.:
+
+``` r
+
+section_div_at_path(tbl3, c("RACE", "*", "@content", "*")) <- "-"
+tbl3
+```
+
+    ##                     A: Drug X              C: Combination                   
+    ##                  F            M            F            M            All    
+    ## ————————————————————————————————————————————————————————————————————————————
+    ## ASIAN        44 (62.9%)   35 (68.6%)   40 (65.6%)   44 (64.7%)   231 (64.9%)
+    ## ----------------------------------------------------------------------------
+    ##   A          15 (21.4%)   12 (23.5%)   15 (24.6%)   16 (23.5%)   78 (21.9%) 
+    ##     Mean        30.4         34.4         37.4         36.2         34.5    
+    ##     Median      30.0         33.5         38.0         33.0         33.0    
+    ##   B          16 (22.9%)   8 (15.7%)    10 (16.4%)   12 (17.6%)   75 (21.1%) 
+    ##     Mean        33.8         34.9         33.3         35.9         33.3    
+    ##     Median      32.0         34.5         34.0         34.5         33.0    
+    ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ##   C          13 (18.6%)   15 (29.4%)   15 (24.6%)   16 (23.5%)   78 (21.9%) 
+    ##     Mean        36.9         35.6         33.5         31.4         33.9    
+    ##     Median      36.0         37.0         34.0         31.0         34.0    
+    ## ****************************************************************************
+    ## WHITE        8 (11.4%)    6 (11.8%)    8 (13.1%)    10 (14.7%)   46 (12.9%) 
+    ## ----------------------------------------------------------------------------
+    ##   A           2 (2.9%)     1 (2.0%)     1 (1.6%)     5 (7.4%)     15 (4.2%) 
+    ##     Mean        34.0         45.0         35.0         32.8         33.3    
+    ##     Median      34.0         45.0         35.0         31.0         31.0    
+    ##   B           4 (5.7%)     3 (5.9%)     3 (4.9%)     1 (1.5%)     16 (4.5%) 
+    ##     Mean        37.0         43.7         34.3         36.0         38.3    
+    ##     Median      38.5         44.0         35.0         36.0         38.0    
+    ## ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ##   C           2 (2.9%)     2 (3.9%)     4 (6.6%)     4 (5.9%)     15 (4.2%) 
+    ##     Mean        35.5         44.0         38.5         35.0         39.1    
+    ##     Median      35.5         44.0         38.5         32.5         40.0    
+    ## ****************************************************************************
+    ## BMRKR1                                                                      
+    ##   Mean          6.06         5.42         5.83         5.57         5.85
+
+The relevant paths can be looked up via `section_div_info`:
+
+``` r
+
+section_div_info(tbl3)
+```
+
+    ##     label   name node_class         path trailing_sep self_section_div
+    ## 1   ASIAN  ASIAN ContentRow root, RA....            -                -
+    ## 2       A      A ContentRow root, RA....         <NA>             <NA>
+    ## 3    Mean   Mean    DataRow root, RA....         <NA>             <NA>
+    ## 4  Median Median    DataRow root, RA....         <NA>             <NA>
+    ## 5       B      B ContentRow root, RA....         <NA>             <NA>
+    ## 6    Mean   Mean    DataRow root, RA....         <NA>             <NA>
+    ## 7  Median Median    DataRow root, RA....            +                +
+    ## 8       C      C ContentRow root, RA....         <NA>             <NA>
+    ## 9    Mean   Mean    DataRow root, RA....         <NA>             <NA>
+    ## 10 Median Median    DataRow root, RA....            *                *
+    ## 11  WHITE  WHITE ContentRow root, RA....            -                -
+    ## 12      A      A ContentRow root, RA....         <NA>             <NA>
+    ## 13   Mean   Mean    DataRow root, RA....         <NA>             <NA>
+    ## 14 Median Median    DataRow root, RA....         <NA>             <NA>
+    ## 15      B      B ContentRow root, RA....         <NA>             <NA>
+    ## 16   Mean   Mean    DataRow root, RA....         <NA>             <NA>
+    ## 17 Median Median    DataRow root, RA....            +                +
+    ## 18      C      C ContentRow root, RA....         <NA>             <NA>
+    ## 19   Mean   Mean    DataRow root, RA....         <NA>             <NA>
+    ## 20 Median Median    DataRow root, RA....            *                *
+    ## 21 BMRKR1 BMRKR1   LabelRow root, BMRKR1         <NA>             <NA>
+    ## 22   Mean   Mean    DataRow root, BM....         <NA>             <NA>
+    ##    sect_div_from_path
+    ## 1        root, RA....
+    ## 2        root, RA....
+    ## 3        root, RA....
+    ## 4        root, RA....
+    ## 5        root, RA....
+    ## 6        root, RA....
+    ## 7        root, RA....
+    ## 8        root, RA....
+    ## 9        root, RA....
+    ## 10       root, RA....
+    ## 11       root, RA....
+    ## 12       root, RA....
+    ## 13       root, RA....
+    ## 14       root, RA....
+    ## 15       root, RA....
+    ## 16       root, RA....
+    ## 17       root, RA....
+    ## 18       root, RA....
+    ## 19       root, RA....
+    ## 20       root, RA....
+    ## 21                 NA
+    ## 22       root, BM....
 
 #### Sorting Within An `rtables` Table
 
@@ -752,6 +932,7 @@ containing all of the structure generated underneath the initial
 `"RACE"` split, and one containing the unnested analysis of `"BMRKR1"`:
 
 ``` r
+
 tree_children(tbl)
 ```
 
@@ -796,6 +977,7 @@ taken each time, thus building up our path as we descend using the class
 structure.
 
 ``` r
+
 multi_step_children <- function(tbl, indices) {
   print(obj_name(tbl))
   ret <- tree_children(tbl)
@@ -812,6 +994,7 @@ Thus we can see that the first of our table’s children has the path
 (recall the “root” path element is correct but optional):
 
 ``` r
+
 multi_step_children(tbl, 1)
 ```
 
@@ -856,6 +1039,7 @@ The children under our `BMRKR1` analysis, on the other hand, are rows
 (in this case only one row, in fact):
 
 ``` r
+
 multi_step_children(tbl, 2)
 ```
 
@@ -869,6 +1053,7 @@ Within each race subtable, we see a table corresponding to the `STRATA1`
 split:
 
 ``` r
+
 multi_step_children(tbl, c(1, 1))
 ```
 
@@ -892,6 +1077,7 @@ multi_step_children(tbl, c(1, 1))
     ##   Median      36.0         37.0         34.0         31.0         34.0
 
 ``` r
+
 multi_step_children(tbl, c(1, 1, 1))
 ```
 
@@ -931,6 +1117,7 @@ And finally within each strata facet is a table representing the
 analysis of `AGE`
 
 ``` r
+
 multi_step_children(tbl, c(1, 1, 1, 2))
 ```
 
@@ -952,6 +1139,7 @@ And within each of those `AGE` analysis tables, like our `BMRKR1` top
 level analysis table, we have a collection of rows:
 
 ``` r
+
 multi_step_children(tbl, c(1, 1, 1, 2, 1))
 ```
 
@@ -974,6 +1162,7 @@ Thus we see that `analyze` calls create tables (called
 that are a table for each facet declared by the split operation:
 
 ``` r
+
 ## child is AGE analysis table within RACE->WHITE->STRATA1->A
 multi_step_children(tbl, c(1, 2, 1, 1))
 ```
@@ -993,6 +1182,7 @@ multi_step_children(tbl, c(1, 2, 1, 1))
     ## Median   34.0    45.0    35.0      31.0     31.0
 
 ``` r
+
 ## children are individual rows of that AGE table
 multi_step_children(tbl, c(1, 2, 1, 1, 1))
 ```
@@ -1027,6 +1217,7 @@ children at a location*, so we must subset one additional time to arrive
 at a single child:
 
 ``` r
+
 tb <- multi_step_children(tbl, c(1, 1, 1))[[2]] ## second ie B strata
 ```
 
@@ -1036,6 +1227,7 @@ tb <- multi_step_children(tbl, c(1, 1, 1))[[2]] ## second ie B strata
     ## [1] "STRATA1"
 
 ``` r
+
 tb
 ```
 
@@ -1047,6 +1239,7 @@ tb
     ##   Median      32.0        34.5         34.0         34.5         33.0
 
 ``` r
+
 content_table(tb)
 ```
 
@@ -1060,6 +1253,7 @@ non-empty content table are not visible when rendering, but they do
 still exist:
 
 ``` r
+
 obj_label(tb)
 ```
 
@@ -1093,6 +1287,7 @@ resulting paths in the table remains valid and useful.
 We can see this by looking again at our column paths summary:
 
 ``` r
+
 col_paths_summary(tbl)
 ```
 

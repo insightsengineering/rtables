@@ -16,17 +16,17 @@ x[i, j, ..., drop = FALSE]
 
 - x:
 
-  (`TableTree`)  
+  (`TableTree`)\
   a `TableTree` object.
 
 - i:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   index.
 
 - j:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   index.
 
 - ...:
@@ -57,12 +57,12 @@ x[i, j, ..., drop = FALSE]
 
 - value:
 
-  (`list`, `TableRow`, or `TableTree`)  
+  (`list`, `TableRow`, or `TableTree`)\
   replacement value.
 
 - drop:
 
-  (`flag`)  
+  (`flag`)\
   whether the value in the cell should be returned if one cell is
   selected by the combination of `i` and `j`. It is not possible to
   return a vector of values. To do so please consider using

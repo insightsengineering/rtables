@@ -23,43 +23,43 @@ matrix_form(
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - indent_rownames:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE`, the column with the row names in the `strings` matrix of
   the output has indented row names (strings pre-fixed).
 
 - expand_newlines:
 
-  (`flag`)  
+  (`flag`)\
   whether the matrix form generated should expand rows whose values
   contain newlines into multiple 'physical' rows (as they will appear
   when rendered into ASCII). Defaults to `TRUE`.
 
 - indent_size:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   number of spaces to use per indent level. Defaults to 2.
 
 - fontspec:
 
-  (`font_spec`)  
+  (`font_spec`)\
   The font that should be used by default when rendering this
   `MatrixPrintForm` object, or NULL (the default).
 
 - col_gap:
 
-  (`numeric(1)`)\]  
+  (`numeric(1)`)\]\
   The number of spaces (in the font specified by `fontspec`) that should
   be placed between columns when the table is rendered directly to text
   (e.g., by `toString` or `export_as_txt`). Defaults to `3`.
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.

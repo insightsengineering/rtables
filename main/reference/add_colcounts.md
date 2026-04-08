@@ -12,12 +12,12 @@ add_colcounts(lyt, format = "(N=xx)")
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See

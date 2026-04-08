@@ -97,37 +97,37 @@ subset_cols(
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - j:
 
-  (`integer`, `logical` or `character`)  
+  (`integer`, `logical` or `character`)\
   The column(s) to subset `tt` down to. Character vectors are
   interpreted as a *column path*, not as names. Path can include `"*"`
   wildcards.
 
 - newcinfo:
 
-  (`NULL` or `InstantiatedColumnInfo`)  
+  (`NULL` or `InstantiatedColumnInfo`)\
   The new column info, if precomputed. Generally should not be manually
   set by users.
 
 - keep_topleft:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE` (the default), top_left material for the table will be
   carried over to the subset.
 
 - keep_titles:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE` (the default), all title material for the table will be
   carried over to the subset.
 
 - keep_footers:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE`, all footer material for the table will be carried over to
   the subset. It defaults to `keep_titles`.
 

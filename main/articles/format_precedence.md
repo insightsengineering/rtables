@@ -20,6 +20,7 @@ a demographic table that summarizes the variables content for different
 population subsets (encoded in the columns).
 
 ``` r
+
 library(rtables)
 ADSL <- ex_adsl
 ```
@@ -50,6 +51,7 @@ that prints the structure of a given table object.
 For a simple illustration, consider the following example:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -71,6 +73,7 @@ adsl_analyzed
     #   mean                    28                 NA                 45
 
 ``` r
+
 table_structure(adsl_analyzed)
 ```
 
@@ -116,6 +119,7 @@ output of the analysis function. In such a case, the default format is
 applied.
 
 ``` r
+
 lyt0 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = "AGE", afun = mean)
@@ -140,6 +144,7 @@ objects. As previously mentioned, this is the most specific place where
 the format can be specified by the user.
 
 ``` r
+
 lyt1 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = "AGE", afun = function(x) {
@@ -154,6 +159,7 @@ build_table(lyt1, ADSL)
     # Mean     33.77       35.43          35.43
 
 ``` r
+
 lyt1a <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = "AGE", afun = function(x) {
@@ -185,6 +191,7 @@ specified cell-specific values), which indicates that the precedence
 rules described above are still in place.
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = "AGE", afun = function(x) {
@@ -209,6 +216,7 @@ specific format for that cell is the one defined at its innermost parent
 table split (if any).
 
 ``` r
+
 lyt3 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = "AGE", mean, format = "xx.x")
@@ -225,6 +233,7 @@ format is ignored for this cell since the cell format is more specific
 and therefore takes precedence.
 
 ``` r
+
 lyt4 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(
@@ -242,6 +251,7 @@ build_table(lyt4, ADSL)
     # Mean     33.77       35.43          35.43
 
 ``` r
+
 lyt4a <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(
@@ -268,6 +278,7 @@ partial inheritance. That is, only `SD` cells inherit the parent table’s
 format while the `Mean` cells do not.
 
 ``` r
+
 lyt5 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(
@@ -293,6 +304,7 @@ build_table(lyt5, ADSL)
 Consider the following layout and the resulting table created:
 
 ``` r
+
 lyt6 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -333,6 +345,7 @@ or `.format_na_str` parameter in
 [`in_rows()`](https://insightsengineering.github.io/rtables/reference/in_rows.md).
 
 ``` r
+
 lyt7 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -355,6 +368,7 @@ build_table(lyt7, ADSL)
     #   Mean               28.00     <missing>        45.00
 
 ``` r
+
 lyt7a <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -394,6 +408,7 @@ specified cell specific values), which means that the precedence rules
 described above are still in place.
 
 ``` r
+
 lyt8 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -427,6 +442,7 @@ that cell is the one defined at its innermost parent table split (if
 any).
 
 ``` r
+
 lyt9 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -452,6 +468,7 @@ cell as the cell level format is more specific and therefore takes
 precedence.
 
 ``` r
+
 lyt10 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -477,6 +494,7 @@ build_table(lyt10, ADSL)
     #   Mean               28.00     <missing>        45.00
 
 ``` r
+
 lyt10a <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -515,6 +533,7 @@ partial inheritance of NA strings. That is, only `SD` cells inherit the
 parent table’s `NA` string, while the `Mean` cells do not.
 
 ``` r
+
 lyt11 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%

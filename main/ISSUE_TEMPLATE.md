@@ -23,6 +23,7 @@ Please delete this preamble after you have read it.
 your brief description of the problem
 
 ``` r
+
 library(rtables)
 
 # your reproducible example here

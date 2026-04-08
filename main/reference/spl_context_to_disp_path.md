@@ -12,7 +12,7 @@ spl_context_to_disp_path(ctx)
 
 - ctx:
 
-  (`data.frame`)  
+  (`data.frame`)\
   the `spl_context` data frame where the error occurred.
 
 ## Value

@@ -72,6 +72,7 @@ further advances remain under active development.
 version with:
 
 ``` r
+
 install.packages("rtables")
 ```
 
@@ -79,6 +80,7 @@ or you can install the latest development version directly from GitHub
 with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("insightsengineering/rtables")
 ```
@@ -102,6 +104,7 @@ We first demonstrate with a demographic table-like example and then show
 the creation of a more complex table.
 
 ``` r
+
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -139,6 +142,7 @@ build_table(lyt, ex_adsl)
 ```
 
 ``` r
+
 library(rtables)
 library(dplyr)
 

@@ -14,6 +14,7 @@ into account the table structure. For example:
 ### A Table In Need of Attention
 
 ``` r
+
 library(rtables)
 library(dplyr)
 
@@ -119,6 +120,7 @@ The default trimming function removes rows in which all columns have no
 values in them, i.e. that have all `NA` values or all `0` values:
 
 ``` r
+
 trim_rows(raw_tbl)
 #                                                  A: Drug X                                              B: Placebo                                           C: Combination                   
 #                                 F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED       F            M           U      UNDIFFERENTIATED
@@ -155,6 +157,7 @@ using the
 function:
 
 ``` r
+
 coltrimmed <- raw_tbl[, col_counts(raw_tbl) > 0]
 # Note: method with signature 'VTableTree#missing#ANY' chosen for function '[',
 #  target signature 'TableTree#missing#logical'.
@@ -183,6 +186,7 @@ h_coltrimmed
 Now, it is interesting to see how this table is structured:
 
 ``` r
+
 table_structure(h_coltrimmed)
 # [TableTree] RACE
 #  [TableTree] ASIAN [cont: 1 x 6]
@@ -232,6 +236,7 @@ connection between row names and their representational path is the
 following:
 
 ``` r
+
 row_paths_summary(h_coltrimmed)
 # rowname                      node_class    path                                                                
 # ———————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -269,6 +274,7 @@ empty by:
 3.  Removing the full subtree if no unpruned children remain
 
 ``` r
+
 pruned <- prune_table(coltrimmed)
 pruned
 #                                    A: Drug X                B: Placebo              C: Combination     
@@ -305,6 +311,7 @@ or average are below a specified number. (In the default summaries the
 first entry per column is the count).
 
 ``` r
+
 pruned2 <- prune_table(coltrimmed, low_obs_pruner(10, "mean"))
 pruned2
 #                   A: Drug X                B: Placebo              C: Combination     
@@ -326,6 +333,7 @@ strata within it did not. We can take care of this by setting the
 `stop_depth` for pruning to `1`.
 
 ``` r
+
 pruned3 <- prune_table(coltrimmed, low_obs_pruner(10, "sum"), stop_depth = 1)
 pruned3
 #                                    A: Drug X                B: Placebo              C: Combination     
@@ -359,6 +367,7 @@ a total of `16`, with no `stop_depth` removes some but not all of the
 strata from our third race (`WHITE`).
 
 ``` r
+
 pruned4 <- prune_table(coltrimmed, low_obs_pruner(16, "sum"))
 pruned4
 #                                    A: Drug X                B: Placebo              C: Combination     
@@ -417,6 +426,7 @@ was not used at the corresponding point in the layout). We can see this
 in it’s definition, below:
 
 ``` r
+
 cont_n_allcols
 # function (tt) 
 # {
@@ -427,7 +437,7 @@ cont_n_allcols
 #     }
 #     sum(sapply(row_values(tree_children(ctab)[[1]]), function(cv) cv[1]))
 # }
-# <bytecode: 0x55cd212869e8>
+# <bytecode: 0x558f84918b98>
 # <environment: namespace:rtables>
 ```
 
@@ -438,6 +448,7 @@ For example, we can sort the strata values (`ContentRow`) by observation
 counts within just the `ASIAN` subtable:
 
 ``` r
+
 sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols)
 #                                    A: Drug X                B: Placebo              C: Combination     
 #                                 F            M            F            M            F            M     
@@ -477,6 +488,7 @@ Thus we can extend our sorting of strata within the `ASIAN` subtable to
 all race-specific subtables by using the wildcard:
 
 ``` r
+
 sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), scorefun = cont_n_allcols)
 #                                    A: Drug X                B: Placebo              C: Combination     
 #                                 F            M            F            M            F            M     
@@ -508,6 +520,7 @@ sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), scorefun = cont_n_allcols
 The above is equivalent to separately calling the following:
 
 ``` r
+
 tmptbl <- sort_at_path(pruned, path = c("RACE", "ASIAN", "STRATA1"), scorefun = cont_n_allcols)
 tmptbl <- sort_at_path(tmptbl, path = c("RACE", "BLACK OR AFRICAN AMERICAN", "STRATA1"), scorefun = cont_n_allcols)
 tmptbl <- sort_at_path(tmptbl, path = c("RACE", "WHITE", "STRATA1"), scorefun = cont_n_allcols)
@@ -543,6 +556,7 @@ It is possible to understand better pathing with
 that highlights the tree-like structure and the node names:
 
 ``` r
+
 table_structure(pruned)
 # [TableTree] RACE
 #  [TableTree] ASIAN [cont: 1 x 6]
@@ -574,6 +588,7 @@ table_structure(pruned)
 or with `row_paths_summary`:
 
 ``` r
+
 row_paths_summary(pruned)
 # rowname                      node_class    path                                                                
 # ———————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -608,6 +623,7 @@ by the scoring functions which begin with `cont_`.
 We can directly sort the ethnicity by observations in increasing order:
 
 ``` r
+
 ethsort <- sort_at_path(pruned, path = c("RACE"), scorefun = cont_n_allcols, decreasing = FALSE)
 ethsort
 #                                    A: Drug X                B: Placebo              C: Combination     
@@ -640,6 +656,7 @@ Within each ethnicity separately, sort the strata by number of females
 in arm C (i.e. column position `5`):
 
 ``` r
+
 sort_at_path(pruned, path = c("RACE", "*", "STRATA1"), cont_n_onecol(5))
 #                                    A: Drug X                B: Placebo              C: Combination     
 #                                 F            M            F            M            F            M     
@@ -680,6 +697,7 @@ To show the differences between sorting an analysis subtable
 (as before) a similar raw table as before:
 
 ``` r
+
 more_analysis_fnc <- function(x) {
   in_rows(
     "median" = median(x),
@@ -742,6 +760,7 @@ or
 [`row_paths_summary()`](https://insightsengineering.github.io/rtables/reference/row_paths_summary.md).
 
 ``` r
+
 table_structure(tbl) # Direct inspection into the tree-like structure of rtables
 # [TableTree] RACE
 #  [TableTree] ASIAN [cont: 1 x 3]
@@ -781,6 +800,7 @@ as having a subtable `tt` as a unique input parameter and a single
 numeric value as output.
 
 ``` r
+
 scorefun <- function(tt) {
   # Here we could use browser()
   sum(unlist(row_values(tt)))
@@ -837,6 +857,7 @@ selecting a specific column to sort. Looking at the pre-defined function
 gives us an insight into how to proceed.
 
 ``` r
+
 cont_n_onecol
 # function (j) 
 # {
@@ -849,7 +870,7 @@ cont_n_onecol
 #         row_values(tree_children(ctab)[[1]])[[j]][1]
 #     }
 # }
-# <bytecode: 0x55cd21ea2118>
+# <bytecode: 0x558f86c13ea0>
 # <environment: namespace:rtables>
 ```
 
@@ -860,6 +881,7 @@ specific column. We will do the same here for selecting which column we
 want to sort.
 
 ``` r
+
 scorefun_onecol <- function(colpath) {
   function(tt) {
     # Here we could use browser()
@@ -898,6 +920,7 @@ With this function we can also do the same for columns that are nested
 within larger splits:
 
 ``` r
+
 # Simpler table
 tbl <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -965,6 +988,7 @@ We sort the ethnicity by alphabetical order (in practice undoing our
 previous sorting by ethnicity above).
 
 ``` r
+
 silly_name_scorer <- function(tt) {
   nm <- obj_name(tt)
   print(nm)
@@ -1021,6 +1045,7 @@ random within each race, but illustrates the various things we need to
 do inside custom sorting functions.
 
 ``` r
+
 silly_gender_diffcount <- function(tt) {
   ## (1st) content row has same name as object (STRATA1 level)
   rpath <- c(obj_name(tt), "@content", obj_name(tt))

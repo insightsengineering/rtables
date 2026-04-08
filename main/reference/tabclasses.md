@@ -64,55 +64,55 @@ TableTree(
 
 - kids:
 
-  (`list`)  
+  (`list`)\
   list of direct children.
 
 - name:
 
-  (`string`)  
+  (`string`)\
   name of the split/table/row being created. Defaults to the value of
   the corresponding label, but is not required to be.
 
 - lev:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   nesting level (roughly, indentation level in practical terms).
 
 - label:
 
-  (`string`)  
+  (`string`)\
   a label (not to be confused with the name) for the object/structure.
 
 - labelrow:
 
-  (`LabelRow`)  
+  (`LabelRow`)\
   the `LabelRow` object to assign to the table. Constructed from `label`
   by default if not specified.
 
 - rspans:
 
-  (`data.frame`)  
+  (`data.frame`)\
   currently stored but otherwise ignored.
 
 - cinfo:
 
-  (`InstantiatedColumnInfo` or `NULL`)  
+  (`InstantiatedColumnInfo` or `NULL`)\
   column structure for the object being created.
 
 - iscontent:
 
-  (`flag`)  
+  (`flag`)\
   whether the `TableTree`/`ElementaryTable` is being constructed as the
   content table for another `TableTree`.
 
 - var:
 
-  (`string`)  
+  (`string`)\
   variable name.
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See
@@ -121,13 +121,13 @@ TableTree(
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -135,14 +135,14 @@ TableTree(
 
 - title:
 
-  (`string`)  
+  (`string`)\
   single string to use as main title
   ([`formatters::main_title()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)).
   Ignored for subtables.
 
 - subtitles:
 
-  (`character`)  
+  (`character`)\
   a vector of strings to use as subtitles
   ([`formatters::subtitles()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)),
   where every element is printed on a separate line. Ignored for
@@ -150,7 +150,7 @@ TableTree(
 
 - main_footer:
 
-  (`character`)  
+  (`character`)\
   a vector of strings to use as main global (non-referential) footer
   materials
   ([`formatters::main_footer()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)),
@@ -158,7 +158,7 @@ TableTree(
 
 - prov_footer:
 
-  (`character`)  
+  (`character`)\
   a vector of strings to use as provenance-related global footer
   materials
   ([`formatters::prov_footer()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)),
@@ -166,7 +166,7 @@ TableTree(
 
 - header_section_div:
 
-  (`string`)  
+  (`string`)\
   string which will be used to divide the header from the table. See
   [`header_section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
   for the associated getter and setter. Please consider changing last
@@ -176,7 +176,7 @@ TableTree(
 
 - hsep:
 
-  (`string`)  
+  (`string`)\
   set of characters to be repeated as the separator between the header
   and body of the table when rendered as text. Defaults to a connected
   horizontal line (unicode 2014) in locals that use a UTF charset, and
@@ -186,7 +186,7 @@ TableTree(
 
 - trailing_section_div:
 
-  (`string`)  
+  (`string`)\
   string which will be used as a section divider after the printing of
   the last row contained in this (sub)table, unless that row is also the
   last table row to be printed overall, or `NA_character_` for none (the
@@ -196,26 +196,26 @@ TableTree(
 
 - inset:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   number of spaces to inset the table header, table body, referential
   footnotes, and main_footer, as compared to alignment of title,
   subtitle, and provenance footer. Defaults to 0 (no inset).
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.
 
 - cont:
 
-  (`ElementaryTable`)  
+  (`ElementaryTable`)\
   content table.
 
 - page_title:
 
-  (`character`)  
+  (`character`)\
   page-specific title(s).
 
 ## Value

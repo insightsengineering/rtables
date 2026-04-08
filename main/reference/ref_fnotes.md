@@ -41,29 +41,29 @@ fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 - rowpath:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   path within row structure. `NULL` indicates the footnote should go on
   the column rather than cell.
 
 - colpath:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   path within column structure. `NULL` indicates footnote should go on
   the row rather than cell.
 
 - reset_idx:
 
-  (`flag`)  
+  (`flag`)\
   whether the numbering for referential footnotes should be immediately
   recalculated. Defaults to `TRUE`.
 

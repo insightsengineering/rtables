@@ -38,18 +38,18 @@ get_cell_aligns(obj)
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - shell:
 
-  (`flag`)  
+  (`flag`)\
   whether the formats themselves should be returned instead of the
   values with formats applied. Defaults to `FALSE`.
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.

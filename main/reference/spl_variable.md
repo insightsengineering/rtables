@@ -35,7 +35,7 @@ spl_variable(spl)
 
 - spl:
 
-  (`VarLevelSplit`)  
+  (`VarLevelSplit`)\
   the split object.
 
 ## Value

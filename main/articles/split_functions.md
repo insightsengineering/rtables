@@ -58,6 +58,7 @@ We will showcase strategies to deal with this in the next sections using
 the following artificial data:
 
 ``` r
+
 set.seed(0)
 levs_type <- c("car", "truck", "suv", "sailboat", "cruiseliner")
 
@@ -110,6 +111,7 @@ If we use default level-based faceting, we get several logically
 incoherent cells within our table:
 
 ``` r
+
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -151,6 +153,7 @@ to trim the levels of `vehicle_type` separately within each level of
 `vehicle_class`, we get a table which only has meaningful combinations:
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("color") %>%
   split_rows_by("vehicle_class", split_fun = trim_levels_in_group("vehicle_type")) %>%
@@ -191,6 +194,7 @@ priori*, and that exact set of combinations is produced in the resulting
 table, regardless of whether they are observed or not.
 
 ``` r
+
 library(tibble)
 map <- tribble(
   ~vehicle_class, ~vehicle_type,
@@ -249,6 +253,7 @@ Building further on our arbitrary vehicles table, we can use this to
 create an “all colors” category:
 
 ``` r
+
 lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("color", split_fun = add_overall_level("allcolors", label = "All Colors")) %>%
   split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) %>%
@@ -303,6 +308,7 @@ Suppose we wanted combinations levels for all non-white colors, and for
 white and black colors. We do this like so:
 
 ``` r
+
 combodf <- tribble(
   ~valname, ~label, ~levelcombo, ~exargs,
   "non-white", "Non-White", c("black", "red"), list(),
@@ -405,6 +411,7 @@ First, we define two aspects of ‘pre-processing step’ behavior:
     the data associated with it.
 
 ``` r
+
 ## reverse order of levels
 
 rev_lev <- function(df, spl, vals, labels, ...) {
@@ -434,6 +441,7 @@ Finally we implement our post-processing function. Here we will reorder
 the facets based on the amount of data each of them represents.
 
 ``` r
+
 sort_them_facets <- function(splret, spl, fulldf, ...) {
   ord <- order(sapply(splret$datasplit, nrow))
   make_split_result(
@@ -448,6 +456,7 @@ Finally, we construct our custom split function and use it to create our
 table:
 
 ``` r
+
 silly_splfun1 <- make_split_fun(
   pre = list(
     rev_lev,
@@ -493,6 +502,7 @@ its to simply illustrate overriding the core splitting machinery and has
 no meaningful statistical purpose.
 
 ``` r
+
 silly_core_split <- function(spl, df, vals, labels, .spl_context) {
   make_split_result(
     c("first", "lowmid", "highmid", "last"),
@@ -519,6 +529,7 @@ splitting behavior is such that pre- or post-processing do not make much
 sense.
 
 ``` r
+
 even_sillier_splfun <- make_split_fun(core_split = silly_core_split)
 
 lyt7 <- basic_table(show_colcounts = TRUE) %>%

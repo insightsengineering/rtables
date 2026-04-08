@@ -12,7 +12,7 @@ cbind_rtables(x, ..., sync_count_vis = TRUE)
 
 - x:
 
-  (`TableTree` or `TableRow`)  
+  (`TableTree` or `TableRow`)\
   a table or row object.
 
 - ...:
@@ -21,7 +21,7 @@ cbind_rtables(x, ..., sync_count_vis = TRUE)
 
 - sync_count_vis:
 
-  (`logical(1)`)  
+  (`logical(1)`)\
   should column count visibility be synced across the new and existing
   columns. Currently defaults to `TRUE` for backwards compatibility but
   this may change in future releases.

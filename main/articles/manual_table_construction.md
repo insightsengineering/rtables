@@ -23,10 +23,12 @@ for manual table constructions are:
 ## Simple Example
 
 ``` r
+
 library(rtables)
 ```
 
 ``` r
+
 tbl <- rtable(
   header = c("Treatement\nN=100", "Comparison\nN=300"),
   format = "xx (xx.xx%)",
@@ -45,5 +47,6 @@ this table we continue with the html conversion of the
 object:
 
 ``` r
+
 as_html(tbl, width = "80%")
 ```

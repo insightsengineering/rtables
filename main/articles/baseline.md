@@ -9,6 +9,7 @@ other columns.
 For example, lets calculate the average age:
 
 ``` r
+
 library(rtables)
 
 lyt <- basic_table() %>%
@@ -27,6 +28,7 @@ and then the difference of the average `AGE` between the placebo arm and
 the other arms:
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze("AGE", afun = function(x, .ref_group) {
@@ -54,6 +56,7 @@ instead of
 and pass `.in_ref_col` as the second argument:
 
 ``` r
+
 lyt3 <- basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze(
@@ -74,6 +77,7 @@ tbl3
     # Difference of Averages     1.89                        1.55
 
 ``` r
+
 lyt4 <- basic_table() %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   analyze(
@@ -104,6 +108,7 @@ When adding row-splitting the reference data may be represented by the
 column with or without row splitting. For example:
 
 ``` r
+
 lyt5 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM", ref_group = "B: Placebo") %>%
   split_rows_by("SEX", split_fun = drop_split_levels) %>%

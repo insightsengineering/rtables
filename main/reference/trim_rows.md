@@ -12,12 +12,12 @@ trim_rows(tt, criteria = all_zero_or_na)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - criteria:
 
-  (`function`)  
+  (`function`)\
   function which takes a `TableRow` object and returns `TRUE` if that
   row should be removed. Defaults to
   [`all_zero_or_na()`](https://insightsengineering.github.io/rtables/reference/trim_prune_funs.md).

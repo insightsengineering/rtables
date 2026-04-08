@@ -47,6 +47,7 @@ is supplied.
 We enter into `build_table` using `debugonce` to see how it works.
 
 ``` r
+
 # rtables 0.6.2
 library(rtables)
 debugonce(build_table)
@@ -82,6 +83,7 @@ the row splits’ vectors which are iterative splits in the row space. In
 the following, we consider the initial checks and defensive programming.
 
 ``` r
+
 ## do checks and defensive programming now that we have the data
 lyt <- fix_dyncuts(lyt, df) # Create the splits that depends on data
 lyt <- set_def_child_ord(lyt, df) # With the data I set the same order for all splits
@@ -115,6 +117,7 @@ the columns. In particular, the column counts are calculated in this
 function. The parameter inputs are as follows:
 
 ``` r
+
 cinfo <- create_colinfo(
   lyt, # Main layout with col split info
   df, # df used for splits and col counts if no alt_counts_df is present
@@ -131,6 +134,7 @@ cinfo <- create_colinfo(
 `lyt`. Entering `create_colinfo`, we will see the following calls:
 
 ``` r
+
 clayout <- clayout(lyt) # Extracts column split and info
 
 if (is.null(topleft)) {
@@ -188,6 +192,7 @@ split vector. It may be worthwhile to check what this vector looks like
 in our test case.
 
 ``` r
+
 # rtables 0.6.2
 # A very simple layout
 lyt <- basic_table() %>%

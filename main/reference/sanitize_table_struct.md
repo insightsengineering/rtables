@@ -15,12 +15,12 @@ sanitize_table_struct(tt, empty_msg = "-- This Section Contains No Data --")
 
 - tt:
 
-  (`TableTree`)  
+  (`TableTree`)\
   a `TableTree` object.
 
 - empty_msg:
 
-  (`string`)  
+  (`string`)\
   the string which should be spanned across the inserted empty rows.
 
 ## Value

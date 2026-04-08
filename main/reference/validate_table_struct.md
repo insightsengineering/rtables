@@ -28,12 +28,12 @@ assert_valid_table(tt, warn_only = FALSE)
 
 - tt:
 
-  (`TableTree`)  
+  (`TableTree`)\
   a `TableTree` object.
 
 - warn_only:
 
-  (`flag`)  
+  (`flag`)\
   whether a warning should be thrown instead of an error. Defaults to
   `FALSE`.
 

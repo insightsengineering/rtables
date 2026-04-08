@@ -12,7 +12,7 @@ update_ref_indexing(tt)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 ## Details

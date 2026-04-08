@@ -25,39 +25,39 @@ as_html(
 
 - x:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   a `TableTree` object.
 
 - width:
 
-  (`character`)  
+  (`character`)\
   a string to indicate the desired width of the table. Common input
   formats include a percentage of the viewer window width (e.g.
   `"100%"`) or a distance value (e.g. `"300px"`). Defaults to `NULL`.
 
 - class_table:
 
-  (`character`)  
+  (`character`)\
   class for `table` tag.
 
 - class_tr:
 
-  (`character`)  
+  (`character`)\
   class for `tr` tag.
 
 - class_th:
 
-  (`character`)  
+  (`character`)\
   class for `th` tag.
 
 - link_label:
 
-  (`character`)  
+  (`character`)\
   link anchor label (not including `tab:` prefix) for the table.
 
 - bold:
 
-  (`character`)  
+  (`character`)\
   elements in table output that should be bold. Options are
   `"main_title"`, `"subtitles"`, `"header"`, `"row_names"`,
   `"label_rows"`, and `"content_rows"` (which includes any non-label
@@ -65,26 +65,26 @@ as_html(
 
 - header_sep_line:
 
-  (`flag`)  
+  (`flag`)\
   whether a black line should be printed to under the table header.
   Defaults to `TRUE`.
 
 - no_spaces_between_cells:
 
-  (`flag`)  
+  (`flag`)\
   whether spaces between table cells should be collapsed. Defaults to
   `FALSE`.
 
 - expand_newlines:
 
-  (`flag`)  
+  (`flag`)\
   Defaults to `FALSE`, relying on `html` output to solve newline
   characters (`\n`). Doing this keeps the structure of the cells but may
   depend on the output device.
 
 - round_type:
 
-  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  (`"iec"`, `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
   for details.

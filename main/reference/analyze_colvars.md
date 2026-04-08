@@ -22,12 +22,12 @@ analyze_colvars(
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - afun:
 
-  (`function` or `list`)  
+  (`function` or `list`)\
   function(s) to be used to calculate the values in each column. The
   list will be repped out as needed and matched by position with the
   columns during tabulation. This functions accepts the same parameters
@@ -38,7 +38,7 @@ analyze_colvars(
 
 - parent_name:
 
-  (`character(1)`)  
+  (`character(1)`)\
   Name to assign to the table corresponding to the *split* or *group of
   sibling analyses*, for `split_rows_by*` and `analyze*` when analyzing
   more than one variable, respectively. Ignored when analyzing a single
@@ -46,7 +46,7 @@ analyze_colvars(
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See
@@ -55,13 +55,13 @@ analyze_colvars(
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - nested:
 
-  (`logical`)  
+  (`logical`)\
   whether this layout instruction should be applied within the existing
   layout structure *if possible* (`TRUE`, the default) or as a new
   top-level element (`FALSE`). Ignored if it would nest a split
@@ -69,7 +69,7 @@ analyze_colvars(
 
 - extra_args:
 
-  (`list`)  
+  (`list`)\
   extra arguments to be passed to the tabulation function. Element
   position in the list corresponds to the children of this split. Named
   elements in the child-specific lists are ignored if they do not match
@@ -77,7 +77,7 @@ analyze_colvars(
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -85,7 +85,7 @@ analyze_colvars(
 
 - inclNAs:
 
-  (`logical`)  
+  (`logical`)\
   whether NA observations in the `var` variable(s) should be included
   when performing the analysis. Defaults to `FALSE`.
 
@@ -142,11 +142,11 @@ tbl
 #>                               value       pctdiff       value       pctdiff       value       pctdiff  
 #> ———————————————————————————————————————————————————————————————————————————————————————————————————————
 #> ASIAN                       79 (65.3%)   79 (65.3%)   68 (64.2%)   68 (64.2%)   84 (65.1%)   84 (65.1%)
-#>                                0.2           39          0.1           39          -0.0          37    
+#>                                0.0           32          0.2           28          0.1           42    
 #> BLACK OR AFRICAN AMERICAN   28 (23.1%)   28 (23.1%)   24 (22.6%)   24 (22.6%)   27 (20.9%)   27 (20.9%)
-#>                                0.2           9           0.1           9           0.3           18    
+#>                                -0.0          15          0.1           9           0.1           15    
 #> WHITE                       14 (11.6%)   14 (11.6%)   14 (13.2%)   14 (13.2%)   18 (14.0%)   18 (14.0%)
-#>                                -0.0          8           0.3           5           -0.1          9     
+#>                                -0.2          10          0.3           7           -0.3          12    
 
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
@@ -166,9 +166,9 @@ tbl2
 #>                             Measurement    Pct Diff    Measurement    Pct Diff    Measurement    Pct Diff 
 #> ——————————————————————————————————————————————————————————————————————————————————————————————————————————
 #> ASIAN                       79 (65.3%)    79 (65.3%)   68 (64.2%)    68 (64.2%)   84 (65.1%)    84 (65.1%)
-#>   mean                         0.18          0.52         0.08          0.54         -0.02         0.45   
+#>   mean                         0.04          0.45         0.19          0.44         0.14          0.51   
 #> BLACK OR AFRICAN AMERICAN   28 (23.1%)    28 (23.1%)   24 (22.6%)    24 (22.6%)   27 (20.9%)    27 (20.9%)
-#>   mean                         0.21          0.42         0.12          0.41         0.26          0.56   
+#>   mean                         -0.04         0.53         0.13          0.46         0.06          0.57   
 #> WHITE                       14 (11.6%)    14 (11.6%)   14 (13.2%)    14 (13.2%)   18 (14.0%)    18 (14.0%)
-#>   mean                         -0.01         0.56         0.29          0.42         -0.10         0.51   
+#>   mean                         -0.19         0.61         0.33          0.48         -0.27         0.55   
 ```

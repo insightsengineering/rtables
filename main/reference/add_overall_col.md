@@ -16,12 +16,12 @@ add_overall_col(lyt, label)
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - label:
 
-  (`string`)  
+  (`string`)\
   a label (not to be confused with the name) for the object/structure.
 
 ## Value

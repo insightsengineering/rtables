@@ -30,7 +30,7 @@ vars_in_layout(lyt)
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   the layout (or a component thereof).
 
 ## Value

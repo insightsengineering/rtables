@@ -16,7 +16,7 @@ find_degen_struct(tt)
 
 - tt:
 
-  (`TableTree`)  
+  (`TableTree`)\
   a `TableTree` object.
 
 ## Value

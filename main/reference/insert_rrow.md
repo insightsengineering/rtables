@@ -12,23 +12,23 @@ insert_rrow(tbl, rrow, at = 1, ascontent = FALSE)
 
 - tbl:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   a `rtable` object.
 
 - rrow:
 
-  (`TableRow`)  
+  (`TableRow`)\
   an `rrow` to append to `tbl`.
 
 - at:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   position into which to put the `rrow`, defaults to beginning (i.e. row
   1).
 
 - ascontent:
 
-  (`flag`)  
+  (`flag`)\
   currently ignored.
 
 ## Value

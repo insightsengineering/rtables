@@ -72,6 +72,7 @@ The following example shows how we can enter `do_split` and start
 understanding the class hierarchy and the main split engine.
 
 ``` r
+
 library(rtables)
 # debugonce(rtables:::do_split) # Uncomment me to enter the function!!!
 basic_table() %>%
@@ -87,6 +88,7 @@ and sections. Each section in the code reflects roughly one section of
 this article.
 
 ``` r
+
 # rtables 0.6.2
 ### NB This is called at EACH level of recursive splitting
 do_split <- function(spl,
@@ -221,6 +223,7 @@ with their constructors in `R/00tabletrees.R`. Reading about how
 objects are expected to work. Please see the comments in the following:
 
 ``` r
+
 # rtables 0.6.2
 setClass("AllSplit", contains = "Split")
 
@@ -311,6 +314,7 @@ autonomously. Let’s go forward in `do_split`. In our case, with
 will be the following (read the comment!):
 
 ``` r
+
 # rtables 0.6.2
 ## Default does nothing, add methods as they become required
 setMethod(
@@ -329,6 +333,7 @@ we are still currently browsing within `do_split` in debug mode from the
 first example. We print and comment on the function in the following:
 
 ``` r
+
 # rtables 0.6.2
 .apply_split_inner <- function(spl, df, vals = NULL, labels = NULL, trim = FALSE) {
   # - INPUTS - #
@@ -414,6 +419,7 @@ programming, allowing for easy extension of the program. For compactness
 we also show the `showMethods` result for each generic.
 
 ``` r
+
 # rtables 0.6.2
 # Retrieves the values that will constitute the splits (facets), not necessarily a unique list.
 # They could come from the data cuts for example -> it can be anything that produces a set of strings.
@@ -562,6 +568,7 @@ elements can be added with `expression(E1, E2)`, which is the same as
 once finished to remove the trace.
 
 ``` r
+
 # rtables 0.6.2
 library(rtables)
 library(dplyr)
@@ -596,6 +603,7 @@ lyt %>%
     ##     Mean      5.97
 
 ``` r
+
 # undebug(rtables:::do_split)
 ```
 
@@ -634,6 +642,7 @@ with specific split values. `VarLevelSplit` also seems to have three
 more slots than `AllSplit`. What are they precisely?
 
 ``` r
+
 # rtables 0.6.2
 slots_as <- getSlots("AllSplit") # inherits virtual class Split and is general class for all splits
 # getClass("CustomizableSplit") # -> Extends: "Split", Known Subclasses: Class "VarLevelSplit", directly
@@ -676,6 +685,7 @@ Instead of looking at the function source code with
 `S4` generic function in debugging mode as follows:
 
 ``` r
+
 # rtables 0.6.2
 eval(debugcall(.applysplit_partlabels(spl, df, vals, labels)))
 # We leave to the smart developer to see how the labels are assigned
@@ -762,6 +772,7 @@ We start by examining a split function that is already defined in
 `rtables`. Its scope is filtering out specific values as follows:
 
 ``` r
+
 library(rtables)
 # debug(rtables:::do_split) # uncomment to see into the main split function
 basic_table() %>%
@@ -778,6 +789,7 @@ basic_table() %>%
     ##   Mean    5.64
 
 ``` r
+
 # undebug(rtables:::do_split)
 
 # This produces the same output as before (when filters were used)
@@ -799,6 +811,7 @@ fundamentally a wrapper of `.apply_split_inner` that drops empty factor
 levels, therefore avoiding empty splits.
 
 ``` r
+
 # rtables 0.6.2
 # > drop_split_levels
 function(df,
@@ -848,6 +861,7 @@ retrieve the default as follows:
 `default_opts <- callr::r(function(){options()}); options(error = default_opts$error)`.
 
 ``` r
+
 # rtables 0.6.2
 # Table call with only the function changing
 simple_table <- function(DM, f) {
@@ -897,6 +911,7 @@ add `...` to the function call. Now let’s construct an interesting split
 function (and error):
 
 ``` r
+
 # rtables 0.6.2
 f_brakes_if <- function(split_col = NULL, error = FALSE) {
   function(df, spl, ...) { # order matters! more than naming
@@ -941,6 +956,7 @@ simple_table(DM, f_brakes_if()) # works!
     ##   Mean            5.69
 
 ``` r
+
 simple_table(DM, f_brakes_if(split_col = "STRATA1")) # works!
 ```
 
@@ -954,6 +970,7 @@ simple_table(DM, f_brakes_if(split_col = "STRATA1")) # works!
     ##   Mean    5.71
 
 ``` r
+
 # simple_table(DM, f_brakes_if(error = TRUE)) # does not work, but returns an informative message
 
 # Error in do_split(spl, df, spl_context = spl_context) :
@@ -1015,6 +1032,7 @@ it should even be impossible to set it differently from `trim = FALSE`.
 (write an issue informative error for not list xxx).
 
 ``` r
+
 # rtables 0.6.2
 browsing_f <- function(df, spl, .spl_context, ...) {
   # browser()
@@ -1089,6 +1107,7 @@ vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/exam
 but we will show here how this can also apply to splits.
 
 ``` r
+
 # rtables 0.6.2
 
 # Let's use the tracer!!
@@ -1190,6 +1209,7 @@ example case taken from
 [`?split_rows_by_multivar`](https://insightsengineering.github.io/rtables/reference/split_rows_by_multivar.md).
 
 ``` r
+
 # rtables 0.6.2
 
 my_tracer <- quote(if (is(spl, "MultiVarSplit")) browser())
@@ -1238,6 +1258,7 @@ how to replace it to solve the empty age groups problem as we did
 before. We propose the same simplified situation:
 
 ``` r
+
 # rtables 0.6.2
 
 cutfun <- function(x) {
@@ -1308,6 +1329,7 @@ We can try to construct the split function for cuts manually with
 `make_split_fun`:
 
 ``` r
+
 my_count_afun <- function(x, .N_col, .spl_context, ...) {
   # browser()
   out <- list(c(length(x), length(x) / .N_col))
@@ -1365,6 +1387,7 @@ Alternatively, we could choose to prune these rows out with
 `prune_table`!
 
 ``` r
+
 # rtables 0.6.2
 
 tbl <- basic_table(show_colcounts = TRUE) %>%
@@ -1406,6 +1429,7 @@ tbl
     ##       M     2 (0.6%)
 
 ``` r
+
 # Trying with pruning
 prune_table(tbl) # (xxx) what is going on here? it is degenerate so it has no real leaves
 ```
@@ -1413,6 +1437,7 @@ prune_table(tbl) # (xxx) what is going on here? it is degenerate so it has no re
     ## NULL
 
 ``` r
+
 # It is degenerate -> what to do?
 # The same mechanism is applied in the case of NULL leaves, they are rolled up in the
 #  table tree

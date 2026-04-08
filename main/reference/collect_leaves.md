@@ -12,18 +12,18 @@ collect_leaves(tt, incl.cont = TRUE, add.labrows = FALSE)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - incl.cont:
 
-  (`flag`)  
+  (`flag`)\
   whether to include rows from content tables within the tree. Defaults
   to `TRUE`.
 
 - add.labrows:
 
-  (`flag`)  
+  (`flag`)\
   whether to include label rows. Defaults to `FALSE`.
 
 ## Value

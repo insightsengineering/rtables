@@ -12,13 +12,13 @@ Viewer(x, y = NULL, ...)
 
 - x:
 
-  (`rtable` or `shiny.tag`)  
+  (`rtable` or `shiny.tag`)\
   an object of class `rtable` or `shiny.tag` (defined in `htmltools`
   package).
 
 - y:
 
-  (`rtable` or `shiny.tag`)  
+  (`rtable` or `shiny.tag`)\
   optional second argument of same type as `x`.
 
 - ...:

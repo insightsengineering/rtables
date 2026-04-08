@@ -12,7 +12,7 @@ df_to_tt(df)
 
 - df:
 
-  (`data.frame`)  
+  (`data.frame`)\
   a data frame.
 
 ## Details

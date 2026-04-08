@@ -32,19 +32,19 @@ colcount_visible(obj, path) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - path:
 
-  (`character`)  
+  (`character`)\
   a vector path for a position within the structure of a `TableTree`.
   Each element represents a subsequent choice amongst the children of
   the previous choice.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 ## Value

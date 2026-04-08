@@ -26,7 +26,7 @@ simple_analysis(x, ...)
 
 - x:
 
-  (`vector`)  
+  (`vector`)\
   the *already split* data being tabulated for a particular cell/set of
   cells.
 

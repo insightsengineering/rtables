@@ -23,12 +23,12 @@ horizontal_sep(obj) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - value:
 
-  (`string`)  
+  (`string`)\
   string to use as new header/body separator.
 
 ## Value

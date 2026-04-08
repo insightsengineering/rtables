@@ -17,24 +17,24 @@ value_at(tt, rowpath = NULL, colpath = NULL)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - rowpath:
 
-  (`character`)  
+  (`character`)\
   path in row-split space to the desired row(s). Can include
   `"@content"`.
 
 - colpath:
 
-  (`character`)  
+  (`character`)\
   path in column-split space to the desired column(s). Can include
   `"*"`.
 
 - omit_labrows:
 
-  (`flag`)  
+  (`flag`)\
   whether label rows underneath `rowpath` should be omitted (`TRUE`, the
   default), or return empty lists of cell "values" (`FALSE`).
 

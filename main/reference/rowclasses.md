@@ -46,33 +46,33 @@ ContentRow(...)
 
 - lev:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   nesting level (roughly, indentation level in practical terms).
 
 - label:
 
-  (`string`)  
+  (`string`)\
   a label (not to be confused with the name) for the object/structure.
 
 - name:
 
-  (`string`)  
+  (`string`)\
   name of the split/table/row being created. Defaults to the value of
   the corresponding label, but is not required to be.
 
 - vis:
 
-  (`flag`)  
+  (`flag`)\
   whether the row should be visible (`LabelRow` only).
 
 - cinfo:
 
-  (`InstantiatedColumnInfo` or `NULL`)  
+  (`InstantiatedColumnInfo` or `NULL`)\
   column structure for the object being created.
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -80,14 +80,14 @@ ContentRow(...)
 
 - table_inset:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   number of spaces to inset the table header, table body, referential
   footnotes, and main footer, as compared to alignment of title,
   subtitles, and provenance footer. Defaults to 0 (no inset).
 
 - trailing_section_div:
 
-  (`string`)  
+  (`string`)\
   string which will be used as a section divider after the printing of
   the last row contained in this (sub)table, unless that row is also the
   last table row to be printed overall, or `NA_character_` for none (the
@@ -97,29 +97,29 @@ ContentRow(...)
 
 - round_type:
 
-  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  (`"iec"`, `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
   for details.
 
 - vals:
 
-  (`list`)  
+  (`list`)\
   cell values for the row.
 
 - cspan:
 
-  (`integer`)  
+  (`integer`)\
   column span. `1` indicates no spanning.
 
 - var:
 
-  (`string`)  
+  (`string`)\
   variable name.
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See
@@ -128,18 +128,18 @@ ContentRow(...)
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - klass:
 
-  (`character`)  
+  (`character`)\
   internal detail.
 
 - footnotes:
 
-  (`list` or `NULL`)  
+  (`list` or `NULL`)\
   referential footnotes to be applied at current level. In
   post-processing, this can be achieved with `fnotes_at_path<-`.
 

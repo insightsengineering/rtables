@@ -14,7 +14,7 @@ col_paths(x)
 
 - x:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   an `rtable` object.
 
 ## Value

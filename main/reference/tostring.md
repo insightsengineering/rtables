@@ -31,24 +31,24 @@ toString(
 
 - x:
 
-  (`ANY`)  
+  (`ANY`)\
   object to be prepared for rendering.
 
 - widths:
 
-  (`numeric` or `NULL`)  
+  (`numeric` or `NULL`)\
   Proposed widths for the columns of `x`. The expected length of this
   numeric vector can be retrieved with `ncol(x) + 1` as the column of
   row names must also be considered.
 
 - col_gap:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   space (in characters) between columns.
 
 - hsep:
 
-  (`string`)  
+  (`string`)\
   character to repeat to create header/body separator line. If `NULL`,
   the object value will be used. If `" "`, an empty separator will be
   printed. See
@@ -57,18 +57,18 @@ toString(
 
 - indent_size:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   number of spaces to use per indent level. Defaults to 2.
 
 - tf_wrap:
 
-  (`flag`)  
+  (`flag`)\
   whether the text for title, subtitles, and footnotes should be
   wrapped.
 
 - max_width:
 
-  (`integer(1)`, `string` or `NULL`)  
+  (`integer(1)`, `string` or `NULL`)\
   width that title and footer (including footnotes) materials should be
   word-wrapped to. If `NULL`, it is set to the current print width of
   the session (`getOption("width")`). If set to `"auto"`, the width of
@@ -77,21 +77,21 @@ toString(
 
 - fontspec:
 
-  (`font_spec`)  
+  (`font_spec`)\
   a font_spec object specifying the font information to use for
   calculating string widths and heights, as returned by
   [`font_spec()`](https://insightsengineering.github.io/formatters/latest-tag/reference/font_spec.html).
 
 - ttype_ok:
 
-  (`logical(1)`)  
+  (`logical(1)`)\
   should truetype (non-monospace) fonts be allowed via `fontspec`.
   Defaults to `FALSE`. This parameter is primarily for internal testing
   and generally should not be set by end users.
 
 - round_type:
 
-  (`string`)  
+  (`string`)\
   The type of rounding to perform. Allowed values: (`"iec"`, `"iec_mod"`
   or `"sas"`) See
   [`round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)

@@ -20,24 +20,24 @@ insert_row_at_path(tt, path, value)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - path:
 
-  (`character`)  
+  (`character`)\
   a vector path for a position within the structure of a `TableTree`.
   Each element represents a subsequent choice amongst the children of
   the previous choice.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 - after:
 
-  (`flag`)  
+  (`flag`)\
   whether `value` should be added as a row directly before (`FALSE`, the
   default) or after (`TRUE`) the row specified by `path`.
 

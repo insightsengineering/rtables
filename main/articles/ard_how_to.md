@@ -13,6 +13,7 @@ vignette](https://insightsengineering.github.io/rtables/latest-tag/articles/clin
 about clinical trials.
 
 ``` r
+
 library(rtables)
 # Loading required package: formatters
 # 
@@ -63,6 +64,7 @@ into a table using the
 function.
 
 ``` r
+
 as_result_df(tbl)
 #   avar_name         row_name       label_name row_num is_group_summary
 # 1       AGE             Mean             Mean       2            FALSE
@@ -122,6 +124,7 @@ Now let’s generate our final ARD output, which is ready to be used for
 quality control purposes.
 
 ``` r
+
 as_result_df(tbl, make_ard = TRUE)
 #    group1   group1_level variable   variable_level   variable_label stat_name
 # 1     ARM      A: Drug X      AGE             Mean             Mean      mean
@@ -165,6 +168,7 @@ the table to customize the output. For example, we can add some
 user-defined statistics with custom names:
 
 ``` r
+
 # rcell and in_rows are the core of any analysis function
 rc <- rcell(c(1, 2), stat_names = c("Rand1", "Rand2"))
 print(obj_stat_names(rc)) # c("Rand1", "Rand2")
@@ -217,6 +221,7 @@ rc_row <- in_rows(
 Let’s put it into practice:
 
 ``` r
+
 mean_sd_custom <- function(x) {
   mean <- mean(x, na.rm = FALSE)
   sd <- sd(x, na.rm = FALSE)
@@ -295,6 +300,7 @@ as_result_df(tbl, make_ard = TRUE)
 Let’s add hierarchical row and column splits:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_rows_by("STRATA2") %>%
   summarize_row_groups() %>%

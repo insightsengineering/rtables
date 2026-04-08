@@ -12,14 +12,14 @@ make_split_fun(pre = list(), core_split = NULL, post = list())
 
 - pre:
 
-  (`list`)  
+  (`list`)\
   zero or more functions which operate on the incoming data and return a
   new data frame that should split via `core_split`. They will be called
   on the data in the order they appear in the list.
 
 - core_split:
 
-  (`function` or `NULL`)  
+  (`function` or `NULL`)\
   if non-`NULL`, a function which accepts the same arguments that
   `do_base_split` does, and returns the same type of named list. Custom
   functions which override this behavior cannot be used in column
@@ -27,7 +27,7 @@ make_split_fun(pre = list(), core_split = NULL, post = list())
 
 - post:
 
-  (`list`)  
+  (`list`)\
   zero or more functions which should be called on the list output by
   splitting.
 

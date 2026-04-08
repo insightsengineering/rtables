@@ -19,7 +19,7 @@ no_colinfo(obj)
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 ## Value

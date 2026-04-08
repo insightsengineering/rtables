@@ -14,6 +14,7 @@ cell values.
 We will use the following table for illustrative purposes:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 
@@ -78,6 +79,7 @@ be used. The indices are based on visible rows and not on the tree
 structure. So:
 
 ``` r
+
 tbl[1, 1]
 #     A: Drug X
 # —————————————
@@ -88,6 +90,7 @@ is a table with an empty cell because the first row is a label row. We
 need to access a cell with actual cell data:
 
 ``` r
+
 tbl[3, 1]
 #        A: Drug X
 # ————————————————
@@ -97,6 +100,7 @@ tbl[3, 1]
 To retrieve the value, we use `drop = TRUE`:
 
 ``` r
+
 tbl[3, 1, drop = TRUE]
 # [1] 32.75949
 ```
@@ -104,6 +108,7 @@ tbl[3, 1, drop = TRUE]
 One can access multiple rows and columns:
 
 ``` r
+
 tbl[1:3, 1:2]
 #            A: Drug X   B: Placebo
 # —————————————————————————————————
@@ -115,6 +120,7 @@ tbl[1:3, 1:2]
 Note that we do not repeat label rows for descending children, e.g.
 
 ``` r
+
 tbl[2:4, ]
 #           A: Drug X   B: Placebo   C: Combination
 # —————————————————————————————————————————————————
@@ -131,6 +137,7 @@ Character indices are interpreted as paths (see below), NOT elements to
 be matched against `names(tbl)`:
 
 ``` r
+
 tbl[, c("ARM", "A: Drug X")]
 # Note: method with signature 'VTableTree#missing#ANY' chosen for function '[',
 #  target signature 'TableTree#missing#character'.
@@ -160,6 +167,7 @@ show with a more complete table how it is still possible to keep the
 (possibly) relevant information.
 
 ``` r
+
 top_left(tbl) <- "SEX"
 main_title(tbl) <- "Table 1"
 subtitles(tbl) <- c("Authors:", " - Abcd Zabcd", " - Cde Zbcd")
@@ -173,6 +181,7 @@ fnotes_at_path(tbl, rowpath = c("M", "AGE", "Mean"), colpath = c("ARM", "A: Drug
 Normal subsetting loses all the information showed above.
 
 ``` r
+
 tbl[3, 3]
 #        C: Combination
 # —————————————————————
@@ -184,6 +193,7 @@ also imposed by adding `keep_topleft = TRUE` to the subsetting as
 follows:
 
 ``` r
+
 tbl[, 2:3]
 # SEX         B: Placebo   C: Combination
 # ———————————————————————————————————————
@@ -217,6 +227,7 @@ In case of subsetting, the referential footnotes are by default indexed
 again, as if the produced table is a new one.
 
 ``` r
+
 tbl[10, 1]
 #        A: Drug X
 # ————————————————
@@ -310,6 +321,7 @@ specify to keep more information from the original table. As a standard
 the foot notes are always present if the titles are kept.
 
 ``` r
+
 tbl[1:3, 2:3, keep_titles = TRUE]
 # Table 1
 # Authors:
@@ -384,6 +396,7 @@ functions, or as a portion of the more general
 function output.
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_cols_by("SEX", split_fun = drop_split_levels) %>%
@@ -422,6 +435,7 @@ tbl2
 So the column paths are as follows:
 
 ``` r
+
 col_paths_summary(tbl2)
 # label             path                       
 # —————————————————————————————————————————————
@@ -439,6 +453,7 @@ col_paths_summary(tbl2)
 and the row paths are as follows:
 
 ``` r
+
 row_paths_summary(tbl2)
 # rowname                      node_class    path                                                                
 # ———————————————————————————————————————————————————————————————————————————————————————————————————————————————
@@ -471,6 +486,7 @@ To get a semantically meaningful subset of our table, then, we can use
 which underlies it)
 
 ``` r
+
 tbl2[c("RACE", "ASIAN"), c("ARM", "C: Combination")]
 #                 C: Combination     
 #                 F            M     
@@ -491,6 +507,7 @@ resolve together to an individual cell, e.g. average age for Asian
 female patients in arm A:
 
 ``` r
+
 value_at(tbl2, c("RACE", "ASIAN", "AGE", "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
 # [1] 31.21951
 ```
@@ -500,6 +517,7 @@ You can also request information from non-cell specific paths with the
 function:
 
 ``` r
+
 cell_values(tbl2, c("RACE", "ASIAN", "AGE", "Mean"), c("ARM", "A: Drug X"))
 # $`A: Drug X.F`
 # [1] 31.21951
@@ -513,6 +531,7 @@ Note the return value of
 is always a list even if you specify a path to a cell:
 
 ``` r
+
 cell_values(tbl2, c("RACE", "ASIAN", "AGE", "Mean"), c("ARM", "A: Drug X", "SEX", "F"))
 # $`A: Drug X.F`
 # [1] 31.21951

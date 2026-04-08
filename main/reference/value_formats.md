@@ -24,12 +24,12 @@ value_formats(obj, default = obj_format(obj))
 
 - obj:
 
-  (`VTableTree` or `TableRow`)  
+  (`VTableTree` or `TableRow`)\
   a table or row object.
 
 - default:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   default format.
 
 ## Value

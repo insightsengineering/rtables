@@ -14,6 +14,7 @@ Display of column counts (off by default) was primarily achieved via
 passing `show_colcounts = TRUE` to `basic_table` , e.g.
 
 ``` r
+
 library(dplyr)
 # 
 # Attaching package: 'dplyr'
@@ -62,6 +63,7 @@ We had no way of displaying (or, in fact, even easily calculating) the
 `col_counts<-` getter:
 
 ``` r
+
 col_counts(tbl) <- c(17, 18, 19, 17, 18, 19)
 tbl
 #           A: Drug X        B: Placebo       C: Combination  
@@ -82,6 +84,7 @@ after table creation, though we did support showing a blank space for
 particular counts by setting them to `NA`:
 
 ``` r
+
 col_counts(tbl) <- c(17, 18, NA, 17, 18, 19)
 tbl
 #           A: Drug X        B: Placebo      C: Combination  
@@ -112,6 +115,7 @@ We do this with the new `show_colcounts` argument now accepted by all
 `split_cols_by*` layout functions.
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_cols_by("SEX",
@@ -130,6 +134,7 @@ tbl2
 ```
 
 ``` r
+
 lyt3 <- basic_table() %>%
   split_cols_by("ARM", show_colcounts = TRUE) %>%
   split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
@@ -169,11 +174,13 @@ The `facet_colcount` getter and setter queries and sets the column count
 for a facet in column space (note it needs not be a leaf facet). E.g.,
 
 ``` r
+
 facet_colcount(tbl3, c("ARM", "C: Combination"))
 # [1] 132
 ```
 
 ``` r
+
 facet_colcount(tbl3, c("ARM", "C: Combination")) <- 75
 tbl3
 #          A: Drug X      B: Placebo      C: Combination  
@@ -203,6 +210,7 @@ instruction in the layout (e.g., `c("ARM")`,
 direct children of that path*.
 
 ``` r
+
 facet_colcounts_visible(tbl3, c("ARM", "A: Drug X", "SEX")) <- TRUE
 tbl3
 #           A: Drug X                                       
@@ -229,6 +237,7 @@ internal detail and in virtually all cases end users should avoid
 calling them directly.
 
 ``` r
+
 ## BEWARE, the following is expected to show error
 tbl4 <- tbl3
 colcount_visible(tbl4, c("ARM", "A: Drug X", "SEX", "F")) <- FALSE
@@ -263,6 +272,7 @@ in case of missing values in the column counts you can use
 `colcount_na_str`:
 
 ``` r
+
 coldf <- make_col_df(tbl3)
 facet_colcount(tbl3, coldf$path[[1]][c(1, 2)]) <- NA_integer_
 print(tbl3) # Keeps the missing space

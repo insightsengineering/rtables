@@ -10,6 +10,7 @@ form.
 Initialization
 
 ``` r
+
 library(rtables)
 ```
 
@@ -20,6 +21,7 @@ without creating an entirely new split functions. By default
 `split_*_by` facets data based on categorical variable.
 
 ``` r
+
 d1 <- subset(ex_adsl, AGE < 25)
 d1$AGE <- as.factor(d1$AGE)
 lyt1 <- basic_table() %>%
@@ -41,6 +43,7 @@ create categories and the corresponding faceting, when the break points
 are dependent from the data.
 
 ``` r
+
 sd_cutfun <- function(x) {
   cutpoints <- c(
     min(x),
@@ -72,6 +75,7 @@ predefined and `split_*_by_quartiles` when the data should be faceted by
 quantile.
 
 ``` r
+
 lyt1 <- basic_table() %>%
   split_cols_by_cuts(
     "AGE",
@@ -102,6 +106,7 @@ want to check, and then return a custom split function that has the
 behavior you want using functions provided by rtables for both cases:
 
 ``` r
+
 picky_splitter <- function(var) {
   function(df, spl, vals, labels, trim) {
     orig_vals <- vals
@@ -132,6 +137,7 @@ lyt1 <- basic_table() %>%
 This gives us the desired behavior in both the one column corner case:
 
 ``` r
+
 build_table(lyt1, d1)
 ```
 
@@ -142,6 +148,7 @@ build_table(lyt1, d1)
 and the standard multi-column case:
 
 ``` r
+
 build_table(lyt1, ex_adsl)
 ```
 
@@ -172,6 +179,7 @@ do computations based on) the following types of information:
 ### Different Formats For Different Values Within A Row-Split
 
 ``` r
+
 dta_test <- data.frame(
   USUBJID = rep(1:6, each = 3),
   PARAMCD = rep("lab", 6 * 3),
@@ -226,6 +234,7 @@ build_table(lyt, dta_test)
 ### Simulating ‘Baseline Comparison’ In Row Space
 
 ``` r
+
 my_afun <- function(x, .var, .spl_context) {
   n <- sum(!is.na(x))
   meanval <- mean(x, na.rm = TRUE)
@@ -274,6 +283,7 @@ We can further simulate the formal modeling of reference row(s) using
 the `extra_args` machinery
 
 ``` r
+
 my_afun <- function(x, .var, ref_rowgroup, .spl_context) {
   n <- sum(!is.na(x))
   meanval <- mean(x, na.rm = TRUE)

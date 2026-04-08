@@ -23,31 +23,31 @@ low_obs_pruner(min, type = c("sum", "mean"))
 
 - tr:
 
-  (`TableRow` or related class)  
+  (`TableRow` or related class)\
   a `TableRow` object representing a single row within a populated
   table.
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - criteria:
 
-  (`function`)  
+  (`function`)\
   function which takes a `TableRow` object and returns `TRUE` if that
   row should be removed. Defaults to `all_zero_or_na()`.
 
 - min:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   (used by `low_obs_pruner` only). Minimum aggregate count value.
   Subtables whose combined/average count are below this threshold will
   be pruned.
 
 - type:
 
-  (`string`)  
+  (`string`)\
   how count values should be aggregated. Must be `"sum"` (the default)
   or `"mean"`.
 

@@ -57,6 +57,7 @@ calculations are often required on subsets of the data.
 ## Split Machinery
 
 ``` r
+
 library(rtables)
 getClass("TreePos")
 ```
@@ -80,6 +81,7 @@ The highest level of the table hierarchy belong to `TableTree`. The code
 below identifies the slots associated with with this class.
 
 ``` r
+
 getClass("TableTree")
 ```
 
@@ -125,6 +127,7 @@ virtual class cannot be instantiated, the purpose is for other classes
 to inherit information from it.
 
 ``` r
+
 lyt <- basic_table(title = "big title") %>%
   split_rows_by("SEX", page_by = TRUE) %>%
   analyze("AGE")

@@ -78,13 +78,13 @@ section_div_at_path(
 
 - obj:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   table object. This can be of any class that inherits from `VTableTree`
   or `TableRow`/`LabelRow`.
 
 - only_sep_sections:
 
-  (`flag`)  
+  (`flag`)\
   defaults to `FALSE` for `section_div<-`. Allows you to set the section
   divider only for sections that are splits or analyses if the number of
   values is less than the number of rows in the table. If `TRUE`, the
@@ -92,7 +92,7 @@ section_div_at_path(
 
 - value:
 
-  (`character`)  
+  (`character`)\
   vector of strings to use as section dividers (a single string for
   `section_div_at_path<-`). Each string's character(s) are repeated to
   the full width of the printed table. Non-`NA` strings will result in a
@@ -107,13 +107,13 @@ section_div_at_path(
 
 - path:
 
-  (`character`)  
+  (`character`)\
   The path of the element(s) to set section_div(s) on. Can include `'*'`
   wildcards for `section_div_at_path<-` only.
 
 - labelrow:
 
-  (`logical(1)`)  
+  (`logical(1)`)\
   For `section_div_at_path`, when `path` leads to a subtable, indicates
   whether the section div be set/retrieved for the subtable (`FALSE`,
   the default) or the subtable's label row (`TRUE`). Ignored when `path`
@@ -121,12 +121,12 @@ section_div_at_path(
 
 - .prev_path:
 
-  (`character`)  
+  (`character`)\
   Internal detail, do not manually set.
 
 - tt_type:
 
-  (`character(1)`)  
+  (`character(1)`)\
   One of "any", "row", "table", "elemtable"; when testing existence or
   resolving a path with "\*" wildcards, this indicates a restriction on
   *the final element the path resolves to*. E.g., for "table", possible

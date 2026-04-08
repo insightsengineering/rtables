@@ -3,6 +3,7 @@
 The packages used in this vignette are `rtables` and `dplyr`:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 ```
@@ -12,6 +13,7 @@ library(dplyr)
 First, let’s set up a simple table.
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") %>%
   split_cols_by("STRATA2", show_colcounts = TRUE) %>%
@@ -41,6 +43,7 @@ We can get basic table dimensions, the number of rows, and the number of
 columns with the following code:
 
 ``` r
+
 dim(tbl)
 # [1] 6 7
 nrow(tbl)
@@ -58,6 +61,7 @@ levels of detail. By default, it summarizes the structure at the
 subtable level.
 
 ``` r
+
 table_structure(tbl)
 # [TableTree] STRATA1
 #  [TableTree] A [cont: 1 x 7]
@@ -75,6 +79,7 @@ how we might normally use the
 function to interrogate compound nested lists.
 
 ``` r
+
 table_structure(tbl, detail = "row") # or "subtable"
 # TableTree: [STRATA1] (STRATA1)
 #   labelrow: [STRATA1] (STRATA1) - <not visible>
@@ -121,6 +126,7 @@ Similarly, for columns we can see how the tree is structured with the
 following call:
 
 ``` r
+
 coltree_structure(tbl)
 # [root] (no pos)
 #    [ARMCD] (no pos)
@@ -152,6 +158,7 @@ remainder of the information in the returned `data.frame` is used for
 pagination)
 
 ``` r
+
 make_row_df(tbl)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 #   label name abs_rownumber         path node_class
 # 1     A    A             1 STRATA1,.... ContentRow
@@ -167,6 +174,7 @@ There is also a wrapper function,
 available for `make_row_df` to display only the row path structure:
 
 ``` r
+
 row_paths(tbl)
 # [[1]]
 # [1] "STRATA1"  "A"        "@content" "A"       
@@ -195,6 +203,7 @@ subtables, including those that are not represented directly by any
 visible rows:
 
 ``` r
+
 make_row_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_rownumber", "path", "node_class")]
 #    label      name abs_rownumber         path      node_class
 # 1          STRATA1            NA      STRATA1       TableTree
@@ -222,6 +231,7 @@ different, indicating whether only *leaf* columns should be summarized
 analogous to subtables in row space - should be summarized as well.
 
 ``` r
+
 make_col_df(tbl)[, c("label", "name", "abs_pos", "path", "leaf_indices")]
 #   label name abs_pos         path leaf_indices
 # 1    S1   S1       1 ARMCD, A....            1
@@ -234,6 +244,7 @@ make_col_df(tbl)[, c("label", "name", "abs_pos", "path", "leaf_indices")]
 ```
 
 ``` r
+
 make_col_df(tbl, visible_only = FALSE)[, c("label", "name", "abs_pos", "path", "leaf_indices")]
 #    label  name abs_pos         path leaf_indices
 # 1  ARM A ARM A      NA ARMCD, ARM A         1, 2
@@ -253,6 +264,7 @@ Similarly, there is wrapper function
 available, which displays only the column structure:
 
 ``` r
+
 col_paths(tbl)
 # [[1]]
 # [1] "ARMCD"   "ARM A"   "STRATA2" "S1"     
@@ -286,6 +298,7 @@ functions wrap the respective `make_*_df` functions, printing the
 illustrate table structure:
 
 ``` r
+
 row_paths_summary(tbl)
 # rowname    node_class    path                   
 # ————————————————————————————————————————————————
@@ -298,6 +311,7 @@ row_paths_summary(tbl)
 ```
 
 ``` r
+
 col_paths_summary(tbl)
 # label    path                     
 # ——————————————————————————————————
@@ -330,6 +344,7 @@ for each cell value in the table.
 See below the printout for the above examples:
 
 ``` r
+
 table_shell(tbl)
 #                  ARM A                     ARM B                     ARM C                      
 #                  N=134                     N=134                     N=132                      
@@ -345,6 +360,7 @@ table_shell(tbl)
 ```
 
 ``` r
+
 value_formats(tbl)
 #     ARM A.S1     ARM A.S2     ARM B.S1     ARM B.S2     ARM C.S1    
 # A   "xx (xx.x%)" "xx (xx.x%)" "xx (xx.x%)" "xx (xx.x%)" "xx (xx.x%)"

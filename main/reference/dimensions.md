@@ -19,7 +19,7 @@ dim(x)
 
 - x:
 
-  (`TableTree` or `ElementaryTable`)  
+  (`TableTree` or `ElementaryTable`)\
   a table object.
 
 ## Value

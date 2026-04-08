@@ -27,51 +27,51 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - spec:
 
-  (`function`)  
+  (`function`)\
   function that generates the result data frame from a table
   (`TableTree`). It defaults to `NULL`, for standard processing.
 
 - data_format:
 
-  (`string`)  
+  (`string`)\
   the format of the data in the result data frame. It can be one value
   between `"full_precision"` (default), `"strings"`, and `"numeric"`.
   The last two values show the numeric data with the visible precision.
 
 - make_ard:
 
-  (`flag`)  
+  (`flag`)\
   when `TRUE`, the result data frame will have only one statistic per
   row.
 
 - expand_colnames:
 
-  (`flag`)  
+  (`flag`)\
   when `TRUE`, the result data frame will have expanded column names
   above the usual output. This is useful when the result data frame is
   used for further processing.
 
 - keep_label_rows:
 
-  (`flag`)  
+  (`flag`)\
   when `TRUE`, the result data frame will have all labels as they appear
   in the final table.
 
 - add_tbl_name_split:
 
-  (`flag`)  
+  (`flag`)\
   when `TRUE` and when the table has more than one
   `analyze(table_names = "<diff_names>")`, the table names will be
   present as a group split named `"<analysis_spl_tbl_name>"`.
 
 - simplify:
 
-  (`flag`)  
+  (`flag`)\
   when `TRUE`, the result data frame will have only visible labels and
   result columns. Consider showing also label rows with
   `keep_label_rows = TRUE`. This output can be used again to create a
@@ -80,13 +80,13 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 
 - verbose:
 
-  (`flag`)  
+  (`flag`)\
   when `TRUE`, the function will print additional information for
   `data_format != "full_precision"`.
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.
@@ -100,12 +100,12 @@ path_enriched_df(tt, path_fun = collapse_path, value_fun = collapse_values)
 
 - path_fun:
 
-  (`function`)  
+  (`function`)\
   function to transform paths into single-string row/column names.
 
 - value_fun:
 
-  (`function`)  
+  (`function`)\
   function to transform cell values into cells of a `data.frame`.
   Defaults to `collapse_values`, which creates strings where
   multi-valued cells are collapsed together, separated by `|`.

@@ -12,22 +12,22 @@ indent_string(x, indent = 0, incr = 2, including_newline = TRUE)
 
 - x:
 
-  (`character`)  
+  (`character`)\
   a character vector.
 
 - indent:
 
-  (`numeric`)  
+  (`numeric`)\
   a vector of non-negative integers of length `length(x)`.
 
 - incr:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   a non-negative number of spaces per indent level.
 
 - including_newline:
 
-  (`flag`)  
+  (`flag`)\
   whether newlines should also be indented.
 
 ## Value

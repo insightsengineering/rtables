@@ -12,12 +12,12 @@ indent(x, by = 1)
 
 - x:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   an `rtable` object.
 
 - by:
 
-  (`integer`)  
+  (`integer`)\
   number to increase indentation of rows by. Can be negative. If final
   indentation is less than 0, the indentation is set to 0.
 

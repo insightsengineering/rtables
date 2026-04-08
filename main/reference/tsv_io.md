@@ -24,36 +24,36 @@ import_from_tsv(file)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - file:
 
-  (`string`)  
+  (`string`)\
   the path of the file to written to or read from.
 
 - path_fun:
 
-  (`function`)  
+  (`function`)\
   function to transform paths into single-string row/column names.
 
 - value_fun:
 
-  (`function`)  
+  (`function`)\
   function to transform cell values into cells of a `data.frame`.
   Defaults to `collapse_values`, which creates strings where
   multi-valued cells are collapsed together, separated by `|`.
 
 - sep:
 
-  (`string`)  
+  (`string`)\
   defaults to `\t`. See
   [`utils::write.table()`](https://rdrr.io/r/utils/write.table.html) for
   more details.
 
 - ...:
 
-  (`any`)  
+  (`any`)\
   additional arguments to be passed to
   [`utils::write.table()`](https://rdrr.io/r/utils/write.table.html).
 

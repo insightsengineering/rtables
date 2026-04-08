@@ -13,7 +13,7 @@ length(x)
 
 - x:
 
-  (`CellValue`)  
+  (`CellValue`)\
   a `CellValue` object.
 
 ## Value

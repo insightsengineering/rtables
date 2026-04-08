@@ -21,7 +21,7 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 - header:
 
-  (`TableRow`, `character`, or `InstantiatedColumnInfo`)  
+  (`TableRow`, `character`, or `InstantiatedColumnInfo`)\
   information defining the header (column structure) of the table. This
   can be as row objects (legacy), character vectors, or an
   `InstantiatedColumnInfo` object.
@@ -32,7 +32,7 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   the format label (string) or formatter function to apply to the cell
   values passed via `...`. See
   [`formatters::list_valid_format_labels()`](https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html)
@@ -40,7 +40,7 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 - hsep:
 
-  (`string`)  
+  (`string`)\
   set of characters to be repeated as the separator between the header
   and body of the table when rendered as text. Defaults to a connected
   horizontal line (unicode 2014) in locals that use a UTF charset, and
@@ -50,14 +50,14 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
 - inset:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   the table inset for the row or table being constructed. See
   [`formatters::table_inset()`](https://insightsengineering.github.io/formatters/latest-tag/reference/table_inset.html)
   for details.
 
 - round_type:
 
-  (`"iec"`, `"iec_mod"` or `"sas"`)  
+  (`"iec"`, `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
   for details.

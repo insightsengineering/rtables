@@ -20,7 +20,7 @@ rheader(..., format = "xx", .lst = NULL)
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   the format label (string) or formatter function to apply to the cell
   values passed via `...`. See
   [`formatters::list_valid_format_labels()`](https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html)
@@ -28,7 +28,7 @@ rheader(..., format = "xx", .lst = NULL)
 
 - .lst:
 
-  (`list`)  
+  (`list`)\
   an already-collected list of arguments to be used instead of the
   elements of `...`. Arguments passed via `...` will be ignored if this
   is specified.

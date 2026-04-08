@@ -22,38 +22,38 @@ make_afun(
 
 - fun:
 
-  (`function`)  
+  (`function`)\
   the function to be wrapped in a new customized analysis function.
   `fun` should return a named `list`.
 
 - .stats:
 
-  (`character`)  
+  (`character`)\
   names of elements to keep from `fun`'s full output.
 
 - .formats:
 
-  (`ANY`)  
+  (`ANY`)\
   vector or list of formats to override any defaults applied by `fun`.
 
 - .labels:
 
-  (`character`)  
+  (`character`)\
   vector of labels to override defaults returned by `fun`.
 
 - .indent_mods:
 
-  (`integer`)  
+  (`integer`)\
   named vector of indent modifiers for the generated rows.
 
 - .ungroup_stats:
 
-  (`character`)  
+  (`character`)\
   vector of names, which must match elements of `.stats`.
 
 - .format_na_strs:
 
-  (`ANY`)  
+  (`ANY`)\
   vector/list of `NA` strings to override any defaults applied by `fun`.
 
 - ...:
@@ -63,7 +63,7 @@ make_afun(
 
 - .null_ref_cells:
 
-  (`flag`)  
+  (`flag`)\
   whether cells for the reference column should be `NULL`-ed by the
   returned analysis function. Defaults to `TRUE` if `fun` accepts
   `.in_ref_col` as a formal argument. Note this argument occurs after

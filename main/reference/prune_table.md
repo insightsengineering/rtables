@@ -18,24 +18,24 @@ prune_table(
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - prune_func:
 
-  (`function`)  
+  (`function`)\
   a function to be called on each subtree which returns `TRUE` if the
   entire subtree should be removed.
 
 - stop_depth:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   the depth after which subtrees should not be checked for pruning.
   Defaults to `NA` which indicates pruning should happen at all levels.
 
 - depth:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   used internally, not intended to be set by the end user.
 
 - ...:

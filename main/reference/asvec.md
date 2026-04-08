@@ -14,12 +14,12 @@ as.vector(x, mode = "any")
 
 - x:
 
-  (`ANY`)  
+  (`ANY`)\
   the object to be converted to a vector.
 
 - mode:
 
-  (`string`)  
+  (`string`)\
   passed on to [`as.vector()`](https://rdrr.io/r/base/vector.html).
 
 ## Value

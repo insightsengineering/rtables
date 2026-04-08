@@ -22,49 +22,49 @@ InstantiatedColumnInfo(
 
 - treelyt:
 
-  (`LayoutColTree`)  
+  (`LayoutColTree`)\
   a `LayoutColTree` object.
 
 - csubs:
 
-  (`list`)  
+  (`list`)\
   a list of subsetting expressions.
 
 - extras:
 
-  (`list`)  
+  (`list`)\
   extra arguments associated with the columns.
 
 - cnts:
 
-  (`integer`)  
+  (`integer`)\
   counts.
 
 - total_cnt:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   total observations represented across all columns.
 
 - dispcounts:
 
-  (`flag`)  
+  (`flag`)\
   whether the counts should be displayed as header info when the
   associated table is printed.
 
 - countformat:
 
-  (`string`)  
+  (`string`)\
   format for the counts if they are displayed.
 
 - count_na_str:
 
-  (`character`)  
+  (`character`)\
   string to use in place of missing values when formatting counts.
   Defaults to `""`.
 
 - topleft:
 
-  (`character`)  
+  (`character`)\
   override values for the "top left" material to be displayed during
   printing.
 

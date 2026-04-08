@@ -19,28 +19,28 @@ make_col_df(
 
 - tt:
 
-  (`ANY`)  
+  (`ANY`)\
   object representing the table-like object to be summarized.
 
 - colwidths:
 
-  (`numeric`)  
+  (`numeric`)\
   internal detail, do not set manually.
 
 - visible_only:
 
-  (`flag`)  
+  (`flag`)\
   should only visible aspects of the table structure be reflected in
   this summary. Defaults to `TRUE`. May not be supported by all methods.
 
 - na_str:
 
-  (`character(1)`)  
+  (`character(1)`)\
   The string to display when a column count is NA. Users should not need
   to set this.
 
 - ccount_format:
 
-  (`FormatSpec`)  
+  (`FormatSpec`)\
   The format to be used by default for column counts if one is not
   specified for an individual column count.

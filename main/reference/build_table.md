@@ -24,23 +24,23 @@ build_table(
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - df:
 
-  (`data.frame` or `tibble`)  
+  (`data.frame` or `tibble`)\
   dataset.
 
 - alt_counts_df:
 
-  (`data.frame` or `tibble`)  
+  (`data.frame` or `tibble`)\
   alternative full dataset the rtables framework will use *only* when
   calculating column counts.
 
 - col_counts:
 
-  (`numeric` or `NULL`)  
+  (`numeric` or `NULL`)\
   **\[deprecated\]** if non-`NULL`, column counts *for leaf-columns
   only* which override those calculated automatically during tabulation.
   Must specify "counts" for *all* leaf-columns if non-`NULL`. `NA`
@@ -49,18 +49,18 @@ build_table(
 
 - col_total:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   the total observations across all columns. Defaults to `nrow(df)`.
 
 - topleft:
 
-  (`character`)  
+  (`character`)\
   override values for the "top left" material to be displayed during
   printing.
 
 - hsep:
 
-  (`string`)  
+  (`string`)\
   set of characters to be repeated as the separator between the header
   and body of the table when rendered as text. Defaults to a connected
   horizontal line (unicode 2014) in locals that use a UTF charset, and
@@ -70,7 +70,7 @@ build_table(
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.
@@ -195,7 +195,7 @@ miniDM <- DM[sample(1:NROW(DM), 100), ]
 tbl5 <- build_table(lyt3, DM, alt_counts_df = miniDM)
 tbl5
 #>               A: Drug X   B: Placebo   C: Combination
-#>                (N=35)       (N=26)         (N=39)    
+#>                (N=37)       (N=30)         (N=33)    
 #> —————————————————————————————————————————————————————
 #> minimum          20           21             22      
 #> lower-hinge      29           29             30      

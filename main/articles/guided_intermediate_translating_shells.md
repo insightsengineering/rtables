@@ -886,6 +886,7 @@ the split/value pairs of each column split in order concatenated
 together, so it suffices to define
 
 ``` r
+
 in_risk_diff <- function(spl_context) grepl("Risk Differences", spl_context$cur_col_id[1])
 ```
 
@@ -896,6 +897,7 @@ different to show that it can tell it is in “risk difference mode”.
 Thus a very simplistic afun is as follows:
 
 ``` r
+
 rr_afun <- function(x, .N_col, .spl_context) {
   xtbl <- table(x)
   if (in_risk_diff(.spl_context)) {

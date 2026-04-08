@@ -28,55 +28,55 @@ in_rows(
 
 - .list:
 
-  (`list`)  
+  (`list`)\
   list cell content (usually `rcells`). The `.list` is concatenated to
   `...`.
 
 - .names:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   names of the returned list/structure.
 
 - .labels:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   labels for the defined rows.
 
 - .formats:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   formats for the values.
 
 - .indent_mods:
 
-  (`integer` or `NULL`)  
+  (`integer` or `NULL`)\
   indent modifications for the defined rows.
 
 - .cell_footnotes:
 
-  (`list`)  
+  (`list`)\
   referential footnote messages to be associated by name with *cells*.
 
 - .row_footnotes:
 
-  (`list`)  
+  (`list`)\
   referential footnotes messages to be associated by name with *rows*.
 
 - .aligns:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   alignments for the cells. Standard for `NULL` is `"center"`. See
   [`formatters::list_valid_aligns()`](https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html)
   for currently supported alignments.
 
 - .format_na_strs:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   NA strings for the cells.
 
 - .stat_names:
 
-  (`list`)  
+  (`list`)\
   names for the statistics in the cells. It can be a vector of values.
   If `list(NULL)`, statistic names are not specified and will appear as
   `NA`.

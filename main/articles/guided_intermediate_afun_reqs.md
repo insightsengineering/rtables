@@ -143,6 +143,7 @@ function used below is not germane to our discussion here but motivated
 readers can choose to inspect it below.
 
 ``` r
+
 disp_denoms <- function(x, .var, .N_col, .df_row, .alt_df_full, .spl_context) {
   ## myfn <- RefFootnote("Patients observed in AE data", symbol = "*")
   parent_df <- .spl_context$full_parent_df[[3]]
@@ -324,6 +325,7 @@ have only a subset of those in the other facets, as those will contain
 comparisons to the baseline visit.
 
 ``` r
+
 avisit_afun <- function(df, .var, .spl_context) {
   cur_visit <- tail(.spl_context$value, 1)
   vals <- list("Mean Patient DIABP" = mean(df[[.var]]))
@@ -402,6 +404,7 @@ chapter](https://insightsengineering.github.io/rtables/articles/guided_intermedi
 without further comment.
 
 ``` r
+
 advs <- ex_advs
 advs$span_label <- "Active Treatment"
 advs$span_label[advs$ARM == "B: Placebo"] <- " "
@@ -421,6 +424,7 @@ We can then define an afun which populates the “risk difference” columns
 only for follow up visits and leaves them blank otherwise:
 
 ``` r
+
 in_risk_diff <- function(spl_context) grepl("Risk Differences", spl_context$cur_col_id[1])
 
 avisit_afun2 <- function(df, .var, .spl_context) {

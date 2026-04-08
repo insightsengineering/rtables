@@ -29,35 +29,35 @@ add_to_split_result(
 
 - values:
 
-  (`character` or `list(SplitValue)`)  
+  (`character` or `list(SplitValue)`)\
   the values associated with each facet.
 
 - datasplit:
 
-  (`list(data.frame)`)  
+  (`list(data.frame)`)\
   the facet data for each facet generated in the split.
 
 - labels:
 
-  (`character`)  
+  (`character`)\
   the labels associated with each facet.
 
 - extras:
 
-  (`list` or `NULL`)  
+  (`list` or `NULL`)\
   extra values associated with each of the facets which will be passed
   to analysis functions applied within the facet.
 
 - subset_exprs:
 
-  (`list`)  
+  (`list`)\
   A list of subsetting expressions (e.g., created with
   [`quote()`](https://rdrr.io/r/base/substitute.html)) to be used during
   column subsetting.
 
 - splres:
 
-  (`list`)  
+  (`list`)\
   a list representing the result of splitting.
 
 ## Value

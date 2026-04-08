@@ -18,12 +18,12 @@ manual_cols(..., .lst = list(...), ccount_format = NULL)
 
 - .lst:
 
-  (`list`)  
+  (`list`)\
   a list of sets of levels, by default populated via `list(...)`.
 
 - ccount_format:
 
-  (`FormatSpec`)  
+  (`FormatSpec`)\
   the format to use when counts are displayed.
 
 ## Value

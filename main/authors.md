@@ -7,7 +7,7 @@ and *contributors* as those who made a significant contribution in the
 past. For all acknowledgements, see the eponymous section in the [Home
 Page](https://insightsengineering.github.io/rtables/).
 
-- **Gabriel Becker**. Author.  
+- **Gabriel Becker**. Author.\
   Original creator of the package
 
 - **Adrian Waddell**. Author.
@@ -34,13 +34,13 @@ Source:
 [`DESCRIPTION`](https://github.com/insightsengineering/rtables/blob/main/DESCRIPTION)
 
 Becker G, Waddell A, Garolini D, de la Rua E, Zhu J (2026). *rtables:
-Reporting Tables*. R package version 0.6.15.9003,
+Reporting Tables*. R package version 0.6.15.9004,
 <https://github.com/insightsengineering/rtables>.
 
     @Manual{,
       title = {rtables: Reporting Tables},
       author = {Gabriel Becker and Adrian Waddell and Davide Garolini and Emily {de la Rua} and Joe Zhu},
       year = {2026},
-      note = {R package version 0.6.15.9003},
+      note = {R package version 0.6.15.9004},
       url = {https://github.com/insightsengineering/rtables},
     }

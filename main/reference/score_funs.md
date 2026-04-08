@@ -14,12 +14,12 @@ cont_n_onecol(j)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - j:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   index of column used for scoring.
 
 ## Value

@@ -19,6 +19,7 @@ example.
 The packages used in this vignette are:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 ```
@@ -41,6 +42,7 @@ indicate that `"B: Placebo"` should be used as the reference level of
 our treatment variable, and the `EVENT` variable is derived from `CNSR`.
 
 ``` r
+
 adtte <- ex_adtte
 
 anl <- adtte %>%
@@ -63,6 +65,7 @@ this analysis and returning a tidied
 object.
 
 ``` r
+
 tidy.summary.coxph <- function(x, ...) {
   is(x, "summary.coxph")
   pval <- x$coefficients
@@ -93,6 +96,7 @@ non-numeric covariates, an interaction effect is calculated for each
 level of the covariate, with each result returned on a separate row.
 
 ``` r
+
 h_coxreg_inter_effect <- function(x,
                                   effect,
                                   covar,
@@ -189,6 +193,7 @@ function to analyze the Cox regression model and extract relevant
 information to be processed and displayed within our output table.
 
 ``` r
+
 h_coxreg_extract_interaction <- function(effect, covar, mod, data) {
   control <- list(pval_method = "wald", ties = "exact", conf_level = 0.95, interaction = FALSE)
   test_statistic <- c(wald = "Wald", likelihood = "LR")[control$pval_method]
@@ -271,6 +276,7 @@ using `df` and the model formula, and this model is both returned and
 stored in the caching environment object as `cache_env[[cov]]`.
 
 ``` r
+
 cached_model <- function(df, cov, cache_env) {
   ## Check if a model already exists for
   ## `cov` in the caching environment
@@ -344,6 +350,7 @@ code below, where the purpose of each line within `a_cox_summary` is
 described.
 
 ``` r
+
 a_cox_summary <- function(df,
                           labelstr = "",
                           .spl_context,
@@ -406,6 +413,7 @@ statistics to include in the table: n, hazard ratio, confidence
 interval, effect p-value, and interaction p-value.
 
 ``` r
+
 my_covs <- c("AGE", "RACE") ## Covariates
 my_cov_labs <- c("Age", "Race") ## Covariate labels
 my_stats <- list("n", "hr", c("lcl", "ucl"), "pval", "pval_inter") ## Statistics
@@ -471,6 +479,7 @@ covariate level (or median value, for numeric covariates), nested under
 the content row (main effect) for that same covariate.
 
 ``` r
+
 lyt <- basic_table() %>%
   ## Column split: one column for each statistic
   split_cols_by_multivar(
@@ -504,6 +513,7 @@ Using our pre-processed `anl` dataset, we can now build and output our
 final Cox regression summary table.
 
 ``` r
+
 cox_tbl <- build_table(lyt, anl)
 cox_tbl
 #>                                                                         p-value       p-value   

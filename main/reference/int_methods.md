@@ -1111,7 +1111,7 @@ show(object)
 
 - x:
 
-  (`ANY`)  
+  (`ANY`)\
   the object.
 
 - ...:
@@ -1120,37 +1120,37 @@ show(object)
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - spl:
 
-  (`Split`)  
+  (`Split`)\
   the split.
 
 - pos:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   intended for internal use.
 
 - cmpnd_fun:
 
-  (`function`)  
+  (`function`)\
   intended for internal use.
 
 - constructor:
 
-  (`function`)  
+  (`function`)\
   constructor function.
 
 - label:
 
-  (`string`)  
+  (`string`)\
   a label (not to be confused with the name) for the object/structure.
 
 - cfun:
 
-  (`list`, `function`, or `NULL`)  
+  (`list`, `function`, or `NULL`)\
   tabulation function(s) for creating content rows. Must accept `x` or
   `df` as first parameter. Must accept `labelstr` as the second
   argument. Can optionally accept all optional arguments accepted by
@@ -1159,7 +1159,7 @@ show(object)
 
 - child_labels:
 
-  (`string`)  
+  (`string`)\
   the display behavior for the labels (i.e. label rows) of the children
   of this split. Accepts `"default"`, `"visible"`, and `"hidden"`.
   Defaults to `"default"` which flags the label row as visible only if
@@ -1167,17 +1167,17 @@ show(object)
 
 - cformat:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format for content rows.
 
 - cna_str:
 
-  (`character`)  
+  (`character`)\
   NA string for use with `cformat` for content table.
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -1185,13 +1185,13 @@ show(object)
 
 - cvar:
 
-  (`string`)  
+  (`string`)\
   the variable, if any, that the content function should accept.
   Defaults to `NA`.
 
 - extra_args:
 
-  (`list`)  
+  (`list`)\
   extra arguments to be passed to the tabulation function. Element
   position in the list corresponds to the children of this split. Named
   elements in the child-specific lists are ignored if they do not match
@@ -1199,49 +1199,49 @@ show(object)
 
 - df:
 
-  (`data.frame` or `tibble`)  
+  (`data.frame` or `tibble`)\
   dataset.
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object.
 
 - depth:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   depth in tree.
 
 - indent:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   indent.
 
 - print_indent:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   indent for printing.
 
 - object:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   a table object.
 
 - max.level:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   passed to [`utils::str`](https://rdrr.io/r/utils/str.html). Defaults
   to 3 for the `VTableTree` method, unlike the underlying default of
   `NA`. `NA` is *not* appropriate for `VTableTree` objects.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 - nested:
 
-  (`logical`)  
+  (`logical`)\
   whether this layout instruction should be applied within the existing
   layout structure *if possible* (`TRUE`, the default) or as a new
   top-level element (`FALSE`). Ignored if it would nest a split
@@ -1253,7 +1253,7 @@ show(object)
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See
@@ -1262,79 +1262,79 @@ show(object)
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - override:
 
-  (`flag`)  
+  (`flag`)\
   whether to override attribute.
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - incl.cont:
 
-  (`flag`)  
+  (`flag`)\
   whether to include rows from content tables within the tree. Defaults
   to `TRUE`.
 
 - add.labrows:
 
-  (`flag`)  
+  (`flag`)\
   whether to include label rows. Defaults to `FALSE`.
 
 - path:
 
-  (`character`)  
+  (`character`)\
   a vector path for a position within the structure of a `TableTree`.
   Each element represents a subsequent choice amongst the children of
   the previous choice.
 
 - mode:
 
-  (`string`)  
+  (`string`)\
   passed on to [`as.vector()`](https://rdrr.io/r/base/vector.html).
 
 - rowpath:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   path within row structure. `NULL` indicates the footnote should go on
   the column rather than cell.
 
 - colpath:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   path within column structure. `NULL` indicates footnote should go on
   the row rather than cell.
 
 - reset_idx:
 
-  (`flag`)  
+  (`flag`)\
   whether the numbering for referential footnotes should be immediately
   recalculated. Defaults to `TRUE`.
 
 - y:
 
-  (`ANY`)  
+  (`ANY`)\
   second element to be row-bound via `rbind2`.
 
 - i:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   index.
 
 - j:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   index.
 
 - drop:
 
-  (`flag`)  
+  (`flag`)\
   whether the value in the cell should be returned if one cell is
   selected by the combination of `i` and `j`. It is not possible to
   return a vector of values. To do so please consider using

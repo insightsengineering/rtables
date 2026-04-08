@@ -34,35 +34,35 @@ analyze(
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - vars:
 
-  (`character`)  
+  (`character`)\
   vector of variable names.
 
 - afun:
 
-  (`function`)  
+  (`function`)\
   analysis function. Must accept `x` or `df` as its first parameter. Can
   optionally take other parameters which will be populated by the
   tabulation framework. See Details in `analyze()`.
 
 - var_labels:
 
-  (`character`)  
+  (`character`)\
   vector of labels for one or more variables.
 
 - table_names:
 
-  (`character`)  
+  (`character`)\
   names for the tables representing each atomic analysis. Defaults to
   `var`.
 
 - parent_name:
 
-  (`character(1)`)  
+  (`character(1)`)\
   Name to assign to the table corresponding to the *split* or *group of
   sibling analyses*, for `split_rows_by*` and `analyze*` when analyzing
   more than one variable, respectively. Ignored when analyzing a single
@@ -70,7 +70,7 @@ analyze(
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See
@@ -79,7 +79,7 @@ analyze(
 
 - formats_var:
 
-  (`string` or `NULL`)  
+  (`string` or `NULL`)\
   `NULL` (the default) or the name of the list column containing named
   lists of default formats to use. These will be applied with the same
   precedence as the `format` argument; i.e., they will not override
@@ -88,13 +88,13 @@ analyze(
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - na_strs_var:
 
-  (`string` or `NULL`)  
+  (`string` or `NULL`)\
   `NULL` (the default) or the name of the list column containing named
   lists of default NA strings to use. These will be applied with the
   same precedence as the `format` argument; i.e., they will not override
@@ -104,7 +104,7 @@ analyze(
 
 - nested:
 
-  (`logical`)  
+  (`logical`)\
   whether this layout instruction should be applied within the existing
   layout structure *if possible* (`TRUE`, the default) or as a new
   top-level element (`FALSE`). Ignored if it would nest a split
@@ -112,13 +112,13 @@ analyze(
 
 - inclNAs:
 
-  (`logical`)  
+  (`logical`)\
   whether NA observations in the `var` variable(s) should be included
   when performing the analysis. Defaults to `FALSE`.
 
 - extra_args:
 
-  (`list`)  
+  (`list`)\
   extra arguments to be passed to the tabulation function. Element
   position in the list corresponds to the children of this split. Named
   elements in the child-specific lists are ignored if they do not match
@@ -126,13 +126,13 @@ analyze(
 
 - show_labels:
 
-  (`string`)  
+  (`string`)\
   whether the variable labels corresponding to the variable(s) in `vars`
   should be visible in the resulting table.
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -140,7 +140,7 @@ analyze(
 
 - section_div:
 
-  (`string`)  
+  (`string`)\
   string which should be repeated as a section divider after the set of
   rows defined by (each sub-analysis/variable) of this analyze
   instruction, or `NA_character_` (the default) for no section divider.

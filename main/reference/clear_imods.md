@@ -18,7 +18,7 @@ clear_indent_mods(tt)
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 ## Value

@@ -13,12 +13,12 @@ counts_wpcts(x, .N_col)
 
 - x:
 
-  (`factor`)  
+  (`factor`)\
   a vector of data, provided by rtables pagination machinery.
 
 - .N_col:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   total count for the column, provided by rtables pagination machinery.
 
 ## Value

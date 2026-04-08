@@ -17,6 +17,7 @@ layouts using the `rtables` framework.
 Load packages used in this vignette:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 ```
@@ -25,6 +26,7 @@ Let’s start by seeing what
 [`table()`](https://rdrr.io/r/base/table.html) can do:
 
 ``` r
+
 table(ex_adsl$ARM)
 # 
 #      A: Drug X     B: Placebo C: Combination 
@@ -45,6 +47,7 @@ and `row_vars` arguments control how to split the data across columns
 and rows respectively.
 
 ``` r
+
 qtable(ex_adsl, col_vars = "ARM")
 #         A: Drug X   B: Placebo   C: Combination
 #          (N=134)     (N=134)        (N=132)    
@@ -66,6 +69,7 @@ will add (N=xx) in the table header by default. This can be removed with
 `show_colcounts`.
 
 ``` r
+
 qtable(ex_adsl, "ARM", show_colcounts = FALSE)
 # count            all obs
 # ————————————————————————
@@ -79,6 +83,7 @@ strings (““). This is because non empty values are required as labels
 when generating the table. The code below will generate an error.
 
 ``` r
+
 tmp_adsl <- ex_adsl
 tmp_adsl$new <- rep_len(c("", "A", "B"), nrow(tmp_adsl))
 
@@ -93,6 +98,7 @@ will create a nested table. Arbitrary nesting is supported in each
 dimension.
 
 ``` r
+
 qtable(ex_adsl, row_vars = c("SEX", "STRATA1"), col_vars = c("ARM", "STRATA2"))
 #                       A: Drug X        B: Placebo       C: Combination  
 #                      S1       S2       S1       S2       S1        S2   
@@ -121,6 +127,7 @@ below adds a row of 0s for `STRATA1` level “B” nested under the `SEX`
 level “UNDIFFERENTIATED”.
 
 ``` r
+
 qtable(
   ex_adsl,
   row_vars = c("SEX", "STRATA1"),
@@ -154,6 +161,7 @@ return a nested table. Rather it produces a list of contingency tables
 when more than two variables are used as inputs.
 
 ``` r
+
 table(ex_adsl$SEX, ex_adsl$STRATA1, ex_adsl$ARM, ex_adsl$STRATA2)
 # , ,  = A: Drug X,  = S1
 # 
@@ -215,6 +223,7 @@ With some help from
 structure can be achieved in two steps.
 
 ``` r
+
 t1 <- ftable(ex_adsl[, c("SEX", "STRATA1", "ARM", "STRATA2")])
 ftable(t1, row.vars = c("SEX", "STRATA1"))
 #                          ARM     A: Drug X    B: Placebo    C: Combination   
@@ -247,6 +256,7 @@ Let’s see what happens when we introduce some `NA` values into the
 analysis variable:
 
 ``` r
+
 tmp_adsl <- ex_adsl
 tmp_adsl[[1]] <- NA_character_
 
@@ -271,6 +281,7 @@ how the latter is done in the [Custom Aggregation](#custom-aggregation)
 section.
 
 ``` r
+
 # Recode NA values
 tmp_adsl[[1]] <- addNA(tmp_adsl[[1]])
 
@@ -288,6 +299,7 @@ labelled as above. If this is not done, the columns and/or rows will not
 reflect the full data.
 
 ``` r
+
 tmp_adsl$new1 <- factor(NA_character_, levels = c("X", "Y", "Z"))
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "new1")
 #                    X       Y       Z  
@@ -302,6 +314,7 @@ Explicitly labeling the `NA` levels in the column facet adds a column to
 the table:
 
 ``` r
+
 tmp_adsl$new2 <- addNA(tmp_adsl$new1)
 levels(tmp_adsl$new2)[4] <- "<NA>" # NA needs to be a recognizible string
 qtable(tmp_adsl, row_vars = "ARM", col_vars = "new2")
@@ -322,6 +335,7 @@ data in each facet. We can specify the type of analysis summary using
 the `afun` argument:
 
 ``` r
+
 qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = mean)
 #              A: Drug X   B: Placebo   C: Combination
 # AGE - mean    (N=134)     (N=134)        (N=132)    
@@ -337,6 +351,7 @@ If the analysis function returns a vector of 2 or 3 elements, the result
 is displayed in multi-valued single cells.
 
 ``` r
+
 qtable(ex_adsl, row_vars = "STRATA2", col_vars = "ARM", avar = "AGE", afun = range)
 #                A: Drug X    B: Placebo    C: Combination
 # AGE - range     (N=134)       (N=134)        (N=132)    
@@ -351,6 +366,7 @@ the table as multiple stacked cells within each facet. If the list
 elements are named, the names are used as row labels.
 
 ``` r
+
 fivenum2 <- function(x) {
   setNames(as.list(fivenum(x)), c("min", "Q1", "MED", "Q3", "max"))
 }
@@ -377,6 +393,7 @@ More advanced formatting can be controlled with
 See function documentation for more details.
 
 ``` r
+
 meansd_range <- function(x) {
   in_rows(
     "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -406,6 +423,7 @@ count of non-NA records of the analysis variable at each level of
 nesting. For example, compare these two tables:
 
 ``` r
+
 qtable(
   ex_adsl,
   row_vars = c("STRATA1", "STRATA2"), col_vars = "ARM",
@@ -470,6 +488,7 @@ Tables generated with
 can include annotations such as titles, subtitles and footnotes like so:
 
 ``` r
+
 qtable(
   ex_adsl,
   row_vars = "STRATA2", col_vars = "ARM",
@@ -488,7 +507,7 @@ qtable(
 # S2         61           67             76      
 # ———————————————————————————————————————————————
 # 
-# Date: 2026-01-03
+# Date: 2026-04-08
 ```
 
 ## Summary

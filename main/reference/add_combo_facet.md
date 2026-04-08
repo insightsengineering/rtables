@@ -15,22 +15,22 @@ add_overall_facet(name, label, extra = list())
 
 - name:
 
-  (`string`)  
+  (`string`)\
   name for the resulting facet (for use in pathing, etc.).
 
 - label:
 
-  (`string`)  
+  (`string`)\
   label for the resulting facet.
 
 - levels:
 
-  (`character`)  
+  (`character`)\
   vector of levels to combine within the resulting facet.
 
 - extra:
 
-  (`list`)  
+  (`list`)\
   extra arguments to be passed to analysis functions applied within the
   resulting facet.
 

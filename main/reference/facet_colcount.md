@@ -38,7 +38,7 @@ facet_colcount(obj, path) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - path:
@@ -49,7 +49,7 @@ facet_colcount(obj, path) <- value
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 ## Value

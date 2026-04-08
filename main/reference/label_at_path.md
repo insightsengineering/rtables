@@ -14,19 +14,19 @@ label_at_path(tt, path) <- value
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - path:
 
-  (`character`)  
+  (`character`)\
   a vector path for a position within the structure of a `TableTree`.
   Each element represents a subsequent choice amongst the children of
   the previous choice.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 ## Details

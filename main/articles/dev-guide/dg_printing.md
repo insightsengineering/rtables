@@ -21,6 +21,7 @@ printed. The following is the code that is executed when a table is
 printed:
 
 ``` r
+
 library(rtables)
 ```
 
@@ -43,6 +44,7 @@ library(rtables)
     #     str
 
 ``` r
+
 library(dplyr)
 ```
 
@@ -58,6 +60,7 @@ library(dplyr)
     #     intersect, setdiff, setequal, union
 
 ``` r
+
 lyt <- basic_table() %>%
   split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
   split_cols_by("ARM") %>%
@@ -74,6 +77,7 @@ lyt <- basic_table() %>%
     # SEX (lvls) -> BMRKR1 (** analysis **)
 
 ``` r
+
 tbl <- build_table(lyt, ex_adsl) %>%
   print()
 ```
@@ -97,6 +101,7 @@ instead if there are no S3 or S4 `print` methods available. Indeed, this
 is the code that is executed:
 
 ``` r
+
 setMethod(
   "show", "PreDataTableLayouts",
   function(object) {
@@ -116,6 +121,7 @@ This was evident if we searched for methods associated with the class
 printing machinery:
 
 ``` r
+
 methods(class = "PreDataTableLayouts")
 ```
 
@@ -133,6 +139,7 @@ methods(class = "PreDataTableLayouts")
 Now, lets see the same for our result table `tbl`:
 
 ``` r
+
 class(tbl) %>% print()
 ```
 
@@ -141,6 +148,7 @@ class(tbl) %>% print()
     # [1] "rtables"
 
 ``` r
+
 getClass("TableTree") %>% print() # Main object representing a table in {rtables}
 ```
 
@@ -177,6 +185,7 @@ getClass("TableTree") %>% print() # Main object representing a table in {rtables
     # Class "VNodeInfo", by class "VTableTree", distance 3
 
 ``` r
+
 methods(class = "TableTree") %>% print() # more than 70 methods but no print method
 ```
 
@@ -231,6 +240,7 @@ different `setMethod(...)`. `toString` is properly defined in
 take a look at the latter first.
 
 ``` r
+
 setMethod("toString", "VTableTree", function(x,
                                              widths = NULL,
                                              col_gap = 3,
@@ -262,6 +272,7 @@ to tracked down to this function or `toString`. If we take a look at
 wrapper that dispatches to `MatrixPrintForm` objects:
 
 ``` r
+
 setMethod("toString", "listing_df", function(x, ...) {
   toString(matrix_form(x), ...)
 })
@@ -275,6 +286,7 @@ real one can be found in `formatters`). Let’s start with the latter
 `"matrix_form"` which is dispatched when dealing with `VTableTree`s.
 
 ``` r
+
 # Entering matrix_form for VTableTree
 trace("matrix_form", signature = "VTableTree", tracer = browser, exit = browser)
 matrix_form(tbl)
@@ -285,6 +297,7 @@ Now lets see the newly commented code for `matrix_form`. With `#->` I
 will comment some suggestions for further understandings.
 
 ``` r
+
 setMethod(
   "matrix_form", "VTableTree",
   function(obj,
@@ -458,6 +471,7 @@ setMethod(
 Now lets see the `matrix_form` in `rlistings`:
 
 ``` r
+
 library(rlistings)
 lsting <- as_listing(mtcars)
 trace("matrix_form", signature = "listing_df", tracer = browser, exit = browser)
@@ -466,6 +480,7 @@ untrace("matrix_form", signature = "listing_df")
 ```
 
 ``` r
+
 setMethod(
   "matrix_form", "listing_df",
   rix_form <- function(obj, indent_rownames = FALSE) { #-> I have no idea why here there is an assignment xxx
@@ -557,6 +572,7 @@ methods associated with `MatrixPrintForm` objects. It is relevant to
 remember how this printed form is meant to
 
 ``` r
+
 # Example quick table
 summary_list <- function(x, ...) as.list(summary(x))
 a_table <- qtable(ex_adsl, row_vars = "SEX", col_vars = "ARM", avar = "AGE", afun = summary_list)
@@ -594,6 +610,7 @@ setdiff(tbl_methods, mpf_methods)
     # [67] "value_formats"
 
 ``` r
+
 setdiff(mpf_methods, tbl_methods) # much less unique methods
 ```
 
@@ -601,6 +618,7 @@ setdiff(mpf_methods, tbl_methods) # much less unique methods
     # [5] "num_rep_cols<-" "Ops"            "rawvalues"      "value_names"
 
 ``` r
+
 intersect(tbl_methods, mpf_methods) # interesting to discover the different behaviors of same functions
 ```
 
@@ -614,6 +632,7 @@ Let’s now take a look at the final function of all this: `toString` from
 `formatters`:
 
 ``` r
+
 setMethod("toString", "MatrixPrintForm", function(x,
                                                   widths = NULL,
                                                   tf_wrap = FALSE,

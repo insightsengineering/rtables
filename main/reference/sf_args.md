@@ -12,18 +12,18 @@ sf_args(trim, label, first)
 
 - trim:
 
-  (`flag`)  
+  (`flag`)\
   whether splits corresponding with 0 observations should be kept when
   tabulating.
 
 - label:
 
-  (`string`)  
+  (`string`)\
   a label (not to be confused with the name) for the object/structure.
 
 - first:
 
-  (`flag`)  
+  (`flag`)\
   whether the created split level should be placed first in the levels
   (`TRUE`) or last (`FALSE`, the default).
 

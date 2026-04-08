@@ -13,7 +13,7 @@ trim_levels_in_facets(innervar)
 
 - innervar:
 
-  (`character`)  
+  (`character`)\
   the variable(s) to trim (remove unobserved levels) independently
   within each facet.
 

@@ -23,6 +23,7 @@ The content in this vignette is based on the following two resources:
 The packages used in this vignette are `rtables` and `dplyr`:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 ```
@@ -48,6 +49,7 @@ person and one column per measurement: study arm, the country of origin,
 gender, handedness, age, and weight.
 
 ``` r
+
 n <- 400
 
 set.seed(1)
@@ -113,6 +115,7 @@ vignette for more details.
 Here is the code to recreate the table above:
 
 ``` r
+
 qtable(df,
   row_vars = c("country", "handed"),
   col_vars = c("arm", "gender"),
@@ -158,6 +161,7 @@ In `rtables` a basic table is defined to have 0 rows and one column
 representing all data. Analyzing a variable is one way of adding a row:
 
 ``` r
+
 lyt <- basic_table() %>%
   analyze("age", mean, format = "xx.x")
 
@@ -185,6 +189,7 @@ Hence, a layout is “pre-data”, that is, it’s a description of how to
 build a table once we get data. We can look at the layout isolated:
 
 ``` r
+
 lyt
 # A Pre-data Table Layout
 # 
@@ -227,6 +232,7 @@ We will now add more structure to the columns by adding a column split
 based on the factor variable `arm`:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   analyze("age", afun = mean, format = "xx.x")
@@ -251,6 +257,7 @@ layout instruction. It’s also possible to add a non-nested split. Here
 we splitting each arm further by the gender:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
@@ -284,6 +291,7 @@ data row. We will add more row structure by stratifying the mean
 analysis by country (i.e. adding a split in the row space):
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
@@ -307,6 +315,7 @@ age of female Canadians in Arm A) is where
 cell value can also be calculated manually:
 
 ``` r
+
 mean(df$age[df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female"])
 # [1] 38.22447
 ```
@@ -316,6 +325,7 @@ pages during rendering. We do this via ‘page by splits’, which are
 declared via `page_by = TRUE` within a call to `split_rows_by`:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
@@ -377,6 +387,7 @@ function is required. By default, the count (`nrows()`) and percentage
 of data relative to the column associated data is calculated:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
@@ -399,6 +410,7 @@ The relative percentage for average age of female Canadians is
 calculated as follows:
 
 ``` r
+
 df_cell <- subset(df, df$country == "CAN" & df$arm == "Arm A" & df$gender == "Female")
 df_col_1 <- subset(df, df$arm == "Arm A" & df$gender == "Female")
 
@@ -413,6 +425,7 @@ We can further split the row space by dividing each country by
 handedness:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%
@@ -442,6 +455,7 @@ Next, we further add a count and percentage summary for handedness
 within each country:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("arm") %>%
   split_cols_by("gender") %>%

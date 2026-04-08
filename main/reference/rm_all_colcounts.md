@@ -24,7 +24,7 @@ rm_all_colcounts(obj)
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 ## Value

@@ -12,18 +12,18 @@ facet_colcounts_visible(obj, path) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - path:
 
-  (`character`)  
+  (`character`)\
   the path *to the parent of the desired siblings*. The last element in
   the path should be a split name.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 ## Value

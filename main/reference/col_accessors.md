@@ -147,46 +147,46 @@ col_total(obj) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - object:
 
-  (`ANY`)  
+  (`ANY`)\
   the object to modify in place.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 - df:
 
-  (`data.frame` or `NULL`)  
+  (`data.frame` or `NULL`)\
   data to use if the column information is being generated from a
   pre-data layout object.
 
 - rtpos:
 
-  (`TreePos`)  
+  (`TreePos`)\
   root position.
 
 - alt_counts_df:
 
-  (`data.frame` or `tibble`)  
+  (`data.frame` or `tibble`)\
   alternative full dataset the rtables framework will use *only* when
   calculating column counts.
 
 - ccount_format:
 
-  (`FormatSpec`)  
+  (`FormatSpec`)\
   The format to be used by default for column counts throughout this
   column tree (i.e. if not overridden by a more specific format
   specification).
 
 - path:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   `col_counts` accessor and setter only. Path (in column structure).
 
 ## Value

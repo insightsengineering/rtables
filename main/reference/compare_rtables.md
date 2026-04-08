@@ -22,28 +22,28 @@ compare_rtables(
 
 - object:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   `rtable` to test.
 
 - expected:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   expected `rtable`.
 
 - tol:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   tolerance.
 
 - comp.attr:
 
-  (`flag`)  
+  (`flag`)\
   whether to compare cell formats. Other attributes are silently
   ignored.
 
 - structure:
 
-  (`flag`)  
+  (`flag`)\
   whether structures (in the form of column and row paths to cells)
   should be compared. Currently defaults to `FALSE`, but this is subject
   to change in future versions.

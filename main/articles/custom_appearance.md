@@ -8,6 +8,7 @@ customize the appearance of `rtables`.
 Loading the package:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 ```
@@ -43,6 +44,7 @@ In the following we show two simplified examples that use `align` and
 `.aligns`, respectively.
 
 ``` r
+
 # In rcell we use align.
 lyt <- basic_table() %>%
   analyze("AGE", function(x) {
@@ -63,6 +65,7 @@ tbl
 ```
 
 ``` r
+
 # In in_rows, we use .aligns. This can either set the general value or the
 #   single values (see NB).
 lyt2 <- basic_table() %>%
@@ -88,6 +91,7 @@ These concepts can be well applied to any clinical table as shown in the
 following, more complex, example.
 
 ``` r
+
 lyt3 <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -148,6 +152,7 @@ function. Note: Indenting is automatically added
 Within the layout initializer:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("STRATA1") %>%
@@ -169,6 +174,7 @@ Specify label position using the `split_rows` function. Notice the
 position of `STRATA1` and `SEX`.
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("STRATA1", label_pos = "topleft") %>%
@@ -213,6 +219,7 @@ Post-processing using the
 function:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("SEX") %>%
@@ -275,6 +282,7 @@ using the `inset` argument or during post-processing with
 Using the layout initializer:
 
 ``` r
+
 lyt <- basic_table(inset = 5) %>%
   analyze("AGE")
 
@@ -289,6 +297,7 @@ Using the post-processing function:
 Without inset -
 
 ``` r
+
 lyt <- basic_table() %>%
   analyze("AGE")
 
@@ -302,6 +311,7 @@ tbl
 With an inset of 5 characters -
 
 ``` r
+
 table_inset(tbl) <- 5
 tbl
 #             all obs
@@ -315,6 +325,7 @@ inset of the table and main footer between the two tables.
 Without inset -
 
 ``` r
+
 analysisfun <- function(x, ...) {
   in_rows(
     row1 = 5,
@@ -360,6 +371,7 @@ is applied to top-left materials, referential footnotes main footer
 materials and any horizontal dividers.
 
 ``` r
+
 table_inset(result) <- 5
 result
 # Title says Whaaaat
@@ -397,6 +409,7 @@ when:
 Below, we replace the default line with “=”.
 
 ``` r
+
 tbl <- basic_table() %>%
   split_cols_by("Species") %>%
   add_colcounts() %>%
@@ -433,6 +446,7 @@ the end of the table is never printed.
 Below, a “+” is repeated and used as a section divider.
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("Species") %>%
   analyze(head(names(iris), -1), afun = function(x) {
@@ -465,6 +479,7 @@ build_table(lyt, iris)
 Section dividers can be set to ” ” to create a blank line.
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("Species") %>%
   analyze(head(names(iris), -1), afun = function(x) {
@@ -498,6 +513,7 @@ Separation characters can be specified for different row splits.
 However, only one will be printed if they “pile up” next to each other.
 
 ``` r
+
 lyt <- basic_table() %>%
   split_cols_by("ARM") %>%
   split_rows_by("RACE", section_div = "=") %>%
@@ -598,6 +614,7 @@ tables below:
 Default Indent -
 
 ``` r
+
 basic_table(
   title = "Study XXXXXXXX",
   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
@@ -654,6 +671,7 @@ basic_table(
 Modified indent -
 
 ``` r
+
 basic_table(
   title = "Study XXXXXXXX",
   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
@@ -725,6 +743,7 @@ content rows but we cannot hide or move the content rows.
 Notice the placement of the “AGE” label in this example:
 
 ``` r
+
 lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
@@ -756,6 +775,7 @@ one variable being analyzed at the same level of nesting. Override this
 by setting the `show_labels` argument as “visible”.
 
 ``` r
+
 lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "hidden") %>%
@@ -796,6 +816,7 @@ should be set to hidden.
 “SEX” label position is hidden -
 
 ``` r
+
 basic_table(
   title = "Study XXXXXXXX",
   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
@@ -839,6 +860,7 @@ basic_table(
 “SEX” label position is with the top-left materials -
 
 ``` r
+
 basic_table(
   title = "Study XXXXXXXX",
   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
@@ -888,6 +910,7 @@ section we aim to render this table with a reduced width since the table
 has very wide contents in several cells, labels, and titles/footers.
 
 ``` r
+
 trimmed_data <- ex_adsl %>%
   filter(SEX %in% c("M", "F")) %>%
   filter(RACE %in% levels(RACE)[1:2])
@@ -975,6 +998,7 @@ customized via the `col_gap` argument to
 if further width customization is desired.
 
 ``` r
+
 result_wrap_cells <- toString(wide_tbl, widths = c(10, 8, 8, 8))
 matrix_wrap_cells <- matrix(strsplit(result_wrap_cells, "\n")[[1]], ncol = 1)
 matrix_wrap_cells
@@ -1042,6 +1066,7 @@ following code, we set `max_width = 43` so that the rendered table and
 all of its annotations have a maximum width of 43 characters.
 
 ``` r
+
 result_wrap_cells_tf <- toString(
   wide_tbl,
   widths = c(10, 8, 8, 8),

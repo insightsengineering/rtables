@@ -221,94 +221,94 @@ make_row_df(
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 - x:
 
-  (`ANY`)  
+  (`ANY`)\
   an object.
 
 - colwidths:
 
-  (`numeric`)  
+  (`numeric`)\
   a vector of column widths for use in vertical pagination.
 
 - max_width:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   width that strings should be wrapped to when determining how many
   lines they require.
 
 - fontspec:
 
-  (`font_spec`)  
+  (`font_spec`)\
   a font_spec object specifying the font information to use for
   calculating string widths and heights, as returned by
   [`font_spec()`](https://insightsengineering.github.io/formatters/latest-tag/reference/font_spec.html).
 
 - col_gap:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   width of gap between columns in number of spaces. Only used by methods
   which must calculate span widths after wrapping.
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - visible_only:
 
-  (`flag`)  
+  (`flag`)\
   should only visible aspects of the table structure be reflected in
   this summary. Defaults to `TRUE`. May not be supported by all methods.
 
 - rownum:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   internal detail, do not set manually.
 
 - indent:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   internal detail, do not set manually.
 
 - path:
 
-  (`character`)  
+  (`character`)\
   a vector path for a position within the structure of a `TableTree`.
   Each element represents a subsequent choice amongst the children of
   the previous choice.
 
 - incontent:
 
-  (`flag`)  
+  (`flag`)\
   internal detail, do not set manually.
 
 - repr_ext:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   internal detail, do not set manually.
 
 - repr_inds:
 
-  (`integer`)  
+  (`integer`)\
   internal detail, do not set manually.
 
 - sibpos:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   internal detail, do not set manually.
 
 - nsibs:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   internal detail, do not set manually.
 
 ## Value

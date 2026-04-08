@@ -22,7 +22,7 @@ row.names(x)
 
 - x:
 
-  (`TableTree`)  
+  (`TableTree`)\
   the object.
 
 ## Value

@@ -15,12 +15,12 @@ content_table(obj) <- value
 
 - obj:
 
-  (`TableTree`)  
+  (`TableTree`)\
   the table object.
 
 - value:
 
-  (`ElementaryTable`)  
+  (`ElementaryTable`)\
   the new content table for `obj`.
 
 ## Value

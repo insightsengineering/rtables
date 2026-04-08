@@ -56,24 +56,24 @@ tail(
 
 - keep_topleft:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE` (the default), top_left material for the table will be
   carried over to the subset.
 
 - keep_titles:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE` (the default), all title material for the table will be
   carried over to the subset.
 
 - keep_footers:
 
-  (`flag`)  
+  (`flag`)\
   if `TRUE`, all footer material for the table will be carried over to
   the subset. It defaults to `keep_titles`.
 
 - reindex_refs:
 
-  (`flag`)  
+  (`flag`)\
   defaults to `FALSE`. If `TRUE`, referential footnotes will be
   reindexed for the subset.

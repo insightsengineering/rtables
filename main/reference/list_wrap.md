@@ -15,7 +15,7 @@ list_wrap_df(f)
 
 - f:
 
-  (`function`)  
+  (`function`)\
   the function to wrap.
 
 ## Value

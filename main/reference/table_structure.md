@@ -12,12 +12,12 @@ table_structure(x, detail = c("subtable", "row"))
 
 - x:
 
-  (`VTableTree`)  
+  (`VTableTree`)\
   a table object.
 
 - detail:
 
-  (`string`)  
+  (`string`)\
   either `row` or `subtable`.
 
 ## Value

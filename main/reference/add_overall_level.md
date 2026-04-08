@@ -33,18 +33,18 @@ An object of class `AllLevelsSentinel` of length 0.
 
 - valname:
 
-  (`string`)  
+  (`string`)\
   value to be assigned to the implicit all-observations split level.
   Defaults to `"Overall"`.
 
 - label:
 
-  (`string`)  
+  (`string`)\
   a label (not to be confused with the name) for the object/structure.
 
 - extra_args:
 
-  (`list`)  
+  (`list`)\
   extra arguments to be passed to the tabulation function. Element
   position in the list corresponds to the children of this split. Named
   elements in the child-specific lists are ignored if they do not match
@@ -52,19 +52,19 @@ An object of class `AllLevelsSentinel` of length 0.
 
 - first:
 
-  (`flag`)  
+  (`flag`)\
   whether the implicit level should appear first (`TRUE`) or last
   (`FALSE`). Defaults to `TRUE`.
 
 - trim:
 
-  (`flag`)  
+  (`flag`)\
   whether splits corresponding with 0 observations should be kept when
   tabulating.
 
 - combosdf:
 
-  (`data.frame` or `tbl_df`)  
+  (`data.frame` or `tbl_df`)\
   a data frame with columns `valname`, `label`, `levelcombo`, and
   `exargs`. `levelcombo` and `exargs` should be list columns. Passing
   the `select_all_levels` object as a value in `comblevels` column
@@ -72,7 +72,7 @@ An object of class `AllLevelsSentinel` of length 0.
 
 - keep_levels:
 
-  (`character` or `NULL`)  
+  (`character` or `NULL`)\
   if non-`NULL`, the levels to retain across both combination and
   individual levels.
 

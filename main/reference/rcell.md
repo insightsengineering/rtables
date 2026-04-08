@@ -36,12 +36,12 @@ non_ref_rcell(
 
 - x:
 
-  (`ANY`)  
+  (`ANY`)\
   cell value.
 
 - format:
 
-  (`string` or `function`)  
+  (`string` or `function`)\
   the format label (string) or `formatters` function to apply to `x`.
   See
   [`formatters::list_valid_format_labels()`](https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html)
@@ -49,18 +49,18 @@ non_ref_rcell(
 
 - colspan:
 
-  (`integer(1)`)  
+  (`integer(1)`)\
   column span value.
 
 - label:
 
-  (`string` or `NULL`)  
+  (`string` or `NULL`)\
   label. If non-`NULL`, it will be looked at when determining row
   labels.
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -68,12 +68,12 @@ non_ref_rcell(
 
 - footnotes:
 
-  (`list` or `NULL`)  
+  (`list` or `NULL`)\
   referential footnote messages for the cell.
 
 - align:
 
-  (`string` or `NULL`)  
+  (`string` or `NULL`)\
   alignment the value should be rendered with. Defaults to `"center"` if
   `NULL` is used. See
   [`formatters::list_valid_aligns()`](https://insightsengineering.github.io/formatters/latest-tag/reference/list_formats.html)
@@ -81,32 +81,32 @@ non_ref_rcell(
 
 - format_na_str:
 
-  (`string`)  
+  (`string`)\
   string which should be displayed when formatted if this cell's
   value(s) are all `NA`.
 
 - stat_names:
 
-  (`character` or `NA`)  
+  (`character` or `NA`)\
   names for the statistics in the cell. It can be a vector of strings.
   If `NA`, statistic names are not specified.
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.
 
 - is_ref:
 
-  (`flag`)  
+  (`flag`)\
   whether function is being used in the reference column (i.e.
   `.in_ref_col` should be passed to this argument).
 
 - refval:
 
-  (`ANY`)  
+  (`ANY`)\
   value to use when in the reference column. Defaults to `NULL`.
 
 ## Value

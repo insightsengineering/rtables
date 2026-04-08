@@ -23,45 +23,45 @@ format_rcell(
 
 - x:
 
-  (`CellValue` or `ANY`)  
+  (`CellValue` or `ANY`)\
   an object of class `CellValue`, or a raw value.
 
 - format:
 
-  (`string` or `function`)  
+  (`string` or `function`)\
   the format label or formatter function to apply to `x`.
 
 - output:
 
-  (`string`)  
+  (`string`)\
   output type.
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - pr_row_format:
 
-  (`list`)  
+  (`list`)\
   list of default formats coming from the general row.
 
 - pr_row_na_str:
 
-  (`list`)  
+  (`list`)\
   list of default `"NA"` strings coming from the general row.
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.
 
 - shell:
 
-  (`flag`)  
+  (`flag`)\
   whether the formats themselves should be returned instead of the
   values with formats applied. Defaults to `FALSE`.
 

@@ -14,30 +14,30 @@ do_base_split(spl, df, vals = NULL, labels = NULL, trim = FALSE)
 
 - spl:
 
-  (`Split`)  
+  (`Split`)\
   a `Split` object defining a partitioning or analysis/tabulation of the
   data.
 
 - df:
 
-  (`data.frame` or `tibble`)  
+  (`data.frame` or `tibble`)\
   dataset.
 
 - vals:
 
-  (`ANY`)  
+  (`ANY`)\
   already calculated/known values of the split. Generally should be left
   as `NULL`.
 
 - labels:
 
-  (`character`)  
+  (`character`)\
   labels associated with `vals`. Should be `NULL` whenever `vals` is,
   which should almost always be the case.
 
 - trim:
 
-  (`flag`)  
+  (`flag`)\
   whether groups corresponding to empty data subsets should be removed.
   Defaults to `FALSE`.
 

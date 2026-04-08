@@ -13,12 +13,12 @@ append_topleft(lyt, newlines)
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - newlines:
 
-  (`character`)  
+  (`character`)\
   the new line(s) to be added to the materials.
 
 ## Value

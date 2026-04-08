@@ -14,12 +14,12 @@ tree_children(x) <- value
 
 - x:
 
-  (`TableTree` or `ElementaryTable`)  
+  (`TableTree` or `ElementaryTable`)\
   an object with a tree structure.
 
 - value:
 
-  (`list`)  
+  (`list`)\
   new list of children.
 
 ## Value

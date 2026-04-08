@@ -18,6 +18,7 @@ accepts the values for each static title and footer element during
 layout construction:
 
 ``` r
+
 library(rtables)
 library(dplyr)
 lyt <- basic_table(
@@ -77,6 +78,7 @@ not be), to the `page_prefix`, separated by a `:`. By default,
 `page_prefix` is name of the variable being split.
 
 ``` r
+
 lyt2 <- basic_table(
   title = "Study XXXXXXXX",
   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
@@ -140,6 +142,7 @@ page title for each page by split will be present on every resulting
 page, as seen below:
 
 ``` r
+
 lyt3 <- basic_table(
   title = "Study XXXXXXXX",
   subtitles = c("subtitle YYYYYYYYYY", "subtitle2 ZZZZZZZZZ"),
@@ -279,6 +282,7 @@ printed below the table during rendering.
 ### Adding Cell- and Analysis-row Referential Footnotes At Tabulation Time
 
 ``` r
+
 afun <- function(df, .var, .spl_context) {
   val <- .spl_context$value[NROW(.spl_context)]
   rw_fnotes <- if (val == "C") list("This is strata level C for these patients") else list()
@@ -378,6 +382,7 @@ This is also the only way to add footnotes to **column** labels, as
 those cannot be controlled within an analysis or content function.
 
 ``` r
+
 ## from ?tolower example slightly modified
 .simpleCap <- function(x) {
   if (length(x) > 1) {
@@ -437,6 +442,7 @@ non-`NULL` column path indicates they go with the column. Both being
 non-`NULL` indicates a cell (and must resolve to an individual cell).
 
 ``` r
+
 fnotes_at_path(tbl2, c("RACE", "ASIAN")) <- c("hi", "there")
 tbl2
 #                       A: Drug X                B: Placebo              C: Combination     
@@ -471,6 +477,7 @@ tbl2
 ```
 
 ``` r
+
 fnotes_at_path(tbl2, rowpath = NULL, c("ARM", "B: Placebo")) <- c("this is a placebo")
 tbl2
 #                       A: Drug X              B: Placebo {NA}           C: Combination     
@@ -513,6 +520,7 @@ than *name* of the corresponding facet. This is reflected in the output
 of, e.g., `row_paths_summary`.
 
 ``` r
+
 row_paths_summary(tbl2)
 # rowname      node_class    path                                            
 # ———————————————————————————————————————————————————————————————————————————
@@ -542,6 +550,7 @@ row_paths_summary(tbl2)
 So we can add our footnotes to the cell like so:
 
 ``` r
+
 fnotes_at_path(
   tbl2,
   rowpath = c("RACE", "ASIAN", "@content", "Asian"),

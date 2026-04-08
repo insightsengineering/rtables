@@ -21,17 +21,17 @@ summarize_row_groups(
 
 - lyt:
 
-  (`PreDataTableLayouts`)  
+  (`PreDataTableLayouts`)\
   layout object pre-data used for tabulation.
 
 - var:
 
-  (`string`)  
+  (`string`)\
   variable name.
 
 - label_fstr:
 
-  (`string`)  
+  (`string`)\
   a `sprintf` style format string. For non-comparison splits, it can
   contain up to one `"\%s"` which takes the current split value and
   generates the row/column label. For comparison-based splits it can
@@ -39,7 +39,7 @@ summarize_row_groups(
 
 - format:
 
-  (`string`, `function`, or `list`)  
+  (`string`, `function`, or `list`)\
   format associated with this split. Formats can be declared via strings
   (`"xx.x"`) or function. In cases such as `analyze` calls, they can be
   character vectors or lists of functions. See
@@ -48,13 +48,13 @@ summarize_row_groups(
 
 - na_str:
 
-  (`string`)  
+  (`string`)\
   string that should be displayed when the value of `x` is missing.
   Defaults to `"NA"`.
 
 - cfun:
 
-  (`list`, `function`, or `NULL`)  
+  (`list`, `function`, or `NULL`)\
   tabulation function(s) for creating content rows. Must accept `x` or
   `df` as first parameter. Must accept `labelstr` as the second
   argument. Can optionally accept all optional arguments accepted by
@@ -63,7 +63,7 @@ summarize_row_groups(
 
 - indent_mod:
 
-  (`numeric`)  
+  (`numeric`)\
   modifier for the default indent position for the structure created by
   this function (subtable, content table, or row) *and all of that
   structure's children*. Defaults to 0, which corresponds to the
@@ -71,7 +71,7 @@ summarize_row_groups(
 
 - extra_args:
 
-  (`list`)  
+  (`list`)\
   extra arguments to be passed to the tabulation function. Element
   position in the list corresponds to the children of this split. Named
   elements in the child-specific lists are ignored if they do not match

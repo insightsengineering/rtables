@@ -24,6 +24,7 @@ R package.
 The packages used in this vignette are:
 
 ``` r
+
 library(rtables)
 library(tibble)
 library(dplyr)
@@ -42,6 +43,7 @@ analysis function `afun` can specify multiple rows with the
 function:
 
 ``` r
+
 ADSL <- ex_adsl # Example ADSL dataset
 
 lyt <- basic_table() %>%
@@ -66,6 +68,7 @@ Multiple variables can be analyzed in one
 call:
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("ARM") %>%
   analyze(vars = c("AGE", "BMRKR1"), afun = function(x) {
@@ -94,6 +97,7 @@ or some number summary if the argument `x` is a factor or numeric,
 respectively:
 
 ``` r
+
 s_summary <- function(x) {
   if (is.numeric(x)) {
     in_rows(
@@ -116,6 +120,7 @@ instructions for `rtables`. We can use `s_summary` outside the context
 of tabulation:
 
 ``` r
+
 s_summary(ADSL$AGE)
 # RowsVerticalSection (in_rows) object print method:
 # ----------------------------
@@ -129,6 +134,7 @@ s_summary(ADSL$AGE)
 and
 
 ``` r
+
 s_summary(ADSL$SEX)
 # RowsVerticalSection (in_rows) object print method:
 # ----------------------------
@@ -142,6 +148,7 @@ s_summary(ADSL$SEX)
 We can now create a commonly used variant of the demographic table:
 
 ``` r
+
 summary_lyt <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   analyze(c("AGE", "SEX"), afun = s_summary)
@@ -167,6 +174,7 @@ Note that
 can also be called multiple times in sequence:
 
 ``` r
+
 summary_lyt2 <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   analyze("AGE", s_summary) %>%
@@ -191,6 +199,7 @@ summary_tbl2
 which leads to the table identical to `summary_tbl`:
 
 ``` r
+
 identical(summary_tbl, summary_tbl2)
 # [1] TRUE
 ```
@@ -203,6 +212,7 @@ by setting the `show_colcounts` argument in
 to `TRUE`:
 
 ``` r
+
 summary_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARMCD") %>%
   analyze(c("AGE", "SEX"), s_summary)
@@ -234,6 +244,7 @@ We will start with a standard table analyzing the variables `AGE` and
 `BMRKR2` variables:
 
 ``` r
+
 lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   analyze(c("AGE", "BMRKR2"), s_summary)
@@ -258,6 +269,7 @@ Assume we would like to have this analysis carried out per gender
 encoded in the row space:
 
 ``` r
+
 lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX") %>%
@@ -314,6 +326,7 @@ We will now subset `ADSL` to include only males and females in the
 analysis in order to reduce the number of rows in the table:
 
 ``` r
+
 ADSL_M_F <- filter(ADSL, SEX %in% c("M", "F"))
 
 lyt2 <- basic_table(show_colcounts = TRUE) %>%
@@ -381,6 +394,7 @@ big topic and will be eventually addressed in a specific package
 vignette.
 
 ``` r
+
 lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", split_fun = drop_split_levels, child_labels = "visible") %>%
@@ -417,6 +431,7 @@ In the table above the labels `M` and `F` are not very descriptive. You
 can add the full labels as follows:
 
 ``` r
+
 ADSL_M_F_l <- ADSL_M_F %>%
   mutate(lbl_sex = case_when(
     SEX == "M" ~ "Male",
@@ -463,6 +478,7 @@ analysis. To do this the `nested` argument has to be set to `FALSE` in
 call:
 
 ``` r
+
 lyt5 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "visible") %>%
@@ -499,6 +515,7 @@ example, if we create the above table but add missing data to the `AGE`
 variable:
 
 ``` r
+
 insert_NAs <- function(x) {
   x[sample(c(TRUE, FALSE), length(x), TRUE, prob = c(0.2, 0.8))] <- NA
   x
@@ -548,6 +565,7 @@ summarized with
 for example:
 
 ``` r
+
 lyt7 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels) %>%
@@ -593,6 +611,7 @@ We can recreate this default behavior (count percentage) by defining a
 above:
 
 ``` r
+
 lyt8 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels) %>%
@@ -634,6 +653,7 @@ accept `labelstr` as the second argument which gives the default group
 label (factor level from splitting) and hence it could be modified:
 
 ``` r
+
 lyt9 <- basic_table() %>%
   split_cols_by(var = "ARM") %>%
   split_rows_by("SEX", labels_var = "lbl_sex", split_fun = drop_split_levels, child_labels = "hidden") %>%
@@ -680,6 +700,7 @@ Layouts have a couple of advantages over tabulating the tables directly:
 Here is an example that demonstrates the reusability of layouts:
 
 ``` r
+
 adsl_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze(c("AGE", "SEX"), afun = s_summary)
@@ -697,6 +718,7 @@ adsl_lyt
 We can now build a table for `ADSL`
 
 ``` r
+
 adsl_tbl <- build_table(adsl_lyt, ADSL)
 adsl_tbl
 #                        A: Drug X      B: Placebo     C: Combination
@@ -717,6 +739,7 @@ adsl_tbl
 or for all patients that are older than 18:
 
 ``` r
+
 adsl_f_tbl <- build_table(lyt, ADSL %>% filter(AGE > 18))
 # Warning in min(x): no non-missing arguments to min; returning Inf
 # Warning in max(x): no non-missing arguments to max; returning -Inf
@@ -778,6 +801,7 @@ but rather generate a dataset on the fly (see [Adrian’s 2016 Phuse
 paper](https://github.com/waddella/phuse2016_adverse_events)):
 
 ``` r
+
 set.seed(1)
 
 lookup <- tribble(
@@ -856,6 +880,7 @@ ADAE2
 We start by defining an events summary function:
 
 ``` r
+
 s_events_patients <- function(x, labelstr, .N_col) {
   in_rows(
     "Total number of patients with at least one event" =
@@ -874,6 +899,7 @@ So, for a population of `5` patients where
 we would get the following summary:
 
 ``` r
+
 s_events_patients(x = c("id 1", "id 1", "id 2"), .N_col = 5)
 # RowsVerticalSection (in_rows) object print method:
 # ----------------------------
@@ -896,6 +922,7 @@ refer to the documentation with
 We now use the `s_events_patients` summary function in a tabulation:
 
 ``` r
+
 adae_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", s_events_patients)
@@ -923,6 +950,7 @@ same column faceting to `alt_counts_df` as it does to the primary data
 during tabulation:
 
 ``` r
+
 adae_adsl_tbl <- build_table(adae_lyt, ADAE2, alt_counts_df = ADSL2)
 adae_adsl_tbl
 #                                                       ARM A          ARM B    
@@ -941,6 +969,7 @@ number of rows will be used, but no duplicate checking!!!).
 We next calculate this information per system organ class:
 
 ``` r
+
 adae_soc_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", s_events_patients) %>%
@@ -975,6 +1004,7 @@ behavior for a factor is to create the count table per level (using
 `rtab_inner`):
 
 ``` r
+
 adae_soc_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
@@ -1054,6 +1084,7 @@ or more events for a particular term. To get the correct table we need
 to write a custom analysis function:
 
 ``` r
+
 table_count_once_per_id <- function(df, termvar = "AEDECOD", idvar = "USUBJID") {
   x <- df[[termvar]]
   id <- df[[idvar]]
@@ -1098,6 +1129,7 @@ table_count_once_per_id(ADAE2)
 So the desired `AE` table is:
 
 ``` r
+
 adae_soc_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   split_rows_by("AEBODSYS", child_labels = "visible", indent_mod = 1) %>%
@@ -1173,6 +1205,7 @@ can be added with an initial
 call.
 
 ``` r
+
 adae_soc_lyt4 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze("USUBJID", afun = s_events_patients) %>%
@@ -1253,6 +1286,7 @@ Finally, if we wanted to prune the 0 count rows we can do that with the
 function:
 
 ``` r
+
 trim_rows(adae_soc_tbl4)
 #                                                           ARM A          ARM B    
 #                                                          (N=146)        (N=154)   
@@ -1300,6 +1334,7 @@ For this table we do not show the zero count grades. Note that we add
 the “overall” groups with a custom split function.
 
 ``` r
+
 table_count_grade_once_per_id <- function(df,
                                           labelstr = "",
                                           gradevar = "AETOXGR",
@@ -1337,6 +1372,7 @@ All of the layouting concepts needed to create this table have already
 been introduced so far:
 
 ``` r
+
 adae_grade_lyt <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARM") %>%
   analyze(
@@ -1717,6 +1753,7 @@ The response table that we will create here is composed of 3 parts:
 Let’s start with the first part which is fairly simple to derive:
 
 ``` r
+
 ADRS_BESRSPI <- ex_adrs %>%
   filter(PARAMCD == "BESRSPI") %>%
   mutate(
@@ -1756,6 +1793,7 @@ We will now look the implementation of part 2: unstratified analysis
 comparison vs. control group. Let’s start with the analysis function:
 
 ``` r
+
 s_unstrat_resp <- function(x, .ref_group, .in_ref_col) {
   if (.in_ref_col) {
     return(in_rows(
@@ -1830,6 +1868,7 @@ s_unstrat_resp(
 Hence we can now add the next vignette to the table:
 
 ``` r
+
 rsp_lyt2 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
@@ -1858,6 +1897,7 @@ are adding a row-split by response level, and then doing the same thing
 as we did for the binary response table above.
 
 ``` r
+
 s_prop <- function(df, .N_col) {
   in_rows(
     "95% CI (Wald, with correction)" = rcell(binom.test(nrow(df), .N_col)$conf.int * 100, format = "(xx.xx, xx.xx)")
@@ -1879,6 +1919,7 @@ s_prop(
 We can now create the final response table with all three parts:
 
 ``` r
+
 rsp_lyt3 <- basic_table(show_colcounts = TRUE) %>%
   split_cols_by("ARMCD", ref_group = "ARM A") %>%
   analyze("rsp", s_proportion, show_labels = "hidden") %>%
@@ -1922,6 +1963,7 @@ In the case that we wanted to rename the levels of `AVALC` and remove
 the CI for `NE` we could do that as follows:
 
 ``` r
+
 rsp_label <- function(x) {
   rsp_full_label <- c(
     CR = "Complete Response (CR)",
@@ -2009,6 +2051,7 @@ First we will start by loading the necessary packages and preparing the
 data to be used in the construction of this table.
 
 ``` r
+
 library(survival)
 
 adtte <- ex_adaette %>%
@@ -2030,6 +2073,7 @@ Next we create a basic analysis function, `a_count_subjs` which prints
 the overall unique subject counts and percentages within the data.
 
 ``` r
+
 a_count_subjs <- function(x, .N_col) {
   in_rows(
     "Subjects with Adverse Events n (%)" = rcell(length(unique(x)) * c(1, 1 / .N_col), format = "xx (xx.xx%)")
@@ -2044,6 +2088,7 @@ variable which contains a censor date description for each censored
 subject.
 
 ``` r
+
 cnsr_counter <- function(df, .var, .N_col) {
   x <- df[!duplicated(df$USUBJID), .var]
   x <- x[x != "__none__"]
@@ -2066,6 +2111,7 @@ and p-values comparing against the reference group - in this case the
 leftmost column.
 
 ``` r
+
 cph <- coxph(Surv(AVAL, CNSR == 0) ~ ACTARM + STRATA1, ties = "exact", data = adtte)
 
 a_cph <- function(df, .var, .in_ref_col, .ref_full, full_cox_fit) {
@@ -2103,6 +2149,7 @@ which produces the table of time to first adverse event consisting of
 the previously mentioned summary statistics.
 
 ``` r
+
 surv_tbl <- as.data.frame(
   summary(survfit(Surv(AVAL, CNSR == 0) ~ ACTARM, data = adtte, conf.type = "log-log"))$table
 ) %>%
@@ -2137,6 +2184,7 @@ Now we are able to use these four analysis functions to build our time
 to event analysis table.
 
 ``` r
+
 lyt <- basic_table(show_colcounts = TRUE) %>%
   ## Column faceting
   split_cols_by("ARM", ref_group = "A: Drug X") %>%
@@ -2180,6 +2228,7 @@ the table. The referential footnote created earlier in the time-to-event
 analysis function (`a_tte`) is also displayed.
 
 ``` r
+
 fnotes_at_path(
   tbl_tte,
   c("ma_USUBJID_CNSDTDSC_ARM_kapmeier", "kapmeier")

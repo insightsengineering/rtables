@@ -45,34 +45,34 @@ paginate_table(
 
 - tt:
 
-  (`TableTree` or related class)  
+  (`TableTree` or related class)\
   a `TableTree` object representing a populated table.
 
 - lpp:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   maximum lines per page including (re)printed header and context rows.
 
 - min_siblings:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   minimum sibling rows which must appear on either side of pagination
   row for a mid-subtable split to be valid. Defaults to 2.
 
 - nosplitin:
 
-  (`character`)  
+  (`character`)\
   names of sub-tables where page-breaks are not allowed, regardless of
   other considerations. Defaults to none.
 
 - colwidths:
 
-  (`numeric`)  
+  (`numeric`)\
   a vector of column widths for use in vertical pagination.
 
 - max_width:
 
-  (`integer(1)`, `string` or `NULL`)  
+  (`integer(1)`, `string` or `NULL`)\
   width that title and footer (including footnotes) materials should be
   word-wrapped to. If `NULL`, it is set to the current print width of
   the session (`getOption("width")`). If set to `"auto"`, the width of
@@ -81,72 +81,72 @@ paginate_table(
 
 - fontspec:
 
-  (`font_spec`)  
+  (`font_spec`)\
   a font_spec object specifying the font information to use for
   calculating string widths and heights, as returned by
   [`font_spec()`](https://insightsengineering.github.io/formatters/latest-tag/reference/font_spec.html).
 
 - col_gap:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   space (in characters) between columns.
 
 - verbose:
 
-  (`flag`)  
+  (`flag`)\
   whether additional information should be displayed to the user.
   Defaults to `FALSE`.
 
 - page_type:
 
-  (`string`)  
+  (`string`)\
   name of a page type. See
   [`page_types`](https://insightsengineering.github.io/formatters/latest-tag/reference/page_types.html).
   Ignored when `pg_width` and `pg_height` are set directly.
 
 - font_family:
 
-  (`string`)  
+  (`string`)\
   name of a font family. An error will be thrown if the family named is
   not monospaced. Defaults to `"Courier"`.
 
 - font_size:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   font size. Defaults to `12`.
 
 - lineheight:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   line height. Defaults to `1`.
 
 - landscape:
 
-  (`flag`)  
+  (`flag`)\
   whether the dimensions of `page_type` should be inverted for landscape
   orientation. Defaults to `FALSE`, ignored when `pg_width` and
   `pg_height` are set directly.
 
 - pg_width:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   page width in inches.
 
 - pg_height:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   page height in inches.
 
 - margins:
 
-  (`numeric(4)`)  
+  (`numeric(4)`)\
   named numeric vector containing `"bottom"`, `"left"`, `"top"`, and
   `"right"` margins in inches. Defaults to `.5` inches for both vertical
   margins and `.75` for both horizontal margins.
 
 - cpp:
 
-  (`numeric(1)` or `NULL`)  
+  (`numeric(1)` or `NULL`)\
   width (in characters) of the pages for horizontal pagination. `NA`
   (the default) indicates `cpp` should be inferred from the page size;
   `NULL` indicates no horizontal pagination should be done regardless of
@@ -154,7 +154,7 @@ paginate_table(
 
 - tf_wrap:
 
-  (`flag`)  
+  (`flag`)\
   whether the text for title, subtitles, and footnotes should be
   wrapped.
 

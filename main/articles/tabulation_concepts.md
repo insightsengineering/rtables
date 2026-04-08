@@ -7,6 +7,7 @@ table creation. Much of the theory also holds true when using other
 table packages. For this vignette we will use the following packages:
 
 ``` r
+
 library(dplyr)
 library(tibble)
 library(rtables)
@@ -15,6 +16,7 @@ library(rtables)
 The data we use is the following, created with random number generators:
 
 ``` r
+
 add_subgroup <- function(x) paste0(tolower(x), sample(1:3, length(x), TRUE))
 
 set.seed(1)
@@ -65,6 +67,7 @@ The data passed to the analysis functions are a subset defined by the
 respective column and:
 
 ``` r
+
 df_A <- df %>% filter(c1 == "A")
 df_B <- df %>% filter(c1 == "B")
 df_C <- df %>% filter(c1 == "C")
@@ -74,6 +77,7 @@ Let’s do this on the concrete data with
 [`analyze()`](https://insightsengineering.github.io/rtables/reference/analyze.md):
 
 ``` r
+
 foo <- prod
 bar <- sum
 zoo <- mean
@@ -109,6 +113,7 @@ or if we wanted the `x` variable instead of the data frame:
 where:
 
 ``` r
+
 x_A <- df_A$x
 x_B <- df_B$x
 x_C <- df_C$x
@@ -121,6 +126,7 @@ is passed to the function, and if `afun` has an argument `df` then a
 subset of the dataset is passed to `afun`:
 
 ``` r
+
 lyt2 <- basic_table() %>%
   split_cols_by("c1") %>%
   analyze("x", foo, var_labels = "foo label", format = "xx.xx") %>%
@@ -145,6 +151,7 @@ Note that it is also possible that a function returns multiple rows with
 [`in_rows()`](https://insightsengineering.github.io/rtables/reference/in_rows.md):
 
 ``` r
+
 lyt3 <- basic_table() %>%
   split_cols_by("c1") %>%
   analyze("x", function(x) {
@@ -189,6 +196,7 @@ Let’s say we would like to create the following table:
 where `df_*` are subsets of `df` as follows:
 
 ``` r
+
 df_UA <- df %>% filter(r1 == "U", c1 == "A")
 df_VA <- df %>% filter(r1 == "V", c1 == "A")
 df_WA <- df %>% filter(r1 == "W", c1 == "A")
@@ -206,6 +214,7 @@ Hence `foo` aggregates the subset of our data to a cell value.
 Given a function `foo` (ignore the `...` for now):
 
 ``` r
+
 foo <- function(df, labelstr = "", ...) {
   paste(dim(df), collapse = " x ")
 }
@@ -214,6 +223,7 @@ foo <- function(df, labelstr = "", ...) {
 we can start calculating the cell values individually:
 
 ``` r
+
 foo(df_UA)
 # [1] "17 x 6"
 foo(df_VA)
@@ -237,6 +247,7 @@ foo(df_WC)
 Now we are still missing the table structure:
 
 ``` r
+
 matrix(
   list(
     foo(df_UA),
@@ -260,6 +271,7 @@ matrix(
 In `rtables` this type of tabulation is done with `layouts`:
 
 ``` r
+
 lyt4 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -280,6 +292,7 @@ tbl4
 or if we would not want to see the `foo` label we would have to use:
 
 ``` r
+
 lyt5 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -298,6 +311,7 @@ but now the row labels have disappeared. This is because `cfun` needs to
 define its row label. So let’s redefine `foo`:
 
 ``` r
+
 foo <- function(df, labelstr) {
   rcell(paste(dim(df), collapse = " x "), format = "xx", label = labelstr)
 }
@@ -321,6 +335,7 @@ tbl6
 Now let’s calculate the mean of `df$y` for pattern I:
 
 ``` r
+
 foo <- function(df, labelstr) {
   rcell(mean(df$y), label = labelstr, format = "xx.xx")
 }
@@ -344,6 +359,7 @@ function body. Let’s try some alternatives returning to
 [`analyze()`](https://insightsengineering.github.io/rtables/reference/analyze.md):
 
 ``` r
+
 lyt8 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -366,6 +382,7 @@ to [`mean()`](https://rdrr.io/r/base/mean.html). We could also get the
 `data.frame` instead of the variable:
 
 ``` r
+
 lyt9 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -386,6 +403,7 @@ tbl9
 which is in contrast to:
 
 ``` r
+
 lyt10 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -429,6 +447,7 @@ where `<>` represents the data that is represented by the cell. So for
 the cell `U > u1, A` we would have the subset:
 
 ``` r
+
 df %>%
   filter(r1 == "U", r2 == "u1", c1 == "A")
 # # A tibble: 2 × 6
@@ -441,6 +460,7 @@ df %>%
 and so on. We can get this table as follows:
 
 ``` r
+
 lyt11 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%
@@ -470,6 +490,7 @@ tbl11
 or, if we wanted to calculate two summaries per row split:
 
 ``` r
+
 s_mean_sd <- function(x) {
   in_rows("mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"))
 }
@@ -656,6 +677,7 @@ way, the `cfun` can define its own row name. In order to get the table
 above we can use the layout framework as follows:
 
 ``` r
+
 s_mean_sd <- function(x) {
   in_rows("mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"))
 }
@@ -763,6 +785,7 @@ In the same manner, if we want content rows for the `r1` split we can do
 it at as follows:
 
 ``` r
+
 lyt14 <- basic_table() %>%
   split_cols_by("c1") %>%
   split_rows_by("r1") %>%

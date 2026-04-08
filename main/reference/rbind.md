@@ -22,7 +22,7 @@ rbind2(x, y)
 
 - x:
 
-  (`VTableNodeInfo`)  
+  (`VTableNodeInfo`)\
   `TableTree`, `ElementaryTable`, or `TableRow` object.
 
 - gap:
@@ -35,17 +35,17 @@ rbind2(x, y)
 
 - ...:
 
-  (`ANY`)  
+  (`ANY`)\
   elements to be stacked.
 
 - deparse.level:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   currently ignored.
 
 - y:
 
-  (`VTableNodeInfo`)  
+  (`VTableNodeInfo`)\
   `TableTree`, `ElementaryTable`, or `TableRow` object.
 
 ## Value

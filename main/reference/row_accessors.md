@@ -41,12 +41,12 @@ row_values(obj) <- value
 
 - obj:
 
-  (`ANY`)  
+  (`ANY`)\
   the object for the accessor to access or modify.
 
 - value:
 
-  (`ANY`)  
+  (`ANY`)\
   the new value.
 
 ## Value

@@ -23,14 +23,14 @@ basic_table(
 
 - title:
 
-  (`string`)  
+  (`string`)\
   single string to use as main title
   ([`formatters::main_title()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)).
   Ignored for subtables.
 
 - subtitles:
 
-  (`character`)  
+  (`character`)\
   a vector of strings to use as subtitles
   ([`formatters::subtitles()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)),
   where every element is printed on a separate line. Ignored for
@@ -38,7 +38,7 @@ basic_table(
 
 - main_footer:
 
-  (`character`)  
+  (`character`)\
   a vector of strings to use as main global (non-referential) footer
   materials
   ([`formatters::main_footer()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)),
@@ -46,7 +46,7 @@ basic_table(
 
 - prov_footer:
 
-  (`character`)  
+  (`character`)\
   a vector of strings to use as provenance-related global footer
   materials
   ([`formatters::prov_footer()`](https://insightsengineering.github.io/formatters/latest-tag/reference/title_footer.html)),
@@ -54,7 +54,7 @@ basic_table(
 
 - show_colcounts:
 
-  (`logical(1)`)  
+  (`logical(1)`)\
   Indicates whether the lowest level of applied to data. `NA`, the
   default, indicates that the `show_colcounts` argument(s) passed to the
   relevant calls to `split_cols_by*` functions. Non-missing values will
@@ -63,7 +63,7 @@ basic_table(
 
 - colcount_format:
 
-  (`string`)  
+  (`string`)\
   format for use when displaying the column counts. Must be 1d, or 2d
   where one component is a percent. This will also apply to any
   displayed higher level column counts where an explicit format was not
@@ -71,7 +71,7 @@ basic_table(
 
 - header_section_div:
 
-  (`string`)  
+  (`string`)\
   string which will be used to divide the header from the table. See
   [`header_section_div()`](https://insightsengineering.github.io/rtables/reference/section_div.md)
   for the associated getter and setter. Please consider changing last
@@ -81,7 +81,7 @@ basic_table(
 
 - top_level_section_div:
 
-  (`character(1)`)  
+  (`character(1)`)\
   if assigned a single character, the first (top level) split or
   division of the table will be highlighted by a line made of that
   character. See
@@ -90,14 +90,14 @@ basic_table(
 
 - inset:
 
-  (`numeric(1)`)  
+  (`numeric(1)`)\
   number of spaces to inset the table header, table body, referential
   footnotes, and main_footer, as compared to alignment of title,
   subtitle, and provenance footer. Defaults to 0 (no inset).
 
 - round_type:
 
-  (`"iec"` (default), `"iec_mod"` or `"sas"`)  
+  (`"iec"` (default), `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
   [`formatters::format_value()`](https://insightsengineering.github.io/formatters/latest-tag/reference/format_value.html)
   for details.
@@ -176,7 +176,7 @@ tbl2
 #> 
 #> test footer
 #> 
-#> test.R program, executed at 2026-01-03 15:03:20.131783
+#> test.R program, executed at 2026-04-08 01:08:50.75864
 
 lyt3 <- basic_table(
   show_colcounts = TRUE,

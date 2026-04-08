@@ -13,12 +13,12 @@ drop_facet_levels(df, spl, ...)
 
 - df:
 
-  (`data.frame`)  
+  (`data.frame`)\
   the incoming data corresponding with the parent facet.
 
 - spl:
 
-  (`VarLevelSplit`)  
+  (`VarLevelSplit`)\
   the split.
 
 - ...:

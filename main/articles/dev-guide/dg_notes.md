@@ -17,6 +17,7 @@ constructor that allows for `section_div` to be assigned to a value
 different than `NA_character`, and `"NX"` otherwise.
 
 ``` r
+
 library(rtables)
 ```
 
@@ -39,6 +40,7 @@ library(rtables)
     ##     str
 
 ``` r
+
 getClass("Split")
 ```
 
@@ -85,6 +87,7 @@ getClass("Split")
     ## Class "VarLevWBaselineSplit", by class "VarLevelSplit", distance 3
 
 ``` r
+
 # Known Subclasses:
 # ? Class "CustomizableSplit", directly # vclass used for grouping different split types (I guess)
 # Class "AllSplit", directly            # NX
@@ -115,6 +118,7 @@ virtual classes `TableRow` and `VTableTree`. In the following is the
 class hierarchy that makes \`trailing_section_div:
 
 ``` r
+
 getClass("TableRow")
 ```
 
@@ -145,6 +149,7 @@ getClass("TableRow")
     ## Known Subclasses: "DataRow", "ContentRow", "LabelRow"
 
 ``` r
+
 # Extends:
 # Class "VLeaf", directly
 # Class "VTableNodeInfo", directly
@@ -189,6 +194,7 @@ getClass("VTableTree")
     ## Known Subclasses: "ElementaryTable", "TableTree"
 
 ``` r
+
 # Extends:
 # Class "VTableNodeInfo", directly
 # Class "VTree", directly
@@ -207,6 +213,7 @@ understand why only these two have this feature, lets see the structure
 of a table built with section dividers:
 
 ``` r
+
 lyt <- basic_table() %>%
   split_rows_by("ARM", section_div = "+") %>%
   split_rows_by("STRATA1", section_div = "") %>%
@@ -263,6 +270,7 @@ print(tbl)
     ##     Standard deviation      6
 
 ``` r
+
 print(class(tbl)) # TableTree
 ```
 
@@ -271,6 +279,7 @@ print(class(tbl)) # TableTree
     ## [1] "rtables"
 
 ``` r
+
 # methods("trailing_section_div") # to see this please do devtools::load_all()
 # [1] trailing_section_div,LabelRow-method
 # trailing_section_div,TableRow-method
@@ -289,6 +298,7 @@ a special case for a `ContentRow`, as it is represented as
 row is turned off. Please take a moment to check the following setter:
 
 ``` r
+
 setMethod("section_div<-", "VTableTree", function(obj, value, only_sep_sections = FALSE) {
   char_v <- as.character(value)
   tree_depths <- unname(vapply(collect_leaves(obj), tt_level, numeric(1)))
