@@ -584,7 +584,7 @@ setMethod(
     cts <- spl_cuts(spl)
     cfct <- cut(varvec, cts, include.lowest = TRUE) # , labels = lbs)
     ret <- lapply(
-      seq_len(length(levels(cfct))),
+      seq_along(levels(cfct)),
       function(i) df[as.integer(cfct) <= i, ]
     )
     names(ret) <- levels(cfct)
