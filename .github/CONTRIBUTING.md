@@ -8,7 +8,8 @@ Contributions to this project are [released](https://docs.github.com/en/site-pol
 
 ## Filing Issues
 
-Issues are used to establish a prioritized timeline and track development progress within the package. If there is a new feature that you feel would be enhance the experience of package users, please open a [Feature Request issue](https://github.com/insightsengineering/rtables/issues/new?labels=enhancement&template=feature.yml&title=%5BFeature+Request%5D%3A+%3Ctitle%3E). If you notice a bug in the existing code, please file a [Bug Fix issue](https://github.com/insightsengineering/rtables/issues/new?&labels=bug&template=bug.yml&title=%5BBug%5D%3A+%3Ctitle%3E) with a description of the bug and a [reprex](https://reprex.tidyverse.org/) (reproducible example). Other types of issues (questions, typos you've noticed, improvements to documentation, etc.) can be filed as well. Click [here](https://github.com/insightsengineering/rtables/issues/new/choose) to file a new issue, and [here](https://github.com/insightsengineering/rtables/issues) to see the list of current issues. Please utilize labels wherever possible when creating issues for organization purposes and to narrow down the scope of the work required.
+Issues are used to establish a prioritized timeline and track development progress within the package. If there is a new feature that you feel would be enhance the experience of package users, please open a [Feature Request issue](https://github.com/insightsengineering/rtables/issues/new?labels=enhancement&template=feature.yml&title=%5BFeature+Request%5D%3A+%3Ctitle%3E). If you notice a bug in the existing code, please file a [Bug Fix issue](https://github.com/insightsengineering/rtables/issues/new?&labels=bug&template=bug.yml&title=%5BBug%5D%3A+%3Ctitle%3E) with a description of the bug and a [reprex](https://reprex.tidyverse.org/) (reproducible example).
+Other types of issues (questions, typos you've noticed, improvements to documentation, etc.) can be filed as well. Click [here](https://github.com/insightsengineering/rtables/issues/new/choose) to file a new issue, and [here](https://github.com/insightsengineering/rtables/issues) to see the list of current issues. Please utilize labels wherever possible when creating issues for organization purposes and to narrow down the scope of the work required.
 
 ---
 
@@ -26,7 +27,7 @@ In order to work on a new pull request, please first create a branch off of `mai
 
 `issue#_description_of_issue@target_merge_branch`
 
-For example, `443_refactor_splits@main`. In most cases, the target merge branch is the base (`main`) branch. 
+For example, `443_refactor_splits@main`. In most cases, the target merge branch is the base (`main`) branch.
 
 In some cases, a change in {rtables} may first require upstream changes in the {formatters} package. Suppose we have branch `100_update_fmts@main` in {formatters} containing the required upstream changes. Then the branch created in {rtables} would be named as follows for this example: `443_refactor_splits@100_update_fmts@main`. This ensures that the correct branches are checked out when running tests, etc.
 
@@ -49,7 +50,7 @@ For advanced development work within {rtables}, consider reading through the {rt
 
 The {rtables} package follows the tidyverse [style guide](https://style.tidyverse.org/index.html) so please adhere to these guidelines in your submitted code. After making changes to a file within the package, you can apply the package styler automatically and check for lint by running the following two lines of code while within the file:
 
-```
+```R
 styler:::style_active_file()
 lintr:::addin_lint()
 ```
@@ -70,7 +71,8 @@ After making updates to the package, please add a descriptive entry to the NEWS 
 
 Once the previous two steps are complete, you can create a pull request. Indicate in the description which issue is addressed in the pull request, and again utilize labels to help reviewers identify the category of the changes contained within the pull request.
 
-Once your pull request has been created, a series of checks will be automatically triggered, including `R CMD check`, tests/code coverage, auto-documentation, and more. All checks must be passing in order to eventually merge your pull request, and further changes may be required in order to resolve the status of these checks. All pull requests must also be reviewed and approved by at least one of the package maintainers before they can be merged. A review will be automatically requested from several {rtables} maintainers upon creating your pull request. When a maintainer reviews your pull request, please try to address the comments in short order - the {rtables} package is updated on a regular basis and leaving a pull request open too long is likely to result in merge conflicts which create more work for the developer.
+Once your pull request has been created, a series of checks will be automatically triggered, including `R CMD check`, tests/code coverage, auto-documentation, and more. All checks must be passing in order to eventually merge your pull request, and further changes may be required in order to resolve the status of these checks. All pull requests must also be reviewed and approved by at least one of the package maintainers before they can be merged. A review will be automatically requested from several {rtables} maintainers upon creating your pull request.
+When a maintainer reviews your pull request, please try to address the comments in short order - the {rtables} package is updated on a regular basis and leaving a pull request open too long is likely to result in merge conflicts which create more work for the developer.
 
 ## Code of Conduct
 
