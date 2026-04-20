@@ -359,6 +359,9 @@ Functions that are useful to be used with the `analyze*` functions.
   : Trim levels of another variable from each facet (post-processing
   split step)
 
+- [`restrict_facets()`](https://insightsengineering.github.io/rtables/reference/restrict_facets.md)
+  : Postprocessing split function behavior to generally restrict facets
+
 - [`add_combo_facet()`](https://insightsengineering.github.io/rtables/reference/add_combo_facet.md)
   [`add_overall_facet()`](https://insightsengineering.github.io/rtables/reference/add_combo_facet.md)
   : Add a combination facet in post-processing
@@ -369,6 +372,9 @@ Functions that are useful to be used with the `analyze*` functions.
 
 - [`spl_variable()`](https://insightsengineering.github.io/rtables/reference/spl_variable.md)
   : Variable associated with a split
+
+- [`make_subset_expr()`](https://insightsengineering.github.io/rtables/reference/make_subset_expr.md)
+  : Make subset expression for a split-value pair
 
 ## Cell Formatting related Functions
 

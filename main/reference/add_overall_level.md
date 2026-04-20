@@ -1,7 +1,7 @@
 # Add overall or combination levels to split groups
 
 `add_overall_level` is a split function that adds a global level to the
-current levels in the split. Similarly, `add_combo_df` uses a
+current levels in the split. Similarly, `add_combo_levels` uses a
 user-provided `data.frame` to define the combine the levels to be added.
 If you need a single overall column, after all splits, please check
 [`add_overall_col()`](https://insightsengineering.github.io/rtables/reference/add_overall_col.md).
