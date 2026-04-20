@@ -433,3 +433,94 @@ drop_facet_levels <- function(df, spl, ...) {
   df[[var]] <- factor(df[[var]])
   df
 }
+
+#' Postprocessing split function behavior to generally restrict facets
+#'
+#' @param facets `(character)`\cr Vector of facet names
+#' @param op `("keep", or "exclude")`\cr Whether `facets` names facets
+#'     to be (exclusively) kept (the default) or removed.
+#' @param reorder `(flag)`\cr For `op == "keep"`, should the resulting
+#'     facets be reordered to the order they appear in
+#'     `facets`. Defaults to `TRUE`. Ignored if `op == "exclude"`.
+#' @param quiet `(logical(1))`\cr Whether warnings should be given or
+#'     not (the default) when facets named in `facets` are not found
+#'     in the split result.
+#'
+#' @return a function suitable for use within the `post` argument of
+#'     [make_split_fun()].
+#'
+#' @details This is a function factory which creates a post-process
+#'     behavioral building block for use in [make_split_fun()].
+#'
+#' This factory provides the equivalent of both `keep_split_levels`
+#' and `remove_split_levels` in a form suitable for use in
+#' [make_split_fun()].
+#'
+#' When `op` is `"keep"` (the default), resulting facets are
+#' restricted to only those named in `facets` when the generated
+#' function is applied to a split result; in the case of `"exclude"`,
+#' facets named in `facets` are removed so that only those not named
+#' remain.
+#'
+#' The generated function will throw a warning if any of `facets` are
+#' not found in the split result it receives during splitting, unless
+#' it was created with `quiet = FALSE`.
+#'
+#' @seealso [make_split_fun()]
+#'
+#' @examples
+#'
+#' keep_spl <- make_split_fun(post = list(restrict_facets(c("M", "F"), op = "keep")))
+#'
+#' lyt <- basic_table() |>
+#'   split_cols_by("SEX", split_fun = keep_spl) |>
+#'   analyze("AGE")
+#'
+#' build_table(lyt, ex_adsl)
+#'
+#'
+#' excl_undiff <- restrict_facets("UNDIFFERENTIATED", op = "exclude")
+#' excl_spl <- make_split_fun(post = list(excl_undiff))
+#'
+#' lyt <- basic_table() |>
+#'   split_cols_by("SEX", split_fun = excl_spl) |>
+#'   analyze("AGE")
+#'
+#' build_table(lyt, ex_adsl)
+#'
+#' @family make_custom_split
+#' @export
+restrict_facets <- function(facets,
+                            op = c("keep", "exclude"),
+                            reorder = TRUE,
+                            quiet = FALSE) {
+  op <- match.arg(op)
+  function(splret, spl, fulldf) {
+    nms <- names(splret[[1]])
+    mtch <- match(facets, nms)
+    if (anyNA(mtch)) {
+      if (!quiet) {
+        warning(
+          "restrict facets (op: ",
+          op, ") could not find facets [",
+          paste(facets[is.na(mtch)], collapse = ", "),
+          "]. Ignoring these."
+        )
+      }
+      mtch <- mtch[!is.na(mtch)]
+    }
+
+    sel_vec <- mtch
+    if (op == "exclude") {
+      sel_vec <- -1 * sel_vec
+    } else if (!reorder) { # op is keep
+      sel_vec <- sort(sel_vec)
+    }
+    ret <- lapply(
+      splret,
+      function(lst) lst[sel_vec]
+    )
+    names(ret) <- names(splret)
+    ret
+  }
+}

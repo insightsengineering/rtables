@@ -10,12 +10,12 @@ test_that("Custom functions in multivar splits work", {
     ret
   }
 
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
     split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
       varlabels = c("N", "E", "BMR1"),
       split_fun = uneven_splfun
-    ) %>%
+    ) |>
     analyze_colvars(list(
       USUBJID = function(x, ...) length(unique(x)),
       AESEQ = max,
@@ -32,9 +32,9 @@ test_that("Custom functions in multivar splits work", {
     ret
   }
 
-  lyt <- basic_table() %>%
-    split_rows_by("ARM") %>%
-    split_rows_by_multivar(c("SEX", "STRATA1"), split_fun = uneven_row_splfun) %>%
+  lyt <- basic_table() |>
+    split_rows_by("ARM") |>
+    split_rows_by_multivar(c("SEX", "STRATA1"), split_fun = uneven_row_splfun) |>
     summarize_row_groups()
 
   tab2 <- build_table(lyt, DM)
@@ -43,14 +43,14 @@ test_that("Custom functions in multivar splits work", {
 })
 
 test_that("add_overall_level works", {
-  l <- basic_table() %>%
-    split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) %>%
+  l <- basic_table() |>
+    split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = FALSE)) |>
     analyze("AGE")
 
   tab <- build_table(l, DM)
 
-  lb <- basic_table() %>%
-    split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = TRUE)) %>%
+  lb <- basic_table() |>
+    split_cols_by("ARM", split_fun = add_overall_level("All Patients", first = TRUE)) |>
     analyze("AGE")
 
   tab_b <- build_table(lb, DM)
@@ -63,9 +63,9 @@ test_that("add_overall_level works", {
 
   expect_identical(cvs[[4]], mean(DM$AGE))
 
-  l2 <- basic_table() %>%
-    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) %>%
-    summarize_row_groups(label_fstr = "%s (n)") %>%
+  l2 <- basic_table() |>
+    split_rows_by("RACE", split_fun = add_overall_level("All Ethnicities")) |>
+    summarize_row_groups(label_fstr = "%s (n)") |>
     analyze("AGE")
 
   tab2 <- build_table(l2, DM)
@@ -78,10 +78,10 @@ test_that("add_overall_level works", {
 # split_rows_by_multivar works -------------------------------------------------
 test_that("split_rows_by_multivar and add_overall_level throw an error", {
   expect_silent(
-    lyt <- basic_table() %>%
+    lyt <- basic_table() |>
       split_rows_by_multivar(c("SEX", "STRATA1"),
         split_fun = add_overall_level("TOT")
-      ) %>%
+      ) |>
       summarize_row_groups()
   )
   expect_error(
@@ -89,8 +89,8 @@ test_that("split_rows_by_multivar and add_overall_level throw an error", {
     "does not make sense"
   )
 
-  lyt <- basic_table() %>%
-    split_rows_by_multivar(c("SEX", "STRATA1")) %>%
+  lyt <- basic_table() |>
+    split_rows_by_multivar(c("SEX", "STRATA1")) |>
     summarize_row_groups()
 
   tbl1 <- build_table(lyt, DM)
@@ -108,8 +108,8 @@ test_that("make_split_fun works", {
     post = list(add_overall_facet("ALL", "All Arms"))
   )
 
-  lyt <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = mysplitfun) %>%
+  lyt <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = mysplitfun) |>
     analyze("AGE")
   tbl <- build_table(lyt, subset(DM, ARM %in% c("B: Placebo", "C: Combination")))
 
@@ -117,9 +117,9 @@ test_that("make_split_fun works", {
   expect_equal(ncol(tbl), 3L)
   expect_equal(ccounts[3], sum(DM$ARM %in% c("B: Placebo", "C: Combination")))
 
-  lyt2a <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = trim_levels_in_group("SEX", drop_outlevs = TRUE)) %>%
-    split_cols_by("SEX") %>%
+  lyt2a <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = trim_levels_in_group("SEX", drop_outlevs = TRUE)) |>
+    split_cols_by("SEX") |>
     analyze("AGE")
 
   adslsub <- subset(ex_adsl, (ARM == "A: Drug X" & SEX == "F") | (ARM == "B: Placebo" & SEX == "M"))
@@ -130,9 +130,9 @@ test_that("make_split_fun works", {
     post = list(trim_levels_in_facets("SEX"))
   )
 
-  lyt2b <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = mysplitfun2) %>%
-    split_cols_by("SEX") %>%
+  lyt2b <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = mysplitfun2) |>
+    split_cols_by("SEX") |>
     analyze("AGE")
 
   tbl2b <- build_table(lyt2b, adslsub)
@@ -147,8 +147,8 @@ test_that("make_split_fun works", {
 
   broken_on_purpose <- make_split_fun(pre = list(function(df, ...) stop("oopsie")))
 
-  lyt3 <- basic_table() %>%
-    split_cols_by("ARM", split_fun = broken_on_purpose) %>%
+  lyt3 <- basic_table() |>
+    split_cols_by("ARM", split_fun = broken_on_purpose) |>
     analyze("ARM")
 
   expect_error(build_table(lyt3, DM), "Error applying custom split function: oopsie")
@@ -173,8 +173,8 @@ test_that("make_split_fun works", {
       levels = c("stupid", "silly")
     ))
   )
-  lyt4a <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = nonsense_splfun) %>%
+  lyt4a <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = nonsense_splfun) |>
     analyze("AGE")
 
   tbl4a <- build_table(lyt4a, DM)
@@ -184,9 +184,9 @@ test_that("make_split_fun works", {
   )
 
 
-  lyt4b <- basic_table() %>%
-    split_rows_by("ARM", split_fun = nonsense_splfun) %>%
-    summarize_row_groups() %>%
+  lyt4b <- basic_table() |>
+    split_rows_by("ARM", split_fun = nonsense_splfun) |>
+    summarize_row_groups() |>
     analyze("AGE")
 
   tbl4b <- build_table(lyt4b, DM)
@@ -212,8 +212,8 @@ test_that("make_split_fun works", {
   combofun <- add_combo_facet("combo", "Drug X or Combo", c("A: Drug X", "C: Combination"))
   mysplfun <- make_split_fun(post = list(combofun))
 
-  lyt5 <- basic_table() %>%
-    split_cols_by("ARM", split_fun = mysplfun) %>%
+  lyt5 <- basic_table() |>
+    split_cols_by("ARM", split_fun = mysplfun) |>
     analyze("STRATA1")
 
   tbl5 <- build_table(lyt5, ex_adsl)
@@ -238,18 +238,105 @@ test_that("spl_variable works", {
 
   mysplitfun <- make_split_fun(pre = list(rem_lev_facet("A: Drug X")))
 
-  lyt <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = mysplitfun) %>%
+  lyt <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = mysplitfun) |>
     analyze("AGE")
   tbl <- expect_silent(build_table(lyt, DM))
   expect_equal(ncol(tbl), 2L)
 
-  lyt <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by_multivar(c("ARM", "SEX"), split_fun = mysplitfun) %>%
+  lyt <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by_multivar(c("ARM", "SEX"), split_fun = mysplitfun) |>
     analyze("AGE")
 
   expect_error(
     build_table(lyt, DM),
     "Split class MultiVarSplit not associated with a single variable"
+  )
+})
+
+test_that("restrict_facets works", {
+  mflevs <- c("M", "F")
+  keep_reord <- restrict_facets(mflevs)
+  splfun <- make_split_fun(post = list(keep_reord))
+
+  lyt <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun) |>
+    analyze("AGE")
+
+  tbl1 <- build_table(lyt, DM)
+
+  expect_equal(
+    unclass(col_paths(tbl1)),
+    list(
+      c("SEX", "M"),
+      c("SEX", "F")
+    )
+  )
+
+  keep_noreord <- restrict_facets(mflevs, reorder = FALSE)
+  splfun2 <- make_split_fun(post = list(keep_noreord))
+
+  lyt2 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun2) |>
+    analyze("AGE")
+
+  tbl2 <- build_table(lyt2, DM)
+  expect_equal(
+    unclass(col_paths(tbl2)),
+    list(
+      c("SEX", "F"),
+      c("SEX", "M")
+    )
+  )
+
+  exclude <- restrict_facets(mflevs, op = "exclude")
+  splfun3 <- make_split_fun(post = list(exclude))
+  lyt3 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun3) |>
+    analyze("AGE")
+  tbl3 <- build_table(lyt3, DM)
+
+  expect_equal(
+    unclass(col_paths(tbl3)),
+    list(
+      c("SEX", "U"),
+      c("SEX", "UNDIFFERENTIATED")
+    )
+  )
+
+  ## check warning and quietly
+  badlevs <- c("F", "yo what?")
+
+  bad_keep1 <- restrict_facets(badlevs)
+  splfun4 <- make_split_fun(post = list(bad_keep1))
+
+  lyt4 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun4) |>
+    analyze("AGE")
+  expect_warning(tbl4 <- build_table(lyt4, DM), regexp = "yo what")
+  expect_identical(
+    unclass(col_paths(tbl4)),
+    list(c("SEX", "F"))
+  )
+
+  bad_keep2 <- restrict_facets(badlevs, quiet = TRUE)
+  splfun5 <- make_split_fun(post = list(bad_keep2))
+
+  lyt5 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun5) |>
+    analyze("AGE")
+  expect_silent(tbl5 <- build_table(lyt5, DM))
+  expect_true(identical(tbl4, tbl5, ignore.environment = TRUE))
+
+  bad_excl <- restrict_facets(badlevs, "exclude")
+  splfun6 <- make_split_fun(post = list(bad_excl))
+
+  lyt6 <- basic_table() |>
+    split_cols_by("SEX", split_fun = splfun6) |>
+    analyze("AGE")
+  expect_warning(tbl6 <- build_table(lyt6, DM), regexp = "yo what")
+  expect_equal(
+    NCOL(tbl6),
+    3
   )
 })
