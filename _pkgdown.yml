@@ -2,11 +2,20 @@ url: https://insightsengineering.github.io/rtables
 
 template:
   package: nesttemplate
+  includes:
+    in_header: |
+      <script async src="https://widget.kapa.ai/kapa-widget.bundle.js"
+      data-modal-override-open-class="open-kapa-widget"
+      data-project-name="rtables"
+      data-project-logo="https://insightsengineering.github.io/rtables/latest-tag/logo.svg"
+      data-modal-title="rtables AI ✨"
+      data-website-id="<this-has-to-be-obtained-from-kapa-ai-account>"
+      ></script>
 
 navbar:
   structure:
     left: [intro, reference, articles, dev-guide, news, reports]
-    right: [search, github]
+    right: [search, github, ai]
   components:
     github:
       icon: fa-github fa-lg
@@ -36,6 +45,10 @@ navbar:
           href: unit-test-report/
         - text: Non-CRAN unit test report
           href: unit-test-report-non-cran/
+    ai:
+      text: Ask AI ✨
+      href: "#"
+      class: open-kapa-widget
 
 repo:
   url:
