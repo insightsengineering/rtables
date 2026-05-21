@@ -1,6 +1,6 @@
 # Changelog
 
-## rtables 0.6.16.9000
+## rtables 0.6.16.9001
 
 ### New Features
 
@@ -872,7 +872,7 @@ backwards compatibility layer with the `rtable`, `rcell`, `rrow`,
 `rheader`, and `rtabulate` family of functions. However the table data
 structure and main tabulation framework have changed. We provide
 extensive documentation in the manuals
-[`help(package = "rtables")`](https://insightsengineering.github.io/rtables/latest-tag/reference)
+[`help(package = "rtables")`](https://insightsengineering.github.io/rtables/latest-release/reference)
 and vignettes `vignette(package = "rtables")` of the package.
 
 The changes to `rtables` have been undertaken to better meet the

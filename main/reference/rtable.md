@@ -59,7 +59,7 @@ rtablel(header, ..., format = NULL, hsep = default_hsep(), inset = 0L)
 
   (`"iec"`, `"iec_mod"` or `"sas"`)\
   the type of rounding to perform. See
-  [`formatters::round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
+  [`round_fmt()`](https://insightsengineering.github.io/formatters/latest-tag/reference/round_fmt.html)
   for details.
 
 ## Value

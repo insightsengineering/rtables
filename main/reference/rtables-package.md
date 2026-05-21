@@ -28,6 +28,9 @@ Useful links:
 
 Authors:
 
+- Joe Zhu <joe.zhu@roche.com>
+  ([ORCID](https://orcid.org/0000-0001-7566-2787))
+
 - Gabriel Becker <gabembecker@gmail.com> (Original creator of the
   package)
 

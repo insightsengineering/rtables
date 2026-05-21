@@ -25,10 +25,6 @@ select_all_levels
 add_combo_levels(combosdf, trim = FALSE, first = FALSE, keep_levels = NULL)
 ```
 
-## Format
-
-An object of class `AllLevelsSentinel` of length 0.
-
 ## Arguments
 
 - valname:
