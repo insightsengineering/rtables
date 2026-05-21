@@ -2,8 +2,36 @@
 ## which is the only reason expression(TRUE) is ok, because otherwise
 ## we (sometimes) run into
 ## factor()[TRUE] giving <NA> (i.e. length 1)
+
+#' Make subset expression for a split-value pair
+#'
+#' @param spl `(Split)`\cr A split object.
+#' @param val `(SplitValue or string)`\cr The value, either as a
+#'     `SplitValue` object or the raw value as a string.
+#'
+#' @details
+#'
+#' If `val` is a `SplitValue` object which already contains a
+#' subsetting expression with length `>0`, that is immediately
+#' returned. Otherwise, the appropriate subsetting expression is
+#' constructed based on the split type of `spl` and the value `val`.
+#'
+#' @note this is occasionally useful when constructing custom
+#'     splitting behavior which may used for column splitting but
+#'     generally should not be called directly by the end user.
+#'
+#' @return A subseting expression to be used to restrict data to a
+#'     particular column during tabulation.
+#'
+#' @examples
+#'
+#' spl <- VarLevelSplit("ARM", split_label = "ARM")
+#' make_subset_expr(spl, "B: Placebo")
+#' @export
+
 setGeneric("make_subset_expr", function(spl, val) standardGeneric("make_subset_expr"))
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "VarLevelSplit",
   function(spl, val) {
@@ -26,6 +54,7 @@ setMethod(
   }
 )
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "MultiVarSplit",
   function(spl, val) {
@@ -41,6 +70,7 @@ setMethod(
   }
 )
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "AnalyzeVarSplit",
   function(spl, val) {
@@ -55,6 +85,7 @@ setMethod(
   }
 )
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "AnalyzeColVarSplit",
   function(spl, val) {
@@ -65,6 +96,7 @@ setMethod(
 ## XXX these are going to be ridiculously slow
 ## FIXME
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "VarStaticCutSplit",
   function(spl, val) {
@@ -86,6 +118,7 @@ setMethod(
 )
 
 ## NB this assumes spl_cutlabels(spl) is in order!!!!!!
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "CumulativeCutSplit",
   function(spl, val) {
@@ -123,18 +156,20 @@ setMethod(
 ##                        fun = spl@cut_fun))
 ## })
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "AllSplit",
   function(spl, val) expression(TRUE)
 )
 
 ## probably don't need this
-
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "expression",
   function(spl, val) spl
 )
 
+#' @rdname make_subset_expr
 setMethod(
   "make_subset_expr", "character",
   function(spl, val) {

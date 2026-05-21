@@ -305,6 +305,34 @@ Section dividers have a *least specific to most specific* order of precedence,
 with only the least specific applicable section divider displayed after any
 given row. See `?section_div` for more details.
 
+In addition to the path specific section dividers, there is also the more general
+section divider function, which can be used to query the divider after each row:
+
+```{r}
+section_div(tbl3)
+```
+
+Together with the corresponding replacement function, this can be used to insert a divider
+after specific rows:
+
+```{r}
+section_div(tbl3)[1] <- "-"
+tbl3
+```
+
+Although here again, the path-specific section divider could come in more handy, e.g.:
+
+```{r}
+section_div_at_path(tbl3, c("RACE", "*", "@content", "*")) <- "-"
+tbl3
+```
+
+The relevant paths can be looked up via `section_div_info`:
+
+```{r}
+section_div_info(tbl3)
+```
+
 ### Sorting Within An `rtables` Table
 
 Sorting rows in a table occurs in a path-specific way. See the sorting section

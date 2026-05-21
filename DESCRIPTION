@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.15.9003
-Date: 2026-01-03
+Version: 0.6.16.9001
+Date: 2026-05-21
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -67,11 +67,11 @@ Config/Needs/verdepcheck: insightsengineering/formatters,
     davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, therneau/survival,
     r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
     r-lib/xml2
+Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Collate:
     '00tabletrees.R'
     'Viewer.R'
