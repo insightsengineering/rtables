@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.16.9000
-Date: 2026-05-20
+Version: 0.6.16.9001
+Date: 2026-05-21
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -67,6 +67,7 @@ Config/Needs/verdepcheck: insightsengineering/formatters,
     davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, therneau/survival,
     r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
     r-lib/xml2
+Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Language: en-US
 LazyData: true
@@ -104,4 +105,3 @@ Collate:
     'tt_from_df.R'
     'validate_table_struct.R'
     'zzz_constants.R'
-Config/roxygen2/version: 8.0.0
