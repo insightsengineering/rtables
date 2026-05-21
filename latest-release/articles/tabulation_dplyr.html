@@ -13,8 +13,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Comparison with dplyr Tabulation">
 <link rel="stylesheet" href="../consent.css">
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rtables</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.16</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,8 @@
     <div class="dropdown-menu" aria-labelledby="dropdown-versions">
     <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/release-candidate">release-candidate</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-tag">latest-tag</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/latest-release">latest-release</a>
+<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.16">v0.6.16</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.15">v0.6.15</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.14">v0.6.14</a>
 <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/rtables/v0.6.13">v0.6.13</a>
@@ -135,7 +136,7 @@
                         <h4 data-toc-skip class="author">Gabriel Becker
 and Adrian Waddell</h4>
             
-            <h4 data-toc-skip class="date">2025-11-18</h4>
+            <h4 data-toc-skip class="date">2026-05-21</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/insightsengineering/rtables/blob/main/vignettes/tabulation_dplyr.Rmd" class="external-link"><code>vignettes/tabulation_dplyr.Rmd</code></a></small>
       <div class="d-none name"><code>tabulation_dplyr.Rmd</code></div>
@@ -243,8 +244,12 @@ columns:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">arm</span>, <span class="va">gender</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">country</span> <span class="op">==</span> <span class="st">"CAN"</span>, <span class="va">handed</span> <span class="op">==</span> <span class="st">"Left"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># `summarise()` has grouped output by 'arm'. You can override using the `.groups`</span></span>
-<span><span class="co"># argument.</span></span>
+<span><span class="co"># `summarise()` has regrouped the output.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Summaries were computed grouped by <span style="color: #0000BB;">arm</span> and <span style="color: #0000BB;">gender</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Output is grouped by <span style="color: #0000BB;">arm</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.groups = "drop_last")` to silence this message.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.by = c(arm, gender))` for per-operation grouping</span></span>
+<span><span class="co">#   (`?dplyr::dplyr_by`) instead.</span></span>
 <span><span class="co"># <span style="color: #949494;"># A tibble: 4 × 3</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm [2]</span></span></span>
 <span><span class="co">#   arm   gender mean_age</span></span>
@@ -258,8 +263,12 @@ columns:</p>
 <code class="sourceCode R"><span><span class="va">average_age</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">arm</span>, <span class="va">gender</span>, <span class="va">country</span>, <span class="va">handed</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># `summarise()` has grouped output by 'arm', 'gender', 'country'. You can</span></span>
-<span><span class="co"># override using the `.groups` argument.</span></span>
+<span><span class="co"># `summarise()` has regrouped the output.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Summaries were computed grouped by <span style="color: #0000BB;">arm</span>, <span style="color: #0000BB;">gender</span>, <span style="color: #0000BB;">country</span>, and <span style="color: #0000BB;">handed</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Output is grouped by <span style="color: #0000BB;">arm</span>, <span style="color: #0000BB;">gender</span>, and <span style="color: #0000BB;">country</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.groups = "drop_last")` to silence this message.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.by = c(arm, gender, country, handed))` for per-operation</span></span>
+<span><span class="co">#   grouping (`?dplyr::dplyr_by`) instead.</span></span>
 <span></span>
 <span><span class="va">average_age</span></span>
 <span><span class="co"># <span style="color: #949494;"># A tibble: 16 × 5</span></span></span>
@@ -332,8 +341,12 @@ row mean values:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="va">country</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># now the `handed` grouping has been removed, therefore we can calculate percent now:</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>n_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">c_h_count</span><span class="op">)</span>, c_h_percent <span class="op">=</span> <span class="va">c_h_count</span> <span class="op">/</span> <span class="va">n_col</span><span class="op">)</span></span>
-<span><span class="co"># `summarise()` has grouped output by 'arm', 'gender', 'country'. You can</span></span>
-<span><span class="co"># override using the `.groups` argument.</span></span>
+<span><span class="co"># `summarise()` has regrouped the output.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Summaries were computed grouped by <span style="color: #0000BB;">arm</span>, <span style="color: #0000BB;">gender</span>, <span style="color: #0000BB;">country</span>, and <span style="color: #0000BB;">handed</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Output is grouped by <span style="color: #0000BB;">arm</span>, <span style="color: #0000BB;">gender</span>, and <span style="color: #0000BB;">country</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.groups = "drop_last")` to silence this message.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.by = c(arm, gender, country, handed))` for per-operation</span></span>
+<span><span class="co">#   grouping (`?dplyr::dplyr_by`) instead.</span></span>
 <span><span class="va">c_h_df</span></span>
 <span><span class="co"># <span style="color: #949494;"># A tibble: 16 × 8</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm, gender [4]</span></span></span>
@@ -364,8 +377,12 @@ countries:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>c_count <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="co"># now the `handed` grouping has been removed, therefore we can calculate percent now:</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>n_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">c_count</span><span class="op">)</span>, c_percent <span class="op">=</span> <span class="va">c_count</span> <span class="op">/</span> <span class="va">n_col</span><span class="op">)</span></span>
-<span><span class="co"># `summarise()` has grouped output by 'arm', 'gender'. You can override using the</span></span>
-<span><span class="co"># `.groups` argument.</span></span>
+<span><span class="co"># `summarise()` has regrouped the output.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Summaries were computed grouped by <span style="color: #0000BB;">arm</span>, <span style="color: #0000BB;">gender</span>, and <span style="color: #0000BB;">country</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Output is grouped by <span style="color: #0000BB;">arm</span> and <span style="color: #0000BB;">gender</span>.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.groups = "drop_last")` to silence this message.</span></span>
+<span><span class="co"># <span style="color: #00BBBB;">ℹ</span> Use `summarise(.by = c(arm, gender, country))` for per-operation grouping</span></span>
+<span><span class="co">#   (`?dplyr::dplyr_by`) instead.</span></span>
 <span><span class="va">c_df</span></span>
 <span><span class="co"># <span style="color: #949494;"># A tibble: 8 × 6</span></span></span>
 <span><span class="co"># <span style="color: #949494;"># Groups:   arm, gender [4]</span></span></span>
