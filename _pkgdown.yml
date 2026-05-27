@@ -68,6 +68,7 @@ articles:
     - guided_intermediate_translating_shells
     - guided_intermediate_afun_reqs
     - guided_intermediate_split_reqs
+    - starts_with("guided_advanced")
 
   - title: Clinical Trials
     navbar: Clinical Trials
