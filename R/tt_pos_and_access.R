@@ -1588,6 +1588,16 @@ setMethod(
 #' @keywords internal
 #' @exportMethod cell_values
 setMethod(
+  "cell_values", "RowsVerticalSection",
+  function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
+   
+  }
+)
+
+#' @rdname int_methods
+#' @keywords internal
+#' @exportMethod cell_values
+setMethod(
   "cell_values", "TableRow",
   function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {
     if (!is.null(rowpath)) {

@@ -1,6 +1,6 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.15.9005
+Version: 0.6.16.0001
 Date: 2026-04-20
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
@@ -71,7 +71,6 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 Collate:
     '00tabletrees.R'
     'Viewer.R'
@@ -105,3 +104,4 @@ Collate:
     'tt_from_df.R'
     'validate_table_struct.R'
     'zzz_constants.R'
+Config/roxygen2/version: 8.0.0
