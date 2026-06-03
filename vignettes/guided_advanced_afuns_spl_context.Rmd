@@ -136,34 +136,29 @@ conditional-on-column `afun` is:
 
 
 ```{r, eval = FALSE}
-
-
 col_condition <- function(spl_context) {
   ## return TRUE or FALSE
 }
 
 col_cond_afun_template1 <- function(df, .var, ..., .spl_context) {
-
   ## shared processing
 
-  if(col_condition(.spl_context)) {
-      ## alternate behavior
-      
-      ## data processing
+  if (col_condition(.spl_context)) {
+    ## alternate behavior
 
-      ## value calculation
+    ## data processing
 
-      ## determine cell formats, etc
+    ## value calculation
 
-
+    ## determine cell formats, etc
   } else {
-      ## primary behavior
-      
-      ## data processing
+    ## primary behavior
 
-      ## value calculation
+    ## data processing
 
-      ## determine cell formats, etc
+    ## value calculation
+
+    ## determine cell formats, etc
   }
 
   ## label calculation, etc if necessary
@@ -176,14 +171,12 @@ Or, alternatively if we have two existing `afun`s that each fully
 encapsulate the desired behavior for one of the conditions,
 
 ```{r, eval = FALSE}
-col_cond_afun_template2 <- function(df, .var, ... , .spl_context) {
-
+col_cond_afun_template2 <- function(df, .var, ..., .spl_context) {
   if (col_condition(.spl_context)) {
     alt_behavior_afun(df, .var, ..., .spl_context = .spl_context)
   } else {
     main_behavior_afun(df, .var, ..., .spl_context = .spl_context)
   }
-
 }
 ```
 
@@ -226,7 +219,6 @@ in the split context by their "col ids", which currently are
 constructed by pasting the split values (only) collapsed with ".":
 
 ```{r}
-
 basic_get_ref <- function(ref_path, spl_context) {
   facet_dat <- spl_context$full_parent_df[[NROW(spl_context)]]
 
@@ -238,7 +230,6 @@ basic_get_ref <- function(ref_path, spl_context) {
 
   list(ref_group = ref_dat, in_ref_col = ref_col_id == spl_context$cur_col_id[[1]])
 }
-
 ```
 
 We can see that this is working via a diagnostic table that shows us what is coming out of that function:
@@ -247,15 +238,18 @@ We can see that this is working via a diagnostic table that shows us what is com
 
 ```{r}
 diag_afun <- function(df, .spl_context, ref_path) {
+  ref_info <- basic_get_ref(ref_path, .spl_context)
 
-    ref_info = basic_get_ref(ref_path, .spl_context)
-
-    in_rows(data_dim = dim(df),
-            ref_dim = dim(ref_info$ref_group),
-            in_ref_col = ref_info$in_ref_col,
-            .formats = c(data_dim = "xx, xx",
-                         ref_dim = "xx, xx",
-                         in_ref_col = "xx"))
+  in_rows(
+    data_dim = dim(df),
+    ref_dim = dim(ref_info$ref_group),
+    in_ref_col = ref_info$in_ref_col,
+    .formats = c(
+      data_dim = "xx, xx",
+      ref_dim = "xx, xx",
+      in_ref_col = "xx"
+    )
+  )
 }
 
 
