@@ -85,9 +85,11 @@ rvs1
 ```
 
 ```{r}
-rvs2 <- in_rows(ok = "hi",
+rvs2 <- in_rows(
+  ok = "hi",
   nah = "bye",
-   .indent_mods = c(ok = 1, nah = -1), .row_footnotes = list(nah = "I guess not ..."))
+  .indent_mods = c(ok = 1, nah = -1), .row_footnotes = list(nah = "I guess not ...")
+)
 rvs2
 ```
 
@@ -122,17 +124,16 @@ build a risk difference harness using this method:
 
 ```{r}
 library(rtables)
-placeholder_rd_afun <- function(df, .var, .spl_context, ref_path)  {
+placeholder_rd_afun <- function(df, .var, .spl_context, ref_path) {
   val <- tail(.spl_context$cur_col_split_val[[1]], 1)
   levs <- levels(df[[.var]])
   len <- length(levs)
 
   lst <- setNames(rep(val, len), levs)
-  in_rows(.list = lst, .formats = setNames(rep("xx", len), levs) )
+  in_rows(.list = lst, .formats = setNames(rep("xx", len), levs))
 }
 
 comb_afun <- function(df, .var, .spl_context, ref_path) {
-
   if (grepl("difference", .spl_context$cur_col_id[[1]], ignore.case = TRUE)) {
     ret <- placeholder_rd_afun(df, .var, .spl_context, ref_path)
   } else {
@@ -146,12 +147,13 @@ adae <- ex_adae
 
 adsl$trt_span <- ifelse(adsl$ARM == "B: Placebo", " ", "Active Treatment")
 adae$trt_span <- ifelse(adae$ARM == "B: Placebo", " ", "Active Treatment")
-adsl$rr_header = "Risk Differences"
-adae$rr_header = "Risk Differences"
+adsl$rr_header <- "Risk Differences"
+adae$rr_header <- "Risk Differences"
 adsl$rr_label <- paste(adsl$ARM, "vs B: Placebo")
 adae$rr_label <- paste(adae$ARM, "vs B: Placebo")
 
-trtmap <- data.frame(rr_header = c("Active Treatment", "Active Treatment", " "),
+trtmap <- data.frame(
+  rr_header = c("Active Treatment", "Active Treatment", " "),
   ARM = c("A: Drug X", "C: Combination", "B: Placebo")
 )
 
@@ -189,7 +191,7 @@ afun_1 <- function(df, .var) {
 afun_2 <- function(df, .var, .N_col, id) {
   non_na <- !is.na(df[[.var]])
   count <- length(unique(df[[id]]))
-  in_rows("Unique Patients" = count * c(1, 1/.N_col), .formats = c("Unique Patients" = "xx (xx.x%)"))
+  in_rows("Unique Patients" = count * c(1, 1 / .N_col), .formats = c("Unique Patients" = "xx (xx.x%)"))
 }
 
 stacked_afun <- function(df, .var, .N_col, id) {
@@ -197,7 +199,6 @@ stacked_afun <- function(df, .var, .N_col, id) {
   pats_rvs <- afun_2(df, .var, .N_col, id)
   c(events_rvs, pats_rvs)
 }
-
 ```
 
 ```{r}
@@ -236,10 +237,10 @@ afun_count_lbl <- function(df, .var, lbl) {
   in_rows(sum(!is.na(df[[.var]])), .names = lbl)
 }
 basic_two_tier <- function(df, .var, .spl_context, detail_var, detail_level) {
-
-  values <- lapply(levels(df[[.var]]),
+  values <- lapply(
+    levels(df[[.var]]),
     function(lvl) {
-      dat <- df[df[[.var]] == lvl,]
+      dat <- df[df[[.var]] == lvl, ]
       rvs_out <- afun_count_lbl(dat, .var, lvl)
       if (lvl %in% detail_level) {
         det_rvs <- simple_analysis(dat[[detail_var]])
@@ -260,7 +261,6 @@ level, stack the result of `simple_analysis` for our detail variable
 (`DCSREAS` for our table).
 
 ```{r}
-
 lyt <- basic_table() |>
   split_cols_by("ARM") |>
   analyze("EOSSTT", afun = basic_two_tier, extra_args = list(detail_var = "DCSREAS", detail_level = "DISCONTINUED"))
