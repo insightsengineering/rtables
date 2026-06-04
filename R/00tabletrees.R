@@ -2192,8 +2192,8 @@ print.RowsVerticalSection <- function(x, ...) {
 #' @export
 c.RowsVerticalSection <- function(...) {
   lst <- list(...)
-  if (!all(sapply(lst, function(x) inherits(x, "RowsVerticalSection")))) {
-    stop("Cannot use c() to combine RowsVerticalSection objects with objects of other clases")
+  if (!all(vapply(lst, function(x) inherits(x, "RowsVerticalSection"), TRUE))) {
+    stop("Cannot use c() to combine RowsVerticalSection objects with objects of other classes")
   }
 
   out <- NextMethod(generic = "c")
