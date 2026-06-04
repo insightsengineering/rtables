@@ -1,6 +1,5 @@
 Package: rtables
 Title: Reporting Tables
-
 Version: 0.6.16.9001
 Date: 2026-05-21
 Authors@R: c(
