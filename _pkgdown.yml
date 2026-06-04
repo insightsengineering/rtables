@@ -323,3 +323,4 @@ reference:
     - length,CellValue-method
     - names,VTableNodeInfo-method
     - insert_rrow
+    - c.RowsVerticalSection
