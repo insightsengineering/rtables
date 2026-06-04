@@ -78,13 +78,13 @@ that can be used as both an analysis and summary function:
 library(rtables)
 
 template_acfun <- function(x,
-         labelstr = NULL,
-         ## <optional special args>,
-         ## <additional args>,
-         ...) {
+                           labelstr = NULL,
+                           ## <optional special args>,
+                           ## <additional args>,
+                           ...) {
   if (is.null(labelstr)) {
     ## 'calculate' label(s) for afun-usage case
-    lbl <- "cool label, bro"  
+    lbl <- "cool label, bro"
   } else {
     ## calculate label(s) from labelstr for cfun-usage case
     lbl <- labelstr
