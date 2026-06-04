@@ -105,4 +105,4 @@ Collate:
     'tt_from_df.R'
     'validate_table_struct.R'
     'zzz_constants.R'
-Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3

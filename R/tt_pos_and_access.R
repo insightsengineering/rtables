@@ -1589,7 +1589,7 @@ setMethod(
 #' @exportMethod cell_values
 setMethod(
   "cell_values", "RowsVerticalSection",
-  function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) {}
+  function(tt, rowpath, colpath = NULL, omit_labrows = TRUE) rawvalues(tt)
 )
 
 #' @rdname int_methods

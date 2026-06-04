@@ -1223,7 +1223,7 @@ setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
 
 #' @rdname int_methods
 #' @export
-setMethod("obj_na_str", "VTableNodeInfo", function(obj) attr(obj, "row_na_strs", exact = TRUE))
+setMethod("obj_na_str", "RowsVerticalSection", function(obj) attr(obj, "row_na_strs", exact = TRUE))
 
 #' @rdname formatters_methods
 #' @export

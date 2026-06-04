@@ -98,7 +98,7 @@ per individual column within the table structure.
 ## Conditional-On-Column Behavior in `afun`s
 
 If we want our table to have different *types* of content in
-differnt cells of the same row, we need an `afun` that
+different cells of the same row, we need an `afun` that
 
 1. can determine where in column space it is calculating cells for, and
 2. implements two or more behaviors which it selects between based on (1)
