@@ -181,9 +181,11 @@
 \alias{spanned_values<-,TableRow-method}
 \alias{spanned_values<-,LabelRow-method}
 \alias{obj_na_str<-,CellValue-method}
+\alias{obj_na_str<-,RowsVerticalSection-method}
 \alias{obj_na_str<-,VTableNodeInfo-method}
 \alias{obj_na_str<-,Split-method}
 \alias{obj_na_str,VTableNodeInfo-method}
+\alias{obj_na_str,RowsVerticalSection-method}
 \alias{set_format_recursive}
 \alias{set_format_recursive,TableRow-method}
 \alias{set_format_recursive,LabelRow-method}
@@ -382,6 +384,7 @@
 \alias{[,VTableTree,missing,numeric-method}
 \alias{[,VTableTree,numeric,numeric-method}
 \alias{cell_values,VTableTree-method}
+\alias{cell_values,RowsVerticalSection-method}
 \alias{cell_values,TableRow-method}
 \alias{cell_values,LabelRow-method}
 \alias{value_at,TableRow-method}
@@ -792,11 +795,15 @@ spanned_values(obj) <- value
 
 \S4method{obj_na_str}{CellValue}(obj) <- value
 
+\S4method{obj_na_str}{RowsVerticalSection}(obj) <- value
+
 \S4method{obj_na_str}{VTableNodeInfo}(obj) <- value
 
 \S4method{obj_na_str}{Split}(obj) <- value
 
 \S4method{obj_na_str}{VTableNodeInfo}(obj)
+
+\S4method{obj_na_str}{RowsVerticalSection}(obj)
 
 set_format_recursive(obj, format, na_str, override = FALSE)
 
@@ -1194,6 +1201,8 @@ obj_stat_names(obj) <- value
 
 \S4method{cell_values}{VTableTree}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 
+\S4method{cell_values}{RowsVerticalSection}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
+
 \S4method{cell_values}{TableRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
 
 \S4method{cell_values}{LabelRow}(tt, rowpath = NULL, colpath = NULL, omit_labrows = TRUE)
@@ -1270,7 +1279,7 @@ underneath analyses, which is not allowed.}
 
 \item{format}{(\code{string}, \code{function}, or \code{list})\cr format associated with this split. Formats can be declared via
 strings (\code{"xx.x"}) or function. In cases such as \code{analyze} calls, they can be character vectors or lists of
-functions. See \code{\link[formatters:list_valid_format_labels]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
+functions. See \code{\link[formatters:list_formats]{formatters::list_valid_format_labels()}} for a list of all available format strings.}
 
 \item{na_str}{(\code{string})\cr string that should be displayed when the value of \code{x} is missing. Defaults to \code{"NA"}.}
 

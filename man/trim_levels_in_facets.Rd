@@ -10,7 +10,7 @@ trim_levels_in_facets(innervar)
 \item{innervar}{(\code{character})\cr the variable(s) to trim (remove unobserved levels) independently within each facet.}
 }
 \value{
-A function suitable for use in the \code{pre} (list) argument of \code{make_split_fun}.
+A function suitable for use in the \code{post} (list) argument of \code{make_split_fun}.
 }
 \description{
 Trim levels of another variable from each facet (post-processing split step)
@@ -18,11 +18,11 @@ Trim levels of another variable from each facet (post-processing split step)
 \seealso{
 \code{\link[=make_split_fun]{make_split_fun()}}
 
-Other make_custom_split:
-\code{\link[=add_combo_facet]{add_combo_facet()}},
-\code{\link[=drop_facet_levels]{drop_facet_levels()}},
-\code{\link[=make_split_fun]{make_split_fun()}},
-\code{\link[=make_split_result]{make_split_result()}},
-\code{\link[=restrict_facets]{restrict_facets()}}
+Other make_custom_split: 
+\code{\link{add_combo_facet}()},
+\code{\link{drop_facet_levels}()},
+\code{\link{make_split_fun}()},
+\code{\link{make_split_result}()},
+\code{\link{restrict_facets}()}
 }
 \concept{make_custom_split}
