@@ -1199,6 +1199,10 @@ setMethod("obj_na_str<-", "Split", function(obj, value) {
 #' @export
 setMethod("obj_na_str", "VTableNodeInfo", function(obj) obj@na_str)
 
+#' @rdname int_methods
+#' @export
+setMethod("obj_na_str", "RowsVerticalSection", function(obj) attr(obj, "row_na_strs", exact = TRUE))
+
 #' @rdname formatters_methods
 #' @export
 setMethod("obj_na_str", "Split", function(obj) obj@split_na_str)
