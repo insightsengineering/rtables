@@ -3,6 +3,8 @@
 ### New Features
  * Added `restrict_facets` function factory for use with `make_split_fun`
  * Exportd previously internal `make_subset_expr` for use when constructing custom splitting behavior
+ * Exported previously internal `splv_extra` and `splv_extra<-` accessors for getting and setting child-specific extra arguments on `SplitValue` objects.
+ * Exported previously internal `value_expr` accessor for retrieving the subsetting expression from a `SplitValue` or `ValueWrapper` object.
 
 ## rtables 0.6.15
 

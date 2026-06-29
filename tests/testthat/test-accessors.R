@@ -628,3 +628,31 @@ test_that("top_level_section_div works", {
   top_lev_div_str <- strsplit(toString(tbl), "\n")[[1]][7]
   expect_true(check_pattern(top_lev_div_str, "=", nchar(top_lev_div_str)))
 })
+
+test_that("splv_extra getter and setter work", {
+  sv <- SplitValue("A", extr = list(foo = 1L))
+
+  expect_identical(splv_extra(sv), list(foo = 1L))
+
+  splv_extra(sv) <- list(foo = 99L, bar = "x")
+  expect_identical(splv_extra(sv), list(foo = 99L, bar = "x"))
+
+  sv_bare <- SplitValue("B")
+  expect_identical(splv_extra(sv_bare), list())
+
+  sv2 <- SplitValue(sv, extr = list(baz = TRUE))
+  expect_identical(splv_extra(sv2), list(foo = 99L, bar = "x", baz = TRUE))
+})
+
+test_that("value_expr returns subset expression or NULL", {
+  sv_no_expr <- SplitValue("X")
+  expect_null(value_expr(sv_no_expr))
+
+  expr <- expression(ARM == "A")
+  sv_with_expr <- SplitValue("A", sub_expr = expr)
+  expect_identical(value_expr(sv_with_expr), expr)
+
+  expect_null(value_expr("not a SplitValue"))
+  expect_null(value_expr(42L))
+  expect_null(value_expr(list()))
+})
