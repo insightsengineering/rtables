@@ -1843,11 +1843,32 @@ setMethod(
 #' @rdname int_methods
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
-#' @rdname int_methods
+#' Retrieve the subset expression from a split value
+#'
+#' Returns the subsetting expression associated with a `SplitValue` (or
+#' `ValueWrapper`) object, or `NULL` for objects without one.  This expression
+#' is used internally to subset data when tabulating.
+#'
+#' @param obj (`ValueWrapper` or `ANY`)\cr a split value object, typically a
+#'   `SplitValue` constructed by [SplitValue()].  Any other object returns
+#'   `NULL`.
+#'
+#' @return An `expression` object, or `NULL`.
+#'
+#' @examples
+#' sv <- SplitValue("A", sub_expr = expression(ARM == "A"))
+#' value_expr(sv)
+#'
+#' value_expr("not a SplitValue") # NULL
+#'
+#' @export
+#' @rdname value_expr
 setGeneric("value_expr", function(obj) standardGeneric("value_expr"))
-#' @rdname int_methods
+#' @exportMethod value_expr
+#' @rdname value_expr
 setMethod("value_expr", "ValueWrapper", function(obj) obj@subset_expression)
-#' @rdname int_methods
+#' @exportMethod value_expr
+#' @rdname value_expr
 setMethod("value_expr", "ANY", function(obj) NULL)
 ## no setters for now, we'll see about that.
 
@@ -1875,21 +1896,51 @@ setMethod("spl_varlabels<-", "MultiVarSplit", function(object, value) {
 ## to *all the chidlren*,
 ## while splv_extra is for *child-specific* extra arguments,
 ## associated with specific values of the split
-#' @rdname int_methods
+
+#' Access or set child-specific extra arguments on a split value
+#'
+#' `splv_extra` retrieves the named list of *child-specific* extra arguments
+#' stored on a `SplitValue` object.  These arguments are forwarded to the
+#' analysis or content function only for the facet represented by that
+#' particular split value, making them distinct from [split_exargs()] which
+#' applies to *all* children of a split.
+#'
+#' @param obj (`SplitValue`)\cr a split value object, typically produced by
+#'   [SplitValue()] or as a result of a splitting operation.
+#' @param value (`list`)\cr named list of extra arguments to store on `obj`.
+#'
+#' @return
+#' * `splv_extra` returns the current `list` of child-specific extra args.
+#' * `splv_extra<-` returns `obj` with the extra arguments replaced.
+#'
+#' @seealso [split_exargs()] for split-level (all-children) extra arguments.
+#'
+#' @examples
+#' sv <- SplitValue("A", extr = list(my_arg = 1))
+#' splv_extra(sv)
+#'
+#' splv_extra(sv) <- list(my_arg = 99)
+#' splv_extra(sv)
+#'
+#' @export
+#' @rdname splv_extra
 setGeneric("splv_extra", function(obj) standardGeneric("splv_extra"))
 
-#' @rdname int_methods
+#' @exportMethod splv_extra
+#' @rdname splv_extra
 setMethod(
   "splv_extra", "SplitValue",
   function(obj) obj@extra
 )
 
-#' @rdname int_methods
+#' @export
+#' @rdname splv_extra
 setGeneric(
   "splv_extra<-",
   function(obj, value) standardGeneric("splv_extra<-")
 )
-#' @rdname int_methods
+#' @exportMethod splv_extra<-
+#' @rdname splv_extra
 setMethod(
   "splv_extra<-", "SplitValue",
   function(obj, value) {

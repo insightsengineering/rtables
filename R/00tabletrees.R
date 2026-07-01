@@ -102,6 +102,30 @@ setClass("SplitValue",
   representation(extra = "list")
 )
 
+#' Construct a `SplitValue` object
+#'
+#' Creates a `SplitValue` object representing a single facet value produced
+#' by a splitting operation, optionally carrying a custom subsetting expression
+#' and child-specific extra arguments.
+#'
+#' @param val (`ANY`)\cr the raw value for this split facet.
+#' @param extr (`list`)\cr named list of child-specific extra arguments to
+#'   forward to the analysis or content function for this facet.
+#' @param label (`character(1)`)\cr display label. Defaults to `val`.
+#' @param sub_expr (`expression` or `NULL`)\cr optional subsetting expression.
+#'   When `NULL` (default) the expression is derived automatically from `val`
+#'   during tabulation.
+#'
+#' @return A `SplitValue` object.
+#'
+#' @seealso [splv_extra()], [value_expr()]
+#'
+#' @examples
+#' sv <- SplitValue("A", sub_expr = expression(ARM == "A"))
+#' value_expr(sv)
+#' splv_extra(sv)
+#'
+#' @export
 SplitValue <- function(val, extr = list(), label = val, sub_expr = NULL) {
   if (is(val, "SplitValue")) {
     if (length(splv_extra(val)) > 0) {

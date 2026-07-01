@@ -259,17 +259,10 @@
 \alias{value_labels,ValueWrapper-method}
 \alias{value_labels,LevelComboSplitValue-method}
 \alias{value_labels,MultiVarSplit-method}
-\alias{value_expr}
-\alias{value_expr,ValueWrapper-method}
-\alias{value_expr,ANY-method}
 \alias{spl_varlabels}
 \alias{spl_varlabels,MultiVarSplit-method}
 \alias{spl_varlabels<-}
 \alias{spl_varlabels<-,MultiVarSplit-method}
-\alias{splv_extra}
-\alias{splv_extra,SplitValue-method}
-\alias{splv_extra<-}
-\alias{splv_extra<-,SplitValue-method}
 \alias{split_exargs}
 \alias{split_exargs,Split-method}
 \alias{split_exargs<-}
@@ -948,12 +941,6 @@ value_labels(obj)
 
 \S4method{value_labels}{MultiVarSplit}(obj)
 
-value_expr(obj)
-
-\S4method{value_expr}{ValueWrapper}(obj)
-
-\S4method{value_expr}{ANY}(obj)
-
 spl_varlabels(obj)
 
 \S4method{spl_varlabels}{MultiVarSplit}(obj)
@@ -961,14 +948,6 @@ spl_varlabels(obj)
 spl_varlabels(object) <- value
 
 \S4method{spl_varlabels}{MultiVarSplit}(object) <- value
-
-splv_extra(obj)
-
-\S4method{splv_extra}{SplitValue}(obj)
-
-splv_extra(obj) <- value
-
-\S4method{splv_extra}{SplitValue}(obj) <- value
 
 split_exargs(obj)
 

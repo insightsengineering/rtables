@@ -4,9 +4,9 @@ test_that("various accessors work at the layout/table level", {
   ## coltree
   col_extra_args <- rtables:::col_extra_args
 
-  l <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by_multivar(c("AGE", "BMRKR1")) %>%
+  l <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by_multivar(c("AGE", "BMRKR1")) |>
     analyze_colvars(list(mean, sd))
 
   pred <- coltree(l, DM)
@@ -227,31 +227,31 @@ test_that("header sep setting works", {
 # section_div tests ------------------------------------------------------------
 test_structure_with_a_getter <- function(tbl, getter, val_per_lev) {
   # Main table obj
-  expect_identical(tbl %>% getter(), val_per_lev$global)
+  expect_identical(tbl |> getter(), val_per_lev$global)
   # Its labelrow (could be also not visible)
-  expect_identical(tt_labelrow(tbl) %>% getter(), val_per_lev$global_labelrow)
+  expect_identical(tt_labelrow(tbl) |> getter(), val_per_lev$global_labelrow)
 
   # First split row + its labels
   split1 <- tree_children(tbl)[[1]]
-  expect_identical(split1 %>% getter(), val_per_lev$split)
-  expect_identical(tt_labelrow(split1) %>% getter(), val_per_lev$split_labelrow)
+  expect_identical(split1 |> getter(), val_per_lev$split)
+  expect_identical(tt_labelrow(split1) |> getter(), val_per_lev$split_labelrow)
 
   # Content table checks if there
   content_elem_tbl <- content_table(split1)
   if (nrow(content_elem_tbl) > 0) {
-    expect_identical(content_elem_tbl %>% getter(), val_per_lev$content)
-    expect_identical(tt_labelrow(content_elem_tbl) %>% getter(), val_per_lev$content_labelrow)
-    expect_identical(tree_children(content_elem_tbl)[[1]] %>% getter(), val_per_lev$contentrow)
+    expect_identical(content_elem_tbl |> getter(), val_per_lev$content)
+    expect_identical(tt_labelrow(content_elem_tbl) |> getter(), val_per_lev$content_labelrow)
+    expect_identical(tree_children(content_elem_tbl)[[1]] |> getter(), val_per_lev$contentrow)
   }
 
   ## The elementary table has it?
   leaves_elementary_tbl <- tree_children(split1)[[1]]
-  expect_identical(leaves_elementary_tbl %>% getter(), val_per_lev$elem_tbl)
-  expect_identical(tt_labelrow(leaves_elementary_tbl) %>% getter(), val_per_lev$elem_tbl_labelrow)
+  expect_identical(leaves_elementary_tbl |> getter(), val_per_lev$elem_tbl)
+  expect_identical(tt_labelrow(leaves_elementary_tbl) |> getter(), val_per_lev$elem_tbl_labelrow)
 
   # Data rows has it?
   for (i in seq_len(nrow(leaves_elementary_tbl))) {
-    expect_identical(tree_children(leaves_elementary_tbl)[[i]] %>% getter(), val_per_lev$datarow[i])
+    expect_identical(tree_children(leaves_elementary_tbl)[[i]] |> getter(), val_per_lev$datarow[i])
   }
 }
 
@@ -298,9 +298,9 @@ test_that("section_div getter and setter works", {
   )
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
-  tbl <- basic_table() %>%
-    split_rows_by("cat", section_div = "~") %>%
-    analyze("value", afun = fast_afun, section_div = " ") %>%
+  tbl <- basic_table() |>
+    split_rows_by("cat", section_div = "~") |>
+    analyze("value", afun = fast_afun, section_div = " ") |>
     build_table(df)
 
   sdf <- section_div_info(tbl)
@@ -330,10 +330,10 @@ test_that("section_div getter and setter works", {
     "Path appears invalid"
   )
 
-  tbl_content <- basic_table() %>%
-    split_rows_by("cat", section_div = "~") %>%
-    summarize_row_groups() %>% # This makes them not visible
-    analyze("value", afun = fast_afun, section_div = " ") %>%
+  tbl_content <- basic_table() |>
+    split_rows_by("cat", section_div = "~") |>
+    summarize_row_groups() |> # This makes them not visible
+    analyze("value", afun = fast_afun, section_div = " ") |>
     build_table(df)
 
   sect_div_info_ok(tbl_content)
@@ -531,10 +531,10 @@ test_that("section_div getter and setter works", {
 test_that("the split only setter works", {
   fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
-  tbla <- tbl <- basic_table() %>%
-    split_rows_by("ARM", section_div = "=") %>%
-    split_rows_by("STRATA1", section_div = "-") %>%
-    analyze("BMRKR1") %>%
+  tbla <- tbl <- basic_table() |>
+    split_rows_by("ARM", section_div = "=") |>
+    split_rows_by("STRATA1", section_div = "-") |>
+    analyze("BMRKR1") |>
     build_table(DM)
   sect_div_info_ok(tbl)
   replace_sec_div <- section_div(tbl)
@@ -570,13 +570,13 @@ test_that("the split only setter works", {
   expect_identical(toString(tbl), toString(tbla))
 
   # multiple analyze
-  tbl <- basic_table(header_section_div = " ") %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", split_fun = drop_split_levels) %>%
-    analyze("AGE") %>%
-    split_rows_by("RACE", split_fun = drop_split_levels) %>%
-    split_rows_by("SEX", split_fun = drop_split_levels) %>%
-    analyze("AGE") %>%
+  tbl <- basic_table(header_section_div = " ") |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX", split_fun = drop_split_levels) |>
+    analyze("AGE") |>
+    split_rows_by("RACE", split_fun = drop_split_levels) |>
+    split_rows_by("SEX", split_fun = drop_split_levels) |>
+    analyze("AGE") |>
     build_table(DM)
   tbl2 <- tbl
   sect_div_info_ok(tbl)
@@ -596,14 +596,14 @@ test_that("the split only setter works", {
 
 
 test_that("header_section_div works", {
-  lyt <- basic_table(header_section_div = "+") %>%
-    split_rows_by("STRATA1") %>%
+  lyt <- basic_table(header_section_div = "+") |>
+    split_rows_by("STRATA1") |>
     analyze("BMRKR1")
   expect_identical(header_section_div(lyt), "+")
   header_section_div(lyt) <- "<"
   expect_identical(header_section_div(lyt), "<")
 
-  tbl <- lyt %>% build_table(DM)
+  tbl <- lyt |> build_table(DM)
   expect_identical(header_section_div(tbl), "<")
   header_section_div(tbl) <- "+"
   expect_identical(header_section_div(tbl), "+")
@@ -613,12 +613,12 @@ test_that("header_section_div works", {
 })
 
 test_that("top_level_section_div works", {
-  lyt <- basic_table(top_level_section_div = "a") %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX", split_fun = drop_split_levels) %>%
-    analyze("AGE") %>%
-    split_rows_by("RACE", split_fun = drop_split_levels) %>%
-    split_rows_by("SEX", split_fun = drop_split_levels) %>%
+  lyt <- basic_table(top_level_section_div = "a") |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX", split_fun = drop_split_levels) |>
+    analyze("AGE") |>
+    split_rows_by("RACE", split_fun = drop_split_levels) |>
+    split_rows_by("SEX", split_fun = drop_split_levels) |>
     analyze("AGE")
   tbl <- build_table(lyt, DM)
   expect_identical(top_level_section_div(lyt), "a")
@@ -627,4 +627,32 @@ test_that("top_level_section_div works", {
   tbl <- build_table(lyt, DM)
   top_lev_div_str <- strsplit(toString(tbl), "\n")[[1]][7]
   expect_true(check_pattern(top_lev_div_str, "=", nchar(top_lev_div_str)))
+})
+
+test_that("splv_extra getter and setter work", {
+  sv <- SplitValue("A", extr = list(foo = 1L))
+
+  expect_identical(splv_extra(sv), list(foo = 1L))
+
+  splv_extra(sv) <- list(foo = 99L, bar = "x")
+  expect_identical(splv_extra(sv), list(foo = 99L, bar = "x"))
+
+  sv_bare <- SplitValue("B")
+  expect_identical(splv_extra(sv_bare), list())
+
+  sv2 <- SplitValue(sv, extr = list(baz = TRUE))
+  expect_identical(splv_extra(sv2), list(foo = 99L, bar = "x", baz = TRUE))
+})
+
+test_that("value_expr returns subset expression or NULL", {
+  sv_no_expr <- SplitValue("X")
+  expect_null(value_expr(sv_no_expr))
+
+  expr <- expression(ARM == "A")
+  sv_with_expr <- SplitValue("A", sub_expr = expr)
+  expect_identical(value_expr(sv_with_expr), expr)
+
+  expect_null(value_expr("not a SplitValue"))
+  expect_null(value_expr(42L))
+  expect_null(value_expr(list()))
 })
