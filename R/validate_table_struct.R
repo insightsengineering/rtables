@@ -147,7 +147,7 @@ assert_valid_table <- function(tt, warn_only = FALSE) {
     stop(msg)
   }
   warning(msg)
-  return(FALSE)
+  FALSE
 }
 
 #' Sanitize degenerate table structures
