@@ -376,6 +376,18 @@ Functions that are useful to be used with the `analyze*` functions.
 - [`make_subset_expr()`](https://insightsengineering.github.io/rtables/reference/make_subset_expr.md)
   : Make subset expression for a split-value pair
 
+- [`SplitValue()`](https://insightsengineering.github.io/rtables/reference/SplitValue.md)
+  :
+
+  Construct a `SplitValue` object
+
+- [`splv_extra()`](https://insightsengineering.github.io/rtables/reference/splv_extra.md)
+  [`` `splv_extra<-`() ``](https://insightsengineering.github.io/rtables/reference/splv_extra.md)
+  : Access or set child-specific extra arguments on a split value
+
+- [`value_expr()`](https://insightsengineering.github.io/rtables/reference/value_expr.md)
+  : Retrieve the subset expression from a split value
+
 ## Cell Formatting related Functions
 
 cell formatting.

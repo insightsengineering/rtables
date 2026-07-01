@@ -41,6 +41,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/EmptyColInfo.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/ManualSplit.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/MultiVarSplit.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/reference/SplitValue.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/VarLevelSplit.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/Viewer.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/add_colcounts.html</loc></url>
@@ -140,6 +141,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/split_funcs.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/split_rows_by.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/split_rows_by_multivar.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/reference/splv_extra.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/subset_cols.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/summarize_row_groups.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/tabclasses.html</loc></url>
@@ -157,6 +159,7 @@
 <url><loc>https://insightsengineering.github.io/rtables/reference/ttap.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/update_ref_indexing.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/validate_table_struct.html</loc></url>
+<url><loc>https://insightsengineering.github.io/rtables/reference/value_expr.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/value_formats.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/varcuts.html</loc></url>
 <url><loc>https://insightsengineering.github.io/rtables/reference/vil.html</loc></url>

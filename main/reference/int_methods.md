@@ -744,14 +744,6 @@ value_labels(obj)
 # S4 method for class 'MultiVarSplit'
 value_labels(obj)
 
-value_expr(obj)
-
-# S4 method for class 'ValueWrapper'
-value_expr(obj)
-
-# S4 method for class 'ANY'
-value_expr(obj)
-
 spl_varlabels(obj)
 
 # S4 method for class 'MultiVarSplit'
@@ -761,16 +753,6 @@ spl_varlabels(object) <- value
 
 # S4 method for class 'MultiVarSplit'
 spl_varlabels(object) <- value
-
-splv_extra(obj)
-
-# S4 method for class 'SplitValue'
-splv_extra(obj)
-
-splv_extra(obj) <- value
-
-# S4 method for class 'SplitValue'
-splv_extra(obj) <- value
 
 split_exargs(obj)
 

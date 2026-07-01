@@ -1,12 +1,17 @@
 # Changelog
 
-## rtables 0.6.16.9001
+## rtables 0.6.16.9002
 
 ### New Features
 
 - Added `restrict_facets` function factory for use with `make_split_fun`
-- Exportd previously internal `make_subset_expr` for use when
+- Exported previously internal `make_subset_expr` for use when
   constructing custom splitting behavior
+- Exported previously internal `splv_extra` and `splv_extra<-` accessors
+  for getting and setting child-specific extra arguments on `SplitValue`
+  objects.
+- Exported previously internal `value_expr` accessor for retrieving the
+  subsetting expression from a `SplitValue` or `ValueWrapper` object.
 
 ## rtables 0.6.15
 
@@ -872,7 +877,7 @@ backwards compatibility layer with the `rtable`, `rcell`, `rrow`,
 `rheader`, and `rtabulate` family of functions. However the table data
 structure and main tabulation framework have changed. We provide
 extensive documentation in the manuals
-[`help(package = "rtables")`](https://insightsengineering.github.io/rtables/latest-release/reference)
+[`help(package = "rtables")`](https://insightsengineering.github.io/rtables/latest-tag/reference)
 and vignettes `vignette(package = "rtables")` of the package.
 
 The changes to `rtables` have been undertaken to better meet the
