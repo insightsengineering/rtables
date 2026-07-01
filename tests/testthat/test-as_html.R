@@ -24,8 +24,8 @@ test_that("as_html Viewer with newline test", {
   )
   varlabs <- c("Mean Age", "SD\nLine Break!!! \nAge")
 
-  lyt <- basic_table() %>%
-    split_cols_by_multivar(c("AGE", "AGE"), varlabels = varlabs) %>%
+  lyt <- basic_table() |>
+    split_cols_by_multivar(c("AGE", "AGE"), varlabels = varlabs) |>
     analyze_colvars(afun = colfuns)
 
   tbl_wrapping <- build_table(lyt, DM)
@@ -89,9 +89,9 @@ test_that("as_html header line works", {
 
 # https://github.com/insightsengineering/rtables/issues/872
 test_that("as_html indentation is translated to rows with linebreaks", {
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
     analyze("AGE", afun = function(x) {
       mn <- round(mean(x), 2)
       if (!is.nan(mn) && mn > mean(DM$AGE)) {
@@ -122,14 +122,14 @@ test_that("as_html expands or not newlines depending on expand_newlines", {
   require(dplyr, quietly = TRUE)
 
   # Table with both col/row names with newlines
-  iris_mod <- iris %>%
-    mutate(Species2 = as.factor(paste0("General", "\n ", as.character(Species)))) %>%
+  iris_mod <- iris |>
+    mutate(Species2 = as.factor(paste0("General", "\n ", as.character(Species)))) |>
     mutate(Species = as.factor(sample(paste0("Petal", "\n ", as.character(Species)))))
 
   # Also the statistic has a newline
-  lyt <- basic_table() %>%
-    split_cols_by("Species") %>%
-    split_rows_by("Species2") %>%
+  lyt <- basic_table() |>
+    split_cols_by("Species") |>
+    split_rows_by("Species2") |>
     analyze("Sepal.Length", afun = function(x) {
       list(
         "mean \n (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),

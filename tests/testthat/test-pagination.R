@@ -2,8 +2,8 @@ context("Pagination")
 
 
 test_that("Page by splitting works", {
-  lyt <- basic_table(title = "big title") %>%
-    split_rows_by("SEX", page_by = TRUE) %>%
+  lyt <- basic_table(title = "big title") |>
+    split_rows_by("SEX", page_by = TRUE) |>
     analyze("AGE")
 
   tt <- build_table(lyt, DM)
@@ -24,9 +24,9 @@ test_that("Page by splitting works", {
 
   expect_error(
     {
-      basic_table(title = "big title") %>%
-        analyze("AGE") %>%
-        split_rows_by("SEX", page_by = TRUE) %>%
+      basic_table(title = "big title") |>
+        analyze("AGE") |>
+        split_rows_by("SEX", page_by = TRUE) |>
         analyze("AGE")
     },
     "page_by splits cannot have top-level siblings"
@@ -34,9 +34,9 @@ test_that("Page by splitting works", {
 
   expect_error(
     {
-      basic_table() %>%
-        split_rows_by("SEX") %>%
-        split_rows_by("ARM", page_by = TRUE) %>%
+      basic_table() |>
+        split_rows_by("SEX") |>
+        split_rows_by("ARM", page_by = TRUE) |>
         analyze("AGE")
     },
     "page_by splits cannot be nested within non-page_by splits"
@@ -47,12 +47,12 @@ test_that("Page by splitting works", {
     subtitles = "subtitle",
     main_footer = "main footer",
     prov_footer = "provenance footer"
-  ) %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-    split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") %>%
-    split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
-    summarize_row_groups() %>%
+  ) |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+    split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") |>
+    split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
+    summarize_row_groups() |>
     analyze("AGE", afun = function(x, ...) {
       in_rows(
         "mean (sd)" = rcell(
@@ -76,36 +76,36 @@ test_that("Page by splitting works", {
 
 test_that("export_as_txt prints split level header correctly when using page_by", {
   # single level in page_by split
-  tbl <- basic_table() %>%
+  tbl <- basic_table() |>
     split_rows_by("PARAMCD",
       labels_var = "PARAMCD", split_label = "aaa",
       label_pos = "topleft",
       split_fun = drop_split_levels, page_by = TRUE
-    ) %>%
+    ) |>
     split_rows_by("AVISIT",
       label_pos = "topleft",
       split_fun = keep_split_levels("SCREENING")
-    ) %>%
-    analyze("AVAL") %>%
+    ) |>
+    analyze("AVAL") |>
     build_table(ex_adlb[ex_adlb$PARAMCD == "ALT", ])
-  tbl_txt <- tbl %>% export_as_txt(lpp = 100)
+  tbl_txt <- tbl |> export_as_txt(lpp = 100)
 
   expect_true(grepl("^\naaa: ALT", tbl_txt))
 
   # multiple levels in page_by split
-  tbl <- basic_table() %>%
+  tbl <- basic_table() |>
     split_rows_by("PARAMCD",
       labels_var = "PARAMCD", split_label = "aaa",
       label_pos = "topleft",
       split_fun = drop_split_levels, page_by = TRUE
-    ) %>%
+    ) |>
     split_rows_by("AVISIT",
       label_pos = "topleft",
       split_fun = keep_split_levels("SCREENING")
-    ) %>%
-    analyze("AVAL") %>%
+    ) |>
+    analyze("AVAL") |>
     build_table(ex_adlb[ex_adlb$PARAMCD != "IGA", ])
-  tbl_txt <- tbl %>% export_as_txt(lpp = 100)
+  tbl_txt <- tbl |> export_as_txt(lpp = 100)
 
   expect_true(grepl("^\naaa: ALT", tbl_txt))
   expect_true(grepl("\naaa: CRP", tbl_txt))
@@ -116,8 +116,8 @@ test_that("vertical and horizontal pagination work", {
     arm = factor(c("a", "b", "c", "d", "e", "f")),
     var1 = 6
   )
-  simple_lyt <- basic_table() %>%
-    split_cols_by("arm") %>%
+  simple_lyt <- basic_table() |>
+    split_cols_by("arm") |>
     analyze("var1", function(x, ...) {
       in_rows(
         .list = replicate(30, list(1234)),
@@ -244,7 +244,7 @@ test_that("vertical and horizontal pagination work", {
 
 
 
-  lyt2 <- basic_table() %>%
+  lyt2 <- basic_table() |>
     analyze(
       "mpg",
       function(x) in_rows(.list = setNames(as.list(x), as.character(seq_along(x))))
@@ -411,9 +411,9 @@ test_that("cell and column wrapping works in pagination", {
 })
 
 test_that("Pagination works with section dividers", {
-  lyt <- basic_table(title = "big title") %>%
-    split_rows_by("SEX", section_div = "~") %>%
-    split_rows_by("ARM") %>%
+  lyt <- basic_table(title = "big title") |>
+    split_rows_by("SEX", section_div = "~") |>
+    split_rows_by("ARM") |>
     analyze("AGE")
 
   tt <- build_table(lyt, DM)
@@ -445,7 +445,7 @@ test_that("Pagination works with section dividers", {
 })
 
 test_that("Pagination works with non-default min_siblings", {
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     analyze("RACE")
 
   tt <- build_table(lyt, DM)
@@ -463,8 +463,8 @@ test_that("Pagination works with non-default min_siblings", {
 })
 
 test_that("Pagination works with wrapped titles/footers", {
-  lyt <- basic_table() %>%
-    split_cols_by("SEX") %>%
+  lyt <- basic_table() |>
+    split_cols_by("SEX") |>
     analyze("RACE")
 
   tt <- build_table(lyt, DM)
@@ -513,12 +513,12 @@ test_that("Pagination works with referential footnotes", {
     subtitles = "subtitle",
     main_footer = "main footer",
     prov_footer = "provenance footer"
-  ) %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-    split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") %>%
-    split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
-    summarize_row_groups() %>%
+  ) |>
+    split_cols_by("ARM") |>
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+    split_rows_by("STRATA1", split_fun = keep_split_levels(c("A", "B")), page_by = TRUE, page_prefix = "Stratum") |>
+    split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
+    summarize_row_groups() |>
     analyze("AGE", afun = function(x, ...) {
       in_rows(
         "mean (sd)" = rcell(

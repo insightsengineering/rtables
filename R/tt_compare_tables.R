@@ -17,17 +17,17 @@
 #' adsl$AGE[adsl$SEX == "UNDIFFERENTIATED"] <- 0
 #' adsl$BMRKR1 <- 0
 #'
-#' tbl_to_prune <- basic_table() %>%
-#'   analyze("BMRKR1") %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX") %>%
-#'   summarize_row_groups() %>%
-#'   split_rows_by("STRATA1") %>%
-#'   summarize_row_groups() %>%
-#'   analyze("AGE") %>%
+#' tbl_to_prune <- basic_table() |>
+#'   analyze("BMRKR1") |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX") |>
+#'   summarize_row_groups() |>
+#'   split_rows_by("STRATA1") |>
+#'   summarize_row_groups() |>
+#'   analyze("AGE") |>
 #'   build_table(adsl)
 #'
-#' tbl_to_prune %>% prune_table(all_zero_or_na)
+#' tbl_to_prune |> prune_table(all_zero_or_na)
 #'
 #' @rdname trim_prune_funs
 #' @export
@@ -42,7 +42,7 @@ all_zero_or_na <- function(tr) {
 #' @details `all_zero` returns `TRUE` for any non-`LabelRow` which contains only (non-missing) zero values.
 #'
 #' @examples
-#' tbl_to_prune %>% prune_table(all_zero)
+#' tbl_to_prune |> prune_table(all_zero)
 #'
 #' @rdname trim_prune_funs
 #' @export
@@ -78,19 +78,19 @@ all_zero <- function(tr) {
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 #'
-#' tbl_to_trim <- basic_table() %>%
-#'   analyze("BMRKR1") %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX") %>%
-#'   summarize_row_groups() %>%
-#'   split_rows_by("STRATA1") %>%
-#'   summarize_row_groups() %>%
-#'   analyze("AGE") %>%
+#' tbl_to_trim <- basic_table() |>
+#'   analyze("BMRKR1") |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX") |>
+#'   summarize_row_groups() |>
+#'   split_rows_by("STRATA1") |>
+#'   summarize_row_groups() |>
+#'   analyze("AGE") |>
 #'   build_table(adsl)
 #'
-#' tbl_to_trim %>% trim_rows()
+#' tbl_to_trim |> trim_rows()
 #'
-#' tbl_to_trim %>% trim_rows(all_zero)
+#' tbl_to_trim |> trim_rows(all_zero)
 #'
 #' @export
 trim_rows <- function(tt, criteria = all_zero_or_na) {
@@ -118,7 +118,7 @@ trim_rows <- function(tt, criteria = all_zero_or_na) {
 #'     (e.g. because a factor variable was used in [split_rows_by()] but not all levels were present in the data).
 #'
 #' @examples
-#' tbl_to_prune %>% prune_table(content_all_zeros_nas)
+#' tbl_to_prune |> prune_table(content_all_zeros_nas)
 #'
 #' @rdname trim_prune_funs
 #' @export
@@ -141,7 +141,7 @@ content_all_zeros_nas <- function(tt, criteria = all_zero_or_na) {
 #' children.
 #'
 #' @examples
-#' tbl_to_prune %>% prune_table(prune_empty_level)
+#' tbl_to_prune |> prune_table(prune_empty_level)
 #'
 #' @rdname trim_prune_funs
 #' @export
@@ -161,7 +161,7 @@ prune_empty_level <- function(tt) {
 #'   only in the case of all non-missing zero values.
 #'
 #' @examples
-#' tbl_to_prune %>% prune_table(prune_zeros_only)
+#' tbl_to_prune |> prune_table(prune_zeros_only)
 #'
 #' @rdname trim_prune_funs
 #' @export
@@ -188,7 +188,7 @@ prune_zeros_only <- function(tt) {
 #'
 #' @examples
 #' min_prune <- low_obs_pruner(70, "sum")
-#' tbl_to_prune %>% prune_table(min_prune)
+#' tbl_to_prune |> prune_table(min_prune)
 #'
 #' @rdname trim_prune_funs
 #' @export
@@ -228,16 +228,16 @@ low_obs_pruner <- function(min, type = c("sum", "mean")) {
 #' adsl <- ex_adsl
 #' levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 #'
-#' tbl_to_prune <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX") %>%
-#'   summarize_row_groups() %>%
-#'   split_rows_by("STRATA1") %>%
-#'   summarize_row_groups() %>%
-#'   analyze("AGE") %>%
+#' tbl_to_prune <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX") |>
+#'   summarize_row_groups() |>
+#'   split_rows_by("STRATA1") |>
+#'   summarize_row_groups() |>
+#'   analyze("AGE") |>
 #'   build_table(adsl)
 #'
-#' tbl_to_prune %>% prune_table()
+#' tbl_to_prune |> prune_table()
 #'
 #' @export
 prune_table <- function(tt,

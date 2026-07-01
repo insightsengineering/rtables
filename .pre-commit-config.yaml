@@ -11,7 +11,6 @@ repos:
       - id: roxygenize
         additional_dependencies:
           - insightsengineering/formatters
-          - magrittr
           - methods
           - checkmate
           - htmltools

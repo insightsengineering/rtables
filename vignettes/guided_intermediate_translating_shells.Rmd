@@ -76,8 +76,8 @@ knitr::opts_chunk$set(comment = "")
 
 
 ```{r, echo = FALSE, result = "asis"}
-adsl <- ex_adsl %>%
-  filter(SEX %in% c("M", "F") & RACE %in% c("ASIAN", "BLACK OR AFRICAN AMERICAN", "WHITE")) %>%
+adsl <- ex_adsl |>
+  filter(SEX %in% c("M", "F") & RACE %in% c("ASIAN", "BLACK OR AFRICAN AMERICAN", "WHITE")) |>
   mutate(
     BMEASIFL = factor(as.character(BMEASIFL),
       levels = c("Y", "N"),
@@ -97,24 +97,24 @@ adsl <- ex_adsl %>%
 lyt <- basic_table(
   title = "Subject Response by Race and Sex; Treated Subjects",
   show_colcounts = TRUE
-) %>%
-  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) %>%
-  split_cols_by("ARM", split_fun = keep_split_levels(only = c("A: Drug X", "B: Placebo"))) %>%
-  analyze("BMEASIFL", afun = counts_wpcts, var_labels = "All Patients", show_labels = "visible") %>%
+) |>
+  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) |>
+  split_cols_by("ARM", split_fun = keep_split_levels(only = c("A: Drug X", "B: Placebo"))) |>
+  analyze("BMEASIFL", afun = counts_wpcts, var_labels = "All Patients", show_labels = "visible") |>
   split_rows_by(
     var = "RACE",
     label_pos = "topleft",
     split_fun = keep_split_levels(only = c("Asian", "Black", "White"))
-  ) %>%
+  ) |>
   split_rows_by(
     var = "SEX",
     label_pos = "topleft",
     split_fun = keep_split_levels(only = c("Male", "Female"))
-  ) %>%
+  ) |>
   summarize_row_groups(
     var = "SEX",
     format = "xx"
-  ) %>%
+  ) |>
   analyze(
     vars = "BMEASIFL",
     afun = counts_wpcts
@@ -191,7 +191,7 @@ the outermost faceting first:
 
 ```{r}
 lyt_cols <- basic_table() |>
-  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) %>%
+  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) |>
   split_cols_by("ARM", split_fun = keep_split_levels(only = c("A: Drug X", "B: Placebo")))
 
 build_table(lyt_cols, adsl)
@@ -203,7 +203,7 @@ the relevant `split_cols_by` call:
 
 ```{r}
 lyt_cols <- basic_table() |>
-  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) %>%
+  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) |>
   split_cols_by("ARM",
     split_fun = keep_split_levels(only = c("A: Drug X", "B: Placebo")),
     show_colcounts = TRUE

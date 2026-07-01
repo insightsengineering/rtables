@@ -3,8 +3,8 @@ context("value formatting")
 test_that("sprintf_format works correctly", {
   myfun <- sprintf_format("hi there %1.4f")
 
-  lyt <- basic_table() %>%
-    split_cols_by("Species") %>%
+  lyt <- basic_table() |>
+    split_cols_by("Species") |>
     analyze("Sepal.Width", afun = mean, format = myfun)
 
   tbl <- build_table(lyt, iris)
@@ -120,10 +120,10 @@ test_that("format_na_str functionality works in get_formatted_cells (i.e. printi
     .format_na_strs = c(mean = "Ridiculous")
   )
 
-  l <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
-    summarize_row_groups(label_fstr = "%s (n)") %>%
+  l <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("COUNTRY", split_fun = drop_split_levels) |>
+    summarize_row_groups(label_fstr = "%s (n)") |>
     analyze("AGE", afun = a_summary3, format = "xx.xx")
 
   tbl <- suppressWarnings(build_table(l, DM2))
@@ -139,8 +139,8 @@ test_that("format and na_str inheritance", {
   require(dplyr, quietly = TRUE)
 
   # Test data
-  DM2 <- DM %>%
-    filter(ARM != levels(DM$ARM)[3]) %>%
+  DM2 <- DM |>
+    filter(ARM != levels(DM$ARM)[3]) |>
     mutate(ARM = as.factor(as.character(ARM)))
   DM2$AGE[1] <- NA # Adding one NA
 
@@ -158,9 +158,9 @@ test_that("format and na_str inheritance", {
   }
 
   # Main builder
-  tbl <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    analyze("AGE", weird_afun, format = "xx.xx", na_str = "lol") %>%
+  tbl <- basic_table() |>
+    split_cols_by("ARM") |>
+    analyze("AGE", weird_afun, format = "xx.xx", na_str = "lol") |>
     build_table(DM2)
 
   # Get the ASCII table
@@ -170,17 +170,17 @@ test_that("format and na_str inheritance", {
   require(dplyr, quietly = TRUE)
 
   # Expected data-set is built with dplyr
-  expected <- DM2 %>%
-    dplyr::group_by(ARM) %>%
+  expected <- DM2 |>
+    dplyr::group_by(ARM) |>
     summarise(
       m_age = format_value(mean(AGE, na.rm = TRUE), format = "xx.x"),
       me_age = format_value(median(AGE, na.rm = TRUE), format = "xx.xx"),
       m_range = paste(sapply(range(AGE, na.rm = TRUE), format_value, format = "xx.x"), collapse = " - ")
-    ) %>%
-    mutate(b = "lol", c = "what", d = "bah - 2.0", e = "lol - 2.0") %>%
-    select(m_age, me_age, b, c, m_range, d, e) %>%
-    mutate_all(as.character) %>%
-    t() %>%
+    ) |>
+    mutate(b = "lol", c = "what", d = "bah - 2.0", e = "lol - 2.0") |>
+    select(m_age, me_age, b, c, m_range, d, e) |>
+    mutate_all(as.character) |>
+    t() |>
     as.matrix()
   dimnames(expected) <- NULL # Fixing attributes
 

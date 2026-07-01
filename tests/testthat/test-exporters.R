@@ -1,8 +1,8 @@
 context("Exporting to txt, pdf, rtf, and docx")
 
 test_that("export_as_txt works with and without pagination", {
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
     analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -210,8 +210,8 @@ test_that("export_as_pdf works", {
 
 # test_that("exporting pdfs gives the correct values", {
 #     if (check_pdf) {
-#         lyt <- basic_table(title = " ") %>%
-#             split_rows_by("SEX", page_by = TRUE) %>%
+#         lyt <- basic_table(title = " ") |>
+#             split_rows_by("SEX", page_by = TRUE) |>
 #             analyze("AGE")
 #
 #         # Building the table
@@ -250,9 +250,9 @@ test_that("exporting pdf does the inset", {
 
 ## https://github.com/insightsengineering/rtables/issues/308
 test_that("path_enriched_df works for tables with a column that has all length 1 elements", {
-  my_table <- basic_table() %>%
-    split_rows_by("Species") %>%
-    analyze("Petal.Length") %>%
+  my_table <- basic_table() |>
+    split_rows_by("Species") |>
+    analyze("Petal.Length") |>
     build_table(df = iris)
   mydf <- path_enriched_df(my_table)
   expect_identical(dim(mydf), c(3L, 2L))
