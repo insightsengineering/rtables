@@ -19,9 +19,9 @@ This function will \emph{only} add an overall column at the \emph{top} level of 
 See \code{\link[=add_overall_level]{add_overall_level()}} for the recommended way to add overall columns more generally within existing splits.
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  add_overall_col("All Patients") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  add_overall_col("All Patients") |>
   analyze("AGE")
 lyt
 

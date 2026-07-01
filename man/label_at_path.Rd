@@ -33,8 +33,8 @@ ending in \code{"@content"} will not exhibit the behavior you want, and are thus
 determining the full paths to content rows.
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) \%>\%
+lyt <- basic_table() |>
+  split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

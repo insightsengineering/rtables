@@ -22,8 +22,8 @@ The number of rows (\code{nrow}), columns (\code{ncol}), or both (\code{dim}) of
 Table dimensions
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("SEX", "AGE"))
 
 tbl <- build_table(lyt, ex_adsl)

@@ -28,9 +28,9 @@ rm_all_colcounts(obj)
 Set all column counts at all levels of nesting to NA
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_cols_by("SEX") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
   analyze("AGE")
 tbl <- build_table(lyt, ex_adsl)
 

@@ -35,12 +35,12 @@ uneven_splfun <- function(df, spl, vals = NULL, labels = NULL, trim = FALSE) {
   ret
 }
 
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
     varlabels = c("N", "E", "BMR1"),
     split_fun = uneven_splfun
-  ) \%>\%
+  ) |>
   analyze_colvars(list(
     USUBJID = function(x, ...) length(unique(x)),
     AESEQ = max,

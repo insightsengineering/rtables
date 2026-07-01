@@ -97,8 +97,8 @@ data before they are called or their outputs.
 }
 
 \examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("AGE", "BMRKR2"))
 
 tbl <- build_table(lyt, ex_adsl)
@@ -106,11 +106,11 @@ tbl
 
 # Let's look at the splits in more detail
 
-lyt1 <- basic_table() \%>\% split_cols_by("ARM")
+lyt1 <- basic_table() |> split_cols_by("ARM")
 lyt1
 
 # add an analysis (summary)
-lyt2 <- lyt1 \%>\%
+lyt2 <- lyt1 |>
   analyze(c("AGE", "COUNTRY"),
     afun = list_wrap_x(summary),
     format = "xx.xx"
@@ -124,13 +124,13 @@ tbl2
 # By default sequentially adding layouts results in nesting
 library(dplyr)
 
-DM_MF <- DM \%>\%
-  filter(SEX \%in\% c("M", "F")) \%>\%
+DM_MF <- DM |>
+  filter(SEX \%in\% c("M", "F")) |>
   mutate(SEX = droplevels(SEX))
 
-lyt3 <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_cols_by("SEX") \%>\%
+lyt3 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
   analyze(c("AGE", "COUNTRY"),
     afun = list_wrap_x(summary),
     format = "xx.xx"
@@ -141,21 +141,21 @@ tbl3 <- build_table(lyt3, DM_MF)
 tbl3
 
 # nested=TRUE vs not
-lyt4 <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
-  split_rows_by("RACE", split_fun = drop_split_levels) \%>\%
+lyt4 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  split_rows_by("RACE", split_fun = drop_split_levels) |>
   analyze("AGE")
 lyt4
 
 tbl4 <- build_table(lyt4, DM)
 tbl4
 
-lyt5 <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
-  analyze("AGE") \%>\%
-  split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) \%>\%
+lyt5 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  analyze("AGE") |>
+  split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) |>
   analyze("AGE")
 lyt5
 
