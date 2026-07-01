@@ -1051,8 +1051,9 @@ summary statistics.
 surv_tbl <- as.data.frame(
   summary(survfit(Surv(AVAL, CNSR == 0) ~ ACTARM, data = adtte, conf.type = "log-log"))$table
 ) |>
+  tibble::rownames_to_column("ACTARM") |>
   dplyr::mutate(
-    ACTARM = factor(gsub("ACTARM=", "", row.names(.)), levels = levels(adtte$ACTARM)),
+    ACTARM = factor(gsub("ACTARM=", "", ACTARM), levels = levels(adtte$ACTARM)),
     ind = FALSE
   )
 
