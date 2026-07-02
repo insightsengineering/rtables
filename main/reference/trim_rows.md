@@ -53,17 +53,17 @@ machinery instead.
 adsl <- ex_adsl
 levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 
-tbl_to_trim <- basic_table() %>%
-  analyze("BMRKR1") %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
-  summarize_row_groups() %>%
-  analyze("AGE") %>%
+tbl_to_trim <- basic_table() |>
+  analyze("BMRKR1") |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
+  summarize_row_groups() |>
+  analyze("AGE") |>
   build_table(adsl)
 
-tbl_to_trim %>% trim_rows()
+tbl_to_trim |> trim_rows()
 #>                    A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————————————
 #> Mean                  5.97         5.70           5.62     
@@ -94,7 +94,7 @@ tbl_to_trim %>% trim_rows()
 #>   C                 1 (0.7%)     0 (0.0%)       1 (0.8%)   
 #>     Mean             28.00          NA           46.00     
 
-tbl_to_trim %>% trim_rows(all_zero)
+tbl_to_trim |> trim_rows(all_zero)
 #>                    A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————————————
 #> Mean                  5.97         5.70           5.62     

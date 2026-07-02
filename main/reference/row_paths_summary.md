@@ -24,11 +24,11 @@ A data frame summarizing the row- or column-structure of `x`.
 ## Examples
 
 ``` r
-ex_adsl_MF <- ex_adsl %>% dplyr::filter(SEX %in% c("M", "F"))
+ex_adsl_MF <- ex_adsl |> dplyr::filter(SEX %in% c("M", "F"))
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX", split_fun = drop_split_levels) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX", split_fun = drop_split_levels) |>
   analyze(c("AGE", "BMRKR2"))
 
 tbl <- build_table(lyt, ex_adsl_MF)

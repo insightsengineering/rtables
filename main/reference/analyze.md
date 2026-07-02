@@ -268,8 +268,8 @@ Gabriel Becker
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 lyt
 #> A Pre-data Table Layout
@@ -292,8 +292,8 @@ tbl
 #> 3rd Qu.     39.00       37.00          38.00     
 #> Max.        60.00       55.00          53.00     
 
-lyt2 <- basic_table() %>%
-  split_cols_by("Species") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("Species") |>
   analyze(head(names(iris), -1), afun = function(x) {
     list(
       "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),

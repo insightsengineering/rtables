@@ -248,9 +248,9 @@ df <- data.frame(
 )
 fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 
-tbl <- basic_table() %>%
-  split_rows_by("cat", section_div = "~") %>%
-  analyze("value", afun = fast_afun, section_div = " ") %>%
+tbl <- basic_table() |>
+  split_rows_by("cat", section_div = "~") |>
+  analyze("value", afun = fast_afun, section_div = " ") |>
   build_table(df)
 
 # Getter

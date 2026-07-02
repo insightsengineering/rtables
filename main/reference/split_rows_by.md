@@ -217,9 +217,9 @@ Gabriel Becker
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("RACE", split_fun = drop_split_levels) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("RACE", split_fun = drop_split_levels) |>
   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
 tbl <- build_table(lyt, DM)
@@ -233,9 +233,9 @@ tbl
 #> WHITE                                                              
 #>   mean                        39.36       36.93          35.11     
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("RACE") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("RACE") |>
   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 
 tbl2 <- build_table(lyt2, DM)
@@ -259,15 +259,15 @@ tbl2
 #> UNKNOWN                                                                            
 #>   mean                                         NA           NA             NA      
 
-lyt3 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
-  summarize_row_groups(label_fstr = "Overall (N)") %>%
+lyt3 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
+  summarize_row_groups(label_fstr = "Overall (N)") |>
   split_rows_by("RACE",
     split_label = "Ethnicity", labels_var = "ethn_lab",
     split_fun = drop_split_levels
-  ) %>%
-  summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+  ) |>
+  summarize_row_groups("RACE", label_fstr = "%s (n)") |>
   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 
 lyt3
@@ -282,8 +282,8 @@ lyt3
 
 library(dplyr)
 
-DM2 <- DM %>%
-  filter(SEX %in% c("M", "F")) %>%
+DM2 <- DM |>
+  filter(SEX %in% c("M", "F")) |>
   mutate(
     SEX = droplevels(SEX),
     gender_lab = c(

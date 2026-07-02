@@ -31,15 +31,14 @@ library(rtables)
 # The following object is masked from 'package:base':
 # 
 #     %||%
-# Loading required package: magrittr
 # 
 # Attaching package: 'rtables'
 # The following object is masked from 'package:utils':
 # 
 #     str
-lyt <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+lyt <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, ex_adsl)
@@ -116,12 +115,12 @@ We do this with the new `show_colcounts` argument now accepted by all
 
 ``` r
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
   split_cols_by("SEX",
     split_fun = keep_split_levels(c("F", "M")),
     show_colcounts = TRUE
-  ) %>%
+  ) |>
   analyze("AGE")
 
 tbl2 <- build_table(lyt2, ex_adsl)
@@ -135,9 +134,9 @@ tbl2
 
 ``` r
 
-lyt3 <- basic_table() %>%
-  split_cols_by("ARM", show_colcounts = TRUE) %>%
-  split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
+lyt3 <- basic_table() |>
+  split_cols_by("ARM", show_colcounts = TRUE) |>
+  split_cols_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
   analyze("AGE")
 
 tbl3 <- build_table(lyt3, ex_adsl)

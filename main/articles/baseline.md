@@ -12,8 +12,8 @@ For example, lets calculate the average age:
 
 library(rtables)
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
@@ -29,8 +29,8 @@ the other arms:
 
 ``` r
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM", ref_group = "B: Placebo") |>
   analyze("AGE", afun = function(x, .ref_group) {
     in_rows(
       "Difference of Averages" = rcell(mean(x) - mean(.ref_group), format = "xx.xx")
@@ -57,8 +57,8 @@ and pass `.in_ref_col` as the second argument:
 
 ``` r
 
-lyt3 <- basic_table() %>%
-  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+lyt3 <- basic_table() |>
+  split_cols_by("ARM", ref_group = "B: Placebo") |>
   analyze(
     "AGE",
     afun = function(x, .ref_group, .in_ref_col) {
@@ -78,8 +78,8 @@ tbl3
 
 ``` r
 
-lyt4 <- basic_table() %>%
-  split_cols_by("ARM", ref_group = "B: Placebo") %>%
+lyt4 <- basic_table() |>
+  split_cols_by("ARM", ref_group = "B: Placebo") |>
   analyze(
     "AGE",
     afun = function(x, .ref_group, .in_ref_col) {
@@ -109,9 +109,9 @@ column with or without row splitting. For example:
 
 ``` r
 
-lyt5 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM", ref_group = "B: Placebo") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
+lyt5 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", ref_group = "B: Placebo") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
   analyze("AGE", afun = function(x, .ref_group, .ref_full, .in_ref_col) {
     in_rows(
       "is reference (.in_ref_col)" = rcell(.in_ref_col),

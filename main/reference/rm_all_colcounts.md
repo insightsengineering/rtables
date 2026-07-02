@@ -34,9 +34,9 @@ rm_all_colcounts(obj)
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
   analyze("AGE")
 tbl <- build_table(lyt, ex_adsl)
 

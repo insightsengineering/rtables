@@ -74,13 +74,13 @@ simply the sum of the counts for all of its children.
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM", show_colcounts = TRUE) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM", show_colcounts = TRUE) |>
   split_cols_by("SEX",
     split_fun = keep_split_levels(c("F", "M")),
     show_colcounts = TRUE
-  ) %>%
-  split_cols_by("STRATA1", show_colcounts = TRUE) %>%
+  ) |>
+  split_cols_by("STRATA1", show_colcounts = TRUE) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, ex_adsl)

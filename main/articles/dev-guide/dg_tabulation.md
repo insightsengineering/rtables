@@ -53,16 +53,16 @@ library(rtables)
 debugonce(build_table)
 
 # A very simple layout
-lyt <- basic_table() %>%
-  split_rows_by("STRATA1") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_rows_by("STRATA1") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  split_cols_by("ARM") |>
   analyze("BMRKR1")
 
 # lyt must be a PreDataTableLayouts object
 is(lyt, "PreDataTableLayouts")
 
-lyt %>% build_table(DM)
+lyt |> build_table(DM)
 ```
 
 Now let’s look within our `build_table` call. After the initial check
@@ -195,10 +195,10 @@ in our test case.
 
 # rtables 0.6.2
 # A very simple layout
-lyt <- basic_table() %>%
-  split_rows_by("STRATA1") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_rows_by("STRATA1") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  split_cols_by("ARM") |>
   analyze("BMRKR1")
 
 rlyt <- rtables:::rlayout(lyt)

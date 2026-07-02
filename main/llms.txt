@@ -107,8 +107,8 @@ the creation of a more complex table.
 
 library(rtables)
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("AGE", "BMRKR1", "BMRKR2"), function(x, ...) {
     if (is.numeric(x)) {
       in_rows(
@@ -147,7 +147,7 @@ library(rtables)
 library(dplyr)
 
 ## for simplicity grab non-sparse subset
-ADSL <- ex_adsl %>% filter(RACE %in% levels(RACE)[1:3])
+ADSL <- ex_adsl |> filter(RACE %in% levels(RACE)[1:3])
 
 biomarker_ave <- function(x, ...) {
   val <- if (length(x) > 0) round(mean(x), 2) else "no data"
@@ -156,13 +156,13 @@ biomarker_ave <- function(x, ...) {
   )
 }
 
-basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("BMRKR2") %>%
-  split_rows_by("RACE", split_fun = trim_levels_in_group("SEX")) %>%
-  split_rows_by("SEX") %>%
-  summarize_row_groups() %>%
-  analyze("BMRKR1", biomarker_ave) %>%
+basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM") |>
+  split_cols_by("BMRKR2") |>
+  split_rows_by("RACE", split_fun = trim_levels_in_group("SEX")) |>
+  split_rows_by("SEX") |>
+  summarize_row_groups() |>
+  analyze("BMRKR1", biomarker_ave) |>
   build_table(ADSL)
 #>                                          A: Drug X                            B: Placebo                           C: Combination           
 #>                                LOW        MEDIUM        HIGH         LOW         MEDIUM       HIGH         LOW         MEDIUM        HIGH   

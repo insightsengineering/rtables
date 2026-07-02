@@ -293,8 +293,8 @@ s_summary <- function(x) {
   }
 }
 
-lyt <- basic_table() %>%
-  split_cols_by(var = "ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by(var = "ARM") |>
   analyze(c("AGE", "SEX", "BEP01FL", "BMRKR1", "BMRKR2", "COUNTRY"), afun = s_summary)
 
 tbl <- build_table(lyt, ex_adsl)

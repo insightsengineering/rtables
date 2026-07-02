@@ -37,9 +37,9 @@ functions, and to
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  add_overall_col("All Patients") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  add_overall_col("All Patients") |>
   analyze("AGE")
 lyt
 #> A Pre-data Table Layout

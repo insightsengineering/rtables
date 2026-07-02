@@ -54,8 +54,8 @@ there is a non-trivial nested row structure in `tbl`.
 
 ``` r
 o <- options(warn = 0)
-lyt <- basic_table() %>%
-  split_cols_by("Species") %>%
+lyt <- basic_table() |>
+  split_cols_by("Species") |>
   analyze("Sepal.Length")
 
 tbl <- build_table(lyt, iris)
@@ -73,9 +73,9 @@ insert_rrow(tbl, rrow("Hello World"), at = 2)
 #> Mean           5.01       5.94        6.59   
 #> Hello World                                  
 
-lyt2 <- basic_table() %>%
-  split_cols_by("Species") %>%
-  split_rows_by("Species") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("Species") |>
+  split_rows_by("Species") |>
   analyze("Sepal.Length")
 
 tbl2 <- build_table(lyt2, iris)

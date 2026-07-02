@@ -24,8 +24,8 @@ without creating an entirely new split functions. By default
 
 d1 <- subset(ex_adsl, AGE < 25)
 d1$AGE <- as.factor(d1$AGE)
-lyt1 <- basic_table() %>%
-  split_cols_by("AGE") %>%
+lyt1 <- basic_table() |>
+  split_cols_by("AGE") |>
   analyze("SEX")
 
 build_table(lyt1, d1)
@@ -56,8 +56,8 @@ sd_cutfun <- function(x) {
   cutpoints
 }
 
-lyt1 <- basic_table() %>%
-  split_cols_by_cutfun("AGE", cutfun = sd_cutfun) %>%
+lyt1 <- basic_table() |>
+  split_cols_by_cutfun("AGE", cutfun = sd_cutfun) |>
   analyze("SEX")
 
 build_table(lyt1, ex_adsl)
@@ -76,12 +76,12 @@ quantile.
 
 ``` r
 
-lyt1 <- basic_table() %>%
+lyt1 <- basic_table() |>
   split_cols_by_cuts(
     "AGE",
     cuts = c(0, 30, 60, 100),
     cutlabels = c("0-30 y.o.", "30-60 y.o.", "60-100 y.o.")
-  ) %>%
+  ) |>
   analyze("SEX")
 
 build_table(lyt1, ex_adsl)
@@ -129,8 +129,8 @@ picky_splitter <- function(var) {
 d1 <- subset(ex_adsl, ARM == "A: Drug X")
 d1$ARM <- factor(d1$ARM)
 
-lyt1 <- basic_table() %>%
-  split_cols_by("ARM", split_fun = picky_splitter("ARM")) %>%
+lyt1 <- basic_table() |>
+  split_cols_by("ARM", split_fun = picky_splitter("ARM")) |>
   analyze("AGE")
 ```
 
@@ -209,10 +209,10 @@ my_afun <- function(x, .spl_context) {
   )
 }
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("AVISIT") %>%
-  split_cols_by_multivar(vars = c("AVAL", "CHG")) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("AVISIT") |>
+  split_cols_by_multivar(vars = c("AVAL", "CHG")) |>
   analyze_colvars(my_afun)
 
 build_table(lyt, dta_test)
@@ -257,10 +257,10 @@ my_afun <- function(x, .var, .spl_context) {
   )
 }
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("AVISIT") %>%
-  split_cols_by_multivar(vars = c("AVAL", "CHG")) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("AVISIT") |>
+  split_cols_by_multivar(vars = c("AVAL", "CHG")) |>
   analyze_colvars(my_afun)
 
 build_table(lyt, dta_test)
@@ -302,10 +302,10 @@ my_afun <- function(x, .var, ref_rowgroup, .spl_context) {
   )
 }
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("AVISIT") %>%
-  split_cols_by_multivar(vars = c("AVAL", "CHG")) %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("AVISIT") |>
+  split_cols_by_multivar(vars = c("AVAL", "CHG")) |>
   analyze_colvars(my_afun, extra_args = list(ref_rowgroup = "V1"))
 
 build_table(lyt2, dta_test)

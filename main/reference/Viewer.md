@@ -42,8 +42,8 @@ if (interactive()) {
 
   df <- cbind(iris, sl5 = sl5)
 
-  lyt <- basic_table() %>%
-    split_cols_by("sl5") %>%
+  lyt <- basic_table() |>
+    split_cols_by("sl5") |>
     analyze("Sepal.Length")
 
   tbl <- build_table(lyt, df)

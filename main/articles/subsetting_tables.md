@@ -18,12 +18,12 @@ We will use the following table for illustrative purposes:
 library(rtables)
 library(dplyr)
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
   analyze(c("AGE", "STRATA1"))
 
-tbl <- build_table(lyt, ex_adsl %>% filter(SEX %in% c("M", "F")))
+tbl <- build_table(lyt, ex_adsl |> filter(SEX %in% c("M", "F")))
 tbl
 #             A: Drug X   B: Placebo   C: Combination
 # ———————————————————————————————————————————————————
@@ -397,14 +397,14 @@ function output.
 
 ``` r
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX", split_fun = drop_split_levels) %>%
-  split_rows_by("RACE", split_fun = drop_split_levels) %>%
-  summarize_row_groups() %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX", split_fun = drop_split_levels) |>
+  split_rows_by("RACE", split_fun = drop_split_levels) |>
+  summarize_row_groups() |>
   analyze(c("AGE", "STRATA1"))
 
-tbl2 <- build_table(lyt2, ex_adsl %>% filter(SEX %in% c("M", "F") & RACE %in% (levels(RACE)[1:3])))
+tbl2 <- build_table(lyt2, ex_adsl |> filter(SEX %in% c("M", "F") & RACE %in% (levels(RACE)[1:3])))
 tbl2
 #                                    A: Drug X                B: Placebo              C: Combination     
 #                                 F            M            F            M            F            M     

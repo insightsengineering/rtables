@@ -55,14 +55,14 @@ are subject to change in future versions.
 ``` r
 library(dplyr)
 
-DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))
+DM2 <- DM |> mutate(RACE = factor(RACE), SEX = factor(SEX))
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
-  split_rows_by("RACE") %>%
-  append_topleft("Ethnicity") %>%
-  analyze("AGE") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
+  split_rows_by("RACE") |>
+  append_topleft("Ethnicity") |>
+  analyze("AGE") |>
   append_topleft("  Age")
 
 tbl <- build_table(lyt, DM2)

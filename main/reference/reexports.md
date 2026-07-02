@@ -11,8 +11,8 @@ to see their documentation.
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
 tbl <- build_table(lyt, ex_adsl)
@@ -49,8 +49,8 @@ export_as_txt(tbl, file = tf)
 system2("cat", tf)
 } # }
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 
 tbl <- build_table(lyt, ex_adsl)

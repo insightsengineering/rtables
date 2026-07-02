@@ -128,8 +128,8 @@ to inherit information from it.
 
 ``` r
 
-lyt <- basic_table(title = "big title") %>%
-  split_rows_by("SEX", page_by = TRUE) %>%
+lyt <- basic_table(title = "big title") |>
+  split_rows_by("SEX", page_by = TRUE) |>
   analyze("AGE")
 
 tt <- build_table(lyt, DM)

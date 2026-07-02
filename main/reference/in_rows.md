@@ -150,8 +150,8 @@ in_rows(1, 2, .list = list(3), .names = c("a", "b", "c"))
 #> 2        b              2          0         b
 #> 3        c              3          0         c
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze("AGE", afun = function(x) {
     in_rows(
       "Mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),

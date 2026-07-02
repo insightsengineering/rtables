@@ -49,8 +49,8 @@ insert_row_at_path(tt, path, value)
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+lyt <- basic_table() |>
+  split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

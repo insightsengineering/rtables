@@ -34,8 +34,6 @@ library(rtables)
     # 
     #     %||%
 
-    # Loading required package: magrittr
-
     # 
     # Attaching package: 'rtables'
 
@@ -61,10 +59,10 @@ library(dplyr)
 
 ``` r
 
-lyt <- basic_table() %>%
-  split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-  split_cols_by("ARM") %>%
-  analyze("BMRKR1") %>%
+lyt <- basic_table() |>
+  split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+  split_cols_by("ARM") |>
+  analyze("BMRKR1") |>
   print()
 ```
 
@@ -78,7 +76,7 @@ lyt <- basic_table() %>%
 
 ``` r
 
-tbl <- build_table(lyt, ex_adsl) %>%
+tbl <- build_table(lyt, ex_adsl) |>
   print()
 ```
 
@@ -140,7 +138,7 @@ Now, lets see the same for our result table `tbl`:
 
 ``` r
 
-class(tbl) %>% print()
+class(tbl) |> print()
 ```
 
     # [1] "TableTree"
@@ -149,7 +147,7 @@ class(tbl) %>% print()
 
 ``` r
 
-getClass("TableTree") %>% print() # Main object representing a table in {rtables}
+getClass("TableTree") |> print() # Main object representing a table in {rtables}
 ```
 
     # Class "TableTree" [package "rtables"]
@@ -186,7 +184,7 @@ getClass("TableTree") %>% print() # Main object representing a table in {rtables
 
 ``` r
 
-methods(class = "TableTree") %>% print() # more than 70 methods but no print method
+methods(class = "TableTree") |> print() # more than 70 methods but no print method
 ```
 
     #  [1] [                    [<-                  as.vector           

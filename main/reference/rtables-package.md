@@ -51,4 +51,6 @@ Other contributors:
 - Abinaya Yogasekaram <ayogasek@gmail.com>
   ([ORCID](https://orcid.org/0009-0005-2083-1105)) \[contributor\]
 
+- David Munoz Tord <david.munoztord@mailbox.org> \[contributor\]
+
 - F. Hoffmann-La Roche AG \[copyright holder, funder\]

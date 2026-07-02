@@ -72,8 +72,7 @@ Almost every bug should become a regression test.
 
 - Pipes are better to write code but horrible to debug
 - T in pipe `%T>%` does print it midway
-- [`debug_pipe()`](https://magrittr.tidyverse.org/reference/debug_pipe.html)
-  -\> it is like the T pipe going into browser()
+- `debug_pipe()` -\> it is like the T pipe going into browser()
 
 #### Shiny Debugging
 

@@ -145,9 +145,9 @@ to have a comprehensive view of the hierarchical structure of the rows.
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("STRATA1") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("STRATA1") |>
   analyze(c("AGE", "BMRKR2"))
 
 tbl <- build_table(lyt, ex_adsl)
@@ -166,8 +166,8 @@ as_result_df(tbl, simplify = TRUE)
 #> 11     MEDIUM        14         17             13
 #> 12       HIGH        16         12             20
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("AGE", "BMRKR2"))
 
 tbl <- build_table(lyt, ex_adsl)

@@ -104,17 +104,17 @@ levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 adsl$AGE[adsl$SEX == "UNDIFFERENTIATED"] <- 0
 adsl$BMRKR1 <- 0
 
-tbl_to_prune <- basic_table() %>%
-  analyze("BMRKR1") %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
-  summarize_row_groups() %>%
-  analyze("AGE") %>%
+tbl_to_prune <- basic_table() |>
+  analyze("BMRKR1") |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
+  summarize_row_groups() |>
+  analyze("AGE") |>
   build_table(adsl)
 
-tbl_to_prune %>% prune_table(all_zero_or_na)
+tbl_to_prune |> prune_table(all_zero_or_na)
 #>            A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————
 #> F          79 (59.0%)   77 (57.5%)     66 (50.0%)  
@@ -139,7 +139,7 @@ tbl_to_prune %>% prune_table(all_zero_or_na)
 #>   C         1 (0.7%)     0 (0.0%)       2 (1.5%)   
 #>     Mean     34.00          NA           33.00     
 
-tbl_to_prune %>% prune_table(all_zero)
+tbl_to_prune |> prune_table(all_zero)
 #>                    A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————————————
 #> F                  79 (59.0%)   77 (57.5%)     66 (50.0%)  
@@ -178,7 +178,7 @@ tbl_to_prune %>% prune_table(all_zero)
 #>   C                 0 (0.0%)     0 (0.0%)       0 (0.0%)   
 #>     Mean               NA           NA             NA      
 
-tbl_to_prune %>% prune_table(content_all_zeros_nas)
+tbl_to_prune |> prune_table(content_all_zeros_nas)
 #>                    A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————————————
 #> Mean                  0.00         0.00           0.00     
@@ -209,7 +209,7 @@ tbl_to_prune %>% prune_table(content_all_zeros_nas)
 #>   C                 1 (0.7%)     0 (0.0%)       1 (0.8%)   
 #>     Mean              0.00          NA            0.00     
 
-tbl_to_prune %>% prune_table(prune_empty_level)
+tbl_to_prune |> prune_table(prune_empty_level)
 #>            A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————
 #> F          79 (59.0%)   77 (57.5%)     66 (50.0%)  
@@ -234,7 +234,7 @@ tbl_to_prune %>% prune_table(prune_empty_level)
 #>   C         1 (0.7%)     0 (0.0%)       2 (1.5%)   
 #>     Mean     34.00          NA           33.00     
 
-tbl_to_prune %>% prune_table(prune_zeros_only)
+tbl_to_prune |> prune_table(prune_zeros_only)
 #>                    A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————————————
 #> F                  79 (59.0%)   77 (57.5%)     66 (50.0%)  
@@ -265,7 +265,7 @@ tbl_to_prune %>% prune_table(prune_zeros_only)
 #>     Mean              0.00          NA            0.00     
 
 min_prune <- low_obs_pruner(70, "sum")
-tbl_to_prune %>% prune_table(min_prune)
+tbl_to_prune |> prune_table(min_prune)
 #>            A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————
 #> Mean          0.00         0.00           0.00     

@@ -75,7 +75,7 @@ understanding the class hierarchy and the main split engine.
 
 library(rtables)
 # debugonce(rtables:::do_split) # Uncomment me to enter the function!!!
-basic_table() %>%
+basic_table() |>
   build_table(DM)
 ```
 
@@ -574,18 +574,18 @@ library(rtables)
 library(dplyr)
 
 # This filter is added to avoid having too many calls to do_split
-DM_tmp <- DM %>%
-  filter(ARM %in% names(table(DM$ARM)[1:2])) %>% # limit to two
-  filter(SEX %in% c("M", "F")) %>% # limit to two
+DM_tmp <- DM |>
+  filter(ARM %in% names(table(DM$ARM)[1:2])) |> # limit to two
+  filter(SEX %in% c("M", "F")) |> # limit to two
   mutate(SEX = factor(SEX), ARM = factor(ARM)) # to drop unused levels
 
 # debug(rtables:::do_split)
-lyt <- basic_table() %>%
-  split_rows_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt <- basic_table() |>
+  split_rows_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze("BMRKR1") # analyze() is needed for the table to have non-label rows
 
-lyt %>%
+lyt |>
   build_table(DM_tmp)
 ```
 
@@ -775,9 +775,9 @@ We start by examining a split function that is already defined in
 
 library(rtables)
 # debug(rtables:::do_split) # uncomment to see into the main split function
-basic_table() %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  analyze("BMRKR1") %>%
+basic_table() |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  analyze("BMRKR1") |>
   build_table(DM)
 ```
 
@@ -865,11 +865,11 @@ retrieve the default as follows:
 # rtables 0.6.2
 # Table call with only the function changing
 simple_table <- function(DM, f) {
-  lyt <- basic_table() %>%
-    split_rows_by("ARM", split_fun = f) %>%
+  lyt <- basic_table() |>
+    split_rows_by("ARM", split_fun = f) |>
     analyze("BMRKR1")
 
-  lyt %>%
+  lyt |>
     build_table(DM)
 }
 # First round will fail because there are unused arguments
@@ -1053,19 +1053,19 @@ fnc_tmp <- function(innervar) { # Exploring trim_levels_in_facets (check its for
   }
 }
 
-basic_table() %>%
-  split_rows_by("ARM") %>%
-  split_rows_by("STRATA1") %>%
+basic_table() |>
+  split_rows_by("ARM") |>
+  split_rows_by("STRATA1") |>
   split_rows_by_cuts("AGE",
     cuts = c(0, 50, 100),
     cutlabels = c("young", "old")
-  ) %>%
+  ) |>
   split_rows_by("SEX", split_fun = make_split_fun(
     pre = list(drop_facet_levels), # This is dropping the SEX levels (AGE is upper level)
     core_split = browsing_f,
     post = list(fnc_tmp("AGE")) # To drop these we should use a split_fun in the above level
-  )) %>%
-  summarize_row_groups() %>%
+  )) |>
+  summarize_row_groups() |>
   build_table(DM)
 ```
 
@@ -1128,17 +1128,17 @@ custom_mean_var <- function(var) {
 DM_ageNA <- DM
 DM_ageNA$AGE[1] <- NA
 
-basic_table() %>%
-  split_rows_by("ARM") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
+basic_table() |>
+  split_rows_by("ARM") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
   summarize_row_groups(
     cfun = custom_mean_var("AGE"),
     extra_args = list(na.rm = TRUE), format = "xx.x",
     label_fstr = "label %s"
-  ) %>%
+  ) |>
   # content_extra_args, c_extra_args are different slots!! (xxx)
-  split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>%
-  analyze("AGE") %>% # check with the extra_args (xxx)
+  split_rows_by("STRATA1", split_fun = keep_split_levels("A")) |>
+  analyze("AGE") |> # check with the extra_args (xxx)
   build_table(DM_ageNA)
 # You can pass extra_args down to other splits. It is possible this will not not
 #   work. Should it? That is why extra_args lives only in splits (xxx) check if it works
@@ -1156,10 +1156,10 @@ my_split_fun <- function(df, spl, .spl_context, ...) {
   drop_split_levels(df, spl)
 } # does not work
 
-basic_table() %>%
-  split_rows_by("ARM") %>%
-  split_rows_by("SEX", split_fun = my_split_fun) %>%
-  analyze("AGE", inclNAs = TRUE, afun = mean) %>% # include_NAs is set FALSE
+basic_table() |>
+  split_rows_by("ARM") |>
+  split_rows_by("SEX", split_fun = my_split_fun) |>
+  analyze("AGE", inclNAs = TRUE, afun = mean) |> # include_NAs is set FALSE
   build_table(DM_ageNA)
 # extra_args is in available in cols but not in rows, because different columns
 #  may need it for different col space. Row-wise it seems not necessary.
@@ -1220,15 +1220,15 @@ trace(
 )
 # We want also to take a look at the following:
 debugonce(rtables:::.apply_split_inner)
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   split_rows_by_multivar(c("BMRKR1", "BMRKR1"),
     varlabels = c("SD", "MEAN")
-  ) %>%
+  ) |>
   split_rows_by("COUNTRY",
     split_fun = keep_split_levels("PAK")
-  ) %>% # xxx for #690 #691
-  summarize_row_groups() %>%
+  ) |> # xxx for #690 #691
+  summarize_row_groups() |>
   analyze(c("AGE", "SEX"))
 
 build_table(lyt, DM)
@@ -1268,14 +1268,14 @@ cutfun <- function(x) {
   cutpoints
 }
 
-tbl <- basic_table(show_colcounts = TRUE) %>%
-  split_rows_by("ARM", split_fun = drop_and_remove_levels(c("B: Placebo", "C: Combination"))) %>%
-  split_rows_by("STRATA1") %>%
-  split_rows_by_cutfun("AGE", cutfun = cutfun) %>%
+tbl <- basic_table(show_colcounts = TRUE) |>
+  split_rows_by("ARM", split_fun = drop_and_remove_levels(c("B: Placebo", "C: Combination"))) |>
+  split_rows_by("STRATA1") |>
+  split_rows_by_cutfun("AGE", cutfun = cutfun) |>
   # split_rows_by_cuts("AGE", cuts = c(0, 50, 100),
-  #                    cutlabels = c("young", "old")) %>% # Works the same
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  summarize_row_groups() %>% # This is degenerate!!!
+  #                    cutlabels = c("young", "old")) |> # Works the same
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  summarize_row_groups() |> # This is degenerate!!!
   build_table(DM)
 
 tbl
@@ -1369,15 +1369,15 @@ gen_split <- make_split_fun(
   post = list(drop_empties)
 )
 
-tbl <- basic_table(show_colcounts = TRUE) %>%
-  split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) %>%
-  split_rows_by("STRATA1") %>%
-  split_rows_by("AGE", split_fun = gen_split) %>%
-  analyze("SEX") %>% # It is the last step!! No need of BMRKR1 right?
+tbl <- basic_table(show_colcounts = TRUE) |>
+  split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) |>
+  split_rows_by("STRATA1") |>
+  split_rows_by("AGE", split_fun = gen_split) |>
+  analyze("SEX") |> # It is the last step!! No need of BMRKR1 right?
   # split_rows_by("SEX", split_fun = drop_split_levels,
-  #               child_labels = "hidden") %>% # close issue #689. would it work for
+  #               child_labels = "hidden") |> # close issue #689. would it work for
   # analyze_colvars? probably (xxx)
-  # analyze("BMRKR1", afun = my_count_afun) %>%  # This is NOT degenerate!!! BMRKR1 is only placeholder
+  # analyze("BMRKR1", afun = my_count_afun) |>  # This is NOT degenerate!!! BMRKR1 is only placeholder
   build_table(DM)
 
 tbl
@@ -1390,16 +1390,16 @@ Alternatively, we could choose to prune these rows out with
 
 # rtables 0.6.2
 
-tbl <- basic_table(show_colcounts = TRUE) %>%
-  split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) %>%
-  split_rows_by("STRATA1") %>%
+tbl <- basic_table(show_colcounts = TRUE) |>
+  split_rows_by("ARM", split_fun = keep_split_levels(c("A: Drug X"))) |>
+  split_rows_by("STRATA1") |>
   split_rows_by_cuts(
     "AGE",
     cuts = c(0, 50, 100),
     cutlabels = c("young", "old")
-  ) %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  summarize_row_groups() %>% # This is degenerate!!! # we keep it until #689
+  ) |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  summarize_row_groups() |> # This is degenerate!!! # we keep it until #689
   build_table(DM)
 
 tbl

@@ -48,8 +48,8 @@ for information on the table format structure.
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+lyt <- basic_table() |>
+  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

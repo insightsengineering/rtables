@@ -91,10 +91,10 @@ and
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
+lyt <- basic_table() |>
   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
     first = FALSE
-  )) %>%
+  )) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
@@ -103,12 +103,12 @@ tbl
 #> —————————————————————————————————————————————————————————————
 #> Mean     34.91       33.02          34.57           34.22    
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
   split_rows_by("RACE",
     split_fun = add_overall_level("All Ethnicities")
-  ) %>%
-  summarize_row_groups(label_fstr = "%s (n)") %>%
+  ) |>
+  summarize_row_groups(label_fstr = "%s (n)") |>
   analyze("AGE")
 lyt2
 #> A Pre-data Table Layout
@@ -151,8 +151,8 @@ combodf <- tribble(
   "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()
 )
 
-lyt <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+lyt <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
@@ -162,7 +162,7 @@ tbl
 #> ————————————————————————————————————————————————————————————————————
 #> Mean     34.91       33.02          34.57         34.03      34.73  
 
-lyt1 <- basic_table(show_colcounts = TRUE) %>%
+lyt1 <- basic_table(show_colcounts = TRUE) |>
   split_cols_by("ARM",
     split_fun = add_combo_levels(combodf,
       keep_levels = c(
@@ -170,7 +170,7 @@ lyt1 <- basic_table(show_colcounts = TRUE) %>%
         "A_C"
       )
     )
-  ) %>%
+  ) |>
   analyze("AGE")
 
 tbl1 <- build_table(lyt1, DM)
@@ -182,19 +182,19 @@ tbl1
 
 smallerDM <- droplevels(subset(DM, SEX %in% c("M", "F") &
   grepl("^(A|B)", ARM)))
-lyt2 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM", split_fun = add_combo_levels(combodf[1, ])) %>%
+lyt2 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", split_fun = add_combo_levels(combodf[1, ])) |>
   split_cols_by("SEX",
     split_fun = add_overall_level("SEX_ALL", "All Genders")
-  ) %>%
+  ) |>
   analyze("AGE")
 
-lyt3 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+lyt3 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
   split_rows_by("SEX",
     split_fun = add_overall_level("SEX_ALL", "All Genders")
-  ) %>%
-  summarize_row_groups() %>%
+  ) |>
+  summarize_row_groups() |>
   analyze("AGE")
 
 tbl3 <- build_table(lyt3, smallerDM)

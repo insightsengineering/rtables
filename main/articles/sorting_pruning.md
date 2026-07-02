@@ -18,13 +18,13 @@ into account the table structure. For example:
 library(rtables)
 library(dplyr)
 
-raw_lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
-  split_rows_by("RACE") %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
-  summarize_row_groups() %>%
+raw_lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
+  split_rows_by("RACE") |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
+  summarize_row_groups() |>
   analyze("AGE")
 
 raw_tbl <- build_table(raw_lyt, DM)
@@ -212,10 +212,10 @@ we suggest taking a look at slides 69-76 of this [Slide
 deck](https://docs.google.com/presentation/d/1ygQE9UaoXY6C_FiQLkiYtXB_OnkVbXvsMIY6_MQPbx0/edit?usp=sharing).
 
 In brief, it is important to notice how `[TableTree] RACE` is the root
-of the table that is split (with `split_rows_by("RACE") %>%`) into two
+of the table that is split (with `split_rows_by("RACE") |>`) into two
 subtables: `[TableTree] ASIAN [cont: 1 x 6]` and
 `[TableTree] BLACK OR AFRICAN AMERICAN [cont: 1 x 6]`. These are then
-“described” with `summarize_row_groups() %>%`, which creates for every
+“described” with `summarize_row_groups() |>`, which creates for every
 split a “content” table containing 1 row (the 1 in `cont: 1 x 6`), which
 when rendered takes the place of `LabelRow`.
 
@@ -437,7 +437,7 @@ cont_n_allcols
 #     }
 #     sum(sapply(row_values(tree_children(ctab)[[1]]), function(cv) cv[1]))
 # }
-# <bytecode: 0x5603ef2af4d0>
+# <bytecode: 0x56031eea3e80>
 # <environment: namespace:rtables>
 ```
 
@@ -706,19 +706,19 @@ more_analysis_fnc <- function(x) {
   )
 }
 
-raw_lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+raw_lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   split_rows_by(
     "RACE",
     split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
-  ) %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
-  summarize_row_groups() %>%
+  ) |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
+  summarize_row_groups() |>
   analyze("AGE", afun = more_analysis_fnc)
 
-tbl <- build_table(raw_lyt, DM) %>%
-  prune_table() %>%
+tbl <- build_table(raw_lyt, DM) |>
+  prune_table() |>
   print()
 #                             A: Drug X    B: Placebo   C: Combination
 # ————————————————————————————————————————————————————————————————————
@@ -870,7 +870,7 @@ cont_n_onecol
 #         row_values(tree_children(ctab)[[1]])[[j]][1]
 #     }
 # }
-# <bytecode: 0x5603f9196398>
+# <bytecode: 0x560327e2ba80>
 # <environment: namespace:rtables>
 ```
 
@@ -922,14 +922,14 @@ within larger splits:
 ``` r
 
 # Simpler table
-tbl <- basic_table() %>%
-  split_cols_by("ARM") %>%
+tbl <- basic_table() |>
+  split_cols_by("ARM") |>
   split_cols_by("SEX",
     split_fun = drop_and_remove_levels(c("U", "UNDIFFERENTIATED"))
-  ) %>%
-  analyze("AGE", afun = more_analysis_fnc) %>%
-  build_table(DM) %>%
-  prune_table() %>%
+  ) |>
+  analyze("AGE", afun = more_analysis_fnc) |>
+  build_table(DM) |>
+  prune_table() |>
   print()
 #           A: Drug X      B: Placebo      C: Combination  
 #            F      M       F       M        F         M   

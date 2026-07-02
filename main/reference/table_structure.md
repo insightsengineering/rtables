@@ -30,14 +30,14 @@ subtable-structure summary of `x`.
 ``` r
 library(dplyr)
 
-iris2 <- iris %>%
-  group_by(Species) %>%
-  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
+iris2 <- iris |>
+  group_by(Species) |>
+  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) |>
   ungroup()
 
-lyt <- basic_table() %>%
-  split_cols_by("Species") %>%
-  split_cols_by("group") %>%
+lyt <- basic_table() |>
+  split_cols_by("Species") |>
+  split_cols_by("group") |>
   analyze(c("Sepal.Length", "Petal.Width"),
     afun = list_wrap_x(summary),
     format = "xx.xx"

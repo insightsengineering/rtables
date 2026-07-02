@@ -54,9 +54,9 @@ map <- data.frame(
   stringsAsFactors = FALSE
 )
 
-lyt <- basic_table() %>%
-  split_rows_by("LBCAT") %>%
-  split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
+lyt <- basic_table() |>
+  split_rows_by("LBCAT") |>
+  split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) |>
   analyze("ANRIND")
 tbl <- build_table(lyt, ex_adlb)
 ```

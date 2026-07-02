@@ -21,7 +21,6 @@ library(rtables)
 # The following object is masked from 'package:base':
 # 
 #     %||%
-# Loading required package: magrittr
 # 
 # Attaching package: 'rtables'
 # The following object is masked from 'package:utils':
@@ -30,8 +29,8 @@ library(rtables)
 ADSL <- ex_adsl # Example ADSL dataset
 
 # Very simple table
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("AGE", "SEX"))
 
 tbl <- build_table(lyt, ADSL)
@@ -243,9 +242,9 @@ counts_percentage_custom <- function(x) {
   )
 }
 
-lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-  split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
-  analyze(vars = "AGE", afun = mean_sd_custom) %>%
+lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") |>
+  split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) |>
+  analyze(vars = "AGE", afun = mean_sd_custom) |>
   analyze(vars = "SEX", afun = counts_percentage_custom)
 
 tbl <- build_table(lyt, ex_adsl)
@@ -301,11 +300,11 @@ Let’s add hierarchical row and column splits:
 
 ``` r
 
-lyt <- basic_table() %>%
-  split_rows_by("STRATA2") %>%
-  summarize_row_groups() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("STRATA1") %>%
+lyt <- basic_table() |>
+  split_rows_by("STRATA2") |>
+  summarize_row_groups() |>
+  split_cols_by("ARM") |>
+  split_cols_by("STRATA1") |>
   analyze(c("AGE", "SEX"))
 
 tbl <- build_table(lyt, ex_adsl)

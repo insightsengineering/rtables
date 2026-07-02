@@ -59,16 +59,16 @@ in the `rtables` package.
 adsl <- ex_adsl
 levels(adsl$SEX) <- c(levels(ex_adsl$SEX), "OTHER")
 
-tbl_to_prune <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
-  summarize_row_groups() %>%
-  analyze("AGE") %>%
+tbl_to_prune <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
+  summarize_row_groups() |>
+  analyze("AGE") |>
   build_table(adsl)
 
-tbl_to_prune %>% prune_table()
+tbl_to_prune |> prune_table()
 #>                    A: Drug X    B: Placebo   C: Combination
 #> ———————————————————————————————————————————————————————————
 #> F                  79 (59.0%)   77 (57.5%)     66 (50.0%)  

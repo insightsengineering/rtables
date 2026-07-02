@@ -114,10 +114,10 @@ incoherent cells within our table:
 
 library(rtables)
 
-lyt <- basic_table() %>%
-  split_cols_by("color") %>%
-  split_rows_by("vehicle_class") %>%
-  split_rows_by("vehicle_type") %>%
+lyt <- basic_table() |>
+  split_cols_by("color") |>
+  split_rows_by("vehicle_class") |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt, vehic_data)
@@ -154,10 +154,10 @@ to trim the levels of `vehicle_type` separately within each level of
 
 ``` r
 
-lyt2 <- basic_table() %>%
-  split_cols_by("color") %>%
-  split_rows_by("vehicle_class", split_fun = trim_levels_in_group("vehicle_type")) %>%
-  split_rows_by("vehicle_type") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("color") |>
+  split_rows_by("vehicle_class", split_fun = trim_levels_in_group("vehicle_type")) |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt2, vehic_data)
@@ -205,10 +205,10 @@ map <- tribble(
   "boat",         "cruiseliner"
 )
 
-lyt3 <- basic_table() %>%
-  split_cols_by("color") %>%
-  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) %>%
-  split_rows_by("vehicle_type") %>%
+lyt3 <- basic_table() |>
+  split_cols_by("color") |>
+  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt3, vehic_data)
@@ -254,10 +254,10 @@ create an “all colors” category:
 
 ``` r
 
-lyt4 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("color", split_fun = add_overall_level("allcolors", label = "All Colors")) %>%
-  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) %>%
-  split_rows_by("vehicle_type") %>%
+lyt4 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("color", split_fun = add_overall_level("allcolors", label = "All Colors")) |>
+  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt4, vehic_data)
@@ -316,10 +316,10 @@ combodf <- tribble(
 )
 
 
-lyt5 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("color", split_fun = add_combo_levels(combodf)) %>%
-  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) %>%
-  split_rows_by("vehicle_type") %>%
+lyt5 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("color", split_fun = add_combo_levels(combodf)) |>
+  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt5, vehic_data)
@@ -465,10 +465,10 @@ silly_splfun1 <- make_split_fun(
   post = list(sort_them_facets)
 )
 
-lyt6 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("color", split_fun = silly_splfun1) %>%
-  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) %>%
-  split_rows_by("vehicle_type") %>%
+lyt6 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("color", split_fun = silly_splfun1) |>
+  split_rows_by("vehicle_class", split_fun = trim_levels_to_map(map)) |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt6, vehic_data)
@@ -532,10 +532,10 @@ sense.
 
 even_sillier_splfun <- make_split_fun(core_split = silly_core_split)
 
-lyt7 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("color") %>%
-  split_rows_by("vehicle_class", split_fun = even_sillier_splfun) %>%
-  split_rows_by("vehicle_type") %>%
+lyt7 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("color") |>
+  split_rows_by("vehicle_class", split_fun = even_sillier_splfun) |>
+  split_rows_by("vehicle_type") |>
   analyze("cost")
 
 build_table(lyt7, vehic_data)

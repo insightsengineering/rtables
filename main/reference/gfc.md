@@ -63,15 +63,15 @@ The formatted print-strings for all (body) cells in `obj`.
 ``` r
 library(dplyr)
 
-iris2 <- iris %>%
-  group_by(Species) %>%
-  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) %>%
+iris2 <- iris |>
+  group_by(Species) |>
+  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) |>
   ungroup()
 
-tbl <- basic_table() %>%
-  split_cols_by("Species") %>%
-  split_cols_by("group") %>%
-  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary), format = "xx.xx") %>%
+tbl <- basic_table() |>
+  split_cols_by("Species") |>
+  split_cols_by("group") |>
+  analyze(c("Sepal.Length", "Petal.Width"), afun = list_wrap_x(summary), format = "xx.xx") |>
   build_table(iris2)
 
 get_formatted_cells(tbl)

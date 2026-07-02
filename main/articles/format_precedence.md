@@ -52,9 +52,9 @@ For a simple illustration, consider the following example:
 
 ``` r
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(vars = "AGE", afun = mean)
 
 adsl_analyzed <- build_table(lyt, ADSL)
@@ -120,8 +120,8 @@ applied.
 
 ``` r
 
-lyt0 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt0 <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(vars = "AGE", afun = mean)
 
 build_table(lyt0, ADSL)
@@ -145,8 +145,8 @@ the format can be specified by the user.
 
 ``` r
 
-lyt1 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt1 <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(vars = "AGE", afun = function(x) {
     rcell(mean(x), format = "xx.xx", label = "Mean")
   })
@@ -160,8 +160,8 @@ build_table(lyt1, ADSL)
 
 ``` r
 
-lyt1a <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt1a <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(vars = "AGE", afun = function(x) {
     in_rows(
       "Mean" = rcell(mean(x)),
@@ -192,8 +192,8 @@ rules described above are still in place.
 
 ``` r
 
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(vars = "AGE", afun = function(x) {
     in_rows(
       "Mean" = rcell(mean(x), format = "xx.xxx"),
@@ -217,8 +217,8 @@ table split (if any).
 
 ``` r
 
-lyt3 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt3 <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(vars = "AGE", mean, format = "xx.x")
 
 build_table(lyt3, ADSL)
@@ -234,8 +234,8 @@ and therefore takes precedence.
 
 ``` r
 
-lyt4 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt4 <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(
     vars = "AGE", afun = function(x) {
       rcell(mean(x), format = "xx.xx", label = "Mean")
@@ -252,8 +252,8 @@ build_table(lyt4, ADSL)
 
 ``` r
 
-lyt4a <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt4a <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(
     vars = "AGE", afun = function(x) {
       in_rows(
@@ -279,8 +279,8 @@ format while the `Mean` cells do not.
 
 ``` r
 
-lyt5 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt5 <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(
     vars = "AGE", afun = function(x) {
       in_rows(
@@ -305,9 +305,9 @@ Consider the following layout and the resulting table created:
 
 ``` r
 
-lyt6 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt6 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(vars = "AGE", afun = mean, format = "xx.xx")
 
 build_table(lyt6, ADSL)
@@ -346,9 +346,9 @@ or `.format_na_str` parameter in
 
 ``` r
 
-lyt7 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt7 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(vars = "AGE", afun = function(x) {
     rcell(mean(x), format = "xx.xx", label = "Mean", format_na_str = "<missing>")
   })
@@ -369,9 +369,9 @@ build_table(lyt7, ADSL)
 
 ``` r
 
-lyt7a <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt7a <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(vars = "AGE", afun = function(x) {
     in_rows(
       "Mean" = rcell(mean(x), format = "xx.xx"),
@@ -409,9 +409,9 @@ described above are still in place.
 
 ``` r
 
-lyt8 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt8 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(vars = "AGE", afun = function(x) {
     in_rows(
       "Mean" = rcell(mean(x), format = "xx.xx", format_na_str = "<missing>"),
@@ -443,9 +443,9 @@ any).
 
 ``` r
 
-lyt9 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt9 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(vars = "AGE", mean, format = "xx.xx", na_str = "not available")
 
 build_table(lyt9, ADSL)
@@ -469,9 +469,9 @@ precedence.
 
 ``` r
 
-lyt10 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt10 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(
     vars = "AGE", afun = function(x) {
       rcell(mean(x), format = "xx.xx", label = "Mean", format_na_str = "<missing>")
@@ -495,9 +495,9 @@ build_table(lyt10, ADSL)
 
 ``` r
 
-lyt10a <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt10a <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(
     vars = "AGE", afun = function(x) {
       in_rows(
@@ -534,9 +534,9 @@ parent table’s `NA` string, while the `Mean` cells do not.
 
 ``` r
 
-lyt11 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+lyt11 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(
     vars = "AGE", afun = function(x) {
       in_rows(

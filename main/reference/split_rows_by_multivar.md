@@ -131,10 +131,10 @@ to perform the same type of split on a column basis.
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_rows_by_multivar(c("SEX", "STRATA1")) %>%
-  summarize_row_groups() %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by_multivar(c("SEX", "STRATA1")) |>
+  summarize_row_groups() |>
   analyze(c("AGE", "SEX"))
 
 tbl <- build_table(lyt, DM)

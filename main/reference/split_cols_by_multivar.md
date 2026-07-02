@@ -99,7 +99,7 @@ Gabriel Becker
 ``` r
 library(dplyr)
 
-ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+ANL <- DM |> mutate(value = rnorm(n()), pctdiff = runif(n()))
 
 ## toy example where we take the mean of the first variable and the
 ## count of >.5 for the second.
@@ -108,14 +108,14 @@ colfuns <- list(
   function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
 )
 
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by_multivar(c("value", "pctdiff")) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by_multivar(c("value", "pctdiff")) |>
   split_rows_by("RACE",
     split_label = "ethnicity",
     split_fun = drop_split_levels
-  ) %>%
-  summarize_row_groups() %>%
+  ) |>
+  summarize_row_groups() |>
   analyze_colvars(afun = colfuns)
 lyt
 #> A Pre-data Table Layout

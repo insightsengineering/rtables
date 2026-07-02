@@ -120,7 +120,7 @@ outermost faceting first:
 
 ``` r
 lyt_cols <- basic_table() |>
-  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) %>%
+  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) |>
   split_cols_by("ARM", split_fun = keep_split_levels(only = c("A: Drug X", "B: Placebo")))
 
 build_table(lyt_cols, adsl)
@@ -135,7 +135,7 @@ relevant `split_cols_by` call:
 
 ``` r
 lyt_cols <- basic_table() |>
-  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) %>%
+  split_cols_by("STRATA1", split_fun = keep_split_levels(only = c("A", "B"))) |>
   split_cols_by("ARM",
     split_fun = keep_split_levels(only = c("A: Drug X", "B: Placebo")),
     show_colcounts = TRUE

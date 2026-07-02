@@ -78,8 +78,8 @@ fnotes_at_path(obj, rowpath = NULL, colpath = NULL, reset_idx = TRUE) <- value
 
 ``` r
 # How to add referencial footnotes after having created a table
-lyt <- basic_table() %>%
-  split_rows_by("SEX", page_by = TRUE) %>%
+lyt <- basic_table() |>
+  split_rows_by("SEX", page_by = TRUE) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

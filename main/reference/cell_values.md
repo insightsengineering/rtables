@@ -58,16 +58,16 @@ value_at(tt, rowpath = NULL, colpath = NULL)
 ## Examples
 
 ``` r
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
-  split_rows_by("RACE") %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
+  split_rows_by("RACE") |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
   analyze("AGE")
 
 library(dplyr) ## for mutate
-tbl <- build_table(lyt, DM %>%
+tbl <- build_table(lyt, DM |>
   mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 
 row_paths_summary(tbl)

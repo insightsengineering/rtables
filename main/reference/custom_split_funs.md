@@ -110,9 +110,9 @@ d1 <- subset(d1, SEX %in% c("M", "F"))
 d1$SEX <- factor(d1$SEX)
 
 # This table uses the number of values in the SEX column to add the overall col or not
-lyt <- basic_table() %>%
-  split_cols_by("ARM", split_fun = drop_split_levels) %>%
-  split_cols_by("SEX", split_fun = picky_splitter("SEX")) %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM", split_fun = drop_split_levels) |>
+  split_cols_by("SEX", split_fun = picky_splitter("SEX")) |>
   analyze("AGE", show_labels = "visible")
 tbl <- build_table(lyt, d1)
 tbl

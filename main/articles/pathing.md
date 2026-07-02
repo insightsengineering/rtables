@@ -43,8 +43,6 @@ library(rtables)
     ## 
     ##     %||%
 
-    ## Loading required package: magrittr
-
     ## 
     ## Attaching package: 'rtables'
 

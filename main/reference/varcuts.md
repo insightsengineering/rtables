@@ -249,14 +249,14 @@ Gabriel Becker
 library(dplyr)
 
 # split_cols_by_cuts
-lyt <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   split_cols_by_cuts("AGE",
     split_label = "Age",
     cuts = c(0, 25, 35, 1000),
     cutlabels = c("young", "medium", "old")
-  ) %>%
-  analyze(c("BMRKR2", "STRATA2")) %>%
+  ) |>
+  analyze(c("BMRKR2", "STRATA2")) |>
   append_topleft("counts")
 
 tbl <- build_table(lyt, ex_adsl)
@@ -273,14 +273,14 @@ tbl
 #>   S2         6       33     22      6       35     26      5       40     31 
 
 # split_rows_by_cuts
-lyt2 <- basic_table() %>%
-  split_cols_by("ARM") %>%
+lyt2 <- basic_table() |>
+  split_cols_by("ARM") |>
   split_rows_by_cuts("AGE",
     split_label = "Age",
     cuts = c(0, 25, 35, 1000),
     cutlabels = c("young", "medium", "old")
-  ) %>%
-  analyze(c("BMRKR2", "STRATA2")) %>%
+  ) |>
+  analyze(c("BMRKR2", "STRATA2")) |>
   append_topleft("counts")
 
 
@@ -315,10 +315,10 @@ tbl2
 
 # split_cols_by_quartiles
 
-lyt3 <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by_quartiles("AGE", split_label = "Age") %>%
-  analyze(c("BMRKR2", "STRATA2")) %>%
+lyt3 <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by_quartiles("AGE", split_label = "Age") |>
+  analyze(c("BMRKR2", "STRATA2")) |>
   append_topleft("counts")
 
 tbl3 <- build_table(lyt3, ex_adsl)
@@ -335,10 +335,10 @@ tbl3
 #>   S2          21          16         12         12          17          22         11         17          16          22         21         17    
 
 # split_rows_by_quartiles
-lyt4 <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("ARM") %>%
-  split_rows_by_quartiles("AGE", split_label = "Age") %>%
-  analyze("BMRKR2") %>%
+lyt4 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM") |>
+  split_rows_by_quartiles("AGE", split_label = "Age") |>
+  analyze("BMRKR2") |>
   append_topleft(c("Age Quartiles", " Counts BMRKR2"))
 
 tbl4 <- build_table(lyt4, ex_adsl)
@@ -376,8 +376,8 @@ cutfun <- function(x) {
   cutpoints
 }
 
-lyt5 <- basic_table() %>%
-  split_cols_by_cutfun("AGE", cutfun = cutfun) %>%
+lyt5 <- basic_table() |>
+  split_cols_by_cutfun("AGE", cutfun = cutfun) |>
   analyze("SEX")
 
 tbl5 <- build_table(lyt5, ex_adsl)
@@ -390,9 +390,9 @@ tbl5
 #> UNDIFFERENTIATED      1        2  
 
 # split_rows_by_cutfun
-lyt6 <- basic_table() %>%
-  split_cols_by("SEX") %>%
-  split_rows_by_cutfun("AGE", cutfun = cutfun) %>%
+lyt6 <- basic_table() |>
+  split_cols_by("SEX") |>
+  split_rows_by_cutfun("AGE", cutfun = cutfun) |>
   analyze("BMRKR2")
 
 tbl6 <- build_table(lyt6, ex_adsl)

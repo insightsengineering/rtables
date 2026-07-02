@@ -30,8 +30,6 @@ library(rtables)
     ## 
     ##     %||%
 
-    ## Loading required package: magrittr
-
     ## 
     ## Attaching package: 'rtables'
 
@@ -214,9 +212,9 @@ of a table built with section dividers:
 
 ``` r
 
-lyt <- basic_table() %>%
-  split_rows_by("ARM", section_div = "+") %>%
-  split_rows_by("STRATA1", section_div = "") %>%
+lyt <- basic_table() |>
+  split_rows_by("ARM", section_div = "+") |>
+  split_rows_by("STRATA1", section_div = "") |>
   analyze("AGE",
     afun = function(x) list("Mean" = mean(x), "Standard deviation" = sd(x)),
     format = list("Mean" = "xx.", "Standard deviation" = "xx."),

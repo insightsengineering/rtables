@@ -107,9 +107,9 @@ lyt <- basic_table(
   subtitles = c("Sub", "titles"),
   prov_footer = "prov footer",
   main_footer = "main footer"
-) %>%
-  split_cols_by("ARM") %>%
-  split_rows_by("SEX") %>%
+) |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   analyze(c("AGE"))
 
 tbl <- build_table(lyt, DM)

@@ -45,17 +45,17 @@ df <- tibble(
   gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
   handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
   age = rchisq(n, 30) + 10
-) %>% mutate(
+) |> mutate(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
 )
 
-lyt <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  summarize_row_groups() %>%
-  split_rows_by("handed") %>%
-  summarize_row_groups() %>%
+lyt <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  summarize_row_groups() |>
+  split_rows_by("handed") |>
+  summarize_row_groups() |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -94,8 +94,8 @@ or with `dplyr`:
 
 ``` r
 
-df %>%
-  filter(country == "CAN", arm == "Arm A", gender == "Female", handed == "Left") %>%
+df |>
+  filter(country == "CAN", arm == "Arm A", gender == "Female", handed == "Left") |>
   summarise(mean_age = mean(age))
 # # A tibble: 1 × 1
 #   mean_age
@@ -108,9 +108,9 @@ left handed Canadians for each group defined by the 4 columns:
 
 ``` r
 
-df %>%
-  group_by(arm, gender) %>%
-  filter(country == "CAN", handed == "Left") %>%
+df |>
+  group_by(arm, gender) |>
+  filter(country == "CAN", handed == "Left") |>
   summarise(mean_age = mean(age))
 # `summarise()` has regrouped the output.
 # ℹ Summaries were computed grouped by arm and gender.
@@ -132,8 +132,8 @@ We can further get to all the average age cell values with:
 
 ``` r
 
-average_age <- df %>%
-  group_by(arm, gender, country, handed) %>%
+average_age <- df |>
+  group_by(arm, gender, country, handed) |>
   summarise(mean_age = mean(age))
 # `summarise()` has regrouped the output.
 # ℹ Summaries were computed grouped by arm, gender, country, and handed.
@@ -170,11 +170,11 @@ content:
 
 ``` r
 
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  split_rows_by("handed") %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  split_rows_by("handed") |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -213,11 +213,11 @@ row mean values:
 
 ``` r
 
-c_h_df <- df %>%
-  group_by(arm, gender, country, handed) %>%
-  summarize(mean = mean(age), c_h_count = n()) %>%
+c_h_df <- df |>
+  group_by(arm, gender, country, handed) |>
+  summarize(mean = mean(age), c_h_count = n()) |>
   ## we need the sum below to *not* be by country, so that we're dividing by the column counts
-  ungroup(country) %>%
+  ungroup(country) |>
   # now the `handed` grouping has been removed, therefore we can calculate percent now:
   mutate(n_col = sum(c_h_count), c_h_percent = c_h_count / n_col)
 # `summarise()` has regrouped the output.
@@ -254,9 +254,9 @@ above. Next, we will derive the group information for countries:
 
 ``` r
 
-c_df <- df %>%
-  group_by(arm, gender, country) %>%
-  summarize(c_count = n()) %>%
+c_df <- df |>
+  group_by(arm, gender, country) |>
+  summarize(c_count = n()) |>
   # now the `handed` grouping has been removed, therefore we can calculate percent now:
   mutate(n_col = sum(c_count), c_percent = c_count / n_col)
 # `summarise()` has regrouped the output.
@@ -288,7 +288,7 @@ in the same order):
 
 ``` r
 
-full_dplyr <- left_join(c_h_df, c_df) %>% ungroup()
+full_dplyr <- left_join(c_h_df, c_df) |> ungroup()
 # Joining with `by = join_by(arm, gender, country, n_col)`
 ```
 
@@ -307,13 +307,13 @@ The `rtables` call in contrast is:
 
 ``` r
 
-lyt <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  summarize_row_groups() %>%
-  split_rows_by("handed") %>%
-  summarize_row_groups() %>%
+lyt <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  summarize_row_groups() |>
+  split_rows_by("handed") |>
+  summarize_row_groups() |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -346,8 +346,8 @@ frm_rtables_h <- cell_values(
 frm_rtables_h
 # [1] 20.0000000  0.2173913
 
-frm_dplyr_h <- full_dplyr %>%
-  filter(country == "CAN" & handed == "Right" & arm == "Arm B" & gender == "Female") %>%
+frm_dplyr_h <- full_dplyr |>
+  filter(country == "CAN" & handed == "Right" & arm == "Arm B" & gender == "Female") |>
   select(c_h_count, c_h_percent)
 
 frm_dplyr_h
@@ -366,8 +366,8 @@ frm_rtables_c <- cell_values(
 frm_rtables_c
 # [1] 64.0000000  0.6095238
 
-frm_dplyr_c <- full_dplyr %>%
-  filter(country == "CAN" & arm == "Arm A" & gender == "Male") %>%
+frm_dplyr_c <- full_dplyr |>
+  filter(country == "CAN" & arm == "Arm A" & gender == "Male") |>
   select(c_count, c_percent)
 
 frm_dplyr_c
