@@ -1,7 +1,7 @@
 Package: rtables
 Title: Reporting Tables
-Version: 0.6.16.9002
-Date: 2026-07-01
+Version: 0.6.16.9003
+Date: 2026-07-02
 Authors@R: c(
     person("Gabriel", "Becker", , "gabembecker@gmail.com", role = "aut",
            comment = "Original creator of the package"),
@@ -60,10 +60,9 @@ Suggests:
 VignetteBuilder:
     knitr,
     rmarkdown
-Config/Needs/verdepcheck: insightsengineering/formatters,
-    mllg/checkmate, rstudio/htmltools,
-    gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
-    davidgohel/flextable, yihui/knitr, r-lib/lifecycle,
+Config/Needs/verdepcheck: insightsengineering/formatters, mllg/checkmate,
+    rstudio/htmltools, gagolews/stringi, tidymodels/broom, cran/car,
+    tidyverse/dplyr, davidgohel/flextable, yihui/knitr, r-lib/lifecycle,
     davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, therneau/survival,
     r-lib/testthat, tidyverse/tibble, tidyverse/tidyr, r-lib/withr,
     r-lib/xml2
