@@ -67,8 +67,8 @@ functions which accept \code{.N_col} and \code{.N_total} or do not rely on colum
 only way to ensure overridden counts are fully respected.
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("Species") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("Species") |>
   analyze("Sepal.Length", afun = function(x) {
     list(
       "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -81,8 +81,8 @@ tbl <- build_table(lyt, iris)
 tbl
 
 # analyze multiple variables
-lyt2 <- basic_table() \%>\%
-  split_cols_by("Species") \%>\%
+lyt2 <- basic_table() |>
+  split_cols_by("Species") |>
   analyze(c("Sepal.Length", "Petal.Width"), afun = function(x) {
     list(
       "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -94,8 +94,8 @@ tbl2 <- build_table(lyt2, iris)
 tbl2
 
 # an example more relevant for clinical trials with column counts
-lyt3 <- basic_table(show_colcounts = TRUE) \%>\%
-  split_cols_by("ARM") \%>\%
+lyt3 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM") |>
   analyze("AGE", afun = function(x) {
     setNames(as.list(fivenum(x)), c(
       "minimum", "lower-hinge", "median",

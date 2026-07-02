@@ -1,13 +1,13 @@
 context("sorting and pruning")
 
-rawtable <- basic_table() %>%
-  split_cols_by("ARM") %>%
-  split_cols_by("SEX") %>%
-  split_rows_by("RACE") %>%
-  summarize_row_groups() %>%
-  split_rows_by("STRATA1") %>%
-  summarize_row_groups() %>%
-  analyze("AGE") %>%
+rawtable <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_cols_by("SEX") |>
+  split_rows_by("RACE") |>
+  summarize_row_groups() |>
+  split_rows_by("STRATA1") |>
+  summarize_row_groups() |>
+  analyze("AGE") |>
   build_table(DM)
 
 
@@ -30,10 +30,10 @@ test_that("pruning and trimming work", {
     all_zero_or_na(tt)
   }
 
-  smallertab <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
-    analyze("AGE") %>%
+  smallertab <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
+    analyze("AGE") |>
     build_table(DM)
 
   ptab <- prune_table(smallertab, silly_prune)
@@ -45,11 +45,11 @@ test_that("pruning and trimming work", {
   )
 
 
-  biggertab <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
-    split_rows_by("STRATA1") %>%
-    analyze("AGE") %>%
+  biggertab <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
+    split_rows_by("STRATA1") |>
+    analyze("AGE") |>
     build_table(subset(DM, STRATA1 != "C"))
 
   ## something trimmed from every outer facet
@@ -67,11 +67,11 @@ test_that("pruning and trimming work", {
   ## ensure/retain structure unawareness of trim_rows
   expect_identical(dim(trm1), c(6L, 3L))
 
-  smallertab2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
-    summarize_row_groups() %>%
-    analyze("AGE") %>%
+  smallertab2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
+    summarize_row_groups() |>
+    analyze("AGE") |>
     build_table(DM)
 
   expect_identical(
@@ -96,11 +96,11 @@ test_that("pruning and trimming work", {
 })
 
 test_that("provided score functions work", {
-  smallertab2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("SEX") %>%
-    summarize_row_groups() %>%
-    analyze("AGE") %>%
+  smallertab2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("SEX") |>
+    summarize_row_groups() |>
+    analyze("AGE") |>
     build_table(DM)
   kids <- tree_children(smallertab2)
   scores <- sapply(kids, cont_n_allcols)
@@ -134,10 +134,10 @@ test_that("sort_at_path just returns an empty input table", {
 })
 
 test_that("trim_rows and prune_table do the same thing in normal cases", {
-  bigtbl <- basic_table() %>%
-    split_rows_by("RACE") %>%
-    split_rows_by("COUNTRY") %>%
-    analyze("AGE") %>%
+  bigtbl <- basic_table() |>
+    split_rows_by("RACE") |>
+    split_rows_by("COUNTRY") |>
+    analyze("AGE") |>
     build_table(ex_adsl)
 
   ptbl <- prune_table(bigtbl)
@@ -192,23 +192,23 @@ test_that("provided score functions throw informative errors when invalid and * 
   }
 
 
-  lyt_raw <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by(var = "ACTARM", split_fun = add_overall_level("total", first = FALSE)) %>%
-    summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) %>%
+  lyt_raw <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by(var = "ACTARM", split_fun = add_overall_level("total", first = FALSE)) |>
+    summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) |>
     split_rows_by("AEBODSYS",
       indent_mod = -1,
       split_fun = drop_split_levels,
       label_pos = "topleft",
       split_label = "aebod sys label",
       child_labels = "visible"
-    ) %>%
-    summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) %>%
+    ) |>
+    summarize_row_groups("AETOXGR", cfun = basic_grade_count, extra_args = list(grade_groups = grade_groups_dict)) |>
     split_rows_by("AEDECOD",
       indent_mod = -1,
       split_fun = drop_split_levels,
       label_pos = "topleft",
       split_label = "aedecod label"
-    ) %>%
+    ) |>
     analyze("AETOXGR",
       basic_grade_count,
       extra_args = list(grade_groups = grade_groups_dict),
@@ -276,11 +276,11 @@ test_that("provided score functions throw informative errors when invalid and * 
 })
 
 test_that("paths come out correct when sorting with '*'", {
-  tbl <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE") %>%
-    summarize_row_groups() %>%
-    analyze("STRATA1") %>%
+  tbl <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE") |>
+    summarize_row_groups() |>
+    analyze("STRATA1") |>
     build_table(DM)
 
   scorefun <- function(tt) sum(unlist(row_values(tt)))
@@ -306,12 +306,12 @@ test_that("sort_at_path works with uniqified names", {
   adsl <- ex_adsl
   adsl$flag <- sample(c("Y", "N"), nrow(adsl), replace = TRUE)
 
-  lyt <- basic_table() %>%
-    split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
-    split_rows_by("SEX") %>%
-    analyze("BMRKR1") %>%
-    split_rows_by("flag", split_fun = keep_split_levels("Y")) %>%
-    split_rows_by("SEX") %>%
+  lyt <- basic_table() |>
+    split_rows_by("flag", split_fun = keep_split_levels("Y")) |>
+    split_rows_by("SEX") |>
+    analyze("BMRKR1") |>
+    split_rows_by("flag", split_fun = keep_split_levels("Y")) |>
+    split_rows_by("SEX") |>
     analyze("AGE")
 
   tbl <- build_table(lyt, adsl)
@@ -328,8 +328,8 @@ test_that("passing extra stuff to sorting and pruning works", {
     force(myarg) ## cause error if it isn't passed
     TRUE
   }
-  lyt <- basic_table() %>%
-    split_rows_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_rows_by("STRATA1") |>
     analyze("SEX")
 
   tbl <- build_table(lyt, ex_adsl)

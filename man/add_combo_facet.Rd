@@ -38,8 +38,8 @@ mysplfun <- make_split_fun(post = list(
   add_overall_facet("ALL", label = "All Arms")
 ))
 
-lyt <- basic_table(show_colcounts = TRUE) \%>\%
-  split_cols_by("ARM", split_fun = mysplfun) \%>\%
+lyt <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", split_fun = mysplfun) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

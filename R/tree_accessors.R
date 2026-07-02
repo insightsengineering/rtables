@@ -32,8 +32,8 @@ setMethod(
 #' @param x (`TableTree` or `ElementaryTable`)\cr a table object.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze(c("SEX", "AGE"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
@@ -1327,8 +1327,8 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #' @seealso [table_shell()] and [table_shell_str()] for information on the table format structure.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -1628,8 +1628,8 @@ setMethod(
 )
 
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -2675,13 +2675,13 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' @seealso [col_counts()]
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM", show_colcounts = TRUE) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM", show_colcounts = TRUE) |>
 #'   split_cols_by("SEX",
 #'     split_fun = keep_split_levels(c("F", "M")),
 #'     show_colcounts = TRUE
-#'   ) %>%
-#'   split_cols_by("STRATA1", show_colcounts = TRUE) %>%
+#'   ) |>
+#'   split_cols_by("STRATA1", show_colcounts = TRUE) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, ex_adsl)
@@ -3306,15 +3306,15 @@ vil_collapse <- function(x) {
 #' * The order these variable names appear within the return vector is undefined and should not be relied upon.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
-#'   summarize_row_groups(label_fstr = "Overall (N)") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
+#'   summarize_row_groups(label_fstr = "Overall (N)") |>
 #'   split_rows_by("RACE",
 #'     split_label = "Ethnicity", labels_var = "ethn_lab",
 #'     split_fun = drop_split_levels
-#'   ) %>%
-#'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+#'   ) |>
+#'   summarize_row_groups("RACE", label_fstr = "%s (n)") |>
 #'   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 #'
 #' vars_in_layout(lyt)
@@ -3833,8 +3833,8 @@ setMethod(
 #'
 #' @examples
 #' # How to add referencial footnotes after having created a table
-#' lyt <- basic_table() %>%
-#'   split_rows_by("SEX", page_by = TRUE) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("SEX", page_by = TRUE) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -4122,9 +4122,9 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' )
 #' fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 #'
-#' tbl <- basic_table() %>%
-#'   split_rows_by("cat", section_div = "~") %>%
-#'   analyze("value", afun = fast_afun, section_div = " ") %>%
+#' tbl <- basic_table() |>
+#'   split_rows_by("cat", section_div = "~") |>
+#'   analyze("value", afun = fast_afun, section_div = " ") |>
 #'   build_table(df)
 #'
 #' # Getter

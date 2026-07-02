@@ -48,10 +48,10 @@ indent <- function(x, by = 1) {
 #' @return The same class as `tt`, with all indent modifiers set to zero.
 #'
 #' @examples
-#' lyt1 <- basic_table() %>%
-#'   summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
-#'   split_rows_by("AEBODSYS", child_labels = "visible") %>%
-#'   summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
+#' lyt1 <- basic_table() |>
+#'   summarize_row_groups("STUDYID", label_fstr = "overall summary") |>
+#'   split_rows_by("AEBODSYS", child_labels = "visible") |>
+#'   summarize_row_groups("STUDYID", label_fstr = "subgroup summary") |>
 #'   analyze("AGE", indent_mod = -1L)
 #'
 #' tbl1 <- build_table(lyt1, ex_adae)

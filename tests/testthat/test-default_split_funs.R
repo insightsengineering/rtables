@@ -2,12 +2,12 @@ context("Default Split Functions")
 
 # Default split functions ------------------------------------------------------
 test_that("keep_split_levels(reorder) works correctly", {
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by("COUNTRY",
       split_fun = keep_split_levels(c("JPN", "USA", "NGA"),
         reorder = FALSE
       )
-    ) %>%
+    ) |>
     summarize_row_groups() # for simplicity
 
   tbl <- build_table(lyt, DM)
@@ -18,10 +18,10 @@ test_that("keep_split_levels(reorder) works correctly", {
   )
 
   # reorder = TRUE
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by("COUNTRY",
       split_fun = keep_split_levels(c("JPN", "USA", "NGA"))
-    ) %>%
+    ) |>
     summarize_row_groups()
 
   tbl <- build_table(lyt, DM)
@@ -33,10 +33,10 @@ test_that("keep_split_levels(reorder) works correctly", {
 
   # Error only during build
   expect_silent(
-    lyt <- basic_table() %>%
+    lyt <- basic_table() |>
       split_rows_by("COUNTRY",
         split_fun = keep_split_levels(c("AbsentCountry", "USA", "NGA"))
-      ) %>%
+      ) |>
       summarize_row_groups()
   )
   expect_error(build_table(lyt, DM), "AbsentCountry")
@@ -47,20 +47,20 @@ test_that("keep_split_level works also with empty splits", {
   require(dplyr, quietly = TRUE)
 
   # Regression #1010
-  iris2 <- iris %>%
-    mutate(chr_split = as.character(Species)) %>%
+  iris2 <- iris |>
+    mutate(chr_split = as.character(Species)) |>
     mutate(fct_split = factor(rep(1, nrow(iris)), levels = c(1, 2)))
 
-  lyt <- basic_table() %>%
-    split_rows_by("fct_split") %>%
-    split_rows_by("chr_split", split_fun = keep_split_levels(c("setosa"))) %>%
+  lyt <- basic_table() |>
+    split_rows_by("fct_split") |>
+    split_rows_by("chr_split", split_fun = keep_split_levels(c("setosa"))) |>
     analyze("Sepal.Length")
 
   expect_silent(tbl <- build_table(lyt, iris2))
 
   # Error with character
-  lyt <- basic_table() %>%
-    split_rows_by("chr_split", split_fun = keep_split_levels(c("a"))) %>%
+  lyt <- basic_table() |>
+    split_rows_by("chr_split", split_fun = keep_split_levels(c("a"))) |>
     analyze("Sepal.Length")
 
   expect_error(
@@ -70,8 +70,8 @@ test_that("keep_split_level works also with empty splits", {
 
   # Error with factor
   iris2$chr_split <- as.factor(iris2$chr_split)
-  lyt <- basic_table() %>%
-    split_rows_by("chr_split", split_fun = keep_split_levels(c("a"))) %>%
+  lyt <- basic_table() |>
+    split_rows_by("chr_split", split_fun = keep_split_levels(c("a"))) |>
     analyze("Sepal.Length")
 
   expect_error(
@@ -81,14 +81,14 @@ test_that("keep_split_level works also with empty splits", {
 })
 
 test_that("reorder_split_levels(drlevels = TRUE) works", {
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
         neworder = c("U", "F"),
         newlabels = c(U = "Uu", `F` = "Female")
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
   tab <- build_table(lyt, DM)
 
@@ -98,14 +98,14 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
   )
 
   # Error when not present
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
         neworder = c("U", "F", "NotPresent"),
         newlabels = c(U = "Uu", `F` = "Female")
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
 
   expect_error(
@@ -114,14 +114,14 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
   )
 
   # Error when name not present
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
         neworder = c("U", "F"),
         newlabels = c(U = "Uu", Fem = "Female")
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
 
   expect_error(
@@ -130,14 +130,14 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
   )
 
   # Error when vector of different lengths
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
         neworder = c("U", "F"),
         newlabels = c("Uu", "Female", "NotPresent")
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
 
   expect_error(
@@ -147,7 +147,7 @@ test_that("reorder_split_levels(drlevels = TRUE) works", {
 })
 
 test_that("reorder_split_levels(drlevels = FALSE) works", {
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
@@ -155,7 +155,7 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
         newlabels = c(U = "Uu", `F` = "Female"),
         drlevels = FALSE
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
   tab <- build_table(lyt, DM)
 
@@ -165,7 +165,7 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
   )
 
   # Error when newlabels too many
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
@@ -173,7 +173,7 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
         newlabels = c(U = "Uu", `F` = "Female", "ThisNotGood"),
         drlevels = FALSE
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
 
   expect_error(
@@ -182,7 +182,7 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
   )
 
   # Error when newlabels have empty "" names (but some names)
-  lyt <- basic_table() %>%
+  lyt <- basic_table() |>
     split_rows_by(
       "SEX",
       split_fun = reorder_split_levels(
@@ -190,7 +190,7 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
         newlabels = c(U = "Uu", "Female"),
         drlevels = FALSE
       )
-    ) %>%
+    ) |>
     summarize_row_groups()
 
   expect_error(
@@ -201,15 +201,15 @@ test_that("reorder_split_levels(drlevels = FALSE) works", {
 
 ## regression test (https://github.com/insightsengineering/rtables/issues/191)
 test_that("regression for reorder_split_levels(newlabels)", {
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
     split_rows_by(
       "COUNTRY",
       split_fun = reorder_split_levels(
         neworder = c("CAN", "PAK", "BRA"),
         newlabels = c(CAN = "Canada", PAK = "Pakistan", BRA = "Brazil")
       )
-    ) %>%
+    ) |>
     analyze("AGE")
   tab <- build_table(lyt, ex_adsl)
   expect_identical(
@@ -221,8 +221,8 @@ test_that("regression for reorder_split_levels(newlabels)", {
 test_that("remove_split_levels works as expected with factor variables", {
   my_split_fun <- remove_split_levels(excl = "ASIAN")
 
-  l <- basic_table() %>%
-    split_rows_by("RACE", split_fun = my_split_fun) %>%
+  l <- basic_table() |>
+    split_rows_by("RACE", split_fun = my_split_fun) |>
     summarize_row_groups()
 
   tab <- build_table(l, DM)
@@ -230,8 +230,8 @@ test_that("remove_split_levels works as expected with factor variables", {
   expect_false("ASIAN" %in% row.names(tab))
 
   # No error if not present
-  l <- basic_table() %>%
-    split_rows_by("RACE", split_fun = remove_split_levels("a")) %>%
+  l <- basic_table() |>
+    split_rows_by("RACE", split_fun = remove_split_levels("a")) |>
     summarize_row_groups()
 
   expect_silent(tab <- build_table(l, DM))
@@ -240,9 +240,9 @@ test_that("remove_split_levels works as expected with factor variables", {
 test_that("remove_split_levels works as expected with character variables", {
   my_split_fun <- remove_split_levels(excl = "ASIAN")
 
-  l <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE", split_fun = my_split_fun) %>%
+  l <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE", split_fun = my_split_fun) |>
     summarize_row_groups()
 
   DM2 <- DM
@@ -255,9 +255,9 @@ test_that("remove_split_levels works as expected with character variables", {
 test_that("drop_and_remove_levels works as expected when dropping not appearing levels", {
   my_split_fun <- drop_and_remove_levels(excl = "ASIAN")
 
-  l <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE", split_fun = my_split_fun) %>%
+  l <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE", split_fun = my_split_fun) |>
     summarize_row_groups()
 
   tab <- build_table(l, DM)
@@ -271,9 +271,9 @@ test_that("drop_and_remove_levels works as expected when dropping not appearing 
 test_that("drop_and_remove_levels also works with character variables", {
   my_split_fun <- drop_and_remove_levels(excl = "ASIAN")
 
-  l <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE", split_fun = my_split_fun) %>%
+  l <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE", split_fun = my_split_fun) |>
     summarize_row_groups()
 
   DM2 <- DM
@@ -297,9 +297,9 @@ test_that("trim_levels_to_map split function works", {
     stringsAsFactors = FALSE
   )
 
-  lyt <- basic_table() %>%
-    split_rows_by("LBCAT") %>%
-    split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
+  lyt <- basic_table() |>
+    split_rows_by("LBCAT") |>
+    split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) |>
     analyze("ANRIND")
   tbl1 <- build_table(lyt, ex_adlb)
 
@@ -321,16 +321,16 @@ test_that("trim_levels_to_map split function works", {
     "C: Combination", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER"
   )
 
-  lyt2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("RACE", split_fun = trim_levels_to_map(map = map2)) %>%
+  lyt2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by("RACE", split_fun = trim_levels_to_map(map = map2)) |>
     analyze("AGE")
 
   expect_error(build_table(lyt2, DM), regexp = "map does not allow")
 
-  lyt3 <- basic_table() %>%
-    split_cols_by("ARM", split_fun = trim_levels_to_map(map = map2)) %>%
-    split_cols_by("RACE", split_fun = trim_levels_to_map(map = map2)) %>%
+  lyt3 <- basic_table() |>
+    split_cols_by("ARM", split_fun = trim_levels_to_map(map = map2)) |>
+    split_cols_by("RACE", split_fun = trim_levels_to_map(map = map2)) |>
     analyze("AGE")
 
   tbl3 <- build_table(lyt3, DM)
@@ -363,10 +363,10 @@ test_that("trim_levels_to_map split function works", {
     stringsAsFactors = FALSE
   )
 
-  lyt4 <- basic_table() %>%
-    split_rows_by("LBCAT", split_fun = trim_levels_to_map(map = map)) %>%
-    split_rows_by("PARAM", split_fun = trim_levels_to_map(map = map)) %>%
-    split_rows_by("VISIT", split_fun = trim_levels_to_map(map = map)) %>%
+  lyt4 <- basic_table() |>
+    split_rows_by("LBCAT", split_fun = trim_levels_to_map(map = map)) |>
+    split_rows_by("PARAM", split_fun = trim_levels_to_map(map = map)) |>
+    split_rows_by("VISIT", split_fun = trim_levels_to_map(map = map)) |>
     analyze("ABN")
 
   tbl4 <- build_table(lyt4, df = data)
@@ -394,9 +394,9 @@ test_that("trim_levels_in_group works", {
   )
 
   ## This works
-  tbl1 <- basic_table() %>%
-    split_rows_by("l1", split_fun = trim_levels_in_group("l2")) %>%
-    analyze("l2") %>%
+  tbl1 <- basic_table() |>
+    split_rows_by("l1", split_fun = trim_levels_in_group("l2")) |>
+    analyze("l2") |>
     build_table(dat1)
 
 
@@ -406,9 +406,9 @@ test_that("trim_levels_in_group works", {
   )
 
   ## This previously gave an error because trim_levels_in_group did not drop the empty "l1" levels
-  tbl2 <- basic_table() %>%
-    split_rows_by("l1", split_fun = trim_levels_in_group("l2")) %>%
-    analyze("l2") %>%
+  tbl2 <- basic_table() |>
+    split_rows_by("l1", split_fun = trim_levels_in_group("l2")) |>
+    analyze("l2") |>
     build_table(dat2)
 
   expect_identical(nrow(tbl1), 6L)

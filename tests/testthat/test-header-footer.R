@@ -12,8 +12,8 @@ test_that("referential footnotes work", {
   lyt <- basic_table(
     title = "Title says Whaaaat", subtitles = "Oh, ok.",
     main_footer = "ha HA! Footer!"
-  ) %>%
-    split_cols_by("ARM") %>%
+  ) |>
+    split_cols_by("ARM") |>
     analyze("AGE", afun = analysisfun)
 
   result <- build_table(lyt, ex_adsl)
@@ -52,8 +52,8 @@ test_that("referential footnotes work", {
       .formats = list(mean = "xx.x", range = "xx - xx")
     )
   }
-  lyt2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt2 <- basic_table() |>
+    split_cols_by("ARM") |>
     analyze("AGE", afun = analysisfun2, extra_args = list(cutoff = mean(ex_adsl$AGE)))
   tbl <- build_table(lyt2, ex_adsl)
   rdf2 <- make_row_df(tbl)
@@ -70,10 +70,10 @@ test_that("post-processing addition of referential footnotes works", {
     "AMERICAN INDIAN OR ALASKA NATIVE",
     "MULTIPLE"
   )
-  l1 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) %>%
-    summarize_row_groups() %>%
+  l1 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) |>
+    summarize_row_groups() |>
     analyze("AGE", mean, format = "xx.x")
 
 
@@ -141,9 +141,9 @@ test_that("post-processing addition of referential footnotes works", {
 
 
 
-  l2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) %>%
+  l2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE", split_fun = keep_split_levels(race_levels)) |>
     analyze("AGE", mean, format = "xx.x")
 
   tb2 <- build_table(l2, DM)

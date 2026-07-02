@@ -45,12 +45,12 @@ We prepare the data as needed to observe the desired effects in our summary tabl
 ```{r}
 adtte <- ex_adtte
 
-anl <- adtte %>%
-  dplyr::filter(PARAMCD == "OS") %>%
-  dplyr::filter(ARM %in% c("A: Drug X", "B: Placebo")) %>%
-  dplyr::filter(RACE %in% c("ASIAN", "BLACK OR AFRICAN AMERICAN", "WHITE")) %>%
-  dplyr::mutate(RACE = droplevels(RACE)) %>%
-  dplyr::mutate(ARM = droplevels(stats::relevel(ARM, "B: Placebo"))) %>%
+anl <- adtte |>
+  dplyr::filter(PARAMCD == "OS") |>
+  dplyr::filter(ARM %in% c("A: Drug X", "B: Placebo")) |>
+  dplyr::filter(RACE %in% c("ASIAN", "BLACK OR AFRICAN AMERICAN", "WHITE")) |>
+  dplyr::mutate(RACE = droplevels(RACE)) |>
+  dplyr::mutate(ARM = droplevels(stats::relevel(ARM, "B: Placebo"))) |>
   dplyr::mutate(EVENT = 1 - CNSR)
 ```
 
@@ -355,7 +355,7 @@ Following this row split, we use `summarize_row_groups` with `a_cox_summary` as 
 The last part of our table is the covariate interaction effects. We use `analyze_colvars` with `a_cox_summary` as `afun`, and again inherit `extra_args` from the column split. Using an `rtables` "analyze" function generates data rows, with one row corresponding to each covariate level (or median value, for numeric covariates), nested under the content row (main effect) for that same covariate.
 
 ```{r}
-lyt <- basic_table() %>%
+lyt <- basic_table() |>
   ## Column split: one column for each statistic
   split_cols_by_multivar(
     vars = rep("STUDYID", length(my_stats)),
@@ -365,21 +365,21 @@ lyt <- basic_table() %>%
       format = my_formats,
       cache_env = ny_cache_env
     )
-  ) %>%
+  ) |>
   ## Create content row for treatment effect
-  summarize_row_groups(cfun = a_cox_summary) %>%
+  summarize_row_groups(cfun = a_cox_summary) |>
   ## Row split: one content row for each covariate
   split_rows_by_multivar(
     vars = my_covs,
     varlabels = my_cov_labs,
     split_label = "Covariate:",
     indent_mod = -1 ## Align split label left
-  ) %>%
+  ) |>
   ## Create content rows for covariate main effects
   summarize_row_groups(
     cfun = a_cox_summary,
     extra_args = list(cov_main = TRUE)
-  ) %>%
+  ) |>
   ## Create data rows for covariate interaction effects
   analyze_colvars(afun = a_cox_summary)
 ```

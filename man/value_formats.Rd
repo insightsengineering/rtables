@@ -31,8 +31,8 @@ Matrix (storage mode list) containing the effective format for each cell positio
 Returns a matrix of formats for the cells in a table.
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
+lyt <- basic_table() |>
+  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

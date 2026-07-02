@@ -125,12 +125,12 @@ func_takes <- function(func, params, is_first = FALSE) {
   }
   f_params <- formals(func)
   if (!is_first) {
-    return(setNames(params %in% names(f_params), params))
+    setNames(params %in% names(f_params), params)
   } else {
     if (length(params) > 1L) {
       stop("is_first works only with one parameters.")
     }
-    return(!is.null(f_params) && names(f_params)[1] == params)
+    !is.null(f_params) && names(f_params)[1] == params
   }
 }
 

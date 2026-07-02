@@ -54,10 +54,10 @@ NULL
 #'
 #' @examples
 #' # keep_split_levels keeps specified levels (reorder = TRUE by default)
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table() |>
 #'   split_rows_by("COUNTRY",
 #'     split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
-#'   ) %>%
+#'   ) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -105,13 +105,13 @@ keep_split_levels <- function(only, reorder = TRUE) {
 #'
 #' @examples
 #' # remove_split_levels removes specified split levels
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table() |>
 #'   split_rows_by("COUNTRY",
 #'     split_fun = remove_split_levels(c(
 #'       "USA", "CAN",
 #'       "CHE", "BRA"
 #'     ))
-#'   ) %>%
+#'   ) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -140,8 +140,8 @@ remove_split_levels <- function(excl) {
 #'
 #' @examples
 #' # drop_split_levels drops levels that are not present in the data
-#' lyt <- basic_table() %>%
-#'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("SEX", split_fun = drop_split_levels) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -173,8 +173,8 @@ drop_split_levels <- function(df,
 #'
 #' @examples
 #' # Removing "M" and "U" directly, then "UNDIFFERENTIATED" because not in data
-#' lyt <- basic_table() %>%
-#'   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -211,21 +211,21 @@ drop_and_remove_levels <- function(excl) {
 #'
 #' @examples
 #' # Reordering levels in split variable
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table() |>
 #'   split_rows_by(
 #'     "SEX",
 #'     split_fun = reorder_split_levels(
 #'       neworder = c("U", "F"),
 #'       newlabels = c(U = "Uu", `F` = "Female")
 #'     )
-#'   ) %>%
+#'   ) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
 #' # Reordering levels in split variable but keeping all the levels
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table() |>
 #'   split_rows_by(
 #'     "SEX",
 #'     split_fun = reorder_split_levels(
@@ -233,7 +233,7 @@ drop_and_remove_levels <- function(excl) {
 #'       newlabels = c("Uu", "Female"),
 #'       drlevels = FALSE
 #'     )
-#'   ) %>%
+#'   ) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -322,9 +322,9 @@ reorder_split_levels <- function(neworder,
 #'   col2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
 #' ) # N is removed if drop_outlevs = TRUE, x is removed always
 #'
-#' tbl <- basic_table() %>%
-#'   split_rows_by("col1", split_fun = trim_levels_in_group("col2")) %>%
-#'   analyze("col2") %>%
+#' tbl <- basic_table() |>
+#'   split_rows_by("col1", split_fun = trim_levels_in_group("col2")) |>
+#'   analyze("col2") |>
 #'   build_table(dat)
 #' tbl
 #'
@@ -416,21 +416,21 @@ trim_levels_in_group <- function(innervar, drop_outlevs = TRUE) {
 #' @seealso [custom_split_funs] and [split_funcs].
 #'
 #' @examples
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table() |>
 #'   split_cols_by("ARM", split_fun = add_overall_level("All Patients",
 #'     first = FALSE
-#'   )) %>%
+#'   )) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   split_rows_by("RACE",
 #'     split_fun = add_overall_level("All Ethnicities")
-#'   ) %>%
-#'   summarize_row_groups(label_fstr = "%s (n)") %>%
+#'   ) |>
+#'   summarize_row_groups(label_fstr = "%s (n)") |>
 #'   analyze("AGE")
 #' lyt2
 #'
@@ -483,14 +483,14 @@ select_all_levels <- new("AllLevelsSentinel")
 #'   "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()
 #' )
 #'
-#' lyt <- basic_table(show_colcounts = TRUE) %>%
-#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+#' lyt <- basic_table(show_colcounts = TRUE) |>
+#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' lyt1 <- basic_table(show_colcounts = TRUE) %>%
+#' lyt1 <- basic_table(show_colcounts = TRUE) |>
 #'   split_cols_by("ARM",
 #'     split_fun = add_combo_levels(combodf,
 #'       keep_levels = c(
@@ -498,7 +498,7 @@ select_all_levels <- new("AllLevelsSentinel")
 #'         "A_C"
 #'       )
 #'     )
-#'   ) %>%
+#'   ) |>
 #'   analyze("AGE")
 #'
 #' tbl1 <- build_table(lyt1, DM)
@@ -506,19 +506,19 @@ select_all_levels <- new("AllLevelsSentinel")
 #'
 #' smallerDM <- droplevels(subset(DM, SEX %in% c("M", "F") &
 #'   grepl("^(A|B)", ARM)))
-#' lyt2 <- basic_table(show_colcounts = TRUE) %>%
-#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf[1, ])) %>%
+#' lyt2 <- basic_table(show_colcounts = TRUE) |>
+#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf[1, ])) |>
 #'   split_cols_by("SEX",
 #'     split_fun = add_overall_level("SEX_ALL", "All Genders")
-#'   ) %>%
+#'   ) |>
 #'   analyze("AGE")
 #'
-#' lyt3 <- basic_table(show_colcounts = TRUE) %>%
-#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+#' lyt3 <- basic_table(show_colcounts = TRUE) |>
+#'   split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
 #'   split_rows_by("SEX",
 #'     split_fun = add_overall_level("SEX_ALL", "All Genders")
-#'   ) %>%
-#'   summarize_row_groups() %>%
+#'   ) |>
+#'   summarize_row_groups() |>
 #'   analyze("AGE")
 #'
 #' tbl3 <- build_table(lyt3, smallerDM)
@@ -607,9 +607,9 @@ add_combo_levels <- function(combosdf,
 #'   stringsAsFactors = FALSE
 #' )
 #'
-#' lyt <- basic_table() %>%
-#'   split_rows_by("LBCAT") %>%
-#'   split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("LBCAT") |>
+#'   split_rows_by("PARAMCD", split_fun = trim_levels_to_map(map = map)) |>
 #'   analyze("ANRIND")
 #' tbl <- build_table(lyt, ex_adlb)
 #'

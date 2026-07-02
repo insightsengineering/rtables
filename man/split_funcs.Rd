@@ -100,60 +100,60 @@ and \code{\link[=make_split_fun]{make_split_fun()}} for a more advanced API.
 }
 \examples{
 # keep_split_levels keeps specified levels (reorder = TRUE by default)
-lyt <- basic_table() \%>\%
+lyt <- basic_table() |>
   split_rows_by("COUNTRY",
     split_fun = keep_split_levels(c("USA", "CAN", "BRA"))
-  ) \%>\%
+  ) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 # remove_split_levels removes specified split levels
-lyt <- basic_table() \%>\%
+lyt <- basic_table() |>
   split_rows_by("COUNTRY",
     split_fun = remove_split_levels(c(
       "USA", "CAN",
       "CHE", "BRA"
     ))
-  ) \%>\%
+  ) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 # drop_split_levels drops levels that are not present in the data
-lyt <- basic_table() \%>\%
-  split_rows_by("SEX", split_fun = drop_split_levels) \%>\%
+lyt <- basic_table() |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 # Removing "M" and "U" directly, then "UNDIFFERENTIATED" because not in data
-lyt <- basic_table() \%>\%
-  split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) \%>\%
+lyt <- basic_table() |>
+  split_rows_by("SEX", split_fun = drop_and_remove_levels(c("M", "U"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 # Reordering levels in split variable
-lyt <- basic_table() \%>\%
+lyt <- basic_table() |>
   split_rows_by(
     "SEX",
     split_fun = reorder_split_levels(
       neworder = c("U", "F"),
       newlabels = c(U = "Uu", `F` = "Female")
     )
-  ) \%>\%
+  ) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
 tbl
 
 # Reordering levels in split variable but keeping all the levels
-lyt <- basic_table() \%>\%
+lyt <- basic_table() |>
   split_rows_by(
     "SEX",
     split_fun = reorder_split_levels(
@@ -161,7 +161,7 @@ lyt <- basic_table() \%>\%
       newlabels = c("Uu", "Female"),
       drlevels = FALSE
     )
-  ) \%>\%
+  ) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)
@@ -173,9 +173,9 @@ dat <- data.frame(
   col2 = factor(c("a", "b", "c"), levels = c("a", "b", "c", "x"))
 ) # N is removed if drop_outlevs = TRUE, x is removed always
 
-tbl <- basic_table() \%>\%
-  split_rows_by("col1", split_fun = trim_levels_in_group("col2")) \%>\%
-  analyze("col2") \%>\%
+tbl <- basic_table() |>
+  split_rows_by("col1", split_fun = trim_levels_in_group("col2")) |>
+  analyze("col2") |>
   build_table(dat)
 tbl
 

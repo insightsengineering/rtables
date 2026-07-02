@@ -3,9 +3,9 @@ context("table structure validation")
 test_that("table structure validation and sanitization work", {
   bad_dat <- DM
   bad_dat$RACE <- NA
-  bad_lyt1 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE") %>%
+  bad_lyt1 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE") |>
     analyze("AGE")
   bad_tab1 <- build_table(bad_lyt1, bad_dat)
 
@@ -29,10 +29,10 @@ test_that("table structure validation and sanitization work", {
     col_info(bad_tab1)
   )
 
-  bad_lyt2 <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("RACE") %>%
-    split_rows_by("SEX") %>%
+  bad_lyt2 <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("RACE") |>
+    split_rows_by("SEX") |>
     summarize_row_groups()
 
   bad_tab2 <- build_table(bad_lyt2, DM)

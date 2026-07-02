@@ -1324,8 +1324,8 @@ recursive_applysplit <- function(df,
 #'   declared in `lyt` to the data `df`.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("Species") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("Species") |>
 #'   analyze("Sepal.Length", afun = function(x) {
 #'     list(
 #'       "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -1338,8 +1338,8 @@ recursive_applysplit <- function(df,
 #' tbl
 #'
 #' # analyze multiple variables
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("Species") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("Species") |>
 #'   analyze(c("Sepal.Length", "Petal.Width"), afun = function(x) {
 #'     list(
 #'       "mean (sd)" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -1351,8 +1351,8 @@ recursive_applysplit <- function(df,
 #' tbl2
 #'
 #' # an example more relevant for clinical trials with column counts
-#' lyt3 <- basic_table(show_colcounts = TRUE) %>%
-#'   split_cols_by("ARM") %>%
+#' lyt3 <- basic_table(show_colcounts = TRUE) |>
+#'   split_cols_by("ARM") |>
 #'   analyze("AGE", afun = function(x) {
 #'     setNames(as.list(fivenum(x)), c(
 #'       "minimum", "lower-hinge", "median",

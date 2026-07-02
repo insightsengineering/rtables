@@ -168,10 +168,10 @@ setMethod(
 #' a summary to the terminal.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("STRATA1") %>%
-#'   split_cols_by("SEX", nested = FALSE) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("STRATA1") |>
+#'   split_cols_by("SEX", nested = FALSE) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, ex_adsl)

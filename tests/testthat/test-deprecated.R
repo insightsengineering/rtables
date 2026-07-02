@@ -3,15 +3,15 @@ context("deprecated functionality")
 
 test_that("deprecated things are still there and work kinda", {
   lifecycle::expect_deprecated(lyt11 <- split_cols_by(lyt = NULL, "ARM"))
-  expect_identical(lyt11, basic_table() %>% split_cols_by("ARM"))
+  expect_identical(lyt11, basic_table() |> split_cols_by("ARM"))
   lifecycle::expect_deprecated(lyt22 <- split_rows_by(lyt = NULL, "ARM"))
-  expect_identical(lyt22, basic_table() %>% split_rows_by("ARM"))
+  expect_identical(lyt22, basic_table() |> split_rows_by("ARM"))
 })
 
 test_that("deprecated insert_rrow still currently works", {
-  tbl <- basic_table() %>%
-    split_cols_by("Species") %>%
-    analyze("Sepal.Length") %>%
+  tbl <- basic_table() |>
+    split_cols_by("Species") |>
+    analyze("Sepal.Length") |>
     build_table(iris)
 
   lifecycle::expect_deprecated(res1 <- insert_rrow(tbl, rrow("Hello World")))
@@ -24,10 +24,10 @@ test_that("deprecated insert_rrow still currently works", {
   mf2 <- matrix_form(res2)
   expect_identical(mf2$strings[3, , drop = TRUE], c("Hello World", "", "", ""))
 
-  tbl2 <- basic_table() %>%
-    split_cols_by("Species") %>%
-    split_rows_by("Species") %>%
-    analyze("Sepal.Length") %>%
+  tbl2 <- basic_table() |>
+    split_cols_by("Species") |>
+    split_rows_by("Species") |>
+    analyze("Sepal.Length") |>
     build_table(iris)
   ## for coverage
   res3 <- insert_rrow(tbl2, rrow("Hello World"))
@@ -51,13 +51,13 @@ test_that("deprecated insert_rrow still currently works", {
 })
 
 test_that("add_colcounts works", {
-  tbl1 <- basic_table() %>%
-    add_colcounts() %>%
-    analyze("AGE") %>%
+  tbl1 <- basic_table() |>
+    add_colcounts() |>
+    analyze("AGE") |>
     build_table(DM)
 
-  tbl2 <- basic_table(show_colcounts = TRUE) %>%
-    analyze("AGE") %>%
+  tbl2 <- basic_table(show_colcounts = TRUE) |>
+    analyze("AGE") |>
     build_table(DM)
 
   expect_true(identical(tbl1, tbl2))
@@ -65,16 +65,16 @@ test_that("add_colcounts works", {
 
 test_that("add_colcounts format argument works", {
   # 2d count (%) format works
-  tbl1 <- basic_table() %>%
-    add_colcounts(format = "xx (xx%)") %>%
-    split_cols_by("ARM") %>%
+  tbl1 <- basic_table() |>
+    add_colcounts(format = "xx (xx%)") |>
+    split_cols_by("ARM") |>
     build_table(DM)
   mf_tbl1_colcounts <- matrix_form(tbl1)$strings[2, ]
   expect_identical(mf_tbl1_colcounts, c("", "121 (100%)", "106 (100%)", "129 (100%)"))
 
   # correct error message for 2d format without %
-  lyt <- basic_table() %>%
-    add_colcounts(format = "xx (xx)") %>%
+  lyt <- basic_table() |>
+    add_colcounts(format = "xx (xx)") |>
     split_cols_by("ARM")
   expect_error(
     matrix_form(build_table(lyt, DM)),
@@ -85,8 +85,8 @@ test_that("add_colcounts format argument works", {
   )
 
   # correct error message for 3d colcount format
-  lyt <- basic_table() %>%
-    add_colcounts(format = "xx.x (xx.x - xx.x)") %>%
+  lyt <- basic_table() |>
+    add_colcounts(format = "xx.x (xx.x - xx.x)") |>
     split_cols_by("ARM")
   expect_error(matrix_form(build_table(lyt, DM)), "3d formats are not supported for column counts.")
 })

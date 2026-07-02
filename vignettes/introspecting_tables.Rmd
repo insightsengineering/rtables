@@ -41,12 +41,12 @@ library(dplyr)
 First, let's set up a simple table.
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") %>%
-  split_cols_by("STRATA2", show_colcounts = TRUE) %>%
-  split_rows_by("STRATA1") %>%
-  add_overall_col("All") %>%
-  summarize_row_groups() %>%
+lyt <- basic_table() |>
+  split_cols_by("ARMCD", show_colcounts = TRUE, colcount_format = "N=xx") |>
+  split_cols_by("STRATA2", show_colcounts = TRUE) |>
+  split_rows_by("STRATA1") |>
+  add_overall_col("All") |>
+  summarize_row_groups() |>
   analyze("AGE", afun = max, format = "xx.x")
 
 tbl <- build_table(lyt, ex_adsl)

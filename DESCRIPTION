@@ -16,6 +16,7 @@ Authors@R: c(
            comment = c(ORCID = "0009-0005-2083-1105")),
     person("Joe", "Zhu", , "joe.zhu@roche.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7566-2787")),
+    person("David", "Munoz Tord", , "david.munoztord@mailbox.org", role = "ctb"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd"))
   )
 Description: Reporting tables often have structure that goes beyond simple
@@ -34,7 +35,6 @@ URL: https://github.com/insightsengineering/rtables,
 BugReports: https://github.com/insightsengineering/rtables/issues
 Depends:
     formatters (>= 0.5.12),
-    magrittr (>= 2.0.3),
     methods,
     R (>= 4.1)
 Imports:
@@ -61,7 +61,7 @@ VignetteBuilder:
     knitr,
     rmarkdown
 Config/Needs/verdepcheck: insightsengineering/formatters,
-    tidyverse/magrittr, mllg/checkmate, rstudio/htmltools,
+    mllg/checkmate, rstudio/htmltools,
     gagolews/stringi, tidymodels/broom, cran/car, tidyverse/dplyr,
     davidgohel/flextable, yihui/knitr, r-lib/lifecycle,
     davidgohel/officer, Merck/r2rtf, rstudio/rmarkdown, therneau/survival,

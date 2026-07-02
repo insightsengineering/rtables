@@ -53,8 +53,8 @@ import_from_tsv <- function(file) {
 #' @importFrom formatters export_as_txt
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
@@ -74,8 +74,8 @@ formatters::export_as_txt
 #' @importFrom formatters export_as_pdf
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze(c("AGE", "BMRKR2", "COUNTRY"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
