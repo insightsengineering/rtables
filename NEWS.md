@@ -22,7 +22,7 @@
  * Added vignette: Guided Tour (Advanced) - (stub) `TableTree` Objects - (stub) Custom Pruning Functions @gmbecker
  
 ### Bug Fixes
- * `obj_na_str<-` RowsVerticalSection method now correctly recycles length 1 values @gmbecker
+ * `indent_mod<-` RowsVerticalSection method now correctly recycles length 1 values @gmbecker
 
 ## rtables 0.6.15
 

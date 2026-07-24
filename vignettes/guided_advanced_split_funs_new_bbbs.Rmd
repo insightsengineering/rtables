@@ -124,7 +124,11 @@ put_facets_first_last <- function(first = NULL, last = NULL) {
     all_speced <- c(first, last)
 
     if (!all(all_speced %in% fac_names)) {
-      stop("Facet(s) []", paste(setdiff(all_speced, fac_names), collapse = ", "), "] not found in incoming split result.")
+      stop(
+        "Facet(s) []",
+        paste(setdiff(all_speced, fac_names), collapse = ", "),
+        "] not found in incoming split result."
+      )
     }
     tmpfun <- restrict_facets(c(first, setdiff(fac_names, all_speced), last), op = "keep", reorder = TRUE)
     tmpfun(ret, spl, fulldf)

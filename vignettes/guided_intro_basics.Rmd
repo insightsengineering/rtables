@@ -181,7 +181,7 @@ lyt_basic <- basic_table() |>
   summarize_row_groups("SEX") |>
   analyze("BMRKR2")
 
-build_table(lyt_basic)
+build_table(lyt_basic, ex_adsl)
 ```
 
 Thus we have created a basic table. In practice, our table structures
