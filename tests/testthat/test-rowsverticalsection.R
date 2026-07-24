@@ -56,5 +56,15 @@ test_that("print and combine method for RVS objects work", {
   check_rvs(c(minrvs, minrvs))
   check_rvs(c(minrvs, fullrvs))
   check_rvs(c(fullrvs, minrvs))
-  expect_identical(length(names(c(minrvs, fullrvs))), 2L)
+  comb <- c(minrvs, fullrvs)
+  expect_identical(length(names(comb)), 2L)
+  expect_identical(obj_format(comb),
+                   unname(c(obj_format(minrvs), obj_format(fullrvs))))
+  ## NULL/unset gets set to NA_character_, unlike formats
+  expect_identical(obj_na_str(comb),
+                   c(NA_character_, "XXX"))
+
+  ## unfortunately we can only catch this direction b/c c(5, minrv)
+  ## never gets to our method. Fundamental limitation of custom c methods.
+  expect_error(c(minrvs, 5))
 })

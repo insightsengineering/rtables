@@ -2,9 +2,7 @@
 % Please edit documentation in R/00tabletrees.R
 \name{c.RowsVerticalSection}
 \alias{c.RowsVerticalSection}
-\title{Combine RowsVerticalSection objects
-Combine two or more RowsVerticalSection objects (as returned
-by \code{\link[=in_rows]{in_rows()}}) into a single object}
+\title{Combine RowsVerticalSection objects}
 \usage{
 \method{c}{RowsVerticalSection}(...)
 }
@@ -16,7 +14,6 @@ A single RowsVerticalSection object containing all
 row sections from the objects passed to \code{...}
 }
 \description{
-Combine RowsVerticalSection objects
 Combine two or more RowsVerticalSection objects (as returned
 by \code{\link[=in_rows]{in_rows()}}) into a single object
 }
