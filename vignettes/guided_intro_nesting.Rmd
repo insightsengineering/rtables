@@ -55,13 +55,12 @@ column), with a couple caveats we discuss later. We see this default
 behavior below:
 
 ```{r}
-
 lyt <- basic_table() |>
-    split_cols_by("ARM") |>
-    split_cols_by("STRATA1") |>
-    split_rows_by("SEX") |>
-    split_rows_by("BMRKR2") |>
-    analyze("AGE")
+  split_cols_by("ARM") |>
+  split_cols_by("STRATA1") |>
+  split_rows_by("SEX") |>
+  split_rows_by("BMRKR2") |>
+  analyze("AGE")
 build_table(lyt, ex_adsl)
 ```
 
@@ -72,12 +71,12 @@ single `analyze` call would have in its place.
 
 ```{r}
 lyt2 <- basic_table() |>
-    split_cols_by("ARM") |>
-    split_cols_by("STRATA1") |>
-    split_rows_by("SEX") |>
-    split_rows_by("BMRKR2") |>
-    analyze("AGE") |>
-    analyze("BMRKR1")
+  split_cols_by("ARM") |>
+  split_cols_by("STRATA1") |>
+  split_rows_by("SEX") |>
+  split_rows_by("BMRKR2") |>
+  analyze("AGE") |>
+  analyze("BMRKR1")
 head(build_table(lyt2, ex_adsl), 32)
 ```
 
