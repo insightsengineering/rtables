@@ -22,9 +22,9 @@ test_that("Result Data Frame generation works v0", {
   )
 
   ## handle multiple analyses
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("STRATA1") |>
     analyze(c("AGE", "BMRKR2"))
 
   tbl2 <- build_table(lyt, ex_adsl)
@@ -39,8 +39,8 @@ test_that("Result Data Frame generation works v0", {
     b = c(1, NA)
   )
 
-  lyt3 <- basic_table() %>%
-    split_cols_by_multivar(c("a", "b")) %>%
+  lyt3 <- basic_table() |>
+    split_cols_by_multivar(c("a", "b")) |>
     analyze_colvars(afun = length, inclNAs = TRUE)
 
   tbl3 <- build_table(lyt3, test)
@@ -49,8 +49,8 @@ test_that("Result Data Frame generation works v0", {
   expect_identical(nrow(result_df3), 1L)
 
   ## test labels when no row splits
-  lyt4 <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt4 <- basic_table() |>
+    split_cols_by("ARM") |>
     analyze(c("AGE", "SEX"))
 
   tbl4 <- build_table(lyt4, DM)
@@ -91,10 +91,10 @@ test_that("as_result_df works with visual output (data_format as numeric)", {
   rownames(string_tbl) <- NULL
   expect_equal(res, string_tbl)
 
-  expect_silent(basic_table() %>% build_table(DM) %>% as_result_df())
+  expect_silent(basic_table() |> build_table(DM) |> as_result_df())
 
-  tbl <- basic_table(show_colcounts = TRUE) %>%
-    analyze("BMRKR1") %>%
+  tbl <- basic_table(show_colcounts = TRUE) |>
+    analyze("BMRKR1") |>
     build_table(DM)
   expect_equal(as_result_df(tbl)$`all obs`, 5.851948, tolerance = 1e-6)
   expect_equal(
@@ -106,9 +106,9 @@ test_that("as_result_df works with visual output (data_format as numeric)", {
 
 
   # Test for integer extraction and ranges
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("STRATA1") |>
     analyze("AGE", afun = function(x) list(a = mean(x), b = range(x)))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -134,9 +134,9 @@ test_that("as_result_df works with visual output (data_format as numeric)", {
 
 test_that("as_result_df works fine also with multiple rbind_root", {
   # regression test for rtables#815
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_rows_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_rows_by("STRATA1") |>
     analyze(c("AGE", "BMRKR2"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -150,10 +150,10 @@ test_that("as_result_df works fine also with multiple rbind_root", {
 
 test_that("as_result_df keeps label rows", {
   # regression test for rtables#815
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA2") %>%
-    split_rows_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA2") |>
+    split_rows_by("STRATA1") |>
     analyze(c("AGE", "BMRKR2"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -171,7 +171,7 @@ test_that("as_result_df keeps label rows", {
   expect_identical(ncol(rd1), ncol(rd4))
 
   expect_identical(as.character(rd1[3, ]), as.character(rd2[5, ]))
-  expect_identical(rd3[["A: Drug X.S1"]], rd4[["A: Drug X.S1"]] %>% unlist())
+  expect_identical(rd3[["A: Drug X.S1"]], rd4[["A: Drug X.S1"]] |> unlist())
 
   # More challenging labels
   lyt <- make_big_lyt()
@@ -210,12 +210,12 @@ test_that("as_result_df simplify is producing a data.frame that is compatible wi
 
   expect_identical(
     ard_out$label_name,
-    df_to_tt(ard_out) %>% row.names()
+    df_to_tt(ard_out) |> row.names()
   )
 
   init_tbl <- df_to_tt(mtcars)
-  end_tbl <- init_tbl %>%
-    as_result_df(simplify = TRUE) %>%
+  end_tbl <- init_tbl |>
+    as_result_df(simplify = TRUE) |>
     df_to_tt()
 
   expect_equal(
@@ -225,7 +225,7 @@ test_that("as_result_df simplify is producing a data.frame that is compatible wi
 })
 
 test_that("as_result_df works fine with empty tables and no character(0) is allowed", {
-  tbl <- basic_table() %>%
+  tbl <- basic_table() |>
     build_table(mtcars)
 
   expect_silent(as_result_df(tbl))
@@ -241,9 +241,9 @@ test_that("as_result_df works fine with empty tables and no character(0) is allo
 })
 
 test_that("as_result_df works with analyze-only tables (odd num of path elements)", {
-  tbl <- basic_table() %>%
-    analyze("cyl", table_names = "a") %>%
-    analyze("mpg") %>%
+  tbl <- basic_table() |>
+    analyze("cyl", table_names = "a") |>
+    analyze("mpg") |>
     build_table(mtcars)
 
   expect_equal(as_result_df(tbl, add_tbl_name_split = TRUE)$group1[[1]], "<analysis_spl_tbl_name>")
@@ -289,9 +289,9 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
     )
   }
 
-  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
-    analyze(vars = "AGE", afun = mean_sd_custom) %>%
+  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") |>
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) |>
+    analyze(vars = "AGE", afun = mean_sd_custom) |>
     analyze(vars = "SEX", afun = counts_percentage_custom)
 
   tbl <- build_table(lyt, ex_adsl)
@@ -334,8 +334,8 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
   )
 
   # Default values
-  lyt <- basic_table() %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table() |>
+    split_cols_by("ARM") |>
     analyze(c("AGE", "SEX"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -345,10 +345,10 @@ test_that("make_ard produces realistic ARD output with as_result_df", {
 })
 
 test_that("make_ard works with multiple row levels", {
-  lyt <- basic_table() %>%
-    split_rows_by("STRATA1") %>%
-    split_rows_by("STRATA2") %>%
-    split_cols_by("ARM") %>%
+  lyt <- basic_table() |>
+    split_rows_by("STRATA1") |>
+    split_rows_by("STRATA2") |>
+    split_cols_by("ARM") |>
     analyze(c("AGE", "SEX"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -379,10 +379,10 @@ test_that("make_ard works with multiple row levels", {
 })
 
 test_that("make_ard works with multiple column levels", {
-  lyt <- basic_table() %>%
-    split_rows_by("STRATA1") %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA2") %>%
+  lyt <- basic_table() |>
+    split_rows_by("STRATA1") |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA2") |>
     analyze(c("AGE", "SEX"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -414,12 +414,12 @@ test_that("make_ard works with multiple column levels", {
 })
 
 test_that("make_ard works with summarize_row_groups", {
-  lyt <- basic_table() %>%
-    split_rows_by("STRATA2") %>%
-    summarize_row_groups() %>%
-    split_rows_by("ARM") %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_rows_by("STRATA2") |>
+    summarize_row_groups() |>
+    split_rows_by("ARM") |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA1") |>
     analyze(c("AGE", "SEX"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -452,12 +452,12 @@ test_that("make_ard works with summarize_row_groups", {
   )
 
   # Testing different placements of summarize_row_groups
-  lyt <- basic_table() %>%
-    split_rows_by("STRATA2") %>%
-    split_rows_by("ARM") %>%
-    summarize_row_groups() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_rows_by("STRATA2") |>
+    split_rows_by("ARM") |>
+    summarize_row_groups() |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA1") |>
     analyze(c("AGE", "SEX"))
 
   tbl <- build_table(lyt, ex_adsl)
@@ -496,8 +496,8 @@ test_that("make_ard works if there are no stat_names", {
     )
   }
 
-  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") %>%
-    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) %>%
+  lyt <- basic_table(show_colcounts = TRUE, colcount_format = "N=xx") |>
+    split_cols_by("ARM", split_fun = keep_split_levels(c("A: Drug X", "B: Placebo"))) |>
     analyze(vars = "AGE", afun = mean_sd_custom)
 
   tbl <- build_table(lyt, ex_adsl)
@@ -506,22 +506,22 @@ test_that("make_ard works if there are no stat_names", {
 })
 
 test_that("make_ard works if string precision is needed", {
-  lyt <- basic_table() %>%
-    split_rows_by("ARM") %>%
-    summarize_row_groups() %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA1") %>%
+  lyt <- basic_table() |>
+    split_rows_by("ARM") |>
+    summarize_row_groups() |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA1") |>
     analyze(c("AGE", "SEX"))
 
   tbl <- build_table(lyt, ex_adsl)
 
   # Some edge cases
   expect_equal(
-    as_result_df(tbl[, 1], make_ard = TRUE) %>% dim(),
+    as_result_df(tbl[, 1], make_ard = TRUE) |> dim(),
     c(21, 12)
   )
   expect_equal(
-    as_result_df(tbl[1, ], make_ard = TRUE) %>% dim(),
+    as_result_df(tbl[1, ], make_ard = TRUE) |> dim(),
     c(18, 12)
   )
 
@@ -545,7 +545,7 @@ test_that("make_ard works with split_cols_by_multivar", {
     gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
     handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
     age = rchisq(n, 30) + 10
-  ) %>% mutate(
+  ) |> mutate(
     weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
   )
 
@@ -554,11 +554,11 @@ test_that("make_ard works with split_cols_by_multivar", {
     function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
   )
 
-  lyt <- basic_table() %>%
-    split_cols_by("arm") %>%
-    split_cols_by_multivar(c("age", "weight")) %>%
-    split_rows_by("country") %>%
-    summarize_row_groups() %>%
+  lyt <- basic_table() |>
+    split_cols_by("arm") |>
+    split_cols_by_multivar(c("age", "weight")) |>
+    split_rows_by("country") |>
+    summarize_row_groups() |>
     analyze_colvars(afun = colfuns)
 
   tbl <- build_table(lyt, df)
@@ -577,10 +577,10 @@ test_that("make_ard works when printed format differs from cell values", {
     }
   }
 
-  test_out <- basic_table() %>%
-    split_rows_by("ARM") %>%
-    split_cols_by("ARM") %>%
-    analyze(vars = "AGE", afun = mean_sd_custom) %>%
+  test_out <- basic_table() |>
+    split_rows_by("ARM") |>
+    split_cols_by("ARM") |>
+    analyze(vars = "AGE", afun = mean_sd_custom) |>
     build_table(DM)
 
   expect_warning(

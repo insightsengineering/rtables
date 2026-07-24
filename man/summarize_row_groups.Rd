@@ -65,10 +65,10 @@ that can be used in \code{cfun}.
 \examples{
 DM2 <- subset(DM, COUNTRY \%in\% c("USA", "CAN", "CHN"))
 
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
-  summarize_row_groups(label_fstr = "\%s (n)") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("COUNTRY", split_fun = drop_split_levels) |>
+  summarize_row_groups(label_fstr = "\%s (n)") |>
   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 lyt
 
@@ -90,14 +90,14 @@ sfun <- function(x, labelstr, trim) {
   )
 }
 
-lyt2 <- basic_table(show_colcounts = TRUE) \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("COUNTRY", split_fun = drop_split_levels) \%>\%
+lyt2 <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM") |>
+  split_rows_by("COUNTRY", split_fun = drop_split_levels) |>
   summarize_row_groups("AGE",
     cfun = sfun,
     extra_args = list(trim = .2)
-  ) \%>\%
-  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx") \%>\%
+  ) |>
+  analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx") |>
   append_topleft(c("Country", "  Age"))
 
 tbl2 <- build_table(lyt2, DM2)

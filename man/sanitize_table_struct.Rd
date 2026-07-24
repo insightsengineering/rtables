@@ -28,9 +28,9 @@ guaranteed to be non-degenerate.
 \examples{
 sanitize_table_struct(rtable("cool beans"))
 
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
-  split_rows_by("SEX") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
+  split_rows_by("SEX") |>
   summarize_row_groups()
 
 ## Degenerate because it doesn't have any analyze calls -> no data rows

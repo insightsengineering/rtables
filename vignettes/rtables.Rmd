@@ -86,7 +86,7 @@ df <- tibble(
   gender = factor(sample(c("Female", "Male"), n, replace = TRUE), levels = c("Female", "Male")),
   handed = factor(sample(c("Left", "Right"), n, prob = c(.6, .4), replace = TRUE), levels = c("Left", "Right")),
   age = rchisq(n, 30) + 10
-) %>% mutate(
+) |> mutate(
   weight = 35 * rnorm(n, sd = .5) + ifelse(gender == "Female", 140, 180)
 )
 
@@ -102,13 +102,13 @@ information of `df` below.
 The aim of this vignette is to build the following table step by step:
 
 ```{r, echo=FALSE}
-lyt <- basic_table(show_colcounts = TRUE) %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  summarize_row_groups() %>%
-  split_rows_by("handed") %>%
-  summarize_row_groups() %>%
+lyt <- basic_table(show_colcounts = TRUE) |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  summarize_row_groups() |>
+  split_rows_by("handed") |>
+  summarize_row_groups() |>
   analyze("age", afun = mean, format = "xx.xx")
 
 tbl <- build_table(lyt, df)
@@ -157,7 +157,7 @@ representing all data. Analyzing a variable is one way of adding a
 row:
 
 ```{r}
-lyt <- basic_table() %>%
+lyt <- basic_table() |>
   analyze("age", mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -203,8 +203,8 @@ We will now add more structure to the columns by adding a column split
 based on the factor variable `arm`:
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -222,9 +222,9 @@ add a non-nested split. Here we splitting each arm further by the
 gender:
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -246,10 +246,10 @@ data row. We will add more row structure by stratifying the mean
 analysis by country (i.e. adding a split in the row space):
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -270,11 +270,11 @@ of pages during rendering. We do this via 'page by splits', which are
 declared via `page_by = TRUE` within a call to `split_rows_by`:
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country", page_by = TRUE) %>%
-  split_rows_by("handed") %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country", page_by = TRUE) |>
+  split_rows_by("handed") |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -304,11 +304,11 @@ the count (`nrows()`) and percentage of data relative to the column
 associated data is calculated:
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  summarize_row_groups() %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  summarize_row_groups() |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -331,12 +331,12 @@ We can further split the row space by dividing each country by
 handedness:
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  summarize_row_groups() %>%
-  split_rows_by("handed") %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  summarize_row_groups() |>
+  split_rows_by("handed") |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)
@@ -347,13 +347,13 @@ Next, we further add a count and percentage summary for handedness
 within each country:
 
 ```{r}
-lyt <- basic_table() %>%
-  split_cols_by("arm") %>%
-  split_cols_by("gender") %>%
-  split_rows_by("country") %>%
-  summarize_row_groups() %>%
-  split_rows_by("handed") %>%
-  summarize_row_groups() %>%
+lyt <- basic_table() |>
+  split_cols_by("arm") |>
+  split_cols_by("gender") |>
+  split_rows_by("country") |>
+  summarize_row_groups() |>
+  split_rows_by("handed") |>
+  summarize_row_groups() |>
   analyze("age", afun = mean, format = "xx.x")
 
 tbl <- build_table(lyt, df)

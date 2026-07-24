@@ -218,8 +218,8 @@ test_that("make_afun .indent_mods argument works", {
     c(nrow_df = 2L, .N_col = 1L, a = 1L, b = 2L)
   )
 
-  tbl <- basic_table() %>%
-    analyze("Sepal.Length", a_imod) %>%
+  tbl <- basic_table() |>
+    analyze("Sepal.Length", a_imod) |>
     build_table(iris)
   rows <- tree_children(tbl)
   expect_identical(
@@ -286,11 +286,11 @@ test_that("make_afun+build_table integration tests", {
       min_max = "xx.xx - xx.xx"
     )
   )
-  tbl <- basic_table() %>%
+  tbl <- basic_table() |>
     analyze(
       "Sepal.Length",
       afun = a_summary
-    ) %>%
+    ) |>
     build_table(iris)
 
   expect_identical(
@@ -302,12 +302,12 @@ test_that("make_afun+build_table integration tests", {
     )
   )
 
-  tbl2 <- basic_table() %>%
-    split_cols_by("Species") %>%
+  tbl2 <- basic_table() |>
+    split_cols_by("Species") |>
     analyze(
       "Sepal.Length",
       afun = a_summary
-    ) %>%
+    ) |>
     build_table(iris)
 
   expect_identical(
@@ -343,11 +343,11 @@ test_that("make_afun+build_table integration tests", {
       min_max = "Range"
     )
   )
-  tbl3 <- basic_table() %>%
+  tbl3 <- basic_table() |>
     analyze(
       "Sepal.Length",
       afun = a_summary2
-    ) %>%
+    ) |>
     build_table(iris)
 
   expect_identical(
@@ -359,12 +359,12 @@ test_that("make_afun+build_table integration tests", {
     )
   )
 
-  tbl4 <- basic_table() %>%
-    split_cols_by("Species") %>%
+  tbl4 <- basic_table() |>
+    split_cols_by("Species") |>
     analyze(
       "Sepal.Length",
       afun = a_summary2
-    ) %>%
+    ) |>
     build_table(iris)
 
   expect_identical(
@@ -383,11 +383,11 @@ test_that("make_afun+build_table integration tests", {
     a_summary,
     .labels = c(min_max = "New Range")
   )
-  tbl5 <- basic_table() %>%
-    split_cols_by("Species") %>%
+  tbl5 <- basic_table() |>
+    split_cols_by("Species") |>
     analyze("Sepal.Length",
       afun = a_function3
-    ) %>%
+    ) |>
     build_table(iris)
 
   expect_identical(
@@ -403,11 +403,11 @@ test_that("make_afun+build_table integration tests", {
     a_summary2,
     .labels = c(min_max = "New Range")
   )
-  tbl5 <- basic_table() %>%
-    split_cols_by("Species") %>%
+  tbl5 <- basic_table() |>
+    split_cols_by("Species") |>
     analyze("Sepal.Length",
       afun = a_function4
-    ) %>%
+    ) |>
     build_table(iris)
 
   expect_identical(

@@ -110,9 +110,9 @@ setGeneric(
 #' d1$SEX <- factor(d1$SEX)
 #'
 #' # This table uses the number of values in the SEX column to add the overall col or not
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM", split_fun = drop_split_levels) %>%
-#'   split_cols_by("SEX", split_fun = picky_splitter("SEX")) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM", split_fun = drop_split_levels) |>
+#'   split_cols_by("SEX", split_fun = picky_splitter("SEX")) |>
 #'   analyze("AGE", show_labels = "visible")
 #' tbl <- build_table(lyt, d1)
 #' tbl
@@ -253,12 +253,12 @@ NULL
 #'   ret
 #' }
 #'
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   split_cols_by_multivar(c("USUBJID", "AESEQ", "BMRKR1"),
 #'     varlabels = c("N", "E", "BMR1"),
 #'     split_fun = uneven_splfun
-#'   ) %>%
+#'   ) |>
 #'   analyze_colvars(list(
 #'     USUBJID = function(x, ...) length(unique(x)),
 #'     AESEQ = max,

@@ -130,8 +130,8 @@ col_fnotes_at_path <- function(ctree, path, fnotes) {
 #' @seealso [DataRow()], [rrow()]
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -239,8 +239,8 @@ setMethod(
 #' determining the full paths to content rows.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -534,13 +534,13 @@ tt_normalize_row_path <- function(obj,
 #'
 #' @examples
 #' # Accessing sub table.
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX") %>%
-#'   split_rows_by("BMRKR2") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX") |>
+#'   split_rows_by("BMRKR2") |>
 #'   analyze("AGE")
 #'
-#' tbl <- build_table(lyt, ex_adsl) %>% prune_table()
+#' tbl <- build_table(lyt, ex_adsl) |> prune_table()
 #' sub_tbl <- tt_at_path(tbl, path = c("SEX", "F", "BMRKR2"))
 #'
 #' # Removing sub table.
@@ -549,12 +549,12 @@ tt_normalize_row_path <- function(obj,
 #' tbl2
 #'
 #' # Setting sub table.
-#' lyt3 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX") %>%
+#' lyt3 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX") |>
 #'   analyze("BMRKR2")
 #'
-#' tbl3 <- build_table(lyt3, ex_adsl) %>% prune_table()
+#' tbl3 <- build_table(lyt3, ex_adsl) |> prune_table()
 #'
 #' tt_at_path(tbl3, path = c("SEX", "F", "BMRKR2")) <- sub_tbl
 #' tbl3
@@ -648,9 +648,9 @@ setMethod(
 #'   subtitles = c("Sub", "titles"),
 #'   prov_footer = "prov footer",
 #'   main_footer = "main footer"
-#' ) %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX") %>%
+#' ) |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX") |>
 #'   analyze(c("AGE"))
 #'
 #' tbl <- build_table(lyt, DM)
@@ -860,9 +860,9 @@ setMethod(
 #'   subtitles = c("Sub", "titles"),
 #'   prov_footer = "prov footer",
 #'   main_footer = "main footer"
-#' ) %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
+#' ) |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
 #'   analyze(c("AGE"))
 #'
 #' tbl <- build_table(lyt, DM)
@@ -1508,17 +1508,17 @@ setMethod(
 #'   value.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
-#'   split_rows_by("RACE") %>%
-#'   summarize_row_groups() %>%
-#'   split_rows_by("STRATA1") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
+#'   split_rows_by("RACE") |>
+#'   summarize_row_groups() |>
+#'   split_rows_by("STRATA1") |>
 #'   analyze("AGE")
 #'
 #' @examplesIf require(dplyr)
 #' library(dplyr) ## for mutate
-#' tbl <- build_table(lyt, DM %>%
+#' tbl <- build_table(lyt, DM |>
 #'   mutate(SEX = droplevels(SEX), RACE = droplevels(RACE)))
 #'
 #' row_paths_summary(tbl)

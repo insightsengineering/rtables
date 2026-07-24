@@ -261,17 +261,10 @@
 \alias{value_labels,ValueWrapper-method}
 \alias{value_labels,LevelComboSplitValue-method}
 \alias{value_labels,MultiVarSplit-method}
-\alias{value_expr}
-\alias{value_expr,ValueWrapper-method}
-\alias{value_expr,ANY-method}
 \alias{spl_varlabels}
 \alias{spl_varlabels,MultiVarSplit-method}
 \alias{spl_varlabels<-}
 \alias{spl_varlabels<-,MultiVarSplit-method}
-\alias{splv_extra}
-\alias{splv_extra,SplitValue-method}
-\alias{splv_extra<-}
-\alias{splv_extra<-,SplitValue-method}
 \alias{split_exargs}
 \alias{split_exargs,Split-method}
 \alias{split_exargs<-}
@@ -955,12 +948,6 @@ value_labels(obj)
 
 \S4method{value_labels}{MultiVarSplit}(obj)
 
-value_expr(obj)
-
-\S4method{value_expr}{ValueWrapper}(obj)
-
-\S4method{value_expr}{ANY}(obj)
-
 spl_varlabels(obj)
 
 \S4method{spl_varlabels}{MultiVarSplit}(obj)
@@ -968,14 +955,6 @@ spl_varlabels(obj)
 spl_varlabels(object) <- value
 
 \S4method{spl_varlabels}{MultiVarSplit}(object) <- value
-
-splv_extra(obj)
-
-\S4method{splv_extra}{SplitValue}(obj)
-
-splv_extra(obj) <- value
-
-\S4method{splv_extra}{SplitValue}(obj) <- value
 
 split_exargs(obj)
 
@@ -1326,14 +1305,14 @@ attention to this documentation.
 \dontshow{if (require(dplyr)) withAutoprint(\{ # examplesIf}
 library(dplyr)
 
-iris2 <- iris \%>\%
-  group_by(Species) \%>\%
-  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) \%>\%
+iris2 <- iris |>
+  group_by(Species) |>
+  mutate(group = as.factor(rep_len(c("a", "b"), length.out = n()))) |>
   ungroup()
 
-lyt <- basic_table() \%>\%
-  split_cols_by("Species") \%>\%
-  split_cols_by("group") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("Species") |>
+  split_cols_by("group") |>
   analyze(c("Sepal.Length", "Petal.Width"),
     afun = list_wrap_x(summary),
     format = "xx.xx"
@@ -1341,8 +1320,8 @@ lyt <- basic_table() \%>\%
 
 tbl <- build_table(lyt, iris2)
 \dontshow{\}) # examplesIf}
-lyt <- basic_table() \%>\%
-  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) \%>\%
+lyt <- basic_table() |>
+  split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

@@ -137,19 +137,19 @@ match_fun_args <- function(fun, ...) {
 #' }
 #'
 #' # Main layout of the table
-#' raw_lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' raw_lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   split_rows_by(
 #'     "RACE",
 #'     split_fun = drop_and_remove_levels("WHITE") # dropping WHITE levels
-#'   ) %>%
-#'   summarize_row_groups() %>%
-#'   split_rows_by("STRATA1") %>%
-#'   summarize_row_groups() %>%
+#'   ) |>
+#'   summarize_row_groups() |>
+#'   split_rows_by("STRATA1") |>
+#'   summarize_row_groups() |>
 #'   analyze("AGE", afun = more_analysis_fnc)
 #'
 #' # Creating the table and pruning empty and NAs
-#' tbl <- build_table(raw_lyt, DM) %>%
+#' tbl <- build_table(raw_lyt, DM) |>
 #'   prune_table()
 #'
 #' # Peek at the table structure to understand how it is built
@@ -177,8 +177,8 @@ match_fun_args <- function(fun, ...) {
 #'   }
 #' }
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_rows_by("SEX") %>%
+#' lyt2 <- basic_table() |>
+#'   split_rows_by("SEX") |>
 #'   analyze("AGE")
 #'
 #' tbl2 <- build_table(lyt2, DM)

@@ -1,8 +1,10 @@
-## rtables 0.6.16.9001
+## rtables 0.6.16.9003
 
 ### New Features
  * Added `restrict_facets` function factory for use with `make_split_fun` @gmbecker
  * Exported previously internal `make_subset_expr` for use when constructing custom splitting behavior
+ * Exported previously internal `splv_extra` and `splv_extra<-` accessors for getting and setting child-specific extra arguments on `SplitValue` objects.
+ * Exported previously internal `value_expr` accessor for retrieving the subsetting expression from a `SplitValue` or `ValueWrapper` object.
  * Added accessor methods for RowsVerticalSection objects: `row_cells`, `obj_format`, `obj_format<-`, `obj_na_str`, `obj_na_str<-`, `cell_values`
  * Added `c` method for directly combining `RowsVerticalSection` objects
  * Added vignette: Guided Tour (Advanced) @gmbecker

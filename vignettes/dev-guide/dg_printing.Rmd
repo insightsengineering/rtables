@@ -28,12 +28,12 @@ Lets track down what is going under the hood when a standard table is printed. T
 ```{r}
 library(rtables)
 library(dplyr)
-lyt <- basic_table() %>%
-  split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-  split_cols_by("ARM") %>%
-  analyze("BMRKR1") %>%
+lyt <- basic_table() |>
+  split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+  split_cols_by("ARM") |>
+  analyze("BMRKR1") |>
   print()
-tbl <- build_table(lyt, ex_adsl) %>%
+tbl <- build_table(lyt, ex_adsl) |>
   print()
 ```
 
@@ -63,11 +63,11 @@ methods(class = "PreDataTableLayouts")
 Now, lets see the same for our result table `tbl`: 
 
 ```{r}
-class(tbl) %>% print()
+class(tbl) |> print()
 
-getClass("TableTree") %>% print() # Main object representing a table in {rtables}
+getClass("TableTree") |> print() # Main object representing a table in {rtables}
 
-methods(class = "TableTree") %>% print() # more than 70 methods but no print method
+methods(class = "TableTree") |> print() # more than 70 methods but no print method
 ```
 
 Again, the class itself has only the `show` method. Nonetheless, if you search for `VTableTree"` you will find the `print` method for the `TableTree` class. This is because `VTableTree` is a virtual class that is inherited by `TableTree` and is almost identical to the `show` method for `TableTree` objects. All the different statements in this case (`show` or `print`) do the same thing, i.e. they call `toString` and `cat` on the object. Hence, we know that every table is printed by `toString` with `\n` as separator for different lines so that `cat` renders it in its final format.

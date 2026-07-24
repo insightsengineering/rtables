@@ -28,8 +28,8 @@ Insert a row into an existing table directly before or directly after an existin
 non-label) row, specified by its path.
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) \%>\%
+lyt <- basic_table() |>
+  split_rows_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
   analyze("AGE")
 
 tbl <- build_table(lyt, DM)

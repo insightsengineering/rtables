@@ -79,7 +79,7 @@ indentation on multiple lines.
 }
 }
 \examples{
-lyt <- basic_table() \%>\%
+lyt <- basic_table() |>
   analyze("AGE", afun = mean)
 
 tbl <- build_table(lyt, DM)
@@ -93,8 +93,8 @@ lyt2 <- basic_table(
     "test.R program, executed at",
     Sys.time()
   )
-) \%>\%
-  split_cols_by("ARM") \%>\%
+) |>
+  split_cols_by("ARM") |>
   analyze("AGE", mean)
 
 tbl2 <- build_table(lyt2, DM)
@@ -103,7 +103,7 @@ tbl2
 lyt3 <- basic_table(
   show_colcounts = TRUE,
   colcount_format = "xx. (xx.\%)"
-) \%>\%
+) |>
   split_cols_by("ARM")
 
 }

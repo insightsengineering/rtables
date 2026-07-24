@@ -19,8 +19,8 @@ A list of paths to each row/column within \code{x}.
 Get a list of table row/column paths
 }
 \examples{
-lyt <- basic_table() \%>\%
-  split_cols_by("ARM") \%>\%
+lyt <- basic_table() |>
+  split_cols_by("ARM") |>
   analyze(c("SEX", "AGE"))
 
 tbl <- build_table(lyt, ex_adsl)

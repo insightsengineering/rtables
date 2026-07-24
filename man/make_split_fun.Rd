@@ -66,9 +66,9 @@ mysplitfun <- make_split_fun(
   post = list(add_overall_facet("ALL", "All Arms"))
 )
 
-basic_table(show_colcounts = TRUE) \%>\%
-  split_cols_by("ARM", split_fun = mysplitfun) \%>\%
-  analyze("AGE") \%>\%
+basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", split_fun = mysplitfun) |>
+  analyze("AGE") |>
   build_table(subset(DM, ARM \%in\% c("B: Placebo", "C: Combination")))
 
 ## post (and pre) arguments can take multiple functions, here
@@ -89,9 +89,9 @@ mysplitfun2 <- make_split_fun(
     reorder_facets
   )
 )
-basic_table(show_colcounts = TRUE) \%>\%
-  split_cols_by("ARM", split_fun = mysplitfun2) \%>\%
-  analyze("AGE") \%>\%
+basic_table(show_colcounts = TRUE) |>
+  split_cols_by("ARM", split_fun = mysplitfun2) |>
+  analyze("AGE") |>
   build_table(subset(DM, ARM \%in\% c("B: Placebo", "C: Combination")))
 
 very_stupid_core <- function(spl, df, vals, labels, .spl_context) {
@@ -113,9 +113,9 @@ nonsense_splfun <- make_split_fun(
 ## recall core split overriding is not supported in column space
 ## currently, but we can see it in action in row space
 
-lyt_silly <- basic_table() \%>\%
-  split_rows_by("ARM", split_fun = nonsense_splfun) \%>\%
-  summarize_row_groups() \%>\%
+lyt_silly <- basic_table() |>
+  split_rows_by("ARM", split_fun = nonsense_splfun) |>
+  summarize_row_groups() |>
   analyze("AGE")
 silly_table <- build_table(lyt_silly, DM)
 silly_table

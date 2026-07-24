@@ -1057,8 +1057,8 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #'
 #' @examples
 #' o <- options(warn = 0)
-#' lyt <- basic_table() %>%
-#'   split_cols_by("Species") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("Species") |>
 #'   analyze("Sepal.Length")
 #'
 #' tbl <- build_table(lyt, iris)
@@ -1066,9 +1066,9 @@ chk_compat_cinfos <- function(tt1, tt2) {
 #' insert_rrow(tbl, rrow("Hello World"))
 #' insert_rrow(tbl, rrow("Hello World"), at = 2)
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("Species") %>%
-#'   split_rows_by("Species") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("Species") |>
+#'   split_rows_by("Species") |>
 #'   analyze("Sepal.Length")
 #'
 #' tbl2 <- build_table(lyt2, iris)

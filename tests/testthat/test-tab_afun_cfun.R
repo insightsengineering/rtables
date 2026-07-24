@@ -6,12 +6,12 @@ test_that(".spl_context contains information about the column split", {
 
   ## Duplication hack -> This would need to use  split_cols_by_multivar(...)
   # Workaround for #690
-  DM_tmp <- DM %>%
+  DM_tmp <- DM |>
     mutate(method = factor("Mean"))
 
   DM_tmp <- rbind(
     DM_tmp,
-    DM_tmp %>% mutate(method = factor("SD"))
+    DM_tmp |> mutate(method = factor("SD"))
   )
 
   analysis_fun_fin <- function(x, .spl_context, labelstr = "", ...) {
@@ -28,15 +28,15 @@ test_that(".spl_context contains information about the column split", {
     in_rows(.list = res)
   }
 
-  lyt <- basic_table() %>%
-    split_rows_by("STRATA1") %>%
-    split_cols_by(var = "method") %>%
-    split_cols_by("SEX", split_fun = drop_split_levels) %>%
+  lyt <- basic_table() |>
+    split_rows_by("STRATA1") |>
+    split_cols_by(var = "method") |>
+    split_cols_by("SEX", split_fun = drop_split_levels) |>
     analyze(vars = "BMRKR1", afun = analysis_fun_fin, format = "xx.xxx")
 
-  expect_silent(tbl <- lyt %>% build_table(DM_tmp))
+  expect_silent(tbl <- lyt |> build_table(DM_tmp))
 
-  DM_B_F <- DM %>% filter(SEX == "F", STRATA1 == "B")
+  DM_B_F <- DM |> filter(SEX == "F", STRATA1 == "B")
   expect_equal(tbl[4, 1, drop = TRUE], mean(DM_B_F$BMRKR1))
   expect_equal(tbl[4, 3, drop = TRUE], sd(DM_B_F$BMRKR1))
 })
@@ -90,31 +90,31 @@ test_that(".spl_context and afun extra parameters contain information about comb
           FUN.VALUE = character(1)
         )
         # Use of cexpr
-        alt_df1c <- .alt_df_row %>%
+        alt_df1c <- .alt_df_row |>
           filter(eval(.all_col_exprs[[AC_colname[1]]]))
-        alt_df2c <- .alt_df_row %>%
+        alt_df2c <- .alt_df_row |>
           filter(eval(.all_col_exprs[[AC_colname[2]]]))
 
         # Normal execution - no use of cexpr
-        alt_df1 <- .alt_df_row %>%
+        alt_df1 <- .alt_df_row |>
           filter(
             ARM == "A: Drug X",
             COUNTRY == .spl_context$cur_col_split_val[[1]][2]
           )
-        alt_df2 <- .alt_df_row %>%
+        alt_df2 <- .alt_df_row |>
           filter(
             ARM == "C: Combination",
             COUNTRY == .spl_context$cur_col_split_val[[1]][2]
           )
 
         # Super manual extraction
-        alt_df1b <- alt_counts_df %>%
+        alt_df1b <- alt_counts_df |>
           filter(
             ARM == "A: Drug X",
             COUNTRY == .spl_context$cur_col_split_val[[1]][2],
             SEX == .spl_context$value[3]
           )
-        alt_df2b <- alt_counts_df %>%
+        alt_df2b <- alt_counts_df |>
           filter(
             ARM == "C: Combination",
             COUNTRY == .spl_context$cur_col_split_val[[1]][2],
@@ -123,9 +123,9 @@ test_that(".spl_context and afun extra parameters contain information about comb
 
         # All strata is add_overall_level -> filter not needed
         if (.spl_context$value[[2]] != "All Strata") {
-          alt_df1b <- alt_df1b %>%
+          alt_df1b <- alt_df1b |>
             filter(STRATA1 == .spl_context$value[[2]])
-          alt_df2b <- alt_df2b %>%
+          alt_df2b <- alt_df2b |>
             filter(STRATA1 == .spl_context$value[[2]])
         }
 
@@ -156,21 +156,21 @@ test_that(".spl_context and afun extra parameters contain information about comb
     }
   }
 
-  lyt <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf, first = TRUE)) %>%
-    split_cols_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) %>%
-    split_rows_by("STRATA1", split_fun = add_overall_level("All Strata")) %>%
-    split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) %>%
-    add_overall_col("All Patients 2") %>%
+  lyt <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf, first = TRUE)) |>
+    split_cols_by("COUNTRY", split_fun = keep_split_levels(c("CHN", "USA"))) |>
+    split_rows_by("STRATA1", split_fun = add_overall_level("All Strata")) |>
+    split_rows_by("SEX", split_fun = keep_split_levels(c("F", "M"))) |>
+    add_overall_col("All Patients 2") |>
     analyze(vars = "BMRKR1", afun = n_wrapper_alt_df(ex_adsl))
 
   # NB: If you add keep_levels = c("all_X") to add_combo_levels the other
   #     column expressions are missing -> Expected!
-  expect_error(lyt %>% build_table(DM),
+  expect_error(lyt |> build_table(DM),
     regexp = "Layout contains afun\\/cfun functions that have optional*"
   )
 
-  tbl <- lyt %>% build_table(DM, alt_counts_df = ex_adsl)
+  tbl <- lyt |> build_table(DM, alt_counts_df = ex_adsl)
 
   expect_silent(cbind_rtables(tbl, tbl))
   expect_message(rbind(tbl, tbl)) # uniqify message
@@ -178,10 +178,10 @@ test_that(".spl_context and afun extra parameters contain information about comb
   spl_ctx_cnt <- lapply(seq(8, nrow(tbl), 5), function(x) tbl[x, 2, drop = TRUE])
 
   nrow_manual <- lapply(sort(unique(ex_adsl$STRATA1)), function(x) {
-    tmp_strata <- ex_adsl %>% filter(STRATA1 == x, SEX == "F", COUNTRY == "USA")
+    tmp_strata <- ex_adsl |> filter(STRATA1 == x, SEX == "F", COUNTRY == "USA")
     sapply(list(
-      tmp_strata %>% filter(ARM == "A: Drug X"),
-      tmp_strata %>% filter(ARM == "C: Combination")
+      tmp_strata |> filter(ARM == "A: Drug X"),
+      tmp_strata |> filter(ARM == "C: Combination")
     ), nrow)
   })
 
@@ -191,14 +191,14 @@ test_that(".spl_context and afun extra parameters contain information about comb
 test_that("Error localization for missing split variable when done in alt_count_df", {
   # Error we want to happen
   afun_tmp <- function(x, .alt_df_row, ...) mean(x)
-  lyt_col <- basic_table() %>%
-    split_cols_by("ARMCD") %>%
+  lyt_col <- basic_table() |>
+    split_cols_by("ARMCD") |>
     analyze("BMRKR1", afun = afun_tmp)
-  lyt_row <- basic_table() %>%
-    split_rows_by("ARMCD") %>%
+  lyt_row <- basic_table() |>
+    split_rows_by("ARMCD") |>
     analyze("BMRKR1", afun = afun_tmp)
-  expect_error(lyt_col %>% build_table(ex_adsl, alt_counts_df = DM))
-  expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM),
+  expect_error(lyt_col |> build_table(ex_adsl, alt_counts_df = DM))
+  expect_error(lyt_row |> build_table(ex_adsl, alt_counts_df = DM),
     regexp = paste0(
       "Following error encountered in splitting ",
       "alt_counts_df:  variable\\(s\\) \\[ARMCD\\] ",
@@ -208,21 +208,21 @@ test_that("Error localization for missing split variable when done in alt_count_
 
   # What if it is not asked by the function?
   afun_tmp <- function(x, ...) mean(x)
-  lyt_col <- basic_table() %>%
-    split_cols_by("ARMCD") %>%
+  lyt_col <- basic_table() |>
+    split_cols_by("ARMCD") |>
     analyze("BMRKR1", afun = afun_tmp)
-  lyt_row <- basic_table() %>%
-    split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>%
-    split_rows_by("ARMCD") %>%
+  lyt_row <- basic_table() |>
+    split_rows_by("STRATA1", split_fun = keep_split_levels("A")) |>
+    split_rows_by("ARMCD") |>
     analyze("BMRKR1", afun = afun_tmp)
 
   # Error on the columns should happen because it is used for counts on column space
   expect_error(
-    lyt_col %>% build_table(ex_adsl, alt_counts_df = DM),
+    lyt_col |> build_table(ex_adsl, alt_counts_df = DM),
     "alt_counts_df appears incompatible with column-split structure*"
   )
-  expect_silent(lyt_col %>% build_table(ex_adsl)) # it is specific of alt_counts_df
-  expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM))
+  expect_silent(lyt_col |> build_table(ex_adsl)) # it is specific of alt_counts_df
+  expect_silent(lyt_row |> build_table(ex_adsl, alt_counts_df = DM))
 })
 
 test_that("Error localization for missmatch split variable when done in alt_count_df", {
@@ -238,56 +238,56 @@ test_that("Error localization for missmatch split variable when done in alt_coun
     stopifnot(as.character(check_val) == .spl_context$value[2])
     mean(x)
   }
-  lyt_row <- basic_table() %>%
-    split_rows_by("ARMCD") %>%
+  lyt_row <- basic_table() |>
+    split_rows_by("ARMCD") |>
     analyze("BMRKR1", afun = afun_tmp)
 
   # Mismatch in the number of splits (NA is 0)
-  DM_tmp <- DM %>% mutate("ARMCD" = NA_character_)
-  expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
+  DM_tmp <- DM |> mutate("ARMCD" = NA_character_)
+  expect_error(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp),
     regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
   )
 
   # Mismatch of levels
   armcd_col <- factor(sample(c("arm A", "arm B", "arm C"), nrow(DM), replace = TRUE))
-  DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
-  expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
+  DM_tmp <- DM |> mutate("ARMCD" = armcd_col)
+  expect_error(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp),
     regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
   )
 
   # Mix mismatch of levels
   armcd_col <- factor(sample(c("arm A", "ARM B", "ARM C"), nrow(DM), replace = TRUE))
-  DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
-  expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
+  DM_tmp <- DM |> mutate("ARMCD" = armcd_col)
+  expect_error(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp),
     regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
   )
 
   # Mismatch in the number of levels
   armcd_col2 <- factor(sample(levels(ex_adsl$ARMCD)[c(1, 2)], nrow(DM), replace = TRUE))
-  DM_tmp <- DM %>% mutate("ARMCD" = armcd_col2)
-  expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
+  DM_tmp <- DM |> mutate("ARMCD" = armcd_col2)
+  expect_error(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp),
     regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
   )
 
   # Another order -> should work? yes, split is valid
   levels(armcd_col) <- levels(ex_adsl$ARMCD)[c(1, 3, 2)]
-  DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
-  expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp))
+  DM_tmp <- DM |> mutate("ARMCD" = armcd_col)
+  expect_silent(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp))
 
   # Mix mismatch of levels but covering them all -> valid split
   armcd_col <- factor(sample(c("arm A", levels(ex_adsl$ARMCD)), nrow(DM), replace = TRUE))
-  DM_tmp <- DM %>% mutate("ARMCD" = armcd_col)
-  expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp))
+  DM_tmp <- DM |> mutate("ARMCD" = armcd_col)
+  expect_silent(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp))
 
   # Values are all NA, but the levels are correct
   DM_tmp$ARMCD <- factor(NA, levels = levels(ex_adsl$ARMCD))
-  expect_error(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp),
+  expect_error(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp),
     regexp = paste0("alt_counts_df split variable\\(s\\) \\[ARMCD\\] *")
   )
 
   DM_tmp$ARMCD <- factor(NA, levels = levels(ex_adsl$ARMCD))
   DM_tmp$ARMCD[seq_along(levels(ex_adsl$ARMCD))] <- levels(ex_adsl$ARMCD)
-  expect_silent(lyt_row %>% build_table(ex_adsl, alt_counts_df = DM_tmp))
+  expect_silent(lyt_row |> build_table(ex_adsl, alt_counts_df = DM_tmp))
 })
 
 context("Content functions (cfun)")
@@ -297,9 +297,9 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
   require(dplyr, quietly = TRUE)
 
   # Adding STRATA2 col to DM for alt_counts_df col split
-  alt_tmp <- DM %>% left_join(
-    ex_adsl %>%
-      mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) %>%
+  alt_tmp <- DM |> left_join(
+    ex_adsl |>
+      mutate(ID = paste0("S", seq_len(nrow(ex_adsl)))) |>
       select(ID, STRATA2)
   )
 
@@ -314,11 +314,11 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
                        ...) {
     if (!missing(.alt_df_row)) {
       # .alt_df_row is only row-splitted matter
-      stopifnot(nrow(alt_tmp %>% filter(STRATA1 == "A")) == nrow(.alt_df_row))
+      stopifnot(nrow(alt_tmp |> filter(STRATA1 == "A")) == nrow(.alt_df_row))
 
       # Filtered column number of elements correspond to .N_col
       stopifnot(nrow(
-        alt_tmp %>%
+        alt_tmp |>
           filter(eval(.spl_context$cur_col_expr[[1]]))
       ) == .N_col)
     } else {
@@ -344,23 +344,23 @@ test_that(".alt_df_row appears in cfun but not in afun.", {
     )
   }
 
-  lyt <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "U"))) %>%
-    split_cols_by("STRATA2", split_fun = keep_split_levels("S1")) %>%
-    split_rows_by("STRATA1", split_fun = keep_split_levels("A")) %>%
-    summarize_row_groups(var = "BMRKR1", cfun = cfun_tmp) %>%
-    split_rows_by("ARMCD") %>%
+  lyt <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("SEX", split_fun = keep_split_levels(c("F", "U"))) |>
+    split_cols_by("STRATA2", split_fun = keep_split_levels("S1")) |>
+    split_rows_by("STRATA1", split_fun = keep_split_levels("A")) |>
+    summarize_row_groups(var = "BMRKR1", cfun = cfun_tmp) |>
+    split_rows_by("ARMCD") |>
     analyze("BMRKR1", afun = afun_tmp)
 
   expect_error(
-    lyt %>% build_table(ex_adsl),
+    lyt |> build_table(ex_adsl),
     "Layout contains afun/cfun functions that have optional*"
   )
   expect_error(
-    lyt %>% build_table(ex_adsl, alt_counts_df = DM),
+    lyt |> build_table(ex_adsl, alt_counts_df = DM),
     "alt_counts_df appears incompatible with column-split*"
   )
-  expect_silent(lyt %>% build_table(ex_adsl, alt_counts_df = alt_tmp))
+  expect_silent(lyt |> build_table(ex_adsl, alt_counts_df = alt_tmp))
 })
 
 
@@ -373,11 +373,11 @@ test_that("full alt_counts_df is accessible from afun/cfun via .alt_df_full", {
     }
   }
   ## row labels will be nonsense but we don't care about that for this check
-  lyt <- basic_table() %>%
-    split_cols_by("SEX") %>%
-    split_cols_by("STRATA1") %>%
-    split_rows_by("AEBODSYS", split_fun = trim_levels_in_group("AEDECOD")) %>%
-    summarize_row_groups("AEBODSYS", cfun = fun, format = "xx") %>%
+  lyt <- basic_table() |>
+    split_cols_by("SEX") |>
+    split_cols_by("STRATA1") |>
+    split_rows_by("AEBODSYS", split_fun = trim_levels_in_group("AEDECOD")) |>
+    summarize_row_groups("AEBODSYS", cfun = fun, format = "xx") |>
     analyze("AEDECOD", afun = fun)
 
   tbl <- build_table(lyt, ex_adae[1:3, ], alt_counts_df = ex_adsl)

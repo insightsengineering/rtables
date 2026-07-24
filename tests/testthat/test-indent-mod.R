@@ -1,8 +1,8 @@
 context("Indent modifiers")
 
 test_that("indent modifiers propogated from analyze calls properly", {
-  lyt <- basic_table() %>%
-    analyze("Sepal.Width", afun = mean, show_labels = "visible") %>%
+  lyt <- basic_table() |>
+    analyze("Sepal.Width", afun = mean, show_labels = "visible") |>
     analyze("Sepal.Width",
       afun = median, show_labels = "hidden", indent_mod = 2L,
       table_names = "SecondAge"
@@ -15,13 +15,13 @@ test_that("indent modifiers propogated from analyze calls properly", {
 
 
 test_that("indents are correct in make_row_df", {
-  l1 <- basic_table() %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+  l1 <- basic_table() |>
+    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)") |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label"
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -35,7 +35,7 @@ test_that("indents are correct in make_row_df", {
     pgdf1$indent
   )
 
-  l2 <- l1 %>% analyze("AGE",
+  l2 <- l1 |> analyze("AGE",
     var_labels = "Age Analysis Redux", table_names = "AgeRedux",
     afun = range, format = "xx - xx"
   )
@@ -48,14 +48,14 @@ test_that("indents are correct in make_row_df", {
   )
 
 
-  l3 <- basic_table() %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+  l3 <- basic_table() |>
+    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)") |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = 0
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -70,14 +70,14 @@ test_that("indents are correct in make_row_df", {
     pgdf3$indent
   )
 
-  l4 <- basic_table() %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+  l4 <- basic_table() |>
+    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label") |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)") |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = -1
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -91,14 +91,14 @@ test_that("indents are correct in make_row_df", {
     pagdf4$indent
   )
 
-  l5 <- basic_table() %>%
-    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2) %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+  l5 <- basic_table() |>
+    split_rows_by("RACE", "Ethnicity", labels_var = "ethn_label", indent_mod = 2) |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)") |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = -2
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -112,17 +112,17 @@ test_that("indents are correct in make_row_df", {
     pgdf5$indent
   )
 
-  l6 <- basic_table() %>%
+  l6 <- basic_table() |>
     split_rows_by("RACE", "Ethnicity",
       labels_var = "ethn_label", indent_mod = 0,
       label_pos = "visible"
-    ) %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+    ) |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)") |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = 0
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -142,17 +142,17 @@ test_that("indents are correct in make_row_df", {
   ## children inherit table idnent mod, NOT content indent_mod, when thsoe two
   ## values are different.
 
-  l7 <- basic_table() %>%
+  l7 <- basic_table() |>
     split_rows_by("RACE", "Ethnicity",
       labels_var = "ethn_label", indent_mod = 2,
       label_pos = "visible"
-    ) %>%
-    summarize_row_groups("RACE", label_fstr = "%s (n)", indent_mod = -1) %>%
+    ) |>
+    summarize_row_groups("RACE", label_fstr = "%s (n)", indent_mod = -1) |>
     split_rows_by("FACTOR2", "Factor2",
       split_fun = remove_split_levels("C"),
       labels_var = "fac2_label",
       indent_mod = 0
-    ) %>%
+    ) |>
     analyze(
       "AGE", "Age Analysis",
       afun = function(x) list(mean = mean(x), median = median(x)),
@@ -168,11 +168,11 @@ test_that("indents are correct in make_row_df", {
 })
 
 test_that("getters and setters work", {
-  t0 <- basic_table() %>%
-    summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
-    split_rows_by("AEBODSYS", child_labels = "visible") %>%
-    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
-    analyze("AGE") %>%
+  t0 <- basic_table() |>
+    summarize_row_groups("STUDYID", label_fstr = "overall summary") |>
+    split_rows_by("AEBODSYS", child_labels = "visible") |>
+    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") |>
+    analyze("AGE") |>
     build_table(ex_adae)
 
   expect_equal(indent_mod(t0), 0)
@@ -215,18 +215,18 @@ test_that("getters and setters work", {
 
 
 test_that("clear_indent_mods works as desired", {
-  lytm <- basic_table() %>%
-    summarize_row_groups("STUDYID", label_fstr = "overall summary", indent_mod = 1L) %>%
-    split_rows_by("AEBODSYS", child_labels = "visible") %>%
-    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
+  lytm <- basic_table() |>
+    summarize_row_groups("STUDYID", label_fstr = "overall summary", indent_mod = 1L) |>
+    split_rows_by("AEBODSYS", child_labels = "visible") |>
+    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") |>
     analyze("AGE", indent_mod = -1L)
   tm <- build_table(lytm, ex_adae)
 
-  t0 <- basic_table() %>%
-    summarize_row_groups("STUDYID", label_fstr = "overall summary") %>%
-    split_rows_by("AEBODSYS", child_labels = "visible") %>%
-    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") %>%
-    analyze("AGE") %>%
+  t0 <- basic_table() |>
+    summarize_row_groups("STUDYID", label_fstr = "overall summary") |>
+    split_rows_by("AEBODSYS", child_labels = "visible") |>
+    summarize_row_groups("STUDYID", label_fstr = "subgroup summary") |>
+    analyze("AGE") |>
     build_table(ex_adae)
 
   expect_identical(

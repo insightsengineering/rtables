@@ -289,8 +289,8 @@ setMethod(
 #' @inheritSection custom_split_funs Custom Splitting Function Details
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze(c("AGE", "BMRKR2"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
@@ -298,11 +298,11 @@ setMethod(
 #'
 #' # Let's look at the splits in more detail
 #'
-#' lyt1 <- basic_table() %>% split_cols_by("ARM")
+#' lyt1 <- basic_table() |> split_cols_by("ARM")
 #' lyt1
 #'
 #' # add an analysis (summary)
-#' lyt2 <- lyt1 %>%
+#' lyt2 <- lyt1 |>
 #'   analyze(c("AGE", "COUNTRY"),
 #'     afun = list_wrap_x(summary),
 #'     format = "xx.xx"
@@ -316,13 +316,13 @@ setMethod(
 #' # By default sequentially adding layouts results in nesting
 #' library(dplyr)
 #'
-#' DM_MF <- DM %>%
-#'   filter(SEX %in% c("M", "F")) %>%
+#' DM_MF <- DM |>
+#'   filter(SEX %in% c("M", "F")) |>
 #'   mutate(SEX = droplevels(SEX))
 #'
-#' lyt3 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
+#' lyt3 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
 #'   analyze(c("AGE", "COUNTRY"),
 #'     afun = list_wrap_x(summary),
 #'     format = "xx.xx"
@@ -333,21 +333,21 @@ setMethod(
 #' tbl3
 #'
 #' # nested=TRUE vs not
-#' lyt4 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
-#'   split_rows_by("RACE", split_fun = drop_split_levels) %>%
+#' lyt4 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX", split_fun = drop_split_levels) |>
+#'   split_rows_by("RACE", split_fun = drop_split_levels) |>
 #'   analyze("AGE")
 #' lyt4
 #'
 #' tbl4 <- build_table(lyt4, DM)
 #' tbl4
 #'
-#' lyt5 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("SEX", split_fun = drop_split_levels) %>%
-#'   analyze("AGE") %>%
-#'   split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) %>%
+#' lyt5 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("SEX", split_fun = drop_split_levels) |>
+#'   analyze("AGE") |>
+#'   split_rows_by("RACE", nested = FALSE, split_fun = drop_split_levels) |>
 #'   analyze("AGE")
 #' lyt5
 #'
@@ -444,31 +444,31 @@ setMethod(
 #' informative, but that will change in the future.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("RACE", split_fun = drop_split_levels) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("RACE", split_fun = drop_split_levels) |>
 #'   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("RACE") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("RACE") |>
 #'   analyze("AGE", mean, var_labels = "Age", format = "xx.xx")
 #'
 #' tbl2 <- build_table(lyt2, DM)
 #' tbl2
 #'
-#' lyt3 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
-#'   summarize_row_groups(label_fstr = "Overall (N)") %>%
+#' lyt3 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
+#'   summarize_row_groups(label_fstr = "Overall (N)") |>
 #'   split_rows_by("RACE",
 #'     split_label = "Ethnicity", labels_var = "ethn_lab",
 #'     split_fun = drop_split_levels
-#'   ) %>%
-#'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+#'   ) |>
+#'   summarize_row_groups("RACE", label_fstr = "%s (n)") |>
 #'   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 #'
 #' lyt3
@@ -476,8 +476,8 @@ setMethod(
 #' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
-#' DM2 <- DM %>%
-#'   filter(SEX %in% c("M", "F")) %>%
+#' DM2 <- DM |>
+#'   filter(SEX %in% c("M", "F")) |>
 #'   mutate(
 #'     SEX = droplevels(SEX),
 #'     gender_lab = c(
@@ -555,7 +555,7 @@ split_rows_by <- function(lyt,
 #' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
-#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' ANL <- DM |> mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
 #' ## toy example where we take the mean of the first variable and the
 #' ## count of >.5 for the second.
@@ -564,14 +564,14 @@ split_rows_by <- function(lyt,
 #'   function(x) in_rows("# x > 5" = sum(x > .5), .formats = "xx")
 #' )
 #'
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by_multivar(c("value", "pctdiff")) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by_multivar(c("value", "pctdiff")) |>
 #'   split_rows_by("RACE",
 #'     split_label = "ethnicity",
 #'     split_fun = drop_split_levels
-#'   ) %>%
-#'   summarize_row_groups() %>%
+#'   ) |>
+#'   summarize_row_groups() |>
 #'   analyze_colvars(afun = colfuns)
 #' lyt
 #'
@@ -616,10 +616,10 @@ split_cols_by_multivar <- function(lyt,
 #'   split on a column basis.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by_multivar(c("SEX", "STRATA1")) %>%
-#'   summarize_row_groups() %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by_multivar(c("SEX", "STRATA1")) |>
+#'   summarize_row_groups() |>
 #'   analyze(c("AGE", "SEX"))
 #'
 #' tbl <- build_table(lyt, DM)
@@ -671,28 +671,28 @@ split_rows_by_multivar <- function(lyt,
 #' library(dplyr)
 #'
 #' # split_cols_by_cuts
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   split_cols_by_cuts("AGE",
 #'     split_label = "Age",
 #'     cuts = c(0, 25, 35, 1000),
 #'     cutlabels = c("young", "medium", "old")
-#'   ) %>%
-#'   analyze(c("BMRKR2", "STRATA2")) %>%
+#'   ) |>
+#'   analyze(c("BMRKR2", "STRATA2")) |>
 #'   append_topleft("counts")
 #'
 #' tbl <- build_table(lyt, ex_adsl)
 #' tbl
 #'
 #' # split_rows_by_cuts
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   split_rows_by_cuts("AGE",
 #'     split_label = "Age",
 #'     cuts = c(0, 25, 35, 1000),
 #'     cutlabels = c("young", "medium", "old")
-#'   ) %>%
-#'   analyze(c("BMRKR2", "STRATA2")) %>%
+#'   ) |>
+#'   analyze(c("BMRKR2", "STRATA2")) |>
 #'   append_topleft("counts")
 #'
 #'
@@ -701,20 +701,20 @@ split_rows_by_multivar <- function(lyt,
 #'
 #' # split_cols_by_quartiles
 #'
-#' lyt3 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by_quartiles("AGE", split_label = "Age") %>%
-#'   analyze(c("BMRKR2", "STRATA2")) %>%
+#' lyt3 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by_quartiles("AGE", split_label = "Age") |>
+#'   analyze(c("BMRKR2", "STRATA2")) |>
 #'   append_topleft("counts")
 #'
 #' tbl3 <- build_table(lyt3, ex_adsl)
 #' tbl3
 #'
 #' # split_rows_by_quartiles
-#' lyt4 <- basic_table(show_colcounts = TRUE) %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by_quartiles("AGE", split_label = "Age") %>%
-#'   analyze("BMRKR2") %>%
+#' lyt4 <- basic_table(show_colcounts = TRUE) |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by_quartiles("AGE", split_label = "Age") |>
+#'   analyze("BMRKR2") |>
 #'   append_topleft(c("Age Quartiles", " Counts BMRKR2"))
 #'
 #' tbl4 <- build_table(lyt4, ex_adsl)
@@ -732,17 +732,17 @@ split_rows_by_multivar <- function(lyt,
 #'   cutpoints
 #' }
 #'
-#' lyt5 <- basic_table() %>%
-#'   split_cols_by_cutfun("AGE", cutfun = cutfun) %>%
+#' lyt5 <- basic_table() |>
+#'   split_cols_by_cutfun("AGE", cutfun = cutfun) |>
 #'   analyze("SEX")
 #'
 #' tbl5 <- build_table(lyt5, ex_adsl)
 #' tbl5
 #'
 #' # split_rows_by_cutfun
-#' lyt6 <- basic_table() %>%
-#'   split_cols_by("SEX") %>%
-#'   split_rows_by_cutfun("AGE", cutfun = cutfun) %>%
+#' lyt6 <- basic_table() |>
+#'   split_cols_by("SEX") |>
+#'   split_rows_by_cutfun("AGE", cutfun = cutfun) |>
 #'   analyze("BMRKR2")
 #'
 #' tbl6 <- build_table(lyt6, ex_adsl)
@@ -1163,16 +1163,16 @@ NULL
 #'   the unmodified values provided by the tabulation framework.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 #' lyt
 #'
 #' tbl <- build_table(lyt, DM)
 #' tbl
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("Species") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("Species") |>
 #'   analyze(head(names(iris), -1), afun = function(x) {
 #'     list(
 #'       "mean / sd" = rcell(c(mean(x), sd(x)), format = "xx.xx (xx.xx)"),
@@ -1318,7 +1318,7 @@ get_acolvar_vars <- function(lyt) {
 #' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
-#' ANL <- DM %>% mutate(value = rnorm(n()), pctdiff = runif(n()))
+#' ANL <- DM |> mutate(value = rnorm(n()), pctdiff = runif(n()))
 #'
 #' ## toy example where we take the mean of the first variable and the
 #' ## count of >.5 for the second.
@@ -1327,30 +1327,30 @@ get_acolvar_vars <- function(lyt) {
 #'   function(x) rcell(sum(x > .5), format = "xx")
 #' )
 #'
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by_multivar(c("value", "pctdiff")) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by_multivar(c("value", "pctdiff")) |>
 #'   split_rows_by("RACE",
 #'     split_label = "ethnicity",
 #'     split_fun = drop_split_levels
-#'   ) %>%
-#'   summarize_row_groups() %>%
+#'   ) |>
+#'   summarize_row_groups() |>
 #'   analyze_colvars(afun = colfuns)
 #' lyt
 #'
 #' tbl <- build_table(lyt, ANL)
 #' tbl
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   split_cols_by_multivar(c("value", "pctdiff"),
 #'     varlabels = c("Measurement", "Pct Diff")
-#'   ) %>%
+#'   ) |>
 #'   split_rows_by("RACE",
 #'     split_label = "ethnicity",
 #'     split_fun = drop_split_levels
-#'   ) %>%
-#'   summarize_row_groups() %>%
+#'   ) |>
+#'   summarize_row_groups() |>
 #'   analyze_colvars(afun = mean, format = "xx.xx")
 #'
 #' tbl2 <- build_table(lyt2, ANL)
@@ -1426,9 +1426,9 @@ analyze_colvars <- function(lyt,
 #' @seealso [add_overall_level()]
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   add_overall_col("All Patients") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   add_overall_col("All Patients") |>
 #'   analyze("AGE")
 #' lyt
 #'
@@ -1708,10 +1708,10 @@ counts_wpcts <- function(x, .N_col) {
 #' @examples
 #' DM2 <- subset(DM, COUNTRY %in% c("USA", "CAN", "CHN"))
 #'
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
-#'   summarize_row_groups(label_fstr = "%s (n)") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("COUNTRY", split_fun = drop_split_levels) |>
+#'   summarize_row_groups(label_fstr = "%s (n)") |>
 #'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx")
 #' lyt
 #'
@@ -1733,14 +1733,14 @@ counts_wpcts <- function(x, .N_col) {
 #'   )
 #' }
 #'
-#' lyt2 <- basic_table(show_colcounts = TRUE) %>%
-#'   split_cols_by("ARM") %>%
-#'   split_rows_by("COUNTRY", split_fun = drop_split_levels) %>%
+#' lyt2 <- basic_table(show_colcounts = TRUE) |>
+#'   split_cols_by("ARM") |>
+#'   split_rows_by("COUNTRY", split_fun = drop_split_levels) |>
 #'   summarize_row_groups("AGE",
 #'     cfun = sfun,
 #'     extra_args = list(trim = .2)
-#'   ) %>%
-#'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx") %>%
+#'   ) |>
+#'   analyze("AGE", afun = list_wrap_x(summary), format = "xx.xx") |>
 #'   append_topleft(c("Country", "  Age"))
 #'
 #' tbl2 <- build_table(lyt2, DM2)
@@ -1788,10 +1788,10 @@ summarize_row_groups <- function(lyt,
 #' @inherit split_cols_by return
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   add_colcounts() %>%
-#'   split_rows_by("RACE", split_fun = drop_split_levels) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   add_colcounts() |>
+#'   split_rows_by("RACE", split_fun = drop_split_levels) |>
 #'   analyze("AGE", afun = function(x) list(min = min(x), max = max(x)))
 #' lyt
 #'
@@ -1818,16 +1818,16 @@ add_colcounts <- function(lyt, format = "(N=xx)") {
 #' @inherit split_cols_by return
 #'
 #' @examples
-#' lyt1 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt1 <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze("AGE", afun = mean, format = "xx.xx")
 #'
 #' tbl1 <- build_table(lyt1, DM)
 #' tbl1
 #'
-#' lyt2 <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   analyze("AGE", afun = sd, format = "xx.xx") %>%
+#' lyt2 <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   analyze("AGE", afun = sd, format = "xx.xx") |>
 #'   add_existing_table(tbl1)
 #'
 #' tbl2 <- build_table(lyt2, DM)
@@ -2008,9 +2008,9 @@ manual_cols <- function(..., .lst = list(...), ccount_format = NULL) {
 #'
 #' @export
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
 #'   analyze("AGE")
 #' tbl <- build_table(lyt, ex_adsl)
 #'
@@ -2160,7 +2160,7 @@ list_wrap_df <- function(f) {
 #' indentation on multiple lines.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
+#' lyt <- basic_table() |>
 #'   analyze("AGE", afun = mean)
 #'
 #' tbl <- build_table(lyt, DM)
@@ -2174,8 +2174,8 @@ list_wrap_df <- function(f) {
 #'     "test.R program, executed at",
 #'     Sys.time()
 #'   )
-#' ) %>%
-#'   split_cols_by("ARM") %>%
+#' ) |>
+#'   split_cols_by("ARM") |>
 #'   analyze("AGE", mean)
 #'
 #' tbl2 <- build_table(lyt2, DM)
@@ -2184,7 +2184,7 @@ list_wrap_df <- function(f) {
 #' lyt3 <- basic_table(
 #'   show_colcounts = TRUE,
 #'   colcount_format = "xx. (xx.%)"
-#' ) %>%
+#' ) |>
 #'   split_cols_by("ARM")
 #'
 #' @export
@@ -2253,14 +2253,14 @@ basic_table <- function(title = "",
 #' @examplesIf require(dplyr)
 #' library(dplyr)
 #'
-#' DM2 <- DM %>% mutate(RACE = factor(RACE), SEX = factor(SEX))
+#' DM2 <- DM |> mutate(RACE = factor(RACE), SEX = factor(SEX))
 #'
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
-#'   split_rows_by("RACE") %>%
-#'   append_topleft("Ethnicity") %>%
-#'   analyze("AGE") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
+#'   split_rows_by("RACE") |>
+#'   append_topleft("Ethnicity") |>
+#'   analyze("AGE") |>
 #'   append_topleft("  Age")
 #'
 #' tbl <- build_table(lyt, DM2)

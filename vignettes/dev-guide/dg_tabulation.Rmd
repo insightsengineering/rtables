@@ -35,16 +35,16 @@ library(rtables)
 debugonce(build_table)
 
 # A very simple layout
-lyt <- basic_table() %>%
-  split_rows_by("STRATA1") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_rows_by("STRATA1") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  split_cols_by("ARM") |>
   analyze("BMRKR1")
 
 # lyt must be a PreDataTableLayouts object
 is(lyt, "PreDataTableLayouts")
 
-lyt %>% build_table(DM)
+lyt |> build_table(DM)
 ```
 
 Now let's look within our `build_table` call. After the initial check that the layout is a pre-data table layout, it checks if the column layout is defined (`clayout` accessor), i.e. it does not have any column split. If that is the case, a `All obs` column is added automatically with all observations. After this, there are a couple of defensive programming calls that do checks and transformations as we finally have the data. These can be divided into two categories: those that mainly concern the layout, which are defined as generics, and those that concern the data, which are instead a function as they are not dependent on the layout class. Indeed, the layout is structured and can be divided into `clayout` and `rlayout` (column and row layout). The first one is used to create `cinfo`, which is the general object and container of the column splits and information. The second one contains the obligatory all data split, i.e. the root split (accessible with `root_spl`), and the row splits' vectors which are iterative splits in the row space. In the following, we consider the initial checks and defensive programming.
@@ -113,10 +113,10 @@ Going back to `build_table`, you will see that the row layout is actually a list
 ```{r, eval=FALSE}
 # rtables 0.6.2
 # A very simple layout
-lyt <- basic_table() %>%
-  split_rows_by("STRATA1") %>%
-  split_rows_by("SEX", split_fun = drop_split_levels) %>%
-  split_cols_by("ARM") %>%
+lyt <- basic_table() |>
+  split_rows_by("STRATA1") |>
+  split_rows_by("SEX", split_fun = drop_split_levels) |>
+  split_cols_by("ARM") |>
   analyze("BMRKR1")
 
 rlyt <- rtables:::rlayout(lyt)

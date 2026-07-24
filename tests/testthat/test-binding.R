@@ -46,12 +46,12 @@ test_that("mixing NA and non-NA counts and avars is ok", {
   iris2$manmade <- sample(c("Y", "N"), nrow(iris), replace = TRUE)
   # First case: no LabelRow objects (hidden)
 
-  rtb_t <- basic_table() %>%
-    split_cols_by("manmade") %>%
+  rtb_t <- basic_table() |>
+    split_cols_by("manmade") |>
     analyze(
       vars = colnames(iris)[1:3], afun = mean, format = "xx.x",
       show_labels = "hidden"
-    ) %>%
+    ) |>
     build_table(iris2)
 
   cinfo <- manual_cols("hiya")
@@ -134,8 +134,8 @@ test_that("chk_cbindable_many works", {
 })
 
 test_that("c/rbind and top-left behave", {
-  lyt <- basic_table() %>%
-    append_topleft("Hi") %>%
+  lyt <- basic_table() |>
+    append_topleft("Hi") |>
     analyze("AGE", mean)
   tab <- build_table(lyt, DM)
 
@@ -169,9 +169,9 @@ test_that("c/rbind and top-left behave", {
 
 ## NB: insert_rrow is now deprecated.
 test_that("insert_rrow works", {
-  tbl <- basic_table() %>%
-    split_cols_by("ARM") %>%
-    analyze("AGE") %>%
+  tbl <- basic_table() |>
+    split_cols_by("ARM") |>
+    analyze("AGE") |>
     build_table(ex_adsl)
 
   ## column numbers don't match
@@ -181,16 +181,16 @@ test_that("insert_rrow works", {
 })
 
 test_that("count visibility syncing works when cbinding", {
-  lyt1 <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM") %>%
-    split_cols_by("STRATA1") %>%
+  lyt1 <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM") |>
+    split_cols_by("STRATA1") |>
     analyze("AGE")
 
   tab1 <- build_table(lyt1, ex_adsl)
 
-  lyt2 <- basic_table() %>%
-    split_cols_by("ARM", show_colcounts = TRUE) %>%
-    split_cols_by("STRATA1") %>%
+  lyt2 <- basic_table() |>
+    split_cols_by("ARM", show_colcounts = TRUE) |>
+    split_cols_by("STRATA1") |>
     analyze("AGE")
 
   tab2 <- build_table(lyt2, ex_adsl)
@@ -222,14 +222,14 @@ test_that("equivalent split funs withs differrent environments dont' block rbind
     "A_C", "Arms A+C", c("A: Drug X", "C: Combination"), list()
   )
 
-  l1 <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+  l1 <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
     analyze("AGE")
 
   tab1 <- build_table(l1, DM)
 
-  l2 <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) %>%
+  l2 <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM", split_fun = add_combo_levels(combodf)) |>
     analyze("SEX")
 
   tab2 <- build_table(l2, DM)
@@ -239,9 +239,9 @@ test_that("equivalent split funs withs differrent environments dont' block rbind
 })
 
 test_that("cbinding table with counts and with NA counts works", {
-  tbl <- basic_table(show_colcounts = TRUE) %>%
-    split_cols_by("ARM") %>%
-    analyze("AGE") %>%
+  tbl <- basic_table(show_colcounts = TRUE) |>
+    split_cols_by("ARM") |>
+    analyze("AGE") |>
     build_table(DM)
 
 
@@ -257,9 +257,9 @@ test_that("cbinding table with counts and with NA counts works", {
 })
 
 test_that("rbinding 2 objects with different titles/footers removes them", {
-  tbl_a <- basic_table(title = "Title A", subtitles = "Subtitle A", main_footer = "Footer A", prov_footer = "PF A") %>%
+  tbl_a <- basic_table(title = "Title A", subtitles = "Subtitle A", main_footer = "Footer A", prov_footer = "PF A") |>
     build_table(ex_adsl)
-  tbl_b <- basic_table(title = "Title B", subtitles = "Subtitle B", main_footer = "Footer B", prov_footer = "PF B") %>%
+  tbl_b <- basic_table(title = "Title B", subtitles = "Subtitle B", main_footer = "Footer B", prov_footer = "PF B") |>
     build_table(ex_adsl)
 
   tbl_ab <- rbind(tbl_a, tbl_b)
@@ -272,9 +272,9 @@ test_that("rbinding 2 objects with different titles/footers removes them", {
 test_that("rbinding objects with only titles/footers for first object keeps them", {
   tbl_a <- basic_table(
     title = "Title", subtitles = c("S1", "S2"), main_footer = c("F1", "F2"), prov_footer = c("PF1", "PF2")
-  ) %>%
+  ) |>
     build_table(ex_adsl)
-  tbl_b <- basic_table() %>%
+  tbl_b <- basic_table() |>
     build_table(ex_adsl)
 
   tbl_ab <- rbind(tbl_a, rrow("Total xx", ""), tbl_b)
@@ -287,11 +287,11 @@ test_that("rbinding objects with only titles/footers for first object keeps them
 test_that("rbinding objects with identical titles/footers keeps them", {
   tbl_a <- basic_table(
     title = "Title", subtitles = c("S1", "S2", "S3"), main_footer = "Footer", prov_footer = c("PF1", "PF2")
-  ) %>%
+  ) |>
     build_table(ex_adsl)
   tbl_b <- basic_table(
     title = "Title", subtitles = c("S1", "S2", "S3"), main_footer = "Footer", prov_footer = c("PF1", "PF2")
-  ) %>%
+  ) |>
     build_table(ex_adsl)
 
   tbl_ab <- rbind(tbl_a, tbl_b)

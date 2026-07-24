@@ -193,6 +193,9 @@ reference:
     - make_split_result
     - spl_variable
     - make_subset_expr
+    - SplitValue
+    - splv_extra
+    - value_expr
 
   - title: Cell Formatting related Functions
     desc: cell formatting.

@@ -32,8 +32,8 @@ setMethod(
 #' @param x (`TableTree` or `ElementaryTable`)\cr a table object.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
 #'   analyze(c("SEX", "AGE"))
 #'
 #' tbl <- build_table(lyt, ex_adsl)
@@ -1353,8 +1353,8 @@ setMethod("content_na_str<-", "Split", function(obj, value) {
 #' @seealso [table_shell()] and [table_shell_str()] for information on the table format structure.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -1654,8 +1654,8 @@ setMethod(
 )
 
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("RACE", split_fun = keep_split_levels(c("ASIAN", "WHITE"))) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -1869,11 +1869,32 @@ setMethod(
 #' @rdname int_methods
 setMethod("value_labels", "MultiVarSplit", function(obj) obj@var_labels)
 
-#' @rdname int_methods
+#' Retrieve the subset expression from a split value
+#'
+#' Returns the subsetting expression associated with a `SplitValue` (or
+#' `ValueWrapper`) object, or `NULL` for objects without one.  This expression
+#' is used internally to subset data when tabulating.
+#'
+#' @param obj (`ValueWrapper` or `ANY`)\cr a split value object, typically a
+#'   `SplitValue` constructed by [SplitValue()].  Any other object returns
+#'   `NULL`.
+#'
+#' @return An `expression` object, or `NULL`.
+#'
+#' @examples
+#' sv <- SplitValue("A", sub_expr = expression(ARM == "A"))
+#' value_expr(sv)
+#'
+#' value_expr("not a SplitValue") # NULL
+#'
+#' @export
+#' @rdname value_expr
 setGeneric("value_expr", function(obj) standardGeneric("value_expr"))
-#' @rdname int_methods
+#' @exportMethod value_expr
+#' @rdname value_expr
 setMethod("value_expr", "ValueWrapper", function(obj) obj@subset_expression)
-#' @rdname int_methods
+#' @exportMethod value_expr
+#' @rdname value_expr
 setMethod("value_expr", "ANY", function(obj) NULL)
 ## no setters for now, we'll see about that.
 
@@ -1901,21 +1922,51 @@ setMethod("spl_varlabels<-", "MultiVarSplit", function(object, value) {
 ## to *all the chidlren*,
 ## while splv_extra is for *child-specific* extra arguments,
 ## associated with specific values of the split
-#' @rdname int_methods
+
+#' Access or set child-specific extra arguments on a split value
+#'
+#' `splv_extra` retrieves the named list of *child-specific* extra arguments
+#' stored on a `SplitValue` object.  These arguments are forwarded to the
+#' analysis or content function only for the facet represented by that
+#' particular split value, making them distinct from [split_exargs()] which
+#' applies to *all* children of a split.
+#'
+#' @param obj (`SplitValue`)\cr a split value object, typically produced by
+#'   [SplitValue()] or as a result of a splitting operation.
+#' @param value (`list`)\cr named list of extra arguments to store on `obj`.
+#'
+#' @return
+#' * `splv_extra` returns the current `list` of child-specific extra args.
+#' * `splv_extra<-` returns `obj` with the extra arguments replaced.
+#'
+#' @seealso [split_exargs()] for split-level (all-children) extra arguments.
+#'
+#' @examples
+#' sv <- SplitValue("A", extr = list(my_arg = 1))
+#' splv_extra(sv)
+#'
+#' splv_extra(sv) <- list(my_arg = 99)
+#' splv_extra(sv)
+#'
+#' @export
+#' @rdname splv_extra
 setGeneric("splv_extra", function(obj) standardGeneric("splv_extra"))
 
-#' @rdname int_methods
+#' @exportMethod splv_extra
+#' @rdname splv_extra
 setMethod(
   "splv_extra", "SplitValue",
   function(obj) obj@extra
 )
 
-#' @rdname int_methods
+#' @export
+#' @rdname splv_extra
 setGeneric(
   "splv_extra<-",
   function(obj, value) standardGeneric("splv_extra<-")
 )
-#' @rdname int_methods
+#' @exportMethod splv_extra<-
+#' @rdname splv_extra
 setMethod(
   "splv_extra<-", "SplitValue",
   function(obj, value) {
@@ -2650,13 +2701,13 @@ ct_recursive_replace <- function(ctree, path, value, pos = 1) {
 #' @seealso [col_counts()]
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM", show_colcounts = TRUE) %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM", show_colcounts = TRUE) |>
 #'   split_cols_by("SEX",
 #'     split_fun = keep_split_levels(c("F", "M")),
 #'     show_colcounts = TRUE
-#'   ) %>%
-#'   split_cols_by("STRATA1", show_colcounts = TRUE) %>%
+#'   ) |>
+#'   split_cols_by("STRATA1", show_colcounts = TRUE) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, ex_adsl)
@@ -3281,15 +3332,15 @@ vil_collapse <- function(x) {
 #' * The order these variable names appear within the return vector is undefined and should not be relied upon.
 #'
 #' @examples
-#' lyt <- basic_table() %>%
-#'   split_cols_by("ARM") %>%
-#'   split_cols_by("SEX") %>%
-#'   summarize_row_groups(label_fstr = "Overall (N)") %>%
+#' lyt <- basic_table() |>
+#'   split_cols_by("ARM") |>
+#'   split_cols_by("SEX") |>
+#'   summarize_row_groups(label_fstr = "Overall (N)") |>
 #'   split_rows_by("RACE",
 #'     split_label = "Ethnicity", labels_var = "ethn_lab",
 #'     split_fun = drop_split_levels
-#'   ) %>%
-#'   summarize_row_groups("RACE", label_fstr = "%s (n)") %>%
+#'   ) |>
+#'   summarize_row_groups("RACE", label_fstr = "%s (n)") |>
 #'   analyze("AGE", var_labels = "Age", afun = mean, format = "xx.xx")
 #'
 #' vars_in_layout(lyt)
@@ -3808,8 +3859,8 @@ setMethod(
 #'
 #' @examples
 #' # How to add referencial footnotes after having created a table
-#' lyt <- basic_table() %>%
-#'   split_rows_by("SEX", page_by = TRUE) %>%
+#' lyt <- basic_table() |>
+#'   split_rows_by("SEX", page_by = TRUE) |>
 #'   analyze("AGE")
 #'
 #' tbl <- build_table(lyt, DM)
@@ -4097,9 +4148,9 @@ setMethod("trailing_section_div<-", "TableRow", function(obj, value) {
 #' )
 #' fast_afun <- function(x) list("m" = rcell(mean(x), format = "xx."), "m/2" = max(x) / 2)
 #'
-#' tbl <- basic_table() %>%
-#'   split_rows_by("cat", section_div = "~") %>%
-#'   analyze("value", afun = fast_afun, section_div = " ") %>%
+#' tbl <- basic_table() |>
+#'   split_rows_by("cat", section_div = "~") |>
+#'   analyze("value", afun = fast_afun, section_div = " ") |>
 #'   build_table(df)
 #'
 #' # Getter
